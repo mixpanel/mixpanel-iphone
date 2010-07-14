@@ -13,11 +13,15 @@ or download the latest version from <http://github.com/mixpanel/mixpanel-iphone/
 # Setup #
 Adding Mixpanel to your Xcode project is as easy as:
 
-1. Drag and drop the MPLib folder into your project. ![Copy Project](Docs/Tutorialimages/copy.png)
+1. Drag and drop the MPLib folder into your project. 
 2. Check the "Copy items into destination Group's folder" and select Recursively create groups for any added folders.
 
-And that's it.
- ![Project](Docs/Tutorial/images/project.png)
+![Copy Project][copy]
+
+And that's it. 
+
+![Project][project]
+
 # Initializing Mixpanel #
 The first thing you need to do in order to use Mixpanel is to initialize the `MixpanelAPI` object. We recommend doing this in `applicationDidFinishLaunching:` of `application:didFinishLaunchingWithOptions` in your Application delegate. 
 	
@@ -81,7 +85,8 @@ The final step is where the user purchases your product:
 	}**
 	
 When viewing the Mixpanel Dashboard, you would see something like this. Please see the MixpanelFunnelSample project for the full source code.
-![Funnel Viewer](Docs/Tutorial/images/funnel.png)
+
+![Funnel Viewer](https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/funnel.png)
 
 ## Registering Funnels ##
 If you want to track an event as a funnel step, you can register Funnels as follows:
@@ -159,3 +164,6 @@ This call will write out the new value for the "User Type" property if it does n
 	[mixpanel identifyUser:username];
 	
 Where `username` is an `NSString`. 
+
+[copy]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/copy.png "Copy Into Project"
+[project]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/project.png "Project"
