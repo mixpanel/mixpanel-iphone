@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+    "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html><head>
+    <title>MixpanelAPI</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ascii" />
+ <meta name="generator" content="HeaderDoc" />
+<meta name="xcode-display" content="render" />
+<style><!--
+#tocMenu {
+		display: block;
+		position:fixed;
+		top:0px;
+		left:0px;
+		width:210px;
+		height:100%;
+		background:transparent;
+}
+#bodyText {
+		margin-left: 210px;
+}
+--></style>
+<script language="JavaScript" type="text/javascript"><!--
+function hidetoc() {
+	var origURL = parent.document.URL;
+	var contentURL = origURL.substring(origURL.indexOf('?')+1, origURL.length);
+	if (contentURL.length == origURL.length) {
+		jumpPos = origURL.substring(origURL.indexOf('#')+1, origURL.length);
+	}
+	if (contentURL == "hidetoc") {
+		var toc = document.getElementById('tocMenu');
+		var body = document.getElementById('bodyText');
+		if (toc && body) {
+			toc.style.display = 'none';
+			body.style.marginLeft = '0px';
+		}
+	}
+}
+--></script>
+<style type="text/css"><!--.keyword {background:#ffffff; color:#761550;}.template {background:#ffffff; color:#761550;}.number {background: #ffffff; color:#0000ff;}.function {background:#ffffff; color:#000000;}.string {background: #ffffff; color:#891315;}.preprocessor {background:#ffffff; color:#236e25}.comment {background:#ffffff; color:#236e25}.char {background: #ffffff; color:#0000ff;}.var {background:#ffffff; color:#000000;}.type {background:#ffffff; color:#761550;}.param {background:#ffffff; color:#000000;}a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}body {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10pt;}.list_indent { margin-left: 40px; }.declaration_indent { margin-left: 40px; }.param_indent { margin-left: 40px; }.group_indent { margin-left: 40px; }.group_desc_indent { margin-left: 20px; }.warning_indent { margin-left: 40px; }.important_indent { margin-left: 40px; }.hd_tocAccess { font-style: italic; font-size: 10px; font-weight: normal; color: #303030; }--></style></head><body bgcolor="#ffffff" onload="hidetoc();">
+</div>
+<!-- headerDoc=cl; uid=//apple_ref/occ/cl/MixpanelAPI;  name=MixpanelAPI-->
+<a name="//apple_ref/occ/cl/MixpanelAPI"></a><div id='tocMenu'>
+<iframe id='toc_content' name='toc_content' SRC='toc.html' width='210' height='100%' align='left' frameborder='0'>This document set is best viewed in a browser that supports iFrames.</iframe>
+</div>
+<div id='bodyText'>
+<a name="top"></a>
+<hr><table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h1><a name="MixpanelAPI">MixpanelAPI</a></h1>
+</td></tr></table><hr><p><!-- begin abstract --><p>Main entry point for the Mixpanel API.
+<!-- end abstract --></p>
+<p><b>Superclass:</b> <!-- a logicalPath="//apple_ref/occ/cl/NSObject" -->NSObject<!-- /a --><br>
+<b>Declared In:</b> <a href="../../index.html" target="_top">MixpanelLib</a><br>
+</p><div class='declaration_indent'>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>With MixpanelAPI you can log events and analyze funnels using the Mixpanel dashboard.
+<!-- end discussion -->
+<p></p><hr><br><a name="HeaderDoc_methods"></a>
+<h2>Methods</h2>
+<dl>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/identifyUser:" target="_top">-identifyUser:</a></tt></dt>
+<dd><p>Identifies a user.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerFunnel:steps:" target="_top">-registerFunnel:steps:</a></tt></dt>
+<dd><p>Registers a funnel.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:eventType:" target="_top">-registerSuperProperties:eventType:</a></tt></dt>
+<dd><p>Registers a set of super properties for a specified event type.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:" target="_top">-registerSuperPropertiesOnce:eventType:</a></tt></dt>
+<dd><p>Registers a set of super properties for a specified event type unless the property already exists.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:defaultValue:" target="_top">-registerSuperPropertiesOnce:eventType:defaultValue:</a></tt></dt>
+<dd><p>Registers a set of super properties for a specified event type without overwriting existing values unless the existing value is equal to defaultValue.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/clm/MixpanelAPI/sharedAPI" target="_top">+sharedAPI</a></tt></dt>
+<dd><p>Returns the shared API object.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/clm/MixpanelAPI/sharedAPIWithToken:" target="_top">+sharedAPIWithToken:</a></tt></dt>
+<dd><p>Initializes the API with your API Token. Returns the shared API object.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/track:" target="_top">-track:</a></tt></dt>
+<dd><p>Tracks an event.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/track:properties:" target="_top">-track:properties:</a></tt></dt>
+<dd><p>Tracks an event with properties.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/trackFunnel:step:goal:" target="_top">-trackFunnel:step:goal:</a></tt></dt>
+<dd><p>Tracks a funnel step. 
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/trackFunnel:step:goal:properties:" target="_top">-trackFunnel:step:goal:properties:</a></tt></dt>
+<dd><p>Tracks a funnel step with properties.
+</dd>
+</dl>
+<hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/identifyUser:;   name=MixpanelAPI::identifyUser: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/identifyUser:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="identifyUser:">identifyUser:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Identifies a user.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/identifyUser //apple_ref/occ/clm/identifyUser //apple_ref/occ/intfcm/identifyUser //apple_ref/occ/intfm/identifyUser //apple_ref/occ/func/identifyUser //apple_ref/occ/ftmplt/identifyUser //apple_ref/occ/defn/identifyUser //apple_ref/occ/macro/identifyUser" --><span class="function">identifyUser</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/identity //apple_ref/occ/data/identity" --><span class="var">identity</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>identity</code></dt><dd><p>A string to use as a user identity.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Identifies a user throughout an application run. By default the UDID of the device is used as an identifier.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerFunnel:steps:;   name=MixpanelAPI::registerFunnel:steps: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerFunnel:steps:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerFunnel:steps:">registerFunnel:steps:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a funnel.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerFunnel //apple_ref/occ/clm/registerFunnel //apple_ref/occ/intfcm/registerFunnel //apple_ref/occ/intfm/registerFunnel //apple_ref/occ/func/registerFunnel //apple_ref/occ/ftmplt/registerFunnel //apple_ref/occ/defn/registerFunnel //apple_ref/occ/macro/registerFunnel" --><span class="function">registerFunnel</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <span class="param">funnel</span> <!-- a logicalPath="//apple_ref/occ/instm/steps //apple_ref/occ/clm/steps //apple_ref/occ/intfcm/steps //apple_ref/occ/intfm/steps //apple_ref/occ/func/steps //apple_ref/occ/ftmplt/steps //apple_ref/occ/defn/steps //apple_ref/occ/macro/steps" --><span class="function">steps</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSArray //apple_ref/occ/tdef/NSArray //apple_ref/occ/tag/NSArray //apple_ref/occ/econst/NSArray //apple_ref/occ/struct/NSArray //apple_ref/occ/clconst/NSArray //apple_ref/occ/intf/NSArray" --><span class="type">NSArray</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/steps //apple_ref/occ/data/steps" --><span class="var">steps</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>funnel</code></dt><dd><p>The name of the funnel to register</dd>
+<dt><code>steps</code></dt><dd><p>An array of NSString objects with the events to use as steps for this funnel.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a funnel with an array of events to use as steps. This method simplifies funnel tracking by preregistering 
+a funnel. After calling this method, you can track funnels by calling the track: or track:properties: methods with an event specified in steps.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:eventType:;   name=MixpanelAPI::registerSuperProperties:eventType: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:eventType:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperProperties:eventType:">registerSuperProperties:eventType:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a set of super properties for a specified event type.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerSuperProperties //apple_ref/occ/clm/registerSuperProperties //apple_ref/occ/intfcm/registerSuperProperties //apple_ref/occ/intfm/registerSuperProperties //apple_ref/occ/func/registerSuperProperties //apple_ref/occ/ftmplt/registerSuperProperties //apple_ref/occ/defn/registerSuperProperties //apple_ref/occ/macro/registerSuperProperties" --><span class="function">registerSuperProperties</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <span class="param">properties</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/eventType //apple_ref/occ/clm/eventType //apple_ref/occ/intfcm/eventType //apple_ref/occ/intfm/eventType //apple_ref/occ/func/eventType //apple_ref/occ/ftmplt/eventType //apple_ref/occ/defn/eventType //apple_ref/occ/macro/eventType" --><span class="function">eventType</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/MPLibEventType //apple_ref/occ/tdef/MPLibEventType //apple_ref/occ/tag/MPLibEventType //apple_ref/occ/econst/MPLibEventType //apple_ref/occ/struct/MPLibEventType //apple_ref/occ/clconst/MPLibEventType //apple_ref/occ/intf/MPLibEventType" --><span class="type">MPLibEventType</span><!-- /a -->) <!-- a logicalPath="//apple_ref/occ/econst/eventType //apple_ref/occ/data/eventType" --><span class="var">eventType</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>properties</code></dt><dd><p>a NSDictionary with the super properties to register.</dd>
+<dt><code>eventType</code></dt><dd><p>The event type to register the properties with. Use kMPLibEventTypeAll for 
+properties that will be registered with both events and funnels.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a set of super properties, overwriting property values if they already exist. 
+Super properties are added to all the data points of the specified event type.                                 
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.        
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:;   name=MixpanelAPI::registerSuperPropertiesOnce:eventType: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperPropertiesOnce:eventType:">registerSuperPropertiesOnce:eventType:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a set of super properties for a specified event type unless the property already exists.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerSuperPropertiesOnce //apple_ref/occ/clm/registerSuperPropertiesOnce //apple_ref/occ/intfcm/registerSuperPropertiesOnce //apple_ref/occ/intfm/registerSuperPropertiesOnce //apple_ref/occ/func/registerSuperPropertiesOnce //apple_ref/occ/ftmplt/registerSuperPropertiesOnce //apple_ref/occ/defn/registerSuperPropertiesOnce //apple_ref/occ/macro/registerSuperPropertiesOnce" --><span class="function">registerSuperPropertiesOnce</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <span class="param">properties</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/eventType //apple_ref/occ/clm/eventType //apple_ref/occ/intfcm/eventType //apple_ref/occ/intfm/eventType //apple_ref/occ/func/eventType //apple_ref/occ/ftmplt/eventType //apple_ref/occ/defn/eventType //apple_ref/occ/macro/eventType" --><span class="function">eventType</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/MPLibEventType //apple_ref/occ/tdef/MPLibEventType //apple_ref/occ/tag/MPLibEventType //apple_ref/occ/econst/MPLibEventType //apple_ref/occ/struct/MPLibEventType //apple_ref/occ/clconst/MPLibEventType //apple_ref/occ/intf/MPLibEventType" --><span class="type">MPLibEventType</span><!-- /a -->) <!-- a logicalPath="//apple_ref/occ/econst/eventType //apple_ref/occ/data/eventType" --><span class="var">eventType</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>properties</code></dt><dd><p>a NSDictionary with the super properties to register.</dd>
+<dt><code>eventType</code></dt><dd><p>The event type to register the properties with. Use kMPLibEventTypeAll for 
+properties that will be registered with both events and funnels.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a set of super properties, without overwriting existing key\value pairs. 
+Super properties are added to all the data points of the specified event type.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:defaultValue:;   name=MixpanelAPI::registerSuperPropertiesOnce:eventType:defaultValue: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:defaultValue:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperPropertiesOnce:eventType:defaultValue:">registerSuperPropertiesOnce:eventType:defaultValue:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a set of super properties for a specified event type without overwriting existing values unless the existing value is equal to defaultValue.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerSuperPropertiesOnce //apple_ref/occ/clm/registerSuperPropertiesOnce //apple_ref/occ/intfcm/registerSuperPropertiesOnce //apple_ref/occ/intfm/registerSuperPropertiesOnce //apple_ref/occ/func/registerSuperPropertiesOnce //apple_ref/occ/ftmplt/registerSuperPropertiesOnce //apple_ref/occ/defn/registerSuperPropertiesOnce //apple_ref/occ/macro/registerSuperPropertiesOnce" --><span class="function">registerSuperPropertiesOnce</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <span class="param">properties</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/eventType //apple_ref/occ/clm/eventType //apple_ref/occ/intfcm/eventType //apple_ref/occ/intfm/eventType //apple_ref/occ/func/eventType //apple_ref/occ/ftmplt/eventType //apple_ref/occ/defn/eventType //apple_ref/occ/macro/eventType" --><span class="function">eventType</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/MPLibEventType //apple_ref/occ/tdef/MPLibEventType //apple_ref/occ/tag/MPLibEventType //apple_ref/occ/econst/MPLibEventType //apple_ref/occ/struct/MPLibEventType //apple_ref/occ/clconst/MPLibEventType //apple_ref/occ/intf/MPLibEventType" --><span class="type">MPLibEventType</span><!-- /a -->) <span class="param">eventType</span> <!-- a logicalPath="//apple_ref/occ/instm/defaultValue //apple_ref/occ/clm/defaultValue //apple_ref/occ/intfcm/defaultValue //apple_ref/occ/intfm/defaultValue //apple_ref/occ/func/defaultValue //apple_ref/occ/ftmplt/defaultValue //apple_ref/occ/defn/defaultValue //apple_ref/occ/macro/defaultValue" --><span class="function">defaultValue</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/econst/id //apple_ref/occ/struct/id //apple_ref/occ/clconst/id //apple_ref/occ/intf/id" --><span class="type">id</span><!-- /a -->) <!-- a logicalPath="//apple_ref/occ/econst/defaultValue //apple_ref/occ/data/defaultValue" --><span class="var">defaultValue</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>properties</code></dt><dd><p>a NSDictionary with the super properties to register.</dd>
+<dt><code>eventType</code></dt><dd><p>The event type to register the properties with. Use kMPLibEventTypeAll for 
+properties that will be registered with both events and funnels.</dd>
+<dt><code>defaultValue</code></dt><dd><p>If an existing property is equal to defaultValue, the value of said property gets updated.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a set of super properties, without overwriting existing key\value pairs. If the value of an existing property is equal to defaultValue, 
+then this method will update the value of that property.
+Super properties are added to all the data points of the specified event type.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=clm;  uid=//apple_ref/occ/clm/MixpanelAPI/sharedAPI;   name=MixpanelAPI::sharedAPI -->
+<a name="//apple_ref/occ/clm/MixpanelAPI/sharedAPI"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="sharedAPI">sharedAPI</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Returns the shared API object.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>+ (<!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/econst/id //apple_ref/occ/struct/id //apple_ref/occ/clconst/id //apple_ref/occ/intf/id" --><span class="type">id</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/sharedAPI //apple_ref/occ/data/sharedAPI" --><span class="var">sharedAPI</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Returns the Singleton instance of the MixpanelAPI class. 
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this class method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=clm;  uid=//apple_ref/occ/clm/MixpanelAPI/sharedAPIWithToken:;   name=MixpanelAPI::sharedAPIWithToken: -->
+<a name="//apple_ref/occ/clm/MixpanelAPI/sharedAPIWithToken:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="sharedAPIWithToken:">sharedAPIWithToken:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Initializes the API with your API Token. Returns the shared API object.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>+ (<!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/econst/id //apple_ref/occ/struct/id //apple_ref/occ/clconst/id //apple_ref/occ/intf/id" --><span class="type">id</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/sharedAPIWithToken //apple_ref/occ/clm/sharedAPIWithToken //apple_ref/occ/intfcm/sharedAPIWithToken //apple_ref/occ/intfm/sharedAPIWithToken //apple_ref/occ/func/sharedAPIWithToken //apple_ref/occ/ftmplt/sharedAPIWithToken //apple_ref/occ/defn/sharedAPIWithToken //apple_ref/occ/macro/sharedAPIWithToken" --><span class="function">sharedAPIWithToken</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/apiToken //apple_ref/occ/data/apiToken" --><span class="var">apiToken</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>apiToken</code></dt><dd><p>Your Mixpanel API token.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Initializes the MixpanelAPI object with your authentication token. 
+This must be the first message sent before logging any events since it performs important
+initializations to the API.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/track:;   name=MixpanelAPI::track: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/track:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="track:">track:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Tracks an event.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/track //apple_ref/occ/clm/track //apple_ref/occ/intfcm/track //apple_ref/occ/intfm/track //apple_ref/occ/func/track //apple_ref/occ/ftmplt/track //apple_ref/occ/defn/track //apple_ref/occ/macro/track" --><span class="function">track</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/event //apple_ref/occ/data/event" --><span class="var">event</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>event</code></dt><dd><p>The event to track.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Tracks an event. Super properties of type <code>kMPLibEventTypeAll</code> and <code>kMPLibEventTypeEvent</code> get attached to events.
+If this event is a funnel step specified by <code>trackFunnel:steps:</code> It will also be tracked as a funnel.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/track:properties:;   name=MixpanelAPI::track:properties: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/track:properties:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="track:properties:">track:properties:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Tracks an event with properties.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/track //apple_ref/occ/clm/track //apple_ref/occ/intfcm/track //apple_ref/occ/intfm/track //apple_ref/occ/func/track //apple_ref/occ/ftmplt/track //apple_ref/occ/defn/track //apple_ref/occ/macro/track" --><span class="function">track</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <span class="param">event</span> <!-- a logicalPath="//apple_ref/occ/instm/properties //apple_ref/occ/clm/properties //apple_ref/occ/intfcm/properties //apple_ref/occ/intfm/properties //apple_ref/occ/func/properties //apple_ref/occ/ftmplt/properties //apple_ref/occ/defn/properties //apple_ref/occ/macro/properties" --><span class="function">properties</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/properties" --><span class="var">properties</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>event</code></dt><dd><p>The event to track. If this event is a funnel step specified by <code>trackFunnel:steps:</code> It will also be tracked as a funnel.</dd>
+<dt><code>properties</code></dt><dd><p>The properties for this event. The keys must be NSString objects and the values should be NSString or NSNumber objects.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Tracks an event. The properties of this event are a union of the super properties of type Super properties of type 
+<code>kMPLibEventTypeAll</code>, <code>kMPLibEventTypeEvent</code> and the <code>properties</properties> parameter. 
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/trackFunnel:step:goal:;   name=MixpanelAPI::trackFunnel:step:goal: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/trackFunnel:step:goal:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="trackFunnel:step:goal:">trackFunnel:step:goal:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Tracks a funnel step. 
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/trackFunnel //apple_ref/occ/clm/trackFunnel //apple_ref/occ/intfcm/trackFunnel //apple_ref/occ/intfm/trackFunnel //apple_ref/occ/func/trackFunnel //apple_ref/occ/ftmplt/trackFunnel //apple_ref/occ/defn/trackFunnel //apple_ref/occ/macro/trackFunnel" --><span class="function">trackFunnel</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <span class="param">funnelName</span> <!-- a logicalPath="//apple_ref/occ/instm/step //apple_ref/occ/clm/step //apple_ref/occ/intfcm/step //apple_ref/occ/intfm/step //apple_ref/occ/func/step //apple_ref/occ/ftmplt/step //apple_ref/occ/defn/step //apple_ref/occ/macro/step" --><span class="function">step</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSInteger //apple_ref/occ/tdef/NSInteger //apple_ref/occ/tag/NSInteger //apple_ref/occ/econst/NSInteger //apple_ref/occ/struct/NSInteger //apple_ref/occ/clconst/NSInteger //apple_ref/occ/intf/NSInteger" --><span class="type">NSInteger</span><!-- /a -->)<span class="param">step</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/goal //apple_ref/occ/clm/goal //apple_ref/occ/intfcm/goal //apple_ref/occ/intfm/goal //apple_ref/occ/func/goal //apple_ref/occ/ftmplt/goal //apple_ref/occ/defn/goal //apple_ref/occ/macro/goal" --><span class="function">goal</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/goal //apple_ref/occ/data/goal" --><span class="var">goal</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>funnelName</code></dt><dd><p>The name for this funnel. Super properties of type <code>kMPLibEventTypeAll</code> and <code>kMPLibEventTypeFunnel</code> get attached to events.</dd>
+<dt><code>step</code></dt><dd><p>The step number of the step you are tracking. Step numbers start at 1.</dd>
+<dt><code>goal</code></dt><dd><p>A Human readable name for this funnel step.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Tracks a funnel step.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/trackFunnel:step:goal:properties:;   name=MixpanelAPI::trackFunnel:step:goal:properties: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/trackFunnel:step:goal:properties:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="trackFunnel:step:goal:properties:">trackFunnel:step:goal:properties:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Tracks a funnel step with properties.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/trackFunnel //apple_ref/occ/clm/trackFunnel //apple_ref/occ/intfcm/trackFunnel //apple_ref/occ/intfm/trackFunnel //apple_ref/occ/func/trackFunnel //apple_ref/occ/ftmplt/trackFunnel //apple_ref/occ/defn/trackFunnel //apple_ref/occ/macro/trackFunnel" --><span class="function">trackFunnel</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <span class="param">funnelName</span> <!-- a logicalPath="//apple_ref/occ/instm/step //apple_ref/occ/clm/step //apple_ref/occ/intfcm/step //apple_ref/occ/intfm/step //apple_ref/occ/func/step //apple_ref/occ/ftmplt/step //apple_ref/occ/defn/step //apple_ref/occ/macro/step" --><span class="function">step</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSInteger //apple_ref/occ/tdef/NSInteger //apple_ref/occ/tag/NSInteger //apple_ref/occ/econst/NSInteger //apple_ref/occ/struct/NSInteger //apple_ref/occ/clconst/NSInteger //apple_ref/occ/intf/NSInteger" --><span class="type">NSInteger</span><!-- /a -->)<span class="param">step</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/goal //apple_ref/occ/clm/goal //apple_ref/occ/intfcm/goal //apple_ref/occ/intfm/goal //apple_ref/occ/func/goal //apple_ref/occ/ftmplt/goal //apple_ref/occ/defn/goal //apple_ref/occ/macro/goal" --><span class="function">goal</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString //apple_ref/occ/intf/NSString" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>) <span class="param">goal</span> <!-- a logicalPath="//apple_ref/occ/instm/properties //apple_ref/occ/clm/properties //apple_ref/occ/intfcm/properties //apple_ref/occ/intfm/properties //apple_ref/occ/func/properties //apple_ref/occ/ftmplt/properties //apple_ref/occ/defn/properties //apple_ref/occ/macro/properties" --><span class="function">properties</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/properties" --><span class="var">properties</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>funnelName</code></dt><dd><p>The name for this funnel. Super properties of type <code>kMPLibEventTypeAll</code> and <code>kMPLibEventTypeFunnel</code> get attached to events.</dd>
+<dt><code>step</code></dt><dd><p>The step number of the step you are tracking. Step numbers start at 1.</dd>
+<dt><code>goal</code></dt><dd><p>A Human readable name for this funnel step.</dd>
+<dt><code>properties</code></dt><dd><p>The properties for this event. The keys must be NSString objects and the values should be NSString or NSNumber objects.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Tracks a funnel step with properties. The properties of this funnel step are a union of the super properties of type Super properties of type 
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<code>kMPLibEventTypeAll</code>, <code>kMPLibEventTypeFunnel</code> and the <code>properties</properties> parameter. 
+<!-- end discussion -->
+<p></p><p>Last Updated: Wednesday, July 14, 2010
+</p></body></html>
