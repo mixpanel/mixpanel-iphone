@@ -1,9 +1,9 @@
 # Logging data on the iOS #
 If you want to track user behavior on your iPhone\iPad application, first download the Mixpanel iOS API by cloning the git repository:
 
-	git clone $REPO_LOCATION
+	git clone http://github.com/mixpanel/mixpanel-iphone.git
 
-or download the latest version from $DOWNLOAD_LOCATION and extract the files. The respository has two folders:
+or download the latest version from <http://github.com/mixpanel/mixpanel-iphone/zipball/master> and extract the files. The respository has two folders:
 
 1. MPLib - The Source code for the Mixpanel API and its dependencies
 2. MixpanelEventSample - A sample application that tracks events using Mixpanel.
@@ -13,11 +13,11 @@ or download the latest version from $DOWNLOAD_LOCATION and extract the files. Th
 # Setup #
 Adding Mixpanel to your Xcode project is as easy as:
 
-1. Drag and drop the MPLib folder into your project. ![Copy Project](images/copy.png)
+1. Drag and drop the MPLib folder into your project. ![Copy Project](Docs/Tutorialimages/copy.png)
 2. Check the "Copy items into destination Group's folder" and select Recursively create groups for any added folders.
 
 And that's it.
- ![Project](images/project.png)
+ ![Project](Docs/Tutorial/images/project.png)
 # Initializing Mixpanel #
 The first thing you need to do in order to use Mixpanel is to initialize the `MixpanelAPI` object. We recommend doing this in `applicationDidFinishLaunching:` of `application:didFinishLaunchingWithOptions` in your Application delegate. 
 	
@@ -81,7 +81,7 @@ The final step is where the user purchases your product:
 	}**
 	
 When viewing the Mixpanel Dashboard, you would see something like this. Please see the MixpanelFunnelSample project for the full source code.
-![Funnel Viewer](images/funnel.png)
+![Funnel Viewer](Docs/Tutorial/images/funnel.png)
 
 ## Registering Funnels ##
 If you want to track an event as a funnel step, you can register Funnels as follows:
