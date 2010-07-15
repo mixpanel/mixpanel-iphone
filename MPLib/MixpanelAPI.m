@@ -6,6 +6,7 @@
 //  Copyright 2010 elfredpagan.com. All rights reserved.
 //
 #import <UIKit/UIKit.h>
+#import <CommonCrypto/CommonHMAC.h>
 #import "MixpanelAPI.h"
 #import "MixpanelEvent.h"
 #import "CJSONDataSerializer.h"
@@ -23,6 +24,7 @@
 @property(nonatomic,retain) NSMutableArray *eventQueue;
 @property(nonatomic,retain) NSURLConnection *connection;
 @property(nonatomic,retain) NSMutableData *responseData;
+@property(nonatomic,retain) NSString *defaultUserId;
 -(void)pushData;
 -(void)unarchiveData;
 -(void)archiveData;
@@ -41,7 +43,24 @@
 @synthesize connection;
 @synthesize responseData;
 @synthesize funnels;
+@synthesize defaultUserId;
 static MixpanelAPI *sharedInstance = nil; 
+NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
+	const char *cStr = [str UTF8String];
+	const char *cSecretStr = [key UTF8String];
+	unsigned char digest[CC_SHA1_DIGEST_LENGTH];
+	memset((void *)digest, 0x0, CC_SHA1_DIGEST_LENGTH);
+	CCHmac(kCCHmacAlgSHA1, cSecretStr, strlen(cSecretStr), cStr, strlen(cStr), digest);
+	return [NSString stringWithFormat:
+			@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+			digest[0],  digest[1],  digest[2],  digest[3],
+			digest[4],  digest[5],  digest[6],  digest[7],
+			digest[8],  digest[9],  digest[10], digest[11],
+			digest[12], digest[13], digest[14], digest[15],
+			digest[16], digest[17], digest[18], digest[19],
+			digest[20], digest[21], digest[22], digest[23]
+			];
+}
 
 + (void)initialize
 {
@@ -49,6 +68,8 @@ static MixpanelAPI *sharedInstance = nil;
         sharedInstance = [[self alloc] init];
 }
 - (void) start {
+	self.defaultUserId = calculateHMAC_SHA1([[UIDevice currentDevice] uniqueIdentifier], self.apiToken);
+	[self identifyUser:self.defaultUserId];
 	[self unarchiveData];
 	if (timer) {
 		[timer invalidate];
@@ -100,7 +121,6 @@ static MixpanelAPI *sharedInstance = nil;
 			self.eventSuperProperties = [NSMutableDictionary dictionary];
 			self.funnelSuperProperties = [NSMutableDictionary dictionary];
 			self.funnels = [NSMutableDictionary dictionary];
-			[self identifyUser:[[UIDevice currentDevice] uniqueIdentifier]];
 			if ([[UIApplication sharedApplication] respondsToSelector:@selector(isMultitaskingSupported)]) {
 				taskId = UIBackgroundTaskInvalid;				
 			}
@@ -198,7 +218,7 @@ static MixpanelAPI *sharedInstance = nil;
 
 - (void)identifyUser:(NSString*) identifier
 {
-	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] eventType:kMPLibEventTypeAll defaultValue:[[UIDevice currentDevice] uniqueIdentifier]];
+	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] eventType:kMPLibEventTypeAll defaultValue:self.defaultUserId];
 }
 
 - (void)track:(NSString*) event
@@ -312,7 +332,7 @@ static MixpanelAPI *sharedInstance = nil;
 										   error:nil];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *urlString = SERVER_URL;
-	NSString *postBody = [NSString stringWithFormat:@"ip=1&test=1&data=%@", [data base64EncodedString]];
+	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data base64EncodedString]];
 	NSURL *url = [NSURL URLWithString:urlString];
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  

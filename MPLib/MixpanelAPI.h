@@ -51,6 +51,7 @@ typedef enum {
 	NSMutableData *responseData;
 	NSURLConnection *connection;
 	UIBackgroundTaskIdentifier taskId;
+	NSString *defaultUserId;
 }
 
 /*!
