@@ -16,10 +16,10 @@
 
 /*!
     @const		kMPUploadInterval
-    @abstract   The number of seconds between data uploads to the Mixpanel server
-    @discussion The number of seconds between data uploads to the Mixpanel server
+    @abstract   The default number of seconds between data uploads to the Mixpanel server
+    @discussion The default number of seconds between data uploads to the Mixpanel server
 */
-static const NSInteger kMPUploadInterval = 30;
+static const NSUInteger kMPUploadInterval = 30;
 /*!
     @enum 
     @abstract   An enumeration of the supported event types.
@@ -52,8 +52,13 @@ typedef enum {
 	NSURLConnection *connection;
 	UIBackgroundTaskIdentifier taskId;
 	NSString *defaultUserId;
+	NSUInteger uploadInterval;
 }
-
+/*! @property uploadInverval
+	@abstract The upload interval in seconds.
+	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
+*/
+@property(nonatomic, assign) NSUInteger uploadInverval;
 /*!
     @method     sharedAPIWithToken:
     @abstract   Initializes the API with your API Token. Returns the shared API object.
@@ -179,4 +184,10 @@ typedef enum {
  */
 - (void)trackFunnel:(NSString*) funnelName step:(NSInteger)step goal:(NSString*) goal properties:(NSDictionary*) properties;
 
+/*!
+ @method     flush
+ @abstract   Uploads datapoints to the Mixpanel Server.
+ @discussion Uploads datapoints to the Mixpanel Server.
+ */
+- (void)flush;
 @end

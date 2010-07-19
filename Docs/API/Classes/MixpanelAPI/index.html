@@ -57,6 +57,9 @@ function hidetoc() {
 <p></p><hr><br><a name="HeaderDoc_methods"></a>
 <h2>Methods</h2>
 <dl>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/flush" target="_top">-flush</a></tt></dt>
+<dd><p>Uploads datapoints to the Mixpanel Server.
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/identifyUser:" target="_top">-identifyUser:</a></tt></dt>
 <dd><p>Identifies a user.
 </dd>
@@ -91,7 +94,18 @@ function hidetoc() {
 <dd><p>Tracks a funnel step with properties.
 </dd>
 </dl>
-<hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/identifyUser:;   name=MixpanelAPI::identifyUser: -->
+<hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/flush;   name=MixpanelAPI::flush -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/flush"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="flush">flush</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Uploads datapoints to the Mixpanel Server.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/flush //apple_ref/occ/data/flush" --><span class="var">flush</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Uploads datapoints to the Mixpanel Server.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/identifyUser:;   name=MixpanelAPI::identifyUser: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/identifyUser:"></a>
 <table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="identifyUser:">identifyUser:</a></h3>
 </td></tr></table><hr><p><!-- begin abstract --><p>Identifies a user.
@@ -311,5 +325,25 @@ The API must be initialized with <code>sharedAPIWithToken:</code> before calling
 The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
 <code>kMPLibEventTypeAll</code>, <code>kMPLibEventTypeFunnel</code> and the <code>properties</properties> parameter. 
 <!-- end discussion -->
-<p></p><p>Last Updated: Wednesday, July 14, 2010
+<p></p><a name="HeaderDoc_props"></a>
+<h2>Properties</h2>
+<dl>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/MixpanelAPI/uploadInverval" target="_top">uploadInverval</a></tt></dt>
+<dd><p>The upload interval in seconds.
+</dd>
+</dl>
+<hr><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/MixpanelAPI/uploadInverval;   name=MixpanelAPI::uploadInverval -->
+<a name="//apple_ref/occ/instp/MixpanelAPI/uploadInverval"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="uploadInverval">uploadInverval</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>The upload interval in seconds.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>@property(
+    <span class="param">nonatomic</span>,
+    <span class="param">assign</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/econst/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/clconst/NSUInteger //apple_ref/occ/intf/NSUInteger" --><span class="type">NSUInteger</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/uploadInverval //apple_ref/occ/data/uploadInverval" --><span class="var">uploadInverval</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Changes the interval value. Changing this values resets the update timer with the new interval.
+<!-- end discussion -->
+<p></p><p>Last Updated: Monday, July 19, 2010
 </p></body></html>

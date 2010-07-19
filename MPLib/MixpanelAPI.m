@@ -25,7 +25,7 @@
 @property(nonatomic,retain) NSURLConnection *connection;
 @property(nonatomic,retain) NSMutableData *responseData;
 @property(nonatomic,retain) NSString *defaultUserId;
--(void)pushData;
+-(void)flush;
 -(void)unarchiveData;
 -(void)archiveData;
 -(void)applicationWillTerminate:(NSNotification *)notification;
@@ -44,6 +44,7 @@
 @synthesize responseData;
 @synthesize funnels;
 @synthesize defaultUserId;
+@synthesize uploadInverval;
 static MixpanelAPI *sharedInstance = nil; 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
@@ -67,6 +68,18 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     if (sharedInstance == nil)
         sharedInstance = [[self alloc] init];
 }
+- (void) setUploadInverval:(NSUInteger) newInterval {
+	uploadInterval = newInterval;
+	if (timer) {
+		[timer invalidate];
+		[timer release];
+	}
+	timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
+											 target:self 
+										   selector:@selector(flush) 
+										   userInfo:nil 
+											repeats:YES];
+}
 - (void) start {
 	self.defaultUserId = calculateHMAC_SHA1([[UIDevice currentDevice] uniqueIdentifier], self.apiToken);
 	[self identifyUser:self.defaultUserId];
@@ -76,10 +89,10 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 		[timer release];
 		timer = nil;
 	}
-	[self pushData];
-	timer = [NSTimer scheduledTimerWithTimeInterval:kMPUploadInterval 
+	[self flush];
+	timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
 											 target:self 
-										   selector:@selector(pushData) 
+										   selector:@selector(flush) 
 										   userInfo:nil 
 											repeats:YES];
 	[timer retain];
@@ -124,6 +137,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			if ([[UIApplication sharedApplication] respondsToSelector:@selector(isMultitaskingSupported)]) {
 				taskId = UIBackgroundTaskInvalid;				
 			}
+			uploadInterval = kMPUploadInterval;
 			[self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 			if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)]) {
@@ -298,7 +312,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			[self.connection cancel];
 			[self archiveData];
 		}]	;
-		[self pushData];
+		[self flush];
 	} else {
 		[self archiveData];
 	}
@@ -308,7 +322,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 {
 	if (self.apiToken) {
 		[self unarchiveData];
-		[self pushData];
+		[self flush];
 	}
 	if ([[UIApplication sharedApplication] respondsToSelector:@selector(isMultitaskingSupported)]) {
 		taskId = UIBackgroundTaskInvalid;				
@@ -317,7 +331,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 
 #pragma mark -
 #pragma mark Timer Callback and Networking code
-- (void)pushData
+- (void)flush
 {
 	if ([self.eventQueue count] == 0 || self.connection != nil) { // No events or already pushing data.
 		return;
