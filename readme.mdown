@@ -141,8 +141,8 @@ This call will register the "User Type" property with a value of @"Paid" for the
 	* kMPLibEventTypeAll: Attach the super property to events and funnels.
 	* kMPLibEventTypeEvent: Attach the super property to events.
 	* kMPLibEventTypeFunnel: Attach the super property to funnels.
-	
-If the "User Type" property was previously registered, its value will be overwritten. If you do not want to overwrite existing values of a super property you can use the following call:
+
+If the "User Type" property was previously registered, its value will be overwritten. As a shortcut, you can use `registerSuperProperties:` to attach super properties to all events. If you do not want to overwrite existing values of a super property you can use the following call:
 
 	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
 	[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
@@ -155,7 +155,7 @@ After this call, the value of the "User Type" property will be written only if i
 						    	eventType:kMPLibEventTypeAll
 							 defaultValue:@"Free"];
 							
-This call will write out the new value for the "User Type" property if it does not exist or if its current value is "Free".
+This call will write out the new value for the "User Type" property if it does not exist or if its current value is "Free". As a shortcut, you can use `registerSuperPropertiesOnce:` to attach super properties to all events without overwriting their current values.
 
 # Identifying a User #
 `MixpanelAPI` uses the UDID of the current device as its default identifier. You can easily change the identifier with the following call:
