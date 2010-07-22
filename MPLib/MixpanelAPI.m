@@ -44,7 +44,7 @@
 @synthesize responseData;
 @synthesize funnels;
 @synthesize defaultUserId;
-@synthesize uploadInverval;
+@synthesize uploadInterval;
 static MixpanelAPI *sharedInstance = nil; 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
@@ -68,7 +68,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     if (sharedInstance == nil)
         sharedInstance = [[self alloc] init];
 }
-- (void) setUploadInverval:(NSUInteger) newInterval {
+- (void) setUploadInterval:(NSUInteger) newInterval {
 	uploadInterval = newInterval;
 	if (timer) {
 		[timer invalidate];
@@ -163,6 +163,10 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     return self;
 }
 
+- (void)registerSuperProperties:(NSDictionary*) properties
+{
+	[self registerSuperProperties:properties eventType:kMPLibEventTypeAll];
+}
 
 - (void)registerSuperProperties:(NSDictionary*) properties eventType:(MPLibEventType) type
 {
@@ -180,6 +184,12 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			break;
 	}
 	[superProps addEntriesFromDictionary:properties];
+}
+
+
+- (void)registerSuperPropertiesOnce:(NSDictionary*) properties
+{
+	[self registerSuperPropertiesOnce:properties eventType:kMPLibEventTypeAll];
 }
 
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) type
@@ -203,6 +213,11 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	}
 }
 
+
+- (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue
+{
+	[self registerSuperPropertiesOnce:properties eventType:kMPLibEventTypeAll defaultValue:defaultValue];
+}
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) type defaultValue:(id) defaultValue
 {
 	NSMutableDictionary *superProps = nil;

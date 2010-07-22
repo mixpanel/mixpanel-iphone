@@ -66,8 +66,17 @@ function hidetoc() {
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerFunnel:steps:" target="_top">-registerFunnel:steps:</a></tt></dt>
 <dd><p>Registers a funnel.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:" target="_top">-registerSuperProperties:</a></tt></dt>
+<dd><p>Registers a set of super properties for all event types.
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:eventType:" target="_top">-registerSuperProperties:eventType:</a></tt></dt>
 <dd><p>Registers a set of super properties for a specified event type.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:" target="_top">-registerSuperPropertiesOnce:</a></tt></dt>
+<dd><p>Registers a set of super properties unless the property already exists.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:defaultValue:" target="_top">-registerSuperPropertiesOnce:defaultValue:</a></tt></dt>
+<dd><p>Registers a set of super properties without overwriting existing values unless the existing value is equal to defaultValue.
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:" target="_top">-registerSuperPropertiesOnce:eventType:</a></tt></dt>
 <dd><p>Registers a set of super properties for a specified event type unless the property already exists.
@@ -143,6 +152,26 @@ The API must be initialized with <code>sharedAPIWithToken:</code> before calling
 a funnel. After calling this method, you can track funnels by calling the track: or track:properties: methods with an event specified in steps.
 The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
 <!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:;   name=MixpanelAPI::registerSuperProperties: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperProperties:">registerSuperProperties:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a set of super properties for all event types.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerSuperProperties //apple_ref/occ/clm/registerSuperProperties //apple_ref/occ/intfcm/registerSuperProperties //apple_ref/occ/intfm/registerSuperProperties //apple_ref/occ/func/registerSuperProperties //apple_ref/occ/ftmplt/registerSuperProperties //apple_ref/occ/defn/registerSuperProperties //apple_ref/occ/macro/registerSuperProperties" --><span class="function">registerSuperProperties</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/properties" --><span class="var">properties</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>properties</code></dt><dd><p>a NSDictionary with the super properties to register.
+properties that will be registered with both events and funnels.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a set of super properties, overwriting property values if they already exist. 
+Super properties are added to all the data points.                                 
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.        
+<!-- end discussion -->
 <p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:eventType:;   name=MixpanelAPI::registerSuperProperties:eventType: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:eventType:"></a>
 <table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperProperties:eventType:">registerSuperProperties:eventType:</a></h3>
@@ -164,6 +193,47 @@ properties that will be registered with both events and funnels.</dd>
 </h5><!-- begin discussion --><p>Registers a set of super properties, overwriting property values if they already exist. 
 Super properties are added to all the data points of the specified event type.                                 
 The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.        
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:;   name=MixpanelAPI::registerSuperPropertiesOnce: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperPropertiesOnce:">registerSuperPropertiesOnce:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a set of super properties unless the property already exists.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerSuperPropertiesOnce //apple_ref/occ/clm/registerSuperPropertiesOnce //apple_ref/occ/intfcm/registerSuperPropertiesOnce //apple_ref/occ/intfm/registerSuperPropertiesOnce //apple_ref/occ/func/registerSuperPropertiesOnce //apple_ref/occ/ftmplt/registerSuperPropertiesOnce //apple_ref/occ/defn/registerSuperPropertiesOnce //apple_ref/occ/macro/registerSuperPropertiesOnce" --><span class="function">registerSuperPropertiesOnce</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/properties" --><span class="var">properties</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>properties</code></dt><dd><p>a NSDictionary with the super properties to register.
+properties that will be registered with both events and funnels.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a set of super properties, without overwriting existing key\value pairs. 
+Super properties are added to all the data points.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+<!-- end discussion -->
+<p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:defaultValue:;   name=MixpanelAPI::registerSuperPropertiesOnce:defaultValue: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:defaultValue:"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="registerSuperPropertiesOnce:defaultValue:">registerSuperPropertiesOnce:defaultValue:</a></h3>
+</td></tr></table><hr><p><!-- begin abstract --><p>Registers a set of super properties without overwriting existing values unless the existing value is equal to defaultValue.
+<!-- end abstract --></p>
+<p></p><div class='declaration_indent'>
+<pre>- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/econst/void //apple_ref/occ/struct/void //apple_ref/occ/clconst/void //apple_ref/occ/intf/void" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/registerSuperPropertiesOnce //apple_ref/occ/clm/registerSuperPropertiesOnce //apple_ref/occ/intfcm/registerSuperPropertiesOnce //apple_ref/occ/intfm/registerSuperPropertiesOnce //apple_ref/occ/func/registerSuperPropertiesOnce //apple_ref/occ/ftmplt/registerSuperPropertiesOnce //apple_ref/occ/defn/registerSuperPropertiesOnce //apple_ref/occ/macro/registerSuperPropertiesOnce" --><span class="function">registerSuperPropertiesOnce</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/econst/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/clconst/NSDictionary //apple_ref/occ/intf/NSDictionary" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>) <span class="param">properties</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/defaultValue //apple_ref/occ/clm/defaultValue //apple_ref/occ/intfcm/defaultValue //apple_ref/occ/intfm/defaultValue //apple_ref/occ/func/defaultValue //apple_ref/occ/ftmplt/defaultValue //apple_ref/occ/defn/defaultValue //apple_ref/occ/macro/defaultValue" --><span class="function">defaultValue</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/econst/id //apple_ref/occ/struct/id //apple_ref/occ/clconst/id //apple_ref/occ/intf/id" --><span class="type">id</span><!-- /a -->) <!-- a logicalPath="//apple_ref/occ/econst/defaultValue //apple_ref/occ/data/defaultValue" --><span class="var">defaultValue</span><!-- /a -->; </pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><code>properties</code></dt><dd><p>a NSDictionary with the super properties to register.</dd>
+<dt><code>defaultValue</code></dt><dd><p>If an existing property is equal to defaultValue, the value of said property gets updated.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
+</h5><!-- begin discussion --><p>Registers a set of super properties, without overwriting existing key\value pairs. If the value of an existing property is equal to defaultValue, 
+then this method will update the value of that property.  Super properties are added to all the data points.
+The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
 <!-- end discussion -->
 <p></p><hr><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:;   name=MixpanelAPI::registerSuperPropertiesOnce:eventType: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperPropertiesOnce:eventType:"></a>
@@ -328,22 +398,22 @@ The API must be initialized with <code>sharedAPIWithToken:</code> before calling
 <p></p><a name="HeaderDoc_props"></a>
 <h2>Properties</h2>
 <dl>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/MixpanelAPI/uploadInverval" target="_top">uploadInverval</a></tt></dt>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/MixpanelAPI/uploadInterval" target="_top">uploadInterval</a></tt></dt>
 <dd><p>The upload interval in seconds.
 </dd>
 </dl>
-<hr><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/MixpanelAPI/uploadInverval;   name=MixpanelAPI::uploadInverval -->
-<a name="//apple_ref/occ/instp/MixpanelAPI/uploadInverval"></a>
-<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="uploadInverval">uploadInverval</a></h3>
+<hr><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/MixpanelAPI/uploadInterval;   name=MixpanelAPI::uploadInterval -->
+<a name="//apple_ref/occ/instp/MixpanelAPI/uploadInterval"></a>
+<table border="0"  cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5"><h3><a name="uploadInterval">uploadInterval</a></h3>
 </td></tr></table><hr><p><!-- begin abstract --><p>The upload interval in seconds.
 <!-- end abstract --></p>
 <p></p><div class='declaration_indent'>
 <pre>@property(
     <span class="param">nonatomic</span>,
-    <span class="param">assign</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/econst/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/clconst/NSUInteger //apple_ref/occ/intf/NSUInteger" --><span class="type">NSUInteger</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/uploadInverval //apple_ref/occ/data/uploadInverval" --><span class="var">uploadInverval</span><!-- /a -->; </pre>
+    <span class="param">assign</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/econst/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/clconst/NSUInteger //apple_ref/occ/intf/NSUInteger" --><span class="type">NSUInteger</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/uploadInterval //apple_ref/occ/data/uploadInterval" --><span class="var">uploadInterval</span><!-- /a -->; </pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font>
 </h5><!-- begin discussion --><p>Changes the interval value. Changing this values resets the update timer with the new interval.
 <!-- end discussion -->
-<p></p><p>Last Updated: Monday, July 19, 2010
+<p></p><p>Last Updated: Thursday, July 22, 2010
 </p></body></html>

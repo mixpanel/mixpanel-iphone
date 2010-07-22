@@ -54,11 +54,11 @@ typedef enum {
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
 }
-/*! @property uploadInverval
+/*! @property uploadInterval
 	@abstract The upload interval in seconds.
 	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
 */
-@property(nonatomic, assign) NSUInteger uploadInverval;
+@property(nonatomic, assign) NSUInteger uploadInterval;
 /*!
     @method     sharedAPIWithToken:
     @abstract   Initializes the API with your API Token. Returns the shared API object.
@@ -80,6 +80,18 @@ typedef enum {
 + (id)sharedAPI;
 
 /*!
+ @method		registerSuperProperties:
+ @abstract	Registers a set of super properties for all event types.
+ @discussion	Registers a set of super properties, overwriting property values if they already exist. 
+ Super properties are added to all the data points. 				
+ The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.	
+ @param		properties a NSDictionary with the super properties to register.
+ properties that will be registered with both events and funnels.
+ 
+ */
+- (void)registerSuperProperties:(NSDictionary*) properties;
+
+/*!
 	@method		registerSuperProperties:eventType:
 	@abstract	Registers a set of super properties for a specified event type.
 	@discussion	Registers a set of super properties, overwriting property values if they already exist. 
@@ -92,6 +104,17 @@ typedef enum {
  */
 - (void)registerSuperProperties:(NSDictionary*) properties eventType:(MPLibEventType) eventType;
 
+
+/*!
+ @method     registerSuperPropertiesOnce:
+ @abstract   Registers a set of super properties unless the property already exists.
+ @discussion Registers a set of super properties, without overwriting existing key\value pairs. 
+ Super properties are added to all the data points.
+ The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+ @param		properties a NSDictionary with the super properties to register.
+ properties that will be registered with both events and funnels.
+ */
+- (void)registerSuperPropertiesOnce:(NSDictionary*) properties;
 /*!
 	@method     registerSuperPropertiesOnce:eventType:
 	@abstract   Registers a set of super properties for a specified event type unless the property already exists.
@@ -104,6 +127,18 @@ typedef enum {
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) eventType;
 
+
+/*!
+ @method     registerSuperPropertiesOnce:defaultValue:
+ @abstract   Registers a set of super properties without overwriting existing values unless the existing value is equal to defaultValue.
+ @discussion Registers a set of super properties, without overwriting existing key\value pairs. If the value of an existing property is equal to defaultValue, 
+ then this method will update the value of that property.  Super properties are added to all the data points.
+ The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
+ @param		properties a NSDictionary with the super properties to register.
+ @param      defaultValue If an existing property is equal to defaultValue, the value of said property gets updated.
+ 
+ */
+- (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
 /*!
 	@method     registerSuperPropertiesOnce:eventType:defaultValue:
 	@abstract   Registers a set of super properties for a specified event type without overwriting existing values unless the existing value is equal to defaultValue.
