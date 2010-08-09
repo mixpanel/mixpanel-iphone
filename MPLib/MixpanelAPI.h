@@ -50,7 +50,9 @@ typedef enum {
 	NSArray *eventsToSend;
 	NSMutableData *responseData;
 	NSURLConnection *connection;
+	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	UIBackgroundTaskIdentifier taskId;
+	#endif
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
 }

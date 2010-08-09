@@ -43,7 +43,8 @@
 		name = [[aDecoder decodeObjectForKey:@"name"] retain];
 		properties = [[aDecoder decodeObjectForKey:@"properties"] mutableCopy];
 		eventType = [aDecoder decodeIntForKey:@"eventType"];
-		timestamp = [[NSDate alloc] initWithTimeIntervalSince1970:[aDecoder decodeDoubleForKey:@"timestamp"]];
+		NSTimeInterval interval = [aDecoder decodeDoubleForKey:@"timestamp"];
+		timestamp = [[NSDate dateWithTimeIntervalSince1970:interval] retain];
 	}
 	return self;
 }
