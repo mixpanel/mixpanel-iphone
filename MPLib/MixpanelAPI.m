@@ -411,9 +411,9 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	if (result) {
 		[self.eventQueue removeObjectsInArray:self.eventsToSend];			
 	} else {
-		NSLog(@"failed");
+		NSLog(@"failed %@", response);
 	}
-
+  [response release];
 	[self archiveData]; //update saved archive
 	self.eventsToSend = nil;
 	self.responseData = nil;
