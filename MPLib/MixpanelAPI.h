@@ -55,12 +55,20 @@ typedef enum {
 	#endif
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
+	BOOL testMode;
 }
 /*! @property uploadInterval
 	@abstract The upload interval in seconds.
 	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
 */
 @property(nonatomic, assign) NSUInteger uploadInterval;
+
+/*! @property testMode
+	@abstract Whether test mode is on
+	@discussion Changing this value enables/disables test mode for future flushes.
+*/
+@property(nonatomic) BOOL testMode;
+
 /*!
     @method     sharedAPIWithToken:
     @abstract   Initializes the API with your API Token. Returns the shared API object.
