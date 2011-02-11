@@ -2,8 +2,6 @@
 //  MixpanelFunnelSampleAppDelegate.h
 //  MixpanelFunnelSample
 //
-//  Created by Elfred Pagan on 7/9/10.
-//  Copyright elfredpagan.com 2010. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
