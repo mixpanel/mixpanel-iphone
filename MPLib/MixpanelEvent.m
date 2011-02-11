@@ -2,8 +2,6 @@
 //  MixpanelEvent.m
 //  MPLib
 //
-//  Created by Elfred Pagan on 6/18/10.
-//  Copyright 2010 elfredpagan.com. All rights reserved.
 //
 
 #import "MixpanelEvent.h"
