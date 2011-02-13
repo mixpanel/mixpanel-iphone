@@ -59,6 +59,11 @@ typedef enum {
 	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
 */
 @property(nonatomic, assign) NSUInteger uploadInterval;
+/*! @property flushOnBackground
+ @abstract Flag to flush data when the app goes into the background.
+ @discussion Changes the flushing behavior of the library. If set to NO, the The library will not flush the data points when going into the background. Defaults to YES.
+ */
+@property(nonatomic, assign) BOOL flushOnBackground;
 /*!
     @method     sharedAPIWithToken:
     @abstract   Initializes the API with your API Token. Returns the shared API object.

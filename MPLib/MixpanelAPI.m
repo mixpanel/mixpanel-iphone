@@ -43,6 +43,7 @@
 @synthesize funnels;
 @synthesize defaultUserId;
 @synthesize uploadInterval;
+@synthesize flushOnBackground;
 static MixpanelAPI *sharedInstance = nil; 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
@@ -132,22 +133,26 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			self.eventSuperProperties = [NSMutableDictionary dictionary];
 			self.funnelSuperProperties = [NSMutableDictionary dictionary];
 			self.funnels = [NSMutableDictionary dictionary];
-
+			self.flushOnBackground = YES;
 			uploadInterval = kMPUploadInterval;
 			[self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000		
-			if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)]) {
+			if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
 
 				taskId = UIBackgroundTaskInvalid;
-				[notificationCenter addObserver:self 
-									   selector:@selector(applicationDidEnterBackground:) 
-										   name:UIApplicationDidEnterBackgroundNotification 
-										 object:nil];
-				[notificationCenter addObserver:self 
-									   selector:@selector(applicationWillEnterForeground:) 
-										   name:UIApplicationWillEnterForegroundNotification 
-										 object:nil];
+				if (&UIApplicationDidEnterBackgroundNotification) {
+				  [notificationCenter addObserver:self 
+										 selector:@selector(applicationDidEnterBackground:) 
+											 name:UIApplicationDidEnterBackgroundNotification 
+										   object:nil];
+				}
+				if (&UIApplicationWillEnterForegroundNotification) {
+				  [notificationCenter addObserver:self 
+										 selector:@selector(applicationWillEnterForeground:) 
+											 name:UIApplicationWillEnterForegroundNotification 
+										   object:nil];
+				}
 			}
 #endif
 			[notificationCenter addObserver:self 
@@ -322,15 +327,19 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 - (void)applicationDidEnterBackground:(NSNotificationCenter*) notification
 {
 	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-	if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)]) {
-		taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-			[self.connection cancel];
-			[self archiveData];
-		}]	;
-		[self flush];
-	} else {
-		[self archiveData];
-	}
+  if ([self flushOnBackground]) {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)]) {
+      taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [self.connection cancel];
+        [self archiveData];
+      }]	;
+      [self flush];
+    } else {
+      [self archiveData];
+    }
+  } else {
+    [self archiveData];
+  }
 	#endif
 }
 - (void)applicationWillEnterForeground:(NSNotificationCenter*) notification
@@ -340,7 +349,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 		[self flush];
 	}
 	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-	if ([[UIApplication sharedApplication] respondsToSelector:@selector(isMultitaskingSupported)]) {
+	if (&UIBackgroundTaskInvalid) {
 		taskId = UIBackgroundTaskInvalid;				
 	}
 	#endif
@@ -397,7 +406,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-	if ([[UIApplication sharedApplication] respondsToSelector:@selector(isMultitaskingSupported)] && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
+	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
 	}
 	#endif
@@ -418,7 +427,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.connection = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-	if ([[UIApplication sharedApplication] respondsToSelector:@selector(isMultitaskingSupported)] && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
+	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
 	}
 #endif
