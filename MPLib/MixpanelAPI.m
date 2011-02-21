@@ -328,10 +328,12 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 {
 	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
   if ([self flushOnBackground]) {
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)]) {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+        [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
       taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [self.connection cancel];
         [self archiveData];
+        [[UIApplication sharedApplication] endBackgroundTask:taskId];
       }]	;
       [self flush];
     } else {
