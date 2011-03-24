@@ -68,34 +68,29 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
         sharedInstance = [[self alloc] init];
 }
 - (void) setUploadInterval:(NSUInteger) newInterval {
-	uploadInterval = newInterval;
-	if (timer) {
-		[timer invalidate];
-		[timer release];
-	}
-	timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
-											 target:self 
-										   selector:@selector(flush) 
-										   userInfo:nil 
-											repeats:YES];
+    uploadInterval = newInterval;
+    if (timer) {
+        [timer invalidate];
+        [timer release];
+        timer = nil;
+    }
+    [self flush];
+    if (uploadInterval != -1)
+    {
+        timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
+                                                 target:self 
+                                               selector:@selector(flush) 
+                                               userInfo:nil 
+                                                repeats:YES];
+        [timer retain];
+    }
 }
 - (void) start {
-	self.defaultUserId = calculateHMAC_SHA1([[UIDevice currentDevice] uniqueIdentifier], self.apiToken);
-	[self identifyUser:self.defaultUserId];
-	[self unarchiveData];
-	if (timer) {
-		[timer invalidate];
-		[timer release];
-		timer = nil;
-	}
-	[self flush];
-	timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
-											 target:self 
-										   selector:@selector(flush) 
-										   userInfo:nil 
-											repeats:YES];
-	[timer retain];
-	
+    self.defaultUserId = calculateHMAC_SHA1([[UIDevice currentDevice] uniqueIdentifier], self.apiToken);
+    [self identifyUser:self.defaultUserId];
+    [self unarchiveData];
+
+    [self setUploadInterval:uploadInterval];
 }
 + (id)sharedAPIWithToken:(NSString*)apiToken
 {
