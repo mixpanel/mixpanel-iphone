@@ -75,15 +75,13 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
         timer = nil;
     }
     [self flush];
-    if (uploadInterval != -1)
-    {
-        timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
-                                                 target:self 
-                                               selector:@selector(flush) 
-                                               userInfo:nil 
-                                                repeats:YES];
-        [timer retain];
-    }
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:uploadInterval 
+                                             target:self 
+                                           selector:@selector(flush) 
+                                           userInfo:nil 
+                                            repeats:YES];
+    [timer retain];
 }
 - (void) start {
     self.defaultUserId = calculateHMAC_SHA1([[UIDevice currentDevice] uniqueIdentifier], self.apiToken);
@@ -412,9 +410,8 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 {
 	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 	NSInteger result = [response intValue];
-	if (result) {
-		[self.eventQueue removeObjectsInArray:self.eventsToSend];			
-	} else {
+    [self.eventQueue removeObjectsInArray:self.eventsToSend];
+	if (result == 0) {
 		NSLog(@"failed %@", response);
 	}
   [response release];
