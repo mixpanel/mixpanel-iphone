@@ -53,17 +53,26 @@ typedef enum {
 	#endif
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
+	BOOL testMode;
 }
 /*! @property uploadInterval
 	@abstract The upload interval in seconds.
 	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
 */
 @property(nonatomic, assign) NSUInteger uploadInterval;
+
 /*! @property flushOnBackground
  @abstract Flag to flush data when the app goes into the background.
  @discussion Changes the flushing behavior of the library. If set to NO, the The library will not flush the data points when going into the background. Defaults to YES.
  */
 @property(nonatomic, assign) BOOL flushOnBackground;
+
+/*! @property testMode
+	@abstract Whether test mode is on
+	@discussion Changing this value enables/disables test mode for future flushes.
+*/
+@property(nonatomic) BOOL testMode;
+
 /*!
     @method     sharedAPIWithToken:
     @abstract   Initializes the API with your API Token. Returns the shared API object.
