@@ -415,11 +415,14 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 {
 	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 	NSInteger result = [response intValue];
+    
     [self.eventQueue removeObjectsInArray:self.eventsToSend];
-	if (result == 0) {
+	
+    if (result == 0) {
 		NSLog(@"failed %@", response);
 	}
-  [response release];
+    
+    [response release];
 	[self archiveData]; //update saved archive
 	self.eventsToSend = nil;
 	self.responseData = nil;
