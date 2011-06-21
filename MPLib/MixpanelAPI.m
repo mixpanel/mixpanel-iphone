@@ -44,6 +44,7 @@
 @synthesize defaultUserId;
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
+@synthesize testMode;
 static MixpanelAPI *sharedInstance = nil; 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
@@ -368,6 +369,10 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *urlString = SERVER_URL;
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data base64EncodedString]];
+	if (self.testMode) {
+		NSLog(@"Mixpanel test mode is enabled");
+		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
+	}
 	NSURL *url = [NSURL URLWithString:urlString];
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
