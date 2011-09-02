@@ -7,7 +7,6 @@ or download the latest version from <http://github.com/mixpanel/mixpanel-iphone/
 
 1. MPLib - The Source code for the Mixpanel API and its dependencies
 2. MixpanelEventSample - A sample application that tracks events using Mixpanel.
-3. MixpanelFunnelSample - A sample application that tracks funnels using Mixpanel.
 4. Docs - Documentation for the Project.
 
 # Setup #
@@ -53,80 +52,6 @@ If you want to add properties to the event you can do the following:
 
 This code snippet is taken from the MixpanelEventSample Project. Line 15-20 of the `MixpanelEventSampleViewController.m` file.
 
-# Tracking Funnels #
-Funnel analysis helps you increase conversions for any goal within your application. Here is how you would use them in your application. Lets say you have a button in your UI that launches a product list for your application. The first step would be something like the following:
-
-	-(void) productViewLoaded {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel trackFunnel:@"In App Purchase" step:1 goal:@"Product List"];
-		// product list code.
-	}
-
-Then there is a second step where a user launches more details for a specific product:
-
-	-(void) selectProduct:(NSString*) product {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel trackFunnel:@"In App Purchase" 
-						 step:2 
-						 goal:@"View Product"
-				   properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-		// view product code.
-	}
-	
-The final step is where the user purchases your product:
-
-	-(void) buyProduct:(NSString*) product {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel trackFunnel:@"In App Purchase" 
-						 step:3 
-						 goal:@"Buy Product"
-				   properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-		// buy product code.
-	}**
-	
-When viewing the Mixpanel Dashboard, you would see something like this. Please see the MixpanelFunnelSample project for the full source code.
-
-![Funnel Viewer](https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/funnel.png)
-
-## Registering Funnels ##
-If you want to track an event as a funnel step, you can register Funnels as follows:
-
-	- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-
-	    // Override point for customization after application launch.  
-   		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPIWithToken:@"YOUR_API_TOKEN"];
-		NSArray *steps = [NSArray arrayWithObjects:@"Product List", @"View Product", @"Buy Product", nil];
-		[mixpanel registerFunnel:@"In App Purchase" steps:steps];
-	    // Add the view controller's view to the window and display.
-	    [window addSubview:viewController.view];
-	    [window makeKeyAndVisible];
-	    return YES;
-	}
-
-Then the code above would turn into the following:
-
-	-(void) productViewLoaded {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel track:@"Product List"];
-		// product list code.
-	}
-	
-	-(void) selectProduct:(NSString*) product {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel track:@"View Product"
-				   properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-		// view product code.
-	}
-	
-	-(void) buyProduct:(NSString*) product {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel track:@"Buy Product"
-				   properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-		// buy product code.
-	}
-
-Or you can use the Funnel Builder, for more information on how to do this, please visit <http://mixpanel.com/api/docs/guides/funnel-analysis>
-
 # Super Properties #
 Super properties are an easy way to store data about your users. They are global properties that get attached to everything you are tracking. More information can be found [here](http://mixpanel.com/api/docs/guides/super-properties “super properties”).
 
@@ -137,10 +62,6 @@ If you want to register a super property for your current user, you can do it as
 							eventType:kMPLibEventTypeAll];
 
 This call will register the "User Type" property with a value of @"Paid" for the current user on both events and funnels. The permitted values for the eventType parameter are:
-
-	* kMPLibEventTypeAll: Attach the super property to events and funnels.
-	* kMPLibEventTypeEvent: Attach the super property to events.
-	* kMPLibEventTypeFunnel: Attach the super property to funnels.
 
 If the "User Type" property was previously registered, its value will be overwritten. As a shortcut, you can use `registerSuperProperties:` to attach super properties to all events. If you do not want to overwrite existing values of a super property you can use the following call:
 
