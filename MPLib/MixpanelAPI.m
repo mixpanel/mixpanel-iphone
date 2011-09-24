@@ -73,8 +73,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			digest[4],  digest[5],  digest[6],  digest[7],
 			digest[8],  digest[9],  digest[10], digest[11],
 			digest[12], digest[13], digest[14], digest[15],
-			digest[16], digest[17], digest[18], digest[19],
-			digest[20], digest[21], digest[22], digest[23]
+			digest[16], digest[17], digest[18], digest[19]
 			];
 }
 
@@ -157,8 +156,8 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 }
 + (id)sharedAPIWithToken:(NSString*)apiToken
 {
-	sharedInstance.apiToken = apiToken;
-	[sharedInstance start];
+    sharedInstance.apiToken = apiToken;
+    [sharedInstance start];
     //Already set by +initialize.
     return sharedInstance;
 }
