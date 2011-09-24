@@ -20,8 +20,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
-	//Initialize the MixpanelAPI object
-	mixpanel = [MixpanelAPI sharedAPIWithToken:MIXPANEL_TOKEN];
+    //Initialize the MixpanelAPI object
+    mixpanel = [MixpanelAPI sharedAPIWithToken:MIXPANEL_TOKEN];
     // Add the view controller's view to the window and display.
     [window addSubview:viewController.view];
     [window makeKeyAndVisible];
