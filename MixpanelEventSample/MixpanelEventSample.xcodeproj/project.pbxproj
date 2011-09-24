@@ -26,7 +26,7 @@
 		4E9018D411E81B3B00CAFD12 /* CSerializedJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018C211E81B3B00CAFD12 /* CSerializedJSONData.m */; };
 		4E9018D511E81B3B00CAFD12 /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018C411E81B3B00CAFD12 /* NSCharacterSet_Extensions.m */; };
 		4E9018D611E81B3B00CAFD12 /* NSScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018C611E81B3B00CAFD12 /* NSScanner_Extensions.m */; };
-		4E9018D711E81B3B00CAFD12 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018C911E81B3B00CAFD12 /* NSData+Base64.m */; };
+		4E9018D711E81B3B00CAFD12 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018C911E81B3B00CAFD12 /* NSData+MPBase64.m */; };
 		4E9018D811E81B3B00CAFD12 /* MixpanelAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018CB11E81B3B00CAFD12 /* MixpanelAPI.m */; };
 		4E9018D911E81B3B00CAFD12 /* MixpanelEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9018CD11E81B3B00CAFD12 /* MixpanelEvent.m */; };
 /* End PBXBuildFile section */
@@ -64,8 +64,8 @@
 		4E9018C411E81B3B00CAFD12 /* NSCharacterSet_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCharacterSet_Extensions.m; sourceTree = "<group>"; };
 		4E9018C511E81B3B00CAFD12 /* NSScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSScanner_Extensions.h; sourceTree = "<group>"; };
 		4E9018C611E81B3B00CAFD12 /* NSScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSScanner_Extensions.m; sourceTree = "<group>"; };
-		4E9018C811E81B3B00CAFD12 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		4E9018C911E81B3B00CAFD12 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		4E9018C811E81B3B00CAFD12 /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
+		4E9018C911E81B3B00CAFD12 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		4E9018CA11E81B3B00CAFD12 /* MixpanelAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelAPI.h; sourceTree = "<group>"; };
 		4E9018CB11E81B3B00CAFD12 /* MixpanelAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelAPI.m; sourceTree = "<group>"; };
 		4E9018CC11E81B3B00CAFD12 /* MixpanelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelEvent.h; sourceTree = "<group>"; };
@@ -200,8 +200,8 @@
 		4E9018C711E81B3B00CAFD12 /* NSData_Base64 */ = {
 			isa = PBXGroup;
 			children = (
-				4E9018C811E81B3B00CAFD12 /* NSData+Base64.h */,
-				4E9018C911E81B3B00CAFD12 /* NSData+Base64.m */,
+				4E9018C811E81B3B00CAFD12 /* NSData+MPBase64.h */,
+				4E9018C911E81B3B00CAFD12 /* NSData+MPBase64.m */,
 			);
 			path = NSData_Base64;
 			sourceTree = "<group>";
@@ -284,7 +284,7 @@
 				4E9018D411E81B3B00CAFD12 /* CSerializedJSONData.m in Sources */,
 				4E9018D511E81B3B00CAFD12 /* NSCharacterSet_Extensions.m in Sources */,
 				4E9018D611E81B3B00CAFD12 /* NSScanner_Extensions.m in Sources */,
-				4E9018D711E81B3B00CAFD12 /* NSData+Base64.m in Sources */,
+				4E9018D711E81B3B00CAFD12 /* NSData+MPBase64.m in Sources */,
 				4E9018D811E81B3B00CAFD12 /* MixpanelAPI.m in Sources */,
 				4E9018D911E81B3B00CAFD12 /* MixpanelEvent.m in Sources */,
 			);
