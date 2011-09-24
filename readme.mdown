@@ -58,22 +58,19 @@ Super properties are an easy way to store data about your users. They are global
 If you want to register a super property for your current user, you can do it as follows:
 
 	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-							eventType:kMPLibEventTypeAll];
+	[mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]];
 
 This call will register the "User Type" property with a value of @"Paid" for the current user on both events and funnels. The permitted values for the eventType parameter are:
 
 If the "User Type" property was previously registered, its value will be overwritten. As a shortcut, you can use `registerSuperProperties:` to attach super properties to all events. If you do not want to overwrite existing values of a super property you can use the following call:
 
 	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-						    	eventType:kMPLibEventTypeAll];
+	[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]];
 
 After this call, the value of the "User Type" property will be written only if it did not exist. There is another flavor of `registerSuperPropertiesOnce:eventType` and it can be used as follows:
 
 	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
 	[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-						    	eventType:kMPLibEventTypeAll
 							 defaultValue:@"Free"];
 							
 This call will write out the new value for the "User Type" property if it does not exist or if its current value is "Free". As a shortcut, you can use `registerSuperPropertiesOnce:` to attach super properties to all events without overwriting their current values.
