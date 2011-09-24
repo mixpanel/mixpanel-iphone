@@ -8,7 +8,7 @@
 
 
 @implementation MixpanelEvent
-- (id) initWithName:(NSString*) aName type:(MPLibEventType) aType properties:(NSDictionary*) someProperties
+- (id) initWithName:(NSString*) aName properties:(NSDictionary*) someProperties
 {
 	if ((self = [super init])) {
 		if (aName) {
@@ -16,7 +16,6 @@
 		} else {
 			name = @"mp_event";
 		}
-		eventType = aType;
 		if (someProperties) {
 			properties = [someProperties mutableCopy];			
 		} else {
@@ -31,7 +30,6 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[aCoder encodeObject:name forKey:@"name"];
-	[aCoder encodeInt:eventType forKey:@"eventType"];
 	[aCoder encodeObject:properties forKey:@"properties"];
 	[aCoder encodeDouble:[timestamp timeIntervalSince1970] forKey:@"timestamp"];
 }
@@ -40,7 +38,6 @@
 	if ((self = [super init])) {
 		name = [[aDecoder decodeObjectForKey:@"name"] retain];
 		properties = [[aDecoder decodeObjectForKey:@"properties"] mutableCopy];
-		eventType = [aDecoder decodeIntForKey:@"eventType"];
 		NSTimeInterval interval = [aDecoder decodeDoubleForKey:@"timestamp"];
 		timestamp = [[NSDate dateWithTimeIntervalSince1970:interval] retain];
 	}

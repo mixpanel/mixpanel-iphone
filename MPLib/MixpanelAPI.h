@@ -19,20 +19,6 @@
 */
 static const NSUInteger kMPUploadInterval = 30;
 /*!
-    @enum 
-    @abstract   An enumeration of the supported event types.
-    @discussion MPLibEventType is used to scope super properties to specific event types. 
-    @constant   kMPLibEventTypeEvent - Scope super properties to events.
-    @constant   kMPLibEventTypeFunnel - Scope super properties to funnels.
-    @constant   kMPLibEventTypeAll - Scope super properties to funnels and events.
-*/
-typedef enum {
-	kMPLibEventTypeEvent = 1,
-	kMPLibEventTypeFunnel = 2,
-	kMPLibEventTypeAll = 3
-} MPLibEventType;
-
-/*!
     @class		MixpanelAPI
     @abstract	Main entry point for the Mixpanel API.
     @discussion With MixpanelAPI you can log events and analyze funnels using the Mixpanel dashboard.
@@ -41,9 +27,6 @@ typedef enum {
 	NSString *apiToken;
 	NSMutableArray *eventQueue;
 	NSMutableDictionary *superProperties;
-	NSMutableDictionary *eventSuperProperties;
-	NSMutableDictionary *funnelSuperProperties;
-	NSMutableDictionary *funnels;
 	NSTimer *timer;
 	NSArray *eventsToSend;
 	NSMutableData *responseData;
@@ -106,20 +89,6 @@ typedef enum {
 - (void)registerSuperProperties:(NSDictionary*) properties;
 
 /*!
-	@method		registerSuperProperties:eventType:
-	@abstract	Registers a set of super properties for a specified event type.
-	@discussion	Registers a set of super properties, overwriting property values if they already exist. 
-				Super properties are added to all the data points of the specified event type. 				
-				The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.	
-	@param		properties a NSDictionary with the super properties to register.
-	@param		eventType The event type to register the properties with. Use kMPLibEventTypeAll for 
-				properties that will be registered with both events and funnels.
-	
- */
-- (void)registerSuperProperties:(NSDictionary*) properties eventType:(MPLibEventType) eventType;
-
-
-/*!
  @method     registerSuperPropertiesOnce:
  @abstract   Registers a set of super properties unless the property already exists.
  @discussion Registers a set of super properties, without overwriting existing key\value pairs. 
@@ -129,18 +98,6 @@ typedef enum {
  properties that will be registered with both events and funnels.
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties;
-/*!
-	@method     registerSuperPropertiesOnce:eventType:
-	@abstract   Registers a set of super properties for a specified event type unless the property already exists.
-	@discussion Registers a set of super properties, without overwriting existing key\value pairs. 
-				Super properties are added to all the data points of the specified event type.
-				The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
-	@param		properties a NSDictionary with the super properties to register.
-	@param		eventType The event type to register the properties with. Use kMPLibEventTypeAll for 
-				properties that will be registered with both events and funnels.
- */
-- (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) eventType;
-
 
 /*!
  @method     registerSuperPropertiesOnce:defaultValue:
@@ -153,31 +110,6 @@ typedef enum {
  
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
-/*!
-	@method     registerSuperPropertiesOnce:eventType:defaultValue:
-	@abstract   Registers a set of super properties for a specified event type without overwriting existing values unless the existing value is equal to defaultValue.
-	@discussion Registers a set of super properties, without overwriting existing key\value pairs. If the value of an existing property is equal to defaultValue, 
-				then this method will update the value of that property.
-				Super properties are added to all the data points of the specified event type.
-				The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
-	@param		properties a NSDictionary with the super properties to register.
-	@param		eventType The event type to register the properties with. Use kMPLibEventTypeAll for 
-				properties that will be registered with both events and funnels.
-	@param      defaultValue If an existing property is equal to defaultValue, the value of said property gets updated.
-
- */
-- (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) eventType defaultValue:(id) defaultValue;
-
-/*!
-	@method     registerFunnel:steps:
-	@abstract   Registers a funnel.
-	@discussion Registers a funnel with an array of events to use as steps. This method simplifies funnel tracking by preregistering 
-				a funnel. After calling this method, you can track funnels by calling the track: or track:properties: methods with an event specified in steps.
-				The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
-	@param		funnel The name of the funnel to register
-	@param		steps An array of NSString objects with the events to use as steps for this funnel.
- */
-- (void)registerFunnel:(NSString*) funnel steps:(NSArray*) steps;
 
 /*!
 	@method     identifyUser:
@@ -209,29 +141,6 @@ typedef enum {
  */
 - (void)track:(NSString*) event properties:(NSDictionary*) properties;
 
-/*!
-	@method     trackFunnel:step:goal:
-	@abstract   Tracks a funnel step. 
-	@discussion Tracks a funnel step.
- 				The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
-	@param		funnelName The name for this funnel. Super properties of type <code>kMPLibEventTypeAll</code> and <code>kMPLibEventTypeFunnel</code> get attached to events.
-	@param		step The step number of the step you are tracking. Step numbers start at 1.
-	@param		goal A Human readable name for this funnel step.
- */
-- (void)trackFunnel:(NSString*) funnelName step:(NSInteger)step goal:(NSString*) goal;
-
-/*!
-	 @method     trackFunnel:step:goal:properties:
-	 @abstract   Tracks a funnel step with properties.
-	 @discussion Tracks a funnel step with properties. The properties of this funnel step are a union of the super properties of type Super properties of type 
-				 The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
-	 <code>kMPLibEventTypeAll</code>, <code>kMPLibEventTypeFunnel</code> and the <code>properties</properties> parameter. 
-	 @param		funnelName The name for this funnel. Super properties of type <code>kMPLibEventTypeAll</code> and <code>kMPLibEventTypeFunnel</code> get attached to events.
-	 @param		step The step number of the step you are tracking. Step numbers start at 1.
-	 @param		goal A Human readable name for this funnel step.
-	 @param		properties The properties for this event. The keys must be NSString objects and the values should be NSString or NSNumber objects.
- */
-- (void)trackFunnel:(NSString*) funnelName step:(NSInteger)step goal:(NSString*) goal properties:(NSDictionary*) properties;
 
 /*!
  @method     flush

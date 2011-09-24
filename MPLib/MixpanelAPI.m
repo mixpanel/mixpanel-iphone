@@ -29,9 +29,6 @@
 @interface MixpanelAPI ()
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
-@property(nonatomic,retain) NSMutableDictionary *eventSuperProperties;
-@property(nonatomic,retain) NSMutableDictionary *funnelSuperProperties;
-@property(nonatomic,retain) NSMutableDictionary *funnels;
 @property(nonatomic,retain) NSArray *eventsToSend;
 @property(nonatomic,retain) NSMutableArray *eventQueue;
 @property(nonatomic,retain) NSURLConnection *connection;
@@ -48,13 +45,10 @@
 @implementation MixpanelAPI
 @synthesize apiToken;
 @synthesize superProperties;
-@synthesize eventSuperProperties;
-@synthesize funnelSuperProperties;
 @synthesize eventQueue;
 @synthesize eventsToSend;
 @synthesize connection;
 @synthesize responseData;
-@synthesize funnels;
 @synthesize defaultUserId;
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
@@ -100,40 +94,40 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 }
 - (NSDictionary *)interfaces
 {
-  NSMutableDictionary *theDictionary = [NSMutableDictionary dictionary];
-  
-  
-  BOOL success;
-  struct ifaddrs * addrs;
-  const struct ifaddrs * cursor;
-  const struct sockaddr_dl * dlAddr;
-  const uint8_t * base;
-  
-  success = getifaddrs(&addrs) == 0;
-  if (success)
-  {
-    cursor = addrs;
-    while (cursor != NULL)
+    NSMutableDictionary *theDictionary = [NSMutableDictionary dictionary];
+    
+    
+    BOOL success;
+    struct ifaddrs * addrs;
+    const struct ifaddrs * cursor;
+    const struct sockaddr_dl * dlAddr;
+    const uint8_t * base;
+    
+    success = getifaddrs(&addrs) == 0;
+    if (success)
     {
-      if ( (cursor->ifa_addr->sa_family == AF_LINK) && (((const struct sockaddr_dl *)cursor->ifa_addr)->sdl_type == IFT_ETHER) )
-      {
-//        fprintf(stderr, "%s:", cursor->ifa_name);
-        dlAddr = (const struct sockaddr_dl *)cursor->ifa_addr;
-        base = (const uint8_t *) &dlAddr->sdl_data[dlAddr->sdl_nlen];
+        cursor = addrs;
+        while (cursor != NULL)
+        {
+            if ( (cursor->ifa_addr->sa_family == AF_LINK) && (((const struct sockaddr_dl *)cursor->ifa_addr)->sdl_type == IFT_ETHER) )
+            {
+                //        fprintf(stderr, "%s:", cursor->ifa_name);
+                dlAddr = (const struct sockaddr_dl *)cursor->ifa_addr;
+                base = (const uint8_t *) &dlAddr->sdl_data[dlAddr->sdl_nlen];
+                
+                NSString *theKey = [NSString stringWithUTF8String:cursor->ifa_name];
+                NSString *theValue = [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x", base[0], base[1], base[2], base[3], base[4], base[5]];
+                [theDictionary setObject:theValue forKey:theKey];
+            }
+            
+            cursor = cursor->ifa_next;
+        }
         
-        NSString *theKey = [NSString stringWithUTF8String:cursor->ifa_name];
-        NSString *theValue = [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x", base[0], base[1], base[2], base[3], base[4], base[5]];
-        [theDictionary setObject:theValue forKey:theKey];
-      }
-      
-      cursor = cursor->ifa_next;
+        freeifaddrs(addrs);
     }
     
-    freeifaddrs(addrs);
-  }
-  
-  return(theDictionary);
-  
+    return(theDictionary);
+    
 }
 - (NSString*) userIdentifier
 {
@@ -151,7 +145,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     self.defaultUserId = calculateHMAC_SHA1([self userIdentifier], self.apiToken);
     [self identifyUser:self.defaultUserId];
     [self unarchiveData];
-
+    
     [self setUploadInterval:uploadInterval];
 }
 + (id)sharedAPIWithToken:(NSString*)apiToken
@@ -187,28 +181,25 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
         if ((self = [super init])) {
 			self.eventQueue = [NSMutableArray array];
 			self.superProperties = [NSMutableDictionary dictionary];
-			self.eventSuperProperties = [NSMutableDictionary dictionary];
-			self.funnelSuperProperties = [NSMutableDictionary dictionary];
-			self.funnels = [NSMutableDictionary dictionary];
 			self.flushOnBackground = YES;
 			uploadInterval = kMPUploadInterval;
 			[self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000		
 			if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
-
+                
 				taskId = UIBackgroundTaskInvalid;
 				if (&UIApplicationDidEnterBackgroundNotification) {
-				  [notificationCenter addObserver:self 
-										 selector:@selector(applicationDidEnterBackground:) 
-											 name:UIApplicationDidEnterBackgroundNotification 
-										   object:nil];
+                    [notificationCenter addObserver:self 
+                                           selector:@selector(applicationDidEnterBackground:) 
+                                               name:UIApplicationDidEnterBackgroundNotification 
+                                             object:nil];
 				}
 				if (&UIApplicationWillEnterForegroundNotification) {
-				  [notificationCenter addObserver:self 
-										 selector:@selector(applicationWillEnterForeground:) 
-											 name:UIApplicationWillEnterForegroundNotification 
-										   object:nil];
+                    [notificationCenter addObserver:self 
+                                           selector:@selector(applicationWillEnterForeground:) 
+                                               name:UIApplicationWillEnterForegroundNotification 
+                                             object:nil];
 				}
 			}
 #endif
@@ -216,7 +207,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 								   selector:@selector(applicationWillTerminate:) 
 									   name:UIApplicationWillTerminateNotification 
 									 object:nil];
-
+            
 			[self applicationWillEnterForeground:nil];
             //Initialize the instance here.
         }
@@ -226,89 +217,37 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 
 - (void)registerSuperProperties:(NSDictionary*) properties
 {
-	[self registerSuperProperties:properties eventType:kMPLibEventTypeAll];
-}
-
-- (void)registerSuperProperties:(NSDictionary*) properties eventType:(MPLibEventType) type
-{
-	NSAssert(properties != nil, @"Properties should not be nil");
-	NSMutableDictionary *superProps = nil;
-	switch (type) {
-		case kMPLibEventTypeEvent:
-			superProps = self.eventSuperProperties;
-			break;
-		case kMPLibEventTypeFunnel:
-			superProps = self.funnelSuperProperties;
-			break;
-		case kMPLibEventTypeAll:
-			superProps = self.superProperties;
-			break;
-	}
-	[superProps addEntriesFromDictionary:properties];
+    NSAssert(properties != nil, @"Properties should not be nil");
+    [self.superProperties addEntriesFromDictionary:properties];
 }
 
 
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties
 {
-	[self registerSuperPropertiesOnce:properties eventType:kMPLibEventTypeAll];
-}
-
-- (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) type
-{
-	NSMutableDictionary *superProps = nil;
-	switch (type) {
-		case kMPLibEventTypeEvent:
-			superProps = self.eventSuperProperties;
-			break;
-		case kMPLibEventTypeFunnel:
-			superProps = self.funnelSuperProperties;
-			break;
-		case kMPLibEventTypeAll:
-			superProps = self.superProperties;
-			break;
-	}
-	for (NSString *key in properties) {
-		if ([superProps objectForKey:key] == nil) {
-			[superProps setObject:[properties objectForKey:key] forKey:key];
-		}
-	}
+    NSMutableDictionary *superProps = self.superProperties;
+    for (NSString *key in properties) {
+        if ([superProps objectForKey:key] == nil) {
+            [superProps setObject:[properties objectForKey:key] forKey:key];
+        }
+    }
 }
 
 
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue
 {
-	[self registerSuperPropertiesOnce:properties eventType:kMPLibEventTypeAll defaultValue:defaultValue];
-}
-- (void)registerSuperPropertiesOnce:(NSDictionary*) properties eventType:(MPLibEventType) type defaultValue:(id) defaultValue
-{
-	NSMutableDictionary *superProps = nil;
-	switch (type) {
-		case kMPLibEventTypeEvent:
-			superProps = self.eventSuperProperties;
-			break;
-		case kMPLibEventTypeFunnel:
-			superProps = self.funnelSuperProperties;
-			break;
-		case kMPLibEventTypeAll:
-			superProps = self.superProperties;
-			break;
-	}
-	for (NSString *key in properties) {
-		id value = [superProps objectForKey:key];
-		if (value == nil || [value isEqual:defaultValue]) {
-			[superProps setObject:[properties objectForKey:key] forKey:key];
-		}
-	}
+    NSMutableDictionary *superProps = self.superProperties;
+    for (NSString *key in properties) {
+        id value = [superProps objectForKey:key];
+        if (value == nil || [value isEqual:defaultValue]) {
+            [superProps setObject:[properties objectForKey:key] forKey:key];
+        }
+    }
 }
 
-- (void)registerFunnel:(NSString*) funnel steps:(NSArray*) steps 
-{
-	[funnels setObject:steps forKey:funnel];
-}
 
 - (void)identifyUser:(NSString*) identifier
 {
-	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] eventType:kMPLibEventTypeAll defaultValue:self.defaultUserId];
+	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] defaultValue:self.defaultUserId];
 }
 
 - (void)track:(NSString*) event
@@ -319,7 +258,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 - (void)track:(NSString*) event properties:(NSDictionary*) properties
 {
 	NSMutableDictionary *props = [NSMutableDictionary dictionary];
-	[props addEntriesFromDictionary:eventSuperProperties];
 	[props addEntriesFromDictionary:superProperties];
 	[props addEntriesFromDictionary:properties];
 	if (![props objectForKey:@"token"]) {
@@ -327,40 +265,10 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	}
 	NSDictionary *allProperties = [props copy];
 	MixpanelEvent *mpEvent = [[MixpanelEvent alloc] initWithName:event 
-															type:kMPLibEventTypeEvent
-													  properties:allProperties];
+                                                      properties:allProperties];
 	[eventQueue addObject:mpEvent];
 	[mpEvent release];
-	for (NSString *funnel in funnels) {
-		NSArray *steps = [funnels objectForKey:funnel];
-		NSInteger step = [steps indexOfObject:event];
-		if (step != NSNotFound) {
-			[self trackFunnel:funnel step:step + 1 goal:event properties:properties];
-		}
-	}
 	[allProperties release];
-}
-- (void)trackFunnel:(NSString*) funnelName step:(NSInteger)step goal:(NSString*) goal
-{
-	[self trackFunnel:funnelName step:step goal:goal properties:nil];	
-}
-- (void)trackFunnel:(NSString*) funnelName step:(NSInteger)step goal:(NSString*) goal properties:(NSDictionary*) properties
-{
-	NSMutableDictionary *props = [NSMutableDictionary dictionary];
-	[props addEntriesFromDictionary:funnelSuperProperties];
-	[props addEntriesFromDictionary:superProperties];
-	[props addEntriesFromDictionary:properties];
-	if (![props objectForKey:@"token"]) {
-		[props setObject:apiToken forKey:@"token"];
-	}
-	[props setObject:funnelName forKey:@"funnel"];
-	[props setObject:[NSNumber numberWithInt:step] forKey:@"step"];
-	[props setObject:goal forKey:@"goal"];
-	MixpanelEvent *mpEvent = [[MixpanelEvent alloc] initWithName:@"mp_funnel"
-															type:kMPLibEventTypeFunnel
-													  properties:props];
-	[eventQueue addObject:mpEvent];
-	[mpEvent release];
 }
 
 #pragma mark -
@@ -383,23 +291,23 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 
 - (void)applicationDidEnterBackground:(NSNotificationCenter*) notification
 {
-	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-  if ([self flushOnBackground]) {
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
-        [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
-      taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        [self.connection cancel];
-        [self archiveData];
-        [[UIApplication sharedApplication] endBackgroundTask:taskId];
-      }]	;
-      [self flush];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+    if ([self flushOnBackground]) {
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+            [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
+            taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                [self.connection cancel];
+                [self archiveData];
+                [[UIApplication sharedApplication] endBackgroundTask:taskId];
+            }]	;
+            [self flush];
+        } else {
+            [self archiveData];
+        }
     } else {
-      [self archiveData];
+        [self archiveData];
     }
-  } else {
-    [self archiveData];
-  }
-	#endif
+#endif
 }
 - (void)applicationWillEnterForeground:(NSNotificationCenter*) notification
 {
@@ -407,11 +315,11 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 		[self unarchiveData];
 		[self flush];
 	}
-	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid) {
 		taskId = UIBackgroundTaskInvalid;				
 	}
-	#endif
+#endif
 }
 
 #pragma mark -
@@ -428,7 +336,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	
 	CJSONDataSerializer *serializer = [CJSONDataSerializer serializer];
 	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
-										   error:nil];
+                                        error:nil];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *urlString = SERVER_URL;
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data base64EncodedString]];
@@ -468,11 +376,11 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.connection = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
 	}
-	#endif
+#endif
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
 {
