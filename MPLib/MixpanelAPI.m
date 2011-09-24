@@ -9,9 +9,23 @@
 #import "MixpanelEvent.h"
 #import "CJSONDataSerializer.h"
 #import "NSData+Base64.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <ifaddrs.h>
+#include <errno.h>
+#include <net/if_dl.h>
 #define SERVER_URL @"http://api.mixpanel.com/track/"
 #define FILE_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"]
+
+#if ! defined(IFT_ETHER)
+#define IFT_ETHER 0x6/* Ethernet CSMACD */
+#endif
+
 @interface MixpanelAPI ()
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
@@ -46,6 +60,7 @@
 @synthesize flushOnBackground;
 @synthesize testMode;
 static MixpanelAPI *sharedInstance = nil; 
+
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
 	const char *cSecretStr = [key UTF8String];
@@ -84,8 +99,57 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
                                             repeats:YES];
     [timer retain];
 }
+- (NSDictionary *)interfaces
+{
+  NSMutableDictionary *theDictionary = [NSMutableDictionary dictionary];
+  
+  
+  BOOL success;
+  struct ifaddrs * addrs;
+  const struct ifaddrs * cursor;
+  const struct sockaddr_dl * dlAddr;
+  const uint8_t * base;
+  
+  success = getifaddrs(&addrs) == 0;
+  if (success)
+  {
+    cursor = addrs;
+    while (cursor != NULL)
+    {
+      if ( (cursor->ifa_addr->sa_family == AF_LINK) && (((const struct sockaddr_dl *)cursor->ifa_addr)->sdl_type == IFT_ETHER) )
+      {
+//        fprintf(stderr, "%s:", cursor->ifa_name);
+        dlAddr = (const struct sockaddr_dl *)cursor->ifa_addr;
+        base = (const uint8_t *) &dlAddr->sdl_data[dlAddr->sdl_nlen];
+        
+        NSString *theKey = [NSString stringWithUTF8String:cursor->ifa_name];
+        NSString *theValue = [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x", base[0], base[1], base[2], base[3], base[4], base[5]];
+        [theDictionary setObject:theValue forKey:theKey];
+      }
+      
+      cursor = cursor->ifa_next;
+    }
+    
+    freeifaddrs(addrs);
+  }
+  
+  return(theDictionary);
+  
+}
+- (NSString*) userIdentifier
+{
+    NSDictionary *dict = [self interfaces];
+    NSArray *keys = [dict allKeys];
+    keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
+    NSMutableString *string = [NSMutableString stringWithString:bundleName];
+    for (NSString *key in keys) {
+        [string appendString:[dict objectForKey:key]];
+    }
+    return string;
+}
 - (void) start {
-    self.defaultUserId = calculateHMAC_SHA1([[UIDevice currentDevice] uniqueIdentifier], self.apiToken);
+    self.defaultUserId = calculateHMAC_SHA1([self userIdentifier], self.apiToken);
     [self identifyUser:self.defaultUserId];
     [self unarchiveData];
 
