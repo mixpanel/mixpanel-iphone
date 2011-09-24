@@ -50,6 +50,12 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 @property(nonatomic, assign) BOOL flushOnBackground;
 
+/*! @property nameTag
+ @abstract The name tag of the current user.
+ @discussion The name tag is a human readable string that identifies the user.
+ */
+@property(nonatomic, retain) NSString *nameTag;
+
 /*! @property testMode
 	@abstract Whether test mode is on
 	@discussion Changing this value enables/disables test mode for future flushes.

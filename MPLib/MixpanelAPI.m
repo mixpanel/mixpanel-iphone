@@ -25,7 +25,7 @@
 #if ! defined(IFT_ETHER)
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
-
+#define kMPNameTag @"mp_name_tag"
 @interface MixpanelAPI ()
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
@@ -91,6 +91,15 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
                                            userInfo:nil 
                                             repeats:YES];
     [timer retain];
+}
+
+- (void)setNameTag:(NSString *)nameTag
+{
+    [[self superProperties] setObject:nameTag forKey:kMPNameTag];
+}
+- (NSString*)nameTag
+{
+    return [[self superProperties] objectForKey:kMPNameTag];
 }
 - (NSDictionary *)interfaces
 {
