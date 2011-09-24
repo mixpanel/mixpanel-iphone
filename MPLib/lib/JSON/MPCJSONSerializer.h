@@ -1,8 +1,8 @@
 //
-//  NSScanner_Extensions.h
+//  CJSONSerializer.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 12/08/2005.
+//  Created by Jonathan Wight on 12/07/2005.
 //  Copyright 2005 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
@@ -29,16 +29,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSScanner (NSScanner_Extensions)
+@class MPCJSONDataSerializer;
 
-- (NSString *)remainingString;
+/// Serialize JSON compatible objects (NSNull, NSNumber, NSString, NSArray, NSDictionary) into a JSON formatted string. Note this class is just a wrapper around CJSONDataSerializer which you really should be using instead.
+@interface MPCJSONSerializer : NSObject {
+	MPCJSONDataSerializer *serializer;
+}
 
-- (unichar)currentCharacter;
-- (unichar)scanCharacter;
-- (BOOL)scanCharacter:(unichar)inCharacter;
-- (void)backtrack:(unsigned)inCount;
++ (id)serializer;
 
-- (BOOL)scanCStyleComment:(NSString **)outComment;
-- (BOOL)scanCPlusPlusStyleComment:(NSString **)outComment;
+/// Take any JSON compatible object (generally NSNull, NSNumber, NSString, NSArray and NSDictionary) and produce a JSON string.
+- (NSString *)serializeObject:(id)inObject error:(NSError **)outError;
+
+- (NSString *)serializeArray:(NSArray *)inArray error:(NSError **)outError;
+- (NSString *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError;
 
 @end
