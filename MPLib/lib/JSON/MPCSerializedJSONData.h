@@ -1,9 +1,9 @@
 //
-//  NSCharacterSet_Extensions.m
+//  CSerializedJSONData.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 12/08/2005.
-//  Copyright 2005 toxicsoftware.com. All rights reserved.
+//  Created by Jonathan Wight on 10/23/09.
+//  Copyright 2009 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -27,22 +27,14 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "NSCharacterSet_Extensions.h"
+#import <Foundation/Foundation.h>
 
-@implementation NSCharacterSet (NSCharacterSet_Extensions)
-
-#define LF 0x000a // Line Feed
-#define FF 0x000c // Form Feed
-#define CR 0x000d // Carriage Return
-#define NEL 0x0085 // Next Line
-#define LS 0x2028 // Line Separator
-#define PS 0x2029 // Paragraph Separator
-
-+ (NSCharacterSet *)linebreaksCharacterSet
-{
-unichar theCharacters[] = { LF, FF, CR, NEL, LS, PS, };
-
-return([NSCharacterSet characterSetWithCharactersInString:[NSString stringWithCharacters:theCharacters length:sizeof(theCharacters) / sizeof(*theCharacters)]]);
+@interface MPCSerializedJSONData : NSObject {
+	NSData *data;
 }
+
+@property (readonly, nonatomic, retain) NSData *data;
+
+- (id)initWithData:(NSData *)inData;
 
 @end

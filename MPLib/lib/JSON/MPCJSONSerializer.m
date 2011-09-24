@@ -1,5 +1,5 @@
 //
-//  CJSONSerializer.h
+//  CJSONSerializer.m
 //  TouchCode
 //
 //  Created by Jonathan Wight on 12/07/2005.
@@ -27,21 +27,55 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#import "MPCJSONSerializer.h"
 
-@class CJSONDataSerializer;
+#import "MPCJSONDataSerializer.h"
 
-/// Serialize JSON compatible objects (NSNull, NSNumber, NSString, NSArray, NSDictionary) into a JSON formatted string. Note this class is just a wrapper around CJSONDataSerializer which you really should be using instead.
-@interface CJSONSerializer : NSObject {
-	CJSONDataSerializer *serializer;
+@implementation MPCJSONSerializer
+
++ (id)serializer
+{
+return([[[self alloc] init] autorelease]);
 }
 
-+ (id)serializer;
+- (id)init
+{
+if ((self = [super init]) != NULL)
+	{
+	serializer = [[MPCJSONDataSerializer alloc] init];
+	}
+return(self);
+}
 
-/// Take any JSON compatible object (generally NSNull, NSNumber, NSString, NSArray and NSDictionary) and produce a JSON string.
-- (NSString *)serializeObject:(id)inObject error:(NSError **)outError;
+- (void)dealloc
+{
+[serializer release];
+serializer = NULL;
+//
+[super dealloc];
+}
 
-- (NSString *)serializeArray:(NSArray *)inArray error:(NSError **)outError;
-- (NSString *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError;
+- (NSString *)serializeObject:(id)inObject error:(NSError **)outError
+{
+NSData *theData = [serializer serializeObject:inObject error:outError];
+if (theData == NULL)
+	return(NULL);
+return([[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease]);
+}
 
+- (NSString *)serializeArray:(NSArray *)inArray error:(NSError **)outError
+{
+NSData *theData = [serializer serializeArray:inArray error:outError];
+if (theData == NULL)
+	return(NULL);
+return([[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease]);
+}
+
+- (NSString *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError
+{
+NSData *theData = [serializer serializeDictionary:inDictionary error:outError];
+if (theData == NULL)
+	return(NULL);
+return([[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease]);
+}
 @end

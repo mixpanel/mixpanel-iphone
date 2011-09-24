@@ -27,15 +27,15 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CJSONDataSerializer.h"
+#import "MPCJSONDataSerializer.h"
 
-#import "CSerializedJSONData.h"
+#import "MPCSerializedJSONData.h"
 
 static NSData *kNULL = NULL;
 static NSData *kFalse = NULL;
 static NSData *kTrue = NULL;
 
-@implementation CJSONDataSerializer
+@implementation MPCJSONDataSerializer
 
 + (void)initialize
 {
@@ -88,7 +88,7 @@ else if ([inObject isKindOfClass:[NSData class]])
 	NSString *theString = [[[NSString alloc] initWithData:inObject encoding:NSUTF8StringEncoding] autorelease];
 	theResult = [self serializeString:theString error:outError];
 	}
-else if ([inObject isKindOfClass:[CSerializedJSONData class]])
+else if ([inObject isKindOfClass:[MPCSerializedJSONData class]])
 	{
 	theResult = [inObject data];
 	}
