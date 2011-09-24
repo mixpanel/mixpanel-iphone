@@ -8,7 +8,7 @@
 #import "MixpanelAPI.h"
 #import "MixpanelEvent.h"
 #import "CJSONDataSerializer.h"
-#import "NSData+Base64.h"
+#import "NSData+MPBase64.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -348,7 +348,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
                                         error:nil];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSString *urlString = SERVER_URL;
-	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data base64EncodedString]];
+	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
 	if (self.testMode) {
 		NSLog(@"Mixpanel test mode is enabled");
 		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
