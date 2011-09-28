@@ -26,6 +26,8 @@
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 #define kMPNameTag @"mp_name_tag"
+#define kMPNoteTag @"mp_note"
+
 @interface MixpanelAPI ()
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
@@ -278,6 +280,16 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	[eventQueue addObject:mpEvent];
 	[mpEvent release];
 	[allProperties release];
+}
+
+- (void)track:(NSString *)event note:(NSString*)note {
+    [self track:event properties:[NSDictionary dictionaryWithObject:note forKey:kMPNoteTag]];
+}
+
+- (void)track:(NSString*) event properties:(NSDictionary *)properties note:(NSString*)note {
+    NSMutableDictionary *propertiesWithNote = [NSMutableDictionary dictionaryWithDictionary:properties];
+    [propertiesWithNote setObject:note forKey:kMPNoteTag];
+    [self track:event properties:propertiesWithNote];
 }
 
 #pragma mark -

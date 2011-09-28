@@ -137,6 +137,16 @@ static const NSUInteger kMPUploadInterval = 30;
 - (void)track:(NSString*) event;
 
 /*!
+ @method		track:note:
+ @abstract      Tracks an event with note.
+ @discussion    Tracks an event with note property attached to it. Notes are sentences that describe what a user is doing alongside an event you track. 
+                See track:properties: for more details.
+ @param         event The event to track.
+ @param         note Note for this event.
+ */
+- (void)track:(NSString*) event note:(NSString*) note;
+
+/*!
 	@method     track:properties:
 	@abstract   Tracks an event with properties.
 	@discussion Tracks an event. The properties of this event are a union of the super properties of type Super properties of type 
@@ -147,6 +157,17 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)track:(NSString*) event properties:(NSDictionary*) properties;
 
+
+/*!
+ @method     track:properties:note:
+ @abstract   Tracks an event with properties and a note.
+ @discussion Tracks an event with properties extended by a note property. Notes are sentences that describe what a user is doing alongside an event you track.
+             See track:properties: for more details.
+ @param		event The event to track.
+ @param		properties The properties for this event. The keys must be NSString objects and the values should be NSString or NSNumber objects.
+ @param     note Note for this event.
+ */
+- (void)track:(NSString*) event properties:(NSDictionary*) properties note:(NSString*)note;
 
 /*!
  @method     flush
