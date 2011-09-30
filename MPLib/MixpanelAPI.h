@@ -18,6 +18,15 @@
     @discussion The default number of seconds between data uploads to the Mixpanel server
 */
 static const NSUInteger kMPUploadInterval = 30;
+
+typedef enum {
+    MPSystemPropertyDeviceModel         = (1 << 0),
+    MPSystemPropertyDeviceConnectivity  = (1 << 1),
+    MPSystemPropertyOSVersion           = (1 << 2),
+    MPSystemPropertyAppVersion          = (1 << 3),
+    MPSystemPropertyAll                 = 0xFFFFFFFF
+} MPSystemProperty;
+
 /*!
     @class		MixpanelAPI
     @abstract	Main entry point for the Mixpanel API.
@@ -116,6 +125,8 @@ static const NSUInteger kMPUploadInterval = 30;
  
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
+
+- (void)registerSystemSuperProperties:(MPSystemProperty) properties;
 
 /*!
 	@method     identifyUser:

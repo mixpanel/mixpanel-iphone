@@ -9,6 +9,7 @@
 #import "MixpanelEvent.h"
 #import "MPCJSONDataSerializer.h"
 #import "NSData+MPBase64.h"
+#import "UIDevice+MPAdditions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -255,6 +256,21 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     }
 }
 
+- (void)registerSystemSuperProperties:(MPSystemProperty)properties
+{
+    if ((properties & MPSystemPropertyAppVersion) == MPSystemPropertyAppVersion) {
+        [self.superProperties setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"app_version"];
+    }
+    if ((properties & MPSystemPropertyDeviceConnectivity) == MPSystemPropertyDeviceConnectivity) {
+        [self.superProperties setObject:[[UIDevice currentDevice] connectivity] forKey:@"device_connectivity"];
+    }
+    if ((properties & MPSystemPropertyDeviceModel) == MPSystemPropertyDeviceModel) {
+        [self.superProperties setObject:[[UIDevice currentDevice] model] forKey:@"device_model"];
+    }
+    if ((properties & MPSystemPropertyOSVersion) == MPSystemPropertyOSVersion) {
+        [self.superProperties setObject:[[UIDevice currentDevice] systemVersion] forKey:@"device_os"];
+    }
+}
 
 - (void)identifyUser:(NSString*) identifier
 {
