@@ -30,6 +30,9 @@
 #define kMPNoteTag @"mp_note"
 
 @interface MixpanelAPI ()
+#if NS_BLOCKS_AVAILABLE
+@property(nonatomic,retain) NSMutableDictionary *superPropertyHandlers;
+#endif
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
 @property(nonatomic,retain) NSArray *eventsToSend;
@@ -46,6 +49,9 @@
 @end
 
 @implementation MixpanelAPI
+#if NS_BLOCKS_AVAILABLE
+@synthesize superPropertyHandlers;
+#endif
 @synthesize apiToken;
 @synthesize superProperties;
 @synthesize eventQueue;
@@ -215,6 +221,9 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 				}
 			}
 #endif
+#if NS_BLOCKS_AVAILABLE
+            self.superPropertyHandlers = [NSMutableDictionary dictionary];
+#endif
 			[notificationCenter addObserver:self 
 								   selector:@selector(applicationWillTerminate:) 
 									   name:UIApplicationWillTerminateNotification 
@@ -272,6 +281,17 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     }
 }
 
+#if NS_BLOCKS_AVAILABLE
+- (void)registerSuperProperty:(NSString*)propertyName handler:(NSString* (^)(NSString* event))handler 
+{
+    if (!handler) {
+        [self.superPropertyHandlers delete:propertyName];
+    } else {
+        [self.superPropertyHandlers setObject:[[handler copy] autorelease] forKey:propertyName];
+    }
+}
+#endif
+
 - (void)identifyUser:(NSString*) identifier
 {
 	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] defaultValue:self.defaultUserId];
@@ -290,6 +310,16 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	if (![props objectForKey:@"token"]) {
 		[props setObject:apiToken forKey:@"token"];
 	}
+    
+    // Add values from superproperty handlers, if any
+    for (NSString* property in self.superPropertyHandlers) {
+        NSString* (^handler)(NSString*) = [self.superPropertyHandlers objectForKey:property];
+        NSString* value = handler(event);
+        if (value) {
+            [props setObject:value forKey:property];
+        }
+    }
+    
 	NSDictionary *allProperties = [props copy];
 	MixpanelEvent *mpEvent = [[MixpanelEvent alloc] initWithName:event 
                                                       properties:allProperties];

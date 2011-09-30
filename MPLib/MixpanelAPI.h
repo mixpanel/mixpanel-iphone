@@ -47,6 +47,7 @@ typedef enum {
 	NSUInteger uploadInterval;
 	BOOL testMode;
 }
+
 /*! @property uploadInterval
 	@abstract The upload interval in seconds.
 	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
@@ -127,6 +128,11 @@ typedef enum {
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
 
 - (void)registerSystemSuperProperties:(MPSystemProperty) properties;
+
+#if NS_BLOCKS_AVAILABLE
+// Whenever an event is tracked, value of the dynamic super property is evaluated by executing the supplied handler block.
+- (void)registerSuperProperty:(NSString*)propertyName handler:(NSString* (^)(NSString* event))handler;
+#endif
 
 /*!
 	@method     identifyUser:
