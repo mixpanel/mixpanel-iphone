@@ -20,6 +20,12 @@
 #include <ifaddrs.h>
 #include <errno.h>
 #include <net/if_dl.h>
+
+NSString* const MPSystemPropertyDeviceModel = @"device_model";
+NSString* const MPSystemPropertyDeviceConnectivity = @"device_connectivity";
+NSString* const MPSystemPropertyOSVersion = @"os_version";
+NSString* const MPSystemPropertyAppVersion = @"app_version";
+
 #define SERVER_URL @"http://api.mixpanel.com/track/"
 #define FILE_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"]
 
@@ -265,19 +271,27 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     }
 }
 
-- (void)registerSystemSuperProperties:(MPSystemProperty)properties
+- (void)registerSystemSuperProperties:(NSDictionary*)properties
 {
-    if ((properties & MPSystemPropertyAppVersion) == MPSystemPropertyAppVersion) {
-        [self.superProperties setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"app_version"];
-    }
-    if ((properties & MPSystemPropertyDeviceConnectivity) == MPSystemPropertyDeviceConnectivity) {
-        [self.superProperties setObject:[[UIDevice currentDevice] connectivity] forKey:@"device_connectivity"];
-    }
-    if ((properties & MPSystemPropertyDeviceModel) == MPSystemPropertyDeviceModel) {
-        [self.superProperties setObject:[[UIDevice currentDevice] model] forKey:@"device_model"];
-    }
-    if ((properties & MPSystemPropertyOSVersion) == MPSystemPropertyOSVersion) {
-        [self.superProperties setObject:[[UIDevice currentDevice] systemVersion] forKey:@"device_os"];
+    for (NSString* key in properties) {
+        if (key == MPSystemPropertyAppVersion) {
+            [self.superProperties setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:[properties objectForKey:key]];
+        }
+        
+        if (key == MPSystemPropertyDeviceConnectivity) {
+            [self.superProperties setObject:[[UIDevice currentDevice] connectivity]
+                                     forKey:[properties objectForKey:key]];
+        }
+        
+        if (key == MPSystemPropertyDeviceModel) {
+            [self.superProperties setObject:[[UIDevice currentDevice] model]
+                                     forKey:[properties objectForKey:key]];
+        }
+        
+        if (key == MPSystemPropertyOSVersion) {
+            [self.superProperties setObject:[[UIDevice currentDevice] systemVersion]
+                                     forKey:[properties objectForKey:key]];
+        }
     }
 }
 

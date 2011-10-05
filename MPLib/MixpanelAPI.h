@@ -19,13 +19,10 @@
 */
 static const NSUInteger kMPUploadInterval = 30;
 
-typedef enum {
-    MPSystemPropertyDeviceModel         = (1 << 0),
-    MPSystemPropertyDeviceConnectivity  = (1 << 1),
-    MPSystemPropertyOSVersion           = (1 << 2),
-    MPSystemPropertyAppVersion          = (1 << 3),
-    MPSystemPropertyAll                 = 0xFFFFFFFF
-} MPSystemProperty;
+extern NSString* const MPSystemPropertyDeviceModel;
+extern NSString* const MPSystemPropertyDeviceConnectivity;
+extern NSString* const MPSystemPropertyOSVersion;
+extern NSString* const MPSystemPropertyAppVersion;
 
 /*!
     @class		MixpanelAPI
@@ -127,7 +124,7 @@ typedef enum {
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
 
-- (void)registerSystemSuperProperties:(MPSystemProperty) properties;
+- (void)registerSystemSuperProperties:(NSDictionary*) properties;
 
 #if NS_BLOCKS_AVAILABLE
 // Whenever an event is tracked, value of the dynamic super property is evaluated by executing the supplied handler block.
