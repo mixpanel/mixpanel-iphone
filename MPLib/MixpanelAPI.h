@@ -37,6 +37,7 @@ static const NSUInteger kMPUploadInterval = 30;
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
 	BOOL testMode;
+	BOOL trackEvents;
 }
 /*! @property uploadInterval
 	@abstract The upload interval in seconds.
@@ -61,6 +62,12 @@ static const NSUInteger kMPUploadInterval = 30;
 	@discussion Changing this value enables/disables test mode for future flushes.
 */
 @property(nonatomic) BOOL testMode;
+
+/*! @property trackEvents
+	@abstract Whether tracking of events is on
+	@discussion Changing this value enables/disables tracking of events. Defaults to YES.
+*/
+@property(nonatomic) BOOL trackEvents;
 
 /*!
     @method     sharedAPIWithToken:
