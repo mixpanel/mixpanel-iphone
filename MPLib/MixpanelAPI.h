@@ -36,6 +36,7 @@ static const NSUInteger kMPUploadInterval = 30;
 	#endif
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
+	BOOL showNetworkActivityIndicator;
 	BOOL testMode;
 }
 /*! @property uploadInterval
@@ -61,6 +62,12 @@ static const NSUInteger kMPUploadInterval = 30;
 	@discussion Changing this value enables/disables test mode for future flushes.
 */
 @property(nonatomic) BOOL testMode;
+
+/*! @property showNetworkActivityIndicator
+	@abstract Whether the network activity indicator will be displayed during network activity.
+	@discussion Changing this value enables/disables the network activity indicator for future flushes.
+*/
+@property(nonatomic) BOOL showNetworkActivityIndicator;
 
 /*!
     @method     sharedAPIWithToken:

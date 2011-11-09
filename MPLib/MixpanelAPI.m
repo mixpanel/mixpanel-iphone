@@ -54,6 +54,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key);
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
 @synthesize testMode;
+@synthesize showNetworkActivityIndicator;
 static MixpanelAPI *sharedInstance = nil; 
 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
@@ -347,7 +348,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
 	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
                                         error:nil];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:self.showNetworkActivityIndicator ? YES : NO];
 	NSString *urlString = SERVER_URL;
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
 	if (self.testMode) {
