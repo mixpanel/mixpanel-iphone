@@ -385,7 +385,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.responseData = nil;
 	self.connection = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
