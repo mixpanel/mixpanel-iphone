@@ -40,6 +40,7 @@
 -(void)applicationWillTerminate:(NSNotification *)notification;
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification;
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification;
+NSString* calculateHMAC_SHA1(NSString *str, NSString *key);
 @end
 
 @implementation MixpanelAPI
