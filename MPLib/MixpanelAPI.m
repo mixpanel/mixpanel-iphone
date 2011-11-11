@@ -3,7 +3,12 @@
 //  MPLib
 //
 //
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
+
 #import <CommonCrypto/CommonHMAC.h>
 #import "MixpanelAPI.h"
 #import "MixpanelEvent.h"
@@ -20,7 +25,7 @@
 #include <errno.h>
 #include <net/if_dl.h>
 #define SERVER_URL @"http://api.mixpanel.com/track/"
-#define FILE_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"]
+#define FILE_NAME @"MixPanelLib_SavedData.plist"
 
 #if ! defined(IFT_ETHER)
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
@@ -194,6 +199,8 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			uploadInterval = kMPUploadInterval;
 			[self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+          
+#if TARGET_OS_IPHONE
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000		
 			if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
                 
@@ -216,6 +223,12 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 								   selector:@selector(applicationWillTerminate:) 
 									   name:UIApplicationWillTerminateNotification 
 									 object:nil];
+#else
+            [notificationCenter addObserver:self 
+                                   selector:@selector(applicationWillTerminate:) 
+                                       name:NSApplicationWillTerminateNotification 
+                                     object:nil];
+#endif
             
 			[self applicationWillEnterForeground:nil];
             //Initialize the instance here.
@@ -282,14 +295,58 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 
 #pragma mark -
 #pragma mark Application Lifecycle Events
+
+- (NSString *)applicationStorageDirectory {
+#if TARGET_OS_IPHONE
+    // iOS apps have thier own Library folder
+    return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+#else
+    // Mac apps use ~/Library/Application Support/<app name>
+    NSString *appName;
+    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+
+    if (bundleName != nil) {
+        // For regular app bundles
+        appName = bundleName;
+    } else {
+        // For command-line apps, use the executable's name
+        appName = [NSString stringWithCString:getprogname() encoding:NSUTF8StringEncoding];
+    }
+
+    NSString *directoryPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:appName];
+
+    BOOL isDirectory;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:directoryPath isDirectory:&isDirectory];
+
+    if (exists && !isDirectory) {
+        NSLog(@"Application directory exists but isn't a directory: %@", directoryPath);
+        return nil;
+    }
+
+    if (!exists) {
+        BOOL created = [[NSFileManager defaultManager] createDirectoryAtPath:directoryPath
+                                                 withIntermediateDirectories:YES 
+                                                                  attributes:nil 
+                                                                       error:nil];
+        if (!created) {
+            return nil;
+        }
+    }
+
+    return directoryPath;
+#endif  
+}
+
 - (void)unarchiveData {
-	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:FILE_PATH];
+    NSString *filePath = [[self applicationStorageDirectory] stringByAppendingPathComponent:FILE_NAME];
+	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
 	if (!self.eventQueue) {
 		self.eventQueue = [NSMutableArray array];
 	}		
 }
 - (void)archiveData {
-	if (![NSKeyedArchiver archiveRootObject:eventQueue toFile:FILE_PATH]) {
+    NSString *filePath = [[self applicationStorageDirectory] stringByAppendingPathComponent:FILE_NAME];  
+	if (![NSKeyedArchiver archiveRootObject:eventQueue toFile:filePath]) {
 		NSLog(@"Unable to archive data!!!");
 	}
 }
@@ -346,7 +403,11 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
 	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
                                         error:nil];
+
+#if TARGET_OS_IPHONE
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+#endif
+  
 	NSString *urlString = SERVER_URL;
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
 	if (self.testMode) {
@@ -383,12 +444,15 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.eventsToSend = nil;
 	self.responseData = nil;
 	self.connection = nil;
+  
+#if TARGET_OS_IPHONE
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
 	}
+#endif
 #endif
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
@@ -407,11 +471,14 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.eventsToSend = nil;
 	self.responseData = nil;
 	self.connection = nil;
+
+#if TARGET_OS_IPHONE
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
 	}
+#endif
 #endif
 }
 @end

@@ -1,0 +1,363 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		28C580F0146C72B100B0847E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C580EF146C72B100B0847E /* Cocoa.framework */; };
+		28C580FA146C72B100B0847E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 28C580F8146C72B100B0847E /* InfoPlist.strings */; };
+		28C580FC146C72B100B0847E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C580FB146C72B100B0847E /* main.m */; };
+		28C58100146C72B100B0847E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 28C580FE146C72B100B0847E /* Credits.rtf */; };
+		28C58103146C72B100B0847E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C58102146C72B100B0847E /* AppDelegate.m */; };
+		28C58106146C72B200B0847E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28C58104146C72B200B0847E /* MainMenu.xib */; };
+		28C5811D146CF15400B0847E /* MPCJSONDataSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C58110146CF15400B0847E /* MPCJSONDataSerializer.m */; };
+		28C5811F146CF15400B0847E /* MPCJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C58112146CF15400B0847E /* MPCJSONSerializer.m */; };
+		28C58121146CF15400B0847E /* MPCSerializedJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C58114146CF15400B0847E /* MPCSerializedJSONData.m */; };
+		28C58123146CF15400B0847E /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C58117146CF15400B0847E /* NSData+MPBase64.m */; };
+		28C58125146CF15400B0847E /* MixpanelAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C58119146CF15400B0847E /* MixpanelAPI.m */; };
+		28C58127146CF15400B0847E /* MixpanelEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C5811B146CF15400B0847E /* MixpanelEvent.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		28C580EB146C72B100B0847E /* MixpanelEventSampleAppKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MixpanelEventSampleAppKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		28C580EF146C72B100B0847E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		28C580F2146C72B100B0847E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		28C580F3146C72B100B0847E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		28C580F4146C72B100B0847E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		28C580F7146C72B100B0847E /* MixpanelEventSampleAppKit-Info.plist */ = {isa = PBXFileReference; path = "MixpanelEventSampleAppKit-Info.plist"; sourceTree = "<group>"; };
+		28C580F9146C72B100B0847E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		28C580FB146C72B100B0847E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		28C580FD146C72B100B0847E /* MixpanelEventSampleAppKit-Prefix.pch */ = {isa = PBXFileReference; path = "MixpanelEventSampleAppKit-Prefix.pch"; sourceTree = "<group>"; };
+		28C580FF146C72B100B0847E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		28C58101146C72B100B0847E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.objj.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		28C58102146C72B100B0847E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		28C58105146C72B200B0847E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		28C5810F146CF15400B0847E /* MPCJSONDataSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = MPCJSONDataSerializer.h; sourceTree = "<group>"; };
+		28C58110146CF15400B0847E /* MPCJSONDataSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONDataSerializer.m; sourceTree = "<group>"; };
+		28C58111146CF15400B0847E /* MPCJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = MPCJSONSerializer.h; sourceTree = "<group>"; };
+		28C58112146CF15400B0847E /* MPCJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONSerializer.m; sourceTree = "<group>"; };
+		28C58113146CF15400B0847E /* MPCSerializedJSONData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = MPCSerializedJSONData.h; sourceTree = "<group>"; };
+		28C58114146CF15400B0847E /* MPCSerializedJSONData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCSerializedJSONData.m; sourceTree = "<group>"; };
+		28C58116146CF15400B0847E /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
+		28C58117146CF15400B0847E /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
+		28C58118146CF15400B0847E /* MixpanelAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = MixpanelAPI.h; sourceTree = "<group>"; };
+		28C58119146CF15400B0847E /* MixpanelAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelAPI.m; sourceTree = "<group>"; };
+		28C5811A146CF15400B0847E /* MixpanelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj.h; path = MixpanelEvent.h; sourceTree = "<group>"; };
+		28C5811B146CF15400B0847E /* MixpanelEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelEvent.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		28C580E8146C72B100B0847E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28C580F0146C72B100B0847E /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		28C580E0146C72B000B0847E = {
+			isa = PBXGroup;
+			children = (
+				28C5810C146CF15400B0847E /* MPLib */,
+				28C580F5146C72B100B0847E /* MixpanelEventSampleAppKit */,
+				28C580EE146C72B100B0847E /* Frameworks */,
+				28C580EC146C72B100B0847E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		28C580EC146C72B100B0847E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				28C580EB146C72B100B0847E /* MixpanelEventSampleAppKit.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		28C580EE146C72B100B0847E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				28C580EF146C72B100B0847E /* Cocoa.framework */,
+				28C580F1146C72B100B0847E /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		28C580F1146C72B100B0847E /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				28C580F2146C72B100B0847E /* AppKit.framework */,
+				28C580F3146C72B100B0847E /* CoreData.framework */,
+				28C580F4146C72B100B0847E /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		28C580F5146C72B100B0847E /* MixpanelEventSampleAppKit */ = {
+			isa = PBXGroup;
+			children = (
+				28C58101146C72B100B0847E /* AppDelegate.h */,
+				28C58102146C72B100B0847E /* AppDelegate.m */,
+				28C58104146C72B200B0847E /* MainMenu.xib */,
+				28C580F6146C72B100B0847E /* Supporting Files */,
+			);
+			name = MixpanelEventSampleAppKit;
+			path = MixpanelEventSampleAppKit;
+			sourceTree = "<group>";
+		};
+		28C580F6146C72B100B0847E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				28C580F7146C72B100B0847E /* MixpanelEventSampleAppKit-Info.plist */,
+				28C580F8146C72B100B0847E /* InfoPlist.strings */,
+				28C580FB146C72B100B0847E /* main.m */,
+				28C580FD146C72B100B0847E /* MixpanelEventSampleAppKit-Prefix.pch */,
+				28C580FE146C72B100B0847E /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		28C5810C146CF15400B0847E /* MPLib */ = {
+			isa = PBXGroup;
+			children = (
+				28C5810D146CF15400B0847E /* lib */,
+				28C58118146CF15400B0847E /* MixpanelAPI.h */,
+				28C58119146CF15400B0847E /* MixpanelAPI.m */,
+				28C5811A146CF15400B0847E /* MixpanelEvent.h */,
+				28C5811B146CF15400B0847E /* MixpanelEvent.m */,
+			);
+			name = MPLib;
+			path = ../MPLib;
+			sourceTree = "<group>";
+		};
+		28C5810D146CF15400B0847E /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				28C5810E146CF15400B0847E /* JSON */,
+				28C58115146CF15400B0847E /* NSData_Base64 */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		28C5810E146CF15400B0847E /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				28C5810F146CF15400B0847E /* MPCJSONDataSerializer.h */,
+				28C58110146CF15400B0847E /* MPCJSONDataSerializer.m */,
+				28C58111146CF15400B0847E /* MPCJSONSerializer.h */,
+				28C58112146CF15400B0847E /* MPCJSONSerializer.m */,
+				28C58113146CF15400B0847E /* MPCSerializedJSONData.h */,
+				28C58114146CF15400B0847E /* MPCSerializedJSONData.m */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		28C58115146CF15400B0847E /* NSData_Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				28C58116146CF15400B0847E /* NSData+MPBase64.h */,
+				28C58117146CF15400B0847E /* NSData+MPBase64.m */,
+			);
+			path = NSData_Base64;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		28C580EA146C72B100B0847E /* MixpanelEventSampleAppKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28C58109146C72B200B0847E /* Build configuration list for PBXNativeTarget "MixpanelEventSampleAppKit" */;
+			buildPhases = (
+				28C580E7146C72B100B0847E /* Sources */,
+				28C580E8146C72B100B0847E /* Frameworks */,
+				28C580E9146C72B100B0847E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MixpanelEventSampleAppKit;
+			productName = MixpanelEventSampleAppKit;
+			productReference = 28C580EB146C72B100B0847E /* MixpanelEventSampleAppKit.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		28C580E2146C72B000B0847E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 28C580E5146C72B000B0847E /* Build configuration list for PBXProject "MixpanelEventSampleAppKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 28C580E0146C72B000B0847E;
+			productRefGroup = 28C580EC146C72B100B0847E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				28C580EA146C72B100B0847E /* MixpanelEventSampleAppKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		28C580E9146C72B100B0847E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28C580FA146C72B100B0847E /* InfoPlist.strings in Resources */,
+				28C58100146C72B100B0847E /* Credits.rtf in Resources */,
+				28C58106146C72B200B0847E /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		28C580E7146C72B100B0847E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28C580FC146C72B100B0847E /* main.m in Sources */,
+				28C58103146C72B100B0847E /* AppDelegate.m in Sources */,
+				28C5811D146CF15400B0847E /* MPCJSONDataSerializer.m in Sources */,
+				28C5811F146CF15400B0847E /* MPCJSONSerializer.m in Sources */,
+				28C58121146CF15400B0847E /* MPCSerializedJSONData.m in Sources */,
+				28C58123146CF15400B0847E /* NSData+MPBase64.m in Sources */,
+				28C58125146CF15400B0847E /* MixpanelAPI.m in Sources */,
+				28C58127146CF15400B0847E /* MixpanelEvent.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		28C580F8146C72B100B0847E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				28C580F9146C72B100B0847E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		28C580FE146C72B100B0847E /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				28C580FF146C72B100B0847E /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		28C58104146C72B200B0847E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				28C58105146C72B200B0847E /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		28C58107146C72B200B0847E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		28C58108146C72B200B0847E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		28C5810A146C72B200B0847E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MixpanelEventSampleAppKit/MixpanelEventSampleAppKit-Prefix.pch";
+				INFOPLIST_FILE = "MixpanelEventSampleAppKit/MixpanelEventSampleAppKit-Info.plist";
+				PRODUCT_NAME = MixpanelEventSampleAppKit;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		28C5810B146C72B200B0847E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MixpanelEventSampleAppKit/MixpanelEventSampleAppKit-Prefix.pch";
+				INFOPLIST_FILE = "MixpanelEventSampleAppKit/MixpanelEventSampleAppKit-Info.plist";
+				PRODUCT_NAME = MixpanelEventSampleAppKit;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		28C580E5146C72B000B0847E /* Build configuration list for PBXProject "MixpanelEventSampleAppKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28C58107146C72B200B0847E /* Debug */,
+				28C58108146C72B200B0847E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		28C58109146C72B200B0847E /* Build configuration list for PBXNativeTarget "MixpanelEventSampleAppKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28C5810A146C72B200B0847E /* Debug */,
+				28C5810B146C72B200B0847E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 28C580E2146C72B000B0847E /* Project object */;
+}
