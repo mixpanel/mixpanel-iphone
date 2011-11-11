@@ -143,13 +143,24 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     return(theDictionary);
     
 }
+- (NSString*) applicationName {
+    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
+
+    if (bundleName != nil) {
+        // For regular iOS and Mac Cocoa apps, that have a proper app bundle
+        return bundleName;
+    } else {
+        // For command-line apps that don't have bundles, use the exeutable name
+        return [NSString stringWithCString:getprogname() encoding:NSASCIIStringEncoding];
+    }
+}
 - (NSString*) userIdentifier
 {
     NSDictionary *dict = [self interfaces];
     NSArray *keys = [dict allKeys];
     keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
-    NSMutableString *string = [NSMutableString stringWithString:bundleName];
+    NSString *applicationName = [self applicationName];
+    NSMutableString *string = [NSMutableString stringWithString:applicationName];
     for (NSString *key in keys) {
         [string appendString:[dict objectForKey:key]];
     }
@@ -302,17 +313,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
 #else
     // Mac apps use ~/Library/Application Support/<app name>
-    NSString *appName;
-    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
-
-    if (bundleName != nil) {
-        // For regular app bundles
-        appName = bundleName;
-    } else {
-        // For command-line apps, use the executable's name
-        appName = [NSString stringWithCString:getprogname() encoding:NSUTF8StringEncoding];
-    }
-
+    NSString *appName = [self applicationName];
     NSString *directoryPath = [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:appName];
 
     BOOL isDirectory;
