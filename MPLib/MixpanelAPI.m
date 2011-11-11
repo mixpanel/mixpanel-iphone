@@ -339,14 +339,14 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 }
 
 - (void)unarchiveData {
-    NSString *filePath = [[self applicationStorageDirectory] stringByAppendingPathComponent:FILE_NAME];
+	NSString *filePath = [[self applicationStorageDirectory] stringByAppendingPathComponent:FILE_NAME];
 	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
 	if (!self.eventQueue) {
 		self.eventQueue = [NSMutableArray array];
 	}		
 }
 - (void)archiveData {
-    NSString *filePath = [[self applicationStorageDirectory] stringByAppendingPathComponent:FILE_NAME];  
+	NSString *filePath = [[self applicationStorageDirectory] stringByAppendingPathComponent:FILE_NAME];
 	if (![NSKeyedArchiver archiveRootObject:eventQueue toFile:filePath]) {
 		NSLog(@"Unable to archive data!!!");
 	}
