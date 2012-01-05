@@ -253,6 +253,11 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     }
 }
 
+-(void)removeSuperPropertyForKey:(NSString*)key
+{
+    NSAssert(key != nil, @"Key should not be nil");
+    [self.superProperties removeObjectForKey:key];
+}
 
 - (void)identifyUser:(NSString*) identifier
 {
