@@ -356,6 +356,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
 	if (self.testMode) {
 		NSLog(@"Mixpanel test mode is enabled");
+        NSAssert([postBody length], @"Failed to serialize MixPanel events!");
 		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
 	}
 	NSURL *url = [NSURL URLWithString:urlString];
