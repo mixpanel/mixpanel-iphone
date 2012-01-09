@@ -16,10 +16,5 @@
 		 properties:[NSDictionary dictionaryWithObjectsAndKeys:[genderControl titleForSegmentAtIndex:genderControl.selectedSegmentIndex], @"gender",
 															[weaponControl titleForSegmentAtIndex:weaponControl.selectedSegmentIndex], @"weapon", nil]];
 }
-- (void)dealloc {
-	self.genderControl = nil;
-	self.weaponControl = nil;
-    [super dealloc];
-}
 
 @end

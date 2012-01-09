@@ -42,13 +42,6 @@ if ((self = [self init]) != NULL)
 return(self);
 }
 
-- (void)dealloc
-{
-[data release];
-data = NULL;
-//
-[super dealloc];
-}
 
 
 @end

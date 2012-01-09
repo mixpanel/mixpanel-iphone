@@ -54,7 +54,7 @@ static const NSUInteger kMPUploadInterval = 30;
  @abstract The name tag of the current user.
  @discussion The name tag is a human readable string that identifies the user.
  */
-@property(nonatomic, retain) NSString *nameTag;
+@property(nonatomic, strong) NSString *nameTag;
 
 /*! @property testMode
 	@abstract Whether test mode is on
