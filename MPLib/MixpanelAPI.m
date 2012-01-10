@@ -308,6 +308,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
                 [self.connection cancel];
                 [self archiveData];
                 [[UIApplication sharedApplication] endBackgroundTask:taskId];
+                taskId = UIBackgroundTaskInvalid;
             }]	;
             [self flush];
         } else {
@@ -326,6 +327,9 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	}
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid) {
+    if (taskId != UIBackgroundTaskInvalid) {
+      [[UIApplication sharedApplication] endBackgroundTask:taskId];
+    }
 		taskId = UIBackgroundTaskInvalid;				
 	}
 #endif
@@ -388,7 +392,9 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
+    taskId = UIBackgroundTaskInvalid;
 	}
+
 #endif
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
@@ -411,6 +417,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
+    taskId = UIBackgroundTaskInvalid;
 	}
 #endif
 }
