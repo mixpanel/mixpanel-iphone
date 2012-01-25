@@ -144,16 +144,16 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     NSArray *keys = [dict allKeys];
     keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
  
-	NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
+    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
  
-	/* while most apps will define CFBundleName, it's not guaranteed -- an app can choose to define it or not
-	   so when it's missing, use the bundle file name */	
-	if (bundleName == nil) {
-		bundleName = [[[NSBundle mainBundle] bundlePath] lastPathComponent];
-	}
+    /* while most apps will define CFBundleName, it's not guaranteed -- an app can choose to define it or not
+       so when it's missing, use the bundle file name */	
+    if (bundleName == nil) {
+        bundleName = [[[NSBundle mainBundle] bundlePath] lastPathComponent];
+    }
 
-	NSMutableString *string = [NSMutableString stringWithString:bundleName];	
-	for (NSString *key in keys) {
+    NSMutableString *string = [NSMutableString stringWithString:bundleName];	
+    for (NSString *key in keys) {
         [string appendString:[dict objectForKey:key]];
     }
     return string;
