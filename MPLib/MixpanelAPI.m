@@ -28,12 +28,12 @@
 #define kMPNameTag @"mp_name_tag"
 @interface MixpanelAPI ()
 @property(nonatomic,copy) NSString *apiToken;
-@property(nonatomic,retain) NSMutableDictionary *superProperties;
-@property(nonatomic,retain) NSArray *eventsToSend;
-@property(nonatomic,retain) NSMutableArray *eventQueue;
-@property(nonatomic,retain) NSURLConnection *connection;
-@property(nonatomic,retain) NSMutableData *responseData;
-@property(nonatomic,retain) NSString *defaultUserId;
+@property(nonatomic,strong) NSMutableDictionary *superProperties;
+@property(nonatomic,strong) NSArray *eventsToSend;
+@property(nonatomic,strong) NSMutableArray *eventQueue;
+@property(nonatomic,strong) NSURLConnection *connection;
+@property(nonatomic,strong) NSMutableData *responseData;
+@property(nonatomic,strong) NSString *defaultUserId;
 -(void)flush;
 -(void)unarchiveData;
 -(void)archiveData;
@@ -80,7 +80,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     uploadInterval = newInterval;
     if (timer) {
         [timer invalidate];
-        [timer release];
         timer = nil;
     }
     [self flush];
@@ -90,7 +89,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
                                            selector:@selector(flush) 
                                            userInfo:nil 
                                             repeats:YES];
-    [timer retain];
 }
 
 - (void)setNameTag:(NSString *)nameTag
@@ -182,7 +180,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     if (sharedInstance) {
         //The caller expects to receive a new object, so implicitly retain it
         //to balance out the eventual release message.
-        return [sharedInstance retain];
+        return sharedInstance;
     } else {
         //When not already set, +initialize is our caller.
         //It's creating the shared instance, let this go through.
@@ -284,8 +282,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	MixpanelEvent *mpEvent = [[MixpanelEvent alloc] initWithName:event 
                                                       properties:allProperties];
 	[eventQueue addObject:mpEvent];
-	[mpEvent release];
-	[allProperties release];
 }
 
 #pragma mark -
@@ -372,7 +368,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	[self.connection start];
-	[request release];
 	
 }
 
@@ -416,7 +411,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 		NSLog(@"failed %@", response);
 	}
     
-    [response release];
 	[self archiveData]; //update saved archive
 	self.eventsToSend = nil;
 	self.responseData = nil;

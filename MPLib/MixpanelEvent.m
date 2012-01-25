@@ -36,19 +36,12 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if ((self = [super init])) {
-		name = [[aDecoder decodeObjectForKey:@"name"] retain];
+		name = [aDecoder decodeObjectForKey:@"name"];
 		properties = [[aDecoder decodeObjectForKey:@"properties"] mutableCopy];
 		NSTimeInterval interval = [aDecoder decodeDoubleForKey:@"timestamp"];
-		timestamp = [[NSDate dateWithTimeIntervalSince1970:interval] retain];
+		timestamp = [NSDate dateWithTimeIntervalSince1970:interval];
 	}
 	return self;
-}
-- (void) dealloc
-{
-	[name release];
-	[properties release];
-	[timestamp release];
-	[super dealloc];
 }
 
 - (NSDictionary*) dictionaryValue 
@@ -57,6 +50,6 @@
 	[dictionary setObject:name forKey:@"event"];
 	[properties setObject:[NSNumber numberWithLongLong:[timestamp timeIntervalSince1970]] forKey:@"time"];
 	[dictionary setObject:properties forKey:@"properties"];
-	return [[dictionary copy] autorelease];
+	return [dictionary copy];
 }
 @end

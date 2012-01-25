@@ -39,7 +39,7 @@ static NSData *kTrue = NULL;
 
 + (void)initialize
 {
-NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
+@autoreleasepool {
 
 @synchronized(@"CJSONDataSerializer")
 	{
@@ -51,12 +51,12 @@ NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
 		kTrue = [[NSData alloc] initWithBytesNoCopy:"true" length:4 freeWhenDone:NO];
 	}
 
-[thePool release];
+}
 }
 
 + (id)serializer
 {
-return([[[self alloc] init] autorelease]);
+return([[self alloc] init]);
 }
 
 - (NSData *)serializeObject:(id)inObject error:(NSError **)outError
@@ -85,7 +85,7 @@ else if ([inObject isKindOfClass:[NSDictionary class]])
 	}
 else if ([inObject isKindOfClass:[NSData class]])
 	{
-	NSString *theString = [[[NSString alloc] initWithData:inObject encoding:NSUTF8StringEncoding] autorelease];
+	NSString *theString = [[NSString alloc] initWithData:inObject encoding:NSUTF8StringEncoding];
 	theResult = [self serializeString:theString error:outError];
 	}
 else if ([inObject isKindOfClass:[MPCSerializedJSONData class]])
@@ -126,7 +126,7 @@ return(kNULL);
 - (NSData *)serializeNumber:(NSNumber *)inNumber error:(NSError **)outError
 {
 NSData *theResult = NULL;
-switch (CFNumberGetType((CFNumberRef)inNumber))
+switch (CFNumberGetType((__bridge CFNumberRef)inNumber))
 	{
 	case kCFNumberCharType:
 		{
@@ -161,7 +161,7 @@ return(theResult);
 
 - (NSData *)serializeString:(NSString *)inString error:(NSError **)outError
 {
-NSMutableString *theMutableCopy = [[inString mutableCopy] autorelease];
+NSMutableString *theMutableCopy = [inString mutableCopy];
 [theMutableCopy replaceOccurrencesOfString:@"\\" withString:@"\\\\" options:0 range:NSMakeRange(0, [theMutableCopy length])];
 [theMutableCopy replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:0 range:NSMakeRange(0, [theMutableCopy length])];
 [theMutableCopy replaceOccurrencesOfString:@"/" withString:@"\\/" options:0 range:NSMakeRange(0, [theMutableCopy length])];

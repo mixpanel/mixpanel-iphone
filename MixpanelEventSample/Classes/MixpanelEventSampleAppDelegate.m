@@ -7,7 +7,7 @@
 #import "MixpanelEventSampleAppDelegate.h"
 #import "MixpanelEventSampleViewController.h"
 #import "MixpanelAPI.h"
-#define MIXPANEL_TOKEN @"YOUR_TOKEN_HERE"
+#define MIXPANEL_TOKEN @"1094957c9f6d50ab07a69b7daab06ff0"
 @implementation MixpanelEventSampleAppDelegate
 
 @synthesize window;
@@ -28,11 +28,6 @@
     return YES;
 }
 
-- (void)dealloc {
-    [viewController release];
-    [window release];
-    [super dealloc];
-}
 
 
 @end

@@ -10,8 +10,8 @@
 	UISegmentedControl *genderControl;
 	UISegmentedControl *weaponControl;
 }
-@property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
-@property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
+@property(nonatomic, strong) IBOutlet UISegmentedControl *genderControl;
+@property(nonatomic, strong) IBOutlet UISegmentedControl *weaponControl;
 
 - (IBAction) registerEvent:(id)sender;
 @end
