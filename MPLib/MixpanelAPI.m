@@ -53,6 +53,7 @@
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
 @synthesize testMode;
+@synthesize trackEvents;
 static MixpanelAPI *sharedInstance = nil; 
 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
@@ -199,6 +200,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			self.eventQueue = [NSMutableArray array];
 			self.superProperties = [NSMutableDictionary dictionary];
 			self.flushOnBackground = YES;
+			self.trackEvents = YES;
 			uploadInterval = kMPUploadInterval;
 			[self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -274,6 +276,10 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 
 - (void)track:(NSString*) event properties:(NSDictionary*) properties
 {
+	if (!self.trackEvents) {
+		return;
+	}
+	
 	NSMutableDictionary *props = [NSMutableDictionary dictionary];
 	[props addEntriesFromDictionary:superProperties];
 	[props addEntriesFromDictionary:properties];
