@@ -9,6 +9,7 @@
 #import "MixpanelEvent.h"
 #import "MPCJSONDataSerializer.h"
 #import "NSData+MPBase64.h"
+#import "UIDevice+MPAdditions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -19,6 +20,12 @@
 #include <ifaddrs.h>
 #include <errno.h>
 #include <net/if_dl.h>
+
+NSString* const MPSystemPropertyDeviceModel = @"device_model";
+NSString* const MPSystemPropertyDeviceConnectivity = @"device_connectivity";
+NSString* const MPSystemPropertyOSVersion = @"os_version";
+NSString* const MPSystemPropertyAppVersion = @"app_version";
+
 #define SERVER_URL @"http://api.mixpanel.com/track/"
 #define FILE_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"]
 
@@ -26,7 +33,12 @@
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 #define kMPNameTag @"mp_name_tag"
+#define kMPNoteTag @"mp_note"
+
 @interface MixpanelAPI ()
+#if NS_BLOCKS_AVAILABLE
+@property(nonatomic,retain) NSMutableDictionary *superPropertyHandlers;
+#endif
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
 @property(nonatomic,retain) NSArray *eventsToSend;
@@ -43,6 +55,9 @@
 @end
 
 @implementation MixpanelAPI
+#if NS_BLOCKS_AVAILABLE
+@synthesize superPropertyHandlers;
+#endif
 @synthesize apiToken;
 @synthesize superProperties;
 @synthesize eventQueue;
@@ -220,6 +235,9 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 				}
 			}
 #endif
+#if NS_BLOCKS_AVAILABLE
+            self.superPropertyHandlers = [NSMutableDictionary dictionary];
+#endif
 			[notificationCenter addObserver:self 
 								   selector:@selector(applicationWillTerminate:) 
 									   name:UIApplicationWillTerminateNotification 
@@ -261,6 +279,40 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     }
 }
 
+- (void)registerSystemSuperProperties:(NSDictionary*)properties
+{
+    for (NSString* key in properties) {
+        if (key == MPSystemPropertyAppVersion) {
+            [self.superProperties setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:[properties objectForKey:key]];
+        }
+        
+        if (key == MPSystemPropertyDeviceConnectivity) {
+            [self.superProperties setObject:[[UIDevice currentDevice] connectivity]
+                                     forKey:[properties objectForKey:key]];
+        }
+        
+        if (key == MPSystemPropertyDeviceModel) {
+            [self.superProperties setObject:[[UIDevice currentDevice] model]
+                                     forKey:[properties objectForKey:key]];
+        }
+        
+        if (key == MPSystemPropertyOSVersion) {
+            [self.superProperties setObject:[[UIDevice currentDevice] systemVersion]
+                                     forKey:[properties objectForKey:key]];
+        }
+    }
+}
+
+#if NS_BLOCKS_AVAILABLE
+- (void)registerSuperProperty:(NSString*)propertyName handler:(NSString* (^)(NSString* event))handler 
+{
+    if (!handler) {
+        [self.superPropertyHandlers delete:propertyName];
+    } else {
+        [self.superPropertyHandlers setObject:[[handler copy] autorelease] forKey:propertyName];
+    }
+}
+#endif
 
 - (void)identifyUser:(NSString*) identifier
 {
@@ -280,12 +332,32 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	if (![props objectForKey:@"token"]) {
 		[props setObject:apiToken forKey:@"token"];
 	}
+    
+    // Add values from superproperty handlers, if any
+    for (NSString* property in self.superPropertyHandlers) {
+        NSString* (^handler)(NSString*) = [self.superPropertyHandlers objectForKey:property];
+        NSString* value = handler(event);
+        if (value) {
+            [props setObject:value forKey:property];
+        }
+    }
+    
 	NSDictionary *allProperties = [props copy];
 	MixpanelEvent *mpEvent = [[MixpanelEvent alloc] initWithName:event 
                                                       properties:allProperties];
 	[eventQueue addObject:mpEvent];
 	[mpEvent release];
 	[allProperties release];
+}
+
+- (void)track:(NSString *)event note:(NSString*)note {
+    [self track:event properties:[NSDictionary dictionaryWithObject:note forKey:kMPNoteTag]];
+}
+
+- (void)track:(NSString*) event properties:(NSDictionary *)properties note:(NSString*)note {
+    NSMutableDictionary *propertiesWithNote = [NSMutableDictionary dictionaryWithDictionary:properties];
+    [propertiesWithNote setObject:note forKey:kMPNoteTag];
+    [self track:event properties:propertiesWithNote];
 }
 
 #pragma mark -

@@ -18,6 +18,12 @@
     @discussion The default number of seconds between data uploads to the Mixpanel server
 */
 static const NSUInteger kMPUploadInterval = 30;
+
+extern NSString* const MPSystemPropertyDeviceModel;
+extern NSString* const MPSystemPropertyDeviceConnectivity;
+extern NSString* const MPSystemPropertyOSVersion;
+extern NSString* const MPSystemPropertyAppVersion;
+
 /*!
     @class		MixpanelAPI
     @abstract	Main entry point for the Mixpanel API.
@@ -38,6 +44,7 @@ static const NSUInteger kMPUploadInterval = 30;
 	NSUInteger uploadInterval;
 	BOOL testMode;
 }
+
 /*! @property uploadInterval
 	@abstract The upload interval in seconds.
 	@discussion Changes the interval value. Changing this values resets the update timer with the new interval.
@@ -117,6 +124,13 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
 
+- (void)registerSystemSuperProperties:(NSDictionary*) properties;
+
+#if NS_BLOCKS_AVAILABLE
+// Whenever an event is tracked, value of the dynamic super property is evaluated by executing the supplied handler block.
+- (void)registerSuperProperty:(NSString*)propertyName handler:(NSString* (^)(NSString* event))handler;
+#endif
+
 /*!
 	@method     identifyUser:
 	@abstract   Identifies a user.
@@ -137,6 +151,16 @@ static const NSUInteger kMPUploadInterval = 30;
 - (void)track:(NSString*) event;
 
 /*!
+ @method		track:note:
+ @abstract      Tracks an event with note.
+ @discussion    Tracks an event with note property attached to it. Notes are sentences that describe what a user is doing alongside an event you track. 
+                See track:properties: for more details.
+ @param         event The event to track.
+ @param         note Note for this event.
+ */
+- (void)track:(NSString*) event note:(NSString*) note;
+
+/*!
 	@method     track:properties:
 	@abstract   Tracks an event with properties.
 	@discussion Tracks an event. The properties of this event are a union of the super properties of type Super properties of type 
@@ -147,6 +171,17 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)track:(NSString*) event properties:(NSDictionary*) properties;
 
+
+/*!
+ @method     track:properties:note:
+ @abstract   Tracks an event with properties and a note.
+ @discussion Tracks an event with properties extended by a note property. Notes are sentences that describe what a user is doing alongside an event you track.
+             See track:properties: for more details.
+ @param		event The event to track.
+ @param		properties The properties for this event. The keys must be NSString objects and the values should be NSString or NSNumber objects.
+ @param     note Note for this event.
+ */
+- (void)track:(NSString*) event properties:(NSDictionary*) properties note:(NSString*)note;
 
 /*!
  @method     flush
