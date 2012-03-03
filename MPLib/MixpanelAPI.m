@@ -20,8 +20,6 @@
 #include <errno.h>
 #include <net/if_dl.h>
 #define SERVER_URL @"http://api.mixpanel.com/track/"
-#define FILE_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"]
-
 #if ! defined(IFT_ETHER)
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
@@ -54,7 +52,6 @@
 @synthesize flushOnBackground;
 @synthesize testMode;
 static MixpanelAPI *sharedInstance = nil; 
-
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
 	const char *cSecretStr = [key UTF8String];
@@ -159,76 +156,79 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     return string;
 }
 - (void) start {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000		
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
+        
+        taskId = UIBackgroundTaskInvalid;
+        if (&UIApplicationDidEnterBackgroundNotification) {
+            [notificationCenter addObserver:self 
+                                   selector:@selector(applicationDidEnterBackground:) 
+                                       name:UIApplicationDidEnterBackgroundNotification 
+                                     object:nil];
+        }
+        if (&UIApplicationWillEnterForegroundNotification) {
+            [notificationCenter addObserver:self 
+                                   selector:@selector(applicationWillEnterForeground:) 
+                                       name:UIApplicationWillEnterForegroundNotification 
+                                     object:nil];
+        }
+    }
+#endif
+    [notificationCenter addObserver:self 
+                           selector:@selector(applicationWillTerminate:) 
+                               name:UIApplicationWillTerminateNotification 
+                             object:nil];
+    
     self.defaultUserId = calculateHMAC_SHA1([self userIdentifier], self.apiToken);
     [self identifyUser:self.defaultUserId];
     [self unarchiveData];
-    
+    [self flush];
     [self setUploadInterval:uploadInterval];
+}
+
+- (void) stop {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [timer invalidate];
+    [timer release];
+    timer = nil;
+    [self archiveData];
 }
 + (id)sharedAPIWithToken:(NSString*)apiToken
 {
+    //Already set by +initialize.
     sharedInstance.apiToken = apiToken;
     [sharedInstance start];
-    //Already set by +initialize.
     return sharedInstance;
 }
 + (id)sharedAPI
 {
 	return sharedInstance;
 }
-+ (id)allocWithZone:(NSZone*)zone
-{
-    //Usually already set by +initialize.
-    if (sharedInstance) {
-        //The caller expects to receive a new object, so implicitly retain it
-        //to balance out the eventual release message.
-        return [sharedInstance retain];
-    } else {
-        //When not already set, +initialize is our caller.
-        //It's creating the shared instance, let this go through.
-        return [super allocWithZone:zone];
-    }
-}
 
+- (id)initWithToken:(NSString *)aToken
+{
+    if ((self = [self init])) {
+        apiToken = [aToken retain];
+        [self start];
+    }
+    return  self;
+}
 - (id)init
 {
     //If sharedInstance is nil, +initialize is our caller, so initialize the instance.
     //If it is not nil, simply return the instance without re-initializing it.
-    if (sharedInstance == nil) {
-        if ((self = [super init])) {
-			self.eventQueue = [NSMutableArray array];
-			self.superProperties = [NSMutableDictionary dictionary];
-			self.flushOnBackground = YES;
-			uploadInterval = kMPUploadInterval;
-			[self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
-			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000		
-			if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
-                
-				taskId = UIBackgroundTaskInvalid;
-				if (&UIApplicationDidEnterBackgroundNotification) {
-                    [notificationCenter addObserver:self 
-                                           selector:@selector(applicationDidEnterBackground:) 
-                                               name:UIApplicationDidEnterBackgroundNotification 
-                                             object:nil];
-				}
-				if (&UIApplicationWillEnterForegroundNotification) {
-                    [notificationCenter addObserver:self 
-                                           selector:@selector(applicationWillEnterForeground:) 
-                                               name:UIApplicationWillEnterForegroundNotification 
-                                             object:nil];
-				}
-			}
-#endif
-			[notificationCenter addObserver:self 
-								   selector:@selector(applicationWillTerminate:) 
-									   name:UIApplicationWillTerminateNotification 
-									 object:nil];
-            
-			[self applicationWillEnterForeground:nil];
-            //Initialize the instance here.
-        }
+
+    if ((self = [super init])) {
+        self.eventQueue = [NSMutableArray array];
+        self.superProperties = [NSMutableDictionary dictionary];
+        self.flushOnBackground = YES;
+        uploadInterval = kMPUploadInterval;
+        [self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
+        
+        //Initialize the instance here.
     }
+
     return self;
 }
 
@@ -267,6 +267,14 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] defaultValue:self.defaultUserId];
 }
 
+- (NSString*) filePath 
+{
+    if (self == sharedInstance) return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"];
+    
+    NSString *filename = [NSString stringWithFormat:@"MPLib_%@_SavedData.plist", [self apiToken]];
+    return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:filename];
+}
+
 - (void)track:(NSString*) event
 {
 	[self track:event properties:nil];
@@ -283,7 +291,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	NSDictionary *allProperties = [props copy];
 	MixpanelEvent *mpEvent = [[MixpanelEvent alloc] initWithName:event 
                                                       properties:allProperties];
-	[eventQueue addObject:mpEvent];
+	[[self eventQueue] addObject:mpEvent];
 	[mpEvent release];
 	[allProperties release];
 }
@@ -291,13 +299,13 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 #pragma mark -
 #pragma mark Application Lifecycle Events
 - (void)unarchiveData {
-	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:FILE_PATH];
+	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
 	if (!self.eventQueue) {
 		self.eventQueue = [NSMutableArray array];
 	}		
 }
 - (void)archiveData {
-	if (![NSKeyedArchiver archiveRootObject:eventQueue toFile:FILE_PATH]) {
+	if (![NSKeyedArchiver archiveRootObject:[self eventQueue] toFile:[self filePath]]) {
 		NSLog(@"Unable to archive data!!!");
 	}
 }
@@ -428,5 +436,20 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     taskId = UIBackgroundTaskInvalid;
 	}
 #endif
+}
+
+- (void)dealloc
+{
+    [self archiveData];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [apiToken release], apiToken = nil;
+    [eventQueue release], eventQueue = nil;
+    [superProperties release], superProperties = nil;
+    [timer invalidate], [timer release], timer = nil;
+    [eventsToSend release], eventsToSend = nil;
+    [responseData release], responseData = nil;
+    [connection release], connection = nil;
+    [defaultUserId release], defaultUserId = nil;
+    [super dealloc];
 }
 @end
