@@ -70,7 +70,6 @@ static const NSUInteger kMPUploadInterval = 30;
 				initializations to the API.
 	@param      apiToken Your Mixpanel API token.
 */
-
 + (id)sharedAPIWithToken:(NSString*)apiToken;
 
 /*!
@@ -79,8 +78,35 @@ static const NSUInteger kMPUploadInterval = 30;
     @discussion Returns the Singleton instance of the MixpanelAPI class. 
 				The API must be initialized with <code>sharedAPIWithToken:</code> before calling this class method.
 */
-
 + (id)sharedAPI;
+
+/*!
+ @method     initWithToken:
+ @abstract   Initializes the API with your API Token. Returns the a new API object.
+ @discussion	Initializes an instance of the MixpanelAPI object with your authentication token. 
+ This must be the first message sent before logging any events since it performs important
+ initializations to the API.
+ @param      apiToken Your Mixpanel API token.
+ */
+- (id)initWithToken:(NSString*)apiToken;
+
+
+/*!
+ @method     stop
+ @abstract   Stops the background execution of the MixPanel API instance. 
+ @discussion Removes this instance as an observer to application lifecycle events and stops the background timers. 
+             Calling this method is required before disposing of this instance.
+ */
+- (void)stop;
+/*!
+ @method     start
+ @abstract   Restarts the background execution of the MixPanel API instance.
+ @discussion Adds this instance as an observer to application lifecycle events and starts the background timers.
+             This method is called automatically on initializating. You should only call it manually if you called stop previously. 
+ */
+- (void)start;
+
+
 
 /*!
  @method		registerSuperProperties:
