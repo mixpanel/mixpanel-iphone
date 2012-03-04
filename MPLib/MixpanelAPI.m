@@ -38,6 +38,7 @@
 -(void)applicationWillTerminate:(NSNotification *)notification;
 -(void)applicationWillEnterForeground:(NSNotificationCenter *)notification;
 -(void)applicationDidEnterBackground:(NSNotificationCenter *)notification;
+NSString* calculateHMAC_SHA1(NSString *str, NSString *key);
 @end
 
 @implementation MixpanelAPI
@@ -51,6 +52,7 @@
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
 @synthesize testMode;
+@synthesize showNetworkActivityIndicator;
 static MixpanelAPI *sharedInstance = nil; 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
@@ -366,7 +368,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
 	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
                                         error:nil];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:self.showNetworkActivityIndicator ? YES : NO];
 	NSString *urlString = SERVER_URL;
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
 	if (self.testMode) {
@@ -404,7 +406,6 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.responseData = nil;
 	self.connection = nil;
     [self archiveData];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
