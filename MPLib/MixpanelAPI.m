@@ -403,6 +403,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	self.eventsToSend = nil;
 	self.responseData = nil;
 	self.connection = nil;
+    [self archiveData];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
