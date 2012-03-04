@@ -1,34 +1,38 @@
-<h1 id="logging_data_on_the_ios">Logging data on the iOS</h1>
+<h1>Logging data on the iOS</h1>
 
 <p>If you want to track user behavior on your iPhone\iPad application, first download the Mixpanel iOS API by cloning the git repository:</p>
 
-<pre><code>git clone $REPO_LOCATION
+<pre><code>git clone http://github.com/mixpanel/mixpanel-iphone.git
 </code></pre>
 
-<p>or download the latest version from $DOWNLOAD_LOCATION and extract the files. The respository has two folders:</p>
+<p>or download the latest version from <a href="http://github.com/mixpanel/mixpanel-iphone/zipball/master">http://github.com/mixpanel/mixpanel-iphone/zipball/master</a> and extract the files. The respository has two folders:</p>
 
 <ol>
 <li>MPLib - The Source code for the Mixpanel API and its dependencies</li>
 <li>MixpanelEventSample - A sample application that tracks events using Mixpanel.</li>
-<li>MixpanelFunnelSample - A sample application that tracks funnels using Mixpanel.</li>
 <li>Docs - Documentation for the Project.</li>
 </ol>
 
-<h1 id="setup">Setup</h1>
+
+<h1>Setup</h1>
 
 <p>Adding Mixpanel to your Xcode project is as easy as:</p>
 
 <ol>
-<li>Drag and drop the MPLib folder into your project. <img src="images/copy.png" alt="Copy Project" title=""></li>
-<li>Check the &#8220;Copy items into destination Group&#8217;s folder&#8221; and select Recursively create groups for any added folders.</li>
+<li>Drag and drop the MPLib folder into your project.</li>
+<li>Check the &ldquo;Copy items into destination Group&rsquo;s folder&rdquo; and select Recursively create groups for any added folders.</li>
 </ol>
 
-<p>And that&#8217;s it.
- <img src="images/project.png" alt="Project" title=""></p>
 
-<h1 id="initializing_mixpanel">Initializing Mixpanel</h1>
+<p><img src="https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/copy.png" title="Copy Into Project" alt="Copy Project" /></p>
 
-<p>The first thing you need to do in order to use Mixpanel is to initialize the <code>MixpanelAPI</code> object. We recommend doing this in <code>applicationDidFinishLaunching:</code> of <code>application:didFinishLaunchingWithOptions</code> in your Application delegate. </p>
+<p>And that&rsquo;s it.</p>
+
+<p><img src="https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/project.png" title="Project" alt="Project" /></p>
+
+<h1>Initializing Mixpanel</h1>
+
+<p>The first thing you need to do in order to use Mixpanel is to initialize the <code>MixpanelAPI</code> object. We recommend doing this in <code>applicationDidFinishLaunching:</code> of <code>application:didFinishLaunchingWithOptions</code> in your Application delegate.</p>
 
 <pre><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     // Override point for customization after application launch.
@@ -40,7 +44,7 @@
 }
 </code></pre>
 
-<h1 id="tracking_events">Tracking Events</h1>
+<h1>Tracking Events</h1>
 
 <p>After initializing the MixpanelAPI object, you are ready to track events. This can be done with the following code snippet:</p>
 
@@ -62,122 +66,34 @@
 
 <p>This code snippet is taken from the MixpanelEventSample Project. Line 15-20 of the <code>MixpanelEventSampleViewController.m</code> file.</p>
 
-<h1 id="tracking_funnels">Tracking Funnels</h1>
+<h1>Super Properties</h1>
 
-<p>Funnel analysis helps you increase conversions for any goal within your application. Here is how you would use them in your application. Lets say you have a button in your UI that launches a product list for your application. The first step would be something like the following:</p>
-
-<pre><code>-(void) productViewLoaded {
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-    [mixpanel trackFunnel:@"In App Purchase" step:1 goal:@"Product List"];
-    // product list code.
-}
-</code></pre>
-
-<p>Then there is a second step where a user launches more details for a specific product:</p>
-
-<pre><code>-(void) selectProduct:(NSString*) product {
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-    [mixpanel trackFunnel:@"In App Purchase" 
-                     step:2 
-                     goal:@"View Product"
-               properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-    // view product code.
-}
-</code></pre>
-
-<p>The final step is where the user purchases your product:</p>
-
-<pre><code>-(void) buyProduct:(NSString*) product {
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-    [mixpanel trackFunnel:@"In App Purchase" 
-                     step:3 
-                     goal:@"Buy Product"
-               properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-    // buy product code.
-}**
-</code></pre>
-
-<p>When viewing the Mixpanel Dashboard, you would see something like this. Please see the MixpanelFunnelSample project for the full source code.
-<img src="images/funnel.png" alt="Funnel Viewer" title=""></p>
-
-<h2 id="registering_funnels">Registering Funnels</h2>
-
-<p>If you want to track an event as a funnel step, you can register Funnels as follows:</p>
-
-<pre><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-
-    // Override point for customization after application launch.  
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPIWithToken:@"YOUR_API_TOKEN"];
-    NSArray *steps = [NSArray arrayWithObjects:@"Product List", @"View Product", @"Buy Product", nil];
-    [mixpanel registerFunnel:@"In App Purchase" steps:steps];
-    // Add the view controller's view to the window and display.
-    [window addSubview:viewController.view];
-    [window makeKeyAndVisible];
-    return YES;
-}
-</code></pre>
-
-<p>Then the code above would turn into the following:</p>
-
-<pre><code>-(void) productViewLoaded {
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-    [mixpanel track:@"Product List"];
-    // product list code.
-}
-
--(void) selectProduct:(NSString*) product {
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-    [mixpanel track:@"View Product"
-               properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-    // view product code.
-}
-
--(void) buyProduct:(NSString*) product {
-    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-    [mixpanel track:@"Buy Product"
-               properties:[NSDictionary dictionaryWithObject:product forKey:@"product"]];
-    // buy product code.
-}
-</code></pre>
-
-<p>Or you can use the Funnel Builder, for more information on how to do this, please visit <a href="http://mixpanel.com/api/docs/guides/funnel-analysis">http://mixpanel.com/api/docs/guides/funnel-analysis</a></p>
-
-<h1 id="super_properties">Super Properties</h1>
-
-<p>Super properties are an easy way to store data about your users. They are global properties that get attached to everything you are tracking. More information can be found <a href="http://mixpanel.com/api/docs/guides/super-properties “super properties”">here</a>.</p>
+<p>Super properties are an easy way to store data about your users. They are global properties that get attached to everything you are tracking. More information can be found <a href="http://mixpanel.com/api/docs/guides/super-properties%20%E2%80%9Csuper%20properties%E2%80%9D">here</a>.</p>
 
 <p>If you want to register a super property for your current user, you can do it as follows:</p>
 
 <pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-[mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-                        eventType:kMPLibEventTypeAll];
+[mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]];
 </code></pre>
 
-<p>This call will register the &#8220;User Type&#8221; property with a value of @&#8221;Paid&#8221; for the current user on both events and funnels. The permitted values for the eventType parameter are:</p>
+<p>This call will register the &ldquo;User Type&rdquo; property with a value of @&ldquo;Paid&rdquo; for the current user on both events and funnels. The permitted values for the eventType parameter are:</p>
 
-<pre><code>* kMPLibEventTypeAll: Attach the super property to events and funnels.
-* kMPLibEventTypeEvent: Attach the super property to events.
-* kMPLibEventTypeFunnel: Attach the super property to funnels.
+<p>If the &ldquo;User Type&rdquo; property was previously registered, its value will be overwritten. As a shortcut, you can use <code>registerSuperProperties:</code> to attach super properties to all events. If you do not want to overwrite existing values of a super property you can use the following call:</p>
+
+<pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]];
 </code></pre>
 
-<p>If the &#8220;User Type&#8221; property was previously registered, its value will be overwritten. If you do not want to overwrite existing values of a super property you can use the following call:</p>
+<p>After this call, the value of the &ldquo;User Type&rdquo; property will be written only if it did not exist. There is another flavor of <code>registerSuperPropertiesOnce:eventType</code> and it can be used as follows:</p>
 
 <pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
 [mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-                            eventType:kMPLibEventTypeAll];
-</code></pre>
-
-<p>After this call, the value of the &#8220;User Type&#8221; property will be written only if it did not exist. There is another flavor of <code>registerSuperPropertiesOnce:eventType</code> and it can be used as follows:</p>
-
-<pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-                            eventType:kMPLibEventTypeAll
                          defaultValue:@"Free"];
 </code></pre>
 
-<p>This call will write out the new value for the &#8220;User Type&#8221; property if it does not exist or if its current value is &#8220;Free&#8221;.</p>
+<p>This call will write out the new value for the &ldquo;User Type&rdquo; property if it does not exist or if its current value is &ldquo;Free&rdquo;. As a shortcut, you can use <code>registerSuperPropertiesOnce:</code> to attach super properties to all events without overwriting their current values.</p>
 
-<h1 id="identifying_a_user">Identifying a User</h1>
+<h1>Identifying a User</h1>
 
 <p><code>MixpanelAPI</code> uses the UDID of the current device as its default identifier. You can easily change the identifier with the following call:</p>
 
@@ -185,4 +101,17 @@
 [mixpanel identifyUser:username];
 </code></pre>
 
-<p>Where <code>username</code> is an <code>NSString</code>. </p>
+<p>Where <code>username</code> is an <code>NSString</code>.</p>
+
+<h1>Using multiple MixpanelAPI instances</h1>
+
+<p>It is now possible to use multiple <code>MixpanelAPI</code> instances in a single application. This makes it easy to send events to multiple Mixpanel projects. To iniitialize a new, non singleton instance of MixpanelAPI, use the <code>initWithToken:</code> method as follows:</p>
+
+<pre><code>MixpanelAPI *mixpanel = [[MixpanelAPI alloc] initWithToken:MIXPANEL_TOKEN];
+</code></pre>
+
+<p>The developer is responsible for the lifecycle of this object. The recommended way of using this is to initialize all of your <code>MixpanelAPI</code> instances in <code>application:didFinishLaunchingWithOptions:</code> and deallocate them in the <code>dealloc</code> method of your Application Delegate. If you chose to dispose of this object before the end of the application&rsquo;s lifetime, you need to call the <code>stop</code> method. This removes the instance as an observer to the application&rsquo;s lifecycle events and invalidates any internal timers. Below is a code snippet that does this:</p>
+
+<pre><code>[mixpanel stop];
+[mixpanel release];
+</code></pre>
