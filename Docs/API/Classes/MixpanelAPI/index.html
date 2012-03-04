@@ -226,6 +226,9 @@ function disclosure_triangle(elt) {
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/identifyUser:" target="_top">-identifyUser:</a></tt></dt>
 <dd><p>Identifies a user.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/initWithToken:" target="_top">-initWithToken:</a></tt></dt>
+<dd><p>Initializes the API with your API Token. Returns the a new API object.
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:" target="_top">-registerSuperProperties:</a></tt></dt>
 <dd><p>Registers a set of super properties for all event types.
 </dd>
@@ -240,6 +243,12 @@ function disclosure_triangle(elt) {
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/clm/MixpanelAPI/sharedAPIWithToken:" target="_top">+sharedAPIWithToken:</a></tt></dt>
 <dd><p>Initializes the API with your API Token. Returns the shared API object.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/start" target="_top">-start</a></tt></dt>
+<dd><p>Restarts the background execution of the MixPanel API instance.
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/stop" target="_top">-stop</a></tt></dt>
+<dd><p>Stops the background execution of the MixPanel API instance. 
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/track:" target="_top">-track:</a></tt></dt>
 <dd><p>Tracks an event.
@@ -279,6 +288,27 @@ function disclosure_triangle(elt) {
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/identifyUser:;name=start --><p>Identifies a user throughout an application run. By default the UDID of the device is used as an identifier.
 The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/identifyUser:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;   name=MixpanelAPI::initWithToken: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/initWithToken:"></a>
+<h3><a name="initWithToken:">initWithToken:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=start --><!-- begin abstract --><p>Initializes the API with your API Token. Returns the a new API object.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/struct/id //apple_ref/occ/intf/id //apple_ref/doc/anysymbol/id" machineGenerated="true" --><span class="type">id</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelAPI/initWithToken //apple_ref/occ/clm/MixpanelAPI/initWithToken //apple_ref/occ/intfcm/MixpanelAPI/initWithToken //apple_ref/occ/intfm/MixpanelAPI/initWithToken //apple_ref/occ/func/initWithToken //apple_ref/occ/ftmplt/MixpanelAPI/initWithToken //apple_ref/occ/defn/initWithToken //apple_ref/occ/macro/initWithToken //apple_ref/doc/anysymbol/initWithToken" machineGenerated="true" --><span class="function">initWithToken</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --><span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/apiToken //apple_ref/occ/data/MixpanelAPI/apiToken //apple_ref/occ/data/apiToken //apple_ref/occ/clconst/MixpanelAPI/apiToken " machineGenerated="true" --><span class="var">apiToken</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/MixpanelAPI/initWithToken:/apiToken;   name=initWithToken:::apiToken -->
+<a name="//apple_ref/doc/methodparam/MixpanelAPI/initWithToken:/apiToken"></a>
+<code>apiToken</code></dt><dd><p>Your Mixpanel API token.</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=start --><p>Initializes an instance of the MixpanelAPI object with your authentication token. 
+This must be the first message sent before logging any events since it performs important
+initializations to the API.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:;   name=MixpanelAPI::registerSuperProperties: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:"></a>
 <h3><a name="registerSuperProperties:">registerSuperProperties:</a></h3>
@@ -381,6 +411,30 @@ The API must be initialized with <code>sharedAPIWithToken:</code> before calling
 This must be the first message sent before logging any events since it performs important
 initializations to the API.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/clm/MixpanelAPI/sharedAPIWithToken:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/start;   name=MixpanelAPI::start -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/start"></a>
+<h3><a name="start">start</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/start;name=start --><!-- begin abstract --><p>Restarts the background execution of the MixPanel API instance.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/start;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/start;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/start //apple_ref/occ/data/MixpanelAPI/start //apple_ref/occ/data/start //apple_ref/occ/clconst/MixpanelAPI/start " machineGenerated="true" --><span class="var">start</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/start;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/start;name=start --><p>Adds this instance as an observer to application lifecycle events and starts the background timers.
+This method is called automatically on initializating. You should only call it manually if you called stop previously. 
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/start;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/stop;   name=MixpanelAPI::stop -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/stop"></a>
+<h3><a name="stop">stop</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/stop;name=start --><!-- begin abstract --><p>Stops the background execution of the MixPanel API instance. 
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/stop;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/stop;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/stop //apple_ref/occ/data/MixpanelAPI/stop //apple_ref/occ/data/stop //apple_ref/occ/clconst/MixpanelAPI/stop " machineGenerated="true" --><span class="var">stop</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/stop;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/stop;name=start --><p>Removes this instance as an observer to application lifecycle events and stops the background timers. 
+Calling this method is required before disposing of this instance.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/stop;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/track:;   name=MixpanelAPI::track: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/track:"></a>
 <h3><a name="track:">track:</a></h3>
@@ -491,7 +545,7 @@ The API must be initialized with <code>sharedAPIWithToken:</code> before calling
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelAPI/uploadInterval;name=start --><p>Changes the interval value. Changing this values resets the update timer with the new interval.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelAPI/uploadInterval;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Saturday, September 24, 2011
+<p class="hd_timestamp">Last Updated: Saturday, March 03, 2012
 </p></div>
 </td></tr></table>
 </body></html>
