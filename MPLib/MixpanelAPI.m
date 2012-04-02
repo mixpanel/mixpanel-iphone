@@ -19,11 +19,12 @@
 #include <ifaddrs.h>
 #include <errno.h>
 #include <net/if_dl.h>
-#define SERVER_URL @"http://api.mixpanel.com/track/"
+#include <sys/sysctl.h>
 #if ! defined(IFT_ETHER)
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 #define kMPNameTag @"mp_name_tag"
+#define kMPDeviceModel @"mp_device_model"
 @interface MixpanelAPI ()
 @property(nonatomic,copy) NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
@@ -50,7 +51,10 @@
 @synthesize defaultUserId;
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
+@synthesize serverURL;
+@synthesize delegate;
 @synthesize testMode;
+@synthesize sendDeviceModel;
 static MixpanelAPI *sharedInstance = nil; 
 NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
@@ -66,6 +70,20 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			digest[12], digest[13], digest[14], digest[15],
 			digest[16], digest[17], digest[18], digest[19]
 			];
+}
+
+NSString* getPlatform()
+{
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    
+    char *answer = malloc(size);
+    sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    
+    NSString *results = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
+    
+    free(answer);
+    return results;
 }
 
 + (void)initialize
@@ -194,6 +212,16 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     timer = nil;
     [self archiveData];
 }
+
+- (void)setSendDeviceModel:(BOOL)sd
+{
+    sendDeviceModel = sd;
+    if (sd) {
+        [[self superProperties] setObject:getPlatform() forKey:kMPDeviceModel];
+    } else {
+        [[self superProperties] removeObjectForKey:kMPDeviceModel];
+    }
+}
 + (id)sharedAPIWithToken:(NSString*)apiToken
 {
     //Already set by +initialize.
@@ -220,9 +248,10 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
     //If it is not nil, simply return the instance without re-initializing it.
 
     if ((self = [super init])) {
-        self.eventQueue = [NSMutableArray array];
-        self.superProperties = [NSMutableDictionary dictionary];
-        self.flushOnBackground = YES;
+        eventQueue = [[NSMutableArray alloc] init];
+        superProperties = [[NSMutableDictionary alloc] init];
+        flushOnBackground = YES;
+        serverURL = @"https://api.mixpanel.com/track/";
         uploadInterval = kMPUploadInterval;
         [self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
         
@@ -362,18 +391,24 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	} else {
 		self.eventsToSend = [NSArray arrayWithArray:self.eventQueue];
 	}
-	
+	if ([self.delegate respondsToSelector:@selector(mixpanel:willUploadEvents:)]) {
+        if (![self.delegate mixpanel:self willUploadEvents:self.eventsToSend]) {
+            self.eventsToSend = nil;
+            return;            
+        }
+
+    }
+
 	MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
 	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
                                         error:nil];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	NSString *urlString = SERVER_URL;
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
 	if (self.testMode) {
 		NSLog(@"Mixpanel test mode is enabled");
 		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
 	}
-	NSURL *url = [NSURL URLWithString:urlString];
+	NSURL *url = [NSURL URLWithString:[self serverURL]];
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
 	[request setHTTPMethod:@"POST"];
@@ -400,11 +435,13 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error 
 {
 	NSLog(@"error, clean up %@", error);
+    if ([self.delegate respondsToSelector:@selector(mixpanel:didFailToUploadEvents:withError:)]) {
+        [self.delegate mixpanel:self didFailToUploadEvents:self.eventsToSend withError:error];
+    }
 	self.eventsToSend = nil;
 	self.responseData = nil;
 	self.connection = nil;
     [self archiveData];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
@@ -416,6 +453,9 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 }
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
 {
+    if ([self.delegate respondsToSelector:@selector(mixpanel:didUploadEvents:)]) {
+        [self.delegate mixpanel:self didUploadEvents:self.eventsToSend];
+    }
 	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 	NSInteger result = [response intValue];
     

@@ -11,7 +11,42 @@
 */
 
 #import <Foundation/Foundation.h>
+@class MixpanelAPI;
+/*!
+ @protocol	MixpanelDelegate
+ @abstract	A delegate for the MixpanelAPI
+ @discussion A delegate for the MixpanelAPI
+ */
+@protocol MixpanelDelegate <NSObject>
+@optional
 
+/*!
+ @method     mixpanel:willUploadEvents   
+ @abstract   Asks the delegate if the events should be uploaded.
+ @discussion Returns YES to upload events, NO to not upload events.
+ @param mixpanel The Mixpanel API
+ @param events The events that will be uploaded.
+ */
+- (BOOL)mixpanel:(MixpanelAPI *) mixpanel willUploadEvents:(NSArray *) events;
+/*!
+ @method     mixpanel:didUploadEvents   
+ @abstract   Notifies the delegate that the events have been uploaded
+ @discussion Notifies the delegate that the events have been uploaded
+ @param mixpanel The Mixpanel API
+ @param events The events that will be uploaded.
+ */
+- (void)mixpanel:(MixpanelAPI *) mixpanel didUploadEvents:(NSArray *) events;
+
+/*!
+ @method     mixpanel:didFailToUploadEvents:withError   
+ @abstract   Notifies the delegate that there was an error while uploading events.
+ @discussion Notifies the delegate that there was an error while uploading events.
+ @param mixpanel The Mixpanel API
+ @param events The events that will be uploaded.
+ @param error the error that ocurred.
+ */
+- (void)mixpanel:(MixpanelAPI *) mixpanel didFailToUploadEvents:(NSArray *) events withError:(NSError *) error;
+@end
 /*!
     @const		kMPUploadInterval
     @abstract   The default number of seconds between data uploads to the Mixpanel server
@@ -31,12 +66,14 @@ static const NSUInteger kMPUploadInterval = 30;
 	NSArray *eventsToSend;
 	NSMutableData *responseData;
 	NSURLConnection *connection;
+    id<MixpanelDelegate> delegate;
 	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	UIBackgroundTaskIdentifier taskId;
 	#endif
 	NSString *defaultUserId;
 	NSUInteger uploadInterval;
 	BOOL testMode;
+    BOOL sendDeviceModel;
 }
 /*! @property uploadInterval
 	@abstract The upload interval in seconds.
@@ -62,6 +99,25 @@ static const NSUInteger kMPUploadInterval = 30;
 */
 @property(nonatomic) BOOL testMode;
 
+
+/*! @property serverURL
+ @abstract The Mixpanel API endpoint 
+ @discussion Allows setting a custom API URL. Defaults to http://api.mixpanel.com/track/
+ */
+@property(retain) NSString *serverURL;
+
+
+/*! @property delegate
+ @abstract The Mixpanel API delegate 
+ @discussion Allows finer grain control over uploading events.
+ */
+@property(assign) id<MixpanelDelegate> delegate;
+
+/*! @property sendDeviceModel
+ @abstract Tells the Mixpane API to send the device model as a super property.
+ @discussion Tells the Mixpane API to send the device model as a super property.
+ */
+@property(nonatomic, assign) BOOL sendDeviceModel;
 /*!
     @method     sharedAPIWithToken:
     @abstract   Initializes the API with your API Token. Returns the shared API object.
