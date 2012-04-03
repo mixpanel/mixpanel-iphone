@@ -53,7 +53,7 @@ If you want to add properties to the event you can do the following:
 This code snippet is taken from the MixpanelEventSample Project. Line 15-20 of the `MixpanelEventSampleViewController.m` file.
 
 # Super Properties #
-Super properties are an easy way to store data about your users. They are global properties that get attached to everything you are tracking. More information can be found [here](http://mixpanel.com/api/docs/guides/super-properties “super properties”).
+Super properties are an easy way to store data about your users. They are global properties that get attached to everything you are tracking. More information can be found [here](https://mixpanel.com/docs/properties-or-segments/how-do-i-set-a-property-every-time).
 
 If you want to register a super property for your current user, you can do it as follows:
 
