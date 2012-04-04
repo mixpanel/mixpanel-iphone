@@ -76,7 +76,7 @@ After this call, the value of the "User Type" property will be written only if i
 This call will write out the new value for the "User Type" property if it does not exist or if its current value is "Free". As a shortcut, you can use `registerSuperPropertiesOnce:` to attach super properties to all events without overwriting their current values.
 
 # Identifying a User #
-`MixpanelAPI` uses the UDID of the current device as its default identifier. You can easily change the identifier with the following call:
+`MixpanelAPI` uses a one-way hash of the MAC address of the current device as its default identifier. You can easily change the identifier with the following call:
 
 	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
 	[mixpanel identifyUser:username];
