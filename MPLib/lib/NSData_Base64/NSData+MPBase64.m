@@ -87,7 +87,7 @@ void *MP_NewBase64Decode(
 		//
 		// Accumulate 4 valid characters (ignore everything else)
 		//
-		unsigned char accumulated[BASE64_UNIT_SIZE];
+		unsigned char accumulated[BASE64_UNIT_SIZE] = {0, 0, 0, 0};
 		size_t accumulateIndex = 0;
 		while (i < length)
 		{
