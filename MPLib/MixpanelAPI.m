@@ -351,6 +351,7 @@ NSString* getPlatform()
             [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
             taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
                 [self.connection cancel];
+                self.connection = nil;
                 [self archiveData];
                 [[UIApplication sharedApplication] endBackgroundTask:taskId];
                 taskId = UIBackgroundTaskInvalid;
@@ -421,7 +422,6 @@ NSString* getPlatform()
 	[request setHTTPMethod:@"POST"];
 	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	[self.connection start];
 	[request release];
 	
 }
