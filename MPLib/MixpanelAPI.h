@@ -199,6 +199,8 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue;
 
+-(void)removeSuperPropertyForKey:(NSString*)key;
+
 /*!
 	@method     identifyUser:
 	@abstract   Identifies a user.

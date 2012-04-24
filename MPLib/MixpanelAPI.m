@@ -290,6 +290,11 @@ NSString* getPlatform()
     }
 }
 
+-(void)removeSuperPropertyForKey:(NSString*)key
+{
+    NSAssert(key != nil, @"Key should not be nil");
+    [self.superProperties removeObjectForKey:key];
+}
 
 - (void)identifyUser:(NSString*) identifier
 {
@@ -413,6 +418,7 @@ NSString* getPlatform()
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
 	if (self.testMode) {
 		NSLog(@"Mixpanel test mode is enabled");
+        NSAssert([postBody length], @"Failed to serialize MixPanel events!");
 		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
 	}
 	NSURL *url = [NSURL URLWithString:[self serverURL]];
