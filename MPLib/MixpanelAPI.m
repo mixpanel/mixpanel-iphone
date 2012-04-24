@@ -403,7 +403,14 @@ NSString* getPlatform()
 	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
                                         error:nil];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", [data mp_base64EncodedString]];
+    NSString *b64String = [data mp_base64EncodedString];
+    b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                    (CFStringRef)b64String,
+                                                                    NULL,
+                                                                    CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                    kCFStringEncodingUTF8);
+    [b64String autorelease];
+	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
 	if (self.testMode) {
 		NSLog(@"Mixpanel test mode is enabled");
 		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
