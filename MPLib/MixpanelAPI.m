@@ -110,7 +110,11 @@ NSString* getPlatform()
 
 - (void)setNameTag:(NSString *)nameTag
 {
-    [[self superProperties] setObject:nameTag forKey:kMPNameTag];
+    if(nameTag == nil) {
+        [[self superProperties] removeObjectForKey:kMPNameTag];
+    } else {
+        [[self superProperties] setObject:nameTag forKey:kMPNameTag];
+    }
 }
 - (NSString*)nameTag
 {
