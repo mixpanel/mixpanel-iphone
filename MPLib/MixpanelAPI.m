@@ -56,7 +56,7 @@
 @synthesize testMode;
 @synthesize sendDeviceModel;
 static MixpanelAPI *sharedInstance = nil; 
-NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
+static NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 	const char *cStr = [str UTF8String];
 	const char *cSecretStr = [key UTF8String];
 	unsigned char digest[CC_SHA1_DIGEST_LENGTH];
@@ -72,7 +72,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			];
 }
 
-NSString* getPlatform()
+static NSString* getPlatform()
 {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
