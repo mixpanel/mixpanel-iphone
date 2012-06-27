@@ -7,7 +7,7 @@
 #import "MixpanelEventSampleAppDelegate.h"
 #import "MixpanelEventSampleViewController.h"
 #import "MixpanelAPI.h"
-#define MIXPANEL_TOKEN @"YOUR_TOKEN_HERE"
+#define MIXPANEL_TOKEN @"886377995387084ca48b4c7a1d6e1aa3"
 @implementation MixpanelEventSampleAppDelegate
 
 @synthesize window;
