@@ -36,7 +36,6 @@
  @param events The events that will be uploaded.
  */
 - (void)mixpanel:(MixpanelAPI *) mixpanel didUploadEvents:(NSArray *) events;
-
 /*!
  @method     mixpanel:didFailToUploadEvents:withError   
  @abstract   Notifies the delegate that there was an error while uploading events.
@@ -46,6 +45,33 @@
  @param error the error that ocurred.
  */
 - (void)mixpanel:(MixpanelAPI *) mixpanel didFailToUploadEvents:(NSArray *) events withError:(NSError *) error;
+
+/*!
+ @method     mixpanel:willUploadPeople
+ @abstract   Asks the delegate if the people should be uploaded.
+ @discussion Return YES to upload events, NO to not upload people.
+ @param mixpanel The Mixpanel API
+ @param people The people that will be uploaded.
+ */
+- (BOOL)mixpanel:(MixpanelAPI *) mixpanel willUploadPeople:(NSArray *) people;
+/*!
+ @method     mixpanel:didUploadPeople   
+ @abstract   Notifies the delegate that the people have been uploaded
+ @discussion Notifies the delegate that the people have been uploaded
+ @param mixpanel The Mixpanel API
+ @param people The people that were uploaded.
+ */
+- (void)mixpanel:(MixpanelAPI *) mixpanel didUploadPeople:(NSArray *) people;
+/*!
+ @method     mixpanel:didFailToUploadPeople:withError   
+ @abstract   Notifies the delegate that there was an error while uploading people.
+ @discussion Notifies the delegate that there was an error while uploading people.
+ @param mixpanel The Mixpanel API
+ @param people The people that were to be uploaded.
+ @param error The error that ocurred.
+ */
+- (void)mixpanel:(MixpanelAPI *) mixpanel didFailToUploadPeople:(NSArray *) people withError:(NSError *) error;
+
 @end
 /*!
     @const		kMPUploadInterval
@@ -61,11 +87,15 @@ static const NSUInteger kMPUploadInterval = 30;
 @interface MixpanelAPI : NSObject {
 	NSString *apiToken;
 	NSMutableArray *eventQueue;
+    NSMutableArray *peopleQueue;
 	NSMutableDictionary *superProperties;
 	NSTimer *timer;
 	NSArray *eventsToSend;
+    NSArray *peopleToSend;
 	NSMutableData *responseData;
+    NSMutableData *peopleResponseData;
 	NSURLConnection *connection;
+    NSURLConnection *people_connection;
     id<MixpanelDelegate> delegate;
 	#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	UIBackgroundTaskIdentifier taskId;
@@ -101,8 +131,8 @@ static const NSUInteger kMPUploadInterval = 30;
 
 
 /*! @property serverURL
- @abstract The Mixpanel API endpoint 
- @discussion Allows setting a custom API URL. Defaults to http://api.mixpanel.com/track/
+ @abstract The Mixpanel API endpoint, no trailing slash
+ @discussion Allows setting a custom API URL. Defaults to https://api.mixpanel.com
  */
 @property(retain) NSString *serverURL;
 
@@ -162,6 +192,13 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)start;
 
+/*!
+ @method    setSendDeviceModel:
+ @abstract  Sets whether to send current device model
+ @discussion If passed YES, all events tracked and people set will include the mp_device_type property
+ @param     sendDeviceModel a BOOL that indicates whether to send device model or not
+ */
+-(void)setSendDeviceModel:(BOOL)sendDeviceModel;
 
 
 /*!
@@ -229,11 +266,34 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)track:(NSString*) event properties:(NSDictionary*) properties;
 
+/*!
+    @method     set:
+    @abstract   TODO
+    @discussion TODO
+    @param      properties
+ */
+- (void)set:(NSDictionary*) properties;
 
 /*!
  @method     flush
- @abstract   Uploads datapoints to the Mixpanel Server.
- @discussion Uploads datapoints to the Mixpanel Server.
+ @abstract   Uploads event & people datapoints to the Mixpanel Server.
+ @discussion Uploads event & people datapoints to the Mixpanel Server.
  */
 - (void)flush;
+
+/*!
+ @method     flushEvents
+ @abstract   Uploads event datapoints to the Mixpanel Server.
+ @discussion Uploads event datapoints to the Mixpanel Server.
+ */
+- (void)flushEvents;
+
+/*!
+ @method     flushPeople
+ @abstract   Uploads people datapoints to the Mixpanel Server.
+ @discussion Uploads people datapoints to the Mixpanel Server.
+ */
+- (void)flushPeople;
+
+
 @end

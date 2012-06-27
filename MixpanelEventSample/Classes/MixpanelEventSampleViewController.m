@@ -12,10 +12,18 @@
 
 - (IBAction) registerEvent:(id)sender {
 	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+    [mixpanel setSendDeviceModel:YES];
 	[mixpanel track:@"Player Create" 
 		 properties:[NSDictionary dictionaryWithObjectsAndKeys:[genderControl titleForSegmentAtIndex:genderControl.selectedSegmentIndex], @"gender",
 															[weaponControl titleForSegmentAtIndex:weaponControl.selectedSegmentIndex], @"weapon", nil]];
 }
+
+- (IBAction) registerPerson:(id)sender {
+    MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+    [mixpanel set:[NSDictionary dictionaryWithObjectsAndKeys:[genderControl titleForSegmentAtIndex:genderControl.selectedSegmentIndex], @"gender",
+                   [weaponControl titleForSegmentAtIndex:weaponControl.selectedSegmentIndex], @"weapon", nil]];
+}
+
 - (void)dealloc {
 	self.genderControl = nil;
 	self.weaponControl = nil;

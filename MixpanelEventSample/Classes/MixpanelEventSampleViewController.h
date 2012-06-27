@@ -14,5 +14,6 @@
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
 
 - (IBAction) registerEvent:(id)sender;
+- (IBAction) registerPerson:(id)sender;
 @end
 
