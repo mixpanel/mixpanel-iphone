@@ -83,8 +83,11 @@ This call will write out the new value for the "User Type" property if it does n
 	
 Where `username` is an `NSString`. 
 
+# Sending People Data #
+TODO
+
 # Using multiple MixpanelAPI instances #
-It is now possible to use multiple `MixpanelAPI` instances in a single application. This makes it easy to send events to multiple Mixpanel projects. To iniitialize a new, non singleton instance of MixpanelAPI, use the `initWithToken:` method as follows:
+It is possible to use multiple `MixpanelAPI` instances in a single application. This makes it easy to send events to multiple Mixpanel projects. To iniitialize a new, non singleton instance of MixpanelAPI, use the `initWithToken:` method as follows:
 
 	MixpanelAPI *mixpanel = [[MixpanelAPI alloc] initWithToken:MIXPANEL_TOKEN];
 	
