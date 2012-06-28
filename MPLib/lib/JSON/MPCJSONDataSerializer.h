@@ -40,6 +40,7 @@
 - (NSData *)serializeNull:(NSNull *)inNull error:(NSError **)outError;
 - (NSData *)serializeNumber:(NSNumber *)inNumber error:(NSError **)outError;
 - (NSData *)serializeString:(NSString *)inString error:(NSError **)outError;
+- (NSData *)serializeDate:(NSDate *)inDate error:(NSError **)outError;
 - (NSData *)serializeArray:(NSArray *)inArray error:(NSError **)outError;
 - (NSData *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError;
 
