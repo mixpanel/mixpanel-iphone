@@ -279,9 +279,8 @@ static MixpanelAPI *sharedInstance = nil;
     }
 }
 
-
 - (void)identifyUser:(NSString*) identifier {
-	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] defaultValue:self.defaultUserId];
+    [self registerSuperProperties:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"]];
 }
 
 - (NSString*)eventFilePath  {
@@ -356,6 +355,7 @@ static MixpanelAPI *sharedInstance = nil;
 }
 
 - (void)setProperties:(NSDictionary*)properties {
+    [self unarchiveData];
     [self addPersonToQueueWithAction:@"$set" andProperties:properties];
 }
 
@@ -517,10 +517,10 @@ static MixpanelAPI *sharedInstance = nil;
     }
     
     NSString *b64String = [self encodedStringFromArray:self.peopleToSend];
-	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
+    NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
 
-	self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+    self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
 }
 
 - (void)flushEvents {
