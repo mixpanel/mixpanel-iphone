@@ -49,7 +49,7 @@
 /*!
  @method     mixpanel:willUploadPeople
  @abstract   Asks the delegate if the people should be uploaded.
- @discussion Return YES to upload events, NO to not upload people.
+ @discussion Return YES to upload people, NO to not upload people.
  @param      mixpanel The Mixpanel API
  @param      people The people that will be uploaded.
  */
