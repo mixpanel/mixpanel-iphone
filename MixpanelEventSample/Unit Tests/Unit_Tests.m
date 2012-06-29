@@ -5,25 +5,74 @@
 
 #import "Unit_Tests.h"
 
-#import "MixpanelAPI.h"
-#import "MixpanelAPI_Private.h"
-#import "MPCJSONSerializer.h"
+int connection_count = 0;
+
+@interface MixpanelAPI (UnitTests)
+- (NSURLConnection*)apiConnectionWithEndpoint:(NSString*)endpoint andBody:(NSString*)body;
+@end
+
+@implementation MixpanelAPI (UnitTests)
+- (NSURLConnection*)apiConnectionWithEndpoint:(NSString*)endpoint andBody:(NSString*)body {
+    NSURL *url = [NSURL URLWithString:@"http://localhost/"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    connection_count++;
+    
+    return [NSURLConnection connectionWithRequest:request delegate:self];
+}
+@end
 
 @implementation Unit_Tests
 
 - (void)setUp {
     [super setUp];
-    [MixpanelAPI sharedAPIWithToken:@"test token"];
+    
+    mp = [[MixpanelAPI alloc] initWithToken:MP_TEST_TOKEN];
+    [mp setUploadInterval:MP_TEST_UPLOAD_INTERVAL];
+    
+    // Over-ride any archived data
+    mp.peopleQueue = [NSMutableArray array];
+    mp.eventQueue = [NSMutableArray array];
 }
 
 - (void)tearDown {
-    // Tear-down code here.
     [super tearDown];
+    
+    [mp stop];
+    [mp release];
 }
 
-- (void)testTrackFormat {
-    MixpanelAPI *mp = [MixpanelAPI sharedAPI];
+- (void)testFlush {    
+    [mp track:@"Event"];
+    [mp setProperty:@"John" forKey:@"name"];
     
+    STAssertTrue([mp.eventQueue count] == 1, @"track: failed, not in queue");
+    STAssertTrue([mp.peopleQueue count] == 1, @"setProperty:forKey: failed, not in queue");
+    
+    connection_count = 0;
+    
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:MP_TEST_UPLOAD_INTERVAL+1]]; // wait a while
+        
+    STAssertTrue(connection_count == 2, @"Connections not created");
+}
+
+- (void)testArchive {
+    [mp track:@"Event"];
+    [mp setProperty:@"John" forKey:@"name"];
+    
+    [mp archiveData];
+    
+    mp.peopleQueue = nil;
+    mp.eventQueue = nil;
+    
+    [mp unarchiveData];
+    
+    STAssertTrue([mp.eventQueue count] == 1, @"Archive/unarchive of event failed");
+    STAssertTrue([mp.peopleQueue count] == 1, @"Archive/unarchive of people failed");
+}
+
+- (void)testTrackFormat {    
     NSString *eventName = @"Test Event";
     NSString *property_key = @"Test Property";
     NSNumber *property_value = [NSNumber numberWithInt:2];
@@ -36,9 +85,7 @@
     STAssertEquals([[event objectForKey:@"properties"] objectForKey:property_key], property_value, @"track:properties: event properties are not set properly.");
 }
 
-- (void)testSetPropertyFormat {
-    MixpanelAPI *mp = [MixpanelAPI sharedAPI];
-    
+- (void)testSetPropertyFormat {    
     NSString *value = @"John Smith";
     NSString *key = @"name";
     
@@ -56,8 +103,6 @@
 }
 
 - (void)testIncrementPropertyFormat {
-    MixpanelAPI *mp = [MixpanelAPI sharedAPI];
-    
     NSString *key = @"numeric";
     
     [mp incrementPropertyWithKey:key];
@@ -71,9 +116,7 @@
     STAssertEquals([NSNumber numberWithInt:4], [[[mp.peopleQueue objectAtIndex:3] objectForKey:@"$add"] objectForKey:key], @"incrementProperties: failed.");
 }
 
-- (void)testAppendPropertyFormat {
-    MixpanelAPI *mp = [MixpanelAPI sharedAPI];
-    
+- (void)testAppendPropertyFormat {    
     NSString *key = @"property_key";
     NSString *value = @"to_append";
     
@@ -83,8 +126,6 @@
 }
 
 - (void)testDeleteUserFormat {
-    MixpanelAPI *mp = [MixpanelAPI sharedAPI];
-    
     NSString *distinct_id = @"user1";
     
     [mp deleteUser:distinct_id];
