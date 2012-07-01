@@ -198,6 +198,7 @@ static MixpanelAPI *sharedInstance = nil;
     [self unarchiveData];
     [self flush];
     [self setUploadInterval:uploadInterval];
+    [self setSendDeviceModel:YES];
 }
 
 - (void)stop {
