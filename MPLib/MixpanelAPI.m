@@ -1,11 +1,12 @@
 //
-//  MixpanelLib.m
+//  MixpanelAPI.m
 //  MPLib
 //
 //
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonHMAC.h>
 #import "MixpanelAPI.h"
+#import "MixpanelAPI_Private.h"
 #import "MixpanelEvent.h"
 #import "MPCJSONDataSerializer.h"
 #import "NSData+MPBase64.h"
@@ -25,29 +26,18 @@
 #endif
 #define kMPNameTag @"mp_name_tag"
 #define kMPDeviceModel @"mp_device_model"
-@interface MixpanelAPI ()
-@property(nonatomic,copy) NSString *apiToken;
-@property(nonatomic,retain) NSMutableDictionary *superProperties;
-@property(nonatomic,retain) NSArray *eventsToSend;
-@property(nonatomic,retain) NSMutableArray *eventQueue;
-@property(nonatomic,retain) NSURLConnection *connection;
-@property(nonatomic,retain) NSMutableData *responseData;
-@property(nonatomic,retain) NSString *defaultUserId;
--(void)flush;
--(void)unarchiveData;
--(void)archiveData;
--(void)applicationWillTerminate:(NSNotification *)notification;
--(void)applicationWillEnterForeground:(NSNotificationCenter *)notification;
--(void)applicationDidEnterBackground:(NSNotificationCenter *)notification;
-@end
 
 @implementation MixpanelAPI
 @synthesize apiToken;
 @synthesize superProperties;
 @synthesize eventQueue;
+@synthesize peopleQueue;
 @synthesize eventsToSend;
+@synthesize peopleToSend;
 @synthesize connection;
+@synthesize peopleConnection;
 @synthesize responseData;
+@synthesize peopleResponseData;
 @synthesize defaultUserId;
 @synthesize uploadInterval;
 @synthesize flushOnBackground;
@@ -55,8 +45,10 @@
 @synthesize delegate;
 @synthesize testMode;
 @synthesize sendDeviceModel;
+
 static MixpanelAPI *sharedInstance = nil; 
-NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
+
++ (NSString*)calculateHMAC_SHA1withString:(NSString*) str andKey:(NSString*)key {
 	const char *cStr = [str UTF8String];
 	const char *cSecretStr = [key UTF8String];
 	unsigned char digest[CC_SHA1_DIGEST_LENGTH];
@@ -72,8 +64,7 @@ NSString* calculateHMAC_SHA1(NSString *str, NSString *key) {
 			];
 }
 
-NSString* getPlatform()
-{
++ (NSString*)currentPlatform {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     
@@ -86,12 +77,12 @@ NSString* getPlatform()
     return results;
 }
 
-+ (void)initialize
-{
++ (void)initialize {
     if (sharedInstance == nil)
         sharedInstance = [[self alloc] init];
 }
-- (void) setUploadInterval:(NSUInteger) newInterval {
+
+- (void)setUploadInterval:(NSUInteger) newInterval {
     uploadInterval = newInterval;
     if (timer) {
         [timer invalidate];
@@ -108,20 +99,19 @@ NSString* getPlatform()
     [timer retain];
 }
 
-- (void)setNameTag:(NSString *)nameTag
-{
+- (void)setNameTag:(NSString *)nameTag {
     if(nameTag == nil) {
         [[self superProperties] removeObjectForKey:kMPNameTag];
     } else {
         [[self superProperties] setObject:nameTag forKey:kMPNameTag];
     }
 }
-- (NSString*)nameTag
-{
+
+- (NSString*)nameTag {
     return [[self superProperties] objectForKey:kMPNameTag];
 }
-- (NSDictionary *)interfaces
-{
+
+- (NSDictionary*)interfaces {
     NSMutableDictionary *theDictionary = [NSMutableDictionary dictionary];
     
     
@@ -157,8 +147,8 @@ NSString* getPlatform()
     return(theDictionary);
     
 }
-- (NSString*) userIdentifier
-{
+
+- (NSString*)userIdentifier {
     NSDictionary *dict = [self interfaces];
     NSArray *keys = [dict allKeys];
     keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -177,7 +167,8 @@ NSString* getPlatform()
     }
     return string;
 }
-- (void) start {
+
+- (void)start {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000		
     if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && &UIBackgroundTaskInvalid) {
@@ -202,14 +193,15 @@ NSString* getPlatform()
                                name:UIApplicationWillTerminateNotification 
                              object:nil];
     
-    self.defaultUserId = calculateHMAC_SHA1([self userIdentifier], self.apiToken);
+    self.defaultUserId = [MixpanelAPI calculateHMAC_SHA1withString:[self userIdentifier] andKey:self.apiToken];
     [self identifyUser:self.defaultUserId];
     [self unarchiveData];
     [self flush];
     [self setUploadInterval:uploadInterval];
+    [self setSendDeviceModel:YES];
 }
 
-- (void) stop {
+- (void)stop {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [timer invalidate];
     [timer release];
@@ -217,63 +209,58 @@ NSString* getPlatform()
     [self archiveData];
 }
 
-- (void)setSendDeviceModel:(BOOL)sd
-{
+- (void)setSendDeviceModel:(BOOL)sd {
     sendDeviceModel = sd;
     if (sd) {
-        [[self superProperties] setObject:getPlatform() forKey:kMPDeviceModel];
+        [[self superProperties] setObject:[MixpanelAPI currentPlatform] forKey:kMPDeviceModel];
     } else {
         [[self superProperties] removeObjectForKey:kMPDeviceModel];
     }
 }
-+ (id)sharedAPIWithToken:(NSString*)apiToken
-{
+
++ (id)sharedAPIWithToken:(NSString*)apiToken {
     //Already set by +initialize.
     sharedInstance.apiToken = apiToken;
     [sharedInstance start];
     return sharedInstance;
 }
-+ (id)sharedAPI
-{
+
++ (id)sharedAPI {
 	return sharedInstance;
 }
 
-- (id)initWithToken:(NSString *)aToken
-{
+- (id)initWithToken:(NSString *)aToken {
     if ((self = [self init])) {
         apiToken = [aToken retain];
         [self start];
     }
     return  self;
 }
-- (id)init
-{
+
+- (id)init {
     //If sharedInstance is nil, +initialize is our caller, so initialize the instance.
     //If it is not nil, simply return the instance without re-initializing it.
 
     if ((self = [super init])) {
         eventQueue = [[NSMutableArray alloc] init];
+        peopleQueue = [[NSMutableArray alloc] init];
         superProperties = [[NSMutableDictionary alloc] init];
         flushOnBackground = YES;
-        serverURL = @"https://api.mixpanel.com/track/";
+        serverURL = @"https://api.mixpanel.com";
         uploadInterval = kMPUploadInterval;
-        [self.superProperties setObject:@"iphone" forKey:@"mp_lib"];
-        
-        //Initialize the instance here.
+        [self.superProperties setObject:@"iphone" forKey:@"mp_lib"];        
     }
 
     return self;
 }
 
-- (void)registerSuperProperties:(NSDictionary*) properties
-{
+- (void)registerSuperProperties:(NSDictionary*) properties {
     NSAssert(properties != nil, @"Properties should not be nil");
     [self.superProperties addEntriesFromDictionary:properties];
 }
 
 
-- (void)registerSuperPropertiesOnce:(NSDictionary*) properties
-{
+- (void)registerSuperPropertiesOnce:(NSDictionary*) properties {
     NSMutableDictionary *superProps = self.superProperties;
     for (NSString *key in properties) {
         if ([superProps objectForKey:key] == nil) {
@@ -283,8 +270,7 @@ NSString* getPlatform()
 }
 
 
-- (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue
-{
+- (void)registerSuperPropertiesOnce:(NSDictionary*) properties defaultValue:(id) defaultValue {
     NSMutableDictionary *superProps = self.superProperties;
     for (NSString *key in properties) {
         id value = [superProps objectForKey:key];
@@ -294,31 +280,34 @@ NSString* getPlatform()
     }
 }
 
-
-- (void)identifyUser:(NSString*) identifier
-{
-	[self registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"] defaultValue:self.defaultUserId];
+- (void)identifyUser:(NSString*) identifier {
+    [self registerSuperProperties:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"]];
 }
 
-- (NSString*) filePath 
-{
+- (NSString*)eventFilePath  {
     if (self == sharedInstance) return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MixPanelLib_SavedData.plist"];
     
     NSString *filename = [NSString stringWithFormat:@"MPLib_%@_SavedData.plist", [self apiToken]];
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:filename];
 }
 
-- (void)track:(NSString*) event
-{
+- (NSString*)peopleFilePath {
+    return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+            stringByAppendingPathComponent:@"MixPanelLib_SavedPeople.plist"];
+}
+
+- (void)track:(NSString*) event {
 	[self track:event properties:nil];
 }
 
-- (void)track:(NSString*) event properties:(NSDictionary*) properties
-{
+- (void)track:(NSString*) event properties:(NSDictionary*) properties {
 	NSMutableDictionary *props = [NSMutableDictionary dictionary];
 	[props addEntriesFromDictionary:superProperties];
 	[props addEntriesFromDictionary:properties];
 	if (![props objectForKey:@"token"]) {
+        if (!apiToken)
+            [NSException raise:@"Mixpanel API token not set" format:@"The token must be specified before making API calls."];
+
 		[props setObject:apiToken forKey:@"token"];
 	}
 	NSDictionary *allProperties = [props copy];
@@ -329,26 +318,123 @@ NSString* getPlatform()
 	[allProperties release];
 }
 
+- (void)addPersonToQueueWithAction:(NSString*)action andProperties:(NSDictionary*)properties {
+    NSMutableDictionary *person = [NSMutableDictionary dictionary];
+    NSMutableDictionary *mutable_properties = [[properties mutableCopy] autorelease];
+    
+    if ([mutable_properties objectForKey:@"$token"]) {
+        [person setObject:[mutable_properties objectForKey:@"$token"] forKey:@"$token"];
+        [mutable_properties removeObjectForKey:@"$token"];
+    } else {
+        if (!apiToken)
+            [NSException raise:@"Mixpanel API token not set" format:@"The token must be specified before making API requests."];
+        
+        [person setObject:apiToken forKey:@"$token"];
+    }
+    
+    if ([mutable_properties objectForKey:@"$distinct_id"]) {
+        [person setObject:[mutable_properties objectForKey:@"$distinct_id"] forKey:@"$distinct_id"];
+        [mutable_properties removeObjectForKey:@"$distinct_id"];
+    } else {
+        if (![superProperties objectForKey:@"distinct_id"])
+            [NSException raise:@"Mixpanel $distinct_id not set" format:@"The $distinct_id must be specified before making people API requests. Call start or identifyUser before making requests."];
+        [person setObject:[superProperties objectForKey:@"distinct_id"] forKey:@"$distinct_id"];
+    }
+    
+    if ([mutable_properties objectForKey:@"$time"]) {
+        [person setObject:[mutable_properties objectForKey:@"$time"] forKey:@"$time"];
+        [mutable_properties removeObjectForKey:@"$time"];
+    } else {
+        [person setObject:
+                [NSNumber numberWithLongLong:(long long)([[NSDate date] timeIntervalSince1970]*1000)]
+                forKey:@"$time"];
+    }
+    
+    [person setObject:[[mutable_properties copy] autorelease] forKey:action];
+    [[self peopleQueue] addObject:person];
+    
+}
+
+- (void)setProperties:(NSDictionary*)properties {
+    [self unarchiveData];
+    [self addPersonToQueueWithAction:@"$set" andProperties:properties];
+}
+
+- (void)setProperty:(id)property forKey:(NSString*)key {
+    [self setProperties:[NSDictionary dictionaryWithObject:property forKey:key]];
+}
+
+- (void)incrementProperties:(NSDictionary*)properties {
+    [self addPersonToQueueWithAction:@"$add" andProperties:properties];
+}
+
+- (void)incrementPropertyWithKey:(NSString*)key {
+    [self incrementProperties:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:1] forKey:key]];
+}
+
+- (void)incrementPropertyWithKey:(NSString*)key byNumber:(NSNumber*)amount {
+    [self incrementProperties:[NSDictionary dictionaryWithObject:amount forKey:key]];
+}
+
+- (void)incrementPropertyWithKey:(NSString*)key byInt:(int)amount {
+    [self incrementPropertyWithKey:key byNumber:[NSNumber numberWithInt:amount]];
+}
+
+- (void)append:(id)item toPropertyWithKey:(NSString*)key {
+    [self addPersonToQueueWithAction:@"$append" andProperties:[NSDictionary dictionaryWithObject:item forKey:key]];
+}
+
+- (void)deleteUser:(NSString*)distinctId {
+    [self addPersonToQueueWithAction:@"$delete" andProperties:[NSDictionary dictionaryWithObject:distinctId forKey:@"$distinct_id"]];
+}
+
+- (void)deleteCurrentUser {
+    [self addPersonToQueueWithAction:@"$delete" andProperties:[NSDictionary dictionary]];
+}
+
 #pragma mark -
 #pragma mark Application Lifecycle Events
 - (void)unarchiveData {
-	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
+    [self unarchiveEvents];
+    [self unarchivePeople];
+}
+
+- (void)unarchiveEvents {
+	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self eventFilePath]];
 	if (!self.eventQueue) {
 		self.eventQueue = [NSMutableArray array];
-	}		
-}
-- (void)archiveData {
-	if (![NSKeyedArchiver archiveRootObject:[self eventQueue] toFile:[self filePath]]) {
-		NSLog(@"Unable to archive data!!!");
 	}
 }
-- (void)applicationWillTerminate:(NSNotification*) notification
-{
+
+- (void)unarchivePeople {
+    self.peopleQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self peopleFilePath]];
+    if (!self.peopleQueue) {
+        self.peopleQueue = [NSMutableArray array];
+    }
+}
+
+- (void)archiveData {
+    [self archiveEvents];
+    [self archivePeople];
+}
+
+- (void)archiveEvents {
+	if (![NSKeyedArchiver archiveRootObject:[self eventQueue] toFile:[self eventFilePath]]) {
+		NSLog(@"Unable to archive Mixpanel event data!");
+	}
+}
+
+- (void)archivePeople {
+    if (![NSKeyedArchiver archiveRootObject:[self peopleQueue] toFile:[self peopleFilePath]]) {
+        NSLog(@"Unable to archive Mixpanel people data!");
+    }
+}
+
+- (void)applicationWillTerminate:(NSNotification*) notification {
 	[self archiveData];
 }
 
-- (void)applicationDidEnterBackground:(NSNotificationCenter*) notification
-{
+- (void)applicationDidEnterBackground:(NSNotificationCenter*) notification {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
     if ([self flushOnBackground]) {
         if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
@@ -356,10 +442,12 @@ NSString* getPlatform()
             taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
                 [self.connection cancel];
                 self.connection = nil;
+                [self.peopleConnection cancel];
+                self.peopleConnection = nil;
                 [self archiveData];
                 [[UIApplication sharedApplication] endBackgroundTask:taskId];
                 taskId = UIBackgroundTaskInvalid;
-            }]	;
+            }];
             [self flush];
         } else {
             [self archiveData];
@@ -369,17 +457,17 @@ NSString* getPlatform()
     }
 #endif
 }
-- (void)applicationWillEnterForeground:(NSNotificationCenter*) notification
-{
+
+- (void)applicationWillEnterForeground:(NSNotificationCenter*) notification {
 	if (self.apiToken) {
 		[self unarchiveData];
 		[self flush];
 	}
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid) {
-    if (taskId != UIBackgroundTaskInvalid) {
-      [[UIApplication sharedApplication] endBackgroundTask:taskId];
-    }
+        if (taskId != UIBackgroundTaskInvalid) {
+          [[UIApplication sharedApplication] endBackgroundTask:taskId];
+        }
 		taskId = UIBackgroundTaskInvalid;				
 	}
 #endif
@@ -387,8 +475,56 @@ NSString* getPlatform()
 
 #pragma mark -
 #pragma mark Timer Callback and Networking code
-- (void)flush
-{
+- (NSURLConnection*)apiConnectionWithEndpoint:(NSString*)endpoint andBody:(NSString*)body {
+    NSURL *url = [NSURL URLWithString:[[self serverURL] stringByAppendingString:endpoint]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    return [NSURLConnection connectionWithRequest:request delegate:self];
+}
+
+- (NSString*)encodedStringFromArray:(NSArray*)array {
+    MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
+    NSData *data = [serializer serializeArray:array error:nil];
+    NSString *b64String = [data mp_base64EncodedString];
+    b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                            (CFStringRef)b64String,
+                                                            NULL,
+                                                            CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                            kCFStringEncodingUTF8);
+    return [b64String autorelease];
+}
+
+- (void)flush {
+    [self flushPeople];
+    [self flushEvents];
+}
+
+- (void)flushPeople {
+    if ([self.peopleQueue count] == 0 || self.peopleConnection != nil) {
+        return;
+    } else if ([self.peopleQueue count] > 50) {
+        self.peopleToSend = [self.peopleQueue subarrayWithRange:NSMakeRange(0, 50)];
+    } else {
+        self.peopleToSend = [NSArray arrayWithArray:self.peopleQueue];
+    }
+    if ([self.delegate respondsToSelector:@selector(mixpanel:willUploadPeople:)]) {
+        if (![self.delegate mixpanel:self willUploadPeople:self.peopleToSend]) {
+            self.peopleToSend = nil;
+            return;
+        }
+    }
+    
+    NSString *b64String = [self encodedStringFromArray:self.peopleToSend];
+    NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
+
+    self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+}
+
+- (void)flushEvents {
 	if ([self.eventQueue count] == 0 || self.connection != nil) { // No events or already pushing data.
 		return;
 	} else if ([self.eventQueue count] > 50) {
@@ -401,105 +537,131 @@ NSString* getPlatform()
             self.eventsToSend = nil;
             return;            
         }
-
     }
-
-	MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
-	NSData *data = [serializer serializeArray:[eventsToSend valueForKey:@"dictionaryValue"]
-                                        error:nil];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    NSString *b64String = [data mp_base64EncodedString];
-    b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                    (CFStringRef)b64String,
-                                                                    NULL,
-                                                                    CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                    kCFStringEncodingUTF8);
-    [b64String autorelease];
+    
+    NSString *b64String = [self encodedStringFromArray:[self.eventsToSend valueForKey:@"dictionaryValue"]];
 	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
 	if (self.testMode) {
 		NSLog(@"Mixpanel test mode is enabled");
 		postBody = [NSString stringWithFormat:@"test=1&%@", postBody];
 	}
-	NSURL *url = [NSURL URLWithString:[self serverURL]];
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];  
-	[request setHTTPMethod:@"POST"];
-	[request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	[request release];
-	
+    
+	self.connection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
 }
 
 #pragma mark -
 #pragma mark NSURLConnection Callbacks
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
+- (void)connection:(NSURLConnection *)_connection didReceiveResponse:(NSHTTPURLResponse *)response {
 	if ([response statusCode] != 200) {
 		NSLog(@"fail %@", [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
-	} else {
+	} else if (_connection == self.connection) {
 		self.responseData = [NSMutableData data];
-	}
+	} else if (_connection == self.peopleConnection) {
+        self.peopleResponseData = [NSMutableData data];
+    }
 }
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
-{
-	[self.responseData appendData:data];
+
+- (void)connection:(NSURLConnection *)_connection didReceiveData:(NSData *)data {
+    if (_connection == self.connection) {
+        [self.responseData appendData:data];
+    } else if (_connection == self.peopleConnection) {
+        [self.peopleResponseData appendData:data];
+    }
 }
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error 
-{
+
+- (void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
 	NSLog(@"error, clean up %@", error);
-    if ([self.delegate respondsToSelector:@selector(mixpanel:didFailToUploadEvents:withError:)]) {
-        [self.delegate mixpanel:self didFailToUploadEvents:self.eventsToSend withError:error];
+    
+    if (_connection == self.connection) {
+        if ([self.delegate respondsToSelector:@selector(mixpanel:didFailToUploadEvents:withError:)]) {
+            [self.delegate mixpanel:self didFailToUploadEvents:self.eventsToSend withError:error];
+        }
+        self.eventsToSend = nil;
+        self.responseData = nil;
+        self.connection = nil;
+        [self archiveEvents];
+    } else if (_connection == self.peopleConnection) {
+        if ([self.delegate respondsToSelector:@selector(mixpanel:didFailToUploadPeople:withError:)]) {
+            [self.delegate mixpanel:self didFailToUploadPeople:self.peopleToSend withError:error];
+        }
+        self.peopleToSend = nil;
+        self.peopleResponseData = nil;
+        self.peopleConnection = nil;
+        [self archivePeople];
     }
-	self.eventsToSend = nil;
-	self.responseData = nil;
-	self.connection = nil;
-    [self archiveData];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
+	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid && self.connection == nil && self.peopleConnection == nil) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
-    taskId = UIBackgroundTaskInvalid;
+        taskId = UIBackgroundTaskInvalid;
 	}
 
 #endif
 }
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection 
-{
-    if ([self.delegate respondsToSelector:@selector(mixpanel:didUploadEvents:)]) {
-        [self.delegate mixpanel:self didUploadEvents:self.eventsToSend];
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)_connection {
+    if (_connection == self.connection) {
+        if ([self.delegate respondsToSelector:@selector(mixpanel:didUploadEvents:)]) {
+            [self.delegate mixpanel:self didUploadEvents:self.eventsToSend];
+        }
+        NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
+        NSInteger result = [response intValue];
+        
+        [self.eventQueue removeObjectsInArray:self.eventsToSend];
+        
+        if (result == 0) {
+            NSLog(@"sending events failed: %@", response);
+        }
+        
+        [response release];
+        [self archiveEvents]; //update saved archive
+        self.eventsToSend = nil;
+        self.responseData = nil;
+        self.connection = nil;
+    } else if (_connection == self.peopleConnection) {
+        if ([self.delegate respondsToSelector:@selector(mixpanel:didUploadPeople:)]) {
+            [self.delegate mixpanel:self didUploadPeople:self.peopleToSend];
+        }
+        NSString *response = [[NSString alloc] initWithData:self.peopleResponseData encoding:NSUTF8StringEncoding];
+        NSInteger result = [response intValue];
+        
+        [self.peopleQueue removeObjectsInArray:self.peopleToSend];
+        
+        if (result == 0) {
+            NSLog(@"sending people failed: %@", response);
+        }
+        
+        [response release];
+        [self archivePeople];
+        self.peopleToSend = nil;
+        self.peopleResponseData = nil;
+        self.peopleConnection = nil;
     }
-	NSString *response = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
-	NSInteger result = [response intValue];
     
-    [self.eventQueue removeObjectsInArray:self.eventsToSend];
-	
-    if (result == 0) {
-		NSLog(@"failed %@", response);
-	}
-    
-    [response release];
-	[self archiveData]; //update saved archive
-	self.eventsToSend = nil;
-	self.responseData = nil;
-	self.connection = nil;
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid) {
+	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid && self.connection == nil && self.peopleConnection == nil) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
-    taskId = UIBackgroundTaskInvalid;
+        taskId = UIBackgroundTaskInvalid;
 	}
 #endif
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [self archiveData];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [apiToken release], apiToken = nil;
     [eventQueue release], eventQueue = nil;
+    [peopleQueue release], peopleQueue = nil;
     [superProperties release], superProperties = nil;
     [timer invalidate], [timer release], timer = nil;
     [eventsToSend release], eventsToSend = nil;
+    [peopleToSend release], peopleToSend = nil;
     [responseData release], responseData = nil;
+    [peopleResponseData release], peopleResponseData = nil;
     [connection release], connection = nil;
     [defaultUserId release], defaultUserId = nil;
     [super dealloc];

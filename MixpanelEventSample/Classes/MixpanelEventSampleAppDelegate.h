@@ -18,4 +18,3 @@
 @property (nonatomic, retain) IBOutlet MixpanelEventSampleViewController *viewController;
 
 @end
-
