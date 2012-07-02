@@ -1,3 +1,10 @@
+# Release notes #
+
+### v1.1 - July 1, 2012 ###
+- People integration
+- Device model is now sent by default. Disable with `setSendDeviceModel:`.
+- `identifyUser:` can now be called multiple times to set the user's distinct ID.
+
 # Logging data on the iOS #
 If you want to track user behavior on your iPhone\iPad application, first download the Mixpanel iOS API by cloning the git repository:
 
@@ -83,8 +90,41 @@ This call will write out the new value for the "User Type" property if it does n
 	
 Where `username` is an `NSString`. 
 
+# Sending People Data #
+
+To start tracking properties for each user, first ensure that an identifier is being set. Calls to `sharedAPIWithToken:` and `initWithToken:` automatically
+generate an identifier, but you can change it by calling `identifyUser:`. Once an identifier is set, there are a few different ways properties for that user
+can be set and modified.
+
+To set a property, you can do the following:
+
+	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+	[mixpanel setProperty:@"john@example.com" forKey:@"email"];
+
+The key must be an `NSString` and the value can be an `NSString`, `NSNumber`, `NSArray`, `NSDate`, or 
+`NSNull`. 
+
+To set multiple properties, you can use `setProperties:` and pass in an `NSDictionary` of property keys and values.
+To override the preset project token and/or user identifier, pass `NSString` values with keys `@"$token"` and
+`@"$distinct_id"` respectively. 
+
+To increment a numeric property, you can do the following:
+
+	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+	[mixpanel incrementPropertyWithKey:@"Tokens collected"]; // Increments by 1
+	[mixpanel incrementPropertyWithKey:@"Total score" byNumber:[NSNumber numberWithInt:100]] // Increments by 100
+	[mixpanel incrementPropertyWithKey:@"Total score" byInt:100] // Equivalent to above
+
+To increment multiple properties, you can use `incrementProperties:` and pass in an `NSDictionary` of
+property keys and `NSNumber` values to increment by.
+
+To append to a list property, you can do the following:
+
+	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+	[mixpanel append:@"Level 2" toPropertyWithKey:@"badges"];
+
 # Using multiple MixpanelAPI instances #
-It is now possible to use multiple `MixpanelAPI` instances in a single application. This makes it easy to send events to multiple Mixpanel projects. To iniitialize a new, non singleton instance of MixpanelAPI, use the `initWithToken:` method as follows:
+It is possible to use multiple `MixpanelAPI` instances in a single application. This makes it easy to send events to multiple Mixpanel projects. To iniitialize a new, non singleton instance of MixpanelAPI, use the `initWithToken:` method as follows:
 
 	MixpanelAPI *mixpanel = [[MixpanelAPI alloc] initWithToken:MIXPANEL_TOKEN];
 	

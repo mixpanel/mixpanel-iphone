@@ -8,8 +8,7 @@
 
 
 @implementation MixpanelEvent
-- (id) initWithName:(NSString*) aName properties:(NSDictionary*) someProperties
-{
+- (id) initWithName:(NSString*) aName properties:(NSDictionary*) someProperties {
 	if ((self = [super init])) {
 		if (aName) {
 			name = [aName copy];			
@@ -43,16 +42,15 @@
 	}
 	return self;
 }
-- (void) dealloc
-{
+
+- (void)dealloc {
 	[name release];
 	[properties release];
 	[timestamp release];
 	[super dealloc];
 }
 
-- (NSDictionary*) dictionaryValue 
-{
+- (NSDictionary*)dictionaryValue  {
 	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
 	[dictionary setObject:name forKey:@"event"];
 	[properties setObject:[NSNumber numberWithLongLong:[timestamp timeIntervalSince1970]] forKey:@"time"];
