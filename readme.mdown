@@ -1,3 +1,10 @@
+# Release notes #
+
+### v1.1 - July 1, 2012 ###
+- People integration
+- Device model is now sent by default. Disable with `setSendDeviceModel:`.
+- `identifyUser:` can now be called multiple times to set the user's distinct ID.
+
 # Logging data on the iOS #
 If you want to track user behavior on your iPhone\iPad application, first download the Mixpanel iOS API by cloning the git repository:
 
