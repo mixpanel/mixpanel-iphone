@@ -92,6 +92,10 @@ else if ([inObject isKindOfClass:[MPCSerializedJSONData class]])
 	{
 	theResult = [inObject data];
 	}
+else if ([inObject isKindOfClass:[NSDate class]])
+    {
+    theResult = [self serializeDate:inObject error:outError];
+    }
 else
 	{
 	if (outError)
@@ -189,6 +193,16 @@ NSMutableString *theMutableCopy = [[inString mutableCopy] autorelease];
 				}
 */
 return([[NSString stringWithFormat:@"\"%@\"", theMutableCopy] dataUsingEncoding:NSUTF8StringEncoding]);
+}
+
+- (NSData *)serializeDate:(NSDate *)inDate error:(NSError **)outError
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    NSData *output = [self serializeString:[formatter stringFromDate:inDate] error:outError];
+    [formatter release];
+    return output;
 }
 
 - (NSData *)serializeArray:(NSArray *)inArray error:(NSError **)outError
