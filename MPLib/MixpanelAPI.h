@@ -268,7 +268,7 @@ static const NSUInteger kMPUploadInterval = 30;
  @method     track:properties:
  @abstract   Tracks an event with properties.
  @discussion Tracks an event. The properties of this event are a union of the super properties of type Super properties of type 
-             <code>kMPLibEventTypeAll</code>, <code>kMPLibEventTypeEvent</code> and the <code>properties</properties> parameter. 
+             <code>kMPLibEventTypeAll</code>, <code>kMPLibEventTypeEvent</code> and the <code>properties</code> parameter. 
              The API must be initialized with <code>sharedAPIWithToken:</code> before calling this method.
  @param		 event The event to track. If this event is a funnel step specified by <code>trackFunnel:steps:</code> It will also be tracked as a funnel.
  @param		 properties The properties for this event. The keys must be NSString objects and the values should be NSString or NSNumber objects.
