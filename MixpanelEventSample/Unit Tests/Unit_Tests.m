@@ -54,7 +54,17 @@ int connection_count = 0;
     
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:MP_TEST_UPLOAD_INTERVAL+1]]; // wait a while
         
-    STAssertTrue(connection_count == 2, @"Connections not created");
+    STAssertTrue(connection_count == 2, @"Connections not created %d");
+}
+
+- (void)testMultipleSet {
+    [mp setProperty:@"1" forKey:@"1"];
+    [mp setProperty:@"2" forKey:@"2"];
+    [mp incrementPropertyWithKey:@"3"];
+    [mp setProperties:[NSDictionary dictionaryWithObject:@"4" forKey:@"4"]];
+    [mp append:@"5" toPropertyWithKey:@"5"];
+    
+    STAssertTrue(mp.peopleQueue.count == 5, @"Not all sets recorded");
 }
 
 - (void)testArchive {
