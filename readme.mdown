@@ -1,5 +1,8 @@
 # Release notes #
 
+### v1.1.1 - July 3, 2012 ###
+- Fixed a bug that affected setProperties: and setProperty:forKey:
+
 ### v1.1 - July 1, 2012 ###
 - People integration
 - Device model is now sent by default. Disable with `setSendDeviceModel:`.
