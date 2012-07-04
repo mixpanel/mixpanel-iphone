@@ -356,7 +356,6 @@ static MixpanelAPI *sharedInstance = nil;
 }
 
 - (void)setProperties:(NSDictionary*)properties {
-    [self unarchiveData];
     [self addPersonToQueueWithAction:@"$set" andProperties:properties];
 }
 
