@@ -276,7 +276,7 @@ static const NSUInteger kMPUploadInterval = 30;
 - (void)track:(NSString*) event properties:(NSDictionary*) properties;
 
 /*!
- @method     setProperties:
+ @method     setUserProperties:
  @abstract   Set properties on the user.
  @discussion The properties will be set on the current user. Note that if the user's $distinct_id is not set
              an exception will be raised. The $distinct_id is set automatically by calling <code>initWithToken:</code>
@@ -285,10 +285,10 @@ static const NSUInteger kMPUploadInterval = 30;
              NSString, NSNumber, NSArray, NSDate, or NSNull objects. You can over-ride the default $token and $distinct_id
              on specific requests by creating entries in this dictionary with the corresponding keys.
  */
-- (void)setProperties:(NSDictionary*)properties;
+- (void)setUserProperties:(NSDictionary*)properties;
 
 /*!
- @method     setProperty:forKey:
+ @method     setUserProperty:forKey:
  @abstract   Set a single property on the user.
  @discussion The property will be set on the current user. Note that if the user's $distinct_id is not set
              an exception will be raised. The $distinct_id is set automatically by calling <code>initWithToken:</code>
@@ -296,10 +296,10 @@ static const NSUInteger kMPUploadInterval = 30;
  @param      property The value of the property to set. Should be NSString, NSNumber, NSArray, NSDate, or NSNull.
  @param      key The key of the property to set.
  */
-- (void)setProperty:(id)property forKey:(NSString*)key;
+- (void)setUserProperty:(id)property forKey:(NSString*)key;
 
 /*!
- @method     incrementProperties:
+ @method     incrementUserProperties:
  @abstract   Increment the given numeric properties by the given values.
  @discussion Increment the given numeric properties by the given values. Note that if the user's $distinct_id is not set
              an exception will be raised. The $distinct_id is set automatically by calling <code>initWithToken:</code>
@@ -309,7 +309,7 @@ static const NSUInteger kMPUploadInterval = 30;
              You can over-ride the default $token and $distinct_id on specific requests by creating entries in this 
              dictionary with the corresponding keys.
  */
-- (void)incrementProperties:(NSDictionary*)properties;
+- (void)incrementUserProperties:(NSDictionary*)properties;
 
 /*!
  @method     incrementPropertyWithKey:
@@ -319,7 +319,7 @@ static const NSUInteger kMPUploadInterval = 30;
              or <code>sharedAPIWithToken:</code> and can be manually set by calling <code>identifyUser:</code>.
  @param      key The key of the property to increment.
  */
-- (void)incrementPropertyWithKey:(NSString*)key;
+- (void)incrementUserPropertyWithKey:(NSString*)key;
 
 /*!
  @method     incrementPropertyWithKey:byNumber:
@@ -330,10 +330,10 @@ static const NSUInteger kMPUploadInterval = 30;
  @param      key The key of the property to increment.
  @param      amount The amount to increment by.
  */
-- (void)incrementPropertyWithKey:(NSString*)key byNumber:(NSNumber*)amount;
+- (void)incrementUserPropertyWithKey:(NSString*)key byNumber:(NSNumber*)amount;
 
 /*!
- @method     incrementPropertyWithKey:byInt:
+ @method     incrementUserPropertyWithKey:byInt:
  @abstract   Increment the given numeric property by the given int.
  @discussion Note that if the user's $distinct_id is not set
              an exception will be raised. The $distinct_id is set automatically by calling <code>initWithToken:</code>
@@ -341,10 +341,10 @@ static const NSUInteger kMPUploadInterval = 30;
  @param      key The key of the property to increment.
  @param      amount The amount to increment by.
  */
-- (void)incrementPropertyWithKey:(NSString*)key byInt:(int)amount;
+- (void)incrementUserPropertyWithKey:(NSString*)key byInt:(int)amount;
 
 /*!
- @method     append:toPropertyWithKey:
+ @method     append:toUserPropertyWithKey:
  @abstract   Append an item to a list property.
  @discussion Append an item to a list property. Note that if the user's $distinct_id is not set
              an exception will be raised. The $distinct_id is set automatically by calling <code>initWithToken:</code>
@@ -352,7 +352,7 @@ static const NSUInteger kMPUploadInterval = 30;
  @param      item The item to append. Should be NSString, NSNumber, NSArray, NSDate, or NSNull object
  @param      key The key of the list property to append to.
  */
-- (void)append:(id)item toPropertyWithKey:(NSString*)key;
+- (void)append:(id)item toUserPropertyWithKey:(NSString*)key;
 
 /*!
  @method     deleteUser:

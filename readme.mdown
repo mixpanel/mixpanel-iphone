@@ -1,5 +1,8 @@
 # Release notes #
 
+### v1.2 - July 5, 2012 ###
+- Renamed all People functions to add User prefix
+
 ### v1.1.1 - July 3, 2012 ###
 - Fixed a bug that affected setProperties: and setProperty:forKey:
 

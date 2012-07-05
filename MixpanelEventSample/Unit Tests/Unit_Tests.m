@@ -45,7 +45,7 @@ int connection_count = 0;
 
 - (void)testFlush {    
     [mp track:@"Event"];
-    [mp setProperty:@"John" forKey:@"name"];
+    [mp setUserProperty:@"John" forKey:@"name"];
     
     STAssertTrue([mp.eventQueue count] == 1, @"track: failed, not in queue");
     STAssertTrue([mp.peopleQueue count] == 1, @"setProperty:forKey: failed, not in queue");
@@ -58,18 +58,18 @@ int connection_count = 0;
 }
 
 - (void)testMultipleSet {
-    [mp setProperty:@"1" forKey:@"1"];
-    [mp setProperty:@"2" forKey:@"2"];
-    [mp incrementPropertyWithKey:@"3"];
-    [mp setProperties:[NSDictionary dictionaryWithObject:@"4" forKey:@"4"]];
-    [mp append:@"5" toPropertyWithKey:@"5"];
+    [mp setUserProperty:@"1" forKey:@"1"];
+    [mp setUserProperty:@"2" forKey:@"2"];
+    [mp incrementUserPropertyWithKey:@"3"];
+    [mp setUserProperties:[NSDictionary dictionaryWithObject:@"4" forKey:@"4"]];
+    [mp append:@"5" toUserPropertyWithKey:@"5"];
     
     STAssertTrue(mp.peopleQueue.count == 5, @"Not all sets recorded");
 }
 
 - (void)testArchive {
     [mp track:@"Event"];
-    [mp setProperty:@"John" forKey:@"name"];
+    [mp setUserProperty:@"John" forKey:@"name"];
     
     [mp archiveData];
     
@@ -99,7 +99,7 @@ int connection_count = 0;
     NSString *value = @"John Smith";
     NSString *key = @"name";
     
-    [mp setProperty:value forKey:key];
+    [mp setUserProperty:value forKey:key];
         
     STAssertTrue([mp.peopleQueue count] == 1, @"setProperty:forKey: failed. Set not in queue.");
     
@@ -115,10 +115,10 @@ int connection_count = 0;
 - (void)testIncrementPropertyFormat {
     NSString *key = @"numeric";
     
-    [mp incrementPropertyWithKey:key];
-    [mp incrementPropertyWithKey:key byInt:2];
-    [mp incrementPropertyWithKey:key byNumber:[NSNumber numberWithInt:3]];
-    [mp incrementProperties:[NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithInt:4], key, nil]];
+    [mp incrementUserPropertyWithKey:key];
+    [mp incrementUserPropertyWithKey:key byInt:2];
+    [mp incrementUserPropertyWithKey:key byNumber:[NSNumber numberWithInt:3]];
+    [mp incrementUserProperties:[NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithInt:4], key, nil]];
     
     STAssertEquals([NSNumber numberWithInt:1], [[[mp.peopleQueue objectAtIndex:0] objectForKey:@"$add"] objectForKey:key], @"incrementPropertyWithKey: failed.");
     STAssertEquals([NSNumber numberWithInt:2], [[[mp.peopleQueue objectAtIndex:1] objectForKey:@"$add"] objectForKey:key], @"incrementPropertyWithKey:byInt: failed.");
@@ -130,7 +130,7 @@ int connection_count = 0;
     NSString *key = @"property_key";
     NSString *value = @"to_append";
     
-    [mp append:value toPropertyWithKey:key];
+    [mp append:value toUserPropertyWithKey:key];
     
     STAssertEquals(value, [[[mp.peopleQueue objectAtIndex:0] objectForKey:@"$append"] objectForKey:key], @"append:toPropertyWithKey: failed.");
 }
