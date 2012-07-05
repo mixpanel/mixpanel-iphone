@@ -112,31 +112,31 @@ can be set and modified.</p>
 <p>To set a property, you can do the following:</p>
 
 <pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-[mixpanel setProperty:@"john@example.com" forKey:@"email"];
+[mixpanel setUserProperty:@"john@example.com" forKey:@"email"];
 </code></pre>
 
 <p>The key must be an <code>NSString</code> and the value can be an <code>NSString</code>, <code>NSNumber</code>, <code>NSArray</code>, <code>NSDate</code>, or 
 <code>NSNull</code>. </p>
 
-<p>To set multiple properties, you can use <code>setProperties:</code> and pass in an <code>NSDictionary</code> of property keys and values.
+<p>To set multiple properties, you can use <code>setUserProperties:</code> and pass in an <code>NSDictionary</code> of property keys and values.
 To override the preset project token and/or user identifier, pass <code>NSString</code> values with keys <code>@"$token"</code> and
 <code>@"$distinct_id"</code> respectively. </p>
 
 <p>To increment a numeric property, you can do the following:</p>
 
 <pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-[mixpanel incrementPropertyWithKey:@"Tokens collected"]; // Increments by 1
-[mixpanel incrementPropertyWithKey:@"Total score" byNumber:[NSNumber numberWithInt:100]] // Increments by 100
-[mixpanel incrementPropertyWithKey:@"Total score" byInt:100] // Equivalent to above
+[mixpanel incrementUserPropertyWithKey:@"Tokens collected"]; // Increments by 1
+[mixpanel incrementUserPropertyWithKey:@"Total score" byNumber:[NSNumber numberWithInt:100]] // Increments by 100
+[mixpanel incrementUserPropertyWithKey:@"Total score" byInt:100] // Equivalent to above
 </code></pre>
 
-<p>To increment multiple properties, you can use <code>incrementProperties:</code> and pass in an <code>NSDictionary</code> of
+<p>To increment multiple properties, you can use <code>incrementUserProperties:</code> and pass in an <code>NSDictionary</code> of
 property keys and <code>NSNumber</code> values to increment by.</p>
 
 <p>To append to a list property, you can do the following:</p>
 
 <pre><code>MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-[mixpanel append:@"Level 2" toPropertyWithKey:@"badges"];
+[mixpanel append:@"Level 2" toUserPropertyWithKey:@"badges"];
 </code></pre>
 
 <h1>Using multiple MixpanelAPI instances</h1>
