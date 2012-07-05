@@ -355,31 +355,31 @@ static MixpanelAPI *sharedInstance = nil;
     
 }
 
-- (void)setProperties:(NSDictionary*)properties {
+- (void)setUserProperties:(NSDictionary*)properties {
     [self addPersonToQueueWithAction:@"$set" andProperties:properties];
 }
 
-- (void)setProperty:(id)property forKey:(NSString*)key {
-    [self setProperties:[NSDictionary dictionaryWithObject:property forKey:key]];
+- (void)setUserProperty:(id)property forKey:(NSString*)key {
+    [self setUserProperties:[NSDictionary dictionaryWithObject:property forKey:key]];
 }
 
-- (void)incrementProperties:(NSDictionary*)properties {
+- (void)incrementUserProperties:(NSDictionary*)properties {
     [self addPersonToQueueWithAction:@"$add" andProperties:properties];
 }
 
-- (void)incrementPropertyWithKey:(NSString*)key {
-    [self incrementProperties:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:1] forKey:key]];
+- (void)incrementUserPropertyWithKey:(NSString*)key {
+    [self incrementUserProperties:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:1] forKey:key]];
 }
 
-- (void)incrementPropertyWithKey:(NSString*)key byNumber:(NSNumber*)amount {
-    [self incrementProperties:[NSDictionary dictionaryWithObject:amount forKey:key]];
+- (void)incrementUserPropertyWithKey:(NSString*)key byNumber:(NSNumber*)amount {
+    [self incrementUserProperties:[NSDictionary dictionaryWithObject:amount forKey:key]];
 }
 
-- (void)incrementPropertyWithKey:(NSString*)key byInt:(int)amount {
-    [self incrementPropertyWithKey:key byNumber:[NSNumber numberWithInt:amount]];
+- (void)incrementUserPropertyWithKey:(NSString*)key byInt:(int)amount {
+    [self incrementUserPropertyWithKey:key byNumber:[NSNumber numberWithInt:amount]];
 }
 
-- (void)append:(id)item toPropertyWithKey:(NSString*)key {
+- (void)append:(id)item toUserPropertyWithKey:(NSString*)key {
     [self addPersonToQueueWithAction:@"$append" andProperties:[NSDictionary dictionaryWithObject:item forKey:key]];
 }
 

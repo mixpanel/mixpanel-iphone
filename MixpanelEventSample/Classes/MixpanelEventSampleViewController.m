@@ -22,7 +22,7 @@
 - (IBAction) registerPerson:(id)sender {
     MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
     
-    [mixpanel setProperties:[NSDictionary dictionaryWithObjectsAndKeys:
+    [mixpanel setUserProperties:[NSDictionary dictionaryWithObjectsAndKeys:
                              [genderControl titleForSegmentAtIndex:genderControl.selectedSegmentIndex], @"gender",
                              [weaponControl titleForSegmentAtIndex:weaponControl.selectedSegmentIndex], @"weapon", 
                              nil]];
