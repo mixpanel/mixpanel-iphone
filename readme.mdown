@@ -1,12 +1,14 @@
 # Release notes #
 
 ### v1.2.1 - July 18, 2012 ###
-- Converted to static lib
+- Converted to static library. See [Jonah Williams](http://blog.carbonfive.com/2011/04/04/using-open-source-static-libraries-in-xcode-4/) post to understand more about Xcode static libraries.
 - To install:
 	- Add the Mixpanel.xcodeproj to your project
 	- Add the Mixpanel static lib to your application target dependencies
 	- Link the application binary to libMixpanel.a
-	- Add '$(OBJROOT)/UninstalledProducts/include' to your user header search paths to install.  This prevents a 	missing header problem when archiving.
+	- Add ```$(OBJROOT)/UninstalledProducts/include``` to your user header search paths to install.  This prevents a 	missing header problem when archiving.
+	- Switch "Always Search User Paths" to ```YES```
+	- Add ```$(OBJROOT)/UninstalledProducts/include``` to your user header search paths
 	- To import, use ```#import "Mixpanel/MixpanelAPI.h"```
 
 ### v1.2 - July 5, 2012 ###
