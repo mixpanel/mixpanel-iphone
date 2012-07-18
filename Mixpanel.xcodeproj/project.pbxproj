@@ -1,0 +1,480 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DBD94A9B15B731A6004FBD74 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD94A9A15B731A6004FBD74 /* Foundation.framework */; };
+		DBD94AA915B731A6004FBD74 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD94AA815B731A6004FBD74 /* SenTestingKit.framework */; };
+		DBD94AAB15B731A6004FBD74 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD94AAA15B731A6004FBD74 /* UIKit.framework */; };
+		DBD94AAC15B731A6004FBD74 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD94A9A15B731A6004FBD74 /* Foundation.framework */; };
+		DBD94AAF15B731A6004FBD74 /* libMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD94A9715B731A6004FBD74 /* libMixpanel.a */; };
+		DBD94AB515B731A6004FBD74 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DBD94AB315B731A6004FBD74 /* InfoPlist.strings */; };
+		DBD94AB815B731A6004FBD74 /* MixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94AB715B731A6004FBD74 /* MixpanelTests.m */; };
+		DBD94ACA15B73258004FBD74 /* MixpanelAPI_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94AC515B73258004FBD74 /* MixpanelAPI_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		DBD94ACB15B73258004FBD74 /* MixpanelAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94AC615B73258004FBD74 /* MixpanelAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DBD94ACC15B73258004FBD74 /* MixpanelAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94AC715B73258004FBD74 /* MixpanelAPI.m */; };
+		DBD94ACD15B73258004FBD74 /* MixpanelEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94AC815B73258004FBD74 /* MixpanelEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DBD94ACE15B73258004FBD74 /* MixpanelEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94AC915B73258004FBD74 /* MixpanelEvent.m */; };
+		DBD94AFF15B73520004FBD74 /* MPCJSONDataSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94AF915B73520004FBD74 /* MPCJSONDataSerializer.h */; };
+		DBD94B0015B73520004FBD74 /* MPCJSONDataSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94AFA15B73520004FBD74 /* MPCJSONDataSerializer.m */; };
+		DBD94B0115B73520004FBD74 /* MPCJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94AFB15B73520004FBD74 /* MPCJSONSerializer.h */; };
+		DBD94B0215B73520004FBD74 /* MPCJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94AFC15B73520004FBD74 /* MPCJSONSerializer.m */; };
+		DBD94B0315B73520004FBD74 /* MPCSerializedJSONData.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94AFD15B73520004FBD74 /* MPCSerializedJSONData.h */; };
+		DBD94B0415B73520004FBD74 /* MPCSerializedJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94AFE15B73520004FBD74 /* MPCSerializedJSONData.m */; };
+		DBD94B0815B73529004FBD74 /* NSData+MPBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = DBD94B0615B73529004FBD74 /* NSData+MPBase64.h */; };
+		DBD94B0915B73529004FBD74 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = DBD94B0715B73529004FBD74 /* NSData+MPBase64.m */; };
+		DBD94B1015B73677004FBD74 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD94B0F15B73677004FBD74 /* UIKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DBD94AAD15B731A6004FBD74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBD94A8E15B731A6004FBD74 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBD94A9615B731A6004FBD74;
+			remoteInfo = Mixpanel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DBD94A9715B731A6004FBD74 /* libMixpanel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMixpanel.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBD94A9A15B731A6004FBD74 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DBD94AA715B731A6004FBD74 /* MixpanelTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixpanelTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBD94AA815B731A6004FBD74 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		DBD94AAA15B731A6004FBD74 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		DBD94AB215B731A6004FBD74 /* MixpanelTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MixpanelTests-Info.plist"; sourceTree = "<group>"; };
+		DBD94AB415B731A6004FBD74 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DBD94AB615B731A6004FBD74 /* MixpanelTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MixpanelTests.h; sourceTree = "<group>"; };
+		DBD94AB715B731A6004FBD74 /* MixpanelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelTests.m; sourceTree = "<group>"; };
+		DBD94AC515B73258004FBD74 /* MixpanelAPI_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelAPI_Private.h; path = MPLib/MixpanelAPI_Private.h; sourceTree = SOURCE_ROOT; };
+		DBD94AC615B73258004FBD74 /* MixpanelAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelAPI.h; path = MPLib/MixpanelAPI.h; sourceTree = SOURCE_ROOT; };
+		DBD94AC715B73258004FBD74 /* MixpanelAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelAPI.m; path = MPLib/MixpanelAPI.m; sourceTree = SOURCE_ROOT; };
+		DBD94AC815B73258004FBD74 /* MixpanelEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelEvent.h; path = MPLib/MixpanelEvent.h; sourceTree = SOURCE_ROOT; };
+		DBD94AC915B73258004FBD74 /* MixpanelEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelEvent.m; path = MPLib/MixpanelEvent.m; sourceTree = SOURCE_ROOT; };
+		DBD94AF915B73520004FBD74 /* MPCJSONDataSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONDataSerializer.h; sourceTree = "<group>"; };
+		DBD94AFA15B73520004FBD74 /* MPCJSONDataSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONDataSerializer.m; sourceTree = "<group>"; };
+		DBD94AFB15B73520004FBD74 /* MPCJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONSerializer.h; sourceTree = "<group>"; };
+		DBD94AFC15B73520004FBD74 /* MPCJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONSerializer.m; sourceTree = "<group>"; };
+		DBD94AFD15B73520004FBD74 /* MPCSerializedJSONData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCSerializedJSONData.h; sourceTree = "<group>"; };
+		DBD94AFE15B73520004FBD74 /* MPCSerializedJSONData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCSerializedJSONData.m; sourceTree = "<group>"; };
+		DBD94B0615B73529004FBD74 /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
+		DBD94B0715B73529004FBD74 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
+		DBD94B0F15B73677004FBD74 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DBD94A9415B731A6004FBD74 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBD94B1015B73677004FBD74 /* UIKit.framework in Frameworks */,
+				DBD94A9B15B731A6004FBD74 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBD94AA315B731A6004FBD74 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBD94AA915B731A6004FBD74 /* SenTestingKit.framework in Frameworks */,
+				DBD94AAB15B731A6004FBD74 /* UIKit.framework in Frameworks */,
+				DBD94AAC15B731A6004FBD74 /* Foundation.framework in Frameworks */,
+				DBD94AAF15B731A6004FBD74 /* libMixpanel.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DBD94A8C15B731A6004FBD74 = {
+			isa = PBXGroup;
+			children = (
+				DBD94A9C15B731A6004FBD74 /* MPLib */,
+				DBD94AB015B731A6004FBD74 /* MixpanelTests */,
+				DBD94A9915B731A6004FBD74 /* Frameworks */,
+				DBD94A9815B731A6004FBD74 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DBD94A9815B731A6004FBD74 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94A9715B731A6004FBD74 /* libMixpanel.a */,
+				DBD94AA715B731A6004FBD74 /* MixpanelTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DBD94A9915B731A6004FBD74 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94B0F15B73677004FBD74 /* UIKit.framework */,
+				DBD94A9A15B731A6004FBD74 /* Foundation.framework */,
+				DBD94AA815B731A6004FBD74 /* SenTestingKit.framework */,
+				DBD94AAA15B731A6004FBD74 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DBD94A9C15B731A6004FBD74 /* MPLib */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94B0A15B7355D004FBD74 /* lib */,
+				DBD94AC515B73258004FBD74 /* MixpanelAPI_Private.h */,
+				DBD94AC615B73258004FBD74 /* MixpanelAPI.h */,
+				DBD94AC715B73258004FBD74 /* MixpanelAPI.m */,
+				DBD94AC815B73258004FBD74 /* MixpanelEvent.h */,
+				DBD94AC915B73258004FBD74 /* MixpanelEvent.m */,
+				DBD94A9D15B731A6004FBD74 /* Supporting Files */,
+			);
+			name = MPLib;
+			path = Mixpanel;
+			sourceTree = "<group>";
+		};
+		DBD94A9D15B731A6004FBD74 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DBD94AB015B731A6004FBD74 /* MixpanelTests */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94AB615B731A6004FBD74 /* MixpanelTests.h */,
+				DBD94AB715B731A6004FBD74 /* MixpanelTests.m */,
+				DBD94AB115B731A6004FBD74 /* Supporting Files */,
+			);
+			path = MixpanelTests;
+			sourceTree = "<group>";
+		};
+		DBD94AB115B731A6004FBD74 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94AB215B731A6004FBD74 /* MixpanelTests-Info.plist */,
+				DBD94AB315B731A6004FBD74 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DBD94AF815B73520004FBD74 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94AF915B73520004FBD74 /* MPCJSONDataSerializer.h */,
+				DBD94AFA15B73520004FBD74 /* MPCJSONDataSerializer.m */,
+				DBD94AFB15B73520004FBD74 /* MPCJSONSerializer.h */,
+				DBD94AFC15B73520004FBD74 /* MPCJSONSerializer.m */,
+				DBD94AFD15B73520004FBD74 /* MPCSerializedJSONData.h */,
+				DBD94AFE15B73520004FBD74 /* MPCSerializedJSONData.m */,
+			);
+			name = JSON;
+			path = MPLib/lib/JSON;
+			sourceTree = SOURCE_ROOT;
+		};
+		DBD94B0515B73529004FBD74 /* NSData_Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94B0615B73529004FBD74 /* NSData+MPBase64.h */,
+				DBD94B0715B73529004FBD74 /* NSData+MPBase64.m */,
+			);
+			name = NSData_Base64;
+			path = MPLib/lib/NSData_Base64;
+			sourceTree = SOURCE_ROOT;
+		};
+		DBD94B0A15B7355D004FBD74 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				DBD94B0515B73529004FBD74 /* NSData_Base64 */,
+				DBD94AF815B73520004FBD74 /* JSON */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DBD94A9515B731A6004FBD74 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBD94ACA15B73258004FBD74 /* MixpanelAPI_Private.h in Headers */,
+				DBD94ACB15B73258004FBD74 /* MixpanelAPI.h in Headers */,
+				DBD94ACD15B73258004FBD74 /* MixpanelEvent.h in Headers */,
+				DBD94AFF15B73520004FBD74 /* MPCJSONDataSerializer.h in Headers */,
+				DBD94B0115B73520004FBD74 /* MPCJSONSerializer.h in Headers */,
+				DBD94B0315B73520004FBD74 /* MPCSerializedJSONData.h in Headers */,
+				DBD94B0815B73529004FBD74 /* NSData+MPBase64.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DBD94A9615B731A6004FBD74 /* Mixpanel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBD94ABB15B731A6004FBD74 /* Build configuration list for PBXNativeTarget "Mixpanel" */;
+			buildPhases = (
+				DBD94A9315B731A6004FBD74 /* Sources */,
+				DBD94A9415B731A6004FBD74 /* Frameworks */,
+				DBD94A9515B731A6004FBD74 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mixpanel;
+			productName = Mixpanel;
+			productReference = DBD94A9715B731A6004FBD74 /* libMixpanel.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		DBD94AA615B731A6004FBD74 /* MixpanelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBD94ABE15B731A6004FBD74 /* Build configuration list for PBXNativeTarget "MixpanelTests" */;
+			buildPhases = (
+				DBD94AA215B731A6004FBD74 /* Sources */,
+				DBD94AA315B731A6004FBD74 /* Frameworks */,
+				DBD94AA415B731A6004FBD74 /* Resources */,
+				DBD94AA515B731A6004FBD74 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DBD94AAE15B731A6004FBD74 /* PBXTargetDependency */,
+			);
+			name = MixpanelTests;
+			productName = MixpanelTests;
+			productReference = DBD94AA715B731A6004FBD74 /* MixpanelTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DBD94A8E15B731A6004FBD74 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = eGraphs;
+			};
+			buildConfigurationList = DBD94A9115B731A6004FBD74 /* Build configuration list for PBXProject "Mixpanel" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DBD94A8C15B731A6004FBD74;
+			productRefGroup = DBD94A9815B731A6004FBD74 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DBD94A9615B731A6004FBD74 /* Mixpanel */,
+				DBD94AA615B731A6004FBD74 /* MixpanelTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DBD94AA415B731A6004FBD74 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBD94AB515B731A6004FBD74 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DBD94AA515B731A6004FBD74 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DBD94A9315B731A6004FBD74 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBD94ACC15B73258004FBD74 /* MixpanelAPI.m in Sources */,
+				DBD94ACE15B73258004FBD74 /* MixpanelEvent.m in Sources */,
+				DBD94B0015B73520004FBD74 /* MPCJSONDataSerializer.m in Sources */,
+				DBD94B0215B73520004FBD74 /* MPCJSONSerializer.m in Sources */,
+				DBD94B0415B73520004FBD74 /* MPCSerializedJSONData.m in Sources */,
+				DBD94B0915B73529004FBD74 /* NSData+MPBase64.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBD94AA215B731A6004FBD74 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBD94AB815B731A6004FBD74 /* MixpanelTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DBD94AAE15B731A6004FBD74 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBD94A9615B731A6004FBD74 /* Mixpanel */;
+			targetProxy = DBD94AAD15B731A6004FBD74 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DBD94AB315B731A6004FBD74 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DBD94AB415B731A6004FBD74 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DBD94AB915B731A6004FBD74 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		DBD94ABA15B731A6004FBD74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DBD94ABC15B731A6004FBD74 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Mixpanel.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRIVATE_HEADERS_FOLDER_PATH = include/Mixpanel/Private;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include/Mixpanel;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		DBD94ABD15B731A6004FBD74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Mixpanel.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRIVATE_HEADERS_FOLDER_PATH = include/Mixpanel/Private;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = include/Mixpanel;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		DBD94ABF15B731A6004FBD74 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INFOPLIST_FILE = "MixpanelTests/MixpanelTests-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		DBD94AC015B731A6004FBD74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INFOPLIST_FILE = "MixpanelTests/MixpanelTests-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DBD94A9115B731A6004FBD74 /* Build configuration list for PBXProject "Mixpanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBD94AB915B731A6004FBD74 /* Debug */,
+				DBD94ABA15B731A6004FBD74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBD94ABB15B731A6004FBD74 /* Build configuration list for PBXNativeTarget "Mixpanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBD94ABC15B731A6004FBD74 /* Debug */,
+				DBD94ABD15B731A6004FBD74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBD94ABE15B731A6004FBD74 /* Build configuration list for PBXNativeTarget "MixpanelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBD94ABF15B731A6004FBD74 /* Debug */,
+				DBD94AC015B731A6004FBD74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DBD94A8E15B731A6004FBD74 /* Project object */;
+}
