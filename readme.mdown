@@ -6,7 +6,6 @@
 	- Add the Mixpanel.xcodeproj to your project
 	- Add the Mixpanel static lib to your application target dependencies
 	- Link the application binary to libMixpanel.a
-	- Add ```$(OBJROOT)/UninstalledProducts/include``` to your user header search paths to install.  This prevents a 	missing header problem when archiving.
 	- Switch "Always Search User Paths" to ```YES```
 	- Add ```$(OBJROOT)/UninstalledProducts/include``` to your user header search paths
 	- To import, use ```#import "Mixpanel/MixpanelAPI.h"```
