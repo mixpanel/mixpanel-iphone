@@ -7,7 +7,7 @@
 	- Add the Mixpanel static lib to your application target dependencies
 	- Link the application binary to libMixpanel.a
 	- Add '$(OBJROOT)/UninstalledProducts/include' to your user header search paths to install.  This prevents a 	missing header problem when archiving.
-	- To import, use ```objective-c#import "Mixpanel/MixpanelAPI.h"```
+	- To import, use ```#import "Mixpanel/MixpanelAPI.h"```
 
 ### v1.2 - July 5, 2012 ###
 - Renamed all People functions to add User prefix
