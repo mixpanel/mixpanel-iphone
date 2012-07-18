@@ -1,6 +1,6 @@
 # Release notes #
 
-### v1.2.1 - July 5, 2012 ###
+### v1.2.1 - July 18, 2012 ###
 - Converted to static lib
 - To install:
 	- Add the Mixpanel.xcodeproj to your project
