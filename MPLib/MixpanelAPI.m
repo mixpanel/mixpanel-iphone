@@ -25,7 +25,10 @@
 #define IFT_ETHER 0x6/* Ethernet CSMACD */
 #endif
 #define kMPNameTag @"mp_name_tag"
-#define kMPDeviceModel @"mp_device_model"
+#define kMPDeviceModel @"mp_device_model" /* Kept for compatibility */
+#define kMPDevicePlatform @"$device_model"
+#define kMPOSVersion @"$os_version"
+#define kMPAppVersion @"$app_version"
 
 @implementation MixpanelAPI
 @synthesize apiToken;
@@ -213,8 +216,13 @@ static MixpanelAPI *sharedInstance = nil;
     sendDeviceModel = sd;
     if (sd) {
         [[self superProperties] setObject:[MixpanelAPI currentPlatform] forKey:kMPDeviceModel];
+        [[self superProperties] setObject:[[UIDevice currentDevice] systemVersion] forKey:kMPOSVersion];
+        [[self superProperties] setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
+                                   forKey:kMPAppVersion];
     } else {
         [[self superProperties] removeObjectForKey:kMPDeviceModel];
+        [[self superProperties] removeObjectForKey:kMPOSVersion];
+        [[self superProperties] removeObjectForKey:kMPAppVersion];
     }
 }
 
@@ -350,6 +358,18 @@ static MixpanelAPI *sharedInstance = nil;
                 forKey:@"$time"];
     }
     
+    if (sendDeviceModel) {
+        // Device model
+        [mutable_properties setObject:[MixpanelAPI currentPlatform] forKey:kMPDevicePlatform];
+
+        // OS version
+        [mutable_properties setObject:[[UIDevice currentDevice] systemVersion] forKey:kMPOSVersion];
+
+        // App version
+        [mutable_properties setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
+                            forKey:kMPAppVersion];
+    }
+
     [person setObject:[[mutable_properties copy] autorelease] forKey:action];
     [[self peopleQueue] addObject:person];
     
