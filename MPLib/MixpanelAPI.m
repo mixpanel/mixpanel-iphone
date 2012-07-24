@@ -649,6 +649,16 @@ static MixpanelAPI *sharedInstance = nil;
 #endif
 }
 
+- (void)registerForPushWithDeviceToken:(NSData*)deviceToken {
+    const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
+    if (!buffer) return;
+    NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
+    for (int i = 0; i < deviceToken.length; i++)
+        [hex appendString:[NSString stringWithFormat:@"%02x", (unsigned long)buffer[i]]];
+
+    [self setUserProperty:[NSArray arrayWithObject:[NSString stringWithString:hex]] forKey:@"$ios_devices"];
+}
+
 - (void)dealloc {
     [self archiveData];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
