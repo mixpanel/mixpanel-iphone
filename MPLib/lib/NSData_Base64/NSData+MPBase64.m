@@ -281,7 +281,7 @@ char *MP_NewBase64Encode(
 //
 - (NSString *)mp_base64EncodedString
 {
-	size_t outputLength;
+	size_t outputLength = 0;
 	char *outputBuffer =
 		MP_NewBase64Encode([self bytes], [self length], false, &outputLength);
 	
