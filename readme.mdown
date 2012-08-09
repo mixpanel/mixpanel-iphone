@@ -1,5 +1,9 @@
 # Release notes #
 
+### v1.2.1 - August 9, 2012 ###
+- Fixed static analyzer warning in XCode 4.4
+- Fixed corrupted archive file bug
+
 ### v1.2 - July 5, 2012 ###
 - Renamed all People functions to add User prefix
 
