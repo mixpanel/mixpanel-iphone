@@ -399,14 +399,30 @@ static MixpanelAPI *sharedInstance = nil;
 }
 
 - (void)unarchiveEvents {
-	self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self eventFilePath]];
+    @try {
+        self.eventQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self eventFilePath]];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable to unarchive Mixpanel event data, starting fresh.");
+        [[NSFileManager defaultManager] removeItemAtPath:[self eventFilePath] error:nil];
+        self.eventQueue = nil;
+    }
+
 	if (!self.eventQueue) {
 		self.eventQueue = [NSMutableArray array];
 	}
 }
 
 - (void)unarchivePeople {
-    self.peopleQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self peopleFilePath]];
+    @try {
+        self.peopleQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:[self peopleFilePath]];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable to unarchive Mixpanel people data, starting fresh.");
+        [[NSFileManager defaultManager] removeItemAtPath:[self peopleFilePath] error:nil];
+        self.peopleQueue = [NSMutableArray array];
+    }
+
     if (!self.peopleQueue) {
         self.peopleQueue = [NSMutableArray array];
     }
