@@ -669,10 +669,12 @@ static MixpanelAPI *sharedInstance = nil;
     const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
     if (!buffer) return;
     NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
-    for (int i = 0; i < deviceToken.length; i++)
-        [hex appendString:[NSString stringWithFormat:@"%02x", (unsigned long)buffer[i]]];
+    for (NSUInteger i = 0; i < deviceToken.length; i++)
+        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
 
-    [self setUserProperty:[NSArray arrayWithObject:[NSString stringWithString:hex]] forKey:@"$ios_devices"];
+    [self addPersonToQueueWithAction:@"$union" andProperties:
+        [NSDictionary dictionaryWithObject:[NSArray arrayWithObject:[NSString stringWithString:hex]] forKey:@"$ios_devices"]
+    ];
 }
 
 - (void)dealloc {
