@@ -201,8 +201,9 @@ static const NSUInteger kMPUploadInterval = 30;
 
 /*!
  @method     setSendDeviceModel:
- @abstract   Sets whether to send current device model
- @discussion If passed YES, all events tracked and people set will include the mp_device_type property
+ @abstract   Sets whether to send current device info
+ @discussion If passed YES, all events tracked will include the mp_device_type, $os_version, $app_version 
+             properties and people set will include $device_model, $os_version, $app_version properties
  @param      sendDeviceModel a BOOL that indicates whether to send device model or not
  */
 -(void)setSendDeviceModel:(BOOL)sendDeviceModel;
