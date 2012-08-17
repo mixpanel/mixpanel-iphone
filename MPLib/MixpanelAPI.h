@@ -394,11 +394,11 @@ static const NSUInteger kMPUploadInterval = 30;
 - (void)flushPeople;
 
 /*!
- @method     registerForPushWithToken:
+ @method     registerDeviceToken:
  @abstract   Register the given device to receive push notifications
  @discussion Register the given device to receive push notifications from Mixpanel
  */
-- (void)registerForPushWithDeviceToken:(NSData*)deviceToken;
+- (void)registerDeviceToken:(NSData*)deviceToken;
 
 /*!
  @method     handlePush:
