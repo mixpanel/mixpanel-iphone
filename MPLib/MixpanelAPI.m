@@ -280,6 +280,11 @@ static MixpanelAPI *sharedInstance = nil;
     }
 }
 
+-(NSDictionary*) getSuperProperties
+{
+    return self.superProperties;
+}
+
 - (void)identifyUser:(NSString*) identifier {
     [self registerSuperProperties:[NSDictionary dictionaryWithObject:identifier forKey:@"distinct_id"]];
 }

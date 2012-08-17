@@ -155,6 +155,14 @@ static const NSUInteger kMPUploadInterval = 30;
  @discussion Tells the Mixpane API to send the device model as a super property.
  */
 @property(nonatomic, assign) BOOL sendDeviceModel;
+
+/*! 
+ @property   superProperties
+ @abstract   Returns the superProperties dictionary
+ @discussion Returns a non-mutable copy - Modification must be done through the various setSuperProperties methods
+ */
+-(NSDictionary*) getSuperProperties;
+
 /*!
  @method     sharedAPIWithToken:
  @abstract   Initializes the API with your API Token. Returns the shared API object.
