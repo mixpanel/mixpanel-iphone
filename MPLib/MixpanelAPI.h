@@ -400,4 +400,13 @@ static const NSUInteger kMPUploadInterval = 30;
  */
 - (void)registerForPushWithDeviceToken:(NSData*)deviceToken;
 
+/*!
+ @method     handlePush:
+ @abstract   Display an alert view with the push message
+ @discussion This is a convenience method that displays an alert view when your app is in
+             the foreground and receives a remote notification. You can call this method from
+             your app delegate's application:didReceiveRemoteNotification: method.
+ */
+- (void)handlePush:(NSDictionary*)userInfo;
+
 @end
