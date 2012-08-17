@@ -677,6 +677,17 @@ static MixpanelAPI *sharedInstance = nil;
     ];
 }
 
+- (void)handlePush:(NSDictionary*)userInfo {
+    NSString *message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+}
+
 - (void)dealloc {
     [self archiveData];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
