@@ -26,9 +26,9 @@
 #endif
 #define kMPNameTag @"mp_name_tag"
 #define kMPDeviceModel @"mp_device_model" /* Kept for compatibility */
-#define kMPDevicePlatform @"$device_model"
-#define kMPOSVersion @"$os_version"
-#define kMPAppVersion @"$app_version"
+#define kMPDevicePlatform @"$ios_device_model"
+#define kMPOSVersion @"$ios_version"
+#define kMPAppVersion @"$ios_app_version"
 
 @implementation MixpanelAPI
 @synthesize apiToken;
@@ -359,20 +359,21 @@ static MixpanelAPI *sharedInstance = nil;
     }
     
     if (sendDeviceModel) {
-        // Device model
-        [mutable_properties setObject:[MixpanelAPI currentPlatform] forKey:kMPDevicePlatform];
+        NSString *platform = [MixpanelAPI currentPlatform];
+        NSString *os_version = [[UIDevice currentDevice] systemVersion];
+        NSString *app_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
-        // OS version
-        [mutable_properties setObject:[[UIDevice currentDevice] systemVersion] forKey:kMPOSVersion];
-
-        // App version
-        [mutable_properties setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
-                            forKey:kMPAppVersion];
+        if ([action isEqualToString:@"$set"]) {
+            [mutable_properties setObject:platform forKey:kMPDevicePlatform];
+            [mutable_properties setObject:os_version forKey:kMPOSVersion];
+            [mutable_properties setObject:app_version forKey:kMPAppVersion];
+        } else if ([action isEqualToString:@"$union"]) {
+            [self addPersonToQueueWithAction:@"$set" andProperties:[NSDictionary dictionary]];
+        }
     }
 
     [person setObject:[[mutable_properties copy] autorelease] forKey:action];
     [[self peopleQueue] addObject:person];
-    
 }
 
 - (void)setUserProperties:(NSDictionary*)properties {
