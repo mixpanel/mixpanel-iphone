@@ -187,10 +187,9 @@ int connection_count = 0;
     STAssertTrue([dict objectForKey:@"$token"] != nil, @"token not set");
 
     NSDictionary *operation = [dict objectForKey:@"$union"];
-    NSArray *ios_devices = [operation objectForKey:@"$ios_devices"];
+    NSDictionary *targetOperation = [NSDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObject:@"74657374"], @"$ios_devices", nil];
 
-    STAssertTrue(ios_devices.count == 1, @"ios_devices should contain exactly 1 token");
-    STAssertTrue([(NSString*)[ios_devices objectAtIndex:0] isEqualToString:@"74657374"], @"push format is incorrect");
+    STAssertTrue([operation isEqualToDictionary:targetOperation], @"push format is incorrect");
 }
 
 @end
