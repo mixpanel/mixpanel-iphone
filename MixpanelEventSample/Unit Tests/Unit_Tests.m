@@ -179,22 +179,18 @@ int connection_count = 0;
     NSData *token = [@"test" dataUsingEncoding:[NSString defaultCStringEncoding]];
     [mp registerDeviceToken:token];
 
-    BOOL pass = NO;
+    NSDictionary *dict = (NSDictionary*)[mp.peopleQueue objectAtIndex:1];
 
-    for (id object in mp.peopleQueue) {
-        NSDictionary *dict = (NSDictionary*)object;
-        NSDictionary *operation;
-        NSArray *ios_devices;
-        if ((operation = [dict objectForKey:@"$union"]) && (ios_devices = [operation objectForKey:@"$ios_devices"])) {
-            STAssertTrue(ios_devices.count == 1, @"ios_devices should contain exactly 1 token");
+    STAssertTrue(dict.count == 4, @"dictionary should have 4 items: $time, $distinct_id, $union, $token");
+    STAssertTrue([dict objectForKey:@"$time"] != nil, @"time not set");
+    STAssertTrue([dict objectForKey:@"$distinct_id"] != nil, @"distinct_id not set");
+    STAssertTrue([dict objectForKey:@"$token"] != nil, @"token not set");
 
-            if ([(NSString*)[ios_devices objectAtIndex:0] isEqualToString:@"74657374"]) {
-                pass = YES;
-            }
-        }
-    }
+    NSDictionary *operation = [dict objectForKey:@"$union"];
+    NSArray *ios_devices = [operation objectForKey:@"$ios_devices"];
 
-    STAssertTrue(pass, @"push format is incorrect");
+    STAssertTrue(ios_devices.count == 1, @"ios_devices should contain exactly 1 token");
+    STAssertTrue([(NSString*)[ios_devices objectAtIndex:0] isEqualToString:@"74657374"], @"push format is incorrect");
 }
 
 @end
