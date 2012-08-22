@@ -475,16 +475,19 @@ static MixpanelAPI *sharedInstance = nil;
     if ([self flushOnBackground]) {
         if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
             [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
-            taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                [self.connection cancel];
-                self.connection = nil;
-                [self.peopleConnection cancel];
-                self.peopleConnection = nil;
-                [self archiveData];
-                [[UIApplication sharedApplication] endBackgroundTask:taskId];
-                taskId = UIBackgroundTaskInvalid;
-            }];
-            [self flush];
+            if (self.peopleQueue.count || self.eventQueue.count) {
+                // There is something to send
+                taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                    [self.connection cancel];
+                    self.connection = nil;
+                    [self.peopleConnection cancel];
+                    self.peopleConnection = nil;
+                    [self archiveData];
+                    [[UIApplication sharedApplication] endBackgroundTask:taskId];
+                    taskId = UIBackgroundTaskInvalid;
+                }];
+                [self flush];
+            }
         } else {
             [self archiveData];
         }
