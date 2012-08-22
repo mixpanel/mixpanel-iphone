@@ -238,6 +238,9 @@ function disclosure_triangle(elt) {
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/flushPeople" target="_top">-flushPeople</a></tt></dt>
 <dd><p>Uploads people datapoints to the Mixpanel Server.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/handlePush:" target="_top">-handlePush:</a></tt></dt>
+<dd><p>Display an alert view with the push message
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/identifyUser:" target="_top">-identifyUser:</a></tt></dt>
 <dd><p>Identifies a user.
 </dd>
@@ -262,6 +265,9 @@ function disclosure_triangle(elt) {
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/initWithToken:" target="_top">-initWithToken:</a></tt></dt>
 <dd><p>Initializes the API with your API Token. Returns the a new API object.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:" target="_top">-registerDeviceToken:</a></tt></dt>
+<dd><p>Register the given device to receive push notifications
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:" target="_top">-registerSuperProperties:</a></tt></dt>
 <dd><p>Registers a set of super properties for all event types.
 </dd>
@@ -272,7 +278,7 @@ function disclosure_triangle(elt) {
 <dd><p>Registers a set of super properties without overwriting existing values unless the existing value is equal to defaultValue.
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:" target="_top">-setSendDeviceModel:</a></tt></dt>
-<dd><p>Sets whether to send current device model
+<dd><p>Sets whether to send current device info
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelAPI/setUserProperties:" target="_top">-setUserProperties:</a></tt></dt>
 <dd><p>Set properties on the user.
@@ -389,6 +395,19 @@ or <code>sharedAPIWithToken:</code> before calling this method.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/flushPeople;name=start --><p>Uploads people datapoints to the Mixpanel Server.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/flushPeople;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;   name=MixpanelAPI::handlePush: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/handlePush:"></a>
+<h3><a name="handlePush:">handlePush:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;name=start --><!-- begin abstract --><p>Display an alert view with the push message
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelAPI/handlePush //apple_ref/occ/clm/MixpanelAPI/handlePush //apple_ref/occ/intfcm/MixpanelAPI/handlePush //apple_ref/occ/intfm/MixpanelAPI/handlePush //apple_ref/occ/func/handlePush //apple_ref/occ/ftmplt/MixpanelAPI/handlePush //apple_ref/occ/defn/handlePush //apple_ref/occ/macro/handlePush //apple_ref/doc/anysymbol/handlePush" machineGenerated="true" --><span class="function">handlePush</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/intf/NSDictionary //apple_ref/doc/anysymbol/NSDictionary" machineGenerated="true" --><span class="type">NSDictionary</span><!-- /a --><span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/userInfo //apple_ref/occ/data/MixpanelAPI/userInfo //apple_ref/occ/data/userInfo //apple_ref/occ/clconst/MixpanelAPI/userInfo " machineGenerated="true" --><span class="var">userInfo</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;name=start --><p>This is a convenience method that displays an alert view when your app is in
+the foreground and receives a remote notification. You can call this method from
+your app delegate's application:didReceiveRemoteNotification: method.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/handlePush:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/identifyUser:;   name=MixpanelAPI::identifyUser: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/identifyUser:"></a>
 <h3><a name="identifyUser:">identifyUser:</a></h3>
@@ -578,6 +597,17 @@ or <code>sharedAPIWithToken:</code> and can be manually set by calling <code>ide
 This must be the first message sent before logging any events since it performs important
 initializations to the API.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/initWithToken:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;   name=MixpanelAPI::registerDeviceToken: -->
+<a name="//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:"></a>
+<h3><a name="registerDeviceToken:">registerDeviceToken:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;name=start --><!-- begin abstract --><p>Register the given device to receive push notifications
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken //apple_ref/occ/clm/MixpanelAPI/registerDeviceToken //apple_ref/occ/intfcm/MixpanelAPI/registerDeviceToken //apple_ref/occ/intfm/MixpanelAPI/registerDeviceToken //apple_ref/occ/func/registerDeviceToken //apple_ref/occ/ftmplt/MixpanelAPI/registerDeviceToken //apple_ref/occ/defn/registerDeviceToken //apple_ref/occ/macro/registerDeviceToken //apple_ref/doc/anysymbol/registerDeviceToken" machineGenerated="true" --><span class="function">registerDeviceToken</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSData //apple_ref/occ/tdef/NSData //apple_ref/occ/tag/NSData //apple_ref/occ/struct/NSData //apple_ref/occ/intf/NSData //apple_ref/doc/anysymbol/NSData" machineGenerated="true" --><span class="type">NSData</span><!-- /a --><span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/deviceToken //apple_ref/occ/data/MixpanelAPI/deviceToken //apple_ref/occ/data/deviceToken //apple_ref/occ/clconst/MixpanelAPI/deviceToken " machineGenerated="true" --><span class="var">deviceToken</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;name=start --><p>Register the given device to receive push notifications from Mixpanel
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/registerDeviceToken:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:;   name=MixpanelAPI::registerSuperProperties: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/registerSuperProperties:"></a>
 <h3><a name="registerSuperProperties:">registerSuperProperties:</a></h3>
@@ -650,7 +680,7 @@ The API must be initialized with <code>sharedAPIWithToken:</code> or <code>initW
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;   name=MixpanelAPI::setSendDeviceModel: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:"></a>
 <h3><a name="setSendDeviceModel:">setSendDeviceModel:</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=start --><!-- begin abstract --><p>Sets whether to send current device model
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=start --><!-- begin abstract --><p>Sets whether to send current device info
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=end --></p>
 <div class='declaration_indent'>
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=start -->-(<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel //apple_ref/occ/clm/MixpanelAPI/setSendDeviceModel //apple_ref/occ/intfcm/MixpanelAPI/setSendDeviceModel //apple_ref/occ/intfm/MixpanelAPI/setSendDeviceModel //apple_ref/occ/func/setSendDeviceModel //apple_ref/occ/ftmplt/MixpanelAPI/setSendDeviceModel //apple_ref/occ/defn/setSendDeviceModel //apple_ref/occ/macro/setSendDeviceModel //apple_ref/doc/anysymbol/setSendDeviceModel" machineGenerated="true" --><span class="function">setSendDeviceModel</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/sendDeviceModel //apple_ref/occ/data/MixpanelAPI/sendDeviceModel //apple_ref/occ/data/sendDeviceModel //apple_ref/occ/clconst/MixpanelAPI/sendDeviceModel " machineGenerated="true" --><span class="var">sendDeviceModel</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=end --></pre>
@@ -664,7 +694,8 @@ The API must be initialized with <code>sharedAPIWithToken:</code> or <code>initW
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=start --><p>If passed YES, all events tracked and people set will include the mp_device_type property
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=start --><p>If passed YES, all events tracked will include the mp_device_type, $os_version, $app_version 
+properties and people set will include $device_model, $os_version, $app_version properties
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelAPI/setSendDeviceModel:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelAPI/setUserProperties:;   name=MixpanelAPI::setUserProperties: -->
 <a name="//apple_ref/occ/instm/MixpanelAPI/setUserProperties:"></a>
@@ -923,7 +954,7 @@ The API must be initialized with <code>sharedAPIWithToken:</code> before calling
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelAPI/uploadInterval;name=start --><p>Changes the interval value. Changing this values resets the update timer with the new interval.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelAPI/uploadInterval;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Thursday, July 05, 2012
+<p class="hd_timestamp">Last Updated: Wednesday, August 22, 2012
 </p></div>
 </td></tr></table>
 </body></html>
