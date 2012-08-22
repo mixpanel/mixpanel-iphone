@@ -1,5 +1,10 @@
 # Release notes #
 
+### v1.3 - August 22, 2012 ###
+- Added push notification registration support
+- Sends more device info (model, app version, os version)
+- Fixed issue that caused background task to never suspend if there was no data to send
+
 ### v1.2.1 - August 9, 2012 ###
 - Fixed static analyzer warning in XCode 4.4
 - Fixed corrupted archive file bug
