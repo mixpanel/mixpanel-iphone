@@ -175,4 +175,26 @@ int connection_count = 0;
     [formatter release];
 }
 
+- (void)testPushFormat {
+    NSData *token = [@"test" dataUsingEncoding:[NSString defaultCStringEncoding]];
+    [mp registerDeviceToken:token];
+
+    BOOL pass = NO;
+
+    for (id object in mp.peopleQueue) {
+        NSDictionary *dict = (NSDictionary*)object;
+        NSDictionary *operation;
+        NSArray *ios_devices;
+        if ((operation = [dict objectForKey:@"$union"]) && (ios_devices = [operation objectForKey:@"$ios_devices"])) {
+            STAssertTrue(ios_devices.count == 1, @"ios_devices should contain exactly 1 token");
+
+            if ([(NSString*)[ios_devices objectAtIndex:0] isEqualToString:@"74657374"]) {
+                pass = YES;
+            }
+        }
+    }
+
+    STAssertTrue(pass, @"push format is incorrect");
+}
+
 @end
