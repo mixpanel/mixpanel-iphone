@@ -526,14 +526,20 @@ static MixpanelAPI *sharedInstance = nil;
 
 - (NSString*)encodedStringFromArray:(NSArray*)array {
     MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
-    NSData *data = [serializer serializeArray:array error:nil];
-    NSString *b64String = [data mp_base64EncodedString];
-    b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                            (CFStringRef)b64String,
-                                                            NULL,
-                                                            CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                            kCFStringEncodingUTF8);
-    return [b64String autorelease];
+    NSError *error = nil;
+    NSData *data = [serializer serializeArray:array error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+        return @"";
+    } else {
+        NSString *b64String = [data mp_base64EncodedString];
+        b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                (CFStringRef)b64String,
+                                                                NULL,
+                                                                CFSTR("!*'();:@&=+$,/?%#[]"),
+                                                                kCFStringEncodingUTF8);
+        return [b64String autorelease];
+    }
 }
 
 - (void)flush {
