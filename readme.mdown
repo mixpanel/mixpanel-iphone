@@ -1,5 +1,8 @@
 # Release notes #
 
+### v1.3.1 - August 23, 2012 ###
+- Better handling for non-standard datatypes (e.g. NSURL)
+
 ### v1.3 - August 22, 2012 ###
 - Added push notification registration support
 - Sends more device info (model, app version, os version)
