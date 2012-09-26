@@ -3,7 +3,13 @@
 //  MPLib
 //
 //
+
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
+
 #import <CommonCrypto/CommonHMAC.h>
 #import "MixpanelAPI.h"
 #import "MixpanelAPI_Private.h"
@@ -191,10 +197,18 @@ static MixpanelAPI *sharedInstance = nil;
         }
     }
 #endif
+
+#if TARGET_OS_IPHONE
     [notificationCenter addObserver:self 
                            selector:@selector(applicationWillTerminate:) 
                                name:UIApplicationWillTerminateNotification 
                              object:nil];
+#else
+    [notificationCenter addObserver:self 
+                           selector:@selector(applicationWillTerminate:) 
+                               name:NSApplicationWillTerminateNotification 
+                             object:nil];
+#endif
     
     self.defaultUserId = [MixpanelAPI calculateHMAC_SHA1withString:[self userIdentifier] andKey:self.apiToken];
     [self identifyUser:self.defaultUserId];
@@ -566,7 +580,9 @@ static MixpanelAPI *sharedInstance = nil;
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", b64String];
 
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
+#if TARGET_OS_IPHONE
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+#endif
 }
 
 - (void)flushEvents {
@@ -592,7 +608,9 @@ static MixpanelAPI *sharedInstance = nil;
 	}
     
 	self.connection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
+#if TARGET_OS_IPHONE
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+#endif
 }
 
 #pragma mark -
@@ -635,8 +653,9 @@ static MixpanelAPI *sharedInstance = nil;
         self.peopleConnection = nil;
         [self archivePeople];
     }
-    
+#if TARGET_OS_IPHONE
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+#endif
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid && self.connection == nil && self.peopleConnection == nil) {
@@ -685,8 +704,10 @@ static MixpanelAPI *sharedInstance = nil;
         self.peopleResponseData = nil;
         self.peopleConnection = nil;
     }
-    
+#if TARGET_OS_IPHONE
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.connection || self.peopleConnection)];
+#endif
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] && taskId != UIBackgroundTaskInvalid && self.connection == nil && self.peopleConnection == nil) {
 		[[UIApplication sharedApplication] endBackgroundTask:taskId];
