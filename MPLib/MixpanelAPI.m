@@ -48,6 +48,7 @@
 @synthesize delegate;
 @synthesize testMode;
 @synthesize sendDeviceModel;
+@synthesize printEvents;
 
 static MixpanelAPI *sharedInstance = nil; 
 
@@ -309,6 +310,9 @@ static MixpanelAPI *sharedInstance = nil;
 }
 
 - (void)track:(NSString*) event properties:(NSDictionary*) properties {
+    if (self.printEvents) {
+	   NSLog(@"Mixpanel: Track \"%@\", Properties %@", event, properties ?: @"none");
+    }
 	NSMutableDictionary *props = [NSMutableDictionary dictionary];
 	[props addEntriesFromDictionary:superProperties];
 	[props addEntriesFromDictionary:properties];
