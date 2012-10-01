@@ -4,9 +4,9 @@ download the Mixpanel iOS API by cloning the git repository:
 
 	git clone http://github.com/mixpanel/mixpanel-iphone.git
 
-Or download the latest version from
-<http://github.com/mixpanel/mixpanel-iphone/zipball/master> and extract the
-files. The respository has three folders:
+Or download [the latest zip
+archive](https://github.com/mixpanel/mixpanel-iphone/zipball/master) and
+extract the files. The respository has three folders:
 
 1. Mixpanel - The Mixpanel iOS library and its dependencies.
 2. HelloMixpanel - A sample application that tracks events and sets user
@@ -72,9 +72,9 @@ tokens as follows.
     }
 
 # Further Documentation #
-https://mixpanel.com/docs/integration-libraries/iphone
-https://mixpanel.com/docs/people-analytics/iphone
-https://mixpanel.com/site_media/doctyl/uploads/iPhone-spec/Classes/Mixpanel/index.html
+1. [Events iOS Library Documentation](https://mixpanel.com/docs/integration-libraries/iphone)
+2. [People iOS Library Documentation](https://mixpanel.com/docs/people-analytics/iphone)
+3. [Full Headerdoc API Reference](https://mixpanel.com/site_media/doctyl/uploads/iPhone-spec/Classes/Mixpanel/index.html)
 
 [copy]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/copy.png "Copy"
 [project]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/project.png "Project"
