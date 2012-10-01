@@ -62,7 +62,6 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    NSLog(@"device token: %@", devToken);
     [self.mixpanel.people addPushDeviceToken:devToken];
 }
 
