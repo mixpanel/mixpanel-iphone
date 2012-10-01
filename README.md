@@ -1,44 +1,24 @@
-# Release notes #
-
-### v1.3.1 - August 23, 2012 ###
-- Better handling for non-standard datatypes (e.g. NSURL)
-
-### v1.3 - August 22, 2012 ###
-- Added push notification registration support
-- Sends more device info (model, app version, os version)
-- Fixed issue that caused background task to never suspend if there was no data to send
-
-### v1.2.1 - August 9, 2012 ###
-- Fixed static analyzer warning in XCode 4.4
-- Fixed corrupted archive file bug
-
-### v1.2 - July 5, 2012 ###
-- Renamed all People functions to add User prefix
-
-### v1.1.1 - July 3, 2012 ###
-- Fixed a bug that affected setProperties: and setProperty:forKey:
-
-### v1.1 - July 1, 2012 ###
-- People integration
-- Device model is now sent by default. Disable with `setSendDeviceModel:`.
-- `identifyUser:` can now be called multiple times to set the user's distinct ID.
-
-# Logging data on the iOS #
-If you want to track user behavior on your iPhone\iPad application, first download the Mixpanel iOS API by cloning the git repository:
+# Using Mixpanel Analytics on iOS #
+If you want to track user behavior on your iPhone\iPad application, first
+download the Mixpanel iOS API by cloning the git repository:
 
 	git clone http://github.com/mixpanel/mixpanel-iphone.git
 
-or download the latest version from <http://github.com/mixpanel/mixpanel-iphone/zipball/master> and extract the files. The respository has two folders:
+or download the latest version from
+<http://github.com/mixpanel/mixpanel-iphone/zipball/master> and extract the
+files. The respository has three folders:
 
-1. MPLib - The Source code for the Mixpanel API and its dependencies
-2. MixpanelEventSample - A sample application that tracks events using Mixpanel.
-4. Docs - Documentation for the Project.
+1. Mixpanel - The Mixpanel iOS library and its dependencies.
+2. HelloMixpanel - A sample application that tracks events and sets user
+properties using Mixpanel.
+4. Docs - Headerdoc API reference.
 
 # Setup #
 Adding Mixpanel to your Xcode project is as easy as:
 
-1. Drag and drop the MPLib folder into your project. 
-2. Check the "Copy items into destination Group's folder" and select Recursively create groups for any added folders.
+1. Drag and drop the Mixpanel folder into your project. 
+2. Check the "Copy items into destination Group's folder" and select
+Recursively create groups for any added folders.
 
 ![Copy Project][copy]
 
@@ -47,109 +27,42 @@ And that's it.
 ![Project][project]
 
 # Initializing Mixpanel #
-The first thing you need to do in order to use Mixpanel is to initialize the `MixpanelAPI` object. We recommend doing this in `applicationDidFinishLaunching:` of `application:didFinishLaunchingWithOptions` in your Application delegate. 
+The first thing you need to do is initialize Mixpanel with your project token.
+We recommend doing this in `applicationDidFinishLaunching:` or
+`application:didFinishLaunchingWithOptions` in your Application delegate. 
 	
 	- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+
 	    // Override point for customization after application launch.
-		mixpanel = [MixpanelAPI sharedAPIWithToken:MIXPANEL_TOKEN];
+		mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+
 	    // Add the view controller's view to the window and display.
 	    [window addSubview:viewController.view];
 	    [window makeKeyAndVisible];
 	    return YES;
 	}
 	
-# Tracking Events #
-After initializing the MixpanelAPI object, you are ready to track events. This can be done with the following code snippet:
+# Tracking Events in Mixpanel Engagement #
+After initializing the Mixpanel object, you are ready to track events. This can
+be done with the following code snippet:
 
-	- (IBAction) registerEvent:(id)sender {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-		[mixpanel track:@"Player Create"];
-	}
+		Mixpanel *mixpanel = [Mixpanel sharedInstance];
+		[mixpanel track:@"Clicked Button"];
 	
 If you want to add properties to the event you can do the following:
 
-	- (IBAction) registerEvent:(id)sender {
-		MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
+		Mixpanel *mixpanel = [Mixpanel sharedInstance];
 		[mixpanel track:@"Player Create" 
-			 properties:[NSDictionary dictionaryWithObjectsAndKeys:[genderControl titleForSegmentAtIndex:genderControl.selectedSegmentIndex], @"gender",
-																[weaponControl titleForSegmentAtIndex:weaponControl.selectedSegmentIndex], @"weapon", nil]];
-	}
+			 properties:[NSDictionary dictionaryWithObjectsAndKeys:@"Female", @"Gender", @"Premium", @"Plan", nil]];
 
-This code snippet is taken from the MixpanelEventSample Project. Line 15-20 of the `MixpanelEventSampleViewController.m` file.
+# Setting Properties in Mixpanel People #
+Use the `people` accessor on the Mixpanel object to make calls to the Mixpanel
+People API. Unlike Mixpanel Engagement, you must explicitly set the distinct ID
+for the current user in Mixpanel People.
 
-# Super Properties #
-Super properties are an easy way to store data about your users. They are global properties that get attached to everything you are tracking. More information can be found [here](https://mixpanel.com/docs/properties-or-segments/how-do-i-set-a-property-every-time).
+		Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel.people identify:@"user123"];
+		[mixpanel.people.set:@"Bought Premium Plan" to:[NSDate date]];
 
-If you want to register a super property for your current user, you can do it as follows:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]];
-
-This call will register the "User Type" property with a value of @"Paid" for the current user on both events and funnels. The permitted values for the eventType parameter are:
-
-If the "User Type" property was previously registered, its value will be overwritten. As a shortcut, you can use `registerSuperProperties:` to attach super properties to all events. If you do not want to overwrite existing values of a super property you can use the following call:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]];
-
-After this call, the value of the "User Type" property will be written only if it did not exist. There is another flavor of `registerSuperPropertiesOnce:eventType` and it can be used as follows:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel registerSuperPropertiesOnce:[NSDictionary dictionaryWithObject:@"Paid" forKey:@"User Type"]
-							 defaultValue:@"Free"];
-							
-This call will write out the new value for the "User Type" property if it does not exist or if its current value is "Free". As a shortcut, you can use `registerSuperPropertiesOnce:` to attach super properties to all events without overwriting their current values.
-
-# Identifying a User #
-`MixpanelAPI` uses a one-way hash of the MAC address of the current device as its default identifier. You can easily change the identifier with the following call:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel identifyUser:username];
-	
-Where `username` is an `NSString`. 
-
-# Sending People Data #
-
-To start tracking properties for each user, first ensure that an identifier is being set. Calls to `sharedAPIWithToken:` and `initWithToken:` automatically
-generate an identifier, but you can change it by calling `identifyUser:`. Once an identifier is set, there are a few different ways properties for that user
-can be set and modified.
-
-To set a property, you can do the following:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel setUserProperty:@"john@example.com" forKey:@"email"];
-
-The key must be an `NSString` and the value can be an `NSString`, `NSNumber`, `NSArray`, `NSDate`, or 
-`NSNull`. 
-
-To set multiple properties, you can use `setUserProperties:` and pass in an `NSDictionary` of property keys and values.
-To override the preset project token and/or user identifier, pass `NSString` values with keys `@"$token"` and
-`@"$distinct_id"` respectively. 
-
-To increment a numeric property, you can do the following:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel incrementUserPropertyWithKey:@"Tokens collected"]; // Increments by 1
-	[mixpanel incrementUserPropertyWithKey:@"Total score" byNumber:[NSNumber numberWithInt:100]] // Increments by 100
-	[mixpanel incrementUserPropertyWithKey:@"Total score" byInt:100] // Equivalent to above
-
-To increment multiple properties, you can use `incrementUserProperties:` and pass in an `NSDictionary` of
-property keys and `NSNumber` values to increment by.
-
-To append to a list property, you can do the following:
-
-	MixpanelAPI *mixpanel = [MixpanelAPI sharedAPI];
-	[mixpanel append:@"Level 2" toUserPropertyWithKey:@"badges"];
-
-# Using multiple MixpanelAPI instances #
-It is possible to use multiple `MixpanelAPI` instances in a single application. This makes it easy to send events to multiple Mixpanel projects. To iniitialize a new, non singleton instance of MixpanelAPI, use the `initWithToken:` method as follows:
-
-	MixpanelAPI *mixpanel = [[MixpanelAPI alloc] initWithToken:MIXPANEL_TOKEN];
-	
-The developer is responsible for the lifecycle of this object. The recommended way of using this is to initialize all of your `MixpanelAPI` instances in `application:didFinishLaunchingWithOptions:` and deallocate them in the `dealloc` method of your Application Delegate. If you chose to dispose of this object before the end of the application's lifetime, you need to call the `stop` method. This removes the instance as an observer to the application's lifecycle events and invalidates any internal timers. Below is a code snippet that does this:
-
-	[mixpanel stop];
-	[mixpanel release];
-	
-[copy]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/copy.png "Copy Into Project"
-[project]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Tutorial/images/project.png "Project"
+[copy]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Images/copy.png "Copy Into Project"
+[project]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Images/project.png "Project"
