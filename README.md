@@ -4,7 +4,7 @@ download the Mixpanel iOS API by cloning the git repository:
 
 	git clone http://github.com/mixpanel/mixpanel-iphone.git
 
-or download the latest version from
+Or download the latest version from
 <http://github.com/mixpanel/mixpanel-iphone/zipball/master> and extract the
 files. The respository has three folders:
 
@@ -42,27 +42,39 @@ We recommend doing this in `applicationDidFinishLaunching:` or
 	    return YES;
 	}
 	
-# Tracking Events in Mixpanel Engagement #
+# Tracking Events #
 After initializing the Mixpanel object, you are ready to track events. This can
 be done with the following code snippet:
 
-		Mixpanel *mixpanel = [Mixpanel sharedInstance];
-		[mixpanel track:@"Clicked Button"];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Clicked Button"];
 	
 If you want to add properties to the event you can do the following:
 
-		Mixpanel *mixpanel = [Mixpanel sharedInstance];
-		[mixpanel track:@"Player Create" 
-			 properties:[NSDictionary dictionaryWithObjectsAndKeys:@"Female", @"Gender", @"Premium", @"Plan", nil]];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Player Create" 
+         properties:[NSDictionary dictionaryWithObjectsAndKeys:@"Female", @"Gender", @"Premium", @"Plan", nil]];
 
-# Setting Properties in Mixpanel People #
+# Setting People Properties #
 Use the `people` accessor on the Mixpanel object to make calls to the Mixpanel
 People API. Unlike Mixpanel Engagement, you must explicitly set the distinct ID
 for the current user in Mixpanel People.
 
-		Mixpanel *mixpanel = [Mixpanel sharedInstance];
-        [mixpanel.people identify:@"user123"];
-		[mixpanel.people.set:@"Bought Premium Plan" to:[NSDate date]];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel.people identify:@"user123"];
+    [mixpanel.people.set:@"Bought Premium Plan" to:[NSDate date]];
+
+To send your users push notifications through Mixpanel People, register device
+tokens as follows.
+
+    - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+        [self.mixpanel.people addPushDeviceToken:devToken];
+    }
+
+# Further Documentation #
+https://mixpanel.com/docs/integration-libraries/iphone
+https://mixpanel.com/docs/people-analytics/iphone
+https://mixpanel.com/site_media/doctyl/uploads/iPhone-spec/Classes/Mixpanel/index.html
 
 [copy]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/copy.png "Copy"
 [project]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/project.png "Project"
