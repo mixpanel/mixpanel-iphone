@@ -20,7 +20,7 @@ Adding Mixpanel to your Xcode project is as easy as:
 2. Check the "Copy items into destination Group's folder" and select
 Recursively create groups for any added folders.
 
-![Copy Project][copy]
+![Copy][copy]
 
 And that's it. 
 
@@ -64,5 +64,5 @@ for the current user in Mixpanel People.
         [mixpanel.people identify:@"user123"];
 		[mixpanel.people.set:@"Bought Premium Plan" to:[NSDate date]];
 
-[copy]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Images/copy.png "Copy Into Project"
-[project]: https://github.com/mixpanel/mixpanel-iphone/raw/master/Docs/Images/project.png "Project"
+[copy]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/copy.png "Copy"
+[project]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/project.png "Project"
