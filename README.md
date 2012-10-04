@@ -76,5 +76,5 @@ tokens as follows.
 2. [People iOS Library Documentation](https://mixpanel.com/docs/people-analytics/iphone)
 3. [Full Headerdoc API Reference](https://mixpanel.com/site_media/doctyl/uploads/iPhone-spec/Classes/Mixpanel/index.html)
 
-[copy]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/copy.png "Copy"
-[project]: https://raw.github.com/mixpanel/mixpanel-iphone/redesign/Docs/Images/project.png "Project"
+[copy]: https://raw.github.com/mixpanel/mixpanel-iphone/master/Docs/Images/copy.png "Copy"
+[project]: https://raw.github.com/mixpanel/mixpanel-iphone/master/Docs/Images/project.png "Project"
