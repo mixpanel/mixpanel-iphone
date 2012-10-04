@@ -33,7 +33,7 @@
  
  <pre>
  // Initialize the API
- Mixpanel *mixpanel = [Mixpanel sharedAPIWithToken:@"YOUR API TOKEN"];
+ Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"YOUR API TOKEN"];
  
  // Track an event in Mixpanel Engagement
  [mixpanel track:@"Button Clicked"];
@@ -128,14 +128,14 @@
  as is the common case, then this is the easiest way to use the API. This
  method will set up a singleton instance of the <code>Mixpanel</code> class for
  you using the given project token. When you want to make calls to Mixpanel
- elsewhere in your code, you can use <code>sharedAPI</code>.
+ elsewhere in your code, you can use <code>sharedInstance</code>.
  
  <pre>
- [Mixpanel sharedAPI] track:@"Something Happened"]];
+ [Mixpanel sharedInstance] track:@"Something Happened"]];
  </pre>
  
  If you are going to use this singleton approach,
- <code>sharedAPIWithToken:</code> <b>must be the first call</b> to the
+ <code>sharedInstanceWithToken:</code> <b>must be the first call</b> to the
  <code>Mixpanel</code> class, since it performs important initializations to
  the API.
  
@@ -150,7 +150,7 @@
  Returns the previously instantiated singleton instance of the API.
  
  @discussion
- The API must be initialized with <code>sharedAPIWithToken:</code> before
+ The API must be initialized with <code>sharedInstanceWithToken:</code> before
  calling this class method.
  */
 + (id)sharedInstance;
@@ -165,7 +165,7 @@
  Returns the a new API object. This allows you to create more than one instance
  of the API object, which is convenient if you'd like to send data to more than
  one Mixpanel project from a single app. If you only need to send data to one
- project, consider using <code>sharedAPIWithToken:</code>.
+ project, consider using <code>sharedInstanceWithToken:</code>.
  
  @param apiToken        your project token
  @param startFlushTimer whether to start the background flush timer
