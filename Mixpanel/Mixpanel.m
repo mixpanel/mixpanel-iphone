@@ -214,8 +214,11 @@ static Mixpanel *sharedInstance = nil;
     for (id v in [properties allValues]) {
         NSAssert([v isKindOfClass:[NSString class]] ||
                  [v isKindOfClass:[NSNumber class]] ||
-                 [v isKindOfClass:[NSDate class]],
-                 @"%@ track property values should be NSString, NSNumber or NSDate. found: %@", self, v);
+                 [v isKindOfClass:[NSNull class]] ||
+                 [v isKindOfClass:[NSDate class]] ||
+                 [v isKindOfClass:[NSArray class]] ||
+                 [v isKindOfClass:[NSDictionary class]],
+                 @"%@ property values must be NSString, NSNumber, NSNull, NSDate, NSArray or NSDictionary. found: %@", self, v);
     }
 }
 
@@ -247,6 +250,7 @@ static Mixpanel *sharedInstance = nil;
 
         self.apiToken = apiToken;
         self.flushInterval = flushInterval;
+        self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
         
         self.distinctId = [self defaultDistinctId];
@@ -442,7 +446,8 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)updateNetworkActivityIndicator
 {
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(self.eventsConnection || self.peopleConnection)];
+    BOOL visible = self.showNetworkActivityIndicator && (self.eventsConnection || self.peopleConnection);
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:visible];
 }
 
 #pragma mark * Persistence
@@ -869,14 +874,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)set:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    for (id v in [properties allValues]) {
-        NSAssert([v isKindOfClass:[NSString class]] ||
-                 [v isKindOfClass:[NSNumber class]] ||
-                 [v isKindOfClass:[NSDate class]]   ||
-                 [v isKindOfClass:[NSArray class]]  ||
-                 [v isKindOfClass:[NSDictionary class]],
-                 @"%@ set property values should be NSString, NSNumber, NSDate, NSArray or NSDictionary. found: %@", self, v);
-    }
+    [Mixpanel assertPropertyTypes:properties];
     [self addPeopleRecordToQueueWithAction:@"$set" andProperties:properties];
 }
 

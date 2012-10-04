@@ -106,6 +106,17 @@
 
 /*!
  @property
+
+ @abstract
+ Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
+
+ @discussion
+ Defaults to YES.
+ */
+@property(nonatomic,assign) BOOL showNetworkActivityIndicator;
+
+/*!
+ @property
  
  @abstract
  Gets and sets the a MixpanelDelegate object that can be used to assert
@@ -191,7 +202,9 @@
  @discussion
  Properties will allow you to segment your events in your Mixpanel reports.
  Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code> or <code>NSNumber</code> objects.
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>, 
+ <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+ objects.
  
  @param event           event name
  @param properties      properties dictionary
@@ -207,8 +220,9 @@
  @discussion
  Super properties, once registered, are automatically sent as properties for
  all event tracking calls. They save you having to maintain and add a common
- set of properties to your events. Property keys must be <code>NSString</code>
- objects and values must be <code>NSString</code> or <code>NSNumber</code>
+ set of properties to your events.  Property keys must be <code>NSString</code> objects and values must be
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
  objects.
 
  @param properties      properties dictionary
@@ -224,7 +238,9 @@
  
  @discussion
  Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code> or <code>NSNumber</code> objects.
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+ objects.
 
  @param properties      properties dictionary
  */
@@ -239,9 +255,9 @@
  
  @discussion
  Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code> or <code>NSNumber</code> objects. The defaultValue
- object must be either an <code>NSString</code> or <code>NSNumber</code>
- object.
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+ objects.
 
  @param properties      properties dictionary
  @param defaultValue    overwrite existing properties that have this value
@@ -393,9 +409,11 @@
  Convenience method for setting a single property in Mixpanel People.
  
  @discussion
- The property name must be an NSString and the property value should be
- NSString, NSNumber, NSArray, NSDate, or NSNull.
- 
+ Property keys must be <code>NSString</code> objects and values must be
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+ objects.
+
  @param property        property name
  @param object          property value
  */

@@ -71,22 +71,33 @@
     return NO;
 }
 
-- (void)testJSONSerializer {
+- (NSDictionary *)allPropertyTypes
+{
     NSNumber *number = [NSNumber numberWithInt:3];
-    
+
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
     NSDate *date = [dateFormatter dateFromString:@"2012-09-28 19:14:36 PDT"];
     [dateFormatter release];
 
-    NSDictionary *test = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @"yello",                   @"string",
-                          number,                     @"number",
-                          date,                       @"date",
-                          nil];
-    
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"v" forKey:@"k"];
+    NSArray *array = [NSArray arrayWithObject:@"1"];
+    NSNull *null = [NSNull null];
+
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            @"yello",   @"string",
+            number,     @"number",
+            date,       @"date",
+            dictionary, @"dictionary",
+            array,      @"array",
+            null,       @"null",
+            nil];
+}
+
+- (void)testJSONSerializer {
+    NSDictionary *test = [self allPropertyTypes];
     NSString *json = [[MPCJSONSerializer serializer] serializeArray:[NSArray arrayWithObject:test] error:nil];
-    STAssertEqualObjects(json, @"[{\"date\":\"2012-09-29T02:14:36\",\"number\":3,\"string\":\"yello\"}]", @"json serializer failed");
+    STAssertEqualObjects(json, @"[{\"date\":\"2012-09-29T02:14:36\",\"array\":[\"1\"],\"null\":null,\"dictionary\":{\"k\":\"v\"},\"number\":3,\"string\":\"yello\"}]", @"json serializer failed");
 }
 
 - (void)testIdentify
@@ -182,10 +193,15 @@
 - (void)testAssertPropertyTypes
 {
     NSDictionary *p = [NSDictionary dictionaryWithObject:[NSURL URLWithString:@"http://www.google.com/"] forKey:@"URL"];
-    STAssertThrows([self.mixpanel track:@"e1" properties:p], @"track allowed unsupported property type");
-    STAssertThrows([self.mixpanel registerSuperProperties:p], @"register super properties allowed unsupported property type");
-    STAssertThrows([self.mixpanel registerSuperPropertiesOnce:p], @"register super properties once allowed unsupported property type");
-    STAssertThrows([self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"v"], @"register super properties once with default allowed unsupported property type");
+    STAssertThrows([self.mixpanel track:@"e1" properties:p], @"property type should not be allowed");
+    STAssertThrows([self.mixpanel registerSuperProperties:p], @"property type should not be allowed");
+    STAssertThrows([self.mixpanel registerSuperPropertiesOnce:p], @"property type should not be allowed");
+    STAssertThrows([self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"v"], @"property type should not be allowed");
+    p = [self allPropertyTypes];
+    STAssertNoThrow([self.mixpanel track:@"e1" properties:p], @"property type should be allowed");
+    STAssertNoThrow([self.mixpanel registerSuperProperties:p], @"property type should be allowed");
+    STAssertNoThrow([self.mixpanel registerSuperPropertiesOnce:p],  @"property type should be allowed");
+    STAssertNoThrow([self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"v"],  @"property type should be allowed");
 }
 
 - (void)testReset
