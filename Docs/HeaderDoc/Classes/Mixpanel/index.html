@@ -363,8 +363,9 @@ project, consider using <code>sharedInstanceWithToken:</code>.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;name=start --><p>Super properties, once registered, are automatically sent as properties for
 all event tracking calls. They save you having to maintain and add a common
-set of properties to your events. Property keys must be <code>NSString</code>
-objects and values must be <code>NSString</code> or <code>NSNumber</code>
+set of properties to your events.  Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
 objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;name=end --><!-- end discussion -->
@@ -388,7 +389,9 @@ set.
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:;name=start --><p>Property keys must be <code>NSString</code> objects and values must be
-<code>NSString</code> or <code>NSNumber</code> objects.
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:defaultValue:;   name=Mixpanel::registerSuperPropertiesOnce:defaultValue: -->
@@ -415,9 +418,9 @@ unless the existing value is equal to defaultValue.
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:defaultValue:;name=start --><p>Property keys must be <code>NSString</code> objects and values must be
-<code>NSString</code> or <code>NSNumber</code> objects. The defaultValue
-object must be either an <code>NSString</code> or <code>NSNumber</code>
-object.
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:defaultValue:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/reset;   name=Mixpanel::reset -->
@@ -515,7 +518,9 @@ the API.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/track:properties:;name=start --><p>Properties will allow you to segment your events in your Mixpanel reports.
 Property keys must be <code>NSString</code> objects and values must be
-<code>NSString</code> or <code>NSNumber</code> objects.
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>, 
+<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
+objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/track:properties:;name=end --><!-- end discussion -->
 <hr class="betweenSections">
@@ -544,6 +549,10 @@ fine-grain control over Mixpanel network activity.
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/serverURL" target="_top">serverURL</a></tt></dt>
 <dd><p>Gets and sets the base URL used for Mixpanel API requests.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator" target="_top">showNetworkActivityIndicator</a></tt></dt>
+<dd><p>Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
 </p>
 </dd>
 </dl>
@@ -628,8 +637,21 @@ hash of the MAC address of the device.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start --><p>Useful if you need to proxy Mixpanel requests. Defaults to 
 https://api.mixpanel.com.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;   name=Mixpanel::showNetworkActivityIndicator -->
+<a name="//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator"></a>
+<h3><a name="showNetworkActivityIndicator">showNetworkActivityIndicator</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><!-- begin abstract --><p>Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start -->@property(<span class="param">nonatomic</span>,
+    <span class="param">assign</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showNetworkActivityIndicator //apple_ref/occ/data/Mixpanel/showNetworkActivityIndicator //apple_ref/occ/data/showNetworkActivityIndicator //apple_ref/occ/clconst/Mixpanel/showNetworkActivityIndicator " machineGenerated="true" --><span class="var">showNetworkActivityIndicator</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><p>Defaults to YES.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Wednesday, October 03, 2012
+<p class="hd_timestamp">Last Updated: Thursday, October 04, 2012
 </p></div>
 </td></tr></table>
 </body></html>
