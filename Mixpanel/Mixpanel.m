@@ -397,7 +397,7 @@ static Mixpanel *sharedInstance = nil;
             return;
         }
     }
-    DebugLog(@"%@ flushing data to %@", self, self.serverURL);
+    DevLog(@"%@ flushing data to %@", self, self.serverURL);
     [self flushEvents];
     [self flushPeople];
 }
