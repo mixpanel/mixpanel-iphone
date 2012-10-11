@@ -235,15 +235,18 @@ static Mixpanel *sharedInstance = nil;
 + (id)sharedInstance
 {
     if (sharedInstance == nil) {
-        [NSException raise:@"MixpanelInitializationException" format:@"sharedInstanceWithToken: must be called before sharedInstance can be used"];
+        NSLog(@"%@ warning sharedInstance called before sharedInstanceWithToken:", self);
     }
 	return sharedInstance;
 }
 
 - (id)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
 {
-    if (apiToken == nil || [apiToken length] == 0) {
-        [NSException raise:@"MixpanelAPITokenException" format:@"mixpanel api token must be a non-empty string. find yours at https://mixpanel.com/account/"];
+    if (apiToken == nil) {
+        apiToken = @"";
+    }
+    if ([apiToken length] == 0) {
+        NSLog(@"%@ warning empty api token", self);
     }
     if (self = [self init]) {
         self.people = [[[MixpanelPeople alloc] initWithMixpanel:self] autorelease];
