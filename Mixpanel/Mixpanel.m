@@ -32,15 +32,19 @@
 #endif
 
 #ifdef DEBUG
+#ifndef DebugLog
 #define DebugLog(...) NSLog(__VA_ARGS__)
 #else
 #define DebugLog(...)
 #endif
+#endif
 
 #ifdef MIXPANEL_DEV
+#ifndef DevLog
 #define DevLog(...) NSLog(__VA_ARGS__)
 #else
 #define DevLog(...)
+#endif
 #endif
 
 @interface Mixpanel ()
