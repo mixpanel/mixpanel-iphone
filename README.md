@@ -62,7 +62,7 @@ for the current user in Mixpanel People.
 
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel.people identify:@"user123"];
-    [mixpanel.people.set:@"Bought Premium Plan" to:[NSDate date]];
+    [mixpanel.people set:@"Bought Premium Plan" to:[NSDate date]];
 
 To send your users push notifications through Mixpanel People, register device
 tokens as follows.
