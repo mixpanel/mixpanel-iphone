@@ -61,7 +61,7 @@
 - (IBAction)trackEvent:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-	[mixpanel track:@"Player Create" properties:[NSDictionary dictionaryWithObjectsAndKeys:
+    [mixpanel track:@"Player Create" properties:[NSDictionary dictionaryWithObjectsAndKeys:
                                                  [self.genderControl titleForSegmentAtIndex:self.genderControl.selectedSegmentIndex], @"gender",
                                                  [self.weaponControl titleForSegmentAtIndex:self.weaponControl.selectedSegmentIndex], @"weapon",
                                                  nil]];

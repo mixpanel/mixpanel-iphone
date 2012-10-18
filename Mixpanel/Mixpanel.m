@@ -179,19 +179,19 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSString *)calculateHMACSHA1withString:(NSString *)str andKey:(NSString *)key
 {
-	const char *cStr = [str UTF8String];
-	const char *cSecretStr = [key UTF8String];
-	unsigned char digest[CC_SHA1_DIGEST_LENGTH];
-	memset((void *)digest, 0x0, CC_SHA1_DIGEST_LENGTH);
-	CCHmac(kCCHmacAlgSHA1, cSecretStr, strlen(cSecretStr), cStr, strlen(cStr), digest);
-	return [NSString stringWithFormat:
-			@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-			digest[0],  digest[1],  digest[2],  digest[3],
-			digest[4],  digest[5],  digest[6],  digest[7],
-			digest[8],  digest[9],  digest[10], digest[11],
-			digest[12], digest[13], digest[14], digest[15],
-			digest[16], digest[17], digest[18], digest[19]
-			];
+    const char *cStr = [str UTF8String];
+    const char *cSecretStr = [key UTF8String];
+    unsigned char digest[CC_SHA1_DIGEST_LENGTH];
+    memset((void *)digest, 0x0, CC_SHA1_DIGEST_LENGTH);
+    CCHmac(kCCHmacAlgSHA1, cSecretStr, strlen(cSecretStr), cStr, strlen(cStr), digest);
+    return [NSString stringWithFormat:
+            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            digest[0],  digest[1],  digest[2],  digest[3],
+            digest[4],  digest[5],  digest[6],  digest[7],
+            digest[8],  digest[9],  digest[10], digest[11],
+            digest[12], digest[13], digest[14], digest[15],
+            digest[16], digest[17], digest[18], digest[19]
+            ];
 }
 
 + (NSString *)encodeAPIData:(NSArray *)array
@@ -241,7 +241,7 @@ static Mixpanel *sharedInstance = nil;
     if (sharedInstance == nil) {
         NSLog(@"%@ warning sharedInstance called before sharedInstanceWithToken:", self);
     }
-	return sharedInstance;
+    return sharedInstance;
 }
 
 - (id)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
@@ -284,7 +284,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)track:(NSString *)event
 {
-	[self track:event properties:nil];
+    [self track:event properties:nil];
 }
 
 - (void)track:(NSString *)event properties:(NSDictionary *)properties
@@ -303,16 +303,16 @@ static Mixpanel *sharedInstance = nil;
     if (self.distinctId) {
         [p setObject:self.distinctId forKey:@"distinct_id"];
     }
-	[p addEntriesFromDictionary:self.superProperties];
+    [p addEntriesFromDictionary:self.superProperties];
     if (properties) {
         [p addEntriesFromDictionary:properties];
     }
 
     [Mixpanel assertPropertyTypes:properties];
 
-	NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
+    NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
     DebugLog(@"%@ queueing event: %@", self, e);
-	[self.eventsQueue addObject:e];
+    [self.eventsQueue addObject:e];
 }
 
 #pragma mark * Super property methods
@@ -412,19 +412,19 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flushEvents
 {
-	if ([self.eventsQueue count] == 0 || self.eventsConnection != nil) {
+    if ([self.eventsQueue count] == 0 || self.eventsConnection != nil) {
         DevLog(@"%@ no events to flush", self);
-		return;
-	} else if ([self.eventsQueue count] > 50) {
-		self.eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, 50)];
-	} else {
-		self.eventsBatch = [NSArray arrayWithArray:self.eventsQueue];
-	}
+        return;
+    } else if ([self.eventsQueue count] > 50) {
+        self.eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, 50)];
+    } else {
+        self.eventsBatch = [NSArray arrayWithArray:self.eventsQueue];
+    }
     
     NSString *data = [Mixpanel encodeAPIData:self.eventsBatch];
-	NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
+    NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
     
-	self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
+    self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
     
     DevLog(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
 
@@ -455,7 +455,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)updateNetworkActivityIndicator
 {
     BOOL visible = self.showNetworkActivityIndicator && (self.eventsConnection || self.peopleConnection);
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:visible];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:visible];
 }
 
 #pragma mark * Persistence
@@ -541,9 +541,9 @@ static Mixpanel *sharedInstance = nil;
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         self.eventsQueue = nil;
     }
-	if (!self.eventsQueue) {
-		self.eventsQueue = [NSMutableArray array];
-	}
+    if (!self.eventsQueue) {
+        self.eventsQueue = [NSMutableArray array];
+    }
 }
 
 - (void)unarchivePeople
@@ -677,19 +677,19 @@ static Mixpanel *sharedInstance = nil;
 {
     [self unarchive];
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-	if (&UIBackgroundTaskInvalid) {
+    if (&UIBackgroundTaskInvalid) {
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
         }
-		self.taskId = UIBackgroundTaskInvalid;
-	}
+        self.taskId = UIBackgroundTaskInvalid;
+    }
 #endif
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     DevLog(@"%@ application will terminate", self);
-	[self archive];
+    [self archive];
 }
 
 - (void)endTaskIfInBackground
@@ -697,12 +697,12 @@ static Mixpanel *sharedInstance = nil;
     // if the os version allows background tasks, the app supports them, and we're in one, end it
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-	if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] &&
+    if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] &&
         self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
         
-		[[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
         self.taskId = UIBackgroundTaskInvalid;
-	}
+    }
 #endif
 }
 
@@ -722,12 +722,12 @@ static Mixpanel *sharedInstance = nil;
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response
 {
     DevLog(@"%@ http status code: %d", self, [response statusCode]);
-	if ([response statusCode] != 200) {
+    if ([response statusCode] != 200) {
         // TODO better failure message here
-		NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
-	} else if (connection == self.eventsConnection) {
-		self.eventsResponseData = [NSMutableData data];
-	} else if (connection == self.peopleConnection) {
+        NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
+    } else if (connection == self.eventsConnection) {
+        self.eventsResponseData = [NSMutableData data];
+    } else if (connection == self.peopleConnection) {
         self.peopleResponseData = [NSMutableData data];
     }
 }
@@ -743,7 +743,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	NSLog(@"%@ network failure: %@", self, error);
+    NSLog(@"%@ network failure: %@", self, error);
     if (connection == self.eventsConnection) {
         self.eventsBatch = nil;
         self.eventsResponseData = nil;
