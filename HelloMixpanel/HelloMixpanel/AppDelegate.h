@@ -29,4 +29,6 @@
 
 @property (strong, nonatomic) Mixpanel *mixpanel;
 
+@property (strong, nonatomic, retain) NSDate *startTime;
+
 @end
