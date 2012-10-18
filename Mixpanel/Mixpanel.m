@@ -125,10 +125,14 @@ static Mixpanel *sharedInstance = nil;
 
 + (BOOL)inBackground
 {
+    BOOL inBg = NO;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-    return [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground;
+    inBg = [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground;
 #endif
-    return false;
+    if (inBg) {
+        DevLog(@"%@ in background", self);
+    }
+    return inBg;
 }
 
 + (NSDictionary *)interfaces
@@ -430,6 +434,7 @@ static Mixpanel *sharedInstance = nil;
                                                         selector:@selector(flush)
                                                         userInfo:nil
                                                          repeats:YES];
+            DevLog(@"%@ started flush timer: %@", self, self.timer);
         }
     }
 }
@@ -439,6 +444,7 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
         if (self.timer) {
             [self.timer invalidate];
+            DevLog(@"%@ stopped flush timer: %@", self, self.timer);
         }
         self.timer = nil;
     }
@@ -473,10 +479,10 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
     
-    self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
-    
     DevLog(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
 
+    self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
+    
     [self updateNetworkActivityIndicator];
 }
 
@@ -494,10 +500,10 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
     
+    DevLog(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
+
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
 
-    DevLog(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
-    
     [self updateNetworkActivityIndicator];
 }
 
@@ -606,7 +612,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *filePath = [self peopleFilePath];
     @try {
         self.peopleQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        DevLog(@"%@ unarchived people data: %@", self, self.eventsQueue);
+        DevLog(@"%@ unarchived people data: %@", self, self.peopleQueue);
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive people data, starting fresh", self);
@@ -701,28 +707,32 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationDidEnterBackground:(NSNotificationCenter *)notification
 {
     DevLog(@"%@ did enter background", self);
+
     @synchronized(self) {
+
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-        if (self.flushOnBackground) {
-            DevLog(@"%@ background flush turned on", self);
-            if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
-                [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
-                DevLog(@"%@ background task supported", self);
-                self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                    DevLog(@"%@ background task expiration handler", self);
-                    [self.eventsConnection cancel];
-                    [self.peopleConnection cancel];
-                    self.eventsConnection = nil;
-                    self.peopleConnection = nil;
-                    [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-                    self.taskId = UIBackgroundTaskInvalid;
-                }];
+        if (self.flushOnBackground &&
+            [[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+            [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
+
+            self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                DevLog(@"%@ background flush cut short", self);
+                [self.eventsConnection cancel];
+                [self.peopleConnection cancel];
+                self.eventsConnection = nil;
+                self.peopleConnection = nil;
+                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                self.taskId = UIBackgroundTaskInvalid;
+            }];
+
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                DevLog(@"%@ background flush starting", self);
                 [self flush];
-            } else {
-                DevLog(@"%@ background task not supported", self);
-            }
-        } else {
-            DevLog(@"%@ background flush turned off", self);
+                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                self.taskId = UIBackgroundTaskInvalid;
+            });
+
+            DevLog(@"%@ background flush dispatched", self);
         }
 #endif
     }
@@ -784,7 +794,6 @@ static Mixpanel *sharedInstance = nil;
 {
     DevLog(@"%@ http status code: %d", self, [response statusCode]);
     if ([response statusCode] != 200) {
-        // TODO better failure message here
         NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
     } else if (connection == self.eventsConnection) {
         self.eventsResponseData = [NSMutableData data];
