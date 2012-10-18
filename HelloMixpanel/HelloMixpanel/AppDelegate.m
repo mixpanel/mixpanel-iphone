@@ -29,6 +29,7 @@
 
 - (void)dealloc
 {
+    [_startTime release];
     [_window release];
     [_viewController release];
     [super dealloc];
@@ -43,8 +44,8 @@
     // Initialize the MixpanelAPI object
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     
-    // Set the upload interval to 5 seconds for demonstration purposes. This would be overkill for most applications.
-    self.mixpanel.flushInterval = 5; // defaults to 60 seconds
+    // Set the upload interval to 10 seconds for demonstration purposes. This would be overkill for most applications.
+    self.mixpanel.flushInterval = 10; // defaults to 60 seconds
     
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
@@ -60,6 +61,8 @@
     
     return YES;
 }
+
+#pragma mark * Push notifications
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     [self.mixpanel.people addPushDeviceToken:devToken];
@@ -80,6 +83,19 @@
                                           otherButtonTitles:nil];
     [alert show];
     [alert release];
+}
+
+#pragma mark * Session timing example
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    self.startTime = [NSDate date];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    NSNumber *seconds = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceDate:self.startTime]];
+    [[Mixpanel sharedInstance] track:@"Session" properties:[NSDictionary dictionaryWithObject:seconds forKey:@"Length"]];
 }
 
 @end
