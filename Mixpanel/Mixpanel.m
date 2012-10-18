@@ -123,6 +123,14 @@ static Mixpanel *sharedInstance = nil;
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 }
 
++ (BOOL)inBackground
+{
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
+    return [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground;
+#endif
+    return false;
+}
+
 + (NSDictionary *)interfaces
 {
     NSMutableDictionary *theDictionary = [NSMutableDictionary dictionary];
@@ -318,6 +326,9 @@ static Mixpanel *sharedInstance = nil;
         NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
         DebugLog(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
+        if ([Mixpanel inBackground]) {
+            [self archiveEvents];
+        }
     }
 }
 
@@ -328,6 +339,9 @@ static Mixpanel *sharedInstance = nil;
     [Mixpanel assertPropertyTypes:properties];
     @synchronized(self) {
         [self.superProperties addEntriesFromDictionary:properties];
+        if ([Mixpanel inBackground]) {
+            [self archiveProperties];
+        }
     }
 }
 
@@ -339,6 +353,9 @@ static Mixpanel *sharedInstance = nil;
             if ([self.superProperties objectForKey:key] == nil) {
                 [self.superProperties setObject:[properties objectForKey:key] forKey:key];
             }
+        }
+        if ([Mixpanel inBackground]) {
+            [self archiveProperties];
         }
     }
 }
@@ -353,6 +370,9 @@ static Mixpanel *sharedInstance = nil;
                 [self.superProperties setObject:[properties objectForKey:key] forKey:key];
             }
         }
+        if ([Mixpanel inBackground]) {
+            [self archiveProperties];
+        }
     }
 }
 
@@ -360,6 +380,9 @@ static Mixpanel *sharedInstance = nil;
 {
     @synchronized(self) {
         [self.superProperties removeAllObjects];
+        if ([Mixpanel inBackground]) {
+            [self archiveProperties];
+        }
     }
 }
 
@@ -707,20 +730,17 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
     @synchronized(self) {
 
-        [self unarchive];
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
         if (&UIBackgroundTaskInvalid) {
             if (self.taskId != UIBackgroundTaskInvalid) {
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             }
             self.taskId = UIBackgroundTaskInvalid;
         }
-#endif
-
     }
+#endif
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -731,20 +751,20 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)endTaskIfInBackground
+- (void)endBackgroundTaskIfComplete
 {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
     // if the os version allows background tasks, the app supports them, and we're in one, end it
     @synchronized(self) {
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
         if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] &&
             self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
             DevLog(@"%@ ending background task", self);
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
-#endif
     }
+#endif
 }
 
 #pragma mark * NSURLConnection callbacks
@@ -799,7 +819,7 @@ static Mixpanel *sharedInstance = nil;
     
     [self updateNetworkActivityIndicator];
     
-    [self endTaskIfInBackground];
+    [self endBackgroundTaskIfComplete];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -836,7 +856,7 @@ static Mixpanel *sharedInstance = nil;
     
     [self updateNetworkActivityIndicator];
 
-    [self endTaskIfInBackground];
+    [self endBackgroundTaskIfComplete];
 }
 
 #pragma mark * NSObject
@@ -848,7 +868,6 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)dealloc
 {
-//    [self archive];
     [self stopFlushTimer];
     [self removeApplicationObservers];
     
@@ -908,6 +927,10 @@ static Mixpanel *sharedInstance = nil;
                 [self.mixpanel.peopleQueue addObject:r];
             }
             [self.unidentifiedQueue removeAllObjects];
+        }
+        if ([Mixpanel inBackground]) {
+            [self.mixpanel archiveProperties];
+            [self.mixpanel archivePeople];
         }
     }
 }
@@ -991,6 +1014,9 @@ static Mixpanel *sharedInstance = nil;
         } else {
             DebugLog(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
             [self.unidentifiedQueue addObject:r];
+        }
+        if ([Mixpanel inBackground]) {
+            [self.mixpanel archivePeople];
         }
     }
 }
