@@ -108,6 +108,19 @@
  @property
 
  @abstract
+ Control whether the library should flush data to Mixpanel when the app
+ enters the background.
+
+ @discussion
+ Defaults to YES. Only affects apps targeted at iOS 4.0, when background 
+ task support was introduced, and later.
+ */
+@property(nonatomic,assign) BOOL flushOnBackground;
+
+/*!
+ @property
+
+ @abstract
  Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
 
  @discussion
