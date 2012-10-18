@@ -238,6 +238,11 @@ Library Guide</a>.
 <hr class="afterClassOrHeaderInfo"><br><a name="HeaderDoc_methods"></a>
 <h2 class="h2tight">Methods</h2>
 <dl>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/archive" target="_top">-archive</a></tt></dt>
+<dd><p>Writes current project info, including distinct ID, super properties and pending event
+and People record queues to disk.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/clearSuperProperties" target="_top">-clearSuperProperties</a></tt></dt>
 <dd><p>Clears all currently set super properties.
 </dd>
@@ -286,6 +291,23 @@ unless the existing value is equal to defaultValue.
 </p>
 </dd>
 </dl>
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/archive;   name=Mixpanel::archive -->
+<a name="//apple_ref/occ/instm/Mixpanel/archive"></a>
+<h3><a name="archive">archive</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/archive;name=start --><!-- begin abstract --><p>Writes current project info, including distinct ID, super properties and pending event
+and People record queues to disk.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/archive;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/archive;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/archive //apple_ref/occ/data/Mixpanel/archive //apple_ref/occ/data/archive //apple_ref/occ/clconst/Mixpanel/archive " machineGenerated="true" --><span class="var">archive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/archive;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/archive;name=start --><p>This state will be recovered when the app is launched again if the Mixpanel library is
+initialized with the same project token. You do not need to call this method. For most
+use cases, the library listens for app state changes and handles persisting data as 
+needed. It can be useful in some special circumstances, though, for example, if you'd 
+like to track app crashes from main.m.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/archive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/clearSuperProperties;   name=Mixpanel::clearSuperProperties -->
 <a name="//apple_ref/occ/instm/Mixpanel/clearSuperProperties"></a>
 <h3><a name="clearSuperProperties">clearSuperProperties</a></h3>
@@ -540,6 +562,11 @@ fine-grain control over Mixpanel network activity.
 <dd><p>Gets and sets the flush timer's interval.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/flushOnBackground" target="_top">flushOnBackground</a></tt></dt>
+<dd><p>Control whether the library should flush data to Mixpanel when the app
+enters the background.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/nameTag" target="_top">nameTag</a></tt></dt>
 <dd><p>Gets and sets the current user's name in Mixpanel Streams.
 </dd>
@@ -600,6 +627,21 @@ hash of the MAC address of the device.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=start --><p>Setting a flush interval of 0 will turn off the flush timer.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;   name=Mixpanel::flushOnBackground -->
+<a name="//apple_ref/occ/instp/Mixpanel/flushOnBackground"></a>
+<h3><a name="flushOnBackground">flushOnBackground</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><!-- begin abstract --><p>Control whether the library should flush data to Mixpanel when the app
+enters the background.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start -->@property(<span class="param">nonatomic</span>,
+    <span class="param">assign</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/flushOnBackground //apple_ref/occ/data/Mixpanel/flushOnBackground //apple_ref/occ/data/flushOnBackground //apple_ref/occ/clconst/Mixpanel/flushOnBackground " machineGenerated="true" --><span class="var">flushOnBackground</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background 
+task support was introduced, and later.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/nameTag;   name=Mixpanel::nameTag -->
 <a name="//apple_ref/occ/instp/Mixpanel/nameTag"></a>
 <h3><a name="nameTag">nameTag</a></h3>
@@ -651,7 +693,7 @@ https://api.mixpanel.com.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Thursday, October 04, 2012
+<p class="hd_timestamp">Last Updated: Thursday, October 18, 2012
 </p></div>
 </td></tr></table>
 </body></html>
