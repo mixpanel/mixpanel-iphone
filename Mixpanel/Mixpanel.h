@@ -314,6 +314,22 @@
  */
 - (void)flush;
 
+/*!
+ @method
+
+ @abstract
+ Writes current project info, including distinct ID, super properties and pending event
+ and People record queues to disk.
+
+ @discussion
+ This state will be recovered when the app is launched again if the Mixpanel library is
+ initialized with the same project token. You do not need to call this method. For most
+ use cases, the library listens for app state changes and handles persisting data as 
+ needed. It can be useful in some special circumstances, though, for example, if you'd 
+ like to track app crashes from main.m.
+ */
+- (void)archive;
+
 @end
 
 /*!
