@@ -257,6 +257,7 @@ static Mixpanel *sharedInstance = nil;
 
         self.apiToken = apiToken;
         self.flushInterval = flushInterval;
+        self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
         
@@ -643,26 +644,31 @@ static Mixpanel *sharedInstance = nil;
     DevLog(@"%@ did enter background", self);
     [self archive];
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
-        [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
-        DevLog(@"%@ background task supported", self);
-        if (self.peopleQueue.count || self.eventsQueue.count) {
-            DevLog(@"%@ background task start for queued items", self);
-            self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                DevLog(@"%@ background task expiration handler", self);
-                [self.eventsConnection cancel];
-                [self.peopleConnection cancel];
-                self.eventsConnection = nil;
-                self.peopleConnection = nil;
-                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-                self.taskId = UIBackgroundTaskInvalid;
-            }];
-            [self flush];
+    if (self.flushOnBackground) {
+        DevLog(@"%@ background flush turned on", self);
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+            [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
+            DevLog(@"%@ background task supported", self);
+            if (self.peopleQueue.count || self.eventsQueue.count) {
+                DevLog(@"%@ background task start for queued items", self);
+                self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                    DevLog(@"%@ background task expiration handler", self);
+                    [self.eventsConnection cancel];
+                    [self.peopleConnection cancel];
+                    self.eventsConnection = nil;
+                    self.peopleConnection = nil;
+                    [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                    self.taskId = UIBackgroundTaskInvalid;
+                }];
+                [self flush];
+            } else {
+                DevLog(@"%@ background task not needed", self);
+            }
         } else {
-            DevLog(@"%@ background task not needed", self);
+            DevLog(@"%@ background task not supported", self);
         }
     } else {
-        DevLog(@"%@ background task not supported", self);
+        DevLog(@"%@ background flush turned off", self);
     }
 #endif
 }
