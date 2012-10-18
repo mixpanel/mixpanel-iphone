@@ -43,10 +43,10 @@
     
     // Initialize the MixpanelAPI object
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-    
-    // Set the upload interval to 10 seconds for demonstration purposes. This would be overkill for most applications.
-    self.mixpanel.flushInterval = 10; // defaults to 60 seconds
-    
+
+    // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
+    self.mixpanel.flushInterval = 20; // defaults to 60 seconds
+
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
     
@@ -69,7 +69,11 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    NSLog(@"Error in registration. Error: %@", err);
+#if TARGET_IPHONE_SIMULATOR
+    NSLog(@"%@ push registration error is expected on simulator", self);
+#else
+    NSLog(@"%@ push registration error: %@", self, err);
+#endif
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -94,8 +98,39 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
+    NSLog(@"%@ will resign active", self);
     NSNumber *seconds = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceDate:self.startTime]];
     [[Mixpanel sharedInstance] track:@"Session" properties:[NSDictionary dictionaryWithObject:seconds forKey:@"Length"]];
+}
+
+#pragma mark * Background task tracking test
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    self.bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+
+        NSLog(@"%@ background task cut short", self);
+
+        [application endBackgroundTask:self.bgTask];
+        self.bgTask = UIBackgroundTaskInvalid;
+    }];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+        NSLog(@"%@ background task starting", self);
+
+        // track some events and set some people properties
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Hi!" forKey:@"Background Super Property"]];
+        [mixpanel track:@"Background Event"];
+        [mixpanel.people set:@"Background Property" to:[NSDate date]];
+
+        [application endBackgroundTask:self.bgTask];
+        self.bgTask = UIBackgroundTaskInvalid;
+    });
+
+    NSLog(@"%@ background task dispatched", self);
+
 }
 
 @end

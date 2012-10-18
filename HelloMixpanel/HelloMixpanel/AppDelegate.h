@@ -31,4 +31,6 @@
 
 @property (strong, nonatomic, retain) NSDate *startTime;
 
+@property (nonatomic) UIBackgroundTaskIdentifier bgTask;
+
 @end
