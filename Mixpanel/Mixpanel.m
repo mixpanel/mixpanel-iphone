@@ -171,9 +171,9 @@ static Mixpanel *sharedInstance = nil;
     NSDictionary *dict = [Mixpanel interfaces];
     NSArray *keys = [dict allKeys];
     keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    
+
     NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
-    
+
     // while most apps will define CFBundleName, it's not guaranteed;
     // an app can choose to define it or not so when it's missing, use the bundle file name
     if (bundleName == nil) {
@@ -467,8 +467,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flushEvents
 {
-    if ([self.eventsQueue count] == 0 || self.eventsConnection != nil) {
+    if ([self.eventsQueue count] == 0) {
         DevLog(@"%@ no events to flush", self);
+        return;
+    } else if (self.eventsConnection != nil) {
+        DevLog(@"%@ events connection already open", self);
         return;
     } else if ([self.eventsQueue count] > 50) {
         self.eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, 50)];
@@ -482,14 +485,25 @@ static Mixpanel *sharedInstance = nil;
     DevLog(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
 
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
-    
+
+    if(![NSThread isMainThread]){
+        DevLog(@"%@ keeping background events connection thread alive", self);
+        while(self.eventsConnection) {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+        }
+        DevLog(@"%@ letting go of background events connection thread", self);
+    }
+
     [self updateNetworkActivityIndicator];
 }
 
 - (void)flushPeople
 {
-    if ([self.peopleQueue count] == 0 || self.peopleConnection != nil) {
+    if ([self.peopleQueue count] == 0) {
         DevLog(@"%@ no people to flush", self);
+        return;
+    } else if (self.peopleConnection != nil) {
+        DevLog(@"%@ people connection already open", self);
         return;
     } else if ([self.peopleQueue count] > 50) {
         self.peopleBatch = [self.peopleQueue subarrayWithRange:NSMakeRange(0, 50)];
@@ -504,7 +518,33 @@ static Mixpanel *sharedInstance = nil;
 
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
 
+    if(![NSThread isMainThread]){
+        DevLog(@"%@ keeping background people connection thread alive", self);
+        while(self.peopleConnection) {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+        }
+        DevLog(@"%@ letting go of background people connection thread", self);
+    }
+
     [self updateNetworkActivityIndicator];
+}
+
+- (void)cancelFlush
+{
+    if (self.eventsConnection == nil) {
+        DevLog(@"%@ no events connection to cancel", self);
+    } else {
+        DevLog(@"%@ cancelling events connection", self);
+        [self.eventsConnection cancel];
+        self.eventsConnection = nil;
+    }
+    if (self.peopleConnection == nil) {
+        DevLog(@"%@ no people connection to cancel", self);
+    } else {
+        DevLog(@"%@ cancelling people connection", self);
+        [self.peopleConnection cancel];
+        self.peopleConnection = nil;
+    }
 }
 
 - (void)updateNetworkActivityIndicator
@@ -717,10 +757,7 @@ static Mixpanel *sharedInstance = nil;
 
             self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
                 DevLog(@"%@ background flush cut short", self);
-                [self.eventsConnection cancel];
-                [self.peopleConnection cancel];
-                self.eventsConnection = nil;
-                self.peopleConnection = nil;
+                [self cancelFlush];
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
                 self.taskId = UIBackgroundTaskInvalid;
             }];
@@ -728,11 +765,12 @@ static Mixpanel *sharedInstance = nil;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 DevLog(@"%@ background flush starting", self);
                 [self flush];
+                DevLog(@"%@ ending background flush with task id: %u", self, self.taskId);
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
                 self.taskId = UIBackgroundTaskInvalid;
             });
 
-            DevLog(@"%@ background flush dispatched", self);
+            DevLog(@"%@ background flush dispatched with task id: %u", self, self.taskId);
         }
 #endif
     }
@@ -749,6 +787,8 @@ static Mixpanel *sharedInstance = nil;
             }
             self.taskId = UIBackgroundTaskInvalid;
         }
+        [self cancelFlush];
+        [self updateNetworkActivityIndicator];
     }
 #endif
 }
