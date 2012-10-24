@@ -756,21 +756,21 @@ static Mixpanel *sharedInstance = nil;
             [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
 
             self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                DevLog(@"%@ background flush cut short", self);
+                DevLog(@"%@ flush background task %u cut short", self, self.taskId);
                 [self cancelFlush];
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
                 self.taskId = UIBackgroundTaskInvalid;
             }];
 
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                DevLog(@"%@ background flush starting", self);
+                DevLog(@"%@ starting flush background task %u", self, self.taskId);
                 [self flush];
-                DevLog(@"%@ ending background flush with task id: %u", self, self.taskId);
+                DevLog(@"%@ ending flush background task %u", self, self.taskId);
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
                 self.taskId = UIBackgroundTaskInvalid;
             });
 
-            DevLog(@"%@ background flush dispatched with task id: %u", self, self.taskId);
+            DevLog(@"%@ dispatched flush background task %u", self, self.taskId);
         }
 #endif
     }

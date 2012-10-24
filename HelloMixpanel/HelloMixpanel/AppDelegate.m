@@ -109,7 +109,7 @@
 {
     self.bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
 
-        NSLog(@"%@ background task cut short", self);
+        NSLog(@"%@ background task %u cut short", self, self.bgTask);
 
         [application endBackgroundTask:self.bgTask];
         self.bgTask = UIBackgroundTaskInvalid;
@@ -117,7 +117,7 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
-        NSLog(@"%@ background task starting", self);
+        NSLog(@"%@ starting background task %u", self, self.bgTask);
 
         // track some events and set some people properties
         Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -125,11 +125,12 @@
         [mixpanel track:@"Background Event"];
         [mixpanel.people set:@"Background Property" to:[NSDate date]];
 
+        NSLog(@"%@ ending background task %u", self, self.bgTask);
         [application endBackgroundTask:self.bgTask];
         self.bgTask = UIBackgroundTaskInvalid;
     });
 
-    NSLog(@"%@ background task dispatched", self);
+    NSLog(@"%@ dispatched background task %u", self, self.bgTask);
 
 }
 
