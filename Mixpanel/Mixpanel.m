@@ -486,14 +486,6 @@ static Mixpanel *sharedInstance = nil;
 
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
 
-    if(![NSThread isMainThread]){
-        DevLog(@"%@ keeping background events connection thread alive", self);
-        while(self.eventsConnection) {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-        }
-        DevLog(@"%@ letting go of background events connection thread", self);
-    }
-
     [self updateNetworkActivityIndicator];
 }
 
@@ -517,14 +509,6 @@ static Mixpanel *sharedInstance = nil;
     DevLog(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
 
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
-
-    if(![NSThread isMainThread]){
-        DevLog(@"%@ keeping background people connection thread alive", self);
-        while(self.peopleConnection) {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-        }
-        DevLog(@"%@ letting go of background people connection thread", self);
-    }
 
     [self updateNetworkActivityIndicator];
 }
@@ -762,15 +746,10 @@ static Mixpanel *sharedInstance = nil;
                 self.taskId = UIBackgroundTaskInvalid;
             }];
 
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                DevLog(@"%@ starting flush background task %u", self, self.taskId);
-                [self flush];
-                DevLog(@"%@ ending flush background task %u", self, self.taskId);
-                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-                self.taskId = UIBackgroundTaskInvalid;
-            });
+            DevLog(@"%@ starting flush background task %u", self, self.taskId);
+            [self flush];
 
-            DevLog(@"%@ dispatched flush background task %u", self, self.taskId);
+            // connection callbacks end this task by calling endBackgroundTaskIfComplete
         }
 #endif
     }
@@ -809,7 +788,7 @@ static Mixpanel *sharedInstance = nil;
 
         if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] &&
             self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
-            DevLog(@"%@ ending background task", self);
+            DevLog(@"%@ ending flush background task %u", self, self.taskId);
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
