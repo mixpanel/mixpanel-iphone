@@ -28,6 +28,8 @@
 		286760BD1611982600B1BEC8 /* MPCSerializedJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */; };
 		286760BE1611982600B1BEC8 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B81611982600B1BEC8 /* NSData+MPBase64.m */; };
 		286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760BA1611982600B1BEC8 /* Mixpanel.m */; };
+		2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541C16548047003DAFFE /* SystemConfiguration.framework */; };
+		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
 		28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E666161530BF00F78E49 /* Icon@2x.png */; };
 		28C7E6691615311100F78E49 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E6681615311100F78E49 /* Icon.png */; };
 		28C7E66B1615317400F78E49 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E66A1615317400F78E49 /* Icon-72.png */; };
@@ -76,6 +78,8 @@
 		286760B81611982600B1BEC8 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		286760B91611982600B1BEC8 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
 		286760BA1611982600B1BEC8 /* Mixpanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mixpanel.m; sourceTree = "<group>"; };
+		2892541C16548047003DAFFE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		2892541E16548283003DAFFE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		28C7E666161530BF00F78E49 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		28C7E6681615311100F78E49 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		28C7E66A1615317400F78E49 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */,
+				2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */,
 				2808F9921610EFE3005772B7 /* UIKit.framework in Frameworks */,
 				2808F9941610EFE3005772B7 /* Foundation.framework in Frameworks */,
 				2808F9961610EFE3005772B7 /* CoreGraphics.framework in Frameworks */,
@@ -128,6 +134,8 @@
 		2808F9901610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2892541E16548283003DAFFE /* CoreTelephony.framework */,
+				2892541C16548047003DAFFE /* SystemConfiguration.framework */,
 				2808F9911610EFE3005772B7 /* UIKit.framework */,
 				2808F9931610EFE3005772B7 /* Foundation.framework */,
 				2808F9951610EFE3005772B7 /* CoreGraphics.framework */,
@@ -447,8 +455,8 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				PROVISIONING_PROFILE = "386F055C-7E38-4B03-AC0F-22EE5CA5FE24";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "386F055C-7E38-4B03-AC0F-22EE5CA5FE24";
+				PROVISIONING_PROFILE = "0F5AB3F8-3831-45DE-A1AA-5408EE0097E3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0F5AB3F8-3831-45DE-A1AA-5408EE0097E3";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -525,8 +533,8 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "386F055C-7E38-4B03-AC0F-22EE5CA5FE24";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "386F055C-7E38-4B03-AC0F-22EE5CA5FE24";
+				PROVISIONING_PROFILE = "0F5AB3F8-3831-45DE-A1AA-5408EE0097E3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0F5AB3F8-3831-45DE-A1AA-5408EE0097E3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
