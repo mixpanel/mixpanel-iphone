@@ -22,6 +22,13 @@ Recursively create groups for any added folders.
 
 ![Copy][copy]
 
+3. Make sure the following Apple frameworks have been added to your project in Targets > Build Phases > Link Binary With Libraries:
+
+    - Foundation.framework
+    - UIKit.framework
+    - SystemConfiguration.framework
+    - CoreTelephony.framework
+
 And that's it. 
 
 ![Project][project]
@@ -70,6 +77,12 @@ tokens as follows.
     - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
         [self.mixpanel.people addPushDeviceToken:devToken];
     }
+
+# ARC #
+The Mixpanel library does not currently use ARC. We've chosen to do this
+because a large number of customers have not moved to ARC yet. To integrate
+with an ARC project: Go to Project > Target > Build Phases, double-click on
+each Mixpanel file and add the flag: `-fno-objc-arc`.
 
 # Further Documentation #
 1. [Events iOS Library Documentation](https://mixpanel.com/docs/integration-libraries/iphone)
