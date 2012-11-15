@@ -22,10 +22,15 @@
 #include <sys/sysctl.h>
 
 #import <CommonCrypto/CommonHMAC.h>
+#import <CoreTelephony/CTCarrier.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 
 #import "MPCJSONDataSerializer.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
+
+#define VERSION @"1.0.0"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
@@ -86,15 +91,37 @@ static Mixpanel *sharedInstance = nil;
 + (NSDictionary *)deviceInfoProperties
 {
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+
+    UIDevice *device = [UIDevice currentDevice];
+
     [properties setValue:@"iphone" forKey:@"mp_lib"];
-    [properties setValue:[Mixpanel legacyDeviceModel] forKey:@"mp_device_model"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
-    [properties setValue:[Mixpanel osVersion] forKey:@"$ios_version"];
-    [properties setValue:[Mixpanel appVersion] forKey:@"$ios_app_version"];
+    [properties setValue:VERSION forKey:@"$lib_version"];
+
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
+
+    [properties setValue:@"Apple" forKey:@"$manufacturer"];
+    [properties setValue:[device systemName] forKey:@"$os"];
+    [properties setValue:[device systemVersion] forKey:@"$os_version"];
+    [properties setValue:[Mixpanel deviceModel] forKey:@"$model"];
+    [properties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
+
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
+    [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
+
+    [properties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
+
+    CTTelephonyNetworkInfo *networkInfo = [[[CTTelephonyNetworkInfo alloc] init] autorelease];
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+
+    if (carrier.carrierName.length) {
+        [properties setValue:carrier.carrierName forKey:@"$carrier"];
+    }
+
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 
-+ (NSString *)legacyDeviceModel
++ (NSString *)deviceModel
 {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
@@ -108,19 +135,33 @@ static Mixpanel *sharedInstance = nil;
     return results;
 }
 
-+ (NSString *)deviceModel
++ (BOOL)wifiAvailable
 {
-    return [[UIDevice currentDevice] model];
-}
+    struct sockaddr_in sockAddr;
+    bzero(&sockAddr, sizeof(sockAddr));
+    sockAddr.sin_len = sizeof(sockAddr);
+    sockAddr.sin_family = AF_INET;
 
-+ (NSString *)osVersion
-{
-    return [[UIDevice currentDevice] systemVersion];
-}
+    SCNetworkReachabilityRef nrRef = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&sockAddr);
+    SCNetworkReachabilityFlags flags;
+    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(nrRef, &flags);
+    if (!didRetrieveFlags) {
+        DevLog(@"%@ unable to fetch the network reachablity flags", self);
+    }
 
-+ (NSString *)appVersion
-{
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    CFRelease(nrRef);
+
+    if (!didRetrieveFlags || (flags & kSCNetworkReachabilityFlagsReachable) != kSCNetworkReachabilityFlagsReachable) {
+        // unable to connect to a network (no signal or airplane mode activated)
+        return NO;
+    }
+
+    if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN) {
+        // only a cellular network connection is available.
+        return NO;
+    }
+
+    return YES;
 }
 
 + (BOOL)inBackground
@@ -928,10 +969,11 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSDictionary *)deviceInfoProperties
 {
+    UIDevice *device = [UIDevice currentDevice];
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
     [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
-    [properties setValue:[Mixpanel osVersion] forKey:@"$ios_version"];
-    [properties setValue:[Mixpanel appVersion] forKey:@"$ios_app_version"];
+    [properties setValue:[device systemVersion] forKey:@"$ios_version"];
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 
