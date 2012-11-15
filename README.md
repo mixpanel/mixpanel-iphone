@@ -24,10 +24,10 @@ Recursively create groups for any added folders.
 
 3. Make sure the following Apple frameworks have been added to your project in Targets > Build Phases > Link Binary With Libraries:
 
-    - Foundation.framework
-    - UIKit.framework
-    - SystemConfiguration.framework
-    - CoreTelephony.framework
+- Foundation.framework
+- UIKit.framework
+- SystemConfiguration.framework
+- CoreTelephony.framework
 
 And that's it. 
 
