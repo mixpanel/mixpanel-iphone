@@ -141,6 +141,7 @@
                        @"yello",                   @"string",
                        [NSNumber numberWithInt:3], @"number",
                        [NSDate date],              @"date",
+                       @"override",                @"$app_version",
                        nil];
     [self.mixpanel track:@"Something Happened" properties:p];
     STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
@@ -148,6 +149,7 @@
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
     STAssertTrue(p.count == 17, @"incorrect number of properties");
+    STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken
@@ -338,8 +340,8 @@
     STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
     STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
     STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_version property");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_app_version property");
+    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
+    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
     [self.mixpanel.people identify:@"d1"];
     STAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"set people distinct id failed");
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"identify should move unidentified records to main queue");
@@ -377,8 +379,18 @@
     STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
     STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
     STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_version property");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_app_version property");
+    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
+    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
+}
+
+- (void)testPeopleSetReservedProperty
+{
+    [self.mixpanel.people identify:@"d1"];
+    NSDictionary *p = [NSDictionary dictionaryWithObject:@"override" forKey:@"$ios_app_version"];
+    [self.mixpanel.people set:p];
+    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    p = [r objectForKey:@"$set"];
+    STAssertEqualObjects([p objectForKey:@"$ios_app_version"], @"override", @"reserved property override failed");
 }
 
 - (void)testPeopleSetTo
@@ -394,8 +406,8 @@
     STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
     STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
     STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_version property");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_app_version property");
+    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
+    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
 }
 
 - (void)testPeopleIncrement

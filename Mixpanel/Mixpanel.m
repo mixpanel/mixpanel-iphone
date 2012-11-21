@@ -30,7 +30,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"1.0.0"
+#define VERSION @"1.0.1"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
@@ -1067,13 +1067,15 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
 
         NSMutableDictionary *r = [NSMutableDictionary dictionary];
-        NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:properties];
+        NSMutableDictionary *p = [NSMutableDictionary dictionary];
 
         [r setObject:self.mixpanel.apiToken forKey:@"$token"];
 
         if ([action isEqualToString:@"$set"]) {
             [p addEntriesFromDictionary:[MixpanelPeople deviceInfoProperties]];
         }
+
+        [p addEntriesFromDictionary:properties];
 
         [r setObject:[NSDictionary dictionaryWithDictionary:p] forKey:action];
 
