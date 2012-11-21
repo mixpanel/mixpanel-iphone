@@ -118,13 +118,21 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 8, @"incorrect number of properties. got %d instead of 8", p.count);
+    STAssertTrue(p.count == 14, @"incorrect number of properties");
+
+    STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
+    STAssertNotNil([p objectForKey:@"$lib_version"], @"$lib_version not set");
+    STAssertEqualObjects([p objectForKey:@"$manufacturer"], @"Apple", @"incorrect $manufacturer");
+    STAssertNotNil([p objectForKey:@"$model"], @"$model not set");
+    STAssertNotNil([p objectForKey:@"$os"], @"$os not set");
+    STAssertNotNil([p objectForKey:@"$os_version"], @"$os_version not set");
+    STAssertNotNil([p objectForKey:@"$screen_height"], @"$screen_height not set");
+    STAssertNotNil([p objectForKey:@"$screen_width"], @"$screen_width not set");
     STAssertNotNil([p objectForKey:@"distinct_id"], @"distinct_id not set");
-    STAssertEqualObjects([p objectForKey:@"token"], TEST_TOKEN, @"incorrect token");
-    STAssertEqualObjects([p objectForKey:@"mp_lib"], @"iphone", @"incorrect mp_lib");
     STAssertNotNil([p objectForKey:@"mp_device_model"], @"mp_device_model not set");
-    STAssertNotNil([p objectForKey:@"$ios_version"], @"$ios_version not set");
-    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"$ios_app_version not set");
+    STAssertEqualObjects([p objectForKey:@"mp_lib"], @"iphone", @"incorrect mp_lib");
+    STAssertNotNil([p objectForKey:@"time"], @"time not set");
+    STAssertEqualObjects([p objectForKey:@"token"], TEST_TOKEN, @"incorrect token");
 }
 
 - (void)testTrackProperties
@@ -139,7 +147,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 11, @"incorrect number of properties. got %d instead of 11", p.count, 9);
+    STAssertTrue(p.count == 17, @"incorrect number of properties");
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken
