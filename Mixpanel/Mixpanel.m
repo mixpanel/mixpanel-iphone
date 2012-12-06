@@ -30,7 +30,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"1.0.1"
+#define VERSION @"1.0.3"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
@@ -243,35 +243,104 @@ static Mixpanel *sharedInstance = nil;
             ];
 }
 
-+ (NSString *)encodeAPIData:(NSArray *)array
++ (NSData *)JSONSerializeObject:(id)obj
 {
+    id coercedObj = [Mixpanel JSONSerializableObjectForObject:obj];
+
     MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
     NSError *error = nil;
-    NSData *data = [serializer serializeArray:array error:&error];
+    NSData *data = nil;
+    @try {
+        data = [serializer serializeObject:coercedObj error:&error];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@ exception encoding api data: %@", self, exception);
+    }
     if (error) {
         NSLog(@"%@ error encoding api data: %@", self, error);
-        return @"";
-    } else {
-        NSString *b64String = [data mp_base64EncodedString];
+    }
+    return data;
+}
+
++ (id)JSONSerializableObjectForObject:(id)obj
+{
+    // valid json types
+    if ([obj isKindOfClass:[NSString class]] ||
+        [obj isKindOfClass:[NSNumber class]] ||
+        [obj isKindOfClass:[NSNull class]]) {
+        return obj;
+    }
+
+    // recurse on containers
+    if ([obj isKindOfClass:[NSArray class]]) {
+        NSMutableArray *a = [NSMutableArray array];
+        for (id i in obj) {
+            [a addObject:[Mixpanel JSONSerializableObjectForObject:i]];
+        }
+        return [NSArray arrayWithArray:a];
+    }
+    if ([obj isKindOfClass:[NSDictionary class]]) {
+        NSMutableDictionary *d = [NSMutableDictionary dictionary];
+        for (id key in obj) {
+            NSString *stringKey;
+            if (![key isKindOfClass:[NSString class]]) {
+                stringKey = [key description];
+                NSLog(@"%@ warning: property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
+            } else {
+                stringKey = [NSString stringWithString:key];
+            }
+            id v = [Mixpanel JSONSerializableObjectForObject:[obj objectForKey:key]];
+            [d setObject:v forKey:stringKey];
+        }
+        return [NSDictionary dictionaryWithDictionary:d];
+    }
+
+    // some common cases
+    if ([obj isKindOfClass:[NSDate class]]) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        NSString *s = [formatter stringFromDate:obj];
+        [formatter release];
+        return s;
+    } else if ([obj isKindOfClass:[NSURL class]]) {
+        return [obj absoluteString];
+    }
+
+    // default to sending the object's description
+    NSString *s = [obj description];
+    NSLog(@"%@ warning: property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
+    return s;
+}
+
++ (NSString *)encodeAPIData:(NSArray *)array
+{
+    NSString *b64String = @"";
+    NSData *data = [Mixpanel JSONSerializeObject:array];
+    if (data) {
+        b64String = [data mp_base64EncodedString];
         b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                 (CFStringRef)b64String,
                                                                 NULL,
                                                                 CFSTR("!*'();:@&=+$,/?%#[]"),
                                                                 kCFStringEncodingUTF8);
-        return [b64String autorelease];
     }
+    return [b64String autorelease];
 }
 
 + (void)assertPropertyTypes:(NSDictionary *)properties
 {
-    for (id v in [properties allValues]) {
+    for (id k in properties) {
+        NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
+        id v = [properties objectForKey:k];
         NSAssert([v isKindOfClass:[NSString class]] ||
                  [v isKindOfClass:[NSNumber class]] ||
                  [v isKindOfClass:[NSNull class]] ||
-                 [v isKindOfClass:[NSDate class]] ||
                  [v isKindOfClass:[NSArray class]] ||
-                 [v isKindOfClass:[NSDictionary class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSDate, NSArray or NSDictionary. found: %@", self, v);
+                 [v isKindOfClass:[NSDictionary class]] ||
+                 [v isKindOfClass:[NSDate class]] ||
+                 [v isKindOfClass:[NSURL class]],
+                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [v class], v);
     }
 }
 
