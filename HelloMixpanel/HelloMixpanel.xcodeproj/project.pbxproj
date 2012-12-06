@@ -525,10 +525,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Neil Rahilly (JLY92MT8BF)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"MIXPANEL_LOG=1",
-					"MIXPANEL_DEBUG=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";

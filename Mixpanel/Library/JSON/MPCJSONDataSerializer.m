@@ -74,10 +74,6 @@ static NSData *kTrue = nil;
         theResult = [self serializeString:theString error:outError];
     } else if ([inObject isKindOfClass:[MPCSerializedJSONData class]]) {
         theResult = [inObject data];
-    } else if ([inObject isKindOfClass:[NSDate class]]) {
-        theResult = [self serializeDate:inObject error:outError];
-    } else if ([inObject isKindOfClass:[NSURL class]]) {
-        theResult = [self serializeString:[(NSURL*)inObject absoluteString] error:outError];
     } else {
         theResult = [self serializeString:[inObject description] error:outError];
     }
@@ -86,7 +82,7 @@ static NSData *kTrue = nil;
         if (outError) {
             NSDictionary *theUserInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                          [NSString stringWithFormat:
-                                          @"Cannot serialize data of type '%@'. The following types are supported: NSNull, NSNumber, NSString, NSArray, NSDictionary, NSData, NSDate, NSURL.",
+                                          @"Cannot serialize data of type '%@'. The following types are supported: NSNull, NSNumber, NSString, NSArray, NSDictionary, NSData.",
                                           NSStringFromClass([inObject class])], NSLocalizedDescriptionKey,
                                          nil];
             *outError = [NSError errorWithDomain:@"MixpanelLib" code:-1 userInfo:theUserInfo];
@@ -152,15 +148,6 @@ static NSData *kTrue = nil;
     [theMutableCopy replaceOccurrencesOfString:@"\r" withString:@"\\r" options:0 range:NSMakeRange(0, [theMutableCopy length])];
     [theMutableCopy replaceOccurrencesOfString:@"\t" withString:@"\\t" options:0 range:NSMakeRange(0, [theMutableCopy length])];
     return [[NSString stringWithFormat:@"\"%@\"", theMutableCopy] dataUsingEncoding:NSUTF8StringEncoding];
-}
-
-- (NSData *)serializeDate:(NSDate *)inDate error:(NSError **)outError {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    NSData *output = [self serializeString:[formatter stringFromDate:inDate] error:outError];
-    [formatter release];
-    return output;
 }
 
 - (NSData *)serializeArray:(NSArray *)inArray error:(NSError **)outError {

@@ -30,6 +30,7 @@
 @property(nonatomic,retain) NSMutableArray *peopleQueue;
 @property(nonatomic,retain) NSTimer *timer;
 
++ (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;
@@ -84,6 +85,16 @@
     NSArray *array = [NSArray arrayWithObject:@"1"];
     NSNull *null = [NSNull null];
 
+    NSDictionary *nested = [NSDictionary dictionaryWithObject:
+                            [NSDictionary dictionaryWithObject:
+                             [NSArray arrayWithObject:
+                              [NSDictionary dictionaryWithObject:
+                               [NSArray arrayWithObject:@"bottom"]
+                                                          forKey:@"p3"]]
+                                                        forKey:@"p2"]
+                                                       forKey:@"p1"];
+    NSURL *url = [NSURL URLWithString:@"https://mixpanel.com/"];
+
     return [NSDictionary dictionaryWithObjectsAndKeys:
             @"yello",   @"string",
             number,     @"number",
@@ -91,13 +102,22 @@
             dictionary, @"dictionary",
             array,      @"array",
             null,       @"null",
+            nested,     @"nested",
+            url,        @"url",
+            @1.3,       @"float",
             nil];
 }
 
-- (void)testJSONSerializer {
+- (void)testJSONSerializeObject {
     NSDictionary *test = [self allPropertyTypes];
-    NSString *json = [[MPCJSONSerializer serializer] serializeArray:[NSArray arrayWithObject:test] error:nil];
-    STAssertEqualObjects(json, @"[{\"date\":\"2012-09-29T02:14:36\",\"array\":[\"1\"],\"null\":null,\"dictionary\":{\"k\":\"v\"},\"number\":3,\"string\":\"yello\"}]", @"json serializer failed");
+    NSData *data = [Mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
+    NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", @"json serialization failed");
+
+    test = [NSDictionary dictionaryWithObject:@"non-string key" forKey:@3];
+    data = [Mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
+    json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    STAssertEqualObjects(json, @"[{\"3\":\"non-string key\"}]", @"json serialization failed");
 }
 
 - (void)testIdentify
@@ -202,7 +222,7 @@
 
 - (void)testAssertPropertyTypes
 {
-    NSDictionary *p = [NSDictionary dictionaryWithObject:[NSURL URLWithString:@"http://www.google.com/"] forKey:@"URL"];
+    NSDictionary *p = [NSDictionary dictionaryWithObject:[NSData data] forKey:@"data"];
     STAssertThrows([self.mixpanel track:@"e1" properties:p], @"property type should not be allowed");
     STAssertThrows([self.mixpanel registerSuperProperties:p], @"property type should not be allowed");
     STAssertThrows([self.mixpanel registerSuperPropertiesOnce:p], @"property type should not be allowed");
@@ -465,10 +485,10 @@
 
 - (void)testPeopleAssertPropertyTypes
 {
-    NSURL *u = [NSURL URLWithString:@"http://www.google.com/"];
-    NSDictionary *p = [NSDictionary dictionaryWithObject:u forKey:@"URL"];
+    NSURL *d = [NSData data];
+    NSDictionary *p = [NSDictionary dictionaryWithObject:d forKey:@"URL"];
     STAssertThrows([self.mixpanel.people set:p], @"unsupported property allowed");
-    STAssertThrows([self.mixpanel.people set:@"p1" to:u], @"unsupported property allowed");
+    STAssertThrows([self.mixpanel.people set:@"p1" to:d], @"unsupported property allowed");
     p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"]; // increment should require a number
     STAssertThrows([self.mixpanel.people increment:p], @"unsupported property allowed");
 }
