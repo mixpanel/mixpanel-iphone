@@ -615,34 +615,40 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)archiveEvents
 {
-    NSString *filePath = [self eventsFilePath];
-    DevLog(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
-    if (![NSKeyedArchiver archiveRootObject:self.eventsQueue toFile:filePath]) {
-        NSLog(@"%@ unable to archive events data", self);
+    @synchronized(self) {
+        NSString *filePath = [self eventsFilePath];
+        DevLog(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
+        if (![NSKeyedArchiver archiveRootObject:self.eventsQueue toFile:filePath]) {
+            NSLog(@"%@ unable to archive events data", self);
+        }
     }
 }
 
 - (void)archivePeople
 {
-    NSString *filePath = [self peopleFilePath];
-    DevLog(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
-    if (![NSKeyedArchiver archiveRootObject:self.peopleQueue toFile:filePath]) {
-        NSLog(@"%@ unable to archive people data", self);
+    @synchronized(self) {
+        NSString *filePath = [self peopleFilePath];
+        DevLog(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
+        if (![NSKeyedArchiver archiveRootObject:self.peopleQueue toFile:filePath]) {
+            NSLog(@"%@ unable to archive people data", self);
+        }
     }
 }
 
 - (void)archiveProperties
 {
-    NSString *filePath = [self propertiesFilePath];
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-    [properties setValue:self.distinctId forKey:@"distinctId"];
-    [properties setValue:self.nameTag forKey:@"nameTag"];
-    [properties setValue:self.superProperties forKey:@"superProperties"];
-    [properties setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [properties setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    DevLog(@"%@ archiving properties data to %@: %@", self, filePath, properties);
-    if (![NSKeyedArchiver archiveRootObject:properties toFile:filePath]) {
-        NSLog(@"%@ unable to archive properties data", self);
+    @synchronized(self) {
+        NSString *filePath = [self propertiesFilePath];
+        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+        [properties setValue:self.distinctId forKey:@"distinctId"];
+        [properties setValue:self.nameTag forKey:@"nameTag"];
+        [properties setValue:self.superProperties forKey:@"superProperties"];
+        [properties setValue:self.people.distinctId forKey:@"peopleDistinctId"];
+        [properties setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+        DevLog(@"%@ archiving properties data to %@: %@", self, filePath, properties);
+        if (![NSKeyedArchiver archiveRootObject:properties toFile:filePath]) {
+            NSLog(@"%@ unable to archive properties data", self);
+        }
     }
 }
 
@@ -873,59 +879,63 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"%@ network failure: %@", self, error);
-    if (connection == self.eventsConnection) {
-        self.eventsBatch = nil;
-        self.eventsResponseData = nil;
-        self.eventsConnection = nil;
-        [self archiveEvents];
-    } else if (connection == self.peopleConnection) {
-        self.peopleBatch = nil;
-        self.peopleResponseData = nil;
-        self.peopleConnection = nil;
-        [self archivePeople];
+    @synchronized(self) {
+        NSLog(@"%@ network failure: %@", self, error);
+        if (connection == self.eventsConnection) {
+            self.eventsBatch = nil;
+            self.eventsResponseData = nil;
+            self.eventsConnection = nil;
+            [self archiveEvents];
+        } else if (connection == self.peopleConnection) {
+            self.peopleBatch = nil;
+            self.peopleResponseData = nil;
+            self.peopleConnection = nil;
+            [self archivePeople];
+        }
+
+        [self updateNetworkActivityIndicator];
+        
+        [self endBackgroundTaskIfComplete];
     }
-    
-    [self updateNetworkActivityIndicator];
-    
-    [self endBackgroundTaskIfComplete];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    DevLog(@"%@ http response finished loading", self);
-    if (connection == self.eventsConnection) {
-        NSString *response = [[NSString alloc] initWithData:self.eventsResponseData encoding:NSUTF8StringEncoding];
-        if ([response intValue] == 0) {
-            NSLog(@"%@ track api error: %@", self, response);
+    @synchronized(self) {
+        DevLog(@"%@ http response finished loading", self);
+        if (connection == self.eventsConnection) {
+            NSString *response = [[NSString alloc] initWithData:self.eventsResponseData encoding:NSUTF8StringEncoding];
+            if ([response intValue] == 0) {
+                NSLog(@"%@ track api error: %@", self, response);
+            }
+            [response release];
+
+            [self.eventsQueue removeObjectsInArray:self.eventsBatch];
+            [self archiveEvents];
+
+            self.eventsBatch = nil;
+            self.eventsResponseData = nil;
+            self.eventsConnection = nil;
+
+        } else if (connection == self.peopleConnection) {
+            NSString *response = [[NSString alloc] initWithData:self.peopleResponseData encoding:NSUTF8StringEncoding];
+            if ([response intValue] == 0) {
+                NSLog(@"%@ engage api error: %@", self, response);
+            }
+            [response release];
+
+            [self.peopleQueue removeObjectsInArray:self.peopleBatch];
+            [self archivePeople];
+
+            self.peopleBatch = nil;
+            self.peopleResponseData = nil;
+            self.peopleConnection = nil;
         }
-        [response release];
-
-        [self.eventsQueue removeObjectsInArray:self.eventsBatch];
-        [self archiveEvents];
-
-        self.eventsBatch = nil;
-        self.eventsResponseData = nil;
-        self.eventsConnection = nil;
-
-    } else if (connection == self.peopleConnection) {
-        NSString *response = [[NSString alloc] initWithData:self.peopleResponseData encoding:NSUTF8StringEncoding];
-        if ([response intValue] == 0) {
-            NSLog(@"%@ engage api error: %@", self, response);
-        }
-        [response release];
         
-        [self.peopleQueue removeObjectsInArray:self.peopleBatch];
-        [self archivePeople];
-
-        self.peopleBatch = nil;
-        self.peopleResponseData = nil;
-        self.peopleConnection = nil;
+        [self updateNetworkActivityIndicator];
+        
+        [self endBackgroundTaskIfComplete];
     }
-    
-    [self updateNetworkActivityIndicator];
-
-    [self endBackgroundTaskIfComplete];
 }
 
 #pragma mark * NSObject
