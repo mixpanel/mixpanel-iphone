@@ -36,20 +36,16 @@
 #define IFT_ETHER 0x6 // ethernet CSMACD
 #endif
 
-#ifndef DebugLog
-#ifdef DEBUG
-#define DebugLog(...) NSLog(__VA_ARGS__)
+#ifdef MIXPANEL_LOG
+#define MixpanelLog(...) NSLog(__VA_ARGS__)
 #else
-#define DebugLog(...)
-#endif
+#define MixpanelLog(...)
 #endif
 
-#ifndef DevLog
-#ifdef MIXPANEL_DEV
-#define DevLog(...) NSLog(__VA_ARGS__)
+#ifdef MIXPANEL_DEBUG
+#define MixpanelDebug(...) NSLog(__VA_ARGS__)
 #else
-#define DevLog(...)
-#endif
+#define MixpanelDebug(...)
 #endif
 
 @interface Mixpanel ()
@@ -146,7 +142,7 @@ static Mixpanel *sharedInstance = nil;
     SCNetworkReachabilityFlags flags;
     BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(nrRef, &flags);
     if (!didRetrieveFlags) {
-        DevLog(@"%@ unable to fetch the network reachablity flags", self);
+        MixpanelDebug(@"%@ unable to fetch the network reachablity flags", self);
     }
 
     CFRelease(nrRef);
@@ -171,7 +167,7 @@ static Mixpanel *sharedInstance = nil;
     inBg = [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground;
 #endif
     if (inBg) {
-        DevLog(@"%@ in background", self);
+        MixpanelDebug(@"%@ in background", self);
     }
     return inBg;
 }
@@ -369,7 +365,7 @@ static Mixpanel *sharedInstance = nil;
         [Mixpanel assertPropertyTypes:properties];
 
         NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
-        DebugLog(@"%@ queueing event: %@", self, e);
+        MixpanelLog(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
@@ -475,7 +471,7 @@ static Mixpanel *sharedInstance = nil;
                                                         selector:@selector(flush)
                                                         userInfo:nil
                                                          repeats:YES];
-            DevLog(@"%@ started flush timer: %@", self, self.timer);
+            MixpanelDebug(@"%@ started flush timer: %@", self, self.timer);
         }
     }
 }
@@ -485,7 +481,7 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
         if (self.timer) {
             [self.timer invalidate];
-            DevLog(@"%@ stopped flush timer: %@", self, self.timer);
+            MixpanelDebug(@"%@ stopped flush timer: %@", self, self.timer);
         }
         self.timer = nil;
     }
@@ -496,11 +492,11 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
         if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
             if (![self.delegate mixpanelWillFlush:self]) {
-                DevLog(@"%@ delegate deferred flush", self);
+                MixpanelDebug(@"%@ delegate deferred flush", self);
                 return;
             }
         }
-        DevLog(@"%@ flushing data to %@", self, self.serverURL);
+        MixpanelDebug(@"%@ flushing data to %@", self, self.serverURL);
         [self flushEvents];
         [self flushPeople];
     }
@@ -509,10 +505,10 @@ static Mixpanel *sharedInstance = nil;
 - (void)flushEvents
 {
     if ([self.eventsQueue count] == 0) {
-        DevLog(@"%@ no events to flush", self);
+        MixpanelDebug(@"%@ no events to flush", self);
         return;
     } else if (self.eventsConnection != nil) {
-        DevLog(@"%@ events connection already open", self);
+        MixpanelDebug(@"%@ events connection already open", self);
         return;
     } else if ([self.eventsQueue count] > 50) {
         self.eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, 50)];
@@ -523,7 +519,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
     
-    DevLog(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
+    MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
 
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
 
@@ -533,10 +529,10 @@ static Mixpanel *sharedInstance = nil;
 - (void)flushPeople
 {
     if ([self.peopleQueue count] == 0) {
-        DevLog(@"%@ no people to flush", self);
+        MixpanelDebug(@"%@ no people to flush", self);
         return;
     } else if (self.peopleConnection != nil) {
-        DevLog(@"%@ people connection already open", self);
+        MixpanelDebug(@"%@ people connection already open", self);
         return;
     } else if ([self.peopleQueue count] > 50) {
         self.peopleBatch = [self.peopleQueue subarrayWithRange:NSMakeRange(0, 50)];
@@ -547,7 +543,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
     
-    DevLog(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
+    MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
 
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
 
@@ -557,16 +553,16 @@ static Mixpanel *sharedInstance = nil;
 - (void)cancelFlush
 {
     if (self.eventsConnection == nil) {
-        DevLog(@"%@ no events connection to cancel", self);
+        MixpanelDebug(@"%@ no events connection to cancel", self);
     } else {
-        DevLog(@"%@ cancelling events connection", self);
+        MixpanelDebug(@"%@ cancelling events connection", self);
         [self.eventsConnection cancel];
         self.eventsConnection = nil;
     }
     if (self.peopleConnection == nil) {
-        DevLog(@"%@ no people connection to cancel", self);
+        MixpanelDebug(@"%@ no people connection to cancel", self);
     } else {
-        DevLog(@"%@ cancelling people connection", self);
+        MixpanelDebug(@"%@ cancelling people connection", self);
         [self.peopleConnection cancel];
         self.peopleConnection = nil;
     }
@@ -617,7 +613,7 @@ static Mixpanel *sharedInstance = nil;
 {
     @synchronized(self) {
         NSString *filePath = [self eventsFilePath];
-        DevLog(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
+        MixpanelDebug(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
         if (![NSKeyedArchiver archiveRootObject:self.eventsQueue toFile:filePath]) {
             NSLog(@"%@ unable to archive events data", self);
         }
@@ -628,7 +624,7 @@ static Mixpanel *sharedInstance = nil;
 {
     @synchronized(self) {
         NSString *filePath = [self peopleFilePath];
-        DevLog(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
+        MixpanelDebug(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
         if (![NSKeyedArchiver archiveRootObject:self.peopleQueue toFile:filePath]) {
             NSLog(@"%@ unable to archive people data", self);
         }
@@ -645,7 +641,7 @@ static Mixpanel *sharedInstance = nil;
         [properties setValue:self.superProperties forKey:@"superProperties"];
         [properties setValue:self.people.distinctId forKey:@"peopleDistinctId"];
         [properties setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-        DevLog(@"%@ archiving properties data to %@: %@", self, filePath, properties);
+        MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, properties);
         if (![NSKeyedArchiver archiveRootObject:properties toFile:filePath]) {
             NSLog(@"%@ unable to archive properties data", self);
         }
@@ -666,7 +662,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *filePath = [self eventsFilePath];
     @try {
         self.eventsQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        DevLog(@"%@ unarchived events data: %@", self, self.eventsQueue);
+        MixpanelDebug(@"%@ unarchived events data: %@", self, self.eventsQueue);
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive events data, starting fresh", self);
@@ -683,7 +679,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *filePath = [self peopleFilePath];
     @try {
         self.peopleQueue = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        DevLog(@"%@ unarchived people data: %@", self, self.peopleQueue);
+        MixpanelDebug(@"%@ unarchived people data: %@", self, self.peopleQueue);
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive people data, starting fresh", self);
@@ -701,7 +697,7 @@ static Mixpanel *sharedInstance = nil;
     NSDictionary *properties = nil;
     @try {
         properties = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        DevLog(@"%@ unarchived properties data: %@", self, properties);
+        MixpanelDebug(@"%@ unarchived properties data: %@", self, properties);
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive properties data, starting fresh", self);
@@ -720,7 +716,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)addApplicationObservers
 {
-    DevLog(@"%@ adding application observers", self);
+    MixpanelDebug(@"%@ adding application observers", self);
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self
                            selector:@selector(applicationWillTerminate:)
@@ -755,13 +751,13 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)removeApplicationObservers
 {
-    DevLog(@"%@ removing application observers", self);
+    MixpanelDebug(@"%@ removing application observers", self);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    DevLog(@"%@ application did become active", self);
+    MixpanelDebug(@"%@ application did become active", self);
     @synchronized(self) {
         [self startFlushTimer];
     }
@@ -769,7 +765,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
-    DevLog(@"%@ application will resign active", self);
+    MixpanelDebug(@"%@ application will resign active", self);
     @synchronized(self) {
         [self stopFlushTimer];
     }
@@ -777,7 +773,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationDidEnterBackground:(NSNotificationCenter *)notification
 {
-    DevLog(@"%@ did enter background", self);
+    MixpanelDebug(@"%@ did enter background", self);
 
     @synchronized(self) {
 
@@ -787,13 +783,13 @@ static Mixpanel *sharedInstance = nil;
             [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
 
             self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                DevLog(@"%@ flush background task %u cut short", self, self.taskId);
+                MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
                 [self cancelFlush];
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
                 self.taskId = UIBackgroundTaskInvalid;
             }];
 
-            DevLog(@"%@ starting flush background task %u", self, self.taskId);
+            MixpanelDebug(@"%@ starting flush background task %u", self, self.taskId);
             [self flush];
 
             // connection callbacks end this task by calling endBackgroundTaskIfComplete
@@ -821,7 +817,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-    DevLog(@"%@ application will terminate", self);
+    MixpanelDebug(@"%@ application will terminate", self);
     @synchronized(self) {
         [self archive];
     }
@@ -835,7 +831,7 @@ static Mixpanel *sharedInstance = nil;
 
         if (&UIBackgroundTaskInvalid && [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)] &&
             self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
-            DevLog(@"%@ ending flush background task %u", self, self.taskId);
+            MixpanelDebug(@"%@ ending flush background task %u", self, self.taskId);
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
@@ -852,13 +848,13 @@ static Mixpanel *sharedInstance = nil;
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    DevLog(@"%@ http request: %@?%@", self, [self.serverURL stringByAppendingString:endpoint], body);
+    MixpanelDebug(@"%@ http request: %@?%@", self, [self.serverURL stringByAppendingString:endpoint], body);
     return [NSURLConnection connectionWithRequest:request delegate:self];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response
 {
-    DevLog(@"%@ http status code: %d", self, [response statusCode]);
+    MixpanelDebug(@"%@ http status code: %d", self, [response statusCode]);
     if ([response statusCode] != 200) {
         NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
     } else if (connection == self.eventsConnection) {
@@ -902,7 +898,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     @synchronized(self) {
-        DevLog(@"%@ http response finished loading", self);
+        MixpanelDebug(@"%@ http response finished loading", self);
         if (connection == self.eventsConnection) {
             NSString *response = [[NSString alloc] initWithData:self.eventsResponseData encoding:NSUTF8StringEncoding];
             if ([response intValue] == 0) {
@@ -1091,10 +1087,10 @@ static Mixpanel *sharedInstance = nil;
 
         if (self.distinctId) {
             [r setObject:self.distinctId forKey:@"$distinct_id"];
-            DebugLog(@"%@ queueing people record: %@", self.mixpanel, r);
+            MixpanelLog(@"%@ queueing people record: %@", self.mixpanel, r);
             [self.mixpanel.peopleQueue addObject:r];
         } else {
-            DebugLog(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
+            MixpanelLog(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
             [self.unidentifiedQueue addObject:r];
         }
         if ([Mixpanel inBackground]) {
