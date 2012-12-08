@@ -84,6 +84,15 @@ because a large number of customers have not moved to ARC yet. To integrate
 with an ARC project: Go to Project > Target > Build Phases, double-click on
 each Mixpanel file and add the flag: `-fno-objc-arc`.
 
+# Logging #
+You can turn on Mixpanel logging by adding the following Preprocessor Macros in
+Build Settings: `MIXPANEL_LOG=1` and `MIXPANEL_DEBUG=1`. Setting
+`MIXPANEL_LOG=1` will cause the Mixpanel library to log tracked events and set
+People properties. Setting `MIXPANEL_DEBUG=1` will cause Mixpanel to log
+everything it's doing—queuing, formatting and uploading data—in a very
+fine-grained way, and is useful for understanding how the library works and
+debugging issues.
+
 # Further Documentation #
 1. [Events iOS Library Documentation](https://mixpanel.com/docs/integration-libraries/iphone)
 2. [People iOS Library Documentation](https://mixpanel.com/docs/people-analytics/iphone)
