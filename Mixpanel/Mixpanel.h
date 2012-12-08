@@ -67,7 +67,7 @@
  @property
  
  @abstract
- Gets and sets the distinct ID of the current user.
+ The distinct ID of the current user.
  
  @discussion
  A distinct ID is a string that uniquely identifies one of your users.
@@ -80,7 +80,7 @@
  @property
  
  @abstract
- Gets and sets the current user's name in Mixpanel Streams.
+ Current user's name in Mixpanel Streams.
  */
 @property(nonatomic,copy) NSString *nameTag;
 
@@ -88,10 +88,10 @@
  @property
  
  @abstract
- Gets and sets the base URL used for Mixpanel API requests.
+ The base URL used for Mixpanel API requests.
  
  @discussion
- Useful if you need to proxy Mixpanel requests. Defaults to 
+ Useful if you need to proxy Mixpanel requests. Defaults to
  https://api.mixpanel.com.
  */
 @property(nonatomic,copy) NSString *serverURL;
@@ -100,7 +100,7 @@
  @property
  
  @abstract
- Gets and sets the flush timer's interval.
+ Flush timer's interval.
  
  @discussion
  Setting a flush interval of 0 will turn off the flush timer.
@@ -124,7 +124,8 @@
  @property
 
  @abstract
- Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
+ Controls whether to show spinning network activity indicator when flushing
+ data to the Mixpanel servers.
 
  @discussion
  Defaults to YES.
@@ -135,8 +136,8 @@
  @property
  
  @abstract
- Gets and sets the a MixpanelDelegate object that can be used to assert
- fine-grain control over Mixpanel network activity.
+ The a MixpanelDelegate object that can be used to assert fine-grain control
+ over Mixpanel network activity.
  
  @discussion
  Using a delegate is optional. See the documentation for MixpanelDelegate 
@@ -218,9 +219,9 @@
  @discussion
  Properties will allow you to segment your events in your Mixpanel reports.
  Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>, 
- <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
- objects.
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
  
  @param event           event name
  @param properties      properties dictionary
@@ -236,11 +237,11 @@
  @discussion
  Super properties, once registered, are automatically sent as properties for
  all event tracking calls. They save you having to maintain and add a common
- set of properties to your events.  Property keys must be <code>NSString</code> objects and values must be
- <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
- <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
- objects.
-
+ set of properties to your events. Property keys must be <code>NSString</code>
+ objects and values must be <code>NSString</code>, <code>NSNumber</code>,
+ <code>NSNull</code>, <code>NSArray</code>, <code>NSDictionary</code>,
+ <code>NSDate</code> or <code>NSURL</code> objects.
+ 
  @param properties      properties dictionary
  */
 - (void)registerSuperProperties:(NSDictionary *)properties;
@@ -255,8 +256,8 @@
  @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
- <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
- objects.
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
 
  @param properties      properties dictionary
  */
@@ -272,8 +273,8 @@
  @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
- <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
- objects.
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
 
  @param properties      properties dictionary
  @param defaultValue    overwrite existing properties that have this value
@@ -311,9 +312,10 @@
  Uploads queued data to the Mixpanel server.
  
  @discussion
- This happens automatically every 60 seconds, or as specified by the
- flushInterval property. You only need to call this method manually if you want
- to force a flush at a particular moment.
+ By default, queued data is flushed to the Mixpanel servers every minute (the
+ default for <code>flushInvterval</code>), and on background (since
+ <code>flushOnBackground</code> is on by default). You only need to call this
+ method manually if you want to force a flush at a particular moment.
  */
 - (void)flush;
 
@@ -325,11 +327,11 @@
  and People record queues to disk.
 
  @discussion
- This state will be recovered when the app is launched again if the Mixpanel library is
- initialized with the same project token. You do not need to call this method. For most
- use cases, the library listens for app state changes and handles persisting data as 
- needed. It can be useful in some special circumstances, though, for example, if you'd 
- like to track app crashes from main.m.
+ This state will be recovered when the app is launched again if the Mixpanel
+ library is initialized with the same project token. <b>You do not need to call
+ this method</b>. The library listens for app state changes and handles
+ persisting data as needed. It can be useful in some special circumstances,
+ though, for example, if you'd like to track app crashes from main.m.
  */
 - (void)archive;
 
@@ -397,8 +399,10 @@
  @discussion
  This will associate the device token with the current user in Mixpanel People,
  which will allow you to send push notifications to the user from the Mixpanel
- People web interface.
- 
+ People web interface. You should call this method with the <code>NSData</code>
+ token passed to
+ <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>.
+
  @param deviceToken     device token as returned <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>
  */
 - (void)addPushDeviceToken:(NSData *)deviceToken;
@@ -443,8 +447,8 @@
  @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
- <code><NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
- objects.
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
 
  @param property        property name
  @param object          property value

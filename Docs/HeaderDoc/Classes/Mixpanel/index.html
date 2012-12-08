@@ -302,11 +302,11 @@ and People record queues to disk.
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/archive;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/archive //apple_ref/occ/data/Mixpanel/archive //apple_ref/occ/data/archive //apple_ref/occ/clconst/Mixpanel/archive " machineGenerated="true" --><span class="var">archive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/archive;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/archive;name=start --><p>This state will be recovered when the app is launched again if the Mixpanel library is
-initialized with the same project token. You do not need to call this method. For most
-use cases, the library listens for app state changes and handles persisting data as 
-needed. It can be useful in some special circumstances, though, for example, if you'd 
-like to track app crashes from main.m.
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/archive;name=start --><p>This state will be recovered when the app is launched again if the Mixpanel
+library is initialized with the same project token. <b>You do not need to call
+this method</b>. The library listens for app state changes and handles
+persisting data as needed. It can be useful in some special circumstances,
+though, for example, if you'd like to track app crashes from main.m.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/archive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/clearSuperProperties;   name=Mixpanel::clearSuperProperties -->
 <a name="//apple_ref/occ/instm/Mixpanel/clearSuperProperties"></a>
@@ -334,9 +334,10 @@ like to track app crashes from main.m.
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/flush;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/flush //apple_ref/occ/data/Mixpanel/flush //apple_ref/occ/data/flush //apple_ref/occ/clconst/Mixpanel/flush " machineGenerated="true" --><span class="var">flush</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/flush;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/flush;name=start --><p>This happens automatically every 60 seconds, or as specified by the
-flushInterval property. You only need to call this method manually if you want
-to force a flush at a particular moment.
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/flush;name=start --><p>By default, queued data is flushed to the Mixpanel servers every minute (the
+default for <code>flushInvterval</code>), and on background (since
+<code>flushOnBackground</code> is on by default). You only need to call this
+method manually if you want to force a flush at a particular moment.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/flush;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/initWithToken:andFlushInterval:;   name=Mixpanel::initWithToken:andFlushInterval: -->
 <a name="//apple_ref/occ/instm/Mixpanel/initWithToken:andFlushInterval:"></a>
@@ -385,10 +386,10 @@ project, consider using <code>sharedInstanceWithToken:</code>.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;name=start --><p>Super properties, once registered, are automatically sent as properties for
 all event tracking calls. They save you having to maintain and add a common
-set of properties to your events.  Property keys must be <code>NSString</code> objects and values must be
-<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
-<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
-objects.
+set of properties to your events. Property keys must be <code>NSString</code>
+objects and values must be <code>NSString</code>, <code>NSNumber</code>,
+<code>NSNull</code>, <code>NSArray</code>, <code>NSDictionary</code>,
+<code>NSDate</code> or <code>NSURL</code> objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:;   name=Mixpanel::registerSuperPropertiesOnce: -->
@@ -412,8 +413,8 @@ set.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:;name=start --><p>Property keys must be <code>NSString</code> objects and values must be
 <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
-<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
-objects.
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:defaultValue:;   name=Mixpanel::registerSuperPropertiesOnce:defaultValue: -->
@@ -441,8 +442,8 @@ unless the existing value is equal to defaultValue.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:defaultValue:;name=start --><p>Property keys must be <code>NSString</code> objects and values must be
 <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
-<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
-objects.
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/registerSuperPropertiesOnce:defaultValue:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/reset;   name=Mixpanel::reset -->
@@ -540,9 +541,9 @@ the API.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/track:properties:;name=start --><p>Properties will allow you to segment your events in your Mixpanel reports.
 Property keys must be <code>NSString</code> objects and values must be
-<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>, 
-<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
-objects.
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/track:properties:;name=end --><!-- end discussion -->
 <hr class="betweenSections">
@@ -550,16 +551,16 @@ objects.
 <h2 class="h2tight">Properties</h2>
 <dl>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/delegate" target="_top">delegate</a></tt></dt>
-<dd><p>Gets and sets the a MixpanelDelegate object that can be used to assert
-fine-grain control over Mixpanel network activity.
+<dd><p>The a MixpanelDelegate object that can be used to assert fine-grain control
+over Mixpanel network activity.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/distinctId" target="_top">distinctId</a></tt></dt>
-<dd><p>Gets and sets the distinct ID of the current user.
+<dd><p>The distinct ID of the current user.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/flushInterval" target="_top">flushInterval</a></tt></dt>
-<dd><p>Gets and sets the flush timer's interval.
+<dd><p>Flush timer's interval.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/flushOnBackground" target="_top">flushOnBackground</a></tt></dt>
@@ -568,26 +569,27 @@ enters the background.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/nameTag" target="_top">nameTag</a></tt></dt>
-<dd><p>Gets and sets the current user's name in Mixpanel Streams.
+<dd><p>Current user's name in Mixpanel Streams.
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/people" target="_top">people</a></tt></dt>
 <dd><p>Accessor to the Mixpanel People API object.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/serverURL" target="_top">serverURL</a></tt></dt>
-<dd><p>Gets and sets the base URL used for Mixpanel API requests.
+<dd><p>The base URL used for Mixpanel API requests.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator" target="_top">showNetworkActivityIndicator</a></tt></dt>
-<dd><p>Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
+<dd><p>Controls whether to show spinning network activity indicator when flushing
+data to the Mixpanel servers.
 </p>
 </dd>
 </dl>
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/delegate;   name=Mixpanel::delegate -->
 <a name="//apple_ref/occ/instp/Mixpanel/delegate"></a>
 <h3><a name="delegate">delegate</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=start --><!-- begin abstract --><p>Gets and sets the a MixpanelDelegate object that can be used to assert
-fine-grain control over Mixpanel network activity.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=start --><!-- begin abstract --><p>The a MixpanelDelegate object that can be used to assert fine-grain control
+over Mixpanel network activity.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=end --></p>
 <div class='declaration_indent'>
@@ -601,7 +603,7 @@ below for more information.
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/distinctId;   name=Mixpanel::distinctId -->
 <a name="//apple_ref/occ/instp/Mixpanel/distinctId"></a>
 <h3><a name="distinctId">distinctId</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start --><!-- begin abstract --><p>Gets and sets the distinct ID of the current user.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start --><!-- begin abstract --><p>The distinct ID of the current user.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=end --></p>
 <div class='declaration_indent'>
@@ -617,7 +619,7 @@ hash of the MAC address of the device.
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/flushInterval;   name=Mixpanel::flushInterval -->
 <a name="//apple_ref/occ/instp/Mixpanel/flushInterval"></a>
 <h3><a name="flushInterval">flushInterval</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=start --><!-- begin abstract --><p>Gets and sets the flush timer's interval.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=start --><!-- begin abstract --><p>Flush timer's interval.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=end --></p>
 <div class='declaration_indent'>
@@ -645,7 +647,7 @@ task support was introduced, and later.
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/nameTag;   name=Mixpanel::nameTag -->
 <a name="//apple_ref/occ/instp/Mixpanel/nameTag"></a>
 <h3><a name="nameTag">nameTag</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=start --><!-- begin abstract --><p>Gets and sets the current user's name in Mixpanel Streams.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=start --><!-- begin abstract --><p>Current user's name in Mixpanel Streams.
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=end --></p>
 <div class='declaration_indent'>
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=start -->@property(<span class="param">nonatomic</span>,
@@ -668,7 +670,7 @@ task support was introduced, and later.
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/serverURL;   name=Mixpanel::serverURL -->
 <a name="//apple_ref/occ/instp/Mixpanel/serverURL"></a>
 <h3><a name="serverURL">serverURL</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start --><!-- begin abstract --><p>Gets and sets the base URL used for Mixpanel API requests.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start --><!-- begin abstract --><p>The base URL used for Mixpanel API requests.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=end --></p>
 <div class='declaration_indent'>
@@ -676,13 +678,14 @@ task support was introduced, and later.
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/serverURL //apple_ref/occ/data/Mixpanel/serverURL //apple_ref/occ/data/serverURL //apple_ref/occ/clconst/Mixpanel/serverURL " machineGenerated="true" --><span class="var">serverURL</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start --><p>Useful if you need to proxy Mixpanel requests. Defaults to 
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start --><p>Useful if you need to proxy Mixpanel requests. Defaults to
 https://api.mixpanel.com.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;   name=Mixpanel::showNetworkActivityIndicator -->
 <a name="//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator"></a>
 <h3><a name="showNetworkActivityIndicator">showNetworkActivityIndicator</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><!-- begin abstract --><p>Controls whether to show spinning network activity indicator when flushing data to the Mixpanel servers.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><!-- begin abstract --><p>Controls whether to show spinning network activity indicator when flushing
+data to the Mixpanel servers.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --></p>
 <div class='declaration_indent'>
@@ -693,7 +696,7 @@ https://api.mixpanel.com.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Thursday, October 18, 2012
+<p class="hd_timestamp">Last Updated: Friday, December 07, 2012
 </p></div>
 </td></tr></table>
 </body></html>
