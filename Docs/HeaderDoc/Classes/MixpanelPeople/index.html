@@ -286,7 +286,9 @@ amount.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/addPushDeviceToken:;name=start --><p>This will associate the device token with the current user in Mixpanel People,
 which will allow you to send push notifications to the user from the Mixpanel
-People web interface.
+People web interface. You should call this method with the <code>NSData</code>
+token passed to
+<code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/addPushDeviceToken:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelPeople/deleteUser;   name=MixpanelPeople::deleteUser -->
@@ -402,8 +404,8 @@ value is overwritten. Other existing properties will not be affected.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/set:to:;name=start --><p>Property keys must be <code>NSString</code> objects and values must be
 <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
-<code>&lt;NSDate</code>, <code>NSArray</code> or <code>NSDictionary</code>
-objects.
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/set:to:;name=end --><!-- end discussion -->
 <hr class="betweenSections">
@@ -447,7 +449,7 @@ this is their user ID from your database.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelPeople/distinctId;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Thursday, October 18, 2012
+<p class="hd_timestamp">Last Updated: Friday, December 07, 2012
 </p></div>
 </td></tr></table>
 </body></html>
