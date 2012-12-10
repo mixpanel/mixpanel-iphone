@@ -869,6 +869,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
+    MixpanelDebug(@"%@ will enter foreground", self);
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
     @synchronized(self) {
 
