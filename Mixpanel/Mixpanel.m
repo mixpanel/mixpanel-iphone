@@ -30,7 +30,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"1.0.3"
+#define VERSION @"1.0.5"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
