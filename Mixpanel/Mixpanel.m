@@ -332,15 +332,15 @@ static Mixpanel *sharedInstance = nil;
 {
     for (id k in properties) {
         NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
-        id v = [properties objectForKey:k];
-        NSAssert([v isKindOfClass:[NSString class]] ||
-                 [v isKindOfClass:[NSNumber class]] ||
-                 [v isKindOfClass:[NSNull class]] ||
-                 [v isKindOfClass:[NSArray class]] ||
-                 [v isKindOfClass:[NSDictionary class]] ||
-                 [v isKindOfClass:[NSDate class]] ||
-                 [v isKindOfClass:[NSURL class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [v class], v);
+        // would be convenient to do: id v = [properties objectForKey:k]; ..but, when the NSAssert's are stripped out in release, it becomes an unused variable error
+        NSAssert([[properties objectForKey:k] isKindOfClass:[NSString class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSNumber class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSNull class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSArray class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSDictionary class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSDate class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSURL class]],
+                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [[properties objectForKey:k] class], [properties objectForKey:k]);
     }
 }
 
