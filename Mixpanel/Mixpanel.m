@@ -30,7 +30,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"1.0.5"
+#define VERSION @"1.1.0"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
@@ -1131,6 +1131,35 @@ static Mixpanel *sharedInstance = nil;
         return;
     }
     [self increment:[NSDictionary dictionaryWithObject:amount forKey:property]];
+}
+
+- (void)append:(NSDictionary *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    [Mixpanel assertPropertyTypes:properties];
+    [self addPeopleRecordToQueueWithAction:@"$append" andProperties:properties];
+}
+
+- (void)trackCharge:(NSNumber *)amount
+{
+    [self trackCharge:amount withProperties:nil];
+}
+
+- (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties
+{
+    NSAssert(amount != nil, @"amount must not be nil");
+    if (amount != nil) {
+        NSMutableDictionary *txn = [NSMutableDictionary dictionaryWithObjectsAndKeys:amount, @"$amount", [NSDate date], @"$time", nil];
+        if (properties) {
+            [txn addEntriesFromDictionary:properties];
+        }
+        [self append:[NSDictionary dictionaryWithObject:txn forKey:@"$transactions"]];
+    }
+}
+
+- (void)clearCharges
+{
+    [self set:[NSDictionary dictionaryWithObject:[NSArray array] forKey:@"$transactions"]];
 }
 
 - (void)deleteUser

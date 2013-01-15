@@ -484,6 +484,54 @@
 
 /*!
  @method
+
+ @abstract
+ Append values to list properties.
+
+ @discussion
+ Property keys must be <code>NSString</code> objects and values must be
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
+
+ @param properties      mapping of list property names to values to append
+ */
+- (void)append:(NSDictionary *)properties;
+
+/*!
+ @method
+
+ @abstract
+ Track money spent by the current user for revenue analytics.
+
+ @param amount          amount of revenue received
+ */
+- (void)trackCharge:(NSNumber *)amount;
+
+/*!
+ @method
+
+ @abstract
+ Track money spent by the current user for revenue analytics and associate
+ properties with the charge.
+
+ @discussion
+ Charge properties allow you segment on types of revenue. For instance, you
+ could record a product ID with each charge so that you could segement on it in
+ revenue analytics to see which products are generating the most revenue.
+ */
+- (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties;
+
+/*!
+ @method
+
+ @abstract
+ Delete current user's revenue history.
+ */
+- (void)clearCharges;
+
+/*!
+ @method
  
  @abstract
  Delete current user's record from Mixpanel People.
