@@ -521,4 +521,55 @@
     STAssertThrows([self.mixpanel.people increment:nil by:nil], @"should not take nil argument");
 }
 
+- (void)testPeopleTrackCharge
+{
+    [self.mixpanel.people identify:@"d1"];
+
+    [self.mixpanel.people trackCharge:@25];
+    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25, nil);
+    STAssertNotNil(r[@"$append"][@"$transactions"][@"$time"], nil);
+    [self.mixpanel.peopleQueue removeAllObjects];
+
+    [self.mixpanel.people trackCharge:@25.34];
+    r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25.34, nil);
+    STAssertNotNil(r[@"$append"][@"$transactions"][@"$time"], nil);
+    [self.mixpanel.peopleQueue removeAllObjects];
+
+    // require a number
+    STAssertThrows([self.mixpanel.people trackCharge:nil], nil);
+    STAssertTrue(self.mixpanel.peopleQueue.count == 0, nil);
+
+    // but allow 0
+    [self.mixpanel.people trackCharge:@0];
+    r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @0, nil);
+    STAssertNotNil(r[@"$append"][@"$transactions"][@"$time"], nil);
+    [self.mixpanel.peopleQueue removeAllObjects];
+
+    // allow $time override
+    NSDictionary *p = [self allPropertyTypes];
+    [self.mixpanel.people trackCharge:@25 withProperties:@{@"$time": p[@"date"]}];
+    r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25, nil);
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"$time"], p[@"date"], nil);
+    [self.mixpanel.peopleQueue removeAllObjects];
+
+    // allow arbitrary charge properties
+    [self.mixpanel.people trackCharge:@25 withProperties:@{@"p1": @"a"}];
+    r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25, nil);
+    STAssertEqualObjects(r[@"$append"][@"$transactions"][@"p1"], @"a", nil);
+}
+
+- (void)testPeopleClearCharges
+{
+    [self.mixpanel.people identify:@"d1"];
+
+    [self.mixpanel.people clearCharges];
+    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects(r[@"$set"][@"$transactions"], @[], nil);
+}
+
 @end
