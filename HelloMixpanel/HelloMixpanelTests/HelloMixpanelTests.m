@@ -394,6 +394,7 @@
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     STAssertEqualObjects([r objectForKey:@"$token"], TEST_TOKEN, @"project token not set");
     STAssertEqualObjects([r objectForKey:@"$distinct_id"], @"d1", @"distinct id not set");
+    STAssertNotNil([r objectForKey:@"$time"], @"$time timestamp missing");
     STAssertNotNil([r objectForKey:@"$set"], @"$set dictionary missing");
     p = [r objectForKey:@"$set"];
     STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);

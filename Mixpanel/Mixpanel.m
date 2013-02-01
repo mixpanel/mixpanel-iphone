@@ -1176,6 +1176,12 @@ static Mixpanel *sharedInstance = nil;
 
         [r setObject:self.mixpanel.apiToken forKey:@"$token"];
 
+        if (![r objectForKey:@"$time"]) {
+            // milliseconds unix timestamp
+            NSNumber *time = [NSNumber numberWithUnsignedLongLong:(uint64_t)([[NSDate date] timeIntervalSince1970] * 1000)];
+            [r setObject:time forKey:@"$time"];
+        }
+
         if ([action isEqualToString:@"$set"]) {
             [p addEntriesFromDictionary:[MixpanelPeople deviceInfoProperties]];
         }
