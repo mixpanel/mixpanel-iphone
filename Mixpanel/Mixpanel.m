@@ -207,7 +207,7 @@ static Mixpanel *sharedInstance = nil;
 {
     NSDictionary *dict = [Mixpanel interfaces];
     NSArray *keys = [dict allKeys];
-    keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    keys = [keys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 
     NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
 
