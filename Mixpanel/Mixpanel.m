@@ -93,7 +93,7 @@ static Mixpanel *sharedInstance = nil;
     [properties setValue:@"iphone" forKey:@"mp_lib"];
     [properties setValue:VERSION forKey:@"$lib_version"];
 
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_version"];
 
     [properties setValue:@"Apple" forKey:@"$manufacturer"];
     [properties setValue:[device systemName] forKey:@"$os"];
