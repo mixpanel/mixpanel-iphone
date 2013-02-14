@@ -30,7 +30,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"1.0.3"
+#define VERSION @"1.1.0"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
@@ -332,15 +332,15 @@ static Mixpanel *sharedInstance = nil;
 {
     for (id k in properties) {
         NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
-        id v = [properties objectForKey:k];
-        NSAssert([v isKindOfClass:[NSString class]] ||
-                 [v isKindOfClass:[NSNumber class]] ||
-                 [v isKindOfClass:[NSNull class]] ||
-                 [v isKindOfClass:[NSArray class]] ||
-                 [v isKindOfClass:[NSDictionary class]] ||
-                 [v isKindOfClass:[NSDate class]] ||
-                 [v isKindOfClass:[NSURL class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [v class], v);
+        // would be convenient to do: id v = [properties objectForKey:k]; ..but, when the NSAssert's are stripped out in release, it becomes an unused variable error
+        NSAssert([[properties objectForKey:k] isKindOfClass:[NSString class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSNumber class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSNull class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSArray class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSDictionary class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSDate class]] ||
+                 [[properties objectForKey:k] isKindOfClass:[NSURL class]],
+                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [[properties objectForKey:k] class], [properties objectForKey:k]);
     }
 }
 
@@ -869,6 +869,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
+    MixpanelDebug(@"%@ will enter foreground", self);
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
     @synchronized(self) {
 
@@ -1130,6 +1131,35 @@ static Mixpanel *sharedInstance = nil;
         return;
     }
     [self increment:[NSDictionary dictionaryWithObject:amount forKey:property]];
+}
+
+- (void)append:(NSDictionary *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    [Mixpanel assertPropertyTypes:properties];
+    [self addPeopleRecordToQueueWithAction:@"$append" andProperties:properties];
+}
+
+- (void)trackCharge:(NSNumber *)amount
+{
+    [self trackCharge:amount withProperties:nil];
+}
+
+- (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties
+{
+    NSAssert(amount != nil, @"amount must not be nil");
+    if (amount != nil) {
+        NSMutableDictionary *txn = [NSMutableDictionary dictionaryWithObjectsAndKeys:amount, @"$amount", [NSDate date], @"$time", nil];
+        if (properties) {
+            [txn addEntriesFromDictionary:properties];
+        }
+        [self append:[NSDictionary dictionaryWithObject:txn forKey:@"$transactions"]];
+    }
+}
+
+- (void)clearCharges
+{
+    [self set:[NSDictionary dictionaryWithObject:[NSArray array] forKey:@"$transactions"]];
 }
 
 - (void)deleteUser
