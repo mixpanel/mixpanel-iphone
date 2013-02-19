@@ -1049,7 +1049,7 @@ static Mixpanel *sharedInstance = nil;
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
     [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
     [properties setValue:[device systemVersion] forKey:@"$ios_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_version"];
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 
