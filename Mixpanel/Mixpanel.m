@@ -771,9 +771,9 @@ static Mixpanel *sharedInstance = nil;
 {
     @synchronized(self) {
         NSString *filePath = [self testsFilePath];
-        MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, self.abTests);
+        MixpanelDebug(@"%@ archiving tests data to %@: %@", self, filePath, self.abTests);
         if (![NSKeyedArchiver archiveRootObject:self.abTests toFile:filePath]) {
-            NSLog(@"%@ unable to archive properties data", self);
+            NSLog(@"%@ unable to archive tests data", self);
         }
     }
 }
