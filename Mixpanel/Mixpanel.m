@@ -473,9 +473,9 @@ static Mixpanel *sharedInstance = nil;
     NSUInteger testNo = [self testNoForTestWithName:name outOf:2];
 
     if( testNo == 1 ){
-        blockA();
+        if( blockA != NULL ) blockA();
     }else{
-        blockB();
+        if( blockB != NULL ) blockB();
     }
 }
 
@@ -484,11 +484,11 @@ static Mixpanel *sharedInstance = nil;
     NSUInteger testNo = [self testNoForTestWithName:name outOf:3];
     
     if( testNo == 1 ){
-        blockA();
+        if( blockA != NULL ) blockA();
     }else if( testNo == 2 ){
-        blockB();
+        if( blockB != NULL ) blockB();
     }else{
-        blockC();
+        if( blockC != NULL ) blockC();
     }
 }
 
