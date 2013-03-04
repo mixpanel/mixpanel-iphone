@@ -232,6 +232,29 @@
  @method
  
  @abstract
+ Do A/B testing with 2 tests
+ 
+ @discussion
+ This function will always return same result untill reset.
+ 
+ @param name            test name
+ @param A               test A
+ @param A               test B
+ */
+- (void)testWithName:(NSString *)name A:(void(^)(void))blockA B:(void(^)(void))blockB;
+
+/*!
+ @method
+ 
+ @abstract
+ Clears all currently set tests.
+ */
+- (void)clearTests;
+
+/*!
+ @method
+ 
+ @abstract
  Registers super properties, overwriting ones that have already been set.
  
  @discussion

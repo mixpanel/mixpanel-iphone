@@ -52,6 +52,7 @@
 
 @property(nonatomic,readwrite,retain) MixpanelPeople *people; // re-declare internally as readwrite
 @property(nonatomic,copy)   NSString *apiToken;
+@property(nonatomic,retain) NSMutableDictionary *abTests;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
 @property(nonatomic,retain) NSTimer *timer;
 @property(nonatomic,retain) NSMutableArray *eventsQueue;
@@ -384,6 +385,7 @@ static Mixpanel *sharedInstance = nil;
         self.serverURL = @"https://api.mixpanel.com";
         
         self.distinctId = [self defaultDistinctId];
+        self.abTests    = [NSMutableDictionary dictionary];
         self.superProperties = [NSMutableDictionary dictionary];
 
         self.eventsQueue = [NSMutableArray array];
@@ -430,7 +432,12 @@ static Mixpanel *sharedInstance = nil;
         if (properties) {
             [p addEntriesFromDictionary:properties];
         }
-
+        
+        for ( NSString *key in self.abTests ) {
+            [p setObject: [NSString stringWithFormat:@"%c", [[self.abTests objectForKey:key] integerValue]]
+                  forKey: key];
+        }
+        NSLog(@"%@", p);
         [Mixpanel assertPropertyTypes:properties];
 
         NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
@@ -439,6 +446,37 @@ static Mixpanel *sharedInstance = nil;
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
         }
+    }
+}
+
+#pragma mark * A/B Testing
+
+- (NSUInteger)testNoForTestWithName:(NSString *)name outOf:(NSUInteger)outOf
+{
+    @synchronized(self) {
+        if( [self.abTests objectForKey:name] ){
+            return [[self.abTests objectForKey:name] unsignedIntegerValue] -64;
+        }
+        
+        NSUInteger testNo = (1 +arc4random() %outOf);
+        
+        [self.abTests setObject:[NSNumber numberWithInt:testNo +64] forKey:name];
+        if ([Mixpanel inBackground]) {
+            [self archiveTests];
+        }
+        
+        return testNo;
+    }
+}
+
+- (void)testWithName:(NSString *)name A:(void(^)(void))blockA B:(void(^)(void))blockB
+{
+    NSUInteger testNo = [self testNoForTestWithName:name outOf:2];
+
+    if( testNo == 1 ){
+        blockA();
+    }else{
+        blockB();
     }
 }
 
@@ -486,6 +524,16 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)clearTests
+{
+    @synchronized(self) {
+        [self.abTests removeAllObjects];
+        if ([Mixpanel inBackground]) {
+            [self archiveTests];
+        }
+    }
+}
+
 - (void)clearSuperProperties
 {
     @synchronized(self) {
@@ -508,6 +556,7 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
         self.distinctId = [self defaultDistinctId];
         self.nameTag = nil;
+        self.abTests = [NSMutableDictionary dictionary];
         self.superProperties = [NSMutableDictionary dictionary];
 
         self.people.distinctId = nil;
@@ -664,6 +713,11 @@ static Mixpanel *sharedInstance = nil;
     return [self filePathForData:@"people"];
 }
 
+- (NSString *)testsFilePath
+{
+    return [self filePathForData:@"tests"];
+}
+
 - (NSString *)propertiesFilePath
 {
     return [self filePathForData:@"properties"];
@@ -674,6 +728,7 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
         [self archiveEvents];
         [self archivePeople];
+        [self archiveTests];
         [self archiveProperties];
     }
 }
@@ -700,6 +755,17 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)archiveTests
+{
+    @synchronized(self) {
+        NSString *filePath = [self testsFilePath];
+        MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, self.abTests);
+        if (![NSKeyedArchiver archiveRootObject:self.abTests toFile:filePath]) {
+            NSLog(@"%@ unable to archive properties data", self);
+        }
+    }
+}
+
 - (void)archiveProperties
 {
     @synchronized(self) {
@@ -722,6 +788,7 @@ static Mixpanel *sharedInstance = nil;
     @synchronized(self) {
         [self unarchiveEvents];
         [self unarchivePeople];
+        [self unarchiveTests];
         [self unarchiveProperties];
     }
 }
@@ -757,6 +824,23 @@ static Mixpanel *sharedInstance = nil;
     }
     if (!self.peopleQueue) {
         self.peopleQueue = [NSMutableArray array];
+    }
+}
+
+- (void)unarchiveTests
+{
+    NSString *filePath = [self testsFilePath];
+    NSMutableDictionary *tests = nil;
+    @try {
+        tests = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        MixpanelDebug(@"%@ unarchived tests data: %@", self, tests);
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@ unable to unarchive tests data, starting fresh", self);
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    if (tests) {
+        self.abTests = tests;
     }
 }
 
@@ -1023,6 +1107,7 @@ static Mixpanel *sharedInstance = nil;
     self.delegate = nil;
     
     self.apiToken = nil;
+    self.abTests  = nil;
     self.superProperties = nil;
     self.timer = nil;
     self.eventsQueue = nil;
@@ -1075,6 +1160,7 @@ static Mixpanel *sharedInstance = nil;
             [self.unidentifiedQueue removeAllObjects];
         }
         if ([Mixpanel inBackground]) {
+            [self.mixpanel archiveTests];
             [self.mixpanel archiveProperties];
             [self.mixpanel archivePeople];
         }
