@@ -239,9 +239,25 @@
  
  @param name            test name
  @param A               test A
- @param A               test B
+ @param B               test B
  */
 - (void)testWithName:(NSString *)name A:(void(^)(void))blockA B:(void(^)(void))blockB;
+
+/*!
+ @method
+ 
+ @abstract
+ Do A/B testing with 3 tests
+ 
+ @discussion
+ This function will always return same result untill reset.
+ 
+ @param name            test name
+ @param A               test A
+ @param B               test B
+ @param C               test C
+ */
+- (void)testWithName:(NSString *)name A:(void(^)(void))blockA B:(void(^)(void))blockB C:(void(^)(void))blockC;
 
 /*!
  @method
