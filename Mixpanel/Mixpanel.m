@@ -433,11 +433,10 @@ static Mixpanel *sharedInstance = nil;
             [p addEntriesFromDictionary:properties];
         }
         
-        for ( NSString *key in self.abTests ) {
-            [p setObject: [NSString stringWithFormat:@"%c", [[self.abTests objectForKey:key] integerValue]]
-                  forKey: key];
-        }
-        NSLog(@"%@", p);
+        [self.abTests enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *test, BOOL *stop) {
+            [p setObject:[NSString stringWithFormat:@"%c", [test integerValue]] forKey:key];
+        }];
+
         [Mixpanel assertPropertyTypes:properties];
 
         NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
