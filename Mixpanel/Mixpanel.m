@@ -385,9 +385,11 @@ static Mixpanel *sharedInstance = nil;
         self.serverURL = @"https://api.mixpanel.com";
         
         self.distinctId = [self defaultDistinctId];
-        self.abTests    = [NSMutableDictionary dictionary];
         self.superProperties = [NSMutableDictionary dictionary];
 
+        self.testBucketID = 0;
+        self.abTests        = [NSMutableDictionary dictionary];
+        
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         
@@ -457,7 +459,7 @@ static Mixpanel *sharedInstance = nil;
             return [[self.abTests objectForKey:name] unsignedIntegerValue] -64;
         }
         
-        NSUInteger testNo = (1 +arc4random() %outOf);
+        NSUInteger testNo = (( self.testBucketID != 0 )?self.testBucketID:arc4random()) %outOf +1;
         
         [self.abTests setObject:[NSNumber numberWithInt:testNo +64] forKey:name];
         if ([Mixpanel inBackground]) {

@@ -136,6 +136,20 @@
  @property
  
  @abstract
+ A/B testing buket ID
+ 
+ @discussion
+ By default A/B test will be picked at random, but if you want more control
+ over it, you can set bucket id and test will be picked bucketID %2, %3 ...
+ for example you can set it to your incremental userID and tests will be
+ evenly split
+ */
+@property(nonatomic,assign) NSUInteger testBucketID;
+
+/*!
+ @property
+ 
+ @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
  over Mixpanel network activity.
  
