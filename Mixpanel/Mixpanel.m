@@ -845,7 +845,8 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ did enter background", self);
 
     @synchronized(self) {
-
+        [self archive];
+        
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
         if (self.flushOnBackground &&
             [[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
@@ -887,6 +888,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
+    NSLog(@"applicationWillTerminate");
     MixpanelDebug(@"%@ application will terminate", self);
     @synchronized(self) {
         [self archive];
