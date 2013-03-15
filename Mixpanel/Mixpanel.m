@@ -346,7 +346,7 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark * Initializiation
 
-+ (id)sharedInstanceWithToken:(NSString *)apiToken
++ (instancetype)sharedInstanceWithToken:(NSString *)apiToken
 {
     @synchronized(self) {
         if (sharedInstance == nil) {
@@ -356,7 +356,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-+ (id)sharedInstance
++ (instancetype)sharedInstance
 {
     @synchronized(self) {
         if (sharedInstance == nil) {
