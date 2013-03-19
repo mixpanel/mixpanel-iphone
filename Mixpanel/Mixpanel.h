@@ -277,6 +277,20 @@
  @method
  
  @abstract
+ preset path for A/B testing
+ 
+ @discussion
+ In case you don't like path that was picked and want to overwrite it, this function will allow to set A or B (C) path for test with name. This "forces" specific test to always return value you want.
+ 
+ @param path            test path
+ @param name            test name
+ */
+- (void)setPath:(NSString *)path forTestWithName:(NSString *)name;
+
+/*!
+ @method
+ 
+ @abstract
  Clears all currently set tests.
  */
 - (void)clearTests;

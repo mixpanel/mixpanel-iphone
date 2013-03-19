@@ -452,6 +452,11 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark * A/B Testing
 
+- (void)setPath:(NSString *)path forTestWithName:(NSString *)name
+{
+    [self.abTests setObject:[NSNumber numberWithInt: [[path uppercaseString] characterAtIndex:0]] forKey:name];
+}
+
 - (NSUInteger)testNoForTestWithName:(NSString *)name outOf:(NSUInteger)outOf
 {
     @synchronized(self) {
