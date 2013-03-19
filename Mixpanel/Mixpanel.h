@@ -136,6 +136,20 @@
  @property
  
  @abstract
+ A/B testing buket ID
+ 
+ @discussion
+ By default A/B test will be picked at random, but if you want more control
+ over it, you can set bucket id and test will be picked bucketID %2, %3 ...
+ for example you can set it to your incremental userID and tests will be
+ evenly split
+ */
+@property(nonatomic,assign) NSUInteger testBucketID;
+
+/*!
+ @property
+ 
+ @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
  over Mixpanel network activity.
  
@@ -227,6 +241,59 @@
  @param properties      properties dictionary
  */
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
+
+/*!
+ @method
+ 
+ @abstract
+ Do A/B testing with 2 tests
+ 
+ @discussion
+ This function will always return same result untill reset.
+ 
+ @param name            test name
+ @param A               test A
+ @param B               test B
+ */
+- (void)testWithName:(NSString *)name A:(void(^)(void))blockA B:(void(^)(void))blockB;
+
+/*!
+ @method
+ 
+ @abstract
+ Do A/B testing with 3 tests
+ 
+ @discussion
+ This function will always return same result untill reset.
+ 
+ @param name            test name
+ @param A               test A
+ @param B               test B
+ @param C               test C
+ */
+- (void)testWithName:(NSString *)name A:(void(^)(void))blockA B:(void(^)(void))blockB C:(void(^)(void))blockC;
+
+/*!
+ @method
+ 
+ @abstract
+ preset path for A/B testing
+ 
+ @discussion
+ In case you don't like path that was picked and want to overwrite it, this function will allow to set A or B (C) path for test with name. This "forces" specific test to always return value you want.
+ 
+ @param path            test path
+ @param name            test name
+ */
+- (void)setPath:(NSString *)path forTestWithName:(NSString *)name;
+
+/*!
+ @method
+ 
+ @abstract
+ Clears all currently set tests.
+ */
+- (void)clearTests;
 
 /*!
  @method
