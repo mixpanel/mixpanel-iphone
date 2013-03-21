@@ -139,16 +139,21 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSString *)deviceModel
 {
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    static NSString *DeviceModel = nil;
     
-    char *answer = malloc(size);
-    sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    if (!DeviceModel) {
+        size_t size;
+        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+        
+        char *answer = malloc(size);
+        sysctlbyname("hw.machine", answer, &size, NULL, 0);
+        
+        DeviceModel = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
+        
+        free(answer);
+    }
     
-    NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-    
-    free(answer);
-    return results;
+    return DeviceModel;
 }
 
 + (BOOL)wifiAvailable
