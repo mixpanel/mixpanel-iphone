@@ -1059,16 +1059,25 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSDictionary *)deviceInfoProperties
 {
-    UIDevice *device = [UIDevice currentDevice];
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
-    [properties setValue:[device systemVersion] forKey:@"$ios_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
-    if (NSClassFromString(@"ASIdentifierManager")) {
-        [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
+    static NSDictionary *StaticDeviceInfoProperties = nil;
+    
+    if (!StaticDeviceInfoProperties) {
+        UIDevice *device = [UIDevice currentDevice];
+        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+
+        [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
+        [properties setValue:[device systemVersion] forKey:@"$ios_version"];
+        [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
+        [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+
+        if (NSClassFromString(@"ASIdentifierManager")) {
+            [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
+        }
+
+        StaticDeviceInfoProperties = [properties copy];
     }
-    return [NSDictionary dictionaryWithDictionary:properties];
+
+    return StaticDeviceInfoProperties;
 }
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel
