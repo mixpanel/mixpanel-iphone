@@ -586,6 +586,7 @@ static Mixpanel *sharedInstance = nil;
             self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
                 MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
                 [self cancelFlush];
+                [self archive];
                 [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
                 self.taskId = UIBackgroundTaskInvalid;
             }];
