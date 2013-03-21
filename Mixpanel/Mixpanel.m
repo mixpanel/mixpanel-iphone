@@ -221,6 +221,13 @@ static Mixpanel *sharedInstance = nil;
 
 + (id)JSONSerializableObjectForObject:(id)obj
 {
+    static NSDateFormatter *JSONDateFormatter = nil;
+    if (!JSONDateFormatter) {
+        JSONDateFormatter = [[NSDateFormatter alloc] init];
+        [JSONDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        [JSONDateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    }
+    
     // valid json types
     if ([obj isKindOfClass:[NSString class]] ||
         [obj isKindOfClass:[NSNumber class]] ||
@@ -254,12 +261,7 @@ static Mixpanel *sharedInstance = nil;
 
     // some common cases
     if ([obj isKindOfClass:[NSDate class]]) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-        [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        NSString *s = [formatter stringFromDate:obj];
-        [formatter release];
-        return s;
+        return [JSONDateFormatter stringFromDate:obj];
     } else if ([obj isKindOfClass:[NSURL class]]) {
         return [obj absoluteString];
     }
