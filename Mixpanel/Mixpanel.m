@@ -1073,7 +1073,7 @@ static Mixpanel *sharedInstance = nil;
             [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
         }
 
-        StaticDeviceInfoProperties = [properties copy];
+        StaticDeviceInfoProperties = [NSDictionary dictionaryWithDictionary:properties];
     }
 
     return StaticDeviceInfoProperties;
