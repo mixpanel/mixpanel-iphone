@@ -116,10 +116,8 @@ static Mixpanel *sharedInstance = nil;
         [StaticProperties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
         [StaticProperties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
 
-
         CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
         CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-        [networkInfo release];
 
         if (carrier.carrierName.length) {
             [StaticProperties setValue:carrier.carrierName forKey:@"$carrier"];
