@@ -93,39 +93,46 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSDictionary *)deviceInfoProperties
 {
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+    static NSMutableDictionary *StaticProperties = nil;
+    
+    if (!StaticProperties) {
+        StaticProperties = [NSMutableDictionary dictionary];
 
-    UIDevice *device = [UIDevice currentDevice];
+        UIDevice *device = [UIDevice currentDevice];
 
-    [properties setValue:@"iphone" forKey:@"mp_lib"];
-    [properties setValue:VERSION forKey:@"$lib_version"];
+        [StaticProperties setValue:@"iphone" forKey:@"mp_lib"];
+        [StaticProperties setValue:VERSION forKey:@"$lib_version"];
 
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
+        [StaticProperties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
+        [StaticProperties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
 
-    [properties setValue:@"Apple" forKey:@"$manufacturer"];
-    [properties setValue:[device systemName] forKey:@"$os"];
-    [properties setValue:[device systemVersion] forKey:@"$os_version"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$model"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
+        [StaticProperties setValue:@"Apple" forKey:@"$manufacturer"];
+        [StaticProperties setValue:[device systemName] forKey:@"$os"];
+        [StaticProperties setValue:[device systemVersion] forKey:@"$os_version"];
+        [StaticProperties setValue:[Mixpanel deviceModel] forKey:@"$model"];
+        [StaticProperties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
 
-    CGSize size = [UIScreen mainScreen].bounds.size;
-    [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
-    [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        [StaticProperties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
+        [StaticProperties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
 
+
+        CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+        CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+        [networkInfo release];
+
+        if (carrier.carrierName.length) {
+            [StaticProperties setValue:carrier.carrierName forKey:@"$carrier"];
+        }
+
+        if (NSClassFromString(@"ASIdentifierManager")) {
+            [StaticProperties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
+        }
+    }
+    
+    // Properties that may change during execution
+    NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithDictionary:StaticProperties];
     [properties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
-
-    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-    [networkInfo release];
-
-    if (carrier.carrierName.length) {
-        [properties setValue:carrier.carrierName forKey:@"$carrier"];
-    }
-
-    if (NSClassFromString(@"ASIdentifierManager")) {
-        [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
-    }
 
     return [NSDictionary dictionaryWithDictionary:properties];
 }
