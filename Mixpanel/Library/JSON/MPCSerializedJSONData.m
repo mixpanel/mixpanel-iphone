@@ -35,20 +35,10 @@
 
 - (id)initWithData:(NSData *)inData;
 {
-if ((self = [self init]) != NULL)
-	{
-	data = inData;
+    if ((self = [self init]) != NULL) {
+        data = inData;
 	}
-return(self);
+    return(self);
 }
-
-- (void)dealloc
-{
-[data release];
-data = NULL;
-//
-[super dealloc];
-}
-
 
 @end

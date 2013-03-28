@@ -54,20 +54,20 @@
 @interface Mixpanel ()
 
 // re-declare internally as readwrite
-@property(nonatomic,retain) MixpanelPeople *people;
+@property(nonatomic,strong) MixpanelPeople *people;
 @property(nonatomic,copy) NSString *distinctId;
 
 @property(nonatomic,copy)   NSString *apiToken;
-@property(nonatomic,retain) NSMutableDictionary *superProperties;
-@property(nonatomic,retain) NSTimer *timer;
-@property(nonatomic,retain) NSMutableArray *eventsQueue;
-@property(nonatomic,retain) NSMutableArray *peopleQueue;
-@property(nonatomic,retain) NSArray *eventsBatch;
-@property(nonatomic,retain) NSArray *peopleBatch;
-@property(nonatomic,retain) NSURLConnection *eventsConnection;
-@property(nonatomic,retain) NSURLConnection *peopleConnection;
-@property(nonatomic,retain) NSMutableData *eventsResponseData;
-@property(nonatomic,retain) NSMutableData *peopleResponseData;
+@property(nonatomic,strong) NSMutableDictionary *superProperties;
+@property(nonatomic,strong) NSTimer *timer;
+@property(nonatomic,strong) NSMutableArray *eventsQueue;
+@property(nonatomic,strong) NSMutableArray *peopleQueue;
+@property(nonatomic,strong) NSArray *eventsBatch;
+@property(nonatomic,strong) NSArray *peopleBatch;
+@property(nonatomic,strong) NSURLConnection *eventsConnection;
+@property(nonatomic,strong) NSURLConnection *peopleConnection;
+@property(nonatomic,strong) NSMutableData *eventsResponseData;
+@property(nonatomic,strong) NSMutableData *peopleResponseData;
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
@@ -77,8 +77,8 @@
 
 @interface MixpanelPeople ()
 
-@property(nonatomic,assign) Mixpanel *mixpanel;
-@property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
+@property(nonatomic,weak) Mixpanel *mixpanel;
+@property(nonatomic,strong) NSMutableArray *unidentifiedQueue;
 @property(nonatomic,copy) NSString *distinctId;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
@@ -1032,23 +1032,9 @@ static Mixpanel *sharedInstance = nil;
     [self stopFlushTimer];
     [self removeApplicationObservers];
     
-    self.people = nil;
     self.distinctId = nil;
-    self.nameTag = nil;
-    self.serverURL = nil;
     self.delegate = nil;
     
-    self.apiToken = nil;
-    self.superProperties = nil;
-    self.timer = nil;
-    self.eventsQueue = nil;
-    self.peopleQueue = nil;
-    self.eventsBatch = nil;
-    self.peopleBatch = nil;
-    self.eventsConnection = nil;
-    self.peopleConnection = nil;
-    self.eventsResponseData = nil;
-    self.peopleResponseData = nil;
 }
 
 @end
@@ -1227,8 +1213,6 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     self.mixpanel = nil;
-    self.distinctId = nil;
-    self.unidentifiedQueue = nil;
 }
 
 @end

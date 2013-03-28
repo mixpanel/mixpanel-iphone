@@ -35,47 +35,44 @@
 
 + (id)serializer
 {
-return([[[self alloc] init] autorelease]);
+    return([[self alloc] init]);
 }
 
 - (id)init
 {
-if ((self = [super init]) != NULL)
+    if ((self = [super init]) != NULL)
 	{
-	serializer = [[MPCJSONDataSerializer alloc] init];
+        serializer = [[MPCJSONDataSerializer alloc] init];
 	}
-return(self);
+    return(self);
 }
 
 - (void)dealloc
 {
-[serializer release];
-serializer = NULL;
-//
-[super dealloc];
+    serializer = nil;
 }
 
 - (NSString *)serializeObject:(id)inObject error:(NSError **)outError
 {
-NSData *theData = [serializer serializeObject:inObject error:outError];
-if (theData == NULL)
-	return(NULL);
-return([[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease]);
+    NSData *theData = [serializer serializeObject:inObject error:outError];
+    if (theData == NULL)
+        return(NULL);
+    return([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
 }
 
 - (NSString *)serializeArray:(NSArray *)inArray error:(NSError **)outError
 {
-NSData *theData = [serializer serializeArray:inArray error:outError];
-if (theData == NULL)
-	return(NULL);
-return([[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease]);
+    NSData *theData = [serializer serializeArray:inArray error:outError];
+    if (theData == NULL)
+        return(NULL);
+    return([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
 }
 
 - (NSString *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError
 {
-NSData *theData = [serializer serializeDictionary:inDictionary error:outError];
-if (theData == NULL)
-	return(NULL);
-return([[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease]);
+    NSData *theData = [serializer serializeDictionary:inDictionary error:outError];
+    if (theData == NULL)
+        return(NULL);
+    return([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
 }
 @end

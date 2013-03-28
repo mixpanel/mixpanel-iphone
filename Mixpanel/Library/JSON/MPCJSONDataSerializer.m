@@ -38,22 +38,22 @@ static NSData *kTrue = nil;
 @implementation MPCJSONDataSerializer
 
 + (void)initialize {
-    NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 
-    @synchronized(@"MPCJSONDataSerializer") {
-        if (kNULL == nil)
-            kNULL = [[NSData alloc] initWithBytesNoCopy:"null" length:4 freeWhenDone:NO];
-        if (kFalse == nil)
-            kFalse = [[NSData alloc] initWithBytesNoCopy:"false" length:5 freeWhenDone:NO];
-        if (kTrue == nil)
-            kTrue = [[NSData alloc] initWithBytesNoCopy:"true" length:4 freeWhenDone:NO];
+        @synchronized(@"MPCJSONDataSerializer") {
+            if (kNULL == nil)
+                kNULL = [[NSData alloc] initWithBytesNoCopy:"null" length:4 freeWhenDone:NO];
+            if (kFalse == nil)
+                kFalse = [[NSData alloc] initWithBytesNoCopy:"false" length:5 freeWhenDone:NO];
+            if (kTrue == nil)
+                kTrue = [[NSData alloc] initWithBytesNoCopy:"true" length:4 freeWhenDone:NO];
+        }
+
     }
-
-    [thePool release];
 }
 
 + (id)serializer {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
 
 - (NSData *)serializeObject:(id)inObject error:(NSError **)outError {
@@ -70,7 +70,7 @@ static NSData *kTrue = nil;
     } else if ([inObject isKindOfClass:[NSDictionary class]]) {
         theResult = [self serializeDictionary:inObject error:outError];
     } else if ([inObject isKindOfClass:[NSData class]]) {
-        NSString *theString = [[[NSString alloc] initWithData:inObject encoding:NSUTF8StringEncoding] autorelease];
+        NSString *theString = [[NSString alloc] initWithData:inObject encoding:NSUTF8StringEncoding];
         theResult = [self serializeString:theString error:outError];
     } else if ([inObject isKindOfClass:[MPCSerializedJSONData class]]) {
         theResult = [inObject data];
@@ -138,7 +138,7 @@ static NSData *kTrue = nil;
 }
 
 - (NSData *)serializeString:(NSString *)inString error:(NSError **)outError {
-    NSMutableString *theMutableCopy = [[inString mutableCopy] autorelease];
+    NSMutableString *theMutableCopy = [inString mutableCopy];
     [theMutableCopy replaceOccurrencesOfString:@"\\" withString:@"\\\\" options:0 range:NSMakeRange(0, [theMutableCopy length])];
     [theMutableCopy replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:0 range:NSMakeRange(0, [theMutableCopy length])];
     [theMutableCopy replaceOccurrencesOfString:@"/" withString:@"\\/" options:0 range:NSMakeRange(0, [theMutableCopy length])];
