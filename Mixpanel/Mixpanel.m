@@ -496,6 +496,29 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)removeSuperPropertiesNamed:(NSArray *)propertyNames
+{
+   @synchronized(self) {
+      [self.superProperties removeObjectsForKeys:propertyNames];
+      if ([Mixpanel inBackground]) {
+         [self archiveProperties];
+      }
+   }
+}
+
+- (void)removeSuperPropertyNamed:(NSString *)propertyName
+{
+   @synchronized(self) {
+      if ([self.superProperties objectForKey:propertyName] != nil)
+      {
+         [self.superProperties removeObjectForKey:propertyName];
+         if ([Mixpanel inBackground]) {
+            [self archiveProperties];
+         }
+      }
+   }
+}
+
 - (NSDictionary *)currentSuperProperties
 {
     @synchronized(self) {
