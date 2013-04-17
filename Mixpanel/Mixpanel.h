@@ -457,6 +457,24 @@
 
 /*!
  @method
+
+ @abstract
+ Set properties on the current user in Mixpanel People, but don't overwrite if
+ there is an existing value.
+
+ @discussion
+ This method is identical to <code>set:</code> except it will only set
+ properties that are not already set. It is particularly useful for collecting
+ data about the user's initial experience and source, as well as dates
+ representing the first time something happened.
+
+ @param properties       properties dictionary
+
+ */
+- (void)setOnce:(NSDictionary *)properties;
+
+/*!
+ @method
  
  @abstract
  Increment the given numeric properties by the given values.
