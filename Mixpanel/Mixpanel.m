@@ -1113,6 +1113,13 @@ static Mixpanel *sharedInstance = nil;
     [self set:[NSDictionary dictionaryWithObject:object forKey:property]];
 }
 
+- (void)setOnce:(NSDictionary *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    [Mixpanel assertPropertyTypes:properties];
+    [self addPeopleRecordToQueueWithAction:@"$set_once" andProperties:properties];
+}
+
 - (void)increment:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
@@ -1182,7 +1189,7 @@ static Mixpanel *sharedInstance = nil;
             [r setObject:time forKey:@"$time"];
         }
 
-        if ([action isEqualToString:@"$set"]) {
+        if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
             [p addEntriesFromDictionary:[MixpanelPeople deviceInfoProperties]];
         }
 

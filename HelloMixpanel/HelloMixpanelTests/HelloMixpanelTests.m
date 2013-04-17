@@ -404,6 +404,25 @@
     STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
 }
 
+- (void)testPeopleSetOnce
+{
+    [self.mixpanel.people identify:@"d1"];
+    NSDictionary *p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"];
+    [self.mixpanel.people setOnce:p];
+    STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
+    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects([r objectForKey:@"$token"], TEST_TOKEN, @"project token not set");
+    STAssertEqualObjects([r objectForKey:@"$distinct_id"], @"d1", @"distinct id not set");
+    STAssertNotNil([r objectForKey:@"$time"], @"$time timestamp missing");
+    STAssertNotNil([r objectForKey:@"$set_once"], @"$set dictionary missing");
+    p = [r objectForKey:@"$set_once"];
+    STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
+    STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
+    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
+    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
+    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
+}
+
 - (void)testPeopleSetReservedProperty
 {
     [self.mixpanel.people identify:@"d1"];
