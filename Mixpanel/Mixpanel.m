@@ -21,6 +21,7 @@
 #include <net/if_dl.h>
 #include <sys/sysctl.h>
 
+#import <AdSupport/ASIdentifierManager.h>
 #import <CommonCrypto/CommonHMAC.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -112,6 +113,10 @@ static Mixpanel *sharedInstance = nil;
 
     if (carrier.carrierName.length) {
         [properties setValue:carrier.carrierName forKey:@"$carrier"];
+    }
+
+    if (NSClassFromString(@"ASIdentifierManager")) {
+        [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
     }
 
     return [NSDictionary dictionaryWithDictionary:properties];
