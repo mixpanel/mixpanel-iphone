@@ -17,12 +17,13 @@
 // limitations under the License.
 
 #include <arpa/inet.h>
-#include <ifaddrs.h>
+#include <net/if.h>
 #include <net/if_dl.h>
+#include <sys/socket.h>
 #include <sys/sysctl.h>
 
 #import <AdSupport/ASIdentifierManager.h>
-#import <CommonCrypto/CommonHMAC.h>
+#import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
@@ -78,6 +79,82 @@
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 
 @end
+
+static NSString *ODIN1()
+{
+    // taken from https://code.google.com/p/odinmobile/source/browse/Sample+Code/iOS/trunk/ODIN.m
+
+    // Step 1: Get MAC address
+
+    int                 mib[6];
+    size_t              len;
+    char                *buf;
+    unsigned char       *ptr;
+    struct if_msghdr    *ifm;
+    struct sockaddr_dl  *sdl;
+
+    mib[0] = CTL_NET;
+    mib[1] = AF_ROUTE;
+    mib[2] = 0;
+    mib[3] = AF_LINK;
+    mib[4] = NET_RT_IFLIST;
+
+    if ((mib[5] = if_nametoindex("en0")) == 0) {
+        NSLog(@"ODIN-1.1: if_nametoindex error");
+        return nil;
+    }
+
+    if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
+        NSLog(@"ODIN-1.1: sysctl 1 error");
+        return nil;
+    }
+
+    if ((buf = malloc(len)) == NULL) {
+        NSLog(@"ODIN-1.1: malloc error");
+        return nil;
+    }
+
+    if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
+        NSLog(@"ODIN-1.1: sysctl 2 error");
+        return nil;
+    }
+
+    ifm = (struct if_msghdr *)buf;
+    sdl = (struct sockaddr_dl *)(ifm + 1);
+    ptr = (unsigned char *)LLADDR(sdl);
+
+    //NSLog(@"MAC Address: %02X:%02X:%02X:%02X:%02X:%02X", *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5));
+
+    // Step 2: Take the SHA-1 of the MAC address
+
+    CFDataRef data = CFDataCreate(NULL, (uint8_t*)ptr, 6);
+
+    unsigned char messageDigest[CC_SHA1_DIGEST_LENGTH];
+
+    CC_SHA1(CFDataGetBytePtr((CFDataRef)data),
+            CFDataGetLength((CFDataRef)data),
+            messageDigest);
+
+    CFMutableStringRef string = CFStringCreateMutable(NULL, 40);
+    for(int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++) {
+        CFStringAppendFormat(string,
+                             NULL,
+                             (CFStringRef)@"%02X",
+                             messageDigest[i]);
+    }
+
+    CFStringLowercase(string, CFLocaleGetSystem());
+
+    //NSLog(@"ODIN-1: %@", string);
+
+    free(buf);
+
+    NSString *odinstring = [[[NSString alloc] initWithString:(NSString*)string] autorelease];
+    CFRelease(data);
+    CFRelease(string);
+
+    return odinstring;
+}
 
 @implementation Mixpanel
 
@@ -177,76 +254,7 @@ static Mixpanel *sharedInstance = nil;
     return inBg;
 }
 
-+ (NSDictionary *)interfaces
-{
-    NSMutableDictionary *theDictionary = [NSMutableDictionary dictionary];
-    
-    BOOL success;
-    struct ifaddrs * addrs;
-    const struct ifaddrs * cursor;
-    const struct sockaddr_dl * dlAddr;
-    const uint8_t * base;
-    
-    success = getifaddrs(&addrs) == 0;
-    if (success) {
-        cursor = addrs;
-        while (cursor != NULL) {
-            if ((cursor->ifa_addr->sa_family == AF_LINK) && (((const struct sockaddr_dl *)cursor->ifa_addr)->sdl_type == IFT_ETHER)) {
-                // fprintf(stderr, "%s:", cursor->ifa_name);
-                dlAddr = (const struct sockaddr_dl *)cursor->ifa_addr;
-                base = (const uint8_t *) &dlAddr->sdl_data[dlAddr->sdl_nlen];
-                
-                NSString *theKey = [NSString stringWithUTF8String:cursor->ifa_name];
-                NSString *theValue = [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x", base[0], base[1], base[2], base[3], base[4], base[5]];
-                [theDictionary setObject:theValue forKey:theKey];
-            }
-            
-            cursor = cursor->ifa_next;
-        }
-        freeifaddrs(addrs);
-    }
-    return(theDictionary);
-}
-
-+ (NSString *)uniqueDeviceString
-{
-    NSDictionary *dict = [Mixpanel interfaces];
-    NSArray *keys = [dict allKeys];
-    keys = [keys  sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-
-    NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleNameKey];
-
-    // while most apps will define CFBundleName, it's not guaranteed;
-    // an app can choose to define it or not so when it's missing, use the bundle file name
-    if (bundleName == nil) {
-        bundleName = [[[NSBundle mainBundle] bundlePath] lastPathComponent];
-    }
-    
-    NSMutableString *string = [NSMutableString stringWithString:bundleName];
-    for (NSString *key in keys) {
-        [string appendString:[dict objectForKey:key]];
-    }
-    return string;
-}
-
 #pragma mark * Encoding/decoding utilities
-
-+ (NSString *)calculateHMACSHA1withString:(NSString *)str andKey:(NSString *)key
-{
-    const char *cStr = [str UTF8String];
-    const char *cSecretStr = [key UTF8String];
-    unsigned char digest[CC_SHA1_DIGEST_LENGTH];
-    memset((void *)digest, 0x0, CC_SHA1_DIGEST_LENGTH);
-    CCHmac(kCCHmacAlgSHA1, cSecretStr, strlen(cSecretStr), cStr, strlen(cStr), digest);
-    return [NSString stringWithFormat:
-            @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-            digest[0],  digest[1],  digest[2],  digest[3],
-            digest[4],  digest[5],  digest[6],  digest[7],
-            digest[8],  digest[9],  digest[10], digest[11],
-            digest[12], digest[13], digest[14], digest[15],
-            digest[16], digest[17], digest[18], digest[19]
-            ];
-}
 
 + (NSData *)JSONSerializeObject:(id)obj
 {
@@ -411,7 +419,10 @@ static Mixpanel *sharedInstance = nil;
         distinctId = ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString;
     }
     if (!distinctId) {
-        return [Mixpanel calculateHMACSHA1withString:[Mixpanel uniqueDeviceString] andKey:self.apiToken];
+        distinctId = ODIN1();
+    }
+    if (!distinctId) {
+        NSLog(@"%@ error getting default distinct id: both iOS IFA and ODIN1 failed", self);
     }
     return distinctId;
 }
