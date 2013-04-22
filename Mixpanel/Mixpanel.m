@@ -406,7 +406,14 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSString *)defaultDistinctId
 {
-    return [Mixpanel calculateHMACSHA1withString:[Mixpanel uniqueDeviceString] andKey:self.apiToken];
+    NSString *distinctId = nil;
+    if (NSClassFromString(@"ASIdentifierManager")) {
+        distinctId = ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString;
+    }
+    if (!distinctId) {
+        return [Mixpanel calculateHMACSHA1withString:[Mixpanel uniqueDeviceString] andKey:self.apiToken];
+    }
+    return distinctId;
 }
 
 - (void)track:(NSString *)event
