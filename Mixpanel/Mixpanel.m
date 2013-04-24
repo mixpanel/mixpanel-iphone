@@ -558,6 +558,14 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flush
 {
+    // If the app is currently in the background but Mixpanel has not requested
+    // to run a background task, the flush will be cut short. This can happen
+    // when the app forces a flush from within its own background task.
+    if ([Mixpanel inBackground] && self.taskId == UIBackgroundTaskInvalid) {
+        [self flushInBackgroundTask];
+        return;
+    }
+
     @synchronized(self) {
         if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
             if (![self.delegate mixpanelWillFlush:self]) {
@@ -569,6 +577,29 @@ static Mixpanel *sharedInstance = nil;
         [self flushEvents];
         [self flushPeople];
     }
+}
+
+- (void)flushInBackgroundTask
+{
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
+    @synchronized(self) {
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+            [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
+
+            self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
+                [self cancelFlush];
+                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                self.taskId = UIBackgroundTaskInvalid;
+            }];
+
+            MixpanelDebug(@"%@ starting flush background task %u", self, self.taskId);
+            [self flush];
+
+            // connection callbacks end this task by calling endBackgroundTaskIfComplete
+        }
+    }
+#endif
 }
 
 - (void)flushEvents
@@ -845,25 +876,9 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ did enter background", self);
 
     @synchronized(self) {
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-        if (self.flushOnBackground &&
-            [[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
-            [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
-
-            self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
-                [self cancelFlush];
-                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-                self.taskId = UIBackgroundTaskInvalid;
-            }];
-
-            MixpanelDebug(@"%@ starting flush background task %u", self, self.taskId);
-            [self flush];
-
-            // connection callbacks end this task by calling endBackgroundTaskIfComplete
+        if (self.flushOnBackground) {
+            [self flushInBackgroundTask];
         }
-#endif
     }
 }
 
