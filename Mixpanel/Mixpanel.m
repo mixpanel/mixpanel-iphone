@@ -52,7 +52,10 @@
 
 @interface Mixpanel ()
 
-@property(nonatomic,readwrite,retain) MixpanelPeople *people; // re-declare internally as readwrite
+// re-declare internally as readwrite
+@property(nonatomic,retain) MixpanelPeople *people;
+@property(nonatomic,copy) NSString *distinctId;
+
 @property(nonatomic,copy)   NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
 @property(nonatomic,retain) NSTimer *timer;
@@ -75,6 +78,7 @@
 
 @property(nonatomic,assign) Mixpanel *mixpanel;
 @property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
+@property(nonatomic,copy) NSString *distinctId;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 
@@ -408,6 +412,27 @@ static Mixpanel *sharedInstance = nil;
 
     }
     return self;
+}
+
+#pragma mark * Identity
+
+- (void)identify:(NSString *)distinctId
+{
+    @synchronized(self) {
+        self.distinctId = distinctId;
+        self.people.distinctId = distinctId;
+        if (distinctId != nil && distinctId.length != 0 && self.people.unidentifiedQueue.count > 0) {
+            for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
+                [r setObject:distinctId forKey:@"$distinct_id"];
+                [self.peopleQueue addObject:r];
+            }
+            [self.people.unidentifiedQueue removeAllObjects];
+        }
+        if ([Mixpanel inBackground]) {
+            [self archiveProperties];
+            [self archivePeople];
+        }
+    }
 }
 
 #pragma mark * Tracking
@@ -1083,25 +1108,6 @@ static Mixpanel *sharedInstance = nil;
         self.unidentifiedQueue = [NSMutableArray array];
     }
     return self;
-}
-
-- (void)identify:(NSString *)distinctId
-{
-    @synchronized(self) {
-        [_distinctId autorelease];
-        _distinctId = [distinctId copy];
-        if (distinctId) {
-            for (NSMutableDictionary *r in self.unidentifiedQueue) {
-                [r setObject:distinctId forKey:@"$distinct_id"];
-                [self.mixpanel.peopleQueue addObject:r];
-            }
-            [self.unidentifiedQueue removeAllObjects];
-        }
-        if ([Mixpanel inBackground]) {
-            [self.mixpanel archiveProperties];
-            [self.mixpanel archivePeople];
-        }
-    }
 }
 
 - (void)addPushDeviceToken:(NSData *)deviceToken
