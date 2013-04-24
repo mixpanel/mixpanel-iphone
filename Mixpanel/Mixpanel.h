@@ -169,7 +169,7 @@
  
  @param apiToken        your project token
  */
-+ (id)sharedInstanceWithToken:(NSString *)apiToken;
++ (instancetype)sharedInstanceWithToken:(NSString *)apiToken;
 
 /*!
  @method
@@ -181,7 +181,7 @@
  The API must be initialized with <code>sharedInstanceWithToken:</code> before
  calling this class method.
  */
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 
 /*!
  @method
