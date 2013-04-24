@@ -43,6 +43,7 @@
 
 // get access to private members
 @property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
+@property(nonatomic,copy) NSMutableArray *distinctId;
 
 @end
 
@@ -242,7 +243,7 @@
     self.mixpanel.nameTag = @"n1";
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people set:p];
     [self.mixpanel archive];
 
@@ -288,7 +289,7 @@
     self.mixpanel.nameTag = @"n1";
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people set:p];
 
     [self.mixpanel archive];
@@ -363,7 +364,7 @@
     STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
     STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
     STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     STAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"set people distinct id failed");
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"identify should move unidentified records to main queue");
     STAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify should move records from unidentified queue");
@@ -371,7 +372,7 @@
 
 - (void)testPeopleAddPushDeviceToken
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSData *token = [@"0123456789abcdef" dataUsingEncoding:[NSString defaultCStringEncoding]];
     [self.mixpanel.people addPushDeviceToken:token];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -388,7 +389,7 @@
 
 - (void)testPeopleSet
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"];
     [self.mixpanel.people set:p];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -407,7 +408,7 @@
 
 - (void)testPeopleSetOnce
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"];
     [self.mixpanel.people setOnce:p];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -426,7 +427,7 @@
 
 - (void)testPeopleSetReservedProperty
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:@"override" forKey:@"$ios_app_version"];
     [self.mixpanel.people set:p];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -436,7 +437,7 @@
 
 - (void)testPeopleSetTo
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -453,7 +454,7 @@
 
 - (void)testPeopleIncrement
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:3] forKey:@"p1"];
     [self.mixpanel.people increment:p];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -468,7 +469,7 @@
 
 - (void)testPeopleIncrementBy
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people increment:@"p1" by:[NSNumber numberWithInt:3]];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -482,7 +483,7 @@
 
 - (void)testPeopleDeleteUser
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people deleteUser];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -497,7 +498,7 @@
 {
     self.mixpanel.delegate = self;
     [self.mixpanel track:@"e1"];
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
     [self.mixpanel flush];
     STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"delegate should have stopped flush");
@@ -530,7 +531,7 @@
     STAssertNotNil([self.mixpanel currentSuperProperties], @"setting super properties to nil should have no effect");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"setting super properties to nil should have no effect");
 
-    [self.mixpanel.people identify:nil];
+    [self.mixpanel identify:nil];
     STAssertNil(self.mixpanel.people.distinctId, @"people identify nil should make people distinct id nil");
     STAssertThrows([self.mixpanel.people set:nil], @"should not take nil argument");
     STAssertThrows([self.mixpanel.people set:nil to:@"a"], @"should not take nil argument");
@@ -544,7 +545,7 @@
 
 - (void)testPeopleTrackCharge
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
 
     [self.mixpanel.people trackCharge:@25];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -586,7 +587,7 @@
 
 - (void)testPeopleClearCharges
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
 
     [self.mixpanel.people clearCharges];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;

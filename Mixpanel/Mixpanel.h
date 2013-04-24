@@ -72,9 +72,10 @@
  @discussion
  A distinct ID is a string that uniquely identifies one of your users.
  Typically, this is the user ID from your database. By default, we'll use a
- hash of the MAC address of the device.
+ hash of the MAC address of the device. To change the current distinct ID,
+ use the <code>identify:</code> method.
  */
-@property(nonatomic,setter=identify:,copy) NSString *distinctId;
+@property(nonatomic,readonly,copy) NSString *distinctId;
 
 /*!
  @property
@@ -199,6 +200,33 @@
  @param startFlushTimer whether to start the background flush timer
  */
 - (id)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
+
+/*!
+ @property
+
+ @abstract
+ Sets the distinct ID of the current user.
+
+ @discussion
+ By default, Mixpanel will set the distinct ID to the device's iOS ID for
+ Advertising (IFA). The IFA depends on the the Ad Support framework, which is
+ only available in iOS 6 and later. For earlier platforms, we fallback to ODIN1
+ (see https://code.google.com/p/odinmobile/wiki/ODIN1).
+
+ For tracking events, you do not need to call <code>identify:</code> if you
+ want to use the default.  However, <b>Mixpanel People always requires an
+ explicit call to <code>identify:</code></b>. If calls are made to
+ <code>set:</code>, <code>increment</code> or other <code>MixpanelPeople</code>
+ methods prior to calling <code>identify:</code>, then they are queued up and
+ flushed once <code>identify:</code> is called.
+
+ If you'd like to use the default distinct ID for Mixpanel People as well
+ (recommended), call <code>identify:</code> using the current distinct ID:
+ <code>[mixpanel identify:mixpanel.distinctId]</code>.
+
+ @param distinctId string that uniquely identifies the current user
+ */
+- (void)identify:(NSString *)distinctId;
 
 /*!
  @method
@@ -368,27 +396,6 @@
  People</b>.
  */
 @interface MixpanelPeople : NSObject
-
-/*!
- @property
- 
- @abstract
- Sets the distinct ID for Mixpanel People calls.
- 
- @discussion
- If calls are made to <code>set:</code>, <code>increment</code> or other
- <code>MixpanelPeople</code> methods prior to calling <code>identify:</code>,
- then they are queued up and flushed once <code>identify:</code> is called.
- 
- This method only affects calls to Mixpanel People. To change the distinct ID
- of event tracking calls use the core Mixpanel @ref identify: method.
- 
- A distinct ID is a string string that uniquely identifies a user. Typically,
- this is their user ID from your database.
- 
- @param distinctId string that uniquely identifies the current user
- */
-@property(nonatomic,setter=identify:,copy) NSString *distinctId;
 
 /*!
  @method
