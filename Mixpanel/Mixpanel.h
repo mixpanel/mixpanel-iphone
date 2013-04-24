@@ -170,7 +170,7 @@
  
  @param apiToken        your project token
  */
-+ (id)sharedInstanceWithToken:(NSString *)apiToken;
++ (instancetype)sharedInstanceWithToken:(NSString *)apiToken;
 
 /*!
  @method
@@ -182,7 +182,7 @@
  The API must be initialized with <code>sharedInstanceWithToken:</code> before
  calling this class method.
  */
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 
 /*!
  @method
@@ -316,6 +316,48 @@
  Clears all currently set super properties.
  */
 - (void)clearSuperProperties;
+
+/*!
+ @method
+
+ @abstract
+ Removes previously registered super properties and discards the existing
+ values.
+
+ @discussion
+ As an alternative to clearing all properties, unregistering specific super
+ properties prevents them from being recorded on future events. This operation
+ does not affect the value of other super properties. Any property name that is
+ not registered is ignored.
+ 
+ Note that after removing a super property, events will show the attribute as 
+ having the value <code>undefined</code> in Mixpanel until a new value is
+ registered.
+
+ @param propertyNames   array of property name strings to remove
+ */
+- (void)removeSuperPropertiesNamed:(NSArray *)propertyNames;
+
+/*!
+ @method
+
+ @abstract
+ Removes a previously registered super property and discards the existing
+ value.
+
+ @discussion
+ As an alternative to clearing all properties, unregistering specific super
+ properties prevents them from being recorded on future events. This operation
+ does not affect the value of other super properties. If a property by that name
+ is not registered, no changes are made.
+
+ Note that after removing a super property, events will show the attribute as
+ having the value <code>undefined</code> in Mixpanel until a new value is
+ registered.
+
+ @param propertyName    name of the property to remove
+ */
+- (void)removeSuperPropertyNamed:(NSString *)propertyName;
 
 /*!
  @method
