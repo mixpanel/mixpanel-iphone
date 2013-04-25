@@ -33,7 +33,7 @@
 #import "NSData+MPBase64.h"
 #import "ODIN.h"
 
-#define VERSION @"1.1.0"
+#define VERSION @"2.0.0"
 
 #ifndef IFT_ETHER
 #define IFT_ETHER 0x6 // ethernet CSMACD
