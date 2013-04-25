@@ -101,7 +101,7 @@ static Mixpanel *sharedInstance = nil;
     [properties setValue:VERSION forKey:@"$lib_version"];
 
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_short_version_string"];
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
 
     [properties setValue:@"Apple" forKey:@"$manufacturer"];
     [properties setValue:[device systemName] forKey:@"$os"];
@@ -1052,6 +1052,10 @@ static Mixpanel *sharedInstance = nil;
     [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
     [properties setValue:[device systemVersion] forKey:@"$ios_version"];
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
+    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+    if (NSClassFromString(@"ASIdentifierManager")) {
+        [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
+    }
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 
