@@ -219,6 +219,13 @@
     [self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"a"];
     STAssertEqualObjects([[self.mixpanel currentSuperProperties] objectForKey:@"p4"], @"c",
                          @"register super properties once with default value failed when match");
+
+    [self.mixpanel unregisterSuperProperty:@"a"];
+    STAssertNil([[self.mixpanel currentSuperProperties] objectForKey:@"a"],
+                         @"unregister super property failed");
+
+    STAssertNoThrow([self.mixpanel unregisterSuperProperty:@"a"], @"unregister non-existent super property should not throw");
+
     [self.mixpanel clearSuperProperties];
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"clear super properties failed");
 }
