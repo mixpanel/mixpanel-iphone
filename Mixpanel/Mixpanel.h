@@ -200,6 +200,40 @@
  */
 - (id)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
 
+/*
+@method
+
+@abstract
+Create an alias. Multiple aliases can map to the same original ID, but not vice-versa.
+
+@discussion
+Uses the Distinct Id for the original ID
+
+@param alias        A unique identifier that you want to use for this user in the future.
+*/
+- (void)alias:(NSString *)alias;
+
+
+/*
+@method
+
+@abstract
+Create an alias. Multiple aliases can map to the same original ID, but not vice-versa.
+
+@discussion
+Aliases can also be chained - the following is a valid scenario:
+[[Mixpanel sharedInstance] alias:@"new_id" original:@"existing_id"];
+...
+[[Mixpanel sharedInstance] alias:@"newer_id" original:@"new_id"];
+
+If the original ID is not passed in, we will use the current distinct_id - probably the auto-generated GUID.
+
+@param alias        A unique identifier that you want to use for this user in the future.
+@param original     The current identifier being used for this user.
+
+*/
+- (void)alias:(NSString *)alias original:(NSString *)original;
+
 /*!
  @method
  
