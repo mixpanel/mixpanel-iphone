@@ -415,8 +415,22 @@ static Mixpanel *sharedInstance = nil;
 {
     @synchronized (self) {
 
-        NSString *event = @"$create_alias";
+        if (!alias) {
+            MixpanelLog(@"alias is nil - skipping api call.");
+            return;
+        }
 
+        if([alias isEqualToString:self.people.distinctId]) {
+            MixpanelLog(@"Attempting to create alias for existing People user - aborting.");
+            return;
+        }
+
+        if (!original) {
+            original = self.distinctId;
+        }
+        if (![alias isEqualToString:original]) {
+            NSString *event = @"$create_alias";
+            NSLog(@"Aliasing '%@' as '%@'", alias, original);
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [p setObject:alias forKey:@"alias"];
         [p setObject:original forKey:@"distinct_id"];
@@ -430,6 +444,10 @@ static Mixpanel *sharedInstance = nil;
         [self.eventsQueue addObject:e];
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
+        }
+        [self identify:alias];
+        } else {
+            [self identify:alias];
         }
     }
 }
