@@ -83,7 +83,7 @@
     // Note that the call to Mixpanel People identify: can come after properties have been set. We queue them until
     // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
     // and identify them once you know their user ID.
-    [mixpanel.people identify:mixpanel.distinctId];
+    [mixpanel identify:mixpanel.distinctId];
 }
 
 @end

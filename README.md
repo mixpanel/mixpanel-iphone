@@ -28,6 +28,7 @@ Recursively create groups for any added folders.
 - UIKit.framework
 - SystemConfiguration.framework
 - CoreTelephony.framework
+- AdSupport.framework
 
 And that's it. 
 

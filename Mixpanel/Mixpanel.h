@@ -72,9 +72,10 @@
  @discussion
  A distinct ID is a string that uniquely identifies one of your users.
  Typically, this is the user ID from your database. By default, we'll use a
- hash of the MAC address of the device.
+ hash of the MAC address of the device. To change the current distinct ID,
+ use the <code>identify:</code> method.
  */
-@property(nonatomic, setter=identify:, copy) NSString *distinctId;
+@property(nonatomic,readonly,copy) NSString *distinctId;
 
 /*!
  @property
@@ -169,7 +170,7 @@
  
  @param apiToken        your project token
  */
-+ (id)sharedInstanceWithToken:(NSString *)apiToken;
++ (instancetype)sharedInstanceWithToken:(NSString *)apiToken;
 
 /*!
  @method
@@ -181,7 +182,7 @@
  The API must be initialized with <code>sharedInstanceWithToken:</code> before
  calling this class method.
  */
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 
 /*!
  @method
@@ -233,6 +234,33 @@ If the original ID is not passed in, we will use the current distinct_id - proba
 
 */
 - (void)alias:(NSString *)alias original:(NSString *)original;
+
+/*!
+ @property
+
+ @abstract
+ Sets the distinct ID of the current user.
+
+ @discussion
+ By default, Mixpanel will set the distinct ID to the device's iOS ID for
+ Advertising (IFA). The IFA depends on the the Ad Support framework, which is
+ only available in iOS 6 and later. For earlier platforms, we fallback to ODIN1
+ (see https://code.google.com/p/odinmobile/wiki/ODIN1).
+
+ For tracking events, you do not need to call <code>identify:</code> if you
+ want to use the default.  However, <b>Mixpanel People always requires an
+ explicit call to <code>identify:</code></b>. If calls are made to
+ <code>set:</code>, <code>increment</code> or other <code>MixpanelPeople</code>
+ methods prior to calling <code>identify:</code>, then they are queued up and
+ flushed once <code>identify:</code> is called.
+
+ If you'd like to use the default distinct ID for Mixpanel People as well
+ (recommended), call <code>identify:</code> using the current distinct ID:
+ <code>[mixpanel identify:mixpanel.distinctId]</code>.
+
+ @param distinctId string that uniquely identifies the current user
+ */
+- (void)identify:(NSString *)distinctId;
 
 /*!
  @method
@@ -357,7 +385,27 @@ If the original ID is not passed in, we will use the current distinct_id - proba
 
 /*!
  @method
- 
+
+ @abstract
+ Removes a previously registered super property.
+
+ @discussion
+ As an alternative to clearing all properties, unregistering specific super
+ properties prevents them from being recorded on future events. This operation
+ does not affect the value of other super properties. Any property name that is
+ not registered is ignored.
+
+ Note that after removing a super property, events will show the attribute as
+ having the value <code>undefined</code> in Mixpanel until a new value is
+ registered.
+
+ @param propertyName   array of property name strings to remove
+ */
+- (void)unregisterSuperProperty:(NSString *)propertyName;
+
+/*!
+ @method
+
  @abstract
  Clears all currently set super properties.
  */
@@ -444,27 +492,6 @@ If the original ID is not passed in, we will use the current distinct_id - proba
 @interface MixpanelPeople : NSObject
 
 /*!
- @property
- 
- @abstract
- Sets the distinct ID for Mixpanel People calls.
- 
- @discussion
- If calls are made to <code>set:</code>, <code>increment</code> or other
- <code>MixpanelPeople</code> methods prior to calling <code>identify:</code>,
- then they are queued up and flushed once <code>identify:</code> is called.
- 
- This method only affects calls to Mixpanel People. To change the distinct ID
- of event tracking calls use the core Mixpanel @ref identify: method.
- 
- A distinct ID is a string string that uniquely identifies a user. Typically,
- this is their user ID from your database.
- 
- @param distinctId string that uniquely identifies the current user
- */
-@property(nonatomic, setter=identify:, copy) NSString *distinctId;
-
-/*!
  @method
  
  @abstract
@@ -528,6 +555,24 @@ If the original ID is not passed in, we will use the current distinct_id - proba
  @param object          property value
  */
 - (void)set:(NSString *)property to:(id)object;
+
+/*!
+ @method
+
+ @abstract
+ Set properties on the current user in Mixpanel People, but don't overwrite if
+ there is an existing value.
+
+ @discussion
+ This method is identical to <code>set:</code> except it will only set
+ properties that are not already set. It is particularly useful for collecting
+ data about the user's initial experience and source, as well as dates
+ representing the first time something happened.
+
+ @param properties       properties dictionary
+
+ */
+- (void)setOnce:(NSDictionary *)properties;
 
 /*!
  @method

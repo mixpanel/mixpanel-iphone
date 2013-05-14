@@ -43,6 +43,7 @@
 
 // get access to private members
 @property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
+@property(nonatomic,copy) NSMutableArray *distinctId;
 
 @end
 
@@ -108,6 +109,16 @@
             nil];
 }
 
+- (void)assertDefaultPeopleProperties:(NSDictionary *)p
+{
+    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
+    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
+    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
+    STAssertNotNil([p objectForKey:@"$ios_app_release"], @"missing $ios_app_release property");
+    STAssertNotNil([p objectForKey:@"$ios_ifa"], @"missing $ios_ifa property");
+
+}
+
 - (void)testJSONSerializeObject {
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [Mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
@@ -122,13 +133,36 @@
 
 - (void)testIdentify
 {
-    NSString *distinctId = @"d1";
-    STAssertFalse([self.mixpanel.distinctId isEqualToString:distinctId], @"incorrect default distinct id: %@", distinctId);
-    [self.mixpanel identify:distinctId];
-    STAssertEqualObjects(self.mixpanel.distinctId, distinctId, @"mixpanel identify failed to set distinct id");
-    [self.mixpanel track:@"e1"];
-    NSString *trackDistinctId = [[self.mixpanel.eventsQueue.lastObject objectForKey:@"properties"] objectForKey:@"distinct_id"];
-    STAssertEqualObjects(trackDistinctId, distinctId, @"user-defined distinct id not used in track. got: %@", trackDistinctId);
+    for (int i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
+
+        NSString *distinctId = @"d1";
+        // try this for IFA, ODIN and nil
+        STAssertEqualObjects(self.mixpanel.distinctId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
+        STAssertNil(self.mixpanel.people.distinctId, @"mixpanel people distinct id should default to nil");
+        [self.mixpanel track:@"e1"];
+        STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"events should be sent right away with default distinct id");
+        STAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], self.mixpanel.defaultDistinctId, @"events should use default distinct id if none set");
+        [self.mixpanel.people set:@"p1" to:@"a"];
+        STAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people records should go to unidentified queue before identify:");
+        STAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 1, @"unidentified people records not queued");
+        STAssertEqualObjects(self.mixpanel.people.unidentifiedQueue.lastObject[@"$token"], TEST_TOKEN, @"incorrect project token in people record");
+        [self.mixpanel identify:distinctId];
+        STAssertEqualObjects(self.mixpanel.distinctId, distinctId, @"mixpanel identify failed to set distinct id");
+        STAssertEqualObjects(self.mixpanel.people.distinctId, distinctId, @"mixpanel identify failed to set people distinct id");
+        STAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify: should move records from unidentified queue");
+        STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"identify: should move records to main people queue");
+        STAssertEqualObjects(self.mixpanel.peopleQueue.lastObject[@"$token"], TEST_TOKEN, @"incorrect project token in people record");
+        STAssertEqualObjects(self.mixpanel.peopleQueue.lastObject[@"$distinct_id"], distinctId, @"distinct id not set properly on unidentified people record");
+        NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$set"];
+        STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
+        [self assertDefaultPeopleProperties:p];
+        [self.mixpanel.people set:@"p1" to:@"a"];
+        STAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"once idenitfy: is called, unidentified queue should be skipped");
+        STAssertTrue(self.mixpanel.peopleQueue.count == 2, @"once identify: is called, records should go straight to main queue");
+        [self.mixpanel track:@"e2"];
+        STAssertEquals(self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], distinctId, @"events should use new distinct id after identify:");
+        [self.mixpanel reset];
+    }
 }
 
 - (void)testTrack
@@ -138,9 +172,10 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 14, @"incorrect number of properties");
+    STAssertTrue(p.count == 16, @"incorrect number of properties");
 
     STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
+    STAssertNotNil([p objectForKey:@"$app_release"], @"$app_release not set");
     STAssertNotNil([p objectForKey:@"$lib_version"], @"$lib_version not set");
     STAssertEqualObjects([p objectForKey:@"$manufacturer"], @"Apple", @"incorrect $manufacturer");
     STAssertNotNil([p objectForKey:@"$model"], @"$model not set");
@@ -152,6 +187,7 @@
     STAssertNotNil([p objectForKey:@"mp_device_model"], @"mp_device_model not set");
     STAssertEqualObjects([p objectForKey:@"mp_lib"], @"iphone", @"incorrect mp_lib");
     STAssertNotNil([p objectForKey:@"time"], @"time not set");
+    STAssertNotNil([p objectForKey:@"$ios_ifa"], @"$ios_ifa not set");
     STAssertEqualObjects([p objectForKey:@"token"], TEST_TOKEN, @"incorrect token");
 }
 
@@ -168,7 +204,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 17, @"incorrect number of properties");
+    STAssertTrue(p.count == 19, @"incorrect number of properties");
     STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
@@ -216,6 +252,13 @@
     [self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"a"];
     STAssertEqualObjects([[self.mixpanel currentSuperProperties] objectForKey:@"p4"], @"c",
                          @"register super properties once with default value failed when match");
+
+    [self.mixpanel unregisterSuperProperty:@"a"];
+    STAssertNil([[self.mixpanel currentSuperProperties] objectForKey:@"a"],
+                         @"unregister super property failed");
+
+    STAssertNoThrow([self.mixpanel unregisterSuperProperty:@"a"], @"unregister non-existent super property should not throw");
+
     [self.mixpanel clearSuperProperties];
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"clear super properties failed");
 }
@@ -241,7 +284,6 @@
     self.mixpanel.nameTag = @"n1";
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
-    [self.mixpanel.people identify:@"d1"];
     [self.mixpanel.people set:p];
     [self.mixpanel archive];
 
@@ -287,7 +329,6 @@
     self.mixpanel.nameTag = @"n1";
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
-    [self.mixpanel.people identify:@"d1"];
     [self.mixpanel.people set:p];
 
     [self.mixpanel archive];
@@ -348,29 +389,9 @@
     STAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from garbage not empty");
 }
 
-- (void)testPeopleIdentify
-{
-    NSDictionary *p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"];
-    [self.mixpanel.people set:p];
-    STAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people records should go to unidentified queue before identify");
-    STAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 1, @"unidentified people records not queued");
-    NSDictionary *r = self.mixpanel.people.unidentifiedQueue.lastObject;
-    STAssertEqualObjects([r objectForKey:@"$token"], TEST_TOKEN, @"incorrect project token in people record");
-    p = [r objectForKey:@"$set"];
-    STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
-    STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
-    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
-    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
-    [self.mixpanel.people identify:@"d1"];
-    STAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"set people distinct id failed");
-    STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"identify should move unidentified records to main queue");
-    STAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify should move records from unidentified queue");
-}
-
 - (void)testPeopleAddPushDeviceToken
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSData *token = [@"0123456789abcdef" dataUsingEncoding:[NSString defaultCStringEncoding]];
     [self.mixpanel.people addPushDeviceToken:token];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -387,7 +408,7 @@
 
 - (void)testPeopleSet
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"];
     [self.mixpanel.people set:p];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -397,16 +418,29 @@
     STAssertNotNil([r objectForKey:@"$time"], @"$time timestamp missing");
     STAssertNotNil([r objectForKey:@"$set"], @"$set dictionary missing");
     p = [r objectForKey:@"$set"];
-    STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
     STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
-    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
-    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
+    [self assertDefaultPeopleProperties:p];
+}
+
+- (void)testPeopleSetOnce
+{
+    [self.mixpanel identify:@"d1"];
+    NSDictionary *p = [NSDictionary dictionaryWithObject:@"a" forKey:@"p1"];
+    [self.mixpanel.people setOnce:p];
+    STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
+    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    STAssertEqualObjects([r objectForKey:@"$token"], TEST_TOKEN, @"project token not set");
+    STAssertEqualObjects([r objectForKey:@"$distinct_id"], @"d1", @"distinct id not set");
+    STAssertNotNil([r objectForKey:@"$time"], @"$time timestamp missing");
+    STAssertNotNil([r objectForKey:@"$set_once"], @"$set dictionary missing");
+    p = [r objectForKey:@"$set_once"];
+    STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
+    [self assertDefaultPeopleProperties:p];
 }
 
 - (void)testPeopleSetReservedProperty
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:@"override" forKey:@"$ios_app_version"];
     [self.mixpanel.people set:p];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -416,7 +450,7 @@
 
 - (void)testPeopleSetTo
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -424,16 +458,13 @@
     STAssertEqualObjects([r objectForKey:@"$distinct_id"], @"d1", @"distinct id not set");
     STAssertNotNil([r objectForKey:@"$set"], @"$set dictionary missing");
     NSDictionary *p = [r objectForKey:@"$set"];
-    STAssertTrue(p.count == 4, @"incorrect people properties: %@", p);
     STAssertEqualObjects([p objectForKey:@"p1"], @"a", @"custom people property not queued");
-    STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
-    STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
-    STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
+    [self assertDefaultPeopleProperties:p];
 }
 
 - (void)testPeopleIncrement
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     NSDictionary *p = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:3] forKey:@"p1"];
     [self.mixpanel.people increment:p];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
@@ -448,7 +479,7 @@
 
 - (void)testPeopleIncrementBy
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people increment:@"p1" by:[NSNumber numberWithInt:3]];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -462,7 +493,7 @@
 
 - (void)testPeopleDeleteUser
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel.people deleteUser];
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -476,8 +507,8 @@
 - (void)testMixpanelDelegate
 {
     self.mixpanel.delegate = self;
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel track:@"e1"];
-    [self.mixpanel.people identify:@"d1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
     [self.mixpanel flush];
     STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"delegate should have stopped flush");
@@ -510,8 +541,8 @@
     STAssertNotNil([self.mixpanel currentSuperProperties], @"setting super properties to nil should have no effect");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"setting super properties to nil should have no effect");
 
-    [self.mixpanel.people identify:nil];
-    STAssertNil(self.mixpanel.people.distinctId, @"people identify nil should make people distinct id nil");
+    [self.mixpanel identify:nil];
+    STAssertNil(self.mixpanel.people.distinctId, @"identify nil should make people distinct id nil");
     STAssertThrows([self.mixpanel.people set:nil], @"should not take nil argument");
     STAssertThrows([self.mixpanel.people set:nil to:@"a"], @"should not take nil argument");
     STAssertThrows([self.mixpanel.people set:@"p1" to:nil], @"should not take nil argument");
@@ -524,7 +555,7 @@
 
 - (void)testPeopleTrackCharge
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
 
     [self.mixpanel.people trackCharge:@25];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
@@ -566,7 +597,7 @@
 
 - (void)testPeopleClearCharges
 {
-    [self.mixpanel.people identify:@"d1"];
+    [self.mixpanel identify:@"d1"];
 
     [self.mixpanel.people clearCharges];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
