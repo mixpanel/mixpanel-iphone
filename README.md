@@ -63,6 +63,8 @@ If you want to add properties to the event you can do the following:
     [mixpanel track:@"Player Create" 
          properties:[NSDictionary dictionaryWithObjectsAndKeys:@"Female", @"Gender", @"Premium", @"Plan", nil]];
 
+Please note, these calls should be made from the main thread.
+
 # Setting People Properties #
 Use the `people` accessor on the Mixpanel object to make calls to the Mixpanel
 People API. Unlike Mixpanel Engagement, you must explicitly set the distinct ID
