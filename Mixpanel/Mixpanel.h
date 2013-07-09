@@ -383,6 +383,19 @@
  */
 - (void)archive;
 
+/*!
+ @method
+ 
+ @abstract
+ Stops and invalidates the flush timer.
+ 
+ @discussion
+ You must call stopFlushTimer before replacing a retained Mixpanel object.
+ 
+ */
+- (void)stopFlushTimer;
+
+
 @end
 
 /*!
