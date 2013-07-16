@@ -17,7 +17,9 @@
 // limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#if TARGET_OS_IPHONE
+    #import <UIKit/UIKit.h>
+#endif
 
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
