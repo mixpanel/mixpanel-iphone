@@ -32,8 +32,10 @@
     #import <CoreTelephony/CTTelephonyNetworkInfo.h>
     #import <SystemConfiguration/SystemConfiguration.h>
 #else
+    #import <ApplicationServices/ApplicationServices.h>
     #import <CommonCrypto/CommonDigest.h>
     #import <SystemConfiguration/SystemConfiguration.h>
+    #import <IOKit/IOKitLib.h>
 #endif
 
 #import "MPCJSONDataSerializer.h"
@@ -107,14 +109,15 @@ static Mixpanel *sharedInstance = nil;
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
     [properties setValue:VERSION forKey:@"$lib_version"];
     [properties setValue:@"Apple" forKey:@"$manufacturer"];
+    [properties setValue:[Mixpanel deviceModel] forKey:@"$model"];
+    [properties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
     
-#if TARGET_OS_IPHONE    
+    
+#if TARGET_OS_IPHONE
     UIDevice *device = [UIDevice currentDevice];
     [properties setValue:@"iphone" forKey:@"mp_lib"];
     [properties setValue:[device systemName] forKey:@"$os"];
     [properties setValue:[device systemVersion] forKey:@"$os_version"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$model"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
 
     CGSize size = [UIScreen mainScreen].bounds.size;
     [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
@@ -148,22 +151,11 @@ static Mixpanel *sharedInstance = nil;
     } else if(0 != versionMajor) {
         [properties setValue:[NSString stringWithFormat:@"%d", versionMajor] forKey:@"$os_version"];
     }
-
-    size_t len = 0;
-    sysctlbyname("hw.model", NULL, &len, NULL, 0);
-    if (len) {
-        char *model = malloc(len*sizeof(char));
-        sysctlbyname("hw.model", model, &len, NULL, 0);
-        NSString *modelString = [NSString stringWithFormat:@"%s", model];
-        [properties setValue:modelString forKey:@"$model"];
-        [properties setValue:modelString forKey:@"mp_device_model"]; // legacy
-        free(model);
-    }
     
     NSSize size = [NSScreen mainScreen].frame.size;
     [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
     [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
-        //this one may not be relevant. In the sense that on desktop the code says always available
+        //this one may or  not be relevant. In the sense that on desktop the code says always available
     [properties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
 
 #endif
@@ -173,15 +165,26 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSString *)deviceModel
 {
+    NSString *results  = nil;
+#if TARGET_OS_IPHONE
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     
     char *answer = malloc(size);
     sysctlbyname("hw.machine", answer, &size, NULL, 0);
     
-    NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-    
+    results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
     free(answer);
+#else    
+    size_t len = 0;
+    sysctlbyname("hw.model", NULL, &len, NULL, 0);
+    if (len) {
+        char *model = malloc(len*sizeof(char));
+        sysctlbyname("hw.model", model, &len, NULL, 0);
+        results = [NSString stringWithFormat:@"%s", model];
+        free(model);
+    }
+#endif
     return results;
 }
 
@@ -217,12 +220,23 @@ static Mixpanel *sharedInstance = nil;
 + (BOOL)inBackground
 {
     BOOL inBg = NO;
+#if TARGET_OS_IPHONE    
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
     inBg = [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground;
 #endif
     if (inBg) {
         MixpanelDebug(@"%@ in background", self);
     }
+#else
+    Boolean tmpBool = false;
+    ProcessSerialNumber currentProcess;
+    ProcessSerialNumber frontProcess;
+    
+    MacGetCurrentProcess(&currentProcess);
+    GetFrontProcess(&frontProcess);
+    SameProcess(&currentProcess, &frontProcess, &tmpBool);
+    inBg = (tmpBool == false);
+#endif
     return inBg;
 }
 
@@ -408,18 +422,31 @@ static Mixpanel *sharedInstance = nil;
 - (NSString *)defaultDistinctId
 {
     NSString *distinctId = nil;
-#if TARGET_OS_IPHONE
-    
+#if TARGET_OS_IPHONE    
     if (NSClassFromString(@"ASIdentifierManager")) {
         distinctId = ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString;
     }
-#endif
+
     if (!distinctId) {
         distinctId = ODIN1();
     }
     if (!distinctId) {
         NSLog(@"%@ error getting default distinct id: both iOS IFA and ODIN1 failed", self);
     }
+#else
+    io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
+    
+    if (platformExpert) {
+        CFTypeRef serialNumber = IORegistryEntryCreateCFProperty(platformExpert,
+                                                                 CFSTR(kIOPlatformSerialNumberKey),
+                                                                 kCFAllocatorDefault, 0);
+        if(serialNumber) {
+            distinctId = [NSString stringWithString:(NSString *)serialNumber];
+            CFRelease(serialNumber);
+        }
+        IOObjectRelease(platformExpert);
+    }
+#endif
     return distinctId;
 }
 
@@ -717,9 +744,38 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSString *)filePathForData:(NSString *)data
 {
+#if TARGET_OS_IPHONE
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
+#else
+    NSDictionary *environ = [[NSProcessInfo processInfo] environment];
+    BOOL inSandbox = (nil != [environ objectForKey:@"APP_SANDBOX_CONTAINER_ID"]);
+    if(inSandbox) { //this is like an iPhone
+        NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
+        return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+                stringByAppendingPathComponent:filename];
+    } else { //here we need to have a special folder
+        NSString *containerFolder = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+                                     stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
+        BOOL isDirectory;
+        NSError *error;
+        BOOL cacheExists = [[NSFileManager defaultManager] fileExistsAtPath:containerFolder isDirectory:&isDirectory];
+        if ((cacheExists == YES) && (isDirectory == NO)){
+            /* It is not a directory. Remove it. */
+            if ([[NSFileManager defaultManager] removeItemAtPath:containerFolder error:&error] == YES) {
+                cacheExists = NO;
+            }
+        }
+        /* Now we can safely create the cache directory if needed. */
+        if (cacheExists == NO){
+            [[NSFileManager defaultManager] createDirectoryAtPath:containerFolder withIntermediateDirectories:YES attributes:nil error:&error];
+        }
+        NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
+        return [containerFolder stringByAppendingPathComponent:filename];
+    }
+    
+#endif
 }
 
 - (NSString *)eventsFilePath
@@ -1113,9 +1169,9 @@ static Mixpanel *sharedInstance = nil;
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];    
 #if TARGET_OS_IPHONE    
     UIDevice *device = [UIDevice currentDevice];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
     [properties setValue:[device systemVersion] forKey:@"$ios_version"];
     if (NSClassFromString(@"ASIdentifierManager")) {
         [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
@@ -1132,18 +1188,6 @@ static Mixpanel *sharedInstance = nil;
     } else if(0 != versionMajor) {
         [properties setValue:[NSString stringWithFormat:@"%d", versionMajor] forKey:@"$os_version"];
     }
-    
-    size_t len = 0;
-    sysctlbyname("hw.model", NULL, &len, NULL, 0);
-    if (len) {
-        char *model = malloc(len*sizeof(char));
-        sysctlbyname("hw.model", model, &len, NULL, 0);
-        NSString *modelString = [NSString stringWithFormat:@"%s", model];
-        [properties setValue:modelString forKey:@"$model"];
-        [properties setValue:modelString forKey:@"mp_device_model"]; // legacy
-        free(model);
-    }
-
 #endif
     return [NSDictionary dictionaryWithDictionary:properties];
 }
