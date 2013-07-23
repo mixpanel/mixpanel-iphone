@@ -58,6 +58,8 @@ NSString * ODIN1(){
     
     if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
         //NSLog(@"ODIN-1.1: sysctl 2 error");
+        if (buf)
+            free(buf);
         return nil;
     }
     
