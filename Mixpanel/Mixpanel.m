@@ -681,7 +681,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
     
-    MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
+    MixpanelDebug(@"%@ flushing %luu of %lu queued events: %@", self,(unsigned long)self.eventsBatch.count, (unsigned long)self.eventsQueue.count, self.eventsQueue);
 
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
 
@@ -705,7 +705,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
     
-    MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
+    MixpanelDebug(@"%@ flushing %luu of %lu queued people: %@", self,(unsigned long)self.peopleBatch.count, (unsigned long)self.peopleQueue.count, self.peopleQueue);
 
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
 
@@ -735,7 +735,7 @@ static Mixpanel *sharedInstance = nil;
 #if TARGET_OS_IPHONE
     @synchronized(self) {
         BOOL visible = self.showNetworkActivityIndicator && (self.eventsConnection || self.peopleConnection);
-        [[NSApUIApplicationredApplication] setNetworkActivityIndicatorVisible:visible];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:visible];
     }
 #endif
 }
@@ -1044,7 +1044,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response
 {
-    MixpanelDebug(@"%@ http status code: %d", self, [response statusCode]);
+    MixpanelDebug(@"%@ http status code: %ld", self, (long)[response statusCode]);
     if ([response statusCode] != 200) {
         NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
     } else if (connection == self.eventsConnection) {
