@@ -34,16 +34,6 @@
 		2A9DA02C17A2D6A70051A34E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA02A17A2D6A70051A34E /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		2A9D9FDC17A2B8910051A34E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2A9D9FBA17A2B8910051A34E;
-			remoteInfo = MixPanelDesktop;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		2808F9B21610EFE4005772B7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		286760B01611982600B1BEC8 /* MPCJSONDataSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONDataSerializer.h; sourceTree = "<group>"; };
@@ -285,7 +275,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2A9D9FDD17A2B8910051A34E /* PBXTargetDependency */,
 			);
 			name = HelloMixpanelDesktopTests;
 			productName = MixPanelDesktopTests;
@@ -387,14 +376,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		2A9D9FDD17A2B8910051A34E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2A9D9FBA17A2B8910051A34E /* HelloMixpanelDesktop */;
-			targetProxy = 2A9D9FDC17A2B8910051A34E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2A9D9FF817A2C21B0051A34E /* Credits.rtf */ = {
@@ -679,7 +660,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MixPanelDesktop.app/Contents/MacOS/MixPanelDesktop";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanelDesktop.app/Contents/MacOS/HelloMixpanelDesktop";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -697,6 +678,7 @@
 				INFOPLIST_FILE = "./HelloMixpanelDesktopTests/HelloMixpanelDesktopTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -708,7 +690,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MixPanelDesktop.app/Contents/MacOS/MixPanelDesktop";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanelDesktop.app/Contents/MacOS/HelloMixpanelDesktop";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -722,6 +704,7 @@
 				GCC_PREFIX_HEADER = "HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
 				INFOPLIST_FILE = "./HelloMixpanelDesktopTests/HelloMixpanelDesktopTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_LDFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -733,7 +716,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MixPanelDesktop.app/Contents/MacOS/MixPanelDesktop";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanelDesktop.app/Contents/MacOS/HelloMixpanelDesktop";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -747,6 +730,7 @@
 				GCC_PREFIX_HEADER = "HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
 				INFOPLIST_FILE = "./HelloMixpanelDesktopTests/HelloMixpanelDesktopTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_LDFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
