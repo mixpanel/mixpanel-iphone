@@ -21,12 +21,22 @@
 #include <net/if_dl.h>
 #include <sys/socket.h>
 #include <sys/sysctl.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#import <AdSupport/ASIdentifierManager.h>
-#import <CommonCrypto/CommonDigest.h>
-#import <CoreTelephony/CTCarrier.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import <SystemConfiguration/SystemConfiguration.h>
+
+#if TARGET_OS_IPHONE
+    #import <AdSupport/ASIdentifierManager.h>
+    #import <CommonCrypto/CommonDigest.h>
+    #import <CoreTelephony/CTCarrier.h>
+    #import <CoreTelephony/CTTelephonyNetworkInfo.h>
+    #import <SystemConfiguration/SystemConfiguration.h>
+#else
+    #import <ApplicationServices/ApplicationServices.h>
+    #import <CommonCrypto/CommonDigest.h>
+    #import <SystemConfiguration/SystemConfiguration.h>
+    #import <IOKit/IOKitLib.h>
+#endif
 
 #import "MPCJSONDataSerializer.h"
 #import "Mixpanel.h"
@@ -69,10 +79,11 @@
 @property(nonatomic,retain) NSMutableData *eventsResponseData;
 @property(nonatomic,retain) NSMutableData *peopleResponseData;
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-@property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
+#if TARGET_OS_IPHONE
+    #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
+        @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
+    #endif
 #endif
-
 @end
 
 @interface MixpanelPeople ()
@@ -94,20 +105,19 @@ static Mixpanel *sharedInstance = nil;
 + (NSDictionary *)deviceInfoProperties
 {
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-
-    UIDevice *device = [UIDevice currentDevice];
-
-    [properties setValue:@"iphone" forKey:@"mp_lib"];
-    [properties setValue:VERSION forKey:@"$lib_version"];
-
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
-
+    [properties setValue:VERSION forKey:@"$lib_version"];
     [properties setValue:@"Apple" forKey:@"$manufacturer"];
-    [properties setValue:[device systemName] forKey:@"$os"];
-    [properties setValue:[device systemVersion] forKey:@"$os_version"];
     [properties setValue:[Mixpanel deviceModel] forKey:@"$model"];
     [properties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
+    
+    
+#if TARGET_OS_IPHONE
+    UIDevice *device = [UIDevice currentDevice];
+    [properties setValue:@"iphone" forKey:@"mp_lib"];
+    [properties setValue:[device systemName] forKey:@"$os"];
+    [properties setValue:[device systemVersion] forKey:@"$os_version"];
 
     CGSize size = [UIScreen mainScreen].bounds.size;
     [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
@@ -126,21 +136,55 @@ static Mixpanel *sharedInstance = nil;
     if (NSClassFromString(@"ASIdentifierManager")) {
         [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
     }
+#else
+    [properties setValue:@"macosx" forKey:@"mp_lib"];
+    [properties setValue:@"macos" forKey:@"$os"];
+    
+    SInt32 versionMinor=0, versionMajor = 0, versionBugFix = 0;
+    Gestalt(gestaltSystemVersionMinor, &versionMinor);
+    Gestalt(gestaltSystemVersionMajor, &versionMajor);
+    Gestalt(gestaltSystemVersionBugFix, &versionBugFix);
+    if( (0 != versionBugFix) && (0 != versionMinor) && (0 != versionBugFix)) {
+        [properties setValue:[NSString stringWithFormat:@"%d.%d.%d", versionMajor,versionMinor,versionBugFix] forKey:@"$os_version"];
+    } else if((0 != versionMinor) && (0 != versionMajor)) {
+        [properties setValue:[NSString stringWithFormat:@"%d.%d", versionMajor,versionMinor] forKey:@"$os_version"];
+    } else if(0 != versionMajor) {
+        [properties setValue:[NSString stringWithFormat:@"%d", versionMajor] forKey:@"$os_version"];
+    }
+    
+    NSSize size = [NSScreen mainScreen].frame.size;
+    [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
+    [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
+        //this one may or  not be relevant. In the sense that on desktop the code says always available
+    [properties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
 
+#endif
+    
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 
 + (NSString *)deviceModel
 {
+    NSString *results  = nil;
+#if TARGET_OS_IPHONE
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     
     char *answer = malloc(size);
     sysctlbyname("hw.machine", answer, &size, NULL, 0);
     
-    NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-    
+    results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
     free(answer);
+#else    
+    size_t len = 0;
+    sysctlbyname("hw.model", NULL, &len, NULL, 0);
+    if (len) {
+        char *model = malloc(len*sizeof(char));
+        sysctlbyname("hw.model", model, &len, NULL, 0);
+        results = [NSString stringWithFormat:@"%s", model];
+        free(model);
+    }
+#endif
     return results;
 }
 
@@ -164,24 +208,35 @@ static Mixpanel *sharedInstance = nil;
         // unable to connect to a network (no signal or airplane mode activated)
         return NO;
     }
-
+#if TARGET_OS_IPHONE
     if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN) {
         // only a cellular network connection is available.
         return NO;
     }
-
+#endif
     return YES;
 }
 
 + (BOOL)inBackground
 {
     BOOL inBg = NO;
+#if TARGET_OS_IPHONE    
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
     inBg = [[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground;
 #endif
     if (inBg) {
         MixpanelDebug(@"%@ in background", self);
     }
+#else
+    Boolean tmpBool = false;
+    ProcessSerialNumber currentProcess;
+    ProcessSerialNumber frontProcess;
+    
+    MacGetCurrentProcess(&currentProcess);
+    GetFrontProcess(&frontProcess);
+    SameProcess(&currentProcess, &frontProcess, &tmpBool);
+    inBg = (tmpBool == false);
+#endif
     return inBg;
 }
 
@@ -367,15 +422,31 @@ static Mixpanel *sharedInstance = nil;
 - (NSString *)defaultDistinctId
 {
     NSString *distinctId = nil;
+#if TARGET_OS_IPHONE    
     if (NSClassFromString(@"ASIdentifierManager")) {
         distinctId = ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString;
     }
+
     if (!distinctId) {
         distinctId = ODIN1();
     }
     if (!distinctId) {
         NSLog(@"%@ error getting default distinct id: both iOS IFA and ODIN1 failed", self);
     }
+#else
+    io_service_t    platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
+    
+    if (platformExpert) {
+        CFTypeRef serialNumber = IORegistryEntryCreateCFProperty(platformExpert,
+                                                                 CFSTR(kIOPlatformSerialNumberKey),
+                                                                 kCFAllocatorDefault, 0);
+        if(serialNumber) {
+            distinctId = [NSString stringWithString:(NSString *)serialNumber];
+            CFRelease(serialNumber);
+        }
+        IOObjectRelease(platformExpert);
+    }
+#endif
     return distinctId;
 }
 
@@ -548,11 +619,13 @@ static Mixpanel *sharedInstance = nil;
     // If the app is currently in the background but Mixpanel has not requested
     // to run a background task, the flush will be cut short. This can happen
     // when the app forces a flush from within its own background task.
+#if TARGET_OS_IPHONE
     if ([Mixpanel inBackground] && self.taskId == UIBackgroundTaskInvalid) {
         [self flushInBackgroundTask];
         return;
     }
-
+#endif
+    
     @synchronized(self) {
         if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
             if (![self.delegate mixpanelWillFlush:self]) {
@@ -568,24 +641,26 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flushInBackgroundTask
 {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-    @synchronized(self) {
-        if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
-            [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
+#if TARGET_OS_IPHONE
+    #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
+        @synchronized(self) {
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)] &&
+                [[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)]) {
 
-            self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
-                [self cancelFlush];
-                [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-                self.taskId = UIBackgroundTaskInvalid;
-            }];
+                self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                    MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
+                    [self cancelFlush];
+                    [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                    self.taskId = UIBackgroundTaskInvalid;
+                }];
 
-            MixpanelDebug(@"%@ starting flush background task %u", self, self.taskId);
-            [self flush];
+                MixpanelDebug(@"%@ starting flush background task %u", self, self.taskId);
+                [self flush];
 
-            // connection callbacks end this task by calling endBackgroundTaskIfComplete
+                // connection callbacks end this task by calling endBackgroundTaskIfComplete
+            }
         }
-    }
+    #endif
 #endif
 }
 
@@ -606,7 +681,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
     
-    MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
+    MixpanelDebug(@"%@ flushing %luu of %lu queued events: %@", self,(unsigned long)self.eventsBatch.count, (unsigned long)self.eventsQueue.count, self.eventsQueue);
 
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
 
@@ -630,7 +705,7 @@ static Mixpanel *sharedInstance = nil;
     NSString *data = [Mixpanel encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
     
-    MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
+    MixpanelDebug(@"%@ flushing %luu of %lu queued people: %@", self,(unsigned long)self.peopleBatch.count, (unsigned long)self.peopleQueue.count, self.peopleQueue);
 
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
 
@@ -657,19 +732,50 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)updateNetworkActivityIndicator
 {
+#if TARGET_OS_IPHONE
     @synchronized(self) {
         BOOL visible = self.showNetworkActivityIndicator && (self.eventsConnection || self.peopleConnection);
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:visible];
     }
+#endif
 }
 
 #pragma mark * Persistence
 
 - (NSString *)filePathForData:(NSString *)data
 {
+#if TARGET_OS_IPHONE
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
+#else
+    NSDictionary *environ = [[NSProcessInfo processInfo] environment];
+    BOOL inSandbox = (nil != [environ objectForKey:@"APP_SANDBOX_CONTAINER_ID"]);
+    if(inSandbox) { //this is like an iPhone
+        NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
+        return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+                stringByAppendingPathComponent:filename];
+    } else { //here we need to have a special folder
+        NSString *containerFolder = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+                                     stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]];
+        BOOL isDirectory;
+        NSError *error;
+        BOOL cacheExists = [[NSFileManager defaultManager] fileExistsAtPath:containerFolder isDirectory:&isDirectory];
+        if ((cacheExists == YES) && (isDirectory == NO)){
+            /* It is not a directory. Remove it. */
+            if ([[NSFileManager defaultManager] removeItemAtPath:containerFolder error:&error] == YES) {
+                cacheExists = NO;
+            }
+        }
+        /* Now we can safely create the cache directory if needed. */
+        if (cacheExists == NO){
+            [[NSFileManager defaultManager] createDirectoryAtPath:containerFolder withIntermediateDirectories:YES attributes:nil error:&error];
+        }
+        NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
+        return [containerFolder stringByAppendingPathComponent:filename];
+    }
+    
+#endif
 }
 
 - (NSString *)eventsFilePath
@@ -805,10 +911,10 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ adding application observers", self);
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+#if TARGET_OS_IPHONE    
     [notificationCenter addObserver:self
                            selector:@selector(applicationWillTerminate:)
-                               name:UIApplicationWillTerminateNotification
-                             object:nil];
+                               name:UIApplicationWillTerminateNotification                          object:nil];
     [notificationCenter addObserver:self
                            selector:@selector(applicationWillResignActive:)
                                name:UIApplicationWillResignActiveNotification
@@ -834,6 +940,18 @@ static Mixpanel *sharedInstance = nil;
         }
     }
 #endif
+#else
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillTerminate:)
+                               name:NSApplicationWillTerminateNotification object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillResignActive:)
+                               name:NSApplicationWillResignActiveNotification object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationDidBecomeActive:)
+                               name:NSApplicationDidBecomeActiveNotification object:nil];
+
+#endif    
 }
 
 - (void)removeApplicationObservers
@@ -926,7 +1044,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response
 {
-    MixpanelDebug(@"%@ http status code: %d", self, [response statusCode]);
+    MixpanelDebug(@"%@ http status code: %ld", self, (long)[response statusCode]);
     if ([response statusCode] != 200) {
         NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
     } else if (connection == self.eventsConnection) {
@@ -1047,15 +1165,30 @@ static Mixpanel *sharedInstance = nil;
 
 + (NSDictionary *)deviceInfoProperties
 {
-    UIDevice *device = [UIDevice currentDevice];
+    
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
-    [properties setValue:[device systemVersion] forKey:@"$ios_version"];
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];    
+#if TARGET_OS_IPHONE    
+    UIDevice *device = [UIDevice currentDevice];
+    [properties setValue:[device systemVersion] forKey:@"$ios_version"];
     if (NSClassFromString(@"ASIdentifierManager")) {
         [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
     }
+#else
+    SInt32 versionMinor=0, versionMajor = 0, versionBugFix = 0;
+    Gestalt(gestaltSystemVersionMinor, &versionMinor);
+    Gestalt(gestaltSystemVersionMajor, &versionMajor);
+    Gestalt(gestaltSystemVersionBugFix, &versionBugFix);
+    if( (0 != versionBugFix) && (0 != versionMinor) && (0 != versionBugFix)) {
+        [properties setValue:[NSString stringWithFormat:@"%d.%d.%d", versionMajor,versionMinor,versionBugFix] forKey:@"$os_version"];
+    } else if((0 != versionMinor) && (0 != versionMajor)) {
+        [properties setValue:[NSString stringWithFormat:@"%d.%d", versionMajor,versionMinor] forKey:@"$os_version"];
+    } else if(0 != versionMajor) {
+        [properties setValue:[NSString stringWithFormat:@"%d", versionMajor] forKey:@"$os_version"];
+    }
+#endif
     return [NSDictionary dictionaryWithDictionary:properties];
 }
 

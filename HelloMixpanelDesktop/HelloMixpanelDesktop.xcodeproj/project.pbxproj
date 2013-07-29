@@ -1,0 +1,777 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A9D9FDA17A2B8910051A34E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9B21610EFE4005772B7 /* SenTestingKit.framework */; };
+		2A9D9FF117A2BBD20051A34E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A9D9FEF17A2BBBE0051A34E /* Cocoa.framework */; };
+		2A9DA00B17A2C21B0051A34E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A9D9FF817A2C21B0051A34E /* Credits.rtf */; };
+		2A9DA00C17A2C21B0051A34E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A9D9FFA17A2C21B0051A34E /* InfoPlist.strings */; };
+		2A9DA00D17A2C21B0051A34E /* MXPMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A9D9FFC17A2C21B0051A34E /* MXPMainMenu.xib */; };
+		2A9DA00E17A2C21B0051A34E /* grid.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A9D9FFE17A2C21B0051A34E /* grid.png */; };
+		2A9DA01017A2C21B0051A34E /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA00017A2C21B0051A34E /* Icon-72.png */; };
+		2A9DA01117A2C21B0051A34E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA00117A2C21B0051A34E /* Icon.png */; };
+		2A9DA01217A2C21B0051A34E /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA00217A2C21B0051A34E /* Icon@2x.png */; };
+		2A9DA01317A2C21B0051A34E /* logo_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA00317A2C21B0051A34E /* logo_white.png */; };
+		2A9DA01417A2C21B0051A34E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A9DA00417A2C21B0051A34E /* main.m */; };
+		2A9DA01517A2C21B0051A34E /* MXPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A9DA00717A2C21B0051A34E /* MXPAppDelegate.m */; };
+		2A9DA01617A2C21B0051A34E /* MXPMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A9DA00917A2C21B0051A34E /* MXPMainWindowController.m */; };
+		2A9DA01717A2C21B0051A34E /* MXPMainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA00A17A2C21B0051A34E /* MXPMainWindow.xib */; };
+		2A9DA01B17A2C7710051A34E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A9DA01A17A2C7710051A34E /* ApplicationServices.framework */; };
+		2A9DA01D17A2C7780051A34E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A9DA01C17A2C7780051A34E /* SystemConfiguration.framework */; };
+		2A9DA01F17A2C7800051A34E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A9DA01E17A2C7800051A34E /* IOKit.framework */; };
+		2A9DA02017A2CB210051A34E /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760BA1611982600B1BEC8 /* Mixpanel.m */; };
+		2A9DA02117A2CB3A0051A34E /* MPCJSONDataSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B11611982600B1BEC8 /* MPCJSONDataSerializer.m */; };
+		2A9DA02217A2CB3A0051A34E /* MPCJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B31611982600B1BEC8 /* MPCJSONSerializer.m */; };
+		2A9DA02317A2CB3A0051A34E /* MPCSerializedJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */; };
+		2A9DA02417A2CB3F0051A34E /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B81611982600B1BEC8 /* NSData+MPBase64.m */; };
+		2A9DA02617A2CD4D0051A34E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A9DA02517A2CD4D0051A34E /* QuartzCore.framework */; };
+		2A9DA02917A2D6990051A34E /* HelloMixpanelDesktopTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A9DA02817A2D6990051A34E /* HelloMixpanelDesktopTests.m */; };
+		2A9DA02C17A2D6A70051A34E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A9DA02A17A2D6A70051A34E /* InfoPlist.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2808F9B21610EFE4005772B7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		286760B01611982600B1BEC8 /* MPCJSONDataSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONDataSerializer.h; sourceTree = "<group>"; };
+		286760B11611982600B1BEC8 /* MPCJSONDataSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONDataSerializer.m; sourceTree = "<group>"; };
+		286760B21611982600B1BEC8 /* MPCJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONSerializer.h; sourceTree = "<group>"; };
+		286760B31611982600B1BEC8 /* MPCJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONSerializer.m; sourceTree = "<group>"; };
+		286760B41611982600B1BEC8 /* MPCSerializedJSONData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCSerializedJSONData.h; sourceTree = "<group>"; };
+		286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCSerializedJSONData.m; sourceTree = "<group>"; };
+		286760B71611982600B1BEC8 /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
+		286760B81611982600B1BEC8 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
+		286760B91611982600B1BEC8 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
+		286760BA1611982600B1BEC8 /* Mixpanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mixpanel.m; sourceTree = "<group>"; };
+		288657D317285E2700EC8035 /* ODIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODIN.h; sourceTree = "<group>"; };
+		288657D417285E2700EC8035 /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
+		2A9D9FBB17A2B8910051A34E /* HelloMixpanelDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanelDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A9D9FD917A2B8910051A34E /* HelloMixpanelDesktopTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelloMixpanelDesktopTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A9D9FEF17A2BBBE0051A34E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		2A9D9FF917A2C21B0051A34E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		2A9D9FFB17A2C21B0051A34E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2A9D9FFD17A2C21B0051A34E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MXPMainMenu.xib; sourceTree = "<group>"; };
+		2A9D9FFE17A2C21B0051A34E /* grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid.png; sourceTree = "<group>"; };
+		2A9D9FFF17A2C21B0051A34E /* HelloMixpanelDesktop-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HelloMixpanelDesktop-Info.plist"; sourceTree = "<group>"; };
+		2A9DA00017A2C21B0051A34E /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		2A9DA00117A2C21B0051A34E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		2A9DA00217A2C21B0051A34E /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		2A9DA00317A2C21B0051A34E /* logo_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_white.png; sourceTree = "<group>"; };
+		2A9DA00417A2C21B0051A34E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A9DA00517A2C21B0051A34E /* MixpanelDesktop-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MixpanelDesktop-Prefix.pch"; sourceTree = "<group>"; };
+		2A9DA00617A2C21B0051A34E /* MXPAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXPAppDelegate.h; sourceTree = "<group>"; };
+		2A9DA00717A2C21B0051A34E /* MXPAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXPAppDelegate.m; sourceTree = "<group>"; };
+		2A9DA00817A2C21B0051A34E /* MXPMainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXPMainWindowController.h; sourceTree = "<group>"; };
+		2A9DA00917A2C21B0051A34E /* MXPMainWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXPMainWindowController.m; sourceTree = "<group>"; };
+		2A9DA00A17A2C21B0051A34E /* MXPMainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MXPMainWindow.xib; sourceTree = "<group>"; };
+		2A9DA01A17A2C7710051A34E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		2A9DA01C17A2C7780051A34E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		2A9DA01E17A2C7800051A34E /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		2A9DA02517A2CD4D0051A34E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		2A9DA02717A2D6990051A34E /* HelloMixpanelDesktopTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelloMixpanelDesktopTests.h; path = HelloMixpanelDesktopTests/HelloMixpanelDesktopTests.h; sourceTree = SOURCE_ROOT; };
+		2A9DA02817A2D6990051A34E /* HelloMixpanelDesktopTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelloMixpanelDesktopTests.m; path = HelloMixpanelDesktopTests/HelloMixpanelDesktopTests.m; sourceTree = SOURCE_ROOT; };
+		2A9DA02B17A2D6A70051A34E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = HelloMixpanelDesktopTests/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A9D9FB817A2B8910051A34E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9DA02617A2CD4D0051A34E /* QuartzCore.framework in Frameworks */,
+				2A9DA01F17A2C7800051A34E /* IOKit.framework in Frameworks */,
+				2A9DA01D17A2C7780051A34E /* SystemConfiguration.framework in Frameworks */,
+				2A9DA01B17A2C7710051A34E /* ApplicationServices.framework in Frameworks */,
+				2A9D9FF117A2BBD20051A34E /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A9D9FD517A2B8910051A34E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9D9FDA17A2B8910051A34E /* SenTestingKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2808F9821610EFE3005772B7 = {
+			isa = PBXGroup;
+			children = (
+				2A9D9FF717A2C21B0051A34E /* HelloMixpanelDesktop */,
+				2A9D9FDE17A2B8910051A34E /* HelloMixpanelDesktopTests */,
+				2808F9901610EFE3005772B7 /* Frameworks */,
+				2808F98E1610EFE3005772B7 /* Products */,
+				286760AD1611982600B1BEC8 /* Mixpanel */,
+			);
+			sourceTree = "<group>";
+		};
+		2808F98E1610EFE3005772B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2A9D9FBB17A2B8910051A34E /* HelloMixpanelDesktop.app */,
+				2A9D9FD917A2B8910051A34E /* HelloMixpanelDesktopTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2808F9901610EFE3005772B7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2A9DA02517A2CD4D0051A34E /* QuartzCore.framework */,
+				2A9DA01E17A2C7800051A34E /* IOKit.framework */,
+				2A9DA01C17A2C7780051A34E /* SystemConfiguration.framework */,
+				2A9DA01A17A2C7710051A34E /* ApplicationServices.framework */,
+				2A9D9FEF17A2BBBE0051A34E /* Cocoa.framework */,
+				2808F9B21610EFE4005772B7 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		286760AD1611982600B1BEC8 /* Mixpanel */ = {
+			isa = PBXGroup;
+			children = (
+				286760AE1611982600B1BEC8 /* Library */,
+				286760B91611982600B1BEC8 /* Mixpanel.h */,
+				286760BA1611982600B1BEC8 /* Mixpanel.m */,
+			);
+			name = Mixpanel;
+			path = ../Mixpanel;
+			sourceTree = "<group>";
+		};
+		286760AE1611982600B1BEC8 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				288657D217285E2700EC8035 /* ODIN */,
+				286760AF1611982600B1BEC8 /* JSON */,
+				286760B61611982600B1BEC8 /* NSData_Base64 */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		286760AF1611982600B1BEC8 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				286760B01611982600B1BEC8 /* MPCJSONDataSerializer.h */,
+				286760B11611982600B1BEC8 /* MPCJSONDataSerializer.m */,
+				286760B21611982600B1BEC8 /* MPCJSONSerializer.h */,
+				286760B31611982600B1BEC8 /* MPCJSONSerializer.m */,
+				286760B41611982600B1BEC8 /* MPCSerializedJSONData.h */,
+				286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		286760B61611982600B1BEC8 /* NSData_Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				286760B71611982600B1BEC8 /* NSData+MPBase64.h */,
+				286760B81611982600B1BEC8 /* NSData+MPBase64.m */,
+			);
+			path = NSData_Base64;
+			sourceTree = "<group>";
+		};
+		288657D217285E2700EC8035 /* ODIN */ = {
+			isa = PBXGroup;
+			children = (
+				288657D317285E2700EC8035 /* ODIN.h */,
+				288657D417285E2700EC8035 /* ODIN.m */,
+			);
+			path = ODIN;
+			sourceTree = "<group>";
+		};
+		2A9D9FDE17A2B8910051A34E /* HelloMixpanelDesktopTests */ = {
+			isa = PBXGroup;
+			children = (
+				2A9DA02717A2D6990051A34E /* HelloMixpanelDesktopTests.h */,
+				2A9DA02817A2D6990051A34E /* HelloMixpanelDesktopTests.m */,
+				2A9D9FDF17A2B8910051A34E /* Supporting Files */,
+			);
+			name = HelloMixpanelDesktopTests;
+			path = MixPanelDesktopTests;
+			sourceTree = "<group>";
+		};
+		2A9D9FDF17A2B8910051A34E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2A9DA02A17A2D6A70051A34E /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2A9D9FF717A2C21B0051A34E /* HelloMixpanelDesktop */ = {
+			isa = PBXGroup;
+			children = (
+				2A9DA01917A2C22E0051A34E /* Resources */,
+				2A9DA01817A2C2250051A34E /* Sources */,
+				2A9D9FFF17A2C21B0051A34E /* HelloMixpanelDesktop-Info.plist */,
+			);
+			path = HelloMixpanelDesktop;
+			sourceTree = "<group>";
+		};
+		2A9DA01817A2C2250051A34E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2A9DA00417A2C21B0051A34E /* main.m */,
+				2A9DA00517A2C21B0051A34E /* MixpanelDesktop-Prefix.pch */,
+				2A9DA00617A2C21B0051A34E /* MXPAppDelegate.h */,
+				2A9DA00717A2C21B0051A34E /* MXPAppDelegate.m */,
+				2A9DA00817A2C21B0051A34E /* MXPMainWindowController.h */,
+				2A9DA00917A2C21B0051A34E /* MXPMainWindowController.m */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		2A9DA01917A2C22E0051A34E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2A9D9FF817A2C21B0051A34E /* Credits.rtf */,
+				2A9D9FFA17A2C21B0051A34E /* InfoPlist.strings */,
+				2A9D9FFC17A2C21B0051A34E /* MXPMainMenu.xib */,
+				2A9DA00A17A2C21B0051A34E /* MXPMainWindow.xib */,
+				2A9DA00017A2C21B0051A34E /* Icon-72.png */,
+				2A9DA00117A2C21B0051A34E /* Icon.png */,
+				2A9DA00217A2C21B0051A34E /* Icon@2x.png */,
+				2A9DA00317A2C21B0051A34E /* logo_white.png */,
+				2A9D9FFE17A2C21B0051A34E /* grid.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2A9D9FBA17A2B8910051A34E /* HelloMixpanelDesktop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A9D9FED17A2B8910051A34E /* Build configuration list for PBXNativeTarget "HelloMixpanelDesktop" */;
+			buildPhases = (
+				2A9D9FB717A2B8910051A34E /* Sources */,
+				2A9D9FB817A2B8910051A34E /* Frameworks */,
+				2A9D9FB917A2B8910051A34E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HelloMixpanelDesktop;
+			productName = MixPanelDesktop;
+			productReference = 2A9D9FBB17A2B8910051A34E /* HelloMixpanelDesktop.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2A9D9FD817A2B8910051A34E /* HelloMixpanelDesktopTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A9D9FEE17A2B8910051A34E /* Build configuration list for PBXNativeTarget "HelloMixpanelDesktopTests" */;
+			buildPhases = (
+				2A9D9FD417A2B8910051A34E /* Sources */,
+				2A9D9FD517A2B8910051A34E /* Frameworks */,
+				2A9D9FD617A2B8910051A34E /* Resources */,
+				2A9D9FD717A2B8910051A34E /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HelloMixpanelDesktopTests;
+			productName = MixPanelDesktopTests;
+			productReference = 2A9D9FD917A2B8910051A34E /* HelloMixpanelDesktopTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2808F9841610EFE3005772B7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Mixpanel;
+			};
+			buildConfigurationList = 2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanelDesktop" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2808F9821610EFE3005772B7;
+			productRefGroup = 2808F98E1610EFE3005772B7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2A9D9FBA17A2B8910051A34E /* HelloMixpanelDesktop */,
+				2A9D9FD817A2B8910051A34E /* HelloMixpanelDesktopTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2A9D9FB917A2B8910051A34E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9DA00B17A2C21B0051A34E /* Credits.rtf in Resources */,
+				2A9DA00C17A2C21B0051A34E /* InfoPlist.strings in Resources */,
+				2A9DA00D17A2C21B0051A34E /* MXPMainMenu.xib in Resources */,
+				2A9DA00E17A2C21B0051A34E /* grid.png in Resources */,
+				2A9DA01017A2C21B0051A34E /* Icon-72.png in Resources */,
+				2A9DA01117A2C21B0051A34E /* Icon.png in Resources */,
+				2A9DA01217A2C21B0051A34E /* Icon@2x.png in Resources */,
+				2A9DA01317A2C21B0051A34E /* logo_white.png in Resources */,
+				2A9DA01717A2C21B0051A34E /* MXPMainWindow.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A9D9FD617A2B8910051A34E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9DA02C17A2D6A70051A34E /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2A9D9FD717A2B8910051A34E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2A9D9FB717A2B8910051A34E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9DA01417A2C21B0051A34E /* main.m in Sources */,
+				2A9DA02017A2CB210051A34E /* Mixpanel.m in Sources */,
+				2A9DA01517A2C21B0051A34E /* MXPAppDelegate.m in Sources */,
+				2A9DA01617A2C21B0051A34E /* MXPMainWindowController.m in Sources */,
+				2A9DA02117A2CB3A0051A34E /* MPCJSONDataSerializer.m in Sources */,
+				2A9DA02217A2CB3A0051A34E /* MPCJSONSerializer.m in Sources */,
+				2A9DA02317A2CB3A0051A34E /* MPCSerializedJSONData.m in Sources */,
+				2A9DA02417A2CB3F0051A34E /* NSData+MPBase64.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A9D9FD417A2B8910051A34E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9DA02917A2D6990051A34E /* HelloMixpanelDesktopTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2A9D9FF817A2C21B0051A34E /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A9D9FF917A2C21B0051A34E /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		2A9D9FFA17A2C21B0051A34E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A9D9FFB17A2C21B0051A34E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2A9D9FFC17A2C21B0051A34E /* MXPMainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A9D9FFD17A2C21B0051A34E /* en */,
+			);
+			name = MXPMainMenu.xib;
+			sourceTree = "<group>";
+		};
+		2A9DA02A17A2D6A70051A34E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A9DA02B17A2D6A70051A34E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2808F9C11610EFE4005772B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MIXPANEL_LOG=1",
+					"MIXPANEL_DEBUG=1",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = NO;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "";
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2808F9C21610EFE4005772B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MIXPANEL_LOG=1",
+					"MIXPANEL_DEBUG=1",
+				);
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = NO;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+			};
+			name = Release;
+		};
+		28C2136516376D3300696E4F /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = NO;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
+		2A9D9FE717A2B8910051A34E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "./HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/HelloMixpanelDesktop/HelloMixpanelDesktop-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		2A9D9FE817A2B8910051A34E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "./HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/HelloMixpanelDesktop/HelloMixpanelDesktop-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		2A9D9FE917A2B8910051A34E /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "./HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/HelloMixpanelDesktop/HelloMixpanelDesktop-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = AppStore;
+		};
+		2A9D9FEA17A2B8910051A34E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanelDesktop.app/Contents/MacOS/HelloMixpanelDesktop";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "./HelloMixpanelDesktopTests/HelloMixpanelDesktopTests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-v";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		2A9D9FEB17A2B8910051A34E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanelDesktop.app/Contents/MacOS/HelloMixpanelDesktop";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
+				INFOPLIST_FILE = "./HelloMixpanelDesktopTests/HelloMixpanelDesktopTests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_LDFLAGS = "-v";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		2A9D9FEC17A2B8910051A34E /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanelDesktop.app/Contents/MacOS/HelloMixpanelDesktop";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HelloMixpanelDesktop/MixpanelDesktop-Prefix.pch";
+				INFOPLIST_FILE = "./HelloMixpanelDesktopTests/HelloMixpanelDesktopTests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_LDFLAGS = "-v";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = AppStore;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanelDesktop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2808F9C11610EFE4005772B7 /* Debug */,
+				2808F9C21610EFE4005772B7 /* Release */,
+				28C2136516376D3300696E4F /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A9D9FED17A2B8910051A34E /* Build configuration list for PBXNativeTarget "HelloMixpanelDesktop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A9D9FE717A2B8910051A34E /* Debug */,
+				2A9D9FE817A2B8910051A34E /* Release */,
+				2A9D9FE917A2B8910051A34E /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A9D9FEE17A2B8910051A34E /* Build configuration list for PBXNativeTarget "HelloMixpanelDesktopTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A9D9FEA17A2B8910051A34E /* Debug */,
+				2A9D9FEB17A2B8910051A34E /* Release */,
+				2A9D9FEC17A2B8910051A34E /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2808F9841610EFE3005772B7 /* Project object */;
+}
