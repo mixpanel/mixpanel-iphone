@@ -74,6 +74,8 @@
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
 #endif
 
+@property(nonatomic,assign) SCNetworkReachabilityRef reachability;
+
 @end
 
 @interface MixpanelPeople ()
@@ -90,6 +92,18 @@
 @implementation Mixpanel
 
 static Mixpanel *sharedInstance = nil;
+
+static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
+{
+    if (info != NULL && [(NSObject*)info isKindOfClass:[Mixpanel class]]) {
+        @autoreleasepool {
+            Mixpanel *mixpanel = (Mixpanel *)info;
+            [mixpanel reachabilityChanged:flags];
+        }
+    } else {
+        NSLog(@"Mixpanel reachability callback received unexpected info object");
+    }
+}
 
 #pragma mark * Device info
 
@@ -142,35 +156,6 @@ static Mixpanel *sharedInstance = nil;
     
     free(answer);
     return results;
-}
-
-+ (BOOL)wifiAvailable
-{
-    struct sockaddr_in sockAddr;
-    bzero(&sockAddr, sizeof(sockAddr));
-    sockAddr.sin_len = sizeof(sockAddr);
-    sockAddr.sin_family = AF_INET;
-
-    SCNetworkReachabilityRef nrRef = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&sockAddr);
-    SCNetworkReachabilityFlags flags;
-    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(nrRef, &flags);
-    if (!didRetrieveFlags) {
-        MixpanelDebug(@"%@ unable to fetch the network reachablity flags", self);
-    }
-
-    CFRelease(nrRef);
-
-    if (!didRetrieveFlags || (flags & kSCNetworkReachabilityFlagsReachable) != kSCNetworkReachabilityFlagsReachable) {
-        // unable to connect to a network (no signal or airplane mode activated)
-        return NO;
-    }
-
-    if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN) {
-        // only a cellular network connection is available.
-        return NO;
-    }
-
-    return YES;
 }
 
 + (BOOL)inBackground
@@ -333,7 +318,25 @@ static Mixpanel *sharedInstance = nil;
 
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
-        
+
+        BOOL success = NO;
+        if ((self.reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
+            SCNetworkReachabilityContext context = {0, NULL, NULL, NULL, NULL};
+            context.info = (void *)self;
+            if (SCNetworkReachabilitySetCallback(self.reachability, MixpanelReachabilityCallback, &context)) {
+                if (SCNetworkReachabilitySetDispatchQueue(self.reachability, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))) {
+                    success = YES;
+                    MixpanelDebug(@"%@ successfully set up reachability callback", self);
+                } else {
+                    // cleanup callback if setting dispatch queue failed
+                    SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
+                }
+            }
+        }
+        if (!success) {
+            NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
+        }
+
         [self addApplicationObservers];
 
         [self unarchive];
@@ -393,7 +396,6 @@ static Mixpanel *sharedInstance = nil;
             event = @"mp_event";
         }
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        [self.automaticProperties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
         [p addEntriesFromDictionary:self.automaticProperties];
         [p setObject:self.apiToken forKey:@"token"];
         [p setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"time"];
@@ -897,6 +899,14 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)reachabilityChanged:(SCNetworkReachabilityFlags)flags
+{
+    BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
+    @synchronized(self) {
+        self.automaticProperties[@"$wifi"] = wifi ? @YES : @NO;
+    }
+}
+
 - (void)endBackgroundTaskIfComplete
 {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
@@ -1038,7 +1048,13 @@ static Mixpanel *sharedInstance = nil;
     self.peopleConnection = nil;
     self.eventsResponseData = nil;
     self.peopleResponseData = nil;
-    
+
+    if (self.reachability) {
+        SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
+        SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
+        self.reachability = nil;
+    }
+
     [super dealloc];
 }
 
