@@ -59,6 +59,7 @@
 
 @property(nonatomic,copy)   NSString *apiToken;
 @property(nonatomic,retain) NSMutableDictionary *superProperties;
+@property(nonatomic,retain) NSMutableDictionary *automaticProperties; // mutable because we update $wifi when reachability changes
 @property(nonatomic,retain) NSTimer *timer;
 @property(nonatomic,retain) NSMutableArray *eventsQueue;
 @property(nonatomic,retain) NSMutableArray *peopleQueue;
@@ -80,6 +81,7 @@
 @property(nonatomic,assign) Mixpanel *mixpanel;
 @property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
 @property(nonatomic,copy) NSString *distinctId;
+@property(nonatomic,retain) NSDictionary *automaticProperties;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 
@@ -91,7 +93,7 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark * Device info
 
-+ (NSDictionary *)deviceInfoProperties
+- (NSMutableDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
 
@@ -113,8 +115,6 @@ static Mixpanel *sharedInstance = nil;
     [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
     [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
 
-    [properties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
-
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networkInfo subscriberCellularProvider];
     [networkInfo release];
@@ -127,7 +127,7 @@ static Mixpanel *sharedInstance = nil;
         [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
     }
 
-    return [NSDictionary dictionaryWithDictionary:properties];
+    return properties;
 }
 
 + (NSString *)deviceModel
@@ -329,12 +329,13 @@ static Mixpanel *sharedInstance = nil;
         
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
+        self.automaticProperties = [self collectAutomaticProperties];
 
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         
         [self addApplicationObservers];
-        
+
         [self unarchive];
 
     }
@@ -392,7 +393,8 @@ static Mixpanel *sharedInstance = nil;
             event = @"mp_event";
         }
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        [p addEntriesFromDictionary:[Mixpanel deviceInfoProperties]];
+        [self.automaticProperties setValue:[NSNumber numberWithBool:[Mixpanel wifiAvailable]] forKey:@"$wifi"];
+        [p addEntriesFromDictionary:self.automaticProperties];
         [p setObject:self.apiToken forKey:@"token"];
         [p setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"time"];
         if (self.nameTag) {
@@ -1026,6 +1028,7 @@ static Mixpanel *sharedInstance = nil;
     
     self.apiToken = nil;
     self.superProperties = nil;
+    self.automaticProperties = nil;
     self.timer = nil;
     self.eventsQueue = nil;
     self.peopleQueue = nil;
@@ -1045,7 +1048,7 @@ static Mixpanel *sharedInstance = nil;
 
 @implementation MixpanelPeople
 
-+ (NSDictionary *)deviceInfoProperties
+- (NSDictionary *)collectAutomaticProperties
 {
     UIDevice *device = [UIDevice currentDevice];
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
@@ -1064,6 +1067,7 @@ static Mixpanel *sharedInstance = nil;
     if (self = [self init]) {
         self.mixpanel = mixpanel;
         self.unidentifiedQueue = [NSMutableArray array];
+        self.automaticProperties = [self collectAutomaticProperties];
     }
     return self;
 }
@@ -1177,7 +1181,7 @@ static Mixpanel *sharedInstance = nil;
         }
 
         if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
-            [p addEntriesFromDictionary:[MixpanelPeople deviceInfoProperties]];
+            [p addEntriesFromDictionary:self.automaticProperties];
         }
 
         [p addEntriesFromDictionary:properties];
@@ -1208,6 +1212,7 @@ static Mixpanel *sharedInstance = nil;
     self.mixpanel = nil;
     self.distinctId = nil;
     self.unidentifiedQueue = nil;
+    self.automaticProperties = nil;
     [super dealloc];
 }
 
