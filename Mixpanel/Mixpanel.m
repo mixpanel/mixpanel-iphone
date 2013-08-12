@@ -846,7 +846,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)endBackgroundTaskIfComplete
 {
-    // if the os version allows background tasks, the app supports them, and we're in one, end it
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
             MixpanelDebug(@"%@ ending flush background task %u", self, self.taskId);
