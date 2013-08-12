@@ -52,8 +52,8 @@
 }
 
 // re-declare internally as readwrite
-@property(retain) MixpanelPeople *people;
-@property(copy) NSString *distinctId;
+@property(atomic,retain) MixpanelPeople *people;
+@property(atomic,copy) NSString *distinctId;
 
 @property(nonatomic,copy)   NSString *apiToken;
 @property(atomic,retain) NSDictionary *superProperties;
