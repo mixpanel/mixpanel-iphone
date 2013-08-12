@@ -229,7 +229,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     for (id k in properties) {
         NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
-        // would be convenient to do: id v = [properties objectForKey:k]; ..but, when the NSAssert's are stripped out in release, it becomes an unused variable error
+        // would be convenient to do: id v = [properties objectForKey:k]; but
+        // when the NSAssert's are stripped out in release, it becomes an
+        // unused variable error. also, note that @YES and @NO pass as
+        // instances of NSNumber class.
         NSAssert([[properties objectForKey:k] isKindOfClass:[NSString class]] ||
                  [[properties objectForKey:k] isKindOfClass:[NSNumber class]] ||
                  [[properties objectForKey:k] isKindOfClass:[NSNull class]] ||
