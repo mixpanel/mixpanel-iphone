@@ -70,6 +70,7 @@
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
+@property(nonatomic,retain) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -160,10 +161,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark * Encoding/decoding utilities
 
-+ (NSData *)JSONSerializeObject:(id)obj
+- (NSData *)JSONSerializeObject:(id)obj
 {
-    id coercedObj = [Mixpanel JSONSerializableObjectForObject:obj];
-
+    id coercedObj = [self JSONSerializableObjectForObject:obj];
     MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
     NSError *error = nil;
     NSData *data = nil;
@@ -179,7 +179,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     return data;
 }
 
-+ (id)JSONSerializableObjectForObject:(id)obj
+- (id)JSONSerializableObjectForObject:(id)obj
 {
     // valid json types
     if ([obj isKindOfClass:[NSString class]] ||
@@ -187,12 +187,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         [obj isKindOfClass:[NSNull class]]) {
         return obj;
     }
-
     // recurse on containers
     if ([obj isKindOfClass:[NSArray class]]) {
         NSMutableArray *a = [NSMutableArray array];
         for (id i in obj) {
-            [a addObject:[Mixpanel JSONSerializableObjectForObject:i]];
+            [a addObject:[self JSONSerializableObjectForObject:i]];
         }
         return [NSArray arrayWithArray:a];
     }
@@ -206,34 +205,27 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             } else {
                 stringKey = [NSString stringWithString:key];
             }
-            id v = [Mixpanel JSONSerializableObjectForObject:[obj objectForKey:key]];
+            id v = [self JSONSerializableObjectForObject:[obj objectForKey:key]];
             [d setObject:v forKey:stringKey];
         }
         return [NSDictionary dictionaryWithDictionary:d];
     }
-
     // some common cases
     if ([obj isKindOfClass:[NSDate class]]) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-        [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        NSString *s = [formatter stringFromDate:obj];
-        [formatter release];
-        return s;
+        return [self.dateFormatter stringFromDate:obj];
     } else if ([obj isKindOfClass:[NSURL class]]) {
         return [obj absoluteString];
     }
-
     // default to sending the object's description
     NSString *s = [obj description];
     NSLog(@"%@ warning: property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
     return s;
 }
 
-+ (NSString *)encodeAPIData:(NSArray *)array
+- (NSString *)encodeAPIData:(NSArray *)array
 {
     NSString *b64String = @"";
-    NSData *data = [Mixpanel JSONSerializeObject:array];
+    NSData *data = [self JSONSerializeObject:array];
     if (data) {
         b64String = [data mp_base64EncodedString];
         b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
@@ -332,6 +324,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
         [self unarchive];
 
+        self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+        [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     }
     return self;
 }
@@ -583,12 +578,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } else {
         self.eventsBatch = [NSArray arrayWithArray:self.eventsQueue];
     }
-    
-    NSString *data = [Mixpanel encodeAPIData:self.eventsBatch];
+    NSString *data = [self encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
-    
     MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
-
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eventsConnection start];
@@ -609,12 +601,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } else {
         self.peopleBatch = [NSArray arrayWithArray:self.peopleQueue];
     }
-    
-    NSString *data = [Mixpanel encodeAPIData:self.peopleBatch];
+    NSString *data = [self encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
-    
     MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
-
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.peopleConnection start];
