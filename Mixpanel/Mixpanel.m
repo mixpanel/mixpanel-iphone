@@ -133,7 +133,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 
     if (NSClassFromString(@"ASIdentifierManager")) {
-        [properties setValue:ASIdentifierManager.sharedManager.advertisingIdentifier.UUIDString forKey:@"$ios_ifa"];
+        [properties setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
 
     return properties;
