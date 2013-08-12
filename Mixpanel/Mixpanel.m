@@ -105,51 +105,39 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (NSMutableDictionary *)collectAutomaticProperties
 {
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-
+    NSMutableDictionary *p = [NSMutableDictionary dictionary];
     UIDevice *device = [UIDevice currentDevice];
-
-    [properties setValue:@"iphone" forKey:@"mp_lib"];
-    [properties setValue:VERSION forKey:@"$lib_version"];
-
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
-
-    [properties setValue:@"Apple" forKey:@"$manufacturer"];
-    [properties setValue:[device systemName] forKey:@"$os"];
-    [properties setValue:[device systemVersion] forKey:@"$os_version"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$model"];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
-
+    [p setValue:@"iphone" forKey:@"mp_lib"];
+    [p setValue:VERSION forKey:@"$lib_version"];
+    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
+    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
+    [p setValue:@"Apple" forKey:@"$manufacturer"];
+    [p setValue:[device systemName] forKey:@"$os"];
+    [p setValue:[device systemVersion] forKey:@"$os_version"];
+    [p setValue:[Mixpanel deviceModel] forKey:@"$model"];
+    [p setValue:[Mixpanel deviceModel] forKey:@"mp_device_model"]; // legacy
     CGSize size = [UIScreen mainScreen].bounds.size;
-    [properties setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
-    [properties setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
-
+    [p setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
+    [p setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networkInfo subscriberCellularProvider];
     [networkInfo release];
-
     if (carrier.carrierName.length) {
-        [properties setValue:carrier.carrierName forKey:@"$carrier"];
+        [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
-
     if (NSClassFromString(@"ASIdentifierManager")) {
-        [properties setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
+        [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
-
-    return properties;
+    return p;
 }
 
 + (NSString *)deviceModel
 {
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    
     char *answer = malloc(size);
     sysctlbyname("hw.machine", answer, &size, NULL, 0);
-    
     NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-    
     free(answer);
     return results;
 }
@@ -281,27 +269,20 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSLog(@"%@ warning empty api token", self);
     }
     if (self = [self init]) {
-
         self.people = [[[MixpanelPeople alloc] initWithMixpanel:self] autorelease];
-
         self.apiToken = apiToken;
         self.flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
-        
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
-
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
-
         self.taskId = UIBackgroundTaskInvalid;
-
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-
         BOOL success = NO;
         if ((self.reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
             SCNetworkReachabilityContext context = {0, NULL, NULL, NULL, NULL};
@@ -319,11 +300,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         if (!success) {
             NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
         }
-
         [self addApplicationObservers];
-
         [self unarchive];
-
         self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
@@ -687,14 +665,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)archiveProperties
 {
     NSString *filePath = [self propertiesFilePath];
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-    [properties setValue:self.distinctId forKey:@"distinctId"];
-    [properties setValue:self.nameTag forKey:@"nameTag"];
-    [properties setValue:self.superProperties forKey:@"superProperties"];
-    [properties setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [properties setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, properties);
-    if (![NSKeyedArchiver archiveRootObject:properties toFile:filePath]) {
+    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    [p setValue:self.distinctId forKey:@"distinctId"];
+    [p setValue:self.nameTag forKey:@"nameTag"];
+    [p setValue:self.superProperties forKey:@"superProperties"];
+    [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
+    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+    MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
+    if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         NSLog(@"%@ unable to archive properties data", self);
     }
 }
@@ -956,13 +934,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     [self stopFlushTimer];
     [self removeApplicationObservers];
-    
     self.people = nil;
     self.distinctId = nil;
     self.nameTag = nil;
     self.serverURL = nil;
     self.delegate = nil;
-    
     self.apiToken = nil;
     self.superProperties = nil;
     self.automaticProperties = nil;
@@ -975,13 +951,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     self.peopleConnection = nil;
     self.eventsResponseData = nil;
     self.peopleResponseData = nil;
-
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
         self.reachability = nil;
     }
-
     [super dealloc];
 }
 
@@ -994,15 +968,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (NSDictionary *)collectAutomaticProperties
 {
     UIDevice *device = [UIDevice currentDevice];
-    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-    [properties setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
-    [properties setValue:[device systemVersion] forKey:@"$ios_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
-    [properties setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    [p setValue:[Mixpanel deviceModel] forKey:@"$ios_device_model"];
+    [p setValue:[device systemVersion] forKey:@"$ios_version"];
+    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
+    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
     if (NSClassFromString(@"ASIdentifierManager")) {
-        [properties setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
+        [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
-    return [NSDictionary dictionaryWithDictionary:properties];
+    return [NSDictionary dictionaryWithDictionary:p];
 }
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel
