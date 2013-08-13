@@ -47,8 +47,6 @@
 #define MixpanelDebug(...)
 #endif
 
-#pragma mark - Interfaces
-
 @interface Mixpanel () {
     NSUInteger _flushInterval;
 }
