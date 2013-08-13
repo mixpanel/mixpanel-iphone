@@ -173,8 +173,30 @@ static Mixpanel *sharedInstance = nil;
         self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        [self addApplicationObservers];
-        [self unarchive];
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillTerminate:)
+                                   name:UIApplicationWillTerminateNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillResignActive:)
+                                   name:UIApplicationWillResignActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidBecomeActive:)
+                                   name:UIApplicationDidBecomeActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidEnterBackground:)
+                                   name:UIApplicationDidEnterBackgroundNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillEnterForeground:)
+                                   name:UIApplicationWillEnterForegroundNotification
+                                 object:nil];
+        dispatch_async(self.serialQueue, ^{
+            [self unarchive];
+        });
     }
     return self;
 }
@@ -182,7 +204,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     [self stopFlushTimer];
-    [self removeApplicationObservers];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.people = nil;
     self.distinctId = nil;
     self.nameTag = nil;
@@ -241,38 +263,6 @@ static Mixpanel *sharedInstance = nil;
         [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
     return p;
-}
-
-- (void)addApplicationObservers
-{
-    MixpanelDebug(@"%@ adding application observers", self);
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillTerminate:)
-                               name:UIApplicationWillTerminateNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillResignActive:)
-                               name:UIApplicationWillResignActiveNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationDidBecomeActive:)
-                               name:UIApplicationDidBecomeActiveNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationDidEnterBackground:)
-                               name:UIApplicationDidEnterBackgroundNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillEnterForeground:)
-                               name:UIApplicationWillEnterForegroundNotification
-                             object:nil];
-}
-
-- (void)removeApplicationObservers
-{
-    MixpanelDebug(@"%@ removing application observers", self);
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 + (BOOL)inBackground
