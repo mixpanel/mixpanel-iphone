@@ -543,14 +543,14 @@ static Mixpanel *sharedInstance = nil;
 {
     @synchronized(self) {
         _flushInterval = interval;
-        [self startFlushTimer];
     }
+    [self startFlushTimer];
 }
 
 - (void)startFlushTimer
 {
-    @synchronized(self) {
-        [self stopFlushTimer];
+    [self stopFlushTimer];
+    dispatch_async(dispatch_get_main_queue(), ^{
         if (self.flushInterval > 0) {
             self.timer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
                                                           target:self
@@ -559,18 +559,18 @@ static Mixpanel *sharedInstance = nil;
                                                          repeats:YES];
             MixpanelDebug(@"%@ started flush timer: %@", self, self.timer);
         }
-    }
+    });
 }
 
 - (void)stopFlushTimer
 {
-    @synchronized(self) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         if (self.timer) {
             [self.timer invalidate];
             MixpanelDebug(@"%@ stopped flush timer: %@", self, self.timer);
         }
         self.timer = nil;
-    }
+    });
 }
 
 - (void)flush
