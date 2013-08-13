@@ -592,6 +592,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ flushing data to %@", self, self.serverURL);
         [self flushEvents];
         [self flushPeople];
+        [self endBackgroundTaskIfComplete];
     });
 }
 
@@ -675,13 +676,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)endBackgroundTaskIfComplete
 {
-    dispatch_async(self.serialQueue, ^{
-        if (self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
-            MixpanelDebug(@"%@ ending flush background task %u", self, self.taskId);
-            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-            self.taskId = UIBackgroundTaskInvalid;
-        }
-    });
+    if (self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
+        MixpanelDebug(@"%@ ending flush background task %u", self, self.taskId);
+        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+        self.taskId = UIBackgroundTaskInvalid;
+    }
 }
 
 - (NSURLConnection *)apiConnectionWithEndpoint:(NSString *)endpoint andBody:(NSString *)body
