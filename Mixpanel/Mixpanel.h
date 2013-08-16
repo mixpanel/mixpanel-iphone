@@ -170,7 +170,7 @@
  
  @param apiToken        your project token
  */
-+ (instancetype)sharedInstanceWithToken:(NSString *)apiToken;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken;
 
 /*!
  @method
@@ -182,7 +182,7 @@
  The API must be initialized with <code>sharedInstanceWithToken:</code> before
  calling this class method.
  */
-+ (instancetype)sharedInstance;
++ (Mixpanel *)sharedInstance;
 
 /*!
  @method
@@ -199,7 +199,7 @@
  @param apiToken        your project token
  @param startFlushTimer whether to start the background flush timer
  */
-- (id)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  @property
