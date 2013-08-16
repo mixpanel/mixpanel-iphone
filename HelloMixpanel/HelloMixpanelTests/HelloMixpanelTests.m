@@ -609,4 +609,44 @@
     STAssertEqualObjects(r[@"$set"][@"$transactions"], @[], nil);
 }
 
+- (void)testDropEvents
+{
+    for (int i = 0; i < 505; i++) {
+        [self.mixpanel track:@"rapid_event" properties:@{@"i": @(i)}];
+    }
+    [self waitForSerialQueue];
+    STAssertTrue([self.mixpanel.eventsQueue count] == 500, nil);
+    NSDictionary *e = [self.mixpanel.eventsQueue objectAtIndex:0];
+    STAssertEqualObjects(e[@"properties"][@"i"], @(5), nil);
+    e = [self.mixpanel.eventsQueue lastObject];
+    STAssertEqualObjects(e[@"properties"][@"i"], @(504), nil);
+}
+
+- (void)testDropUnidentifiedPeopleRecords
+{
+    for (int i = 0; i < 505; i++) {
+        [self.mixpanel.people set:@"i" to:@(i)];
+    }
+    [self waitForSerialQueue];
+    STAssertTrue([self.mixpanel.people.unidentifiedQueue count] == 500, nil);
+    NSDictionary *r = [self.mixpanel.people.unidentifiedQueue objectAtIndex:0];
+    STAssertEqualObjects(r[@"$set"][@"i"], @(5), nil);
+    r = [self.mixpanel.people.unidentifiedQueue lastObject];
+    STAssertEqualObjects(r[@"$set"][@"i"], @(504), nil);
+}
+
+- (void)testDropPeopleRecords
+{
+    [self.mixpanel identify:@"d1"];
+    for (int i = 0; i < 505; i++) {
+        [self.mixpanel.people set:@"i" to:@(i)];
+    }
+    [self waitForSerialQueue];
+    STAssertTrue([self.mixpanel.peopleQueue count] == 500, nil);
+    NSDictionary *r = [self.mixpanel.peopleQueue objectAtIndex:0];
+    STAssertEqualObjects(r[@"$set"][@"i"], @(5), nil);
+    r = [self.mixpanel.peopleQueue lastObject];
+    STAssertEqualObjects(r[@"$set"][@"i"], @(504), nil);
+}
+
 @end
