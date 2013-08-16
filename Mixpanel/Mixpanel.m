@@ -192,9 +192,8 @@ static Mixpanel *sharedInstance = nil;
                                selector:@selector(applicationWillEnterForeground:)
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
-        dispatch_async(self.serialQueue, ^{
-            [self unarchive];
-        });
+        [self unarchive];
+        [self startFlushTimer];
     }
     return self;
 }
@@ -225,6 +224,10 @@ static Mixpanel *sharedInstance = nil;
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
         self.reachability = nil;
+    }
+    if (self.serialQueue) {
+        dispatch_release(self.serialQueue);
+        self.serialQueue = nil;
     }
     [super dealloc];
 }
