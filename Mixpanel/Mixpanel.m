@@ -424,9 +424,7 @@ static Mixpanel *sharedInstance = nil;
         if (self.distinctId) {
             [p setObject:self.distinctId forKey:@"distinct_id"];
         }
-        @synchronized(self) {
-            [p addEntriesFromDictionary:self.superProperties];
-        }
+        [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];
         }
