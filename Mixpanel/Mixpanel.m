@@ -580,20 +580,19 @@ static Mixpanel *sharedInstance = nil;
 - (void)flush
 {
     dispatch_async(self.serialQueue, ^{
-        MixpanelDebug(@"%@ starting flush background task %u", self, self.taskId);
         if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
             if (![self.delegate mixpanelWillFlush:self]) {
-                MixpanelDebug(@"%@ delegate deferred flush", self);
+                MixpanelDebug(@"%@ flush deferred by delegate", self);
                 return;
             }
         }
         self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            MixpanelDebug(@"%@ flush background task %u cut short", self, self.taskId);
+            MixpanelDebug(@"%@ flush %u cut short", self, self.taskId);
             [self cancelFlush];
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }];
-        MixpanelDebug(@"%@ flushing data to %@", self, self.serverURL);
+        MixpanelDebug(@"%@ flush %u starting", self, self.taskId);
         [self flushEvents];
         [self flushPeople];
         [self endBackgroundTaskIfComplete];
@@ -681,7 +680,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)endBackgroundTaskIfComplete
 {
     if (self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
-        MixpanelDebug(@"%@ ending flush background task %u", self, self.taskId);
+        MixpanelDebug(@"%@ flush %u finished", self, self.taskId);
         [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
         self.taskId = UIBackgroundTaskInvalid;
     }
