@@ -200,7 +200,6 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)dealloc
 {
-    [self stopFlushTimer];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.people = nil;
     self.distinctId = nil;
