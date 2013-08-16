@@ -111,7 +111,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 static Mixpanel *sharedInstance = nil;
 
-+ (instancetype)sharedInstanceWithToken:(NSString *)apiToken
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -120,7 +120,7 @@ static Mixpanel *sharedInstance = nil;
     return sharedInstance;
 }
 
-+ (instancetype)sharedInstance
++ (Mixpanel *)sharedInstance
 {
     if (sharedInstance == nil) {
         NSLog(@"%@ warning sharedInstance called before sharedInstanceWithToken:", self);
@@ -128,7 +128,7 @@ static Mixpanel *sharedInstance = nil;
     return sharedInstance;
 }
 
-- (id)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
+- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
 {
     if (apiToken == nil) {
         apiToken = @"";
