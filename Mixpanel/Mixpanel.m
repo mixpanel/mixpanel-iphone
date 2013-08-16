@@ -374,7 +374,7 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
         self.people.distinctId = distinctId;
-        if (distinctId != nil && distinctId.length != 0 && self.people.unidentifiedQueue.count > 0) {
+        if (distinctId != nil && distinctId.length != 0 && [self.people.unidentifiedQueue count] > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
                 [r setObject:distinctId forKey:@"$distinct_id"];
                 [self.peopleQueue addObject:r];
@@ -433,6 +433,10 @@ static Mixpanel *sharedInstance = nil;
         NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
         MixpanelLog(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
+        if ([self.eventsQueue count] > 500) {
+            [self.eventsQueue removeObjectAtIndex:0];
+        }
+
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
         }
@@ -611,7 +615,7 @@ static Mixpanel *sharedInstance = nil;
     }
     NSString *data = [self encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
-    MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, self.eventsBatch.count, self.eventsQueue.count, self.eventsQueue);
+    MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, [self.eventsBatch count], [self.eventsQueue count], self.eventsQueue);
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eventsConnection start];
@@ -634,7 +638,7 @@ static Mixpanel *sharedInstance = nil;
     }
     NSString *data = [self encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
-    MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, self.peopleBatch.count, self.peopleQueue.count, self.peopleQueue);
+    MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, [self.peopleBatch count], [self.peopleQueue count], self.peopleQueue);
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.peopleConnection start];
@@ -1004,9 +1008,15 @@ static Mixpanel *sharedInstance = nil;
             [r setObject:self.distinctId forKey:@"$distinct_id"];
             MixpanelLog(@"%@ queueing people record: %@", self.mixpanel, r);
             [self.mixpanel.peopleQueue addObject:r];
+            if ([self.mixpanel.peopleQueue count] > 500) {
+                [self.mixpanel.peopleQueue removeObjectAtIndex:0];
+            }
         } else {
             MixpanelLog(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
             [self.unidentifiedQueue addObject:r];
+            if ([self.unidentifiedQueue count] > 500) {
+                [self.unidentifiedQueue removeObjectAtIndex:0];
+            }
         }
         if ([Mixpanel inBackground]) {
             [self.mixpanel archivePeople];
