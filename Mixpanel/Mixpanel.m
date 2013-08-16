@@ -85,16 +85,6 @@
 
 @end
 
-static NSString *MixpanelDeviceModel()
-{
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char answer[size];
-    sysctlbyname("hw.machine", answer, &size, NULL, 0);
-    NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-    return results;
-}
-
 @implementation Mixpanel
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
@@ -151,13 +141,13 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        BOOL success = NO;
+        BOOL reachabilityOk = NO;
         if ((self.reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
             SCNetworkReachabilityContext context = {0, NULL, NULL, NULL, NULL};
             context.info = (void *)self;
             if (SCNetworkReachabilitySetCallback(self.reachability, MixpanelReachabilityCallback, &context)) {
                 if (SCNetworkReachabilitySetDispatchQueue(self.reachability, self.serialQueue)) {
-                    success = YES;
+                    reachabilityOk = YES;
                     MixpanelDebug(@"%@ successfully set up reachability callback", self);
                 } else {
                     // cleanup callback if setting dispatch queue failed
@@ -165,7 +155,7 @@ static Mixpanel *sharedInstance = nil;
                 }
             }
         }
-        if (!success) {
+        if (!reachabilityOk) {
             NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
         }
         self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
@@ -236,11 +226,21 @@ static Mixpanel *sharedInstance = nil;
     return [NSString stringWithFormat:@"<Mixpanel: %p %@>", self, self.apiToken];
 }
 
+- (NSString *)deviceModel
+{
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char answer[size];
+    sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
+    return results;
+}
+
 - (NSMutableDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     UIDevice *device = [UIDevice currentDevice];
-    NSString *deviceModel = MixpanelDeviceModel();
+    NSString *deviceModel = [self deviceModel];
     [p setValue:@"iphone" forKey:@"mp_lib"];
     [p setValue:VERSION forKey:@"$lib_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
@@ -974,7 +974,7 @@ static Mixpanel *sharedInstance = nil;
 {
     UIDevice *device = [UIDevice currentDevice];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    [p setValue:MixpanelDeviceModel() forKey:@"$ios_device_model"];
+    [p setValue:[self.mixpanel deviceModel] forKey:@"$ios_device_model"];
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
