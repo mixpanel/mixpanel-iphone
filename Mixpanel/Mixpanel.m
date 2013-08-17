@@ -362,6 +362,28 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)setAlias:(NSString *)alias
+{
+    @synchronized(self) {
+        if (!self.distinctId) {
+            NSLog(@"%@ warning: Tried to set alias '%@' but no distinctId is set to associate.", self, alias);
+            return;
+        }
+        
+        NSMutableDictionary *p = [NSMutableDictionary dictionary];
+        [p setObject:self.apiToken forKey:@"token"];
+        [p setObject:self.distinctId forKey:@"distinct_id"];
+        [p setObject:alias forKey:@"alias"];
+        
+        NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:@"$create_alias", @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
+        MixpanelLog(@"%@ queueing event: %@", self, e);
+        [self.eventsQueue addObject:e];
+        if ([Mixpanel inBackground]) {
+            [self archiveEvents];
+        }
+    }
+}
+
 #pragma mark * Tracking
 
 - (NSString *)defaultDistinctId
