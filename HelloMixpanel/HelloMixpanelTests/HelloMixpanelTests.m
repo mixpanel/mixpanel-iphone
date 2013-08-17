@@ -172,7 +172,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 16, @"incorrect number of properties");
+    STAssertTrue(p.count == 17, @"incorrect number of properties");
 
     STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
     STAssertNotNil([p objectForKey:@"$app_release"], @"$app_release not set");
@@ -204,7 +204,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 19, @"incorrect number of properties");
+    STAssertTrue(p.count == 20, @"incorrect number of properties");
     STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
