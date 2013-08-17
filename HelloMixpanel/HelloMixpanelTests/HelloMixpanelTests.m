@@ -165,6 +165,21 @@
     }
 }
 
+- (void)testSetAlias
+{
+    NSString *alias = @"d1";
+    [self.mixpanel setAlias:alias];
+    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    STAssertTrue([@"$create_alias" isEqualToString:[e objectForKey:@"event"]], @"incorrect event name");
+    NSDictionary *p = [e objectForKey:@"properties"];
+    STAssertTrue(p.count == 3, @"incorrect number of properties");
+    
+    STAssertTrue([alias isEqualToString:[p objectForKey:@"alias"]], @"incorrect alias");
+    STAssertTrue([self.mixpanel.distinctId isEqualToString:[p objectForKey:@"distinct_id"]], @"incorrect distinct_id");
+    STAssertEqualObjects([p objectForKey:@"token"], TEST_TOKEN, @"incorrect token");
+}
+
 - (void)testTrack
 {
     [self.mixpanel track:@"Something Happened"];
