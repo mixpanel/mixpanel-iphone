@@ -232,6 +232,18 @@
  @method
  
  @abstract
+ Creates an alias for the existing distinctId with value <code>alias</code>.
+ New events and updates sent with distinctId <code>alias</code> will be mapped
+ to the original disctinId when they are stored in Mixpanel
+ 
+ @param alias           new distinct id to alias with the existing mixpanel id
+ */
+- (void)setAlias:(NSString *)alias;
+
+/*!
+ @method
+ 
+ @abstract
  Tracks an event.
  
  @param event           event name
