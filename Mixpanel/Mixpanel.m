@@ -371,10 +371,14 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)identify:(NSString *)distinctId
 {
+    if (distinctId == nil || distinctId.length == 0) {
+        NSLog(@"%@ error blank distinct id: %@", self, distinctId);
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
         self.people.distinctId = distinctId;
-        if (distinctId != nil && distinctId.length != 0 && [self.people.unidentifiedQueue count] > 0) {
+        if ([self.people.unidentifiedQueue count] > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
                 [r setObject:distinctId forKey:@"$distinct_id"];
                 [self.peopleQueue addObject:r];
