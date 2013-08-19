@@ -384,10 +384,10 @@ static Mixpanel *sharedInstance = nil;
                 [self.peopleQueue addObject:r];
             }
             [self.people.unidentifiedQueue removeAllObjects];
+            [self archivePeople];
         }
         if ([Mixpanel inBackground]) {
             [self archiveProperties];
-            [self archivePeople];
         }
     });
 }
