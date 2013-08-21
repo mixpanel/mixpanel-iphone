@@ -29,9 +29,11 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 #import "MPCJSONDataSerializer.h"
+#import "MPSurveyNavigationController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "ODIN.h"
+#import "UIView+MPSnapshotImage.h"
 
 #define VERSION @"2.0.1"
 
@@ -65,8 +67,10 @@
 @property(nonatomic,retain) NSArray *peopleBatch;
 @property(nonatomic,retain) NSURLConnection *eventsConnection;
 @property(nonatomic,retain) NSURLConnection *peopleConnection;
+@property(nonatomic,retain) NSURLConnection *decideConnection;
 @property(nonatomic,retain) NSMutableData *eventsResponseData;
 @property(nonatomic,retain) NSMutableData *peopleResponseData;
+@property(nonatomic,retain) NSMutableData *decideResponseData;
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
@@ -84,6 +88,11 @@
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 
 @end
+
+static NSString *MPURLEncode(NSString *s)
+{
+    return [(NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8) autorelease];
+}
 
 @implementation Mixpanel
 
@@ -206,8 +215,10 @@ static Mixpanel *sharedInstance = nil;
     self.peopleBatch = nil;
     self.eventsConnection = nil;
     self.peopleConnection = nil;
+    self.decideConnection = nil;
     self.eventsResponseData = nil;
     self.peopleResponseData = nil;
+    self.decideResponseData = nil;
     self.dateFormatter = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
@@ -882,6 +893,8 @@ static Mixpanel *sharedInstance = nil;
             self.eventsResponseData = [NSMutableData data];
         } else if (connection == self.peopleConnection) {
             self.peopleResponseData = [NSMutableData data];
+        } else if (connection == self.decideConnection) {
+            self.decideResponseData = [NSMutableData data];
         }
     });
 }
@@ -893,6 +906,8 @@ static Mixpanel *sharedInstance = nil;
             [self.eventsResponseData appendData:data];
         } else if (connection == self.peopleConnection) {
             [self.peopleResponseData appendData:data];
+        } else if (connection == self.decideConnection) {
+            [self.decideResponseData appendData:data];
         }
     });
 }
@@ -911,6 +926,9 @@ static Mixpanel *sharedInstance = nil;
             self.peopleResponseData = nil;
             self.peopleConnection = nil;
             [self archivePeople];
+        } else if (connection == self.decideConnection) {
+            self.decideResponseData = nil;
+            self.decideConnection = nil;
         }
         [self updateNetworkActivityIndicator];
         [self endBackgroundTaskIfComplete];
@@ -943,10 +961,61 @@ static Mixpanel *sharedInstance = nil;
             self.peopleBatch = nil;
             self.peopleResponseData = nil;
             self.peopleConnection = nil;
+        } else if (connection == self.decideConnection) {
+            [self didReceiveDecideResponse:self.decideResponseData];
+            self.decideResponseData = nil;
+            self.decideConnection = nil;
         }
         [self updateNetworkActivityIndicator];
         [self endBackgroundTaskIfComplete];
     });
+}
+
+#pragma mark - Surveys
+
+- (void)didReceiveDecideResponse:(NSData *)data
+{
+    NSError *error = nil;
+    NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (response[@"surveys"]) {
+        for (NSDictionary *dict in response[@"surveys"]) {
+            MPSurvey *survey = [MPSurvey surveyWithJSONObject:dict];
+            if (survey) {
+                if (self.delegate) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.delegate mixpanel:self didReceiveSurvey:survey];
+                    });
+                }
+                break; // only show first available, valid survey
+            }
+        }
+    }
+}
+
+- (void)checkForSurvey
+{
+    dispatch_async(self.serialQueue, ^{
+        NSString *params = [NSString stringWithFormat:@"token=%@&distinct_id=%@&survey_version=1", self.apiToken, MPURLEncode(self.distinctId)];
+        NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        self.decideConnection = [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.decideConnection start];
+        });
+    });
+}
+
+- (void)showSurvey:(MPSurvey *)survey
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+    MPSurveyNavigationController *nav = [[storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"] retain];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    nav.mixpanel = self;
+    nav.survey = survey;
+    nav.backgroundImage = [window.rootViewController.view mp_snapshotImage];
+    nav.view.frame = window.rootViewController.view.bounds;
+    [window.rootViewController.view addSubview:nav.view];
 }
 
 @end
@@ -1091,6 +1160,16 @@ static Mixpanel *sharedInstance = nil;
     NSAssert(properties != nil, @"properties must not be nil");
     [Mixpanel assertPropertyTypes:properties];
     [self addPeopleRecordToQueueWithAction:@"$append" andProperties:properties];
+}
+
+- (void)union:(NSDictionary *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    for (id v in [properties allValues]) {
+        NSAssert([v isKindOfClass:[NSArray class]],
+                 @"%@ union property values should be NSArray. found: %@", self, v);
+    }
+    [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
 }
 
 - (void)trackCharge:(NSNumber *)amount
