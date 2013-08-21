@@ -18,10 +18,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class ViewController;
-@class Mixpanel;
+#import "Mixpanel.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@class ViewController;
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, MixpanelDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

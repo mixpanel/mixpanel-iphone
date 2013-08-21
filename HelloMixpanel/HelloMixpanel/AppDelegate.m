@@ -62,7 +62,7 @@
     return YES;
 }
 
-#pragma mark * Push notifications
+#pragma mark - Push notifications
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     [self.mixpanel.people addPushDeviceToken:devToken];
@@ -89,7 +89,7 @@
     [alert release];
 }
 
-#pragma mark * Session timing example
+#pragma mark - Session timing example
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
@@ -103,7 +103,7 @@
     [[Mixpanel sharedInstance] track:@"Session" properties:[NSDictionary dictionaryWithObject:seconds forKey:@"Length"]];
 }
 
-#pragma mark * Background task tracking test
+#pragma mark - Background task tracking test
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
@@ -132,6 +132,13 @@
 
     NSLog(@"%@ dispatched background task %u", self, self.bgTask);
 
+}
+
+#pragma mark - MixpanelDelegate callbacks
+
+- (void)mixpanel:(Mixpanel *)mixpanel didReceiveSurvey:(MPSurvey *)survey
+{
+    [mixpanel showSurvey:survey];
 }
 
 @end

@@ -17,6 +17,7 @@
 // limitations under the License.
 
 #import "Mixpanel.h"
+#import "MPSurvey.h"
 
 #import "ViewController.h"
 
@@ -24,9 +25,6 @@
 
 @property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
-
-- (IBAction)trackEvent:(id)sender;
-- (IBAction)sendPeopleRecord:(id)sender;
 
 @end
 
@@ -39,25 +37,6 @@
     [super dealloc];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"grid.png"]];
-    UIScrollView *tempScrollView = (UIScrollView *)self.view;
-    tempScrollView.contentSize = CGSizeMake(320, 342);
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
-}
-
 - (IBAction)trackEvent:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -67,7 +46,7 @@
                                                  nil]];
 }
 
-- (IBAction)sendPeopleRecord:(id)sender
+- (IBAction)setPeopleProperties:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel.people set:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -84,6 +63,95 @@
     // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
     // and identify them once you know their user ID.
     [mixpanel identify:mixpanel.distinctId];
+}
+
+- (IBAction)showSurvey:(id)sender
+{
+    NSDictionary *object = @{
+                             @"version": @0,
+                             @"id": @1,
+                             @"collection_id": @2,
+                             @"questions": @[
+                                     @{
+                                         @"id": @3,
+                                         @"type": @"multiple_choice",
+                                         @"prompt": @"If we discontinued our service, how much would you care?",
+                                         @"extra_data": @{
+                                                 @"choices": @[
+                                                         @"A lot",
+                                                         @"A little",
+                                                         @"Not at all",
+                                                         @"I'd prefer you didn't exist",
+                                                         [NSNull null]
+                                                         ]
+                                                 }
+                                         },
+                                     @{
+                                         @"id": @4,
+                                         @"type": @"multiple_choice",
+                                         @"prompt": @"How many employees does your company have?",
+                                         @"extra_data": @{
+                                                 @"choices": @[
+                                                         @1,
+                                                         @1.5,
+                                                         @100,
+                                                         @1000,
+                                                         @10000,
+                                                         @(-2.0),
+                                                         @33333333333.33,
+                                                         @9,
+                                                         @2314,
+                                                         @2
+                                                         ]
+                                                 }
+                                         },
+                                     @{
+                                         @"id": @5,
+                                         @"type": @"multiple_choice",
+                                         @"prompt": @"Would you recommend this app to a friend?",
+                                         @"extra_data": @{
+                                                 @"choices": @[
+                                                         @YES,
+                                                         @NO
+                                                         ]
+                                                 }
+                                         },
+                                     @{
+                                         @"id": @6,
+                                         @"type": @"multiple_choice",
+                                         @"prompt": @"Is this question too long or just long enough to be effective in getting to the exact point we were trying to get across when engaging you in as efficient a manner as possible?",
+                                         @"property": @"Promoter",
+                                         @"extra_data": @{
+                                                 @"choices": @[
+                                                         @YES,
+                                                         @NO
+                                                         ]
+                                                 }
+                                         },
+                                     @{
+                                         @"id": @7,
+                                         @"type": @"text",
+                                         @"prompt": @"Anything else to add?",
+                                         @"extra_data": @{}
+                                         }
+                                     ]
+                             };
+    MPSurvey *survey = [MPSurvey surveyWithJSONObject:object];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel showSurvey:survey];
+}
+
+- (IBAction)changeBackgroundColor:(id)sender
+{
+    NSArray *colors = @[
+                        [UIColor redColor],
+                        [UIColor greenColor],
+                        [UIColor blueColor],
+                        [UIColor yellowColor],
+                        [UIColor whiteColor],
+                        [UIColor blackColor]
+                        ];
+    self.view.backgroundColor = colors[arc4random() % [colors count]];
 }
 
 @end

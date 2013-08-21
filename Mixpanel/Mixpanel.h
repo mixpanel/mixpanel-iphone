@@ -19,6 +19,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "MPSurvey.h"
+
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
@@ -383,6 +385,8 @@
  */
 - (void)archive;
 
+- (void)showSurvey:(MPSurvey *)survey;
+
 @end
 
 /*!
@@ -547,6 +551,19 @@
  @method
 
  @abstract
+ Union list properties.
+
+ @discussion
+ Property keys must be <code>NSArray</code> objects.
+
+ @param properties      mapping of list property names to lists to union
+ */
+- (void)union:(NSDictionary *)properties;
+
+/*!
+ @method
+
+ @abstract
  Track money spent by the current user for revenue analytics.
 
  @param amount          amount of revenue received
@@ -612,5 +629,7 @@
  @param mixpanel        Mixpanel API instance
  */
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
+
+- (void)mixpanel:(Mixpanel *)mixpanel didReceiveSurvey:(MPSurvey *)survey;
 
 @end
