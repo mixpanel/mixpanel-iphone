@@ -37,6 +37,8 @@
 		288657D517285E2700EC8035 /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 288657D417285E2700EC8035 /* ODIN.m */; };
 		2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541C16548047003DAFFE /* SystemConfiguration.framework */; };
 		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
+		289B497617D68DE50035439B /* Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 289B497417D68DE40035439B /* Checkmark.png */; };
+		289B497717D68DE50035439B /* Checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289B497517D68DE50035439B /* Checkmark@2x.png */; };
 		28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E666161530BF00F78E49 /* Icon@2x.png */; };
 		28C7E6691615311100F78E49 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E6681615311100F78E49 /* Icon.png */; };
 		28C7E66B1615317400F78E49 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E66A1615317400F78E49 /* Icon-72.png */; };
@@ -108,6 +110,8 @@
 		288657D417285E2700EC8035 /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
 		2892541C16548047003DAFFE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		2892541E16548283003DAFFE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		289B497417D68DE40035439B /* Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Checkmark.png; sourceTree = "<group>"; };
+		289B497517D68DE50035439B /* Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark@2x.png"; sourceTree = "<group>"; };
 		28C7E666161530BF00F78E49 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		28C7E6681615311100F78E49 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		28C7E66A1615317400F78E49 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
@@ -263,6 +267,8 @@
 				28ECB34317CEB6920075ADE7 /* ArrowLeft@2x.png */,
 				28ECB34417CEB6920075ADE7 /* ArrowRight.png */,
 				28ECB34517CEB6920075ADE7 /* ArrowRight@2x.png */,
+				289B497417D68DE40035439B /* Checkmark.png */,
+				289B497517D68DE50035439B /* Checkmark@2x.png */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -394,6 +400,8 @@
 				28ECB34917CEB6920075ADE7 /* ArrowRight@2x.png in Resources */,
 				28ECB34C17CECA290075ADE7 /* Dots.png in Resources */,
 				28ECB34D17CECA290075ADE7 /* Dots@2x.png in Resources */,
+				289B497617D68DE50035439B /* Checkmark.png in Resources */,
+				289B497717D68DE50035439B /* Checkmark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 
 @interface MPSurveyMultipleChoiceQuestionViewController : MPSurveyQuestionViewController <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic,retain) MPSurveyMultipleChoiceQuestion *question;
+@property(nonatomic,retain) IBOutlet UIImageView *checkmarkImageView;
 @end
 
 @interface MPSurveyMultipleChoiceQuestionCell : UITableViewCell
@@ -97,7 +98,7 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.highlighted = YES;
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    cell.accessoryView = self.checkmarkImageView;
     NSDictionary *answer = [self.question.choices objectAtIndex:indexPath.row];
     [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$answer": answer}];
 }
@@ -106,7 +107,7 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.highlighted = NO;
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = nil;
 }
 
 @end
