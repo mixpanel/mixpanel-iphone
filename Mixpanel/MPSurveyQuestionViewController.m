@@ -24,7 +24,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.promptLabel.text = self.question.prompt;
+    _promptLabel.text = self.question.prompt;
+    // shrink font size to fit frame. can't use adjustsFontSizeToFitWidth and minimumScaleFactor,
+    // since they only work on single line labels. minimum font size is 9.
+    UIFont *font = _promptLabel.font;
+    for (CGFloat size = _promptLabel.font.pointSize; size >= 9; size--) {
+        font = [font fontWithSize:size];
+        CGSize constraintSize = CGSizeMake(_promptLabel.preferredMaxLayoutWidth, MAXFLOAT);
+        CGSize sizeToFit = [_promptLabel.text sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:_promptLabel.lineBreakMode];
+        if (sizeToFit.height <= 76) {
+            break;
+        }
+    }
+    _promptLabel.font = font;
 }
 
 - (void)dealloc
