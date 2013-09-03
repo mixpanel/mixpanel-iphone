@@ -451,7 +451,6 @@ static Mixpanel *sharedInstance = nil;
         if ([self.eventsQueue count] > 500) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
-
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
         }
