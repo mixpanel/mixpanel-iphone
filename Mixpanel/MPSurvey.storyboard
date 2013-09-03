@@ -168,10 +168,16 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="checkmarkImageView" destination="b8T-z8-gtL" id="ErB-CI-Yt7"/>
                         <outlet property="promptLabel" destination="nTV-Im-rNp" id="eHf-Iy-792"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X73-mA-413" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Checkmark.png" id="b8T-z8-gtL">
+                    <rect key="frame" x="0.0" y="114" width="13" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
             </objects>
             <point key="canvasLocation" x="713" y="-103"/>
         </scene>
@@ -226,6 +232,7 @@
     <resources>
         <image name="ArrowLeft.png" width="24" height="16"/>
         <image name="ArrowRight.png" width="24" height="16"/>
+        <image name="Checkmark.png" width="13" height="14"/>
         <image name="Dots.png" width="32" height="10"/>
     </resources>
     <classes>
@@ -234,6 +241,9 @@
         </class>
         <class className="MPSurveyMultipleChoiceQuestionViewController" superclassName="MPSurveyQuestionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyMultipleChoiceQuestionViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="checkmarkImageView" candidateClass="UIImageView"/>
+            </relationships>
         </class>
         <class className="MPSurveyNavigationController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyNavigationController.h"/>
