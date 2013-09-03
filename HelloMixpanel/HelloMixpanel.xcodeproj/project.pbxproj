@@ -27,9 +27,6 @@
 		28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0A17C417E000A0F32F /* MPSurvey.m */; };
 		28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */; };
 		285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
-		286760BB1611982600B1BEC8 /* MPCJSONDataSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B11611982600B1BEC8 /* MPCJSONDataSerializer.m */; };
-		286760BC1611982600B1BEC8 /* MPCJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B31611982600B1BEC8 /* MPCJSONSerializer.m */; };
-		286760BD1611982600B1BEC8 /* MPCSerializedJSONData.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */; };
 		286760BE1611982600B1BEC8 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B81611982600B1BEC8 /* NSData+MPBase64.m */; };
 		286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760BA1611982600B1BEC8 /* Mixpanel.m */; };
 		286903FF17C6D2CF00DCA073 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 286903FE17C6D2CF00DCA073 /* Default-568h@2x.png */; };
@@ -94,12 +91,6 @@
 		28526F0A17C417E000A0F32F /* MPSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurvey.m; sourceTree = "<group>"; };
 		28526F0C17C417F300A0F32F /* MPSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSurveyQuestion.h; sourceTree = "<group>"; };
 		28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyQuestion.m; sourceTree = "<group>"; };
-		286760B01611982600B1BEC8 /* MPCJSONDataSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONDataSerializer.h; sourceTree = "<group>"; };
-		286760B11611982600B1BEC8 /* MPCJSONDataSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONDataSerializer.m; sourceTree = "<group>"; };
-		286760B21611982600B1BEC8 /* MPCJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCJSONSerializer.h; sourceTree = "<group>"; };
-		286760B31611982600B1BEC8 /* MPCJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCJSONSerializer.m; sourceTree = "<group>"; };
-		286760B41611982600B1BEC8 /* MPCSerializedJSONData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCSerializedJSONData.h; sourceTree = "<group>"; };
-		286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCSerializedJSONData.m; sourceTree = "<group>"; };
 		286760B71611982600B1BEC8 /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
 		286760B81611982600B1BEC8 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		286760B91611982600B1BEC8 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
@@ -278,23 +269,9 @@
 			isa = PBXGroup;
 			children = (
 				288657D217285E2700EC8035 /* ODIN */,
-				286760AF1611982600B1BEC8 /* JSON */,
 				286760B61611982600B1BEC8 /* NSData_Base64 */,
 			);
 			path = Library;
-			sourceTree = "<group>";
-		};
-		286760AF1611982600B1BEC8 /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				286760B01611982600B1BEC8 /* MPCJSONDataSerializer.h */,
-				286760B11611982600B1BEC8 /* MPCJSONDataSerializer.m */,
-				286760B21611982600B1BEC8 /* MPCJSONSerializer.h */,
-				286760B31611982600B1BEC8 /* MPCJSONSerializer.m */,
-				286760B41611982600B1BEC8 /* MPCSerializedJSONData.h */,
-				286760B51611982600B1BEC8 /* MPCSerializedJSONData.m */,
-			);
-			path = JSON;
 			sourceTree = "<group>";
 		};
 		286760B61611982600B1BEC8 /* NSData_Base64 */ = {
@@ -439,9 +416,6 @@
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
-				286760BB1611982600B1BEC8 /* MPCJSONDataSerializer.m in Sources */,
-				286760BC1611982600B1BEC8 /* MPCJSONSerializer.m in Sources */,
-				286760BD1611982600B1BEC8 /* MPCSerializedJSONData.m in Sources */,
 				286760BE1611982600B1BEC8 /* NSData+MPBase64.m in Sources */,
 				286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */,
 				288657D517285E2700EC8035 /* ODIN.m in Sources */,
