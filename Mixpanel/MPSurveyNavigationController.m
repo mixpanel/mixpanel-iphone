@@ -71,7 +71,7 @@
             controller = [self.storyboard instantiateViewControllerWithIdentifier:storyboardIdentifier];
             controller.delegate = self;
             controller.question = question;
-            controller.highlightColor = [[self.backgroundImage mp_averageColor] colorWithAlphaComponent:0.4];
+            controller.highlightColor = [[self.backgroundImage mp_averageColor] colorWithAlphaComponent:0.5];
             self.questionControllers[index] = controller;
         }
     }
