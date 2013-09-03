@@ -28,7 +28,6 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
-#import "MPCJSONDataSerializer.h"
 #import "MPSurveyNavigationController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
@@ -286,11 +285,10 @@ static Mixpanel *sharedInstance = nil;
 - (NSData *)JSONSerializeObject:(id)obj
 {
     id coercedObj = [self JSONSerializableObjectForObject:obj];
-    MPCJSONDataSerializer *serializer = [MPCJSONDataSerializer serializer];
     NSError *error = nil;
     NSData *data = nil;
     @try {
-        data = [serializer serializeObject:coercedObj error:&error];
+        data = [NSJSONSerialization dataWithJSONObject:coercedObj options:0 error:&error];
     }
     @catch (NSException *exception) {
         NSLog(@"%@ exception encoding api data: %@", self, exception);
