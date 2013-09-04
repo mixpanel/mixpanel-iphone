@@ -20,20 +20,25 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () {
+    UITextField *aliasTextField;
+}
 
 @property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
+@property(nonatomic, retain) IBOutlet UISwitch *enabledSwitch;
 
 - (IBAction)trackEvent:(id)sender;
 - (IBAction)sendPeopleRecord:(id)sender;
-
+- (IBAction)toggleEnabled:(UISwitch *)sender;
+- (IBAction)aliasUser:(id)sender;
 @end
 
 @implementation ViewController
 
 - (void)dealloc
 {
+    aliasTextField = nil;
     self.genderControl = nil;
     self.weaponControl = nil;
     [super dealloc];
@@ -57,6 +62,49 @@
 {
     return YES;
 }
+
+- (IBAction)toggleEnabled:(UISwitch *)sender {
+   if(sender.on)
+       [[Mixpanel sharedInstance] enable];
+   else {
+       // This disables all tracking events
+       // To disable specific events call disable: with an array of event names to disable.
+       [[Mixpanel sharedInstance] disable];
+   }
+}
+
+- (IBAction)aliasUser:(id)sender {
+    UIAlertView *aliasAlertView = [[[UIAlertView alloc] initWithTitle:@"Alias User? \nTypically your own internal ID for the user.\n\n\n"
+                                                          message:@""
+                                                         delegate:self
+                                                cancelButtonTitle:@"Cancel"
+                                                otherButtonTitles:@"OK", nil] autorelease];
+
+    aliasTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 110.0, 260.0, 35.0)];
+    [aliasTextField setBackgroundColor:[UIColor whiteColor]];
+    aliasTextField.placeholder = @"alias";
+    aliasTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    aliasTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [aliasAlertView addSubview:aliasTextField];
+    aliasAlertView.tag = 999;
+    [aliasAlertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 999) {
+        NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+        if([title isEqualToString:@"OK"]) {
+            NSString *alias = aliasTextField.text;
+
+            // Aliases the specified ID with users distinct ID
+            // Use [[Mixpanel sharedInstance] alias:alias original:original]; if you want to specify the original ID to alias
+            // This calls identify internally after creating the alias
+            [[Mixpanel sharedInstance] alias:alias];
+        }
+    }
+}
+
 
 - (IBAction)trackEvent:(id)sender
 {

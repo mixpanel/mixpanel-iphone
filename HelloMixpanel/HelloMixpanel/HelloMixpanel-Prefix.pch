@@ -6,3 +6,9 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+// Uncomment this to see Mixpanel debug logs
+//#define MixpanelDebug
+
+// Uncomment this to see Mixpanel logs
+//#define MixpanelLog

@@ -71,6 +71,8 @@
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
+@property(nonatomic, retain) NSMutableArray *disabledEvents;
+@property(nonatomic) BOOL isDisabled;
 
 @end
 
@@ -294,8 +296,8 @@ static Mixpanel *sharedInstance = nil;
 {
     // valid json types
     if ([obj isKindOfClass:[NSString class]] ||
-        [obj isKindOfClass:[NSNumber class]] ||
-        [obj isKindOfClass:[NSNull class]]) {
+            [obj isKindOfClass:[NSNumber class]] ||
+            [obj isKindOfClass:[NSNull class]]) {
         return obj;
     }
     // recurse on containers
@@ -339,11 +341,11 @@ static Mixpanel *sharedInstance = nil;
     NSData *data = [self JSONSerializeObject:array];
     if (data) {
         b64String = [data mp_base64EncodedString];
-        b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                (CFStringRef)b64String,
-                                                                NULL,
-                                                                CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                kCFStringEncodingUTF8);
+        b64String = (id) CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                (CFStringRef) b64String,
+                NULL,
+                CFSTR("!*'();:@&=+$,/?%#[]"),
+                kCFStringEncodingUTF8);
     }
     return [b64String autorelease];
 }
@@ -359,14 +361,58 @@ static Mixpanel *sharedInstance = nil;
         // unused variable error. also, note that @YES and @NO pass as
         // instances of NSNumber class.
         NSAssert([[properties objectForKey:k] isKindOfClass:[NSString class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSNumber class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSNull class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSArray class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSDictionary class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSDate class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSURL class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [[properties objectForKey:k] class], [properties objectForKey:k]);
+                [[properties objectForKey:k] isKindOfClass:[NSNumber class]] ||
+                [[properties objectForKey:k] isKindOfClass:[NSNull class]] ||
+                [[properties objectForKey:k] isKindOfClass:[NSArray class]] ||
+                [[properties objectForKey:k] isKindOfClass:[NSDictionary class]] ||
+                [[properties objectForKey:k] isKindOfClass:[NSDate class]] ||
+                [[properties objectForKey:k] isKindOfClass:[NSURL class]],
+        @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [[properties objectForKey:k] class], [properties objectForKey:k]);
     }
+}
+
+
+#pragma mark * Alias
+
+- (void)alias:(NSString *)alias
+{
+    if (self.distinctId) {
+        [self alias:alias original:self.distinctId];
+    } else {
+        NSLog(@"%@ Unable to alias, distinctId is null", self);
+    }
+}
+
+- (void)alias:(NSString *)alias original:(NSString *)original
+{
+    if (!alias) {
+        NSLog(@"alias is nil - skipping api call.");
+        return;
+    }
+    
+    if ([alias isEqualToString:self.people.distinctId]) {
+        NSLog(@"Attempting to create alias for existing People user - aborting.");
+        return;
+    }
+    
+    if (!original) {
+        original = self.distinctId;
+    }
+    
+    dispatch_async(self.serialQueue, ^{
+        if (![alias isEqualToString:original]) {
+            MixpanelLog(@"Aliasing '%@' as '%@'", alias, original);
+
+            NSMutableDictionary *p = [NSMutableDictionary dictionary];
+            [p setObject:alias forKey:@"alias"];
+            [p setObject:original forKey:@"distinct_id"];
+            [self track:@"$create_alias" properties:p];
+            [self flushEvents];
+            [self identify:alias];
+        } else {
+            [self identify:alias];
+        }
+    });
 }
 
 - (void)identify:(NSString *)distinctId
@@ -414,6 +460,16 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
+    if (self.isDisabled) {
+        MixpanelDebug(@"Not tracking: %@, all event tracking is disabled", event);
+        return;
+    }
+
+    if (self.disabledEvents && [self.disabledEvents indexOfObject:event] != NSNotFound) {
+        MixpanelDebug(@"Not tracking: %@, event was disabled", event);
+        return;
+    }
+
     if (event == nil || [event length] == 0) {
         NSLog(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
@@ -423,7 +479,7 @@ static Mixpanel *sharedInstance = nil;
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [p addEntriesFromDictionary:self.automaticProperties];
         [p setObject:self.apiToken forKey:@"token"];
-        [p setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"time"];
+        [p setObject:[NSNumber numberWithLong:(long) [[NSDate date] timeIntervalSince1970]] forKey:@"time"];
         if (self.nameTag) {
             [p setObject:self.nameTag forKey:@"mp_name_tag"];
         }
@@ -445,6 +501,21 @@ static Mixpanel *sharedInstance = nil;
             [self archiveEvents];
         }
     });
+}
+
+- (void)disable
+{
+    self.isDisabled = true;
+}
+
+- (void)disable:(NSArray *)events
+{
+    [self.disabledEvents addObjectsFromArray:events];
+}
+
+- (void)enable
+{
+    self.isDisabled = false;
 }
 
 - (void)registerSuperProperties:(NSDictionary *)properties
@@ -549,7 +620,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)setFlushInterval:(NSUInteger)interval
 {
-    @synchronized(self) {
+    @synchronized (self) {
         _flushInterval = interval;
     }
     [self startFlushTimer];
@@ -1029,13 +1100,13 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)addPushDeviceToken:(NSData *)deviceToken
 {
-    const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
+    const unsigned char *buffer = (const unsigned char *) [deviceToken bytes];
     if (!buffer) {
         return;
     }
     NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
     for (NSUInteger i = 0; i < deviceToken.length; i++) {
-        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
+        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long) buffer[i]]];
     }
     NSArray *tokens = [NSArray arrayWithObject:[NSString stringWithString:hex]];
     NSDictionary *properties = [NSDictionary dictionaryWithObject:tokens forKey:@"$ios_devices"];
@@ -1071,7 +1142,7 @@ static Mixpanel *sharedInstance = nil;
     NSAssert(properties != nil, @"properties must not be nil");
     for (id v in [properties allValues]) {
         NSAssert([v isKindOfClass:[NSNumber class]],
-                 @"%@ increment property values should be NSNumber. found: %@", self, v);
+        @"%@ increment property values should be NSNumber. found: %@", self, v);
     }
     [self addPeopleRecordToQueueWithAction:@"$add" andProperties:properties];
 }
