@@ -24,7 +24,17 @@
         NSLog(@"invalid survey id: %@", ID);
         return nil;
     }
-    NSNumber *collectionID = object[@"collection_id"];
+    NSArray *collections = object[@"collections"];
+    if (!([collections isKindOfClass:[NSArray class]] && [collections count] > 0)) {
+        NSLog(@"invalid survey collections: %@", collections);
+        return nil;
+    }
+    NSDictionary *collection = collections[0];
+    if (![collection isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"invalid survey collection: %@", collection);
+        return nil;
+    }
+    NSNumber *collectionID = collection[@"id"];
     if (!([collectionID isKindOfClass:[NSNumber class]] && [collectionID integerValue] > 0)) {
         NSLog(@"invalid survey collection id: %@", collectionID);
         return nil;

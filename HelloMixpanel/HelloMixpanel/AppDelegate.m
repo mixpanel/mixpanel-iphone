@@ -23,7 +23,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR MIXPANEL PROJECT TOKEN"
+#define MIXPANEL_TOKEN @"1a59f812e0366298ffad1b458e199c93"
 
 @implementation AppDelegate
 
@@ -49,7 +49,7 @@
 
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
-    
+
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:[NSDictionary dictionaryWithObjectsAndKeys:@"Premium", @"Plan", nil]];
     

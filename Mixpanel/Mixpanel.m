@@ -139,6 +139,7 @@ static Mixpanel *sharedInstance = nil;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
+        self.decideURL = @"https://decide.mixpanel.com";
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -190,6 +191,7 @@ static Mixpanel *sharedInstance = nil;
                                  object:nil];
         [self unarchive];
         [self startFlushTimer];
+        [self checkForSurvey];
     }
     return self;
 }
@@ -957,36 +959,40 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)checkForSurvey
 {
+    if (!self.people.distinctId) {
+        NSLog(@"%@ survey check skipped because no user has been identified", self);
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
-        NSString *params = [NSString stringWithFormat:@"version=1&platform=iphone&token=%@&distinct_id=%@",
-                            self.apiToken,
-                            MPURLEncode(self.distinctId)];
-        NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
+        NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
+        NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-        NSURLResponse *response = nil;
         NSError *error = nil;
-        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
         if (error) {
-            NSLog(@"check for survey failed: %@", error);
+            NSLog(@"%@ survey check http error: %@", self, error);
             return;
         }
         NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         if (error) {
-            NSLog(@"could not decode survey json: %@", error);
+            NSLog(@"%@ survey check json error: %@", self, error);
             return;
         }
-        if (object[@"surveys"]) {
-            for (NSDictionary *dict in object[@"surveys"]) {
-                MPSurvey *survey = [MPSurvey surveyWithJSONObject:dict];
-                if (survey) {
-                    if (self.delegate) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.delegate mixpanel:self didReceiveSurvey:survey];
-                        });
-                    }
-                    break; // only show first available, valid survey
+        if (object[@"error"]) {
+            NSLog(@"%@ survey check api error: %@", self, object[@"error"]);
+            return;
+        }
+        for (NSDictionary *dict in object[@"surveys"]) {
+            MPSurvey *survey = [MPSurvey surveyWithJSONObject:dict];
+            NSLog(@"survey: %@", survey);
+            if (survey) {
+                if (self.delegate) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.delegate mixpanel:self didReceiveSurvey:survey];
+                    });
                 }
+                break; // only show first available, valid survey
             }
         }
     });
