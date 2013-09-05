@@ -135,7 +135,7 @@ static Mixpanel *sharedInstance = nil;
     if (self = [self init]) {
         self.people = [[[MixpanelPeople alloc] initWithMixpanel:self] autorelease];
         self.apiToken = apiToken;
-        self.flushInterval = flushInterval;
+        _flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
@@ -194,7 +194,6 @@ static Mixpanel *sharedInstance = nil;
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
         [self unarchive];
-        [self startFlushTimer];
     }
     return self;
 }
