@@ -99,8 +99,8 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.highlighted = YES;
     cell.accessoryView = self.checkmarkImageView;
-    NSDictionary *answer = [self.question.choices objectAtIndex:indexPath.row];
-    [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$answer": answer}];
+    id value = [self.question.choices objectAtIndex:indexPath.row];
+    [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": value}];
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,7 +153,7 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if([text hasSuffix:@"\n"]) {
-        [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$answer": _textView.text}];
+        [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": _textView.text}];
         return NO;
     }
     return YES;
