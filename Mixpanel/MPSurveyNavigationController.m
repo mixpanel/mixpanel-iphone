@@ -45,11 +45,17 @@
     [self.containerView addSubview:firstQuestion.view];
     [firstQuestion didMoveToParentViewController:self];
     self.currentQuestionController = firstQuestion;
+    [self updatePageNumber:0];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
+}
+
+- (void)updatePageNumber:(NSUInteger)index
+{
+    self.pageNumberLabel.text = [NSString stringWithFormat:@"%d of %d", index + 1, self.survey.questions.count];
 }
 
 - (void)loadQuestion:(NSUInteger)index
@@ -99,7 +105,7 @@
                                     [fromController removeFromParentViewController];
                                     self.currentQuestionController = toController;
                                 }];
-        self.pageNumberLabel.text = [NSString stringWithFormat:@"%d of %d", index + 1, self.survey.questions.count];
+        [self updatePageNumber:index];
         self.previousButton.enabled = index != 0;
         self.nextButton.enabled = index < ([self.survey.questions count] - 1);
     } else {
@@ -129,21 +135,23 @@
 
 - (IBAction)dismiss
 {
-    [self.mixpanel.people union:@{@"survey_collections": @[@(self.survey.collectionID)]}];
+    [self.mixpanel.people union:@{
+     @"$surveys": @[@(self.survey.ID)],
+     @"$collections": @[@(self.survey.collectionID)]}];
     [self.view removeFromSuperview];
 }
 
 - (void)questionViewController:(MPSurveyQuestionViewController *)controller
     didReceiveAnswerProperties:(NSDictionary *)properties
 {
-    NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:properties];
-    [response addEntriesFromDictionary:@{
+    NSMutableDictionary *answer = [NSMutableDictionary dictionaryWithDictionary:properties];
+    [answer addEntriesFromDictionary:@{
      @"$survey_id": @(self.survey.ID),
      @"$collection_id": @(self.survey.collectionID),
      @"$question_id": @(controller.question.ID),
      @"$time": [NSDate date]
      }];
-    [self.mixpanel.people append:@{@"survey_responses": response}];
+    [self.mixpanel.people append:@{@"$answers": answer}];
     NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
     if (currentIndex < ([self.survey.questions count] - 1)) {
         [self showNextQuestion];

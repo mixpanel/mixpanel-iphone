@@ -149,6 +149,29 @@
 
 /*!
  @property
+
+ @abstract
+ Controls whether to automatically check for surveys for the currently 
+ identified Mixpanel People user when the application enters the foreground.
+
+ @discussion
+ Defaults to YES.
+ */
+@property(atomic) BOOL checkForSurveyOnForeground;
+
+/*!
+ @property
+
+ @abstract
+ Block to be called when a survey becomes available for the current user.
+
+ @discussion
+ By default, calls <code>showSurvey:</code>.
+ */
+@property(atomic,copy) void (^didReceiveSurveyBlock)(MPSurvey *);
+
+/*!
+ @property
  
  @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
@@ -397,6 +420,27 @@
  */
 - (void)archive;
 
+/*!
+ @method
+
+ @abstract
+ Checks for available surveys for the currently identified Mixpanel People profile.
+
+ @discussion
+ By default, the <code>checkForSurveyOnForeground</code> property is set to YES, so
+ this method is automatically called when the application enters the foreground.
+ If a survey is found, it is parsed and passed to the <code>didReceiveSurveyBlock</code>
+ callback.
+ */
+- (void)checkForSurvey;
+
+/*!
+ @method
+
+ @abstract
+ Shows the survey in a <code>MPSurveyNavigationController</code> in the view of the 
+ root view controller.
+ */
 - (void)showSurvey:(MPSurvey *)survey;
 
 @end
@@ -641,7 +685,5 @@
  @param mixpanel        Mixpanel API instance
  */
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
-
-- (void)mixpanel:(Mixpanel *)mixpanel didReceiveSurvey:(MPSurvey *)survey;
 
 @end
