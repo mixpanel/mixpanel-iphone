@@ -195,7 +195,6 @@ static Mixpanel *sharedInstance = nil;
                                  object:nil];
         [self unarchive];
         [self startFlushTimer];
-        [self checkForSurvey];
     }
     return self;
 }

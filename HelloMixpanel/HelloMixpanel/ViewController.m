@@ -70,7 +70,7 @@
     NSDictionary *object = @{
                              @"version": @0,
                              @"id": @1,
-                             @"collection_id": @2,
+                             @"collections": @[@{@"id": @2}],
                              @"questions": @[
                                      @{
                                          @"id": @3,
