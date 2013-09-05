@@ -140,6 +140,10 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
+        self.checkForSurveyOnForeground = YES;
+        self.didReceiveSurveyBlock = ^(MPSurvey *survey) {
+            [self showSurvey:survey];
+        };
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -203,6 +207,8 @@ static Mixpanel *sharedInstance = nil;
     self.distinctId = nil;
     self.nameTag = nil;
     self.serverURL = nil;
+    self.decideURL = nil;
+    self.didReceiveSurveyBlock = nil;
     self.delegate = nil;
     self.apiToken = nil;
     self.superProperties = nil;
@@ -858,6 +864,9 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
     MixpanelDebug(@"%@ will enter foreground", self);
+    if (self.checkForSurveyOnForeground) {
+        [self checkForSurvey];
+    }
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
@@ -959,11 +968,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)checkForSurvey
 {
-    if (!self.people.distinctId) {
-        NSLog(@"%@ survey check skipped because no user has been identified", self);
-        return;
-    }
     dispatch_async(self.serialQueue, ^{
+        if (!self.people.distinctId) {
+            NSLog(@"%@ survey check skipped because no user has been identified", self);
+            return;
+        }
         NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
         NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -985,13 +994,8 @@ static Mixpanel *sharedInstance = nil;
         }
         for (NSDictionary *dict in object[@"surveys"]) {
             MPSurvey *survey = [MPSurvey surveyWithJSONObject:dict];
-            NSLog(@"survey: %@", survey);
             if (survey) {
-                if (self.delegate) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.delegate mixpanel:self didReceiveSurvey:survey];
-                    });
-                }
+                self.didReceiveSurveyBlock(survey);
                 break; // only show first available, valid survey
             }
         }
@@ -1000,14 +1004,16 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurvey:(MPSurvey *)survey
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-    MPSurveyNavigationController *nav = [[storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"] retain];
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    nav.mixpanel = self;
-    nav.survey = survey;
-    nav.backgroundImage = [window.rootViewController.view mp_snapshotImage];
-    nav.view.frame = window.rootViewController.view.bounds;
-    [window.rootViewController.view addSubview:nav.view];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+        MPSurveyNavigationController *nav = [[storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"] retain];
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        nav.mixpanel = self;
+        nav.survey = survey;
+        nav.backgroundImage = [window.rootViewController.view mp_snapshotImage];
+        nav.view.frame = window.rootViewController.view.bounds;
+        [window.rootViewController.view addSubview:nav.view];
+    });
 }
 
 @end
