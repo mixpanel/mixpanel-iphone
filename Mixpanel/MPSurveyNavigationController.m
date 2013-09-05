@@ -138,7 +138,7 @@
     [self.mixpanel.people union:@{
      @"$surveys": @[@(self.survey.ID)],
      @"$collections": @[@(self.survey.collectionID)]}];
-    [self.view removeFromSuperview];
+    [self.delegate surveyNavigationControllerWasDismissed:self];
 }
 
 - (void)questionViewController:(MPSurveyQuestionViewController *)controller

@@ -48,7 +48,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () {
+@interface Mixpanel () <MPSurveyNavigationControllerDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -72,6 +72,7 @@
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
+@property(nonatomic,retain) MPSurveyNavigationController *surveyController;
 
 @end
 
@@ -221,6 +222,7 @@ static Mixpanel *sharedInstance = nil;
     self.eventsResponseData = nil;
     self.peopleResponseData = nil;
     self.dateFormatter = nil;
+    self.surveyController = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
@@ -1003,15 +1005,27 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey:(MPSurvey *)survey
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.surveyController) {
+            [self.surveyController.view removeFromSuperview];
+        }
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-        MPSurveyNavigationController *nav = [[storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"] retain];
+        self.surveyController = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        nav.mixpanel = self;
-        nav.survey = survey;
-        nav.backgroundImage = [window.rootViewController.view mp_snapshotImage];
-        nav.view.frame = window.rootViewController.view.bounds;
-        [window.rootViewController.view addSubview:nav.view];
+        _surveyController.mixpanel = self;
+        _surveyController.delegate = self;
+        _surveyController.survey = survey;
+        _surveyController.backgroundImage = [window.rootViewController.view mp_snapshotImage];
+        _surveyController.view.frame = window.rootViewController.view.bounds;
+        [window.rootViewController.view addSubview:_surveyController.view];
     });
+}
+
+- (void)surveyNavigationControllerWasDismissed:(MPSurveyNavigationController *)controller
+{
+    if (controller == _surveyController) {
+        [self.surveyController.view removeFromSuperview];
+        self.surveyController = nil;
+    }
 }
 
 @end
