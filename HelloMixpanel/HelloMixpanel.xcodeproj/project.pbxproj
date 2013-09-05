@@ -27,15 +27,17 @@
 		28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0A17C417E000A0F32F /* MPSurvey.m */; };
 		28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */; };
 		285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
-		286760BE1611982600B1BEC8 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760B81611982600B1BEC8 /* NSData+MPBase64.m */; };
 		286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 286760BA1611982600B1BEC8 /* Mixpanel.m */; };
 		286903FF17C6D2CF00DCA073 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 286903FE17C6D2CF00DCA073 /* Default-568h@2x.png */; };
 		2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2869040017C7EC8100DCA073 /* MPSurvey.storyboard */; };
-		288657D517285E2700EC8035 /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 288657D417285E2700EC8035 /* ODIN.m */; };
 		2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541C16548047003DAFFE /* SystemConfiguration.framework */; };
 		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
 		289B497617D68DE50035439B /* Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 289B497417D68DE40035439B /* Checkmark.png */; };
 		289B497717D68DE50035439B /* Checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289B497517D68DE50035439B /* Checkmark@2x.png */; };
+		289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497917D913D50035439B /* NSData+MPBase64.m */; };
+		289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497917D913D50035439B /* NSData+MPBase64.m */; };
+		289B497E17D913EA0035439B /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497D17D913EA0035439B /* ODIN.m */; };
+		289B497F17D913EA0035439B /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497D17D913EA0035439B /* ODIN.m */; };
 		28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E666161530BF00F78E49 /* Icon@2x.png */; };
 		28C7E6691615311100F78E49 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E6681615311100F78E49 /* Icon.png */; };
 		28C7E66B1615317400F78E49 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E66A1615317400F78E49 /* Icon-72.png */; };
@@ -91,18 +93,18 @@
 		28526F0A17C417E000A0F32F /* MPSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurvey.m; sourceTree = "<group>"; };
 		28526F0C17C417F300A0F32F /* MPSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSurveyQuestion.h; sourceTree = "<group>"; };
 		28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyQuestion.m; sourceTree = "<group>"; };
-		286760B71611982600B1BEC8 /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
-		286760B81611982600B1BEC8 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		286760B91611982600B1BEC8 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
 		286760BA1611982600B1BEC8 /* Mixpanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mixpanel.m; sourceTree = "<group>"; };
 		286903FE17C6D2CF00DCA073 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2869040017C7EC8100DCA073 /* MPSurvey.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MPSurvey.storyboard; sourceTree = "<group>"; };
-		288657D317285E2700EC8035 /* ODIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODIN.h; sourceTree = "<group>"; };
-		288657D417285E2700EC8035 /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
 		2892541C16548047003DAFFE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		2892541E16548283003DAFFE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		289B497417D68DE40035439B /* Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Checkmark.png; sourceTree = "<group>"; };
 		289B497517D68DE50035439B /* Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark@2x.png"; sourceTree = "<group>"; };
+		289B497817D913D40035439B /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
+		289B497917D913D50035439B /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
+		289B497C17D913EA0035439B /* ODIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODIN.h; sourceTree = "<group>"; };
+		289B497D17D913EA0035439B /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
 		28C7E666161530BF00F78E49 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		28C7E6681615311100F78E49 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		28C7E66A1615317400F78E49 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
@@ -234,7 +236,6 @@
 		286760AD1611982600B1BEC8 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
-				286760AE1611982600B1BEC8 /* Library */,
 				286760B91611982600B1BEC8 /* Mixpanel.h */,
 				286760BA1611982600B1BEC8 /* Mixpanel.m */,
 				28526F0317C4103200A0F32F /* MPSurveyNavigationController.h */,
@@ -246,6 +247,10 @@
 				28526F0C17C417F300A0F32F /* MPSurveyQuestion.h */,
 				28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */,
 				2869040017C7EC8100DCA073 /* MPSurvey.storyboard */,
+				289B497817D913D40035439B /* NSData+MPBase64.h */,
+				289B497917D913D50035439B /* NSData+MPBase64.m */,
+				289B497C17D913EA0035439B /* ODIN.h */,
+				289B497D17D913EA0035439B /* ODIN.m */,
 				28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */,
 				28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
@@ -263,33 +268,6 @@
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
-			sourceTree = "<group>";
-		};
-		286760AE1611982600B1BEC8 /* Library */ = {
-			isa = PBXGroup;
-			children = (
-				288657D217285E2700EC8035 /* ODIN */,
-				286760B61611982600B1BEC8 /* NSData_Base64 */,
-			);
-			path = Library;
-			sourceTree = "<group>";
-		};
-		286760B61611982600B1BEC8 /* NSData_Base64 */ = {
-			isa = PBXGroup;
-			children = (
-				286760B71611982600B1BEC8 /* NSData+MPBase64.h */,
-				286760B81611982600B1BEC8 /* NSData+MPBase64.m */,
-			);
-			path = NSData_Base64;
-			sourceTree = "<group>";
-		};
-		288657D217285E2700EC8035 /* ODIN */ = {
-			isa = PBXGroup;
-			children = (
-				288657D317285E2700EC8035 /* ODIN.h */,
-				288657D417285E2700EC8035 /* ODIN.m */,
-			);
-			path = ODIN;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -416,9 +394,7 @@
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
-				286760BE1611982600B1BEC8 /* NSData+MPBase64.m in Sources */,
 				286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */,
-				288657D517285E2700EC8035 /* ODIN.m in Sources */,
 				28526F0517C4103200A0F32F /* MPSurveyNavigationController.m in Sources */,
 				28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */,
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
@@ -426,6 +402,8 @@
 				28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */,
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,
+				289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */,
+				289B497E17D913EA0035439B /* ODIN.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +412,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
+				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
+				289B497F17D913EA0035439B /* ODIN.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
