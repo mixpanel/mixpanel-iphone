@@ -86,9 +86,7 @@
 - (void)showQuestion:(NSUInteger)index direction:(UIViewAnimationOptions)direction animated:(BOOL)animated
 {
     if (index < [self.survey.questions count]) {
-        [self loadQuestion:index - 1];
         [self loadQuestion:index];
-        [self loadQuestion:index + 1];
         UIViewController *fromController = self.currentQuestionController;
         UIViewController *toController = self.questionControllers[index];
         toController.view.frame = self.containerView.bounds;
@@ -108,6 +106,8 @@
         [self updatePageNumber:index];
         self.previousButton.enabled = index != 0;
         self.nextButton.enabled = index < ([self.survey.questions count] - 1);
+        [self loadQuestion:index - 1];
+        [self loadQuestion:index + 1];
     } else {
         NSLog(@"attempt to navigate to invalid question index");
     }
