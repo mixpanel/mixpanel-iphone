@@ -152,7 +152,7 @@ static Mixpanel *sharedInstance = nil;
         self.peopleQueue = [NSMutableArray array];
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
-        self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+        _serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         BOOL reachabilityOk = NO;
         if ((self.reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
             SCNetworkReachabilityContext context = {0, NULL, NULL, NULL, NULL};
@@ -228,9 +228,9 @@ static Mixpanel *sharedInstance = nil;
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
         self.reachability = nil;
     }
-    if (self.serialQueue) {
-        dispatch_release(self.serialQueue);
-        self.serialQueue = nil;
+    if (_serialQueue) {
+        dispatch_release(_serialQueue);
+        _serialQueue = NULL;
     }
     [super dealloc];
 }

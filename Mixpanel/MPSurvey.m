@@ -46,21 +46,21 @@
             [questions addObject:q];
         }
     }
-    return [[MPSurvey alloc] initWithID:[ID integerValue]
-                           collectionID:[collectionID integerValue]
-                           andQuestions:[NSArray arrayWithArray:questions]];
+    return [[[MPSurvey alloc] initWithID:[ID unsignedIntegerValue]
+                            collectionID:[collectionID unsignedIntegerValue]
+                            andQuestions:[NSArray arrayWithArray:questions]] autorelease];
 }
 
 - (id)initWithID:(NSUInteger *)ID collectionID:(NSUInteger *)collectionID andQuestions:(NSArray *)questions
 {
-    if (questions == nil || [questions count] == 0) {
+    if (questions != nil && [questions count] > 0) {
+        if (self = [super init]) {
+            _ID = ID;
+            _collectionID = collectionID;
+            self.questions = questions;
+        }
+    } else {
         NSLog(@"survey has no questions: %@", questions);
-        return nil;
-    }
-    if (self = [super init]) {
-        _ID = ID;
-        _collectionID = collectionID;
-        self.questions = questions;
     }
     return self;
 }
