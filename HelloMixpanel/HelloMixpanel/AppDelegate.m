@@ -52,6 +52,8 @@
 
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:[NSDictionary dictionaryWithObjectsAndKeys:@"Premium", @"Plan", nil]];
+
+    self.mixpanel.checkForSurveyOnForeground = NO;
     
     self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
     self.window.rootViewController = self.viewController;
