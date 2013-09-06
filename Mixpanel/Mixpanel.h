@@ -152,12 +152,12 @@
 
  @abstract
  Controls whether to automatically check for surveys for the currently 
- identified Mixpanel People user when the application enters the foreground.
+ identified Mixpanel People user when the application becomes active.
 
  @discussion
  Defaults to YES.
  */
-@property(atomic) BOOL checkForSurveyOnForeground;
+@property(atomic) BOOL checkForSurveyOnActive;
 
 /*!
  @property
