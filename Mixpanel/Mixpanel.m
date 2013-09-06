@@ -969,6 +969,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)checkForSurvey
 {
     dispatch_async(self.serialQueue, ^{
+        MixpanelLog(@"%@ survey check started", self);
         if (!self.people.distinctId) {
             NSLog(@"%@ survey check skipped because no user has been identified", self);
             return;
@@ -994,19 +995,26 @@ static Mixpanel *sharedInstance = nil;
         }
         for (NSDictionary *dict in object[@"surveys"]) {
             MPSurvey *survey = [MPSurvey surveyWithJSONObject:dict];
+            MixpanelLog(@"%@ survey check found available survey: %@", self, survey);
             if (survey) {
-                self.didReceiveSurveyBlock(survey);
-                break; // only show first available, valid survey
+                if (self.didReceiveSurveyBlock) {
+                    self.didReceiveSurveyBlock(survey);
+                }
+                return; // only show first available, valid survey
             }
         }
+        MixpanelLog(@"%@ survey check found no survey", self);
     });
 }
 
 - (void)showSurvey:(MPSurvey *)survey
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.surveyController) {
-            [self.surveyController.view removeFromSuperview];
+        if (_surveyController) {
+            if (_surveyController.survey.ID == survey.ID) {
+                return;
+            }
+            [_surveyController.view removeFromSuperview];
         }
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
         self.surveyController = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
@@ -1023,7 +1031,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)surveyNavigationControllerWasDismissed:(MPSurveyNavigationController *)controller
 {
     if (controller == _surveyController) {
-        [self.surveyController.view removeFromSuperview];
+        [_surveyController.view removeFromSuperview];
         self.surveyController = nil;
     }
 }
