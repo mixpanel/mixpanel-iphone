@@ -57,8 +57,8 @@
                             </imageView>
                             <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vP-xd-w4j">
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="VPd-Zd-k6d"/>
-                                    <constraint firstAttribute="height" constant="30" id="wZJ-Al-GR3"/>
+                                    <constraint firstAttribute="height" constant="48" id="3Ks-zv-XSz"/>
+                                    <constraint firstAttribute="width" constant="50" id="lKm-ZE-wiX"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Exit">
@@ -80,18 +80,17 @@
                             <constraint firstItem="D7a-kU-sIs" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" type="default" id="63l-xL-Fry"/>
                             <constraint firstItem="tHb-kq-3y4" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="64G-bX-dmV"/>
                             <constraint firstAttribute="bottom" secondItem="D7a-kU-sIs" secondAttribute="bottom" constant="48" type="user" id="Eka-YD-9LA"/>
-                            <constraint firstItem="8vP-xd-w4j" firstAttribute="top" secondItem="D7a-kU-sIs" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="HWX-Cu-Mxf"/>
-                            <constraint firstAttribute="trailing" secondItem="8vP-xd-w4j" secondAttribute="trailing" constant="14" id="Kwv-Ti-wNz"/>
+                            <constraint firstItem="8vP-xd-w4j" firstAttribute="trailing" secondItem="cp6-lZ-a9t" secondAttribute="trailing" type="default" id="Etj-ja-pVf"/>
                             <constraint firstItem="JbJ-sK-oCv" firstAttribute="centerX" secondItem="D7a-kU-sIs" secondAttribute="centerX" type="default" id="LRY-s5-ll8"/>
                             <constraint firstItem="Rrk-0y-OIL" firstAttribute="centerY" secondItem="JbJ-sK-oCv" secondAttribute="centerY" type="default" id="PJS-7A-8kE"/>
                             <constraint firstItem="kZ0-zi-Urm" firstAttribute="leading" secondItem="JbJ-sK-oCv" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Tmo-Wf-R7I"/>
                             <constraint firstItem="kZ0-zi-Urm" firstAttribute="top" secondItem="cp6-lZ-a9t" secondAttribute="top" type="default" id="Tww-tT-v9G"/>
                             <constraint firstAttribute="trailing" secondItem="D7a-kU-sIs" secondAttribute="trailing" type="user" id="Xmu-kv-ZRo"/>
-                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="baseline" secondItem="Rrk-0y-OIL" secondAttribute="baseline" type="default" id="XwY-n6-zGb"/>
                             <constraint firstItem="Rrk-0y-OIL" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" type="default" id="c2j-VF-Plc"/>
                             <constraint firstItem="Rrk-0y-OIL" firstAttribute="top" secondItem="cp6-lZ-a9t" secondAttribute="top" type="default" id="f9A-RM-viY"/>
                             <constraint firstItem="kZ0-zi-Urm" firstAttribute="bottom" secondItem="Rrk-0y-OIL" secondAttribute="bottom" type="default" id="nUv-L5-m2B"/>
                             <constraint firstAttribute="bottom" secondItem="tHb-kq-3y4" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="sLq-9t-WlT"/>
+                            <constraint firstItem="8vP-xd-w4j" firstAttribute="bottom" secondItem="cp6-lZ-a9t" secondAttribute="bottom" type="default" id="svI-P2-yJq"/>
                             <constraint firstItem="JbJ-sK-oCv" firstAttribute="leading" secondItem="Rrk-0y-OIL" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="vMD-zc-1h9"/>
                         </constraints>
                     </view>
