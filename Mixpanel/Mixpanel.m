@@ -141,7 +141,7 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
-        self.checkForSurveyOnForeground = YES;
+        self.checkForSurveyOnActive = YES;
         self.didReceiveSurveyBlock = ^(MPSurvey *survey) {
             [self showSurvey:survey];
         };
@@ -845,6 +845,9 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
+    if (self.checkForSurveyOnActive) {
+        [self checkForSurvey];
+    }
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -864,9 +867,6 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
     MixpanelDebug(@"%@ will enter foreground", self);
-    if (self.checkForSurveyOnForeground) {
-        [self checkForSurvey];
-    }
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
