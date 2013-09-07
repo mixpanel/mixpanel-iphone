@@ -1,3 +1,5 @@
+#import <QuartzCore/QuartzCore.h>
+
 #import "MPSurvey.h"
 #import "MPSurveyNavigationController.h"
 #import "MPSurveyQuestion.h"
@@ -77,7 +79,7 @@
             controller = [self.storyboard instantiateViewControllerWithIdentifier:storyboardIdentifier];
             controller.delegate = self;
             controller.question = question;
-            controller.highlightColor = [[self.backgroundImage mp_averageColor] colorWithAlphaComponent:0.5];
+            controller.highlightColor = [[self.backgroundImage mp_averageColor] colorWithAlphaComponent:.6];
             self.questionControllers[index] = controller;
         }
     }
@@ -90,15 +92,38 @@
         UIViewController *fromController = self.currentQuestionController;
         UIViewController *toController = self.questionControllers[index];
         toController.view.frame = self.containerView.bounds;
+        CGPoint cachedCenter = toController.view.center;
+        // fromController starts in place, toController starts offscreen and rotated 45 degrees clockwise
+        toController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
+        toController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
         [self addChildViewController:toController];
         [fromController willMoveToParentViewController:nil];
-        NSTimeInterval duration = animated ? 0.2 : 0;
+        NSTimeInterval duration = animated ? 0.3 : 0;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:duration
-                                   options:direction | UIViewAnimationOptionCurveEaseIn
-                                animations:nil
-                                completion:^(BOOL finished) {
+                                   options:UIViewAnimationOptionCurveEaseIn
+                                animations:^{
+                                    // fromController slides left the whole time
+                                    fromController.view.center = CGPointMake(-fromController.view.bounds.size.width / 2, fromController.view.center.y);
+                                    // after a brief delay, fromController also "falls away" (rotates around counterclockwise and shrinks a little)
+                                    NSArray *keyTimes = @[@0.0, @0.3, @1.0];
+                                    CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                    anim.keyTimes = keyTimes;
+                                    anim.values = @[@0.0, @0.0, @(-M_PI_4)];
+                                    anim.duration = duration;
+                                    [fromController.view.layer addAnimation:anim forKey:@"MPRotateZ"];
+                                    anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+                                    anim.keyTimes = keyTimes;
+                                    anim.values = @[@1.0, @1.0, @0.8];
+                                    anim.duration = duration;
+                                    [fromController.view.layer addAnimation:anim forKey:@"MPShrink"];
+                                    // toController starts way offscreen (which is a hack to make it move faster) and flies up and into place as it rotates to vertical
+                                    toController.view.center = cachedCenter;
+                                    toController.view.transform = CGAffineTransformMakeRotation(0);
+                                    // also animate the new page number to slide in from the right as it fades in from transparent
+                                }
+                                completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
                                     self.currentQuestionController = toController;
