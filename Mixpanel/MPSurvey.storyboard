@@ -98,6 +98,7 @@
                     <connections>
                         <outlet property="containerView" destination="D7a-kU-sIs" id="M3o-I4-WJ2"/>
                         <outlet property="exitButton" destination="8vP-xd-w4j" id="Tcm-85-BiT"/>
+                        <outlet property="logo" destination="tHb-kq-3y4" id="81p-Zv-kbC"/>
                         <outlet property="nextButton" destination="kZ0-zi-Urm" id="dbM-en-2LY"/>
                         <outlet property="pageNumberLabel" destination="JbJ-sK-oCv" id="RmX-Iu-HZi"/>
                         <outlet property="previousButton" destination="Rrk-0y-OIL" id="FTv-4I-n0S"/>
@@ -249,6 +250,7 @@
             <relationships>
                 <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="exitButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="logo" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="nextButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="pageNumberLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="previousButton" candidateClass="UIButton"/>
