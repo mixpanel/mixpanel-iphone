@@ -156,7 +156,6 @@
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
-				2802053F17DEC234000D71F5 /* QuartzCore.framework */,
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
 				2808F9901610EFE3005772B7 /* Frameworks */,
@@ -177,6 +176,7 @@
 		2808F9901610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2802053F17DEC234000D71F5 /* QuartzCore.framework */,
 				2805EDE517C6B815003A0D72 /* Accelerate.framework */,
 				283CEC52171F5E2800ACACB5 /* AdSupport.framework */,
 				2892541E16548283003DAFFE /* CoreTelephony.framework */,
