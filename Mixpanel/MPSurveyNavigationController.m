@@ -117,17 +117,23 @@
     }
 }
 
-- (void)showQuestion:(NSUInteger)index
+- (void)showQuestionAtIndex:(NSUInteger)index animatingForward:(BOOL)forward
 {
     if (index < [self.survey.questions count]) {
         [self loadQuestion:index];
         UIViewController *fromController = self.currentQuestionController;
         UIViewController *toController = self.questionControllers[index];
-        toController.view.frame = self.containerView.bounds;
+        toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
+        toController.view.frame = self.containerView.bounds; // and then get view to size itself according to container bounds
         CGPoint cachedCenter = toController.view.center;
-        // fromController starts in place, toController starts offscreen and rotated 45 degrees clockwise
-        toController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
-        toController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
+        if (forward) {
+            // toController starts way offscreen right (the extra distance makes it move faster) and rotated 45 degrees clockwise
+            toController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
+            toController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
+        } else {
+            // toController starts offscreen left (rotation and scaling are done with a keyframe animation)
+            toController.view.center = CGPointMake(-toController.view.bounds.size.width / 2, toController.view.center.y);
+        }
         [self addChildViewController:toController];
         [fromController willMoveToParentViewController:nil];
         NSTimeInterval duration = 0.3;
@@ -136,24 +142,43 @@
                                   duration:duration
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
-                                    // fromController slides left the whole time
-                                    fromController.view.center = CGPointMake(-fromController.view.bounds.size.width / 2, fromController.view.center.y);
-                                    // after a brief delay, fromController also "falls away" (rotates around counterclockwise and shrinks a little)
-                                    NSArray *keyTimes = @[@0.0, @0.3, @1.0];
-                                    CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-                                    anim.keyTimes = keyTimes;
-                                    anim.values = @[@0.0, @0.0, @(-M_PI_4)];
-                                    anim.duration = duration;
-                                    [fromController.view.layer addAnimation:anim forKey:@"MPRotateZ"];
-                                    anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-                                    anim.keyTimes = keyTimes;
-                                    anim.values = @[@1.0, @1.0, @0.8];
-                                    anim.duration = duration;
-                                    [fromController.view.layer addAnimation:anim forKey:@"MPShrink"];
-                                    // toController starts way offscreen (which is a hack to make it move faster) and flies up and into place as it rotates to vertical
-                                    toController.view.center = cachedCenter;
-                                    toController.view.transform = CGAffineTransformMakeRotation(0);
-                                    // also animate the new page number to slide in from the right as it fades in from transparent
+                                    if (forward) {
+                                        // fromController slides in from right to left the whole time
+                                        fromController.view.center = CGPointMake(-fromController.view.bounds.size.width / 2, fromController.view.center.y);
+                                        // after a brief delay, fromController also "falls away" by rotating counterclockwise and scaling down a little
+                                        NSArray *keyTimes = @[@0.0, @0.3, @1.0];
+                                        CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                        anim.keyTimes = keyTimes;
+                                        anim.values = @[@0.0, @0.0, @(-M_PI_4)];
+                                        anim.duration = duration;
+                                        [fromController.view.layer addAnimation:anim forKey:@"MPRotateZ"];
+                                        anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+                                        anim.keyTimes = keyTimes;
+                                        anim.values = @[@1.0, @1.0, @0.8];
+                                        anim.duration = duration;
+                                        [fromController.view.layer addAnimation:anim forKey:@"MPScale"];
+                                        // toController flies up and to the left
+                                        toController.view.center = cachedCenter;
+                                        toController.view.transform = CGAffineTransformMakeRotation(0);
+                                    } else {
+                                        // fromController flies down and to the right
+                                        fromController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
+                                        fromController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
+                                        // toController slides in from left to right the whole time
+                                        toController.view.center = cachedCenter;
+                                        // toController also "falls forward" by rotating clockwise to vertical and scaling up to full size
+                                        NSArray *keyTimes = @[@0.0, @0.7, @1.0];
+                                        CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                        anim.keyTimes = keyTimes;
+                                        anim.values = @[@(-M_PI_4), @0.0, @0.0];
+                                        anim.duration = duration;
+                                        [toController.view.layer addAnimation:anim forKey:@"MPRotateZ"];
+                                        anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+                                        anim.keyTimes = keyTimes;
+                                        anim.values = @[@0.8, @1.0, @1.0];
+                                        anim.duration = duration;
+                                        [toController.view.layer addAnimation:anim forKey:@"MPScale"];
+                                    }
                                 }
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
@@ -174,7 +199,7 @@
 {
     NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
     if (currentIndex < (self.survey.questions.count - 1)) {
-        [self showQuestion:currentIndex + 1];
+        [self showQuestionAtIndex:currentIndex + 1 animatingForward:YES];
     }
 }
 
@@ -182,7 +207,7 @@
 {
     NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
     if (currentIndex > 0) {
-        [self showQuestion:currentIndex - 1];
+        [self showQuestionAtIndex:currentIndex - 1 animatingForward:NO];
     }
 }
 
