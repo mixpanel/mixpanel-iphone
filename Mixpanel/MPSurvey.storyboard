@@ -8,7 +8,7 @@
         <scene sceneID="Ry2-Ta-Gf6">
             <objects>
                 <viewController storyboardIdentifier="MPSurveyNavigationController" id="RIP-po-dgx" customClass="MPSurveyNavigationController" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
+                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.0" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <subviews>
                             <button opaque="NO" alpha="0.70000000000000007" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrk-0y-OIL">
