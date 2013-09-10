@@ -140,7 +140,7 @@
                                         // fromController slides in from right to left the whole time
                                         fromController.view.center = CGPointMake(-fromController.view.bounds.size.width / 2, fromController.view.center.y);
                                         // after a brief delay, fromController also "falls away" by rotating counterclockwise and scaling down a little
-                                        NSArray *keyTimes = @[@0.0, @0.3, @1.0];
+                                        NSArray *keyTimes = @[@0.0, @0.4, @1.0];
                                         CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
                                         anim.keyTimes = keyTimes;
                                         anim.values = @[@0.0, @0.0, @(-M_PI_4)];
@@ -161,7 +161,7 @@
                                         // toController slides in from left to right the whole time
                                         toController.view.center = cachedCenter;
                                         // toController also "falls forward" by rotating clockwise to vertical and scaling up to full size
-                                        NSArray *keyTimes = @[@0.0, @0.7, @1.0];
+                                        NSArray *keyTimes = @[@0.0, @0.6, @1.0];
                                         CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
                                         anim.keyTimes = keyTimes;
                                         anim.values = @[@(-M_PI_4), @0.0, @0.0];
