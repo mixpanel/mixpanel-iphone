@@ -15,6 +15,7 @@
 @property(nonatomic,retain) IBOutlet UILabel *pageNumberLabel;
 @property(nonatomic,retain) IBOutlet UIButton *nextButton;
 @property(nonatomic,retain) IBOutlet UIButton *previousButton;
+@property(nonatomic,retain) IBOutlet UIImageView *logo;
 @property(nonatomic,retain) IBOutlet UIButton *exitButton;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic,retain) UIViewController *currentQuestionController;
@@ -48,6 +49,38 @@
     [firstQuestion didMoveToParentViewController:self];
     self.currentQuestionController = firstQuestion;
     [self updatePageNumber:0];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.view.alpha = 0.0;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.nextButton.center = CGPointMake(self.nextButton.center.x, self.nextButton.center.y - 100);
+    self.previousButton.center = CGPointMake(self.previousButton.center.x, self.previousButton.center.y - 100);
+    self.pageNumberLabel.center = CGPointMake(self.pageNumberLabel.center.x, self.pageNumberLabel.center.y - 100);
+    self.containerView.center = CGPointMake(self.containerView.center.x, self.containerView.center.y + self.view.bounds.size.height);
+    self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y + 100);
+    self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y + 100);
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         self.view.alpha = 1.0;
+                         self.nextButton.center = CGPointMake(self.nextButton.center.x, self.nextButton.center.y + 100);
+                         self.previousButton.center = CGPointMake(self.previousButton.center.x, self.previousButton.center.y + 100);
+                         self.pageNumberLabel.center = CGPointMake(self.pageNumberLabel.center.x, self.pageNumberLabel.center.y + 100);
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.5 animations:^{
+                             self.containerView.center = CGPointMake(self.containerView.center.x, self.containerView.center.y - self.view.bounds.size.height);
+                             self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y - 100);
+                             self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y - 100);
+                         }];
+                     }
+     ];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -160,10 +193,23 @@
 
 - (IBAction)dismiss
 {
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         self.view.alpha = 0.0;
+                         self.nextButton.center = CGPointMake(self.nextButton.center.x, self.nextButton.center.y - 100);
+                         self.previousButton.center = CGPointMake(self.previousButton.center.x, self.previousButton.center.y - 100);
+                         self.pageNumberLabel.center = CGPointMake(self.pageNumberLabel.center.x, self.pageNumberLabel.center.y - 100);
+                         self.containerView.center = CGPointMake(self.containerView.center.x, self.containerView.center.y + self.view.bounds.size.height);
+                         self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y + 100);
+                         self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y + 100);
+                     }
+                     completion:^(BOOL finished){
+                         [self.delegate surveyNavigationControllerWasDismissed:self];
+                     }];
     [self.mixpanel.people union:@{
      @"$surveys": @[@(self.survey.ID)],
-     @"$collections": @[@(self.survey.collectionID)]}];
-    [self.delegate surveyNavigationControllerWasDismissed:self];
+     @"$collections": @[@(self.survey.collectionID)]
+     }];
 }
 
 - (void)questionViewController:(MPSurveyQuestionViewController *)controller
