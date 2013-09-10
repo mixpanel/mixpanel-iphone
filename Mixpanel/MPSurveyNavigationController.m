@@ -43,7 +43,6 @@
     [self loadQuestion:0];
     [self loadQuestion:1];
     MPSurveyQuestionViewController *firstQuestion = self.questionControllers[0];
-    //firstQuestion.view.frame = self.containerView.bounds;
     [self addChildViewController:firstQuestion];
     [self.containerView addSubview:firstQuestion.view];
     [firstQuestion didMoveToParentViewController:self];
@@ -118,7 +117,7 @@
     }
 }
 
-- (void)showQuestion:(NSUInteger)index direction:(UIViewAnimationOptions)direction animated:(BOOL)animated
+- (void)showQuestion:(NSUInteger)index
 {
     if (index < [self.survey.questions count]) {
         [self loadQuestion:index];
@@ -131,7 +130,7 @@
         toController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
         [self addChildViewController:toController];
         [fromController willMoveToParentViewController:nil];
-        NSTimeInterval duration = animated ? 0.3 : 0;
+        NSTimeInterval duration = 0.3;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:duration
@@ -175,9 +174,7 @@
 {
     NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
     if (currentIndex < (self.survey.questions.count - 1)) {
-        [self showQuestion:currentIndex + 1
-                 direction:UIViewAnimationOptionTransitionFlipFromLeft
-                  animated:YES];
+        [self showQuestion:currentIndex + 1];
     }
 }
 
@@ -185,9 +182,7 @@
 {
     NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
     if (currentIndex > 0) {
-        [self showQuestion:currentIndex - 1
-                 direction:UIViewAnimationOptionTransitionFlipFromRight
-                  animated:YES];
+        [self showQuestion:currentIndex - 1];
     }
 }
 
