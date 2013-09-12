@@ -75,7 +75,7 @@ NSString * ODIN1(){
     unsigned char messageDigest[CC_SHA1_DIGEST_LENGTH];
 	
 	CC_SHA1(CFDataGetBytePtr((CFDataRef)data), 
-			CFDataGetLength((CFDataRef)data), 
+			(CC_LONG)CFDataGetLength((CFDataRef)data),
 			messageDigest);
 	
 	CFMutableStringRef string = CFStringCreateMutable(NULL, 40);

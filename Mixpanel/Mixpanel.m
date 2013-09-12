@@ -591,12 +591,12 @@ static Mixpanel *sharedInstance = nil;
             }
         }
         self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            MixpanelDebug(@"%@ flush %u cut short", self, self.taskId);
+            MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
             [self cancelFlush];
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }];
-        MixpanelDebug(@"%@ flush %u starting", self, self.taskId);
+        MixpanelDebug(@"%@ flush %lu starting", self, (unsigned long)self.taskId);
         [self flushEvents];
         [self flushPeople];
         [self endBackgroundTaskIfComplete];
@@ -618,7 +618,7 @@ static Mixpanel *sharedInstance = nil;
     }
     NSString *data = [self encodeAPIData:self.eventsBatch];
     NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", data];
-    MixpanelDebug(@"%@ flushing %u of %u queued events: %@", self, [self.eventsBatch count], [self.eventsQueue count], self.eventsQueue);
+    MixpanelDebug(@"%@ flushing %lu of %lu queued events: %@", self, (unsigned long)[self.eventsBatch count], (unsigned long)[self.eventsQueue count], self.eventsQueue);
     self.eventsConnection = [self apiConnectionWithEndpoint:@"/track/" andBody:postBody];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eventsConnection start];
@@ -641,7 +641,7 @@ static Mixpanel *sharedInstance = nil;
     }
     NSString *data = [self encodeAPIData:self.peopleBatch];
     NSString *postBody = [NSString stringWithFormat:@"data=%@", data];
-    MixpanelDebug(@"%@ flushing %u of %u queued people: %@", self, [self.peopleBatch count], [self.peopleQueue count], self.peopleQueue);
+    MixpanelDebug(@"%@ flushing %lu of %lu queued people: %@", self, (unsigned long)[self.peopleBatch count], (unsigned long)[self.peopleQueue count], self.peopleQueue);
     self.peopleConnection = [self apiConnectionWithEndpoint:@"/engage/" andBody:postBody];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.peopleConnection start];
@@ -684,7 +684,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)endBackgroundTaskIfComplete
 {
     if (self.taskId != UIBackgroundTaskInvalid && self.eventsConnection == nil && self.peopleConnection == nil) {
-        MixpanelDebug(@"%@ flush %u finished", self, self.taskId);
+        MixpanelDebug(@"%@ flush %lu finished", self, (unsigned long)self.taskId);
         [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
         self.taskId = UIBackgroundTaskInvalid;
     }
@@ -874,7 +874,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response
 {
-    MixpanelDebug(@"%@ http status code: %d", self, [response statusCode]);
+    MixpanelDebug(@"%@ http status code: %ld", self, (long)[response statusCode]);
     dispatch_async(self.serialQueue, ^{
         if ([response statusCode] != 200) {
             NSLog(@"%@ http error: %@", self, [NSHTTPURLResponse localizedStringForStatusCode:[response statusCode]]);
