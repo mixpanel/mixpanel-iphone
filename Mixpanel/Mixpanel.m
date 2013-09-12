@@ -141,10 +141,7 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
-        self.checkForSurveyOnActive = YES;
-        self.didReceiveSurveyBlock = ^(MPSurvey *survey) {
-            [self showSurvey:survey];
-        };
+        self.showSurveyOnActive = YES;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -207,7 +204,6 @@ static Mixpanel *sharedInstance = nil;
     self.nameTag = nil;
     self.serverURL = nil;
     self.decideURL = nil;
-    self.didReceiveSurveyBlock = nil;
     self.delegate = nil;
     self.apiToken = nil;
     self.superProperties = nil;
@@ -845,8 +841,12 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
-    if (self.checkForSurveyOnActive) {
-        [self checkForSurvey];
+    if (self.showSurveyOnActive) {
+        [self checkForSurveyWithCompletion:^(MPSurvey *survey){
+            if (survey) {
+                [self showSurvey:survey];
+            }
+        }];
     }
 }
 
@@ -966,7 +966,7 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-- (void)checkForSurvey
+- (void)checkForSurveyWithCompletion:(void (^)(MPSurvey *))completion
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelLog(@"%@ survey check started", self);
@@ -993,17 +993,21 @@ static Mixpanel *sharedInstance = nil;
             NSLog(@"%@ survey check api error: %@", self, object[@"error"]);
             return;
         }
+        MPSurvey *survey = nil;
         for (NSDictionary *dict in object[@"surveys"]) {
-            MPSurvey *survey = [MPSurvey surveyWithJSONObject:dict];
-            MixpanelLog(@"%@ survey check found available survey: %@", self, survey);
+            survey = [MPSurvey surveyWithJSONObject:dict];
             if (survey) {
-                if (self.didReceiveSurveyBlock) {
-                    self.didReceiveSurveyBlock(survey);
-                }
-                return; // only show first available, valid survey
+                break; // only show first available, valid survey
             }
         }
-        MixpanelLog(@"%@ survey check found no survey", self);
+        if (survey) {
+            MixpanelDebug(@"%@ survey check found available survey: %@", self, survey);
+        } else {
+            MixpanelDebug(@"%@ survey check found no survey", self);
+        }
+        if (completion) {
+            completion(survey);
+        }
     });
 }
 
