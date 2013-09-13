@@ -1,11 +1,15 @@
 #import "MPSurveyQuestion.h"
 
+static NSString *MPSurveyQuestionTypeMultipleChoice = @"multiple_choice";
+static NSString *MPSurveyQuestionTypeText = @"text";
+
 @interface MPSurveyQuestion ()
 
 @property(nonatomic) NSUInteger ID;
+@property(nonatomic,retain) NSString *type;
 @property(nonatomic,retain) NSString *prompt;
 
-- (id)initWithID:(NSUInteger *)ID andPrompt:(NSString *)prompt;
+- (id)initWithID:(NSUInteger *)ID type:(NSString *)type andPrompt:(NSString *)prompt;
 
 @end
 
@@ -13,7 +17,7 @@
 
 @property(nonatomic,retain) NSArray *choices;
 
-- (id)initWithID:(NSUInteger *)ID prompt:(NSString *)prompt andChoices:(NSArray *)choices;
+- (id)initWithID:(NSUInteger *)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices;
 
 @end
 
@@ -45,28 +49,35 @@
         NSLog(@"invalid question type: %@", type);
         return nil;
     }
-    if ([type isEqualToString:@"multiple_choice"]) {
+    if ([type isEqualToString:MPSurveyQuestionTypeMultipleChoice]) {
         NSArray *choices = extraData[@"choices"];
         return [[[MPSurveyMultipleChoiceQuestion alloc] initWithID:[ID unsignedIntegerValue]
+                                                              type:type
                                                             prompt:prompt
                                                         andChoices:choices] autorelease];
-    } else if ([type isEqualToString:@"text"]) {
+    } else if ([type isEqualToString:MPSurveyQuestionTypeText]) {
         return [[[MPSurveyTextQuestion alloc] initWithID:[ID unsignedIntegerValue]
+                                                    type:type
                                                andPrompt:prompt] autorelease];
     }
     NSLog(@"unknown question type: %@", type);
     return nil;
 }
 
-- (id)initWithID:(NSUInteger *)ID andPrompt:(NSString *)prompt
+- (id)initWithID:(NSUInteger *)ID type:(NSString *)type andPrompt:(NSString *)prompt
 {
-    if (prompt != nil && prompt.length > 0) {
-        if (self = [super init]) {
-            _ID = ID;
-            self.prompt = prompt;
-        }
-    } else {
+    if (!prompt || prompt.length == 0) {
         NSLog(@"invalid question prompt: %@", prompt);
+        return self;
+    }
+    if (!type || (type != MPSurveyQuestionTypeMultipleChoice && type != MPSurveyQuestionTypeText)) {
+        NSLog(@"invalid question type: %@", type);
+        return self;
+    }
+    if (self = [super init]) {
+        _ID = ID;
+        self.type = type;
+        self.prompt = prompt;
     }
     return self;
 }
@@ -75,6 +86,7 @@
 {
     _ID = nil;
     self.prompt = nil;
+    self.type = nil;
     [super dealloc];
 }
 
@@ -82,10 +94,10 @@
 
 @implementation MPSurveyMultipleChoiceQuestion
 
-- (id)initWithID:(NSUInteger *)ID prompt:(NSString *)prompt andChoices:(NSArray *)choices
+- (id)initWithID:(NSUInteger *)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices
 {
     if (choices != nil && [choices count] > 0) {
-        if (self = [super initWithID:ID andPrompt:prompt]) {
+        if (self = [super initWithID:ID type:type andPrompt:prompt]) {
             self.choices = choices;
         }
     } else {
