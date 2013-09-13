@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="RIP-po-dgx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="RIP-po-dgx">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
         <!--Survey Navigation Controller-->
         <scene sceneID="Ry2-Ta-Gf6">
             <objects>
                 <viewController storyboardIdentifier="MPSurveyNavigationController" id="RIP-po-dgx" customClass="MPSurveyNavigationController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="yBe-16-sDN"/>
+                        <viewControllerLayoutGuide type="bottom" id="yeI-nh-85p"/>
+                    </layoutGuides>
                     <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.0" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <subviews>
                             <button opaque="NO" alpha="0.70000000000000007" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrk-0y-OIL">
+                                <rect key="frame" x="0.0" y="0.0" width="44" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="3aI-AD-BBH"/>
                                     <constraint firstAttribute="height" constant="48" id="w9G-Tc-Rfq"/>
@@ -29,6 +35,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" text="1 of 10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbJ-sK-oCv">
+                                <rect key="frame" x="52" y="12" width="216" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="kEH-Da-AT7"/>
                                 </constraints>
@@ -37,6 +44,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZ0-zi-Urm">
+                                <rect key="frame" x="276" y="0.0" width="44" height="48"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" image="ArrowRight.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -50,12 +58,15 @@
                                 </connections>
                             </button>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7a-kU-sIs">
+                                <rect key="frame" x="0.0" y="48" width="320" height="472"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </containerView>
                             <imageView userInteractionEnabled="NO" alpha="0.40000000000000013" contentMode="scaleToFill" image="Dots.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
+                                <rect key="frame" x="20" y="538" width="32" height="10"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
                             <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vP-xd-w4j">
+                                <rect key="frame" x="270" y="520" width="50" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="3Ks-zv-XSz"/>
                                     <constraint firstAttribute="width" constant="50" id="lKm-ZE-wiX"/>
@@ -75,23 +86,23 @@
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="D7a-kU-sIs" firstAttribute="centerY" secondItem="cp6-lZ-a9t" secondAttribute="centerY" type="default" id="0Jq-zu-E9w"/>
-                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="trailing" secondItem="cp6-lZ-a9t" secondAttribute="trailing" type="default" id="54f-CY-2k2"/>
-                            <constraint firstItem="D7a-kU-sIs" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" type="default" id="63l-xL-Fry"/>
-                            <constraint firstItem="tHb-kq-3y4" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="64G-bX-dmV"/>
-                            <constraint firstAttribute="bottom" secondItem="D7a-kU-sIs" secondAttribute="bottom" constant="48" type="user" id="Eka-YD-9LA"/>
-                            <constraint firstItem="8vP-xd-w4j" firstAttribute="trailing" secondItem="cp6-lZ-a9t" secondAttribute="trailing" type="default" id="Etj-ja-pVf"/>
-                            <constraint firstItem="JbJ-sK-oCv" firstAttribute="centerX" secondItem="D7a-kU-sIs" secondAttribute="centerX" type="default" id="LRY-s5-ll8"/>
-                            <constraint firstItem="Rrk-0y-OIL" firstAttribute="centerY" secondItem="JbJ-sK-oCv" secondAttribute="centerY" type="default" id="PJS-7A-8kE"/>
-                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="leading" secondItem="JbJ-sK-oCv" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Tmo-Wf-R7I"/>
-                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="top" secondItem="cp6-lZ-a9t" secondAttribute="top" type="default" id="Tww-tT-v9G"/>
-                            <constraint firstAttribute="trailing" secondItem="D7a-kU-sIs" secondAttribute="trailing" type="user" id="Xmu-kv-ZRo"/>
-                            <constraint firstItem="Rrk-0y-OIL" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" type="default" id="c2j-VF-Plc"/>
-                            <constraint firstItem="Rrk-0y-OIL" firstAttribute="top" secondItem="cp6-lZ-a9t" secondAttribute="top" type="default" id="f9A-RM-viY"/>
-                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="bottom" secondItem="Rrk-0y-OIL" secondAttribute="bottom" type="default" id="nUv-L5-m2B"/>
-                            <constraint firstAttribute="bottom" secondItem="tHb-kq-3y4" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="sLq-9t-WlT"/>
-                            <constraint firstItem="8vP-xd-w4j" firstAttribute="bottom" secondItem="cp6-lZ-a9t" secondAttribute="bottom" type="default" id="svI-P2-yJq"/>
-                            <constraint firstItem="JbJ-sK-oCv" firstAttribute="leading" secondItem="Rrk-0y-OIL" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="vMD-zc-1h9"/>
+                            <constraint firstItem="D7a-kU-sIs" firstAttribute="centerY" secondItem="cp6-lZ-a9t" secondAttribute="centerY" id="0Jq-zu-E9w"/>
+                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="trailing" secondItem="cp6-lZ-a9t" secondAttribute="trailing" id="54f-CY-2k2"/>
+                            <constraint firstItem="D7a-kU-sIs" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" id="63l-xL-Fry"/>
+                            <constraint firstItem="tHb-kq-3y4" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" constant="20" symbolic="YES" id="64G-bX-dmV"/>
+                            <constraint firstAttribute="bottom" secondItem="D7a-kU-sIs" secondAttribute="bottom" constant="48" id="Eka-YD-9LA"/>
+                            <constraint firstItem="8vP-xd-w4j" firstAttribute="trailing" secondItem="cp6-lZ-a9t" secondAttribute="trailing" id="Etj-ja-pVf"/>
+                            <constraint firstItem="JbJ-sK-oCv" firstAttribute="centerX" secondItem="D7a-kU-sIs" secondAttribute="centerX" id="LRY-s5-ll8"/>
+                            <constraint firstItem="Rrk-0y-OIL" firstAttribute="centerY" secondItem="JbJ-sK-oCv" secondAttribute="centerY" id="PJS-7A-8kE"/>
+                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="leading" secondItem="JbJ-sK-oCv" secondAttribute="trailing" constant="8" symbolic="YES" id="Tmo-Wf-R7I"/>
+                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="top" secondItem="cp6-lZ-a9t" secondAttribute="top" id="Tww-tT-v9G"/>
+                            <constraint firstAttribute="trailing" secondItem="D7a-kU-sIs" secondAttribute="trailing" id="Xmu-kv-ZRo"/>
+                            <constraint firstItem="Rrk-0y-OIL" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" id="c2j-VF-Plc"/>
+                            <constraint firstItem="Rrk-0y-OIL" firstAttribute="top" secondItem="cp6-lZ-a9t" secondAttribute="top" id="f9A-RM-viY"/>
+                            <constraint firstItem="kZ0-zi-Urm" firstAttribute="bottom" secondItem="Rrk-0y-OIL" secondAttribute="bottom" id="nUv-L5-m2B"/>
+                            <constraint firstAttribute="bottom" secondItem="tHb-kq-3y4" secondAttribute="bottom" constant="20" symbolic="YES" id="sLq-9t-WlT"/>
+                            <constraint firstItem="8vP-xd-w4j" firstAttribute="bottom" secondItem="cp6-lZ-a9t" secondAttribute="bottom" id="svI-P2-yJq"/>
+                            <constraint firstItem="JbJ-sK-oCv" firstAttribute="leading" secondItem="Rrk-0y-OIL" secondAttribute="trailing" constant="8" symbolic="YES" id="vMD-zc-1h9"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -112,11 +123,16 @@
         <scene sceneID="QpU-2b-ieB">
             <objects>
                 <viewController storyboardIdentifier="MPSurveyMultipleChoiceQuestionViewController" id="V5X-Ik-MvF" customClass="MPSurveyMultipleChoiceQuestionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0dc-oD-fBd"/>
+                        <viewControllerLayoutGuide type="bottom" id="pb1-Oq-4Kx"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dcL-M9-gG3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.70000000000000007" contentMode="left" text="Prompt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="nTV-Im-rNp">
+                                <rect key="frame" x="20" y="0.0" width="280" height="76"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="76" id="h1j-Cd-an3"/>
@@ -126,6 +142,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" alpha="0.70000000000000007" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="51D-Sg-9Sy">
+                                <rect key="frame" x="10" y="84" width="300" height="484"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="bek-1K-MHA"/>
@@ -133,20 +150,20 @@
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell alpha="0.80000000000000004" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MPSurveyMultipleChoiceQuestionCell" textLabel="clj-6g-lNw" style="IBUITableViewCellStyleDefault" id="5Xk-yg-bRK" customClass="MPSurveyMultipleChoiceQuestionCell">
-                                        <rect key="frame" x="0.0" y="46" width="300" height="45"/>
+                                        <rect key="frame" x="0.0" y="55" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Xk-yg-bRK" id="Yx0-o8-79V">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Choice" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clj-6g-lNw">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Choice" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="clj-6g-lNw">
+                                                    <rect key="frame" x="15" y="0.0" width="270" height="43"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
+                                        </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </prototypes>
@@ -158,12 +175,12 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="51D-Sg-9Sy" firstAttribute="bottom" secondItem="dcL-M9-gG3" secondAttribute="bottom" type="default" id="EBK-IZ-W6g"/>
-                            <constraint firstItem="51D-Sg-9Sy" firstAttribute="top" secondItem="nTV-Im-rNp" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="KKk-KB-Nji"/>
-                            <constraint firstItem="nTV-Im-rNp" firstAttribute="top" secondItem="dcL-M9-gG3" secondAttribute="top" type="default" id="Rce-vi-DVo"/>
-                            <constraint firstItem="nTV-Im-rNp" firstAttribute="centerX" secondItem="51D-Sg-9Sy" secondAttribute="centerX" type="default" id="WOi-i3-VGV"/>
-                            <constraint firstItem="nTV-Im-rNp" firstAttribute="leading" secondItem="dcL-M9-gG3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="aWe-7K-hb1"/>
-                            <constraint firstAttribute="trailing" secondItem="nTV-Im-rNp" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="hyC-gX-Kwu"/>
+                            <constraint firstItem="51D-Sg-9Sy" firstAttribute="bottom" secondItem="dcL-M9-gG3" secondAttribute="bottom" id="EBK-IZ-W6g"/>
+                            <constraint firstItem="51D-Sg-9Sy" firstAttribute="top" secondItem="nTV-Im-rNp" secondAttribute="bottom" constant="8" symbolic="YES" id="KKk-KB-Nji"/>
+                            <constraint firstItem="nTV-Im-rNp" firstAttribute="top" secondItem="dcL-M9-gG3" secondAttribute="top" id="Rce-vi-DVo"/>
+                            <constraint firstItem="nTV-Im-rNp" firstAttribute="centerX" secondItem="51D-Sg-9Sy" secondAttribute="centerX" id="WOi-i3-VGV"/>
+                            <constraint firstItem="nTV-Im-rNp" firstAttribute="leading" secondItem="dcL-M9-gG3" secondAttribute="leading" constant="20" symbolic="YES" id="aWe-7K-hb1"/>
+                            <constraint firstAttribute="trailing" secondItem="nTV-Im-rNp" secondAttribute="trailing" constant="20" symbolic="YES" id="hyC-gX-Kwu"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -185,11 +202,16 @@
         <scene sceneID="1rW-Hb-tJ5">
             <objects>
                 <viewController storyboardIdentifier="MPSurveyTextQuestionViewController" id="tDf-fb-udT" customClass="MPSurveyTextQuestionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0Dc-CW-5y3"/>
+                        <viewControllerLayoutGuide type="bottom" id="Z0K-Vd-ax9"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="LG7-cL-aRp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.70000000000000007" contentMode="left" text="Prompt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="3Vm-1Z-umb">
+                                <rect key="frame" x="20" y="0.0" width="280" height="76"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="76" id="IKd-B6-rks"/>
@@ -199,6 +221,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtB-0d-D3n">
+                                <rect key="frame" x="20" y="84" width="280" height="92"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="92" id="SvP-xo-l2z"/>
@@ -210,12 +233,12 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vtB-0d-D3n" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="0WW-Br-oYt"/>
-                            <constraint firstAttribute="trailing" secondItem="vtB-0d-D3n" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="3Qk-2d-x32"/>
-                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="3cX-Jc-jbi"/>
-                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="top" secondItem="LG7-cL-aRp" secondAttribute="top" type="default" id="3x8-Qg-tx8"/>
-                            <constraint firstAttribute="trailing" secondItem="3Vm-1Z-umb" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="J0E-hr-yyD"/>
-                            <constraint firstItem="vtB-0d-D3n" firstAttribute="top" secondItem="3Vm-1Z-umb" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="n1b-l4-LaD"/>
+                            <constraint firstItem="vtB-0d-D3n" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="20" symbolic="YES" id="0WW-Br-oYt"/>
+                            <constraint firstAttribute="trailing" secondItem="vtB-0d-D3n" secondAttribute="trailing" constant="20" symbolic="YES" id="3Qk-2d-x32"/>
+                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="20" symbolic="YES" id="3cX-Jc-jbi"/>
+                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="top" secondItem="LG7-cL-aRp" secondAttribute="top" id="3x8-Qg-tx8"/>
+                            <constraint firstAttribute="trailing" secondItem="3Vm-1Z-umb" secondAttribute="trailing" constant="20" symbolic="YES" id="J0E-hr-yyD"/>
+                            <constraint firstItem="vtB-0d-D3n" firstAttribute="top" secondItem="3Vm-1Z-umb" secondAttribute="bottom" constant="8" symbolic="YES" id="n1b-l4-LaD"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -235,44 +258,6 @@
         <image name="Checkmark.png" width="13" height="14"/>
         <image name="Dots.png" width="32" height="10"/>
     </resources>
-    <classes>
-        <class className="MPSurveyMultipleChoiceQuestionCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyMultipleChoiceQuestionCell.h"/>
-        </class>
-        <class className="MPSurveyMultipleChoiceQuestionViewController" superclassName="MPSurveyQuestionViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyMultipleChoiceQuestionViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="checkmarkImageView" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="MPSurveyNavigationController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyNavigationController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="exitButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="logo" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="nextButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="pageNumberLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="previousButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="view" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="MPSurveyQuestionViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyQuestionViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="promptLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="MPSurveyTextQuestionViewController" superclassName="MPSurveyQuestionViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MPSurveyTextQuestionViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
