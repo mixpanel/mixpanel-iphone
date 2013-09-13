@@ -142,16 +142,12 @@
         // replace the placeholder if necessary
         if ((NSNull *)controller == [NSNull null]) {
             MPSurveyQuestion *question = self.survey.questions[index];
-            NSString *storyboardIdentifier;
-            if ([question isKindOfClass:[MPSurveyMultipleChoiceQuestion class]]) {
-                storyboardIdentifier = @"MPSurveyMultipleChoiceQuestionViewController";
-            } else if ([question isKindOfClass:[MPSurveyTextQuestion class]]) {
-                storyboardIdentifier = @"MPSurveyTextQuestionViewController";
-            } else {
-                NSLog(@"no view controller for question: %@", question);
+            NSString *storyboardIdentifier = [NSString stringWithFormat:@"%@ViewController", NSStringFromClass([question class])];
+            controller = [self.storyboard instantiateViewControllerWithIdentifier:storyboardIdentifier];
+            if (!controller) {
+                NSLog(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
                 return;
             }
-            controller = [self.storyboard instantiateViewControllerWithIdentifier:storyboardIdentifier];
             controller.delegate = self;
             controller.question = question;
             controller.highlightColor = [[self.backgroundImage mp_averageColor] colorWithAlphaComponent:.6];
