@@ -3,6 +3,7 @@
 @interface MPSurveyQuestion : NSObject
 
 @property(nonatomic,readonly) NSUInteger ID;
+@property(nonatomic,readonly,retain) NSString *type;
 @property(nonatomic,readonly,retain) NSString *prompt;
 
 + (MPSurveyQuestion *)questionWithJSONObject:(NSObject *)object;

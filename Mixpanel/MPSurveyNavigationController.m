@@ -283,6 +283,7 @@
      @"$survey_id": @(self.survey.ID),
      @"$collection_id": @(self.survey.collectionID),
      @"$question_id": @(controller.question.ID),
+     @"$question_type": controller.question.type,
      @"$time": [NSDate date]
      }];
     [self.mixpanel.people append:@{@"$answers": answer}];
