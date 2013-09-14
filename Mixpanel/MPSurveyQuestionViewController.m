@@ -9,6 +9,9 @@
 @interface MPSurveyMultipleChoiceQuestionViewController : MPSurveyQuestionViewController <UITableViewDataSource, UITableViewDelegate>
 @property(nonatomic,retain) MPSurveyMultipleChoiceQuestion *question;
 @property(nonatomic,retain) IBOutlet UIImageView *checkmarkImageView;
+@property(nonatomic,retain) IBOutlet UITableView *tableView;
+@property(nonatomic,retain) IBOutlet UIView *tableContainer;
+@property(nonatomic,retain) CAGradientLayer *fadeLayer;
 @end
 
 @interface MPSurveyMultipleChoiceQuestionCell : UITableViewCell
@@ -50,6 +53,31 @@
 @end
 
 @implementation MPSurveyMultipleChoiceQuestionViewController
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSLog(@"table container frame: %@", NSStringFromCGRect(_tableContainer.frame));
+    NSLog(@"table container frame: %@", NSStringFromCGRect(_tableContainer.frame));
+    _tableContainer.layer.borderColor = [UIColor redColor].CGColor;
+    _tableContainer.layer.borderWidth = 3;
+
+    if (!_fadeLayer) {
+        _fadeLayer = [CAGradientLayer layer];
+        CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
+        CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
+        _fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
+        _fadeLayer.locations = @[@0.0, @0.25, @0.75, @1.0];
+        _fadeLayer.bounds = self.tableContainer.bounds;
+        _fadeLayer.anchorPoint = CGPointZero;
+        _tableContainer.layer.mask = _fadeLayer;
+    }
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
 
 - (NSString *)labelForValue:(id)val
 {
@@ -141,13 +169,17 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [_textView becomeFirstResponder];
+    
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
-    [_textView resignFirstResponder];
+    [super beginAppearanceTransition:isAppearing animated:animated];
+    if (isAppearing) {
+        [_textView becomeFirstResponder];
+    } else {
+        [_textView resignFirstResponder];
+    }
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
