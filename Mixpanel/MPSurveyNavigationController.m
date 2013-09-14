@@ -48,14 +48,6 @@
     [firstQuestion didMoveToParentViewController:self];
     self.currentQuestionController = firstQuestion;
     [self updatePageNumber:0];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShown:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -82,47 +74,6 @@
                          }];
                      }
      ];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)resizeContainerViewForKeyboard:(NSNotification*)note up:(BOOL)up {
-    NSDictionary* userInfo = [note userInfo];
-    NSTimeInterval duration;
-    UIViewAnimationCurve curve;
-    CGRect frame;
-    [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
-    [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&curve];
-    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frame];
-    CGFloat height = frame.size.height;
-    [UIView animateWithDuration:duration
-                          delay:0
-                        options:curve
-                     animations:^{
-                         NSLog(@"rect: %@", NSStringFromCGRect(frame));
-                         if (up) {
-                             self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y - height);
-                             self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y - height);
-                         } else {
-                             self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y + height);
-                             self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y + height);
-                         }
-                     }
-                     completion:^(BOOL finished){
-                     }];
-}
-
-- (void)keyboardWillShown:(NSNotification*)note
-{
-    [self resizeContainerViewForKeyboard:note up:YES];
-}
-
-- (void)keyboardWillHide:(NSNotification*)note
-{
-    [self resizeContainerViewForKeyboard:note up:NO];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
