@@ -73,9 +73,15 @@
                              @"collections": @[@{@"id": @2}],
                              @"questions": @[
                                      @{
+                                         @"id": @7,
+                                         @"type": @"text",
+                                         @"prompt": @"Anything else to add?",
+                                         @"extra_data": @{}
+                                         },
+                                     @{
                                          @"id": @3,
                                          @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care?",
+                                         @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
                                          @"extra_data": @{
                                                  @"choices": @[
                                                          @"A lot",
@@ -85,6 +91,12 @@
                                                          [NSNull null]
                                                          ]
                                                  }
+                                         },
+                                     @{
+                                         @"id": @7,
+                                         @"type": @"text",
+                                         @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
+                                         @"extra_data": @{}
                                          },
                                      @{
                                          @"id": @4,
@@ -106,17 +118,6 @@
                                                  }
                                          },
                                      @{
-                                         @"id": @5,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"Would you recommend this app to a friend?",
-                                         @"extra_data": @{
-                                                 @"choices": @[
-                                                         @YES,
-                                                         @NO
-                                                         ]
-                                                 }
-                                         },
-                                     @{
                                          @"id": @6,
                                          @"type": @"multiple_choice",
                                          @"prompt": @"Is this question too long or just long enough to be effective in getting to the exact point we were trying to get across when engaging you in as efficient a manner as possible?",
@@ -127,12 +128,6 @@
                                                          @NO
                                                          ]
                                                  }
-                                         },
-                                     @{
-                                         @"id": @7,
-                                         @"type": @"text",
-                                         @"prompt": @"Anything else to add?",
-                                         @"extra_data": @{}
                                          }
                                      ]
                              };

@@ -17,8 +17,10 @@
 @property(nonatomic,retain) IBOutlet UIButton *previousButton;
 @property(nonatomic,retain) IBOutlet UIImageView *logo;
 @property(nonatomic,retain) IBOutlet UIButton *exitButton;
+@property(nonatomic,retain) IBOutlet UIView *header;
+@property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
-@property(nonatomic,retain) UIViewController *currentQuestionController;
+@property(nonatomic) UIViewController *currentQuestionController;
 
 @end
 
@@ -35,45 +37,92 @@
 
 - (void)viewDidLoad
 {
-    self.view.image = [self.backgroundImage mp_applyDarkEffect];
+    self.view.image = [_backgroundImage mp_applyDarkEffect];
     self.questionControllers = [NSMutableArray array];
-    for (NSUInteger i = 0; i < self.survey.questions.count; i++) {
-        [self.questionControllers addObject:[NSNull null]];
+    for (NSUInteger i = 0; i < _survey.questions.count; i++) {
+        [_questionControllers addObject:[NSNull null]];
     }
     [self loadQuestion:0];
     [self loadQuestion:1];
-    MPSurveyQuestionViewController *firstQuestion = self.questionControllers[0];
-    [self addChildViewController:firstQuestion];
-    [self.containerView addSubview:firstQuestion.view];
-    [firstQuestion didMoveToParentViewController:self];
-    self.currentQuestionController = firstQuestion;
+    MPSurveyQuestionViewController *firstQuestionController = _questionControllers[0];
+    [self addChildViewController:firstQuestionController];
+    [_containerView addSubview:firstQuestionController.view];
+    [firstQuestionController didMoveToParentViewController:self];
+    _currentQuestionController = firstQuestionController;
     [self updatePageNumber:0];
+    [self updateButtons:0];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.nextButton.center = CGPointMake(self.nextButton.center.x, self.nextButton.center.y - 100);
-    self.previousButton.center = CGPointMake(self.previousButton.center.x, self.previousButton.center.y - 100);
-    self.pageNumberLabel.center = CGPointMake(self.pageNumberLabel.center.x, self.pageNumberLabel.center.y - 100);
-    self.containerView.center = CGPointMake(self.containerView.center.x, self.containerView.center.y + self.view.bounds.size.height);
-    self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y + 100);
-    self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y + 100);
+    _currentQuestionController.view.frame = _containerView.bounds;
+    _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
+    _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
     [UIView animateWithDuration:0.5
                      animations:^{
                          self.view.alpha = 1.0;
-                         self.nextButton.center = CGPointMake(self.nextButton.center.x, self.nextButton.center.y + 100);
-                         self.previousButton.center = CGPointMake(self.previousButton.center.x, self.previousButton.center.y + 100);
-                         self.pageNumberLabel.center = CGPointMake(self.pageNumberLabel.center.x, self.pageNumberLabel.center.y + 100);
+                         _header.center = CGPointMake(_header.center.x, _header.center.y + 100);
                      }
-                     completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.5 animations:^{
-                             self.containerView.center = CGPointMake(self.containerView.center.x, self.containerView.center.y - self.view.bounds.size.height);
-                             self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y - 100);
-                             self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y - 100);
-                         }];
-                     }
-     ];
+                     completion:^(BOOL finished1){
+                         [_currentQuestionController beginAppearanceTransition:YES animated:NO];
+                         [UIView animateWithDuration:0.5
+                                          animations:^{
+                                              _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y - self.view.bounds.size.height);
+                                              _footer.center = CGPointMake(_footer.center.x, _footer.center.y - 100);
+                                          }
+                                          completion:^(BOOL finished2) {
+                                              [_currentQuestionController endAppearanceTransition];
+                                          }];
+                     }];
+}
+
+- (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
+    NSDictionary* userInfo = [note userInfo];
+    NSTimeInterval duration;
+    UIViewAnimationCurve curve;
+    CGRect keyboardFrameEnd;
+    [userInfo[UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
+    [userInfo[UIKeyboardAnimationCurveUserInfoKey] getValue:&curve];
+    [userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrameEnd];
+    CGRect newFooterFrame = _footer.frame;
+    if (up) {
+        newFooterFrame.origin.y -= keyboardFrameEnd.size.height;
+    } else {
+        newFooterFrame.origin.y += keyboardFrameEnd.size.height;
+    }
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+        _footer.frame = newFooterFrame;
+    } completion:nil];
+}
+
+- (void)keyboardWillShow:(NSNotification*)note
+{
+    [self resizeViewForKeyboard:note up:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification*)note
+{
+    [self resizeViewForKeyboard:note up:NO];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -83,16 +132,22 @@
 
 - (void)updatePageNumber:(NSUInteger)index
 {
-    self.pageNumberLabel.text = [NSString stringWithFormat:@"%d of %d", index + 1, self.survey.questions.count];
+    _pageNumberLabel.text = [NSString stringWithFormat:@"%d of %d", index + 1, _survey.questions.count];
+}
+
+- (void)updateButtons:(NSUInteger)index
+{
+    _previousButton.enabled = index > 0;
+    _nextButton.enabled = index < ([_survey.questions count] - 1);
 }
 
 - (void)loadQuestion:(NSUInteger)index
 {
-    if (index < self.survey.questions.count) {
-        MPSurveyQuestionViewController *controller = self.questionControllers[index];
+    if (index < _survey.questions.count) {
+        MPSurveyQuestionViewController *controller = _questionControllers[index];
         // replace the placeholder if necessary
         if ((NSNull *)controller == [NSNull null]) {
-            MPSurveyQuestion *question = self.survey.questions[index];
+            MPSurveyQuestion *question = _survey.questions[index];
             NSString *storyboardIdentifier = [NSString stringWithFormat:@"%@ViewController", NSStringFromClass([question class])];
             controller = [self.storyboard instantiateViewControllerWithIdentifier:storyboardIdentifier];
             if (!controller) {
@@ -101,20 +156,20 @@
             }
             controller.delegate = self;
             controller.question = question;
-            controller.highlightColor = [[self.backgroundImage mp_averageColor] colorWithAlphaComponent:.6];
-            self.questionControllers[index] = controller;
+            controller.highlightColor = [[_backgroundImage mp_averageColor] colorWithAlphaComponent:.6];
+            _questionControllers[index] = controller;
         }
     }
 }
 
 - (void)showQuestionAtIndex:(NSUInteger)index animatingForward:(BOOL)forward
 {
-    if (index < [self.survey.questions count]) {
+    if (index < [_survey.questions count]) {
         [self loadQuestion:index];
-        UIViewController *fromController = self.currentQuestionController;
-        UIViewController *toController = self.questionControllers[index];
+        UIViewController *fromController = _currentQuestionController;
+        UIViewController *toController = _questionControllers[index];
         toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
-        toController.view.frame = self.containerView.bounds; // and then get view to size itself according to container bounds
+        toController.view.frame = _containerView.bounds; // and then get view to size itself according to container bounds
         CGPoint cachedCenter = toController.view.center;
         if (forward) {
             // toController starts way offscreen right (the extra distance makes it move faster) and rotated 45 degrees clockwise
@@ -173,11 +228,10 @@
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
-                                    self.currentQuestionController = toController;
+                                    _currentQuestionController = toController;
                                 }];
         [self updatePageNumber:index];
-        self.previousButton.enabled = index != 0;
-        self.nextButton.enabled = index < ([self.survey.questions count] - 1);
+        [self updateButtons:index];
         [self loadQuestion:index - 1];
         [self loadQuestion:index + 1];
     } else {
@@ -185,17 +239,22 @@
     }
 }
 
+- (NSUInteger)currentIndex
+{
+    return [_questionControllers indexOfObject:_currentQuestionController];
+}
+
 - (IBAction)showNextQuestion
 {
-    NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
-    if (currentIndex < (self.survey.questions.count - 1)) {
+    NSUInteger currentIndex = [self currentIndex];
+    if (currentIndex < (_survey.questions.count - 1)) {
         [self showQuestionAtIndex:currentIndex + 1 animatingForward:YES];
     }
 }
 
 - (IBAction)showPreviousQuestion
 {
-    NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
+    NSUInteger currentIndex = [self currentIndex];
     if (currentIndex > 0) {
         [self showQuestionAtIndex:currentIndex - 1 animatingForward:NO];
     }
@@ -206,36 +265,28 @@
     [UIView animateWithDuration:0.5
                      animations:^{
                          self.view.alpha = 0.0;
-                         self.nextButton.center = CGPointMake(self.nextButton.center.x, self.nextButton.center.y - 100);
-                         self.previousButton.center = CGPointMake(self.previousButton.center.x, self.previousButton.center.y - 100);
-                         self.pageNumberLabel.center = CGPointMake(self.pageNumberLabel.center.x, self.pageNumberLabel.center.y - 100);
-                         self.containerView.center = CGPointMake(self.containerView.center.x, self.containerView.center.y + self.view.bounds.size.height);
-                         self.logo.center = CGPointMake(self.logo.center.x, self.logo.center.y + 100);
-                         self.exitButton.center = CGPointMake(self.exitButton.center.x, self.exitButton.center.y + 100);
+                         _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
+                         _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+                         _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
                      }
                      completion:^(BOOL finished){
-                         [self.delegate surveyNavigationControllerWasDismissed:self];
+                         [_delegate surveyNavigationControllerWasDismissed:self];
                      }];
-    [self.mixpanel.people union:@{
-     @"$surveys": @[@(self.survey.ID)],
-     @"$collections": @[@(self.survey.collectionID)]
-     }];
+    [_mixpanel.people union:@{@"$surveys": @[@(_survey.ID)],
+                              @"$collections": @[@(_survey.collectionID)]}];
 }
 
 - (void)questionViewController:(MPSurveyQuestionViewController *)controller
     didReceiveAnswerProperties:(NSDictionary *)properties
 {
     NSMutableDictionary *answer = [NSMutableDictionary dictionaryWithDictionary:properties];
-    [answer addEntriesFromDictionary:@{
-     @"$survey_id": @(self.survey.ID),
-     @"$collection_id": @(self.survey.collectionID),
-     @"$question_id": @(controller.question.ID),
-     @"$question_type": controller.question.type,
-     @"$time": [NSDate date]
-     }];
-    [self.mixpanel.people append:@{@"$answers": answer}];
-    NSUInteger currentIndex = [_questionControllers indexOfObject:_currentQuestionController];
-    if (currentIndex < ([self.survey.questions count] - 1)) {
+    [answer addEntriesFromDictionary:@{@"$survey_id": @(_survey.ID),
+                                       @"$collection_id": @(_survey.collectionID),
+                                       @"$question_id": @(controller.question.ID),
+                                       @"$question_type": controller.question.type,
+                                       @"$time": [NSDate date]}];
+    [_mixpanel.people append:@{@"$answers": answer}];
+    if ([self currentIndex] < ([_survey.questions count] - 1)) {
         [self showNextQuestion];
     } else {
         [self dismiss];
