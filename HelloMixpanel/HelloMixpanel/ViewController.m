@@ -77,7 +77,7 @@
                                          @"type": @"multiple_choice",
                                          @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
                                          @"extra_data": @{
-                                                 @"choices": @[
+                                                 @"$choices": @[
                                                          @"A lot",
                                                          @"A little",
                                                          @"Not at all",
@@ -97,7 +97,7 @@
                                          @"type": @"multiple_choice",
                                          @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
                                          @"extra_data": @{
-                                                 @"choices": @[
+                                                 @"$choices": @[
                                                          @"A lot",
                                                          @"A little",
                                                          @"Not at all",
@@ -117,7 +117,7 @@
                                          @"type": @"multiple_choice",
                                          @"prompt": @"How many employees does your company have?",
                                          @"extra_data": @{
-                                                 @"choices": @[
+                                                 @"$choices": @[
                                                          @1,
                                                          @1.5,
                                                          @100,
@@ -137,7 +137,7 @@
                                          @"prompt": @"Is this question too long or just long enough to be effective in getting to the exact point we were trying to get across when engaging you in as efficient a manner as possible?",
                                          @"property": @"Promoter",
                                          @"extra_data": @{
-                                                 @"choices": @[
+                                                 @"$choices": @[
                                                          @YES,
                                                          @NO
                                                          ]

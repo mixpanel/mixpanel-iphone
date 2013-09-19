@@ -50,7 +50,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
         return nil;
     }
     if ([type isEqualToString:MPSurveyQuestionTypeMultipleChoice]) {
-        NSArray *choices = extraData[@"choices"];
+        NSArray *choices = extraData[@"$choices"];
         return [[[MPSurveyMultipleChoiceQuestion alloc] initWithID:[ID unsignedIntegerValue]
                                                               type:type
                                                             prompt:prompt
