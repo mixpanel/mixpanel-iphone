@@ -181,11 +181,13 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if([text hasSuffix:@"\n"]) {
-        [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": _textView.text}];
+    // submit on return
+    if ([text hasSuffix:@"\n"]) {
+        [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
         return NO;
     }
-    return YES;
+    // 255 character max
+    return [textView.text length] + ([text length] - range.length) <= 255;
 }
 
 @end
