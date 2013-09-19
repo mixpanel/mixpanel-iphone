@@ -73,6 +73,20 @@
                              @"collections": @[@{@"id": @2}],
                              @"questions": @[
                                      @{
+                                         @"id": @3,
+                                         @"type": @"multiple_choice",
+                                         @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
+                                         @"extra_data": @{
+                                                 @"choices": @[
+                                                         @"A lot",
+                                                         @"A little",
+                                                         @"Not at all",
+                                                         @"I'd prefer you didn't exist",
+                                                         [NSNull null]
+                                                         ]
+                                                 }
+                                         },
+                                     @{
                                          @"id": @7,
                                          @"type": @"text",
                                          @"prompt": @"Anything else to add?",
