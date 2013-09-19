@@ -57,17 +57,14 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"table container frame: %@", NSStringFromCGRect(_tableContainer.frame));
-    NSLog(@"table container frame: %@", NSStringFromCGRect(_tableContainer.frame));
-    _tableContainer.layer.borderColor = [UIColor redColor].CGColor;
-    _tableContainer.layer.borderWidth = 3;
-
     if (!_fadeLayer) {
         _fadeLayer = [CAGradientLayer layer];
         CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
         CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
         _fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
-        _fadeLayer.locations = @[@0.0, @0.25, @0.75, @1.0];
+        // add 20 pixels of fade in and out at top and bottom of table view container
+        CGFloat offset = 20.0 / _tableContainer.bounds.size.height;
+        _fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
         _fadeLayer.bounds = self.tableContainer.bounds;
         _fadeLayer.anchorPoint = CGPointZero;
         _tableContainer.layer.mask = _fadeLayer;

@@ -53,6 +53,13 @@
     [self updateButtons:0];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    // prior to this, container view frame's height has not be reduced to account for status bar
+    _currentQuestionController.view.frame = _containerView.bounds;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -68,13 +75,13 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    _currentQuestionController.view.frame = _containerView.bounds;
     _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
     _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
     _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
