@@ -11,7 +11,8 @@
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
 @property(nonatomic,retain) IBOutlet UIImageView *view;
-@property(nonatomic,retain) IBOutlet UIView *containerView;
+@property(nonatomic,retain) IBOutlet UIView *mainContainer;
+@property(nonatomic,retain) IBOutlet UIView *questionContainer;
 @property(nonatomic,retain) IBOutlet UILabel *pageNumberLabel;
 @property(nonatomic,retain) IBOutlet UIButton *nextButton;
 @property(nonatomic,retain) IBOutlet UIButton *previousButton;
@@ -46,7 +47,7 @@
     [self loadQuestion:1];
     MPSurveyQuestionViewController *firstQuestionController = _questionControllers[0];
     [self addChildViewController:firstQuestionController];
-    [_containerView addSubview:firstQuestionController.view];
+    [_questionContainer addSubview:firstQuestionController.view];
     [firstQuestionController didMoveToParentViewController:self];
     _currentQuestionController = firstQuestionController;
     [self updatePageNumber:0];
@@ -57,7 +58,7 @@
 {
     [super viewDidLayoutSubviews];
     // prior to this, container view frame's height has not be reduced to account for status bar
-    _currentQuestionController.view.frame = _containerView.bounds;
+    _currentQuestionController.view.frame = _questionContainer.bounds;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,7 +84,7 @@
 {
     [super viewDidAppear:animated];
     _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
-    _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+    _questionContainer.center = CGPointMake(_questionContainer.center.x, _questionContainer.center.y + self.view.bounds.size.height);
     _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
     [UIView animateWithDuration:0.5
                      animations:^{
@@ -94,7 +95,7 @@
                          [_currentQuestionController beginAppearanceTransition:YES animated:NO];
                          [UIView animateWithDuration:0.5
                                           animations:^{
-                                              _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y - self.view.bounds.size.height);
+                                              _questionContainer.center = CGPointMake(_questionContainer.center.x, _questionContainer.center.y - self.view.bounds.size.height);
                                               _footer.center = CGPointMake(_footer.center.x, _footer.center.y - 100);
                                           }
                                           completion:^(BOOL finished2) {
@@ -112,18 +113,14 @@
     [userInfo[UIKeyboardAnimationCurveUserInfoKey] getValue:&curve];
     [userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrame];
     CGFloat keyboardHeight = keyboardFrame.size.height;
-//    CGRect newContainerFrame = _containerView.frame;
-    CGRect newFooterFrame = _footer.frame;
+    CGRect newMainFrame = _mainContainer.frame;
     if (up) {
-//        newContainerFrame.size.height -= keyboardHeight;
-        newFooterFrame.origin.y -= keyboardHeight;
+        newMainFrame.origin.y -= keyboardHeight;
     } else {
-//        newContainerFrame.size.height += keyboardHeight;
-        newFooterFrame.origin.y += keyboardHeight;
+        newMainFrame.origin.y += keyboardHeight;
     }
     [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
-//        _containerView.frame = newContainerFrame;
-        _footer.frame = newFooterFrame;
+        _mainContainer.frame = newMainFrame;
     } completion:nil];
 }
 
@@ -176,7 +173,7 @@
         UIViewController *fromController = _currentQuestionController;
         UIViewController *toController = _questionControllers[index];
         toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
-        toController.view.frame = _containerView.bounds; // and then get view to size itself according to container bounds
+        toController.view.frame = _questionContainer.bounds; // and then get view to size itself according to container bounds
         CGPoint cachedCenter = toController.view.center;
         if (forward) {
             // toController starts way offscreen right (the extra distance makes it move faster) and rotated 45 degrees clockwise
@@ -273,7 +270,7 @@
                      animations:^{
                          self.view.alpha = 0.0;
                          _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
-                         _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+                         _questionContainer.center = CGPointMake(_questionContainer.center.x, _questionContainer.center.y + self.view.bounds.size.height);
                          _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
                      }
                      completion:^(BOOL finished){
