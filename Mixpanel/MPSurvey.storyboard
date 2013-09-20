@@ -78,7 +78,7 @@
                             </view>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7a-kU-sIs">
                                 <rect key="frame" x="0.0" y="44" width="320" height="480"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.80000001190000003" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0dH-sL-neW">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
@@ -122,10 +122,10 @@
                             </view>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="0dH-sL-neW" firstAttribute="top" secondItem="D7a-kU-sIs" secondAttribute="bottom" id="0Kq-OI-Z9U"/>
                             <constraint firstItem="D7a-kU-sIs" firstAttribute="top" secondItem="vot-vr-03f" secondAttribute="bottom" id="876-SY-APE"/>
                             <constraint firstItem="vot-vr-03f" firstAttribute="top" secondItem="yBe-16-sDN" secondAttribute="bottom" id="9O0-Xn-ObU"/>
                             <constraint firstItem="D7a-kU-sIs" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" id="FeJ-av-bOC"/>
-                            <constraint firstItem="0dH-sL-neW" firstAttribute="top" secondItem="D7a-kU-sIs" secondAttribute="bottom" id="K27-N7-Uq3"/>
                             <constraint firstAttribute="trailing" secondItem="0dH-sL-neW" secondAttribute="trailing" id="Rt8-vG-7fN"/>
                             <constraint firstItem="yeI-nh-85p" firstAttribute="top" secondItem="0dH-sL-neW" secondAttribute="bottom" id="UaL-FN-stA"/>
                             <constraint firstItem="vot-vr-03f" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" id="Uov-Pd-rlO"/>
@@ -135,6 +135,7 @@
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="containerView" destination="D7a-kU-sIs" id="M3o-I4-WJ2"/>
                         <outlet property="exitButton" destination="8vP-xd-w4j" id="Tcm-85-BiT"/>
@@ -164,7 +165,7 @@
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="nTV-Im-rNp">
                                 <rect key="frame" x="15" y="0.0" width="290" height="72"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="0.43529412150000002" blue="0.81176471709999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="72" id="9qc-WR-PCE"/>
                                 </constraints>
@@ -257,9 +258,10 @@
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="3Vm-1Z-umb">
                                 <rect key="frame" x="15" y="0.0" width="290" height="72"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="0.43529412150000002" blue="0.81176471709999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="72" id="lLW-1U-mf7"/>
+                                    <constraint firstAttribute="height" constant="72" id="liB-vF-H4c"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="nMX-ce-e7C"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

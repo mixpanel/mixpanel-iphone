@@ -29,20 +29,42 @@
 {
     [super viewDidLoad];
     _promptLabel.text = self.question.prompt;
+    [self resizePromptTextForHeight:72];
+}
+
+- (void)resizePromptTextForHeight:(CGFloat)height
+{
     // shrink font size to fit frame. can't use adjustsFontSizeToFitWidth and minimumScaleFactor,
     // since they only work on single line labels. minimum font size is 9.
     UIFont *font = _promptLabel.font;
-    for (CGFloat size = _promptLabel.font.pointSize; size >= 9; size--) {
+    for (CGFloat size = 20; size >= 9; size--) {
         font = [font fontWithSize:size];
-        CGSize constraintSize = CGSizeMake(_promptLabel.preferredMaxLayoutWidth, MAXFLOAT);
+        CGSize constraintSize = CGSizeMake(_promptLabel.bounds.size.width, MAXFLOAT);
         CGSize sizeToFit = [_promptLabel.text sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:_promptLabel.lineBreakMode];
-        if (sizeToFit.height <= 76) {
+        if (sizeToFit.height <= height) {
             break;
         }
     }
     _promptLabel.font = font;
 }
 
+//- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+//{
+//    NSLog(@"received will animate to new orientation");
+//    CGFloat newPromptHeight;
+//    if (toInterfaceOrientation == UIInterfaceOrientationPortrait || toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown) {
+//        newPromptHeight = 72;
+//    } else {
+//        newPromptHeight = 24;
+//    }
+//    if (_promptLabel.bounds.size.height != newPromptHeight) {
+//        CGRect tmp = _promptLabel.frame;
+//        tmp.size.height = newPromptHeight;
+//        _promptLabel.frame = tmp;
+//        [self resizePromptTextForHeight:newPromptHeight];
+//    }
+//}
+//
 - (void)dealloc
 {
     self.question = nil;

@@ -107,17 +107,22 @@
     NSDictionary* userInfo = [note userInfo];
     NSTimeInterval duration;
     UIViewAnimationCurve curve;
-    CGRect keyboardFrameEnd;
+    CGRect keyboardFrame;
     [userInfo[UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
     [userInfo[UIKeyboardAnimationCurveUserInfoKey] getValue:&curve];
-    [userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrameEnd];
+    [userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrame];
+    CGFloat keyboardHeight = keyboardFrame.size.height;
+//    CGRect newContainerFrame = _containerView.frame;
     CGRect newFooterFrame = _footer.frame;
     if (up) {
-        newFooterFrame.origin.y -= keyboardFrameEnd.size.height;
+//        newContainerFrame.size.height -= keyboardHeight;
+        newFooterFrame.origin.y -= keyboardHeight;
     } else {
-        newFooterFrame.origin.y += keyboardFrameEnd.size.height;
+//        newContainerFrame.size.height += keyboardHeight;
+        newFooterFrame.origin.y += keyboardHeight;
     }
     [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+//        _containerView.frame = newContainerFrame;
         _footer.frame = newFooterFrame;
     } completion:nil];
 }
@@ -130,11 +135,6 @@
 - (void)keyboardWillHide:(NSNotification*)note
 {
     [self resizeViewForKeyboard:note up:NO];
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)updatePageNumber:(NSUInteger)index
