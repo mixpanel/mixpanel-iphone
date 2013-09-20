@@ -1027,15 +1027,25 @@ static Mixpanel *sharedInstance = nil;
         _surveyController.delegate = self;
         _surveyController.survey = survey;
         _surveyController.backgroundImage = [window.rootViewController.view mp_snapshotImage];
-        _surveyController.view.frame = window.rootViewController.view.bounds;
-        [window.rootViewController.view addSubview:_surveyController.view];
+        _surveyController.modalPresentationStyle = UIModalPresentationFullScreen;
+
+//        [window.rootViewController.view addSubview:_surveyController.view];
+//        [window.rootViewController addChildViewController:_surveyController];
+
+        [window.rootViewController presentViewController:_surveyController animated:NO completion:^{
+            _surveyController.view.frame = window.rootViewController.view.bounds;
+        }];
     });
 }
 
 - (void)surveyNavigationControllerWasDismissed:(MPSurveyNavigationController *)controller
 {
     if (controller == _surveyController) {
-        [_surveyController.view removeFromSuperview];
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        [window.rootViewController dismissViewControllerAnimated:NO completion:nil];
+
+//        [_surveyController.view removeFromSuperview];
+
         self.surveyController = nil;
     }
 }
