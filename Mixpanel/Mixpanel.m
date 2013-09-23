@@ -1014,11 +1014,8 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey:(MPSurvey *)survey
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_surveyController) {
-            if (_surveyController.survey.ID == survey.ID) {
-                return;
-            }
-            [_surveyController.view removeFromSuperview];
+        if (_surveyController && _surveyController.survey.ID == survey.ID) {
+            return;
         }
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
         self.surveyController = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
@@ -1027,13 +1024,8 @@ static Mixpanel *sharedInstance = nil;
         _surveyController.delegate = self;
         _surveyController.survey = survey;
         _surveyController.backgroundImage = [window.rootViewController.view mp_snapshotImage];
-        _surveyController.modalPresentationStyle = UIModalPresentationFullScreen;
-
-//        [window.rootViewController.view addSubview:_surveyController.view];
-//        [window.rootViewController addChildViewController:_surveyController];
-
         [window.rootViewController presentViewController:_surveyController animated:NO completion:^{
-            _surveyController.view.frame = window.rootViewController.view.bounds;
+//            _surveyController.view.frame = window.rootViewController.view.bounds;
         }];
     });
 }

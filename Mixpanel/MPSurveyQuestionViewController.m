@@ -4,6 +4,7 @@
 
 @interface MPSurveyQuestionViewController ()
 @property(nonatomic,retain) IBOutlet UILabel *promptLabel;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptHeight;
 @end
 
 @interface MPSurveyMultipleChoiceQuestionViewController : MPSurveyQuestionViewController <UITableViewDataSource, UITableViewDelegate>
@@ -19,6 +20,7 @@
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
+@property(nonatomic,retain) IBOutlet UIScrollView *view;
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
 @property(nonatomic,retain) IBOutlet UITextView *textView;
 @end
@@ -29,10 +31,10 @@
 {
     [super viewDidLoad];
     _promptLabel.text = self.question.prompt;
-    [self resizePromptTextForHeight:72];
+    [self resizePromptText];
 }
 
-- (void)resizePromptTextForHeight:(CGFloat)height
+- (void)resizePromptText
 {
     // shrink font size to fit frame. can't use adjustsFontSizeToFitWidth and minimumScaleFactor,
     // since they only work on single line labels. minimum font size is 9.
@@ -41,30 +43,19 @@
         font = [font fontWithSize:size];
         CGSize constraintSize = CGSizeMake(_promptLabel.bounds.size.width, MAXFLOAT);
         CGSize sizeToFit = [_promptLabel.text sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:_promptLabel.lineBreakMode];
-        if (sizeToFit.height <= height) {
+        if (sizeToFit.height <= _promptLabel.bounds.size.height) {
             break;
         }
     }
     _promptLabel.font = font;
 }
 
-//- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-//{
-//    NSLog(@"received will animate to new orientation");
-//    CGFloat newPromptHeight;
-//    if (toInterfaceOrientation == UIInterfaceOrientationPortrait || toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown) {
-//        newPromptHeight = 72;
-//    } else {
-//        newPromptHeight = 24;
-//    }
-//    if (_promptLabel.bounds.size.height != newPromptHeight) {
-//        CGRect tmp = _promptLabel.frame;
-//        tmp.size.height = newPromptHeight;
-//        _promptLabel.frame = tmp;
-//        [self resizePromptTextForHeight:newPromptHeight];
-//    }
-//}
-//
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self resizePromptText];
+}
+
 - (void)dealloc
 {
     self.question = nil;
@@ -79,18 +70,18 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (!_fadeLayer) {
-        _fadeLayer = [CAGradientLayer layer];
-        CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
-        CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
-        _fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
-        // add 20 pixels of fade in and out at top and bottom of table view container
-        CGFloat offset = 20.0 / _tableContainer.bounds.size.height;
-        _fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
-        _fadeLayer.bounds = self.tableContainer.bounds;
-        _fadeLayer.anchorPoint = CGPointZero;
-        _tableContainer.layer.mask = _fadeLayer;
-    }
+//    if (!_fadeLayer) {
+//        _fadeLayer = [CAGradientLayer layer];
+//        CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
+//        CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
+//        _fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
+//        // add 20 pixels of fade in and out at top and bottom of table view container
+//        CGFloat offset = 20.0 / _tableContainer.bounds.size.height;
+//        _fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
+//        _fadeLayer.bounds = self.tableContainer.bounds;
+//        _fadeLayer.anchorPoint = CGPointZero;
+//        _tableContainer.layer.mask = _fadeLayer;
+//    }
 }
 
 - (void)viewDidLoad
@@ -183,22 +174,6 @@
     _textView.layer.borderColor = [UIColor whiteColor].CGColor;
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-}
-
-- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
-{
-    [super beginAppearanceTransition:isAppearing animated:animated];
-    if (isAppearing) {
-        [_textView becomeFirstResponder];
-    } else {
-        [_textView resignFirstResponder];
-    }
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
