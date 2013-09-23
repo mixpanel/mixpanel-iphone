@@ -22,6 +22,7 @@
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardHeight;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
+@property (nonatomic, strong) NSArray *priorConstraints;
 
 @end
 
@@ -58,12 +59,43 @@
     MPSurveyQuestionViewController *firstQuestionController = _questionControllers[0];
     [self addChildViewController:firstQuestionController];
     [_containerView addSubview:firstQuestionController.view];
+    self.priorConstraints = [self constrainSubview:firstQuestionController.view toMatchWithSuperview:_containerView];
     [firstQuestionController didMoveToParentViewController:self];
     _currentQuestionController = firstQuestionController;
     [firstQuestionController.view setNeedsUpdateConstraints];
     [self updatePageNumber:0];
     [self updateButtons:0];
 }
+
+- (NSArray *)constrainSubview:(UIView *)subview toMatchWithSuperview:(UIView *)superview
+{
+    subview.translatesAutoresizingMaskIntoConstraints = NO;
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(subview);
+    NSArray *constraints = [NSLayoutConstraint
+                            constraintsWithVisualFormat:@"H:|[subview]|"
+                            options:0
+                            metrics:nil
+                            views:viewsDictionary];
+    constraints = [constraints arrayByAddingObjectsFromArray:
+                   [NSLayoutConstraint
+                    constraintsWithVisualFormat:@"V:|[subview]|"
+                    options:0
+                    metrics:nil
+                    views:viewsDictionary]];
+    [superview addConstraints:constraints];
+    return constraints;
+}
+
+- (void)removeConstraintsFromQuestion:(UIView *)questionView
+{
+    for (NSLayoutConstraint *constraint in [questionView constraints]) {
+        if (constraint.secondItem == _containerView) {
+            NSLog(@"removing constraint: %@", constraint);
+            [questionView removeConstraint:constraint];
+        }
+    }
+}
+
 
 - (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
     NSDictionary *userInfo = [note userInfo];
@@ -134,18 +166,20 @@
         UIViewController *toController = _questionControllers[index];
         [fromController willMoveToParentViewController:nil];
         [self addChildViewController:toController];
+        NSArray *priorConstraints = _priorConstraints;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:0
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
-                                    [_containerView layoutIfNeeded];
                                 }
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
                                     _currentQuestionController = toController;
+                                    [_containerView removeConstraints:priorConstraints];
                                 }];
+        self.priorConstraints = [self constrainSubview:toController.view toMatchWithSuperview:_containerView];
         [self updatePageNumber:index];
         [self updateButtons:index];
         [self loadQuestion:index - 1];
