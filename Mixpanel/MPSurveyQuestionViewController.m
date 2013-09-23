@@ -31,7 +31,7 @@
 {
     [super viewDidLoad];
     _promptLabel.text = self.question.prompt;
-    [self resizePromptText];
+//    [self resizePromptText];
 }
 
 - (void)resizePromptText
@@ -53,7 +53,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self resizePromptText];
+//    [self resizePromptText];
 }
 
 - (void)dealloc
