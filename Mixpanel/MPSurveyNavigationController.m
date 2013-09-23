@@ -139,6 +139,7 @@
                                   duration:0
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
+                                    [_containerView layoutIfNeeded];
                                 }
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
