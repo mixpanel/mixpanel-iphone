@@ -156,10 +156,10 @@
         [self loadQuestion:index];
         UIViewController *fromController = _currentQuestionController;
         UIViewController *toController = _questionControllers[index];
-        [self addChildViewController:toController];
         [fromController willMoveToParentViewController:nil];
+        [self addChildViewController:toController];
+        /*
         [toController.view layoutIfNeeded];
-
 //        toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
 //        toController.view.frame = _containerView.bounds; // and then get view to size itself according to container bounds
         CGPoint cachedCenter = toController.view.center;
@@ -172,11 +172,13 @@
             // toController starts offscreen left (rotation and scaling are done with a keyframe animation)
             toController.view.center = CGPointMake(-toController.view.bounds.size.width / 2, toController.view.center.y);
         }
+ */
         NSTimeInterval duration = 0.3;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:duration
-                                   options:UIViewAnimationOptionCurveEaseIn
+                                   options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionTransitionCurlDown
+         /*
                                 animations:^{
                                     if (forward) {
                                         // fromController slides in from right to left the whole time
@@ -216,12 +218,14 @@
                                         [toController.view.layer addAnimation:anim forKey:@"MPScale"];
                                     }
                                 }
+                                     */
+                                animations:^{}
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
                                     _currentQuestionController = toController;
-                                    toController.view.frame = _containerView.bounds;
-                                    [toController.view layoutIfNeeded];
+//                                    toController.view.frame = _containerView.bounds;
+//                                    [toController.view layoutIfNeeded];
                                 }];
         [self updatePageNumber:index];
         [self updateButtons:index];
