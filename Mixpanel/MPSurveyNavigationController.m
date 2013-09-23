@@ -19,7 +19,6 @@
 @property(nonatomic,retain) IBOutlet UIButton *exitButton;
 @property(nonatomic,retain) IBOutlet UIView *header;
 @property(nonatomic,retain) IBOutlet UIView *footer;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardHeight;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
 @property (nonatomic, strong) NSArray *priorConstraints;
@@ -34,21 +33,12 @@
     self.survey = nil;
     self.backgroundImage = nil;
     self.questionControllers = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
     self.view.image = [_backgroundImage mp_applyDarkEffect];
     self.questionControllers = [NSMutableArray array];
     for (NSUInteger i = 0; i < _survey.questions.count; i++) {
@@ -96,35 +86,6 @@
     }
 }
 
-
-- (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
-    NSDictionary *userInfo = [note userInfo];
-    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    CGFloat height;
-    if (up) {
-        CGRect kbFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-        height = isPortrait ? kbFrame.size.height : kbFrame.size.width;
-    } else {
-        height = 0;
-    }
-    self.keyboardHeight.constant = height;
-    [self.view setNeedsUpdateConstraints];
-    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
-        [self.view layoutIfNeeded];
-    } completion:nil];
-}
-
-- (void)keyboardWillShow:(NSNotification*)note
-{
-    [self resizeViewForKeyboard:note up:YES];
-}
-
-- (void)keyboardWillHide:(NSNotification*)note
-{
-    [self resizeViewForKeyboard:note up:NO];
-}
 
 - (void)updatePageNumber:(NSUInteger)index
 {
