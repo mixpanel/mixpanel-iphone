@@ -11,8 +11,7 @@
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
 @property(nonatomic,retain) IBOutlet UIImageView *view;
-@property(nonatomic,retain) IBOutlet UIView *mainContainer;
-@property(nonatomic,retain) IBOutlet UIView *questionContainer;
+@property(nonatomic,retain) IBOutlet UIView *containerView;
 @property(nonatomic,retain) IBOutlet UILabel *pageNumberLabel;
 @property(nonatomic,retain) IBOutlet UIButton *nextButton;
 @property(nonatomic,retain) IBOutlet UIButton *previousButton;
@@ -20,6 +19,7 @@
 @property(nonatomic,retain) IBOutlet UIButton *exitButton;
 @property(nonatomic,retain) IBOutlet UIView *header;
 @property(nonatomic,retain) IBOutlet UIView *footer;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardHeight;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
 
@@ -33,11 +33,21 @@
     self.survey = nil;
     self.backgroundImage = nil;
     self.questionControllers = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     self.view.image = [_backgroundImage mp_applyDarkEffect];
     self.questionControllers = [NSMutableArray array];
     for (NSUInteger i = 0; i < _survey.questions.count; i++) {
@@ -47,80 +57,54 @@
     [self loadQuestion:1];
     MPSurveyQuestionViewController *firstQuestionController = _questionControllers[0];
     [self addChildViewController:firstQuestionController];
-    [_questionContainer addSubview:firstQuestionController.view];
+    [_containerView addSubview:firstQuestionController.view];
     [firstQuestionController didMoveToParentViewController:self];
     _currentQuestionController = firstQuestionController;
     [self updatePageNumber:0];
     [self updateButtons:0];
 }
 
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    // prior to this, container view frame's height has not be reduced to account for status bar
-    _currentQuestionController.view.frame = _questionContainer.bounds;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
-    _questionContainer.center = CGPointMake(_questionContainer.center.x, _questionContainer.center.y + self.view.bounds.size.height);
-    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         self.view.alpha = 1.0;
-                         _header.center = CGPointMake(_header.center.x, _header.center.y + 100);
-                     }
-                     completion:^(BOOL finished1){
-                         [_currentQuestionController beginAppearanceTransition:YES animated:NO];
-                         [UIView animateWithDuration:0.5
-                                          animations:^{
-                                              _questionContainer.center = CGPointMake(_questionContainer.center.x, _questionContainer.center.y - self.view.bounds.size.height);
-                                              _footer.center = CGPointMake(_footer.center.x, _footer.center.y - 100);
-                                          }
-                                          completion:^(BOOL finished2) {
-                                              [_currentQuestionController endAppearanceTransition];
-                                          }];
-                     }];
+    self.view.alpha = 1.0;
+//    _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
+//    _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+//    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
+//    [UIView animateWithDuration:0.5
+//                     animations:^{
+//                         self.view.alpha = 1.0;
+//                         _header.center = CGPointMake(_header.center.x, _header.center.y + 100);
+//                     }
+//                     completion:^(BOOL finished1){
+//                         [_currentQuestionController beginAppearanceTransition:YES animated:NO];
+//                         [UIView animateWithDuration:0.5
+//                                          animations:^{
+//                                              _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y - self.view.bounds.size.height);
+//                                              _footer.center = CGPointMake(_footer.center.x, _footer.center.y - 100);
+//                                          }
+//                                          completion:^(BOOL finished2) {
+//                                              [_currentQuestionController endAppearanceTransition];
+//                                          }];
+//                     }];
 }
 
 - (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
-    NSDictionary* userInfo = [note userInfo];
-    NSTimeInterval duration;
-    UIViewAnimationCurve curve;
-    CGRect keyboardFrame;
-    [userInfo[UIKeyboardAnimationDurationUserInfoKey] getValue:&duration];
-    [userInfo[UIKeyboardAnimationCurveUserInfoKey] getValue:&curve];
-    [userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrame];
-    CGFloat keyboardHeight = keyboardFrame.size.height;
-    CGRect newMainFrame = _mainContainer.frame;
+    NSDictionary *userInfo = [note userInfo];
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    CGFloat height;
     if (up) {
-        newMainFrame.origin.y -= keyboardHeight;
+        CGRect kbFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+        height = isPortrait ? kbFrame.size.height : kbFrame.size.width;
     } else {
-        newMainFrame.origin.y += keyboardHeight;
+        height = 0;
     }
+    self.keyboardHeight.constant = height;
+    [self.view setNeedsUpdateConstraints];
     [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
-        _mainContainer.frame = newMainFrame;
+        [self.view layoutIfNeeded];
     } completion:nil];
 }
 
@@ -172,9 +156,14 @@
         [self loadQuestion:index];
         UIViewController *fromController = _currentQuestionController;
         UIViewController *toController = _questionControllers[index];
-        toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
-        toController.view.frame = _questionContainer.bounds; // and then get view to size itself according to container bounds
+        [self addChildViewController:toController];
+        [fromController willMoveToParentViewController:nil];
+        [toController.view layoutIfNeeded];
+
+//        toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
+//        toController.view.frame = _containerView.bounds; // and then get view to size itself according to container bounds
         CGPoint cachedCenter = toController.view.center;
+
         if (forward) {
             // toController starts way offscreen right (the extra distance makes it move faster) and rotated 45 degrees clockwise
             toController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
@@ -183,8 +172,6 @@
             // toController starts offscreen left (rotation and scaling are done with a keyframe animation)
             toController.view.center = CGPointMake(-toController.view.bounds.size.width / 2, toController.view.center.y);
         }
-        [self addChildViewController:toController];
-        [fromController willMoveToParentViewController:nil];
         NSTimeInterval duration = 0.3;
         [self transitionFromViewController:fromController
                           toViewController:toController
@@ -233,6 +220,8 @@
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
                                     _currentQuestionController = toController;
+                                    toController.view.frame = _containerView.bounds;
+                                    [toController.view layoutIfNeeded];
                                 }];
         [self updatePageNumber:index];
         [self updateButtons:index];
@@ -270,7 +259,7 @@
                      animations:^{
                          self.view.alpha = 0.0;
                          _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
-                         _questionContainer.center = CGPointMake(_questionContainer.center.x, _questionContainer.center.y + self.view.bounds.size.height);
+                         _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
                          _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
                      }
                      completion:^(BOOL finished){
