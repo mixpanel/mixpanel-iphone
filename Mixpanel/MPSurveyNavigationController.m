@@ -60,33 +60,9 @@
     [_containerView addSubview:firstQuestionController.view];
     [firstQuestionController didMoveToParentViewController:self];
     _currentQuestionController = firstQuestionController;
+    [firstQuestionController.view setNeedsUpdateConstraints];
     [self updatePageNumber:0];
     [self updateButtons:0];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.view.alpha = 1.0;
-//    _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
-//    _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
-//    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
-//    [UIView animateWithDuration:0.5
-//                     animations:^{
-//                         self.view.alpha = 1.0;
-//                         _header.center = CGPointMake(_header.center.x, _header.center.y + 100);
-//                     }
-//                     completion:^(BOOL finished1){
-//                         [_currentQuestionController beginAppearanceTransition:YES animated:NO];
-//                         [UIView animateWithDuration:0.5
-//                                          animations:^{
-//                                              _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y - self.view.bounds.size.height);
-//                                              _footer.center = CGPointMake(_footer.center.x, _footer.center.y - 100);
-//                                          }
-//                                          completion:^(BOOL finished2) {
-//                                              [_currentQuestionController endAppearanceTransition];
-//                                          }];
-//                     }];
 }
 
 - (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
@@ -158,74 +134,16 @@
         UIViewController *toController = _questionControllers[index];
         [fromController willMoveToParentViewController:nil];
         [self addChildViewController:toController];
-        /*
-        [toController.view layoutIfNeeded];
-//        toController.view.transform = CGAffineTransformMakeRotation(0); // straighten out view
-//        toController.view.frame = _containerView.bounds; // and then get view to size itself according to container bounds
-        CGPoint cachedCenter = toController.view.center;
-
-        if (forward) {
-            // toController starts way offscreen right (the extra distance makes it move faster) and rotated 45 degrees clockwise
-            toController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
-            toController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
-        } else {
-            // toController starts offscreen left (rotation and scaling are done with a keyframe animation)
-            toController.view.center = CGPointMake(-toController.view.bounds.size.width / 2, toController.view.center.y);
-        }
- */
-        NSTimeInterval duration = 0.3;
         [self transitionFromViewController:fromController
                           toViewController:toController
-                                  duration:duration
-                                   options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionTransitionCurlDown
-         /*
+                                  duration:0
+                                   options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
-                                    if (forward) {
-                                        // fromController slides in from right to left the whole time
-                                        fromController.view.center = CGPointMake(-fromController.view.bounds.size.width / 2, fromController.view.center.y);
-                                        // after a brief delay, fromController also "falls away" by rotating counterclockwise and scaling down a little
-                                        NSArray *keyTimes = @[@0.0, @0.4, @1.0];
-                                        CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-                                        anim.keyTimes = keyTimes;
-                                        anim.values = @[@0.0, @0.0, @(-M_PI_4)];
-                                        anim.duration = duration;
-                                        [fromController.view.layer addAnimation:anim forKey:@"MPRotateZ"];
-                                        anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-                                        anim.keyTimes = keyTimes;
-                                        anim.values = @[@1.0, @1.0, @0.8];
-                                        anim.duration = duration;
-                                        [fromController.view.layer addAnimation:anim forKey:@"MPScale"];
-                                        // toController flies up and to the left
-                                        toController.view.center = cachedCenter;
-                                        toController.view.transform = CGAffineTransformMakeRotation(0);
-                                    } else {
-                                        // fromController flies down and to the right
-                                        fromController.view.center = CGPointMake(self.view.bounds.size.width * 2, cachedCenter.y + 300);
-                                        fromController.view.transform = CGAffineTransformRotate(self.view.transform, M_PI_4);
-                                        // toController slides in from left to right the whole time
-                                        toController.view.center = cachedCenter;
-                                        // toController also "falls forward" by rotating clockwise to vertical and scaling up to full size
-                                        NSArray *keyTimes = @[@0.0, @0.6, @1.0];
-                                        CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-                                        anim.keyTimes = keyTimes;
-                                        anim.values = @[@(-M_PI_4), @0.0, @0.0];
-                                        anim.duration = duration;
-                                        [toController.view.layer addAnimation:anim forKey:@"MPRotateZ"];
-                                        anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-                                        anim.keyTimes = keyTimes;
-                                        anim.values = @[@0.8, @1.0, @1.0];
-                                        anim.duration = duration;
-                                        [toController.view.layer addAnimation:anim forKey:@"MPScale"];
-                                    }
                                 }
-                                     */
-                                animations:^{}
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
                                     _currentQuestionController = toController;
-//                                    toController.view.frame = _containerView.bounds;
-//                                    [toController.view layoutIfNeeded];
                                 }];
         [self updatePageNumber:index];
         [self updateButtons:index];
