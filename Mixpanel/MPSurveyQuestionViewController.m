@@ -23,20 +23,15 @@
 @property(nonatomic,retain) IBOutlet UIScrollView *view;
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
 @property(nonatomic,retain) IBOutlet UITextView *textView;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardHeight;
 @end
 
 @implementation MPSurveyQuestionViewController
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    NSLog(@"will rotate");
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _promptLabel.text = self.question.prompt;
-//    [self resizePromptText];
 }
 
 - (void)resizePromptText
@@ -55,10 +50,20 @@
     _promptLabel.font = font;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewWillLayoutSubviews
 {
-    [super viewWillAppear:animated];
-//    [self resizePromptText];
+    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+        _promptHeight.constant = 72.0;
+    } else {
+        _promptHeight.constant = 48.0;
+    }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    // TODO: is this the correct callback?
+    [super viewDidLayoutSubviews];
+    [self resizePromptText];
 }
 
 - (void)dealloc
@@ -174,6 +179,27 @@
     _textView.layer.borderColor = [UIColor whiteColor].CGColor;
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
+    self.view.bounces = YES;
+    self.view.alwaysBounceVertical = YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -185,6 +211,35 @@
     }
     // 255 character max
     return [textView.text length] + ([text length] - range.length) <= 255;
+}
+
+- (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
+    NSDictionary *userInfo = [note userInfo];
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    CGFloat height;
+    if (up) {
+        CGRect kbFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+        height = isPortrait ? kbFrame.size.height : kbFrame.size.width;
+    } else {
+        height = 0;
+    }
+    self.keyboardHeight.constant = height;
+    [self.view setNeedsUpdateConstraints];
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+        [self.view layoutIfNeeded];
+    } completion:nil];
+}
+
+- (void)keyboardWillShow:(NSNotification*)note
+{
+    [self resizeViewForKeyboard:note up:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification*)note
+{
+    [self resizeViewForKeyboard:note up:NO];
 }
 
 @end
