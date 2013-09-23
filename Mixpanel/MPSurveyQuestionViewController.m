@@ -20,10 +20,11 @@
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
-@property(nonatomic,retain) IBOutlet UIScrollView *view;
+@property(nonatomic,retain) IBOutlet UIView *contentView;
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
 @property(nonatomic,retain) IBOutlet UITextView *textView;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardHeight;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentWidth;
 @end
 
 @implementation MPSurveyQuestionViewController
@@ -62,7 +63,6 @@
 - (void)viewDidLayoutSubviews
 {
     // TODO: is this the correct callback?
-    [super viewDidLayoutSubviews];
     [self resizePromptText];
 }
 
@@ -179,8 +179,6 @@
     _textView.layer.borderColor = [UIColor whiteColor].CGColor;
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
-    self.view.bounces = YES;
-    self.view.alwaysBounceVertical = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -200,6 +198,13 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    NSLog(@"bounds: %@", NSStringFromCGRect(self.view.bounds));
+    _contentWidth.constant = self.view.bounds.size.width;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
