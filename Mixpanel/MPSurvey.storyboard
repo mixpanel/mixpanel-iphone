@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="top" id="yBe-16-sDN"/>
                         <viewControllerLayoutGuide type="bottom" id="yeI-nh-85p"/>
                     </layoutGuides>
-                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.0" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
+                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vot-vr-03f">

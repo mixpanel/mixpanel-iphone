@@ -84,11 +84,6 @@
 //    }
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (NSString *)labelForValue:(id)val
 {
     NSString *label;
