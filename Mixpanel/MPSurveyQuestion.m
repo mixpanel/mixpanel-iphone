@@ -9,7 +9,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 @property(nonatomic,retain) NSString *type;
 @property(nonatomic,retain) NSString *prompt;
 
-- (id)initWithID:(NSUInteger *)ID type:(NSString *)type andPrompt:(NSString *)prompt;
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt;
 
 @end
 
@@ -17,7 +17,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 @property(nonatomic,retain) NSArray *choices;
 
-- (id)initWithID:(NSUInteger *)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices;
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices;
 
 @end
 
@@ -64,7 +64,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
     return nil;
 }
 
-- (id)initWithID:(NSUInteger *)ID type:(NSString *)type andPrompt:(NSString *)prompt
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt
 {
     if (!prompt || prompt.length == 0) {
         NSLog(@"invalid question prompt: %@", prompt);
@@ -84,7 +84,6 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 - (void)dealloc
 {
-    _ID = nil;
     self.prompt = nil;
     self.type = nil;
     [super dealloc];
@@ -94,7 +93,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 @implementation MPSurveyMultipleChoiceQuestion
 
-- (id)initWithID:(NSUInteger *)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices
 {
     if (choices != nil && [choices count] > 0) {
         if (self = [super initWithID:ID type:type andPrompt:prompt]) {
