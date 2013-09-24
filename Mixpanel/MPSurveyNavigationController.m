@@ -201,8 +201,8 @@
                      completion:^(BOOL finished){
                          [_delegate surveyNavigationControllerWasDismissed:self];
                      }];
-    [_mixpanel.people union:@{@"$surveys": @[@(_survey.ID)],
-                              @"$collections": @[@(_survey.collectionID)]}];
+//    [_mixpanel.people union:@{@"$surveys": @[@(_survey.ID)],
+//                              @"$collections": @[@(_survey.collectionID)]}];
 }
 
 - (void)questionViewController:(MPSurveyQuestionViewController *)controller
