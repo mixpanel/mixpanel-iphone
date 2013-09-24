@@ -70,7 +70,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
         NSLog(@"invalid question prompt: %@", prompt);
         return self;
     }
-    if (!type || (type != MPSurveyQuestionTypeMultipleChoice && type != MPSurveyQuestionTypeText)) {
+    if (!type || (![type isEqualToString:MPSurveyQuestionTypeMultipleChoice] && ![type isEqualToString:MPSurveyQuestionTypeText])) {
         NSLog(@"invalid question type: %@", type);
         return self;
     }

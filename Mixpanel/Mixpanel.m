@@ -48,7 +48,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () <MPSurveyNavigationControllerDelegate> {
+@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -72,6 +72,7 @@
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
+@property(nonatomic,retain) MPSurvey *survey;
 @property(nonatomic,retain) MPSurveyNavigationController *surveyController;
 
 @end
@@ -219,6 +220,7 @@ static Mixpanel *sharedInstance = nil;
     self.peopleResponseData = nil;
     self.dateFormatter = nil;
     self.surveyController = nil;
+    self.survey = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
@@ -842,9 +844,22 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
     if (self.showSurveyOnActive) {
+        NSDate *start = [NSDate date];
         [self checkForSurveyWithCompletion:^(MPSurvey *survey){
             if (survey) {
-                [self showSurvey:survey];
+                self.survey = survey;
+                if ([start timeIntervalSinceNow] < -2.0) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
+                                                                    message:@"Mind taking a quick survey?"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"No, Thanks"
+                                                          otherButtonTitles:@"Sure", nil];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [alert show];
+                    });
+                } else {
+                    [self showSurvey:survey];
+                }
             }
         }];
     }
@@ -1014,7 +1029,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey:(MPSurvey *)survey
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_surveyController && _surveyController.survey.ID == survey.ID) {
+        if (_surveyController && survey.ID == _surveyController.survey.ID) {
             return;
         }
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
@@ -1034,6 +1049,16 @@ static Mixpanel *sharedInstance = nil;
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         [window.rootViewController dismissViewControllerAnimated:NO completion:nil];
         self.surveyController = nil;
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    [alertView release];
+    if (buttonIndex == 1) {
+        [self showSurvey:self.survey];
     }
 }
 
