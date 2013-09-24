@@ -21,6 +21,7 @@
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
 @property(nonatomic,retain) IBOutlet UIScrollView *scrollView;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *scrollViewBottomSpace;
 @property(nonatomic,retain) IBOutlet UIView *contentView;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentWidth;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentHeight;
@@ -194,6 +195,8 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_textView resignFirstResponder];
+    _scrollViewBottomSpace.constant = 0;
 }
 
 - (void)viewWillLayoutSubviews
@@ -222,7 +225,9 @@
         [UIView animateWithDuration:0.3 animations:^{
             _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ characters left", @(255 - newLength)];
             _charactersLeftLabel.alpha = (newLength > 155) ? 1.0 : 0.0;
-            _doneButton.alpha = (newLength > 0) ? 1.0 : 0.0;
+            _doneButton.enabled = newLength > 0;
+            _doneButton.alpha = (newLength > 0) ? 1.0 : 0.3;
+
         }];
     }
     return shouldChange;
@@ -242,7 +247,9 @@
 - (void)keyboardDidShow:(NSNotification*)note
 {
     NSDictionary* info = [note userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGSize kbSize = [info[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
     CGFloat height;
     if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
         height = kbSize.height;
@@ -250,17 +257,23 @@
         height = kbSize.width;
     }
     height -= 44.0;
-    UIEdgeInsets contentInsets = _scrollView.contentInset;
-    contentInsets.bottom = height;
-    _scrollView.contentInset = contentInsets;
-    _scrollView.scrollIndicatorInsets = contentInsets;
+    _scrollViewBottomSpace.constant = height;
+    [_scrollView setNeedsUpdateConstraints];
+    CGRect textViewTop = _textView.frame;
+    textViewTop.size.height = 48.0;
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState | curve
+                     animations:^{
+                         [self.view layoutIfNeeded];
+                         [_scrollView scrollRectToVisible:textViewTop animated:YES];
+                     }
+                     completion:nil];
 }
 
 - (void)keyboardWillHide:(NSNotification *)note
 {
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    _scrollView.contentInset = contentInsets;
-    _scrollView.scrollIndicatorInsets = contentInsets;
+    _scrollViewBottomSpace.constant = 0;
 }
 
 - (IBAction)cancelEditingText
