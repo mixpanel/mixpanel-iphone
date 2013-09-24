@@ -180,6 +180,7 @@
                                         <rect key="frame" x="0.0" y="20" width="320" height="448"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MPSurveyMultipleChoiceQuestionCell" textLabel="clj-6g-lNw" style="IBUITableViewCellStyleDefault" id="5Xk-yg-bRK" customClass="MPSurveyMultipleChoiceQuestionCell">
                                                 <rect key="frame" x="0.0" y="55" width="320" height="44"/>
@@ -282,7 +283,7 @@
                                                 </constraints>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes"/>
                                             </textView>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
@@ -317,13 +318,75 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="charactersLeftLabel" destination="Fr7-FM-QMp" id="OH5-Lh-iUs"/>
                         <outlet property="contentWidth" destination="McZ-ec-I7U" id="LMB-JN-jNx"/>
+                        <outlet property="doneButton" destination="ate-xY-FeB" id="Kwx-7T-rKb"/>
+                        <outlet property="keyboardAccessory" destination="svP-JH-3n8" id="dmq-ze-SYv"/>
+                        <outlet property="keyboardAccessoryWidth" destination="YNx-KC-6sd" id="gAG-uy-7ID"/>
                         <outlet property="promptHeight" destination="3oE-KU-Uof" id="k4w-87-oIK"/>
                         <outlet property="promptLabel" destination="3Vm-1Z-umb" id="qb6-7t-46D"/>
+                        <outlet property="scrollView" destination="EgE-Y8-pxY" id="luQ-dA-w4G"/>
                         <outlet property="textView" destination="vtB-0d-D3n" id="49Z-Lp-eh1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIy-O6-XdD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="svP-JH-3n8" userLabel="Keyboard Accessory">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxL-nA-eon">
+                            <rect key="frame" x="5" y="0.0" width="65" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="65" id="RKz-UL-uMk"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="65" id="h2y-gp-VNw"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title="Cancel"/>
+                            <connections>
+                                <action selector="cancelEditingText" destination="tDf-fb-udT" eventType="touchUpInside" id="ys3-MF-nN6"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ate-xY-FeB">
+                            <rect key="frame" x="262" y="0.0" width="53" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="53" id="FaV-10-pyv"/>
+                                <constraint firstAttribute="width" constant="53" id="eYw-Vk-5hM"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="highlighted">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="submitText" destination="tDf-fb-udT" eventType="touchUpInside" id="27Z-vj-0YA"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="20 characters left" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fr7-FM-QMp">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="86i-m2-Ixr"/>
+                        <constraint firstItem="BxL-nA-eon" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" constant="5" id="ENw-1z-acL"/>
+                        <constraint firstAttribute="trailing" secondItem="Fr7-FM-QMp" secondAttribute="trailing" id="Ix6-mZ-pfV"/>
+                        <constraint firstItem="Fr7-FM-QMp" firstAttribute="top" secondItem="svP-JH-3n8" secondAttribute="top" id="LhI-cu-TA8"/>
+                        <constraint firstItem="ate-xY-FeB" firstAttribute="top" secondItem="svP-JH-3n8" secondAttribute="top" id="SKY-do-IEE"/>
+                        <constraint firstAttribute="width" constant="320" id="YNx-KC-6sd"/>
+                        <constraint firstAttribute="bottom" secondItem="BxL-nA-eon" secondAttribute="bottom" id="YRZ-ic-1sN"/>
+                        <constraint firstAttribute="bottom" secondItem="ate-xY-FeB" secondAttribute="bottom" id="bEk-MC-weB"/>
+                        <constraint firstItem="BxL-nA-eon" firstAttribute="top" secondItem="svP-JH-3n8" secondAttribute="top" id="eKw-3t-kQh"/>
+                        <constraint firstAttribute="bottom" secondItem="Fr7-FM-QMp" secondAttribute="bottom" id="fJz-2f-co7"/>
+                        <constraint firstItem="Fr7-FM-QMp" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" id="kan-2W-5qF"/>
+                        <constraint firstAttribute="trailing" secondItem="ate-xY-FeB" secondAttribute="trailing" constant="5" id="xd0-tt-lJ4"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="772" y="585"/>
         </scene>

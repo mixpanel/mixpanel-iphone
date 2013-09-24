@@ -20,11 +20,14 @@
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
-@property(nonatomic,retain) IBOutlet UIView *contentView;
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
-@property(nonatomic,retain) IBOutlet UITextView *textView;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardHeight;
+@property(nonatomic,retain) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentWidth;
+@property(nonatomic,retain) IBOutlet UITextView *textView;
+@property(nonatomic,retain) IBOutlet UIView *keyboardAccessory;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
+@property(nonatomic,retain) IBOutlet UILabel *charactersLeftLabel;
+@property(nonatomic,retain) IBOutlet UIButton *doneButton;
 @end
 
 @implementation MPSurveyQuestionViewController
@@ -179,19 +182,20 @@
     _textView.layer.borderColor = [UIColor whiteColor].CGColor;
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
+    _textView.inputAccessoryView = _keyboardAccessory;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+                                                 name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -203,48 +207,85 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    NSLog(@"bounds: %@", NSStringFromCGRect(self.view.bounds));
     _contentWidth.constant = self.view.bounds.size.width;
+    _keyboardAccessoryWidth.constant = self.view.bounds.size.width;
 }
 
+
+//- (BOOL)textViewShouldEndEditing:(UITextView *)aTextView {
+//
+//    [aTextView resignFirstResponder];
+//    self.navigationItem.rightBarButtonItem = self.editButton;
+//
+//    return YES;
+//}
+//
+//
+//
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    // submit on return
-    if ([text hasSuffix:@"\n"]) {
-        [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
-        return NO;
+    NSInteger newLength = [textView.text length] + ([text length] - range.length);
+    BOOL shouldChange = newLength <= 255;
+    if (shouldChange) {
+        [UIView animateWithDuration:0.3 animations:^{
+            _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ characters left", @(255 - newLength)];
+            _charactersLeftLabel.alpha = (newLength > 155) ? 1.0 : 0.0;
+            _doneButton.alpha = (newLength > 0) ? 1.0 : 0.0;
+        }];
     }
-    // 255 character max
-    return [textView.text length] + ([text length] - range.length) <= 255;
+    return shouldChange;
 }
 
-- (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
-    NSDictionary *userInfo = [note userInfo];
-    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    CGFloat height;
-    if (up) {
-        CGRect kbFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-        height = isPortrait ? kbFrame.size.height : kbFrame.size.width;
-    } else {
-        height = 0;
-    }
-    self.keyboardHeight.constant = height;
-    [self.view setNeedsUpdateConstraints];
-    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
-        [self.view layoutIfNeeded];
-    } completion:nil];
-}
-
-- (void)keyboardWillShow:(NSNotification*)note
+//- (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
+//    NSDictionary *userInfo = [note userInfo];
+//    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+//    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+//    CGFloat height;
+//    if (up) {
+//        CGRect kbFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+//        BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+//        height = isPortrait ? kbFrame.size.height : kbFrame.size.width;
+//    } else {
+//        height = 0;
+//    }
+//    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+//
+//    } completion:nil];
+//
+//}
+//
+- (void)keyboardDidShow:(NSNotification*)note
 {
-    [self resizeViewForKeyboard:note up:YES];
+    NSDictionary *info = [note userInfo];
+    CGSize kbSize = [info[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
+
+    // scroll so text field it's visible
+//    CGRect aRect = self.view.frame;
+//    aRect.size.height -= kbSize.height;
+//    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+//        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
+//    }
 }
 
 - (void)keyboardWillHide:(NSNotification*)note
 {
-    [self resizeViewForKeyboard:note up:NO];
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
+}
+
+- (IBAction)cancelEditingText
+{
+    [_textView resignFirstResponder];
+}
+
+- (IBAction)submitText
+{
+    [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": _textView.text}];
 }
 
 @end
