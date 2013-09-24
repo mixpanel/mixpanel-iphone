@@ -258,7 +258,6 @@
     }
     height -= 44.0;
     _scrollViewBottomSpace.constant = height;
-    [_scrollView setNeedsUpdateConstraints];
     CGRect textViewTop = _textView.frame;
     textViewTop.size.height = 48.0;
     [UIView animateWithDuration:duration

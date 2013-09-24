@@ -13,10 +13,10 @@
                         <viewControllerLayoutGuide type="top" id="yBe-16-sDN"/>
                         <viewControllerLayoutGuide type="bottom" id="yeI-nh-85p"/>
                     </layoutGuides>
-                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.0" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
+                    <view key="view" opaque="NO" alpha="0.0" contentMode="scaleToFill" id="cp6-lZ-a9t" customClass="UIImageView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vot-vr-03f">
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vot-vr-03f">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -76,11 +76,11 @@
                                     <constraint firstItem="Rrk-0y-OIL" firstAttribute="top" secondItem="vot-vr-03f" secondAttribute="top" id="vwN-Ft-BC8"/>
                                 </constraints>
                             </view>
-                            <containerView clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7a-kU-sIs">
+                            <containerView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7a-kU-sIs">
                                 <rect key="frame" x="0.0" y="44" width="320" height="480"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0dH-sL-neW">
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0dH-sL-neW">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -101,7 +101,7 @@
                                             <action selector="dismiss" destination="RIP-po-dgx" eventType="touchUpInside" id="o74-Ja-Cor"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" alpha="0.6000000000000002" contentMode="scaleToFill" image="Dots.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
+                                    <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.6000000000000002" contentMode="scaleToFill" image="Dots.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
                                         <rect key="frame" x="15" y="17" width="32" height="10"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -159,7 +159,7 @@
                         <viewControllerLayoutGuide type="top" id="0dc-oD-fBd"/>
                         <viewControllerLayoutGuide type="bottom" id="pb1-Oq-4Kx"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="dcL-M9-gG3">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="dcL-M9-gG3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -177,13 +177,13 @@
                                 <rect key="frame" x="0.0" y="80" width="320" height="488"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="51D-Sg-9Sy">
+                                    <tableView opaque="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="51D-Sg-9Sy">
                                         <rect key="frame" x="0.0" y="20" width="320" height="448"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MPSurveyMultipleChoiceQuestionCell" textLabel="clj-6g-lNw" style="IBUITableViewCellStyleDefault" id="5Xk-yg-bRK" customClass="MPSurveyMultipleChoiceQuestionCell">
+                                            <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MPSurveyMultipleChoiceQuestionCell" textLabel="clj-6g-lNw" style="IBUITableViewCellStyleDefault" id="5Xk-yg-bRK" customClass="MPSurveyMultipleChoiceQuestionCell">
                                                 <rect key="frame" x="0.0" y="55" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Xk-yg-bRK" id="Yx0-o8-79V">
@@ -254,15 +254,15 @@
                         <viewControllerLayoutGuide type="top" id="0Dc-CW-5y3"/>
                         <viewControllerLayoutGuide type="bottom" id="Z0K-Vd-ax9"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="LG7-cL-aRp" userLabel="Scroll View Container">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="LG7-cL-aRp" userLabel="Scroll View Container">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgE-Y8-pxY" customClass="UIScrollView">
+                            <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgE-Y8-pxY" customClass="UIScrollView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FOg-xd-7Td" userLabel="Content View">
+                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FOg-xd-7Td" userLabel="Content View">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="208"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -276,7 +276,7 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtB-0d-D3n">
+                                            <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtB-0d-D3n">
                                                 <rect key="frame" x="15" y="80" width="290" height="120"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -334,7 +334,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIy-O6-XdD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="svP-JH-3n8" userLabel="Keyboard Accessory">
+                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="svP-JH-3n8" userLabel="Keyboard Accessory">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
