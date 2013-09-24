@@ -12,7 +12,6 @@
 @property(nonatomic,retain) IBOutlet UIImageView *checkmarkImageView;
 @property(nonatomic,retain) IBOutlet UITableView *tableView;
 @property(nonatomic,retain) IBOutlet UIView *tableContainer;
-@property(nonatomic,retain) CAGradientLayer *fadeLayer;
 @end
 
 @interface MPSurveyMultipleChoiceQuestionCell : UITableViewCell
@@ -82,21 +81,19 @@
 
 @implementation MPSurveyMultipleChoiceQuestionViewController
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewDidLayoutSubviews
 {
-    [super viewDidAppear:animated];
-//    if (!_fadeLayer) {
-//        _fadeLayer = [CAGradientLayer layer];
-//        CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
-//        CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
-//        _fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
-//        // add 20 pixels of fade in and out at top and bottom of table view container
-//        CGFloat offset = 20.0 / _tableContainer.bounds.size.height;
-//        _fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
-//        _fadeLayer.bounds = self.tableContainer.bounds;
-//        _fadeLayer.anchorPoint = CGPointZero;
-//        _tableContainer.layer.mask = _fadeLayer;
-//    }
+    [super viewDidLayoutSubviews];
+    CAGradientLayer *fadeLayer = [CAGradientLayer layer];
+    CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
+    CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
+    fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
+    // add 20 pixels of fade in and out at top and bottom of table view container
+    CGFloat offset = 20.0 / _tableContainer.bounds.size.height;
+    fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
+    fadeLayer.bounds = self.tableContainer.bounds;
+    fadeLayer.anchorPoint = CGPointZero;
+    _tableContainer.layer.mask = fadeLayer;
 }
 
 - (NSString *)labelForValue:(id)val
