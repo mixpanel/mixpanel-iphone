@@ -149,10 +149,9 @@
         NSArray *priorConstraints = _priorConstraints;
         [self transitionFromViewController:fromController
                           toViewController:toController
-                                  duration:0
-                                   options:UIViewAnimationOptionCurveEaseIn
-                                animations:^{
-                                }
+                                  duration:0.3
+                                   options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionTransitionCrossDissolve
+                                animations:nil
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
                                     [fromController removeFromParentViewController];
