@@ -22,7 +22,9 @@
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
 @property(nonatomic,retain) IBOutlet UIScrollView *scrollView;
+@property(nonatomic,retain) IBOutlet UIView *contentView;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentWidth;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentHeight;
 @property(nonatomic,retain) IBOutlet UITextView *textView;
 @property(nonatomic,retain) IBOutlet UIView *keyboardAccessory;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
@@ -183,19 +185,12 @@
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
     _textView.inputAccessoryView = _keyboardAccessory;
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidShow:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
+    [self registerForKeyboardNotifications];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -207,21 +202,21 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _contentWidth.constant = self.view.bounds.size.width;
     _keyboardAccessoryWidth.constant = self.view.bounds.size.width;
+    _contentWidth.constant = self.view.bounds.size.width;
+    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+        _contentHeight.constant = 208;
+    } else {
+        _contentHeight.constant = 184;
+    }
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    _scrollView.contentSize = CGSizeMake(_contentWidth.constant, _contentHeight.constant);
+}
 
-//- (BOOL)textViewShouldEndEditing:(UITextView *)aTextView {
-//
-//    [aTextView resignFirstResponder];
-//    self.navigationItem.rightBarButtonItem = self.editButton;
-//
-//    return YES;
-//}
-//
-//
-//
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     NSInteger newLength = [textView.text length] + ([text length] - range.length);
@@ -236,42 +231,35 @@
     return shouldChange;
 }
 
-//- (void)resizeViewForKeyboard:(NSNotification*)note up:(BOOL)up {
-//    NSDictionary *userInfo = [note userInfo];
-//    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-//    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-//    CGFloat height;
-//    if (up) {
-//        CGRect kbFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-//        BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-//        height = isPortrait ? kbFrame.size.height : kbFrame.size.width;
-//    } else {
-//        height = 0;
-//    }
-//    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
-//
-//    } completion:nil];
-//
-//}
-//
-- (void)keyboardDidShow:(NSNotification*)note
+- (void)registerForKeyboardNotifications
 {
-    NSDictionary *info = [note userInfo];
-    CGSize kbSize = [info[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
 
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    _scrollView.contentInset = contentInsets;
-    _scrollView.scrollIndicatorInsets = contentInsets;
-
-    // scroll so text field it's visible
-//    CGRect aRect = self.view.frame;
-//    aRect.size.height -= kbSize.height;
-//    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-//        [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
-//    }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardWillHide:(NSNotification*)note
+- (void)keyboardDidShow:(NSNotification*)note
+{
+    NSDictionary* info = [note userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGFloat height;
+    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+        height = kbSize.height;
+    } else {
+        height = kbSize.width;
+    }
+    height -= 44.0;
+    UIEdgeInsets contentInsets = _scrollView.contentInset;
+    contentInsets.bottom = height;
+    _scrollView.contentInset = contentInsets;
+    _scrollView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void)keyboardWillHide:(NSNotification *)note
 {
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     _scrollView.contentInset = contentInsets;
