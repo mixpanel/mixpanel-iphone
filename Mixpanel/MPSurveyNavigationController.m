@@ -133,6 +133,7 @@
             controller.delegate = self;
             controller.question = question;
             controller.highlightColor = [[_backgroundImage mp_averageColor] colorWithAlphaComponent:.6];
+            controller.view.translatesAutoresizingMaskIntoConstraints = NO;
             _questionControllers[index] = controller;
         }
     }
@@ -147,10 +148,11 @@
         [fromController willMoveToParentViewController:nil];
         [self addChildViewController:toController];
         NSArray *priorConstraints = _priorConstraints;
+        UIViewAnimationOptions direction = forward ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:0.3
-                                   options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionTransitionCrossDissolve
+                                   options:UIViewAnimationOptionCurveEaseIn | direction
                                 animations:nil
                                 completion:^(BOOL finished){
                                     [toController didMoveToParentViewController:self];
