@@ -21,7 +21,7 @@
 @property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
-@property (nonatomic, strong) NSArray *priorConstraints;
+@property(nonatomic,retain) NSArray *currentQuestionConstraints;
 
 @end
 
@@ -49,7 +49,7 @@
     MPSurveyQuestionViewController *firstQuestionController = _questionControllers[0];
     [self addChildViewController:firstQuestionController];
     [_containerView addSubview:firstQuestionController.view];
-    self.priorConstraints = [self constrainSubview:firstQuestionController.view toMatchWithSuperview:_containerView];
+    [self constrainCurrentQuestionControllerView:firstQuestionController.view];
     [firstQuestionController didMoveToParentViewController:self];
     _currentQuestionController = firstQuestionController;
     [firstQuestionController.view setNeedsUpdateConstraints];
@@ -75,36 +75,6 @@
                      }
                      completion:nil];
 }
-
-- (NSArray *)constrainSubview:(UIView *)subview toMatchWithSuperview:(UIView *)superview
-{
-    subview.translatesAutoresizingMaskIntoConstraints = NO;
-    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(subview);
-    NSArray *constraints = [NSLayoutConstraint
-                            constraintsWithVisualFormat:@"H:|[subview]|"
-                            options:0
-                            metrics:nil
-                            views:viewsDictionary];
-    constraints = [constraints arrayByAddingObjectsFromArray:
-                   [NSLayoutConstraint
-                    constraintsWithVisualFormat:@"V:|[subview]|"
-                    options:0
-                    metrics:nil
-                    views:viewsDictionary]];
-    [superview addConstraints:constraints];
-    return constraints;
-}
-
-- (void)removeConstraintsFromQuestion:(UIView *)questionView
-{
-    for (NSLayoutConstraint *constraint in [questionView constraints]) {
-        if (constraint.secondItem == _containerView) {
-            NSLog(@"removing constraint: %@", constraint);
-            [questionView removeConstraint:constraint];
-        }
-    }
-}
-
 
 - (void)updatePageNumber:(NSUInteger)index
 {
@@ -139,6 +109,22 @@
     }
 }
 
+- (void)constrainCurrentQuestionControllerView:(UIView *)view
+{
+    NSDictionary *views = NSDictionaryOfVariableBindings(view);
+    NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                   options:0
+                                                                   metrics:nil
+                                                                     views:views];
+    constraints = [constraints arrayByAddingObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                                                     options:0
+                                                                                                     metrics:nil
+                                                                                                       views:views]];
+    [_containerView addConstraints:constraints];
+    self.currentQuestionConstraints = constraints;
+
+}
+
 - (void)showQuestionAtIndex:(NSUInteger)index animatingForward:(BOOL)forward
 {
     if (index < [_survey.questions count]) {
@@ -147,20 +133,41 @@
         UIViewController *toController = _questionControllers[index];
         [fromController willMoveToParentViewController:nil];
         [self addChildViewController:toController];
-        NSArray *priorConstraints = _priorConstraints;
-        UIViewAnimationOptions direction = forward ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft;
+        NSArray *priorConstraints = _currentQuestionConstraints;
+        NSLog(@"_containerView constraints before: %@", _containerView.constraints);
+        toController.view.alpha = 0.0;
         [self transitionFromViewController:fromController
                           toViewController:toController
-                                  duration:0.3
-                                   options:UIViewAnimationOptionCurveEaseIn | direction
-                                animations:nil
+                                  duration:1.0
+                                   options:UIViewAnimationOptionCurveEaseIn
+                                animations:^{
+//                                    [_containerView removeConstraints:priorConstraints];
+                                    [self constrainCurrentQuestionControllerView:toController.view];
+//                                    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+//                                    anim.duration = 1.0;
+//                                    anim.byValue = @(M_PI_2);
+//                                    [fromController.view.layer addAnimation:anim forKey:@"blah"];
+//
+//
+////                                    CGPoint center = toController.view.center;
+////                                    center.x += 200;
+////                                    toController.view.center = center;
+                                    CGAffineTransform transform = CGAffineTransformRotate(fromController.view.transform, M_PI_2);
+                                    fromController.view.transform = transform;
+                                    fromController.view.alpha = 0.0;
+
+                                    transform = CGAffineTransformRotate(fromController.view.transform, M_PI_2);
+                                    toController.view.transform = transform;
+                                    toController.view.alpha = 1.0;
+
+                               }
                                 completion:^(BOOL finished){
-                                    [toController didMoveToParentViewController:self];
+                                    fromController.view.transform = CGAffineTransformIdentity;
                                     [fromController removeFromParentViewController];
+                                    [toController didMoveToParentViewController:self];
+                                    NSLog(@"_containerView constraints after: %@", _containerView.constraints);
                                     _currentQuestionController = toController;
-                                    [_containerView removeConstraints:priorConstraints];
                                 }];
-        self.priorConstraints = [self constrainSubview:toController.view toMatchWithSuperview:_containerView];
         [self updatePageNumber:index];
         [self updateButtons:index];
         [self loadQuestion:index - 1];
