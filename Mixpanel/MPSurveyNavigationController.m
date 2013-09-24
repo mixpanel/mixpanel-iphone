@@ -136,13 +136,15 @@
         NSArray *priorConstraints = _currentQuestionConstraints;
         NSLog(@"_containerView constraints before: %@", _containerView.constraints);
         toController.view.alpha = 0.0;
+        toController.view.transform = CGAffineTransformMakeRotation(M_PI_2);
+
+        // todo: disable next and previous buttons while animating
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:1.0
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
 //                                    [_containerView removeConstraints:priorConstraints];
-                                    [self constrainCurrentQuestionControllerView:toController.view];
 //                                    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
 //                                    anim.duration = 1.0;
 //                                    anim.byValue = @(M_PI_2);
@@ -152,17 +154,16 @@
 ////                                    CGPoint center = toController.view.center;
 ////                                    center.x += 200;
 ////                                    toController.view.center = center;
-                                    CGAffineTransform transform = CGAffineTransformRotate(fromController.view.transform, M_PI_2);
-                                    fromController.view.transform = transform;
+                                    fromController.view.transform = CGAffineTransformMakeRotation(-M_PI_2);
                                     fromController.view.alpha = 0.0;
 
-                                    transform = CGAffineTransformRotate(fromController.view.transform, M_PI_2);
-                                    toController.view.transform = transform;
+                                    [self constrainCurrentQuestionControllerView:toController.view];
+                                    toController.view.transform = CGAffineTransformIdentity;
                                     toController.view.alpha = 1.0;
-
+                                    [toController.view layoutIfNeeded];
                                }
                                 completion:^(BOOL finished){
-                                    fromController.view.transform = CGAffineTransformIdentity;
+                                    fromController.view.transform = CGAffineTransformIdentity; // reset view
                                     [fromController removeFromParentViewController];
                                     [toController didMoveToParentViewController:self];
                                     NSLog(@"_containerView constraints after: %@", _containerView.constraints);
