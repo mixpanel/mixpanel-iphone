@@ -57,6 +57,25 @@
     [self updateButtons:0];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    _header.center = CGPointMake(_header.center.x, _header.center.y - _header.bounds.size.height);
+    _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + _footer.bounds.size.height);
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         self.view.alpha = 1.0;
+                         [self.view layoutIfNeeded];
+                     }
+                     completion:nil];
+}
+
 - (NSArray *)constrainSubview:(UIView *)subview toMatchWithSuperview:(UIView *)superview
 {
     subview.translatesAutoresizingMaskIntoConstraints = NO;
