@@ -258,7 +258,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgE-Y8-pxY" customClass="UIScrollView">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgE-Y8-pxY" customClass="UIScrollView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -329,6 +329,7 @@
                         <outlet property="promptHeight" destination="3oE-KU-Uof" id="k4w-87-oIK"/>
                         <outlet property="promptLabel" destination="3Vm-1Z-umb" id="qb6-7t-46D"/>
                         <outlet property="scrollView" destination="EgE-Y8-pxY" id="luQ-dA-w4G"/>
+                        <outlet property="scrollViewBottomSpace" destination="NhO-fi-MXr" id="jhL-jN-eGx"/>
                         <outlet property="textView" destination="vtB-0d-D3n" id="49Z-Lp-eh1"/>
                     </connections>
                 </viewController>
@@ -349,7 +350,7 @@
                                 <action selector="cancelEditingText" destination="tDf-fb-udT" eventType="touchUpInside" id="ys3-MF-nN6"/>
                             </connections>
                         </button>
-                        <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ate-xY-FeB">
+                        <button opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ate-xY-FeB">
                             <rect key="frame" x="262" y="0.0" width="53" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="53" id="FaV-10-pyv"/>
