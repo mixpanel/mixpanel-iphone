@@ -7,7 +7,7 @@
 @property (nonatomic) NSUInteger collectionID;
 @property (nonatomic, retain) NSArray *questions;
 
-- (id)initWithID:(NSUInteger *)ID collectionID:(NSUInteger *)collectionID andQuestions:(NSArray *)questions;
+- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
 
 @end
 
@@ -51,7 +51,7 @@
                             andQuestions:[NSArray arrayWithArray:questions]] autorelease];
 }
 
-- (id)initWithID:(NSUInteger *)ID collectionID:(NSUInteger *)collectionID andQuestions:(NSArray *)questions
+- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
     if (questions != nil && [questions count] > 0) {
         if (self = [super init]) {
@@ -67,8 +67,6 @@
 
 - (void)dealloc
 {
-    _ID = nil;
-    _collectionID = nil;
     self.questions = nil;
     [super dealloc];
 }
