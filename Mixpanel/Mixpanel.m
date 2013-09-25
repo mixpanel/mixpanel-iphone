@@ -1067,8 +1067,7 @@ static Mixpanel *sharedInstance = nil;
     properties[@"$surveys"] = @[@(survey.ID)];
     properties[@"$collections"] = @[@(survey.collectionID)];
     if (answered) {
-        properties[@"$surveys_answered"] = @[@(survey.ID)];
-        properties[@"$collections_answered"] = @[@(survey.collectionID)];
+        properties[@"$responses"] = @[@(survey.collectionID)];
     }
     [self.people union:properties];
 }
