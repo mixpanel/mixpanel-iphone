@@ -13,6 +13,5 @@
 @end
 
 @protocol MPSurveyQuestionViewControllerDelegate <NSObject>
-- (void)questionViewController:(MPSurveyQuestionViewController *)controller
-    didReceiveAnswerProperties:(NSDictionary *)properties;
+- (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties;
 @end

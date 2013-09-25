@@ -21,6 +21,7 @@
 @property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
+@property(nonatomic) BOOL answeredOneQuestion;
 
 @end
 
@@ -28,7 +29,6 @@
 
 - (void)dealloc
 {
-    self.mixpanel = nil;
     self.survey = nil;
     self.backgroundImage = nil;
     self.questionControllers = nil;
@@ -203,22 +203,19 @@
                          _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
                      }
                      completion:^(BOOL finished){
-                         [_delegate surveyNavigationControllerWasDismissed:self];
+                         [_delegate surveyControllerWasDismissed:self];
                      }];
-    [_mixpanel.people union:@{@"$surveys": @[@(_survey.ID)],
-                              @"$collections": @[@(_survey.collectionID)]}];
 }
 
-- (void)questionViewController:(MPSurveyQuestionViewController *)controller
-    didReceiveAnswerProperties:(NSDictionary *)properties
+- (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties
 {
     NSMutableDictionary *answer = [NSMutableDictionary dictionaryWithDictionary:properties];
-    [answer addEntriesFromDictionary:@{@"$survey_id": @(_survey.ID),
-                                       @"$collection_id": @(_survey.collectionID),
-                                       @"$question_id": @(controller.question.ID),
-                                       @"$question_type": controller.question.type,
-                                       @"$time": [NSDate date]}];
-    [_mixpanel.people append:@{@"$answers": answer}];
+    answer[@"$collection_id"] = @(_survey.collectionID);
+    answer[@"$question_id"] = @(controller.question.ID);
+    answer[@"$question_type"] = controller.question.type;
+    answer[@"$survey_id"] = @(_survey.ID);
+    answer[@"$time"] = [NSDate date];
+    [_delegate surveyController:self didReceiveAnswer:answer];
     if ([self currentIndex] < ([_survey.questions count] - 1)) {
         [self showNextQuestion];
     } else {

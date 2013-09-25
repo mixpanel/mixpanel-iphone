@@ -7,7 +7,6 @@
 
 @interface MPSurveyNavigationController : UIViewController
 
-@property(nonatomic,retain) Mixpanel *mixpanel;
 @property(nonatomic,retain) MPSurvey *survey;
 @property(nonatomic,retain) UIImage *backgroundImage;
 @property(nonatomic,assign) id<MPSurveyNavigationControllerDelegate> delegate;
@@ -15,5 +14,6 @@
 @end
 
 @protocol MPSurveyNavigationControllerDelegate <NSObject>
-- (void)surveyNavigationControllerWasDismissed:(MPSurveyNavigationController *)controller;
+- (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer;
+- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller;
 @end
