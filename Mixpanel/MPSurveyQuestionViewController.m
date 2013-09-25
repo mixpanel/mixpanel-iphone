@@ -223,7 +223,7 @@
     BOOL shouldChange = newLength <= 255;
     if (shouldChange) {
         [UIView animateWithDuration:0.3 animations:^{
-            _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ characters left", @(255 - newLength)];
+            _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ character%@ left", @(255 - newLength), (255 - newLength == 1) ? @"": @"s"];
             _charactersLeftLabel.alpha = (newLength > 155) ? 1.0 : 0.0;
             _doneButton.enabled = newLength > 0;
             _doneButton.alpha = (newLength > 0) ? 1.0 : 0.3;
