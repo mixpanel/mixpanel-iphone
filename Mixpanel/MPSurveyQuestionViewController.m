@@ -146,7 +146,7 @@
     cell.highlighted = YES;
     cell.accessoryView = self.checkmarkImageView;
     id value = [self.question.choices objectAtIndex:indexPath.row];
-    [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": value}];
+    [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -282,7 +282,7 @@
 
 - (IBAction)submitText
 {
-    [self.delegate questionViewController:self didReceiveAnswerProperties:@{@"$value": _textView.text}];
+    [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": _textView.text}];
 }
 
 @end

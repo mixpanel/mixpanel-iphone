@@ -220,7 +220,6 @@ static Mixpanel *sharedInstance = nil;
     self.peopleResponseData = nil;
     self.dateFormatter = nil;
     self.surveyController = nil;
-    self.survey = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
@@ -1028,22 +1027,21 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurvey:(MPSurvey *)survey
 {
+    if (_surveyController && survey.ID == _surveyController.survey.ID) {
+        return;
+    }
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+    self.surveyController = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    _surveyController.delegate = self;
+    _surveyController.survey = survey;
+    _surveyController.backgroundImage = [window.rootViewController.view mp_snapshotImage];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_surveyController && survey.ID == _surveyController.survey.ID) {
-            return;
-        }
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-        self.surveyController = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        _surveyController.mixpanel = self;
-        _surveyController.delegate = self;
-        _surveyController.survey = survey;
-        _surveyController.backgroundImage = [window.rootViewController.view mp_snapshotImage];
         [window.rootViewController presentViewController:_surveyController animated:NO completion:nil];
     });
 }
 
-- (void)surveyNavigationControllerWasDismissed:(MPSurveyNavigationController *)controller
+- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller
 {
     if (controller == _surveyController) {
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
@@ -1052,13 +1050,37 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer
+{
+    if (!_surveyControllerReceivedFirstAnswer) {
+        // should only send answered properties once for any given survey_id/distinct_id
+        [self setSurveyReceived:controller.survey andAnswered:YES];
+        _surveyReceivedFirstAnswer = YES;
+    }
+    [self.people append:@{@"$answers":answer}];
+}
+
+- (void)setSurveyReceived:(MPSurvey *)survey andAnswered:(BOOL)answered
+{
+    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+    properties[@"$surveys"] = @[@(survey.ID)];
+    properties[@"$collections"] = @[@(survey.collectionID)];
+    if (answered) {
+        properties[@"$surveys_answered"] = @[@(survey.ID)];
+        properties[@"$collections_answered"] = @[@(survey.collectionID)];
+    }
+    [self.people union:properties];
+}
+
 #pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     [alertView release];
     if (buttonIndex == 1) {
-        [self showSurvey:self.survey];
+        [self showSurvey:_survey];
+    } else {
+        [self setSurveyReceived:_survey andAnswered:NO];
     }
 }
 
