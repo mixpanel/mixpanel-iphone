@@ -75,7 +75,7 @@
                                      @{
                                          @"id": @3,
                                          @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
+                                         @"prompt": @"If we discontinued our service, how much would you care?",
                                          @"extra_data": @{
                                                  @"$choices": @[
                                                          @"A lot",
