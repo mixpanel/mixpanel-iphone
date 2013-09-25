@@ -21,7 +21,6 @@
 @property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
-@property(nonatomic,retain) NSArray *currentQuestionConstraints;
 
 @end
 
@@ -49,7 +48,7 @@
     MPSurveyQuestionViewController *firstQuestionController = _questionControllers[0];
     [self addChildViewController:firstQuestionController];
     [_containerView addSubview:firstQuestionController.view];
-    [self constrainCurrentQuestionControllerView:firstQuestionController.view];
+    [self constrainQuestionView:firstQuestionController.view];
     [firstQuestionController didMoveToParentViewController:self];
     _currentQuestionController = firstQuestionController;
     [firstQuestionController.view setNeedsUpdateConstraints];
@@ -109,20 +108,17 @@
     }
 }
 
-- (void)constrainCurrentQuestionControllerView:(UIView *)view
+- (void)constrainQuestionView:(UIView *)view
 {
     NSDictionary *views = NSDictionaryOfVariableBindings(view);
-    NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:views];
-    constraints = [constraints arrayByAddingObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                                                     options:0
-                                                                                                     metrics:nil
-                                                                                                       views:views]];
-    [_containerView addConstraints:constraints];
-    self.currentQuestionConstraints = constraints;
-
+    [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:views]];
+    [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:views]];
 }
 
 - (void)showQuestionAtIndex:(NSUInteger)index animatingForward:(BOOL)forward
@@ -133,11 +129,9 @@
         UIViewController *toController = _questionControllers[index];
         [fromController willMoveToParentViewController:nil];
         [self addChildViewController:toController];
-        NSArray *priorConstraints = _currentQuestionConstraints;
         NSLog(@"_containerView constraints before: %@", _containerView.constraints);
         toController.view.alpha = 0.0;
         toController.view.transform = CGAffineTransformMakeRotation(M_PI_2);
-
         // todo: disable next and previous buttons while animating
         [self transitionFromViewController:fromController
                           toViewController:toController
@@ -157,7 +151,7 @@
                                     fromController.view.transform = CGAffineTransformMakeRotation(-M_PI_2);
                                     fromController.view.alpha = 0.0;
 
-                                    [self constrainCurrentQuestionControllerView:toController.view];
+                                    [self constrainQuestionView:toController.view];
                                     toController.view.transform = CGAffineTransformIdentity;
                                     toController.view.alpha = 1.0;
                                     [toController.view layoutIfNeeded];
