@@ -72,8 +72,8 @@
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
-@property(nonatomic,retain) MPSurvey *survey;
-@property(nonatomic,retain) MPSurveyNavigationController *surveyController;
+@property(nonatomic,retain) MPSurvey *surveyCache; // for holding survey during survey permission alert
+@property(nonatomic) BOOL surveyAnswered;
 
 @end
 
@@ -219,7 +219,7 @@ static Mixpanel *sharedInstance = nil;
     self.eventsResponseData = nil;
     self.peopleResponseData = nil;
     self.dateFormatter = nil;
-    self.surveyController = nil;
+    self.surveyCache = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
@@ -846,13 +846,13 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         [self checkForSurveyWithCompletion:^(MPSurvey *survey){
             if (survey) {
-                self.survey = survey;
                 if ([start timeIntervalSinceNow] < -2.0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
                                                                     message:@"Mind taking a quick survey?"
                                                                    delegate:self
                                                           cancelButtonTitle:@"No, Thanks"
                                                           otherButtonTitles:@"Sure", nil];
+                    self.surveyCache = survey;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [alert show];
                     });
@@ -1027,40 +1027,41 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurvey:(MPSurvey *)survey
 {
-    if (_surveyController && survey.ID == _surveyController.survey.ID) {
-        return;
-    }
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-    self.surveyController = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    _surveyController.delegate = self;
-    _surveyController.survey = survey;
-    _surveyController.backgroundImage = [window.rootViewController.view mp_snapshotImage];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [window.rootViewController presentViewController:_surveyController animated:NO completion:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+        MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
+        controller.survey = survey;
+        controller.delegate = self;
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        controller.backgroundImage = [window.rootViewController.view mp_snapshotImage];
+        _surveyAnswered = NO;
+        [window.rootViewController presentViewController:controller animated:NO completion:nil];
     });
 }
 
 - (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller
 {
-    if (controller == _surveyController) {
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    // if _surveyAnswered is YES, we already marked the survey received
+    if (!_surveyAnswered) {
+        [self markSurveyReceived:controller.survey andAnswered:NO];
+    }
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    if (window.rootViewController.presentedViewController == controller) {
         [window.rootViewController dismissViewControllerAnimated:NO completion:nil];
-        self.surveyController = nil;
     }
 }
 
 - (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer
 {
-    if (!_surveyControllerReceivedFirstAnswer) {
-        // should only send answered properties once for any given survey_id/distinct_id
-        [self setSurveyReceived:controller.survey andAnswered:YES];
-        _surveyReceivedFirstAnswer = YES;
+    if (!_surveyAnswered) {
+        // should only set answered once
+        [self markSurveyReceived:controller.survey andAnswered:YES];
+        _surveyAnswered = YES;
     }
     [self.people append:@{@"$answers":answer}];
 }
 
-- (void)setSurveyReceived:(MPSurvey *)survey andAnswered:(BOOL)answered
+- (void)markSurveyReceived:(MPSurvey *)survey andAnswered:(BOOL)answered
 {
     NSMutableDictionary *properties = [NSMutableDictionary dictionary];
     properties[@"$surveys"] = @[@(survey.ID)];
@@ -1077,10 +1078,13 @@ static Mixpanel *sharedInstance = nil;
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     [alertView release];
-    if (buttonIndex == 1) {
-        [self showSurvey:_survey];
-    } else {
-        [self setSurveyReceived:_survey andAnswered:NO];
+    if (_surveyCache) {
+        if (buttonIndex == 1) {
+            [self showSurvey:_surveyCache];
+        } else {
+            [self markSurveyReceived:_surveyCache andAnswered:NO];
+        }
+        self.surveyCache = nil;
     }
 }
 

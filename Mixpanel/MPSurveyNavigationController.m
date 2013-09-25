@@ -59,14 +59,22 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         self.view.alpha = 0.0;
+                         _header.center = CGPointMake(_header.center.x, _header.center.y - _header.bounds.size.height * 5);
+                         _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
+                         _footer.center = CGPointMake(_footer.center.x, _footer.center.y + _footer.bounds.size.height * 5);
+                     }
+                     completion:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    _header.center = CGPointMake(_header.center.x, _header.center.y - _header.bounds.size.height);
+    _header.center = CGPointMake(_header.center.x, _header.center.y - _header.bounds.size.height * 5);
     _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
-    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + _footer.bounds.size.height);
+    _footer.center = CGPointMake(_footer.center.x, _footer.center.y + _footer.bounds.size.height * 5);
     [UIView animateWithDuration:0.5
                      animations:^{
                          self.view.alpha = 1.0;
@@ -195,16 +203,7 @@
 
 - (IBAction)dismiss
 {
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         self.view.alpha = 0.0;
-                         _header.center = CGPointMake(_header.center.x, _header.center.y - 100);
-                         _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
-                         _footer.center = CGPointMake(_footer.center.x, _footer.center.y + 100);
-                     }
-                     completion:^(BOOL finished){
-                         [_delegate surveyControllerWasDismissed:self];
-                     }];
+    [_delegate surveyControllerWasDismissed:self];
 }
 
 - (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties
