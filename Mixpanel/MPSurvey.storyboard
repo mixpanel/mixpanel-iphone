@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <subviews>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vot-vr-03f">
-                                <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrk-0y-OIL">
@@ -38,7 +38,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZ0-zi-Urm">
-                                        <rect key="frame" x="251" y="0.0" width="44" height="44"/>
+                                        <rect key="frame" x="271" y="0.0" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="YhL-l3-mCL"/>
                                         </constraints>
@@ -55,7 +55,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1 of 10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbJ-sK-oCv">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -123,7 +123,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="vot-vr-03f" secondAttribute="trailing" constant="20" id="02o-Xs-dkn"/>
+                            <constraint firstAttribute="trailing" secondItem="vot-vr-03f" secondAttribute="trailing" id="02o-Xs-dkn"/>
                             <constraint firstItem="D7a-kU-sIs" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" id="I8N-re-zwQ"/>
                             <constraint firstItem="vot-vr-03f" firstAttribute="leading" secondItem="cp6-lZ-a9t" secondAttribute="leading" id="KBv-PY-YLx"/>
                             <constraint firstAttribute="trailing" secondItem="0dH-sL-neW" secondAttribute="trailing" id="TOm-ta-pyH"/>
