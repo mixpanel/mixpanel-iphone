@@ -847,7 +847,7 @@ static Mixpanel *sharedInstance = nil;
         [self checkForSurveyWithCompletion:^(MPSurvey *survey){
             if (survey) {
                 // mark survey received
-                [self.people union:@{@"$surveys": @[@(survey.ID)], @"collections": @[@(survey.collectionID)]}];
+                [self.people union:@{@"$surveys": @[@(survey.ID)], @"$collections": @[@(survey.collectionID)]}];
                 if ([start timeIntervalSinceNow] < -2.0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
                                                                     message:@"Mind taking a quick survey?"
