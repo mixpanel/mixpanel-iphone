@@ -34,7 +34,7 @@
 #import "ODIN.h"
 #import "UIView+MPSnapshotImage.h"
 
-#define VERSION @"2.0.1"
+#define VERSION @"2.1.0"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
