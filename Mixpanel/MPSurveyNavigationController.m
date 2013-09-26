@@ -109,8 +109,8 @@
             }
             controller.delegate = self;
             controller.question = question;
-            controller.highlightColor = [[_backgroundImage mp_averageColor] colorWithAlphaComponent:.6];
-            controller.view.translatesAutoresizingMaskIntoConstraints = NO;
+            controller.highlightColor = [[_backgroundImage mp_averageColor] colorWithAlphaComponent:0.6];
+            controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
             _questionControllers[index] = controller;
         }
     }
@@ -132,44 +132,62 @@
 - (void)showQuestionAtIndex:(NSUInteger)index animatingForward:(BOOL)forward
 {
     if (index < [_survey.questions count]) {
-        [self loadQuestion:index];
+
         UIViewController *fromController = _currentQuestionController;
+
+        [self loadQuestion:index];
         UIViewController *toController = _questionControllers[index];
+
         [fromController willMoveToParentViewController:nil];
         [self addChildViewController:toController];
-        NSLog(@"_containerView constraints before: %@", _containerView.constraints);
-        toController.view.alpha = 0.0;
-        toController.view.transform = CGAffineTransformMakeRotation(M_PI_2);
-        // todo: disable next and previous buttons while animating
+
+        // reset after being faded out last time
+        toController.view.alpha = 1.0;
+        // to view starts down and to the right, rotated 45 degrees clockwise. form view starts where it is
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(_containerView.bounds.size.width, _containerView.center.y + _containerView.bounds.size.height / 4);
+        toController.view.transform = CGAffineTransformRotate(transform, (M_PI_4));
+
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+
+        NSTimeInterval duration = 0.25;
         [self transitionFromViewController:fromController
                           toViewController:toController
-                                  duration:1.0
+                                  duration:duration
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
-//                                    [_containerView removeConstraints:priorConstraints];
-//                                    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-//                                    anim.duration = 1.0;
-//                                    anim.byValue = @(M_PI_2);
-//                                    [fromController.view.layer addAnimation:anim forKey:@"blah"];
-//
-//
-////                                    CGPoint center = toController.view.center;
-////                                    center.x += 200;
-////                                    toController.view.center = center;
-                                    fromController.view.transform = CGAffineTransformMakeRotation(-M_PI_2);
+
+                                    // to view rotates upright and into container view (based on auto layout constraints)
+                                    toController.view.transform = CGAffineTransformIdentity;
+                                    [self constrainQuestionView:toController.view];
+
+                                    // from view starts moving to the left, then a brief pause, rotates 45 degrees counterclockwise and shrinks a bit
+                                    NSMutableArray *anims = [NSMutableArray array];
+                                    CABasicAnimation *anim1 = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+                                    anim1.byValue = @(-fromController.view.bounds.size.width * 1.3);
+                                    [anims addObject:anim1];
+                                    NSArray *keyTimes = @[@0.0, @0.4, @1.0];
+                                    CAKeyframeAnimation *anim2 = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                    anim2.keyTimes = keyTimes;
+                                    anim2.values = @[@0.0, @0.0, @(-M_PI_4)];
+                                    [anims addObject:anim2];
+                                    CAKeyframeAnimation *anim3 = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+                                    anim3.keyTimes = keyTimes;
+                                    anim3.values = @[@1.0, @1.0, @0.8];
+                                    [anims addObject:anim3];
+                                    CAAnimationGroup *group = [CAAnimationGroup animation];
+                                    group.animations = anims;
+                                    group.duration = duration;
+                                    [fromController.view.layer addAnimation:group forKey:nil];
+
+                                    // hack to hide animation flashing fromController.view at the end
                                     fromController.view.alpha = 0.0;
 
-                                    [self constrainQuestionView:toController.view];
-                                    toController.view.transform = CGAffineTransformIdentity;
-                                    toController.view.alpha = 1.0;
-                                    [toController.view layoutIfNeeded];
                                }
                                 completion:^(BOOL finished){
-                                    fromController.view.transform = CGAffineTransformIdentity; // reset view
-                                    [fromController removeFromParentViewController];
                                     [toController didMoveToParentViewController:self];
-                                    NSLog(@"_containerView constraints after: %@", _containerView.constraints);
+                                    [fromController removeFromParentViewController];
                                     _currentQuestionController = toController;
+                                    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                                 }];
         [self updatePageNumber:index];
         [self updateButtons:index];
