@@ -146,7 +146,7 @@
 
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
-        NSTimeInterval duration = 3.5;
+        NSTimeInterval duration = 0.25;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:duration
