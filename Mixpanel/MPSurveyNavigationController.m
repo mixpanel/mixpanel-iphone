@@ -144,63 +144,110 @@
         // reset after being faded out last time
         toController.view.alpha = 1.0;
 
-        if (forward) {
-            // to view starts down and to the right, rotated 45 degrees clockwise. form view starts where it is
-            CGAffineTransform transform = CGAffineTransformMakeTranslation(_containerView.bounds.size.width, _containerView.center.y + _containerView.bounds.size.height / 4);
-            toController.view.transform = CGAffineTransformRotate(transform, (M_PI_4));
-        }
-
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
-        NSTimeInterval duration = 0.25;
+        NSTimeInterval duration = 3.5;
         [self transitionFromViewController:fromController
                           toViewController:toController
                                   duration:duration
                                    options:UIViewAnimationOptionCurveEaseIn
                                 animations:^{
 
-                                    if (forward) {
-                                        // to view rotates upright and into container view (based on auto layout constraints)
-                                        toController.view.transform = CGAffineTransformIdentity;
-                                        [self constrainQuestionView:toController.view];
+                                    // position to view with auto layout
+                                    [self constrainQuestionView:toController.view];
 
-                                        // from view starts moving to the left, then a brief pause, rotates 45 degrees counterclockwise and shrinks a bit
-                                        NSMutableArray *anims = [NSMutableArray array];
-                                        CABasicAnimation *anim1 = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-                                        anim1.byValue = @(-fromController.view.bounds.size.width * 1.3);
-                                        [anims addObject:anim1];
-                                        NSArray *keyTimes = @[@0.0, @0.4, @1.0];
-                                        CAKeyframeAnimation *anim2 = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-                                        anim2.keyTimes = keyTimes;
-                                        anim2.values = @[@0.0, @0.0, @(-M_PI_4)];
-                                        [anims addObject:anim2];
-                                        CAKeyframeAnimation *anim3 = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-                                        anim3.keyTimes = keyTimes;
-                                        anim3.values = @[@1.0, @1.0, @0.8];
-                                        [anims addObject:anim3];
-                                        CAAnimationGroup *group = [CAAnimationGroup animation];
+                                    NSMutableArray *anims;
+                                    CABasicAnimation *basicAnim;
+                                    CAKeyframeAnimation *keyFrameAnim;
+                                    CAAnimationGroup *group;
+                                    NSArray *keyTimes;
+
+                                    CGFloat slideDistance = _containerView.bounds.size.width * 1.3;
+                                    CGFloat dropDistance = _containerView.bounds.size.height / 4.0;
+
+                                    if (forward) {
+
+                                        // from view
+                                        anims = [NSMutableArray array];
+                                        // slides left
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+                                        basicAnim.byValue = @(-slideDistance);
+                                        [anims addObject:basicAnim];
+                                        // after a moment, rotates counterclockwise and shrinks a bit as it moves offscreen
+                                        keyTimes = @[@0.0, @0.4, @1.0];
+                                        keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                        keyFrameAnim.keyTimes = keyTimes;
+                                        keyFrameAnim.values = @[@0.0, @0.0, @(-M_PI_4)];
+                                        [anims addObject:keyFrameAnim];
+                                        keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+                                        keyFrameAnim.keyTimes = keyTimes;
+                                        keyFrameAnim.values = @[@1.0, @1.0, @0.8];
+                                        [anims addObject:keyFrameAnim];
+                                        group = [CAAnimationGroup animation];
                                         group.animations = anims;
                                         group.duration = duration;
                                         [fromController.view.layer addAnimation:group forKey:nil];
-                                    } else {
-                                        NSMutableArray *anims = [NSMutableArray array];
-                                        CABasicAnimation *anim1 = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-                                        anim1.byValue = @(toController.view.bounds.size.width * 1.3);
-                                        [anims addObject:anim1];
-                                        NSArray *keyTimes = @[@0.0, @0.4, @1.0];
-                                        CAKeyframeAnimation *anim2 = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-                                        anim2.keyTimes = keyTimes;
-                                        anim2.values = @[@0.0, @0.0, @(-M_PI_4)];
-                                        [anims addObject:anim2];
-                                        CAKeyframeAnimation *anim3 = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-                                        anim3.keyTimes = keyTimes;
-                                        anim3.values = @[@1.0, @1.0, @0.8];
-                                        [anims addObject:anim3];
-                                        CAAnimationGroup *group = [CAAnimationGroup animation];
+
+                                        // to view
+                                        anims = [NSMutableArray array];
+                                        // starts offscreen, down, to the right and rotated clockwise, then snaps into place
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
+                                        basicAnim.fromValue = @(dropDistance);
+                                        basicAnim.byValue = @(-dropDistance);
+                                        [anims addObject:basicAnim];
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+                                        basicAnim.fromValue = @(slideDistance);
+                                        basicAnim.byValue = @(-slideDistance);
+                                        [anims addObject:basicAnim];
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                        basicAnim.fromValue = @(M_PI_4);
+                                        basicAnim.byValue = @(-M_PI_4);
+                                        [anims addObject:basicAnim];
+                                        group = [CAAnimationGroup animation];
                                         group.animations = anims;
                                         group.duration = duration;
                                         [toController.view.layer addAnimation:group forKey:nil];
-                                        [self constrainQuestionView:toController.view];
+
+                                    } else {
+
+                                        // from view
+                                        anims = [NSMutableArray array];
+                                        // slides right and spins and drops offscreen
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
+                                        basicAnim.byValue = @(dropDistance);
+                                        [anims addObject:basicAnim];
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+                                        basicAnim.byValue = @(slideDistance);
+                                        [anims addObject:basicAnim];
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                        basicAnim.byValue = @(M_PI_4);
+                                        [anims addObject:basicAnim];
+                                        group = [CAAnimationGroup animation];
+                                        group.animations = anims;
+                                        group.duration = duration;
+                                        [fromController.view.layer addAnimation:group forKey:nil];
+
+                                        // to view
+                                        anims = [NSMutableArray array];
+                                        // slides right into place
+                                        basicAnim = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+                                        basicAnim.fromValue = @(-slideDistance);
+                                        basicAnim.byValue = @(slideDistance);
+                                        [anims addObject:basicAnim];
+                                        // grows and rotates clockwise at the beginning
+                                        keyTimes = @[@0.0, @0.6, @1.0];
+                                        keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+                                        keyFrameAnim.keyTimes = keyTimes;
+                                        keyFrameAnim.values = @[@(-M_PI_4), @0.0, @0.0];
+                                        [anims addObject:keyFrameAnim];
+                                        keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+                                        keyFrameAnim.keyTimes = keyTimes;
+                                        keyFrameAnim.values = @[@0.8, @1.0, @1.0];
+                                        [anims addObject:keyFrameAnim];
+                                        group = [CAAnimationGroup animation];
+                                        group.animations = anims;
+                                        group.duration = duration;
+                                        [toController.view.layer addAnimation:group forKey:nil];
                                     }
 
                                     // hack to hide animation flashing fromController.view at the end
