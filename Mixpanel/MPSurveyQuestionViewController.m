@@ -189,6 +189,9 @@
 {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
+    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+        [_textView becomeFirstResponder];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
