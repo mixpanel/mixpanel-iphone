@@ -1042,7 +1042,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)markSurveyReceived:(MPSurvey *)survey
 {
-    [self.people union:@{@"$surveys": @[@(survey.ID)], @"$collections": @[@(survey.collectionID)]}];
+    [self.people append:@{@"$surveys": @[@(survey.ID)], @"$collections": @[@(survey.collectionID)]}];
 }
 
 - (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller
