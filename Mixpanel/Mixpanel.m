@@ -1036,11 +1036,11 @@ static Mixpanel *sharedInstance = nil;
         controller.backgroundImage = [window.rootViewController.view mp_snapshotImage];
         _surveyReceivedFirstAnswer = NO;
         [window.rootViewController presentViewController:controller animated:NO completion:nil];
-        [self markSurveyReceived:survey];
+        [self markSurveySeen:survey];
     });
 }
 
-- (void)markSurveyReceived:(MPSurvey *)survey
+- (void)markSurveySeen:(MPSurvey *)survey
 {
     [self.people append:@{@"$surveys": @[@(survey.ID)], @"$collections": @[@(survey.collectionID)]}];
     [self flush];
@@ -1076,7 +1076,7 @@ static Mixpanel *sharedInstance = nil;
         if (buttonIndex == 1) {
             [self showSurvey:_surveyCache];
         } else {
-            [self markSurveyReceived:_surveyCache];
+            [self markSurveySeen:_surveyCache];
         }
         self.surveyCache = nil;
     }
