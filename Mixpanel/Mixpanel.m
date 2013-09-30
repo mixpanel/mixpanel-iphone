@@ -846,8 +846,6 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         [self checkForSurveyWithCompletion:^(MPSurvey *survey){
             if (survey) {
-                // mark survey received
-                [self.people union:@{@"$surveys": @[@(survey.ID)], @"$collections": @[@(survey.collectionID)]}];
                 if ([start timeIntervalSinceNow] < -2.0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
                                                                     message:@"Mind taking a quick survey?"
@@ -1038,7 +1036,13 @@ static Mixpanel *sharedInstance = nil;
         controller.backgroundImage = [window.rootViewController.view mp_snapshotImage];
         _surveyReceivedFirstAnswer = NO;
         [window.rootViewController presentViewController:controller animated:NO completion:nil];
+        [self markSurveyReceived:survey];
     });
+}
+
+- (void)markSurveyReceived:(MPSurvey *)survey
+{
+    [self.people union:@{@"$surveys": @[@(survey.ID)], @"$collections": @[@(survey.collectionID)]}];
 }
 
 - (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller
@@ -1070,6 +1074,8 @@ static Mixpanel *sharedInstance = nil;
     if (_surveyCache) {
         if (buttonIndex == 1) {
             [self showSurvey:_surveyCache];
+        } else {
+            [self markSurveyReceived:_surveyCache];
         }
         self.surveyCache = nil;
     }
