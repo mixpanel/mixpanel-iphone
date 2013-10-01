@@ -49,13 +49,13 @@
 - (IBAction)setPeopleProperties:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel.people set:[NSDictionary dictionaryWithObjectsAndKeys:
-                          [self.genderControl titleForSegmentAtIndex:self.genderControl.selectedSegmentIndex], @"gender",
-                          [self.weaponControl titleForSegmentAtIndex:self.weaponControl.selectedSegmentIndex], @"weapon",
-                          @"Demo", @"$first_name",
-                          @"User", @"$last_name",
-                          @"user@example.com", @"$email",
-                          nil]];
+    [mixpanel.people set:@{
+                           @"gender": [self.genderControl titleForSegmentAtIndex:self.genderControl.selectedSegmentIndex],
+                           @"weapon": [self.weaponControl titleForSegmentAtIndex:self.weaponControl.selectedSegmentIndex],
+                           @"$first_name": @"Demo",
+                           @"$last_name": @"User",
+                           @"$email": @"user@example.com"
+                           }];
     // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
     // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
     // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
