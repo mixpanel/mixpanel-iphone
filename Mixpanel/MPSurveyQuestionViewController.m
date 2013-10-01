@@ -12,10 +12,25 @@
 @property(nonatomic,retain) IBOutlet UIImageView *checkmarkImageView;
 @property(nonatomic,retain) IBOutlet UITableView *tableView;
 @property(nonatomic,retain) IBOutlet UIView *tableContainer;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerLeadingSpace;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerTrailingSpace;
 @end
 
-@interface MPSurveyMultipleChoiceQuestionCell : UITableViewCell
-@property(nonatomic,retain) UIColor *highlightColor;
+@interface MPSurveyTableViewCell : UITableViewCell
+@end
+
+typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundStyle) {
+    MPSurveyTableViewCellBackgroundStyleTop,
+    MPSurveyTableViewCellBackgroundStyleMiddle,
+    MPSurveyTableViewCellBackgroundStyleBottom,
+    MPSurveyTableViewCellBackgroundStyleSingle
+};
+
+@interface MPSurveyTableViewCellBackground : UIView
+@property(nonatomic,retain) UIColor *color;
+@property(nonatomic) MPSurveyTableViewCellBackgroundStyle style;
++ (MPSurveyTableViewCellBackground *)backgroundWithColor:(UIColor *)color andStyle:(MPSurveyTableViewCellBackgroundStyle)style;
+- (id)initWithFrame:(CGRect)frame color:(UIColor *)color andStyle:(MPSurveyTableViewCellBackgroundStyle)style;
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
@@ -82,6 +97,18 @@
 
 @implementation MPSurveyMultipleChoiceQuestionViewController
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        _tableContainerLeadingSpace.constant = 5.0;
+        _tableContainerTrailingSpace.constant = 5.0;
+    } else {
+        _tableContainerLeadingSpace.constant = 15.0;
+        _tableContainerTrailingSpace.constant = 15.0;
+    }
+}
+
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
@@ -133,17 +160,28 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MPSurveyMultipleChoiceQuestionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyMultipleChoiceQuestionCell"];
-    cell.highlightColor = self.highlightColor;
+    MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
     cell.textLabel.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
+    MPSurveyTableViewCellBackgroundStyle style;
+    if (indexPath.row == 0) {
+        if ([self.question.choices count] == 1) {
+            style = MPSurveyTableViewCellBackgroundStyleSingle;
+        } else {
+            style = MPSurveyTableViewCellBackgroundStyleTop;
+        }
+    } else if (indexPath.row == (NSInteger)([self.question.choices count] - 1)) {
+        style = MPSurveyTableViewCellBackgroundStyleBottom;
+    } else {
+        style = MPSurveyTableViewCellBackgroundStyleMiddle;
+    }
+    cell.backgroundView = [MPSurveyTableViewCellBackground backgroundWithColor:[UIColor clearColor] andStyle:style];
+    cell.selectedBackgroundView = [MPSurveyTableViewCellBackground backgroundWithColor:[self.highlightColor colorWithAlphaComponent:0.4] andStyle:style];
     return cell;
 }
-
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    cell.highlighted = YES;
     cell.accessoryView = self.checkmarkImageView;
     id value = [self.question.choices objectAtIndex:indexPath.row];
     [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
@@ -156,18 +194,71 @@
     cell.accessoryView = nil;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.1; // for some reason, 0.0 doesn't work
+}
+
 @end
 
-@implementation MPSurveyMultipleChoiceQuestionCell
+@implementation MPSurveyTableViewCell
+@end
 
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+@implementation MPSurveyTableViewCellBackground
+
++ (MPSurveyTableViewCellBackground *)backgroundWithColor:(UIColor *)color andStyle:(MPSurveyTableViewCellBackgroundStyle)style
 {
-    if (highlighted) {
-        self.backgroundColor = self.highlightColor;
-        self.textLabel.backgroundColor = [UIColor clearColor];
-    } else {
+    return [[[MPSurveyTableViewCellBackground alloc] initWithFrame:CGRectZero color:color andStyle:style] autorelease];
+}
+
+- (id)initWithFrame:(CGRect)frame color:(UIColor *)color andStyle:(MPSurveyTableViewCellBackgroundStyle)style
+{
+    if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
+        self.contentMode = UIViewContentModeRedraw;
+        self.color = color;
+        _style = style;
     }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGFloat minx = CGRectGetMinX(rect) + 0.5; // pixel fit
+    CGFloat midx = CGRectGetMidX(rect);
+    CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
+    CGFloat miny = CGRectGetMinY(rect) + 0.5;
+    CGFloat maxy = CGRectGetMaxY(rect) - 0.5;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextBeginPath(context);
+    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineCap(context, kCGLineCapSquare);
+    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextSetFillColorWithColor(context, self.color.CGColor);
+    if (_style == MPSurveyTableViewCellBackgroundStyleTop) {
+        CGContextMoveToPoint(context, minx, maxy);
+        CGContextAddArcToPoint(context, minx, miny, midx, miny, 5.0);
+        CGContextAddArcToPoint(context, maxx, miny, maxx, maxy, 5.0);
+        CGContextAddLineToPoint(context, maxx, maxy);
+    } else if (_style == MPSurveyTableViewCellBackgroundStyleMiddle) {
+        CGContextMoveToPoint(context, minx, maxy);
+        CGContextAddLineToPoint(context, minx, miny);
+        CGContextAddLineToPoint(context, maxx, miny);
+        CGContextAddLineToPoint(context, maxx, maxy);
+    } else if (_style == MPSurveyTableViewCellBackgroundStyleBottom) {
+        CGContextMoveToPoint(context, minx, miny);
+        CGContextAddLineToPoint(context, maxx, miny);
+        CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, 5.0);
+        CGContextAddArcToPoint(context, minx, maxy, minx, miny, 5.0);
+        CGContextAddLineToPoint(context, minx, miny);
+    } else {
+        // MPSurveyTableViewCellBackgroundStyleSingle
+        CGContextMoveToPoint(context, minx, maxy);
+        CGContextAddLineToPoint(context, minx, miny);
+        CGContextAddLineToPoint(context, maxx, miny);
+        CGContextAddLineToPoint(context, maxx, maxy);
+    }
+    CGContextDrawPath(context, kCGPathFillStroke);
 }
 
 @end
@@ -177,7 +268,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _textView.backgroundColor = self.highlightColor;
+    _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3];
     _textView.delegate = self;
     _textView.layer.borderColor = [UIColor whiteColor].CGColor;
     _textView.layer.borderWidth = 1;

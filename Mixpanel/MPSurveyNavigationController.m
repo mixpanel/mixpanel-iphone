@@ -109,7 +109,7 @@
             }
             controller.delegate = self;
             controller.question = question;
-            controller.highlightColor = [[_backgroundImage mp_averageColor] colorWithAlphaComponent:0.6];
+            controller.highlightColor = [_backgroundImage mp_averageColor];
             controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
             _questionControllers[index] = controller;
         }
