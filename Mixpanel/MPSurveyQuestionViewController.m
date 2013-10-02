@@ -15,16 +15,17 @@
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerTrailingSpace;
 @end
 
-typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
-    MPSurveyTableViewCellBackgroundPositionTop,
-    MPSurveyTableViewCellBackgroundPositionMiddle,
-    MPSurveyTableViewCellBackgroundPositionBottom,
-    MPSurveyTableViewCellBackgroundPositionSingle
+typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
+    MPSurveyTableViewCellPositionTop,
+    MPSurveyTableViewCellPositionMiddle,
+    MPSurveyTableViewCellPositionBottom,
+    MPSurveyTableViewCellPositionSingle
 };
 
 @interface MPSurveyTableViewCellBackground : UIView
-@property(nonatomic,retain) UIColor *color;
-@property(nonatomic) MPSurveyTableViewCellBackgroundPosition position;
+@property(nonatomic,retain) UIColor *strokeColor;
+@property(nonatomic,retain) UIColor *fillColor;
+@property(nonatomic) MPSurveyTableViewCellPosition position;
 @end
 
 @interface MPSurveyTableViewCell : UITableViewCell
@@ -102,7 +103,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 
 @implementation MPSurveyTableViewCellBackground
 
-- (void)setPosition:(MPSurveyTableViewCellBackgroundPosition)position
+- (void)setPosition:(MPSurveyTableViewCellPosition)position
 {
     _position = position;
     [self setNeedsDisplay];
@@ -119,19 +120,18 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
     CGContextBeginPath(context);
     CGContextSetLineWidth(context, 1.0);
     CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:1.0 alpha:0.6].CGColor);
-    CGContextSetFillColorWithColor(context, self.color.CGColor);
-    if (_position == MPSurveyTableViewCellBackgroundPositionTop) {
+    CGContextSetStrokeColorWithColor(context, _strokeColor.CGColor);
+    if (_position == MPSurveyTableViewCellPositionTop) {
         CGContextMoveToPoint(context, minx, maxy);
         CGContextAddArcToPoint(context, minx, miny, midx, miny, 5.0);
         CGContextAddArcToPoint(context, maxx, miny, maxx, maxy, 5.0);
         CGContextAddLineToPoint(context, maxx, maxy);
-    } else if (_position == MPSurveyTableViewCellBackgroundPositionMiddle) {
+    } else if (_position == MPSurveyTableViewCellPositionMiddle) {
         CGContextMoveToPoint(context, minx, maxy);
         CGContextAddLineToPoint(context, minx, miny);
         CGContextAddLineToPoint(context, maxx, miny);
         CGContextAddLineToPoint(context, maxx, maxy);
-    } else if (_position == MPSurveyTableViewCellBackgroundPositionBottom) {
+    } else if (_position == MPSurveyTableViewCellPositionBottom) {
         CGContextMoveToPoint(context, minx, miny);
         CGContextAddLineToPoint(context, maxx, miny);
         CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, 5.0);
@@ -144,6 +144,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
         CGContextAddLineToPoint(context, maxx, miny);
         CGContextAddLineToPoint(context, maxx, maxy);
     }
+    CGContextSetFillColorWithColor(context, _fillColor.CGColor);
     CGContextDrawPath(context, kCGPathFillStroke);
 }
 
@@ -269,21 +270,25 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
-    cell.label.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
-    cell.selectedLabel.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
-    cell.customBackgroundView.color = [UIColor clearColor];
-    cell.customSelectedBackgroundView.color = [self.highlightColor colorWithAlphaComponent:0.3];
-    MPSurveyTableViewCellBackgroundPosition position;
+    NSString *text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
+    cell.label.text = text;
+    cell.selectedLabel.text = text;
+    UIColor *strokeColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    cell.customBackgroundView.strokeColor = strokeColor;
+    cell.customSelectedBackgroundView.strokeColor = strokeColor;
+    cell.customBackgroundView.fillColor = [UIColor clearColor];
+    cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3];
+    MPSurveyTableViewCellPosition position;
     if (indexPath.row == 0) {
         if ([self.question.choices count] == 1) {
-            position = MPSurveyTableViewCellBackgroundPositionSingle;
+            position = MPSurveyTableViewCellPositionSingle;
         } else {
-            position = MPSurveyTableViewCellBackgroundPositionTop;
+            position = MPSurveyTableViewCellPositionTop;
         }
     } else if (indexPath.row == (NSInteger)([self.question.choices count] - 1)) {
-        position = MPSurveyTableViewCellBackgroundPositionBottom;
+        position = MPSurveyTableViewCellPositionBottom;
     } else {
-        position = MPSurveyTableViewCellBackgroundPositionMiddle;
+        position = MPSurveyTableViewCellPositionMiddle;
     }
     cell.customBackgroundView.position = position;
     cell.customSelectedBackgroundView.position = position;
@@ -323,7 +328,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
     [super viewDidLoad];
     _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3];
     _textView.delegate = self;
-    _textView.layer.borderColor = [UIColor whiteColor].CGColor;
+    _textView.layer.borderColor = [UIColor colorWithWhite:1.0 alpha:0.5].CGColor;
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
     _textView.inputAccessoryView = _keyboardAccessory;
