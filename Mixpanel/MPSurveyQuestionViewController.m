@@ -28,10 +28,14 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 @end
 
 @interface MPSurveyTableViewCell : UITableViewCell
+@property(nonatomic) BOOL checked;
 @property(nonatomic,retain) IBOutlet UILabel *label;
+@property(nonatomic,retain) IBOutlet UILabel *selectedLabel;
 @property(nonatomic,retain) IBOutlet UIImageView *checkmark;
 @property(nonatomic,retain) IBOutlet MPSurveyTableViewCellBackground *customBackgroundView;
 @property(nonatomic,retain) IBOutlet MPSurveyTableViewCellBackground *customSelectedBackgroundView;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *selectedLabelLeadingSpace;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *checkmarkLeadingSpace;
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
@@ -92,6 +96,110 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
     self.question = nil;
     self.highlightColor = nil;
     [super dealloc];
+}
+
+@end
+
+@implementation MPSurveyTableViewCellBackground
+
+- (void)setPosition:(MPSurveyTableViewCellBackgroundPosition)position
+{
+    _position = position;
+    [self setNeedsDisplay];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    NSLog(@"drawing rect");
+    CGFloat minx = CGRectGetMinX(rect) + 0.5; // pixel fit
+    CGFloat midx = CGRectGetMidX(rect);
+    CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
+    CGFloat miny = CGRectGetMinY(rect) + 0.5;
+    CGFloat maxy = CGRectGetMaxY(rect) - 0.5;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextBeginPath(context);
+    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineCap(context, kCGLineCapSquare);
+    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextSetFillColorWithColor(context, self.color.CGColor);
+    if (_position == MPSurveyTableViewCellBackgroundPositionTop) {
+        CGContextMoveToPoint(context, minx, maxy);
+        CGContextAddArcToPoint(context, minx, miny, midx, miny, 5.0);
+        CGContextAddArcToPoint(context, maxx, miny, maxx, maxy, 5.0);
+        CGContextAddLineToPoint(context, maxx, maxy);
+    } else if (_position == MPSurveyTableViewCellBackgroundPositionMiddle) {
+        CGContextMoveToPoint(context, minx, maxy);
+        CGContextAddLineToPoint(context, minx, miny);
+        CGContextAddLineToPoint(context, maxx, miny);
+        CGContextAddLineToPoint(context, maxx, maxy);
+    } else if (_position == MPSurveyTableViewCellBackgroundPositionBottom) {
+        CGContextMoveToPoint(context, minx, miny);
+        CGContextAddLineToPoint(context, maxx, miny);
+        CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, 5.0);
+        CGContextAddArcToPoint(context, minx, maxy, minx, miny, 5.0);
+        CGContextAddLineToPoint(context, minx, miny);
+    } else {
+        // MPSurveyTableViewCellBackgroundPositionSingle
+        CGContextMoveToPoint(context, minx, maxy);
+        CGContextAddLineToPoint(context, minx, miny);
+        CGContextAddLineToPoint(context, maxx, miny);
+        CGContextAddLineToPoint(context, maxx, maxy);
+    }
+    CGContextDrawPath(context, kCGPathFillStroke);
+}
+
+@end
+
+@implementation MPSurveyTableViewCell
+
+- (void)setChecked:(BOOL)checked
+{
+    _checked = checked;
+    if (checked) {
+        [UIView animateWithDuration:0.25
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             _label.alpha = 0.0;
+                             _customBackgroundView.alpha = 0.0;
+                             _checkmark.alpha = 1.0;
+                             _selectedLabel.alpha = 1.0;
+                             _customSelectedBackgroundView.alpha = 1.0;
+                         }
+                         completion:^(BOOL finished) {
+                             NSTimeInterval duration = 0.25;
+                             _checkmarkLeadingSpace.constant = 20.0;
+                             [UIView animateWithDuration:duration
+                                                   delay:0.0
+                                                 options:UIViewAnimationOptionCurveEaseOut
+                                              animations:^{
+                                                  [self.contentView layoutIfNeeded];
+                                                  _selectedLabelLeadingSpace.constant = 46.0;
+                                                  [UIView animateWithDuration:duration * 0.5
+                                                                        delay:duration * 0.5
+                                                                      options:0
+                                                                   animations:^{
+                                                                       [self.contentView layoutIfNeeded];
+                                                                   }
+                                                                   completion:nil];
+                                              }
+                                              completion:nil];
+                         }];
+    } else {
+        [UIView animateWithDuration:0.5
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             _checkmark.alpha = 0.0;
+                             _selectedLabel.alpha = 0.0;
+                             _customSelectedBackgroundView.alpha = 0.0;
+                             _checkmarkLeadingSpace.constant = 15.0;
+                             _selectedLabelLeadingSpace.constant = 30.0;
+                             _label.alpha = 1.0;
+                             _customBackgroundView.alpha = 1.0;
+                         }
+                         completion:nil];
+    }
 }
 
 @end
@@ -163,6 +271,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
     cell.label.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
+    cell.selectedLabel.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
     MPSurveyTableViewCellBackgroundPosition position;
     if (indexPath.row == 0) {
         if ([self.question.choices count] == 1) {
@@ -175,33 +284,20 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
     } else {
         position = MPSurveyTableViewCellBackgroundPositionMiddle;
     }
-    NSLog(@"making cell");
     cell.customBackgroundView.position = position;
     cell.customBackgroundView.color = [UIColor clearColor];
     cell.customSelectedBackgroundView.position = position;
     cell.customSelectedBackgroundView.color = [self.highlightColor colorWithAlphaComponent:0.3];
-    [cell setNeedsDisplay];
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"didSelect");
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    id value = [self.question.choices objectAtIndex:indexPath.row];
-//    [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"will select");
-    return indexPath;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"willdeselect");
-    return indexPath;
+    MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    if (!cell.checked) {
+        cell.checked = YES;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,90 +313,15 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"diddeselect");
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    cell.highlighted = NO;
-    cell.accessoryView = nil;
+    MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    if (cell.checked) {
+        cell.checked = NO;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.1; // for some reason, 0.0 doesn't work
-}
-
-@end
-
-@implementation MPSurveyTableViewCell
-
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
-    NSLog(@"set hightlighted: %hhd, %hhd", highlighted, animated);
-    NSLog(@"begore %hhd", self.highlighted);
-    NSLog(@"background: %@\nselectedbackground: %@", self.backgroundView, self.selectedBackgroundView);
-    [super setHighlighted:highlighted animated:animated];
-    NSLog(@"background: %@\nselectedbackground: %@", self.backgroundView, self.selectedBackgroundView);
-    NSLog(@"after %hhd", self.highlighted);
-    NSTimeInterval duration = animated ? 3.0 : 0.0;
-    [UIView animateWithDuration:duration
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         if (highlighted) {
-                             self.selectedBackgroundView.hidden = NO;
-                             self.selectedBackgroundView.alpha = 1.0;
-                             self.selectedBackgroundView.backgroundColor = [UIColor redColor];
-                             self.checkmark.alpha = 1.0;
-                         } else {
-                             self.selectedBackgroundView.hidden = YES;
-                             self.selectedBackgroundView.alpha = 0.0;
-                             self.checkmark.alpha = 0.0;
-                         }
-                     }
-                     completion:^(BOOL finished){
-                     }];
-}
-
-@end
-
-@implementation MPSurveyTableViewCellBackground
-
-- (void)drawRect:(CGRect)rect
-{
-    NSLog(@"drawing rect");
-    CGFloat minx = CGRectGetMinX(rect) + 0.5; // pixel fit
-    CGFloat midx = CGRectGetMidX(rect);
-    CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
-    CGFloat miny = CGRectGetMinY(rect) + 0.5;
-    CGFloat maxy = CGRectGetMaxY(rect) - 0.5;
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextBeginPath(context);
-    CGContextSetLineWidth(context, 1.0);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextSetFillColorWithColor(context, self.color.CGColor);
-    if (_position == MPSurveyTableViewCellBackgroundPositionTop) {
-        CGContextMoveToPoint(context, minx, maxy);
-        CGContextAddArcToPoint(context, minx, miny, midx, miny, 5.0);
-        CGContextAddArcToPoint(context, maxx, miny, maxx, maxy, 5.0);
-        CGContextAddLineToPoint(context, maxx, maxy);
-    } else if (_position == MPSurveyTableViewCellBackgroundPositionMiddle) {
-        CGContextMoveToPoint(context, minx, maxy);
-        CGContextAddLineToPoint(context, minx, miny);
-        CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddLineToPoint(context, maxx, maxy);
-    } else if (_position == MPSurveyTableViewCellBackgroundPositionBottom) {
-        CGContextMoveToPoint(context, minx, miny);
-        CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, 5.0);
-        CGContextAddArcToPoint(context, minx, maxy, minx, miny, 5.0);
-        CGContextAddLineToPoint(context, minx, miny);
-    } else {
-        // MPSurveyTableViewCellBackgroundPositionSingle
-        CGContextMoveToPoint(context, minx, maxy);
-        CGContextAddLineToPoint(context, minx, miny);
-        CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddLineToPoint(context, maxx, maxy);
-    }
-    CGContextDrawPath(context, kCGPathFillStroke);
 }
 
 @end
