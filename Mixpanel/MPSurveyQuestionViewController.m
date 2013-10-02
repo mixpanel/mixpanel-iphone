@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 @end
 
 @interface MPSurveyTableViewCell : UITableViewCell
-@property(nonatomic) BOOL checked;
+@property(nonatomic,getter=isChecked) BOOL checked;
 @property(nonatomic,retain) IBOutlet UILabel *label;
 @property(nonatomic,retain) IBOutlet UILabel *selectedLabel;
 @property(nonatomic,retain) IBOutlet UIImageView *checkmark;
@@ -110,7 +110,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 
 - (void)drawRect:(CGRect)rect
 {
-    NSLog(@"drawing rect");
     CGFloat minx = CGRectGetMinX(rect) + 0.5; // pixel fit
     CGFloat midx = CGRectGetMidX(rect);
     CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
@@ -120,7 +119,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
     CGContextBeginPath(context);
     CGContextSetLineWidth(context, 1.0);
     CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:1.0 alpha:0.6].CGColor);
     CGContextSetFillColorWithColor(context, self.color.CGColor);
     if (_position == MPSurveyTableViewCellBackgroundPositionTop) {
         CGContextMoveToPoint(context, minx, maxy);
@@ -152,7 +151,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
 
 @implementation MPSurveyTableViewCell
 
-- (void)setChecked:(BOOL)checked
+- (void)setChecked:(BOOL)checked animatedWithCompletion:(void (^)(BOOL))completion
 {
     _checked = checked;
     if (checked) {
@@ -181,7 +180,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
                                                                    animations:^{
                                                                        [self.contentView layoutIfNeeded];
                                                                    }
-                                                                   completion:nil];
+                                                                   completion:completion];
                                               }
                                               completion:nil];
                          }];
@@ -198,7 +197,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
                              _label.alpha = 1.0;
                              _customBackgroundView.alpha = 1.0;
                          }
-                         completion:nil];
+                         completion:completion];
     }
 }
 
@@ -272,6 +271,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
     cell.label.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
     cell.selectedLabel.text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
+    cell.customBackgroundView.color = [UIColor clearColor];
+    cell.customSelectedBackgroundView.color = [self.highlightColor colorWithAlphaComponent:0.3];
     MPSurveyTableViewCellBackgroundPosition position;
     if (indexPath.row == 0) {
         if ([self.question.choices count] == 1) {
@@ -285,37 +286,26 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellBackgroundPosition) {
         position = MPSurveyTableViewCellBackgroundPositionMiddle;
     }
     cell.customBackgroundView.position = position;
-    cell.customBackgroundView.color = [UIColor clearColor];
     cell.customSelectedBackgroundView.position = position;
-    cell.customSelectedBackgroundView.color = [self.highlightColor colorWithAlphaComponent:0.3];
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"didSelect");
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    if (!cell.checked) {
-        cell.checked = YES;
+    if (!cell.isChecked) {
+        [cell setChecked:YES animatedWithCompletion:^(BOOL finished){
+            id value = [self.question.choices objectAtIndex:indexPath.row];
+            [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
+        }];
     }
-}
-
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"didHightlight");
-}
-
-- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"did unhighlight");
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"diddeselect");
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-    if (cell.checked) {
-        cell.checked = NO;
+    if (cell.isChecked) {
+        [cell setChecked:NO animatedWithCompletion:nil];
     }
 }
 
