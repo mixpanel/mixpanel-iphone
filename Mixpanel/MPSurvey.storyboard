@@ -195,12 +195,7 @@
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         </view>
-                                                        <view opaque="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="zez-BA-29E" userLabel="Selected Background View" customClass="MPSurveyTableViewCellBackground">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </view>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKN-5X-vPc">
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CKN-5X-vPc">
                                                             <rect key="frame" x="20" y="0.0" width="280" height="44"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -208,36 +203,56 @@
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </label>
-                                                        <imageView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Checkmark.png" translatesAutoresizingMaskIntoConstraints="NO" id="XuO-7b-ZTD" userLabel="Checkmark">
-                                                            <rect key="frame" x="20" y="15" width="13" height="14"/>
+                                                        <view opaque="NO" alpha="0.0" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="zez-BA-29E" userLabel="Selected Background View" customClass="MPSurveyTableViewCellBackground">
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </view>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GfX-Tm-gkM" userLabel="Selected Label">
+                                                            <rect key="frame" x="30" y="0.0" width="270" height="44"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </label>
+                                                        <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Checkmark.png" translatesAutoresizingMaskIntoConstraints="NO" id="XuO-7b-ZTD" userLabel="Checkmark">
+                                                            <rect key="frame" x="15" y="15" width="13" height="14"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="GfX-Tm-gkM" secondAttribute="bottom" id="2fd-fb-6iU"/>
                                                         <constraint firstAttribute="bottom" secondItem="QfX-h1-AIt" secondAttribute="bottom" id="3Na-VB-Js8"/>
                                                         <constraint firstAttribute="trailing" secondItem="zez-BA-29E" secondAttribute="trailing" id="4Jq-CO-48r"/>
-                                                        <constraint firstAttribute="bottom" secondItem="CKN-5X-vPc" secondAttribute="bottom" id="8m5-c9-Y7j"/>
-                                                        <constraint firstItem="CKN-5X-vPc" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" constant="20" id="Blf-Qe-v75"/>
+                                                        <constraint firstItem="GfX-Tm-gkM" firstAttribute="top" secondItem="Yx0-o8-79V" secondAttribute="top" id="BDV-I0-1pn"/>
+                                                        <constraint firstItem="XuO-7b-ZTD" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" constant="15" id="C0l-Up-TDG"/>
+                                                        <constraint firstAttribute="trailing" secondItem="CKN-5X-vPc" secondAttribute="trailing" constant="20" id="GgV-9Z-icq"/>
                                                         <constraint firstItem="zez-BA-29E" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" id="OKP-HQ-CEc"/>
-                                                        <constraint firstAttribute="trailing" secondItem="CKN-5X-vPc" secondAttribute="trailing" constant="20" id="QzM-TU-rHY"/>
                                                         <constraint firstAttribute="trailing" secondItem="QfX-h1-AIt" secondAttribute="trailing" id="Smq-dg-X16"/>
+                                                        <constraint firstAttribute="centerY" secondItem="XuO-7b-ZTD" secondAttribute="centerY" id="UEC-OP-50M"/>
+                                                        <constraint firstAttribute="trailing" secondItem="GfX-Tm-gkM" secondAttribute="trailing" constant="20" id="ZLo-ZH-O3J"/>
                                                         <constraint firstItem="QfX-h1-AIt" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" id="Zwq-XT-5x5"/>
-                                                        <constraint firstAttribute="centerY" secondItem="XuO-7b-ZTD" secondAttribute="centerY" id="aUv-sB-ryA"/>
+                                                        <constraint firstItem="CKN-5X-vPc" firstAttribute="top" secondItem="Yx0-o8-79V" secondAttribute="top" id="d90-di-tJU"/>
+                                                        <constraint firstItem="CKN-5X-vPc" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" constant="20" id="dY1-Iq-wMV"/>
+                                                        <constraint firstAttribute="bottom" secondItem="CKN-5X-vPc" secondAttribute="bottom" id="eBr-Aq-oDt"/>
                                                         <constraint firstItem="QfX-h1-AIt" firstAttribute="top" secondItem="Yx0-o8-79V" secondAttribute="top" id="eda-kt-mnh"/>
-                                                        <constraint firstItem="XuO-7b-ZTD" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" constant="20" id="k4h-cN-ivJ"/>
                                                         <constraint firstItem="zez-BA-29E" firstAttribute="top" secondItem="Yx0-o8-79V" secondAttribute="top" id="sUS-vd-btV"/>
+                                                        <constraint firstItem="GfX-Tm-gkM" firstAttribute="leading" secondItem="Yx0-o8-79V" secondAttribute="leading" constant="30" id="tbc-7g-RZf"/>
                                                         <constraint firstAttribute="bottom" secondItem="zez-BA-29E" secondAttribute="bottom" id="ywC-Da-Cbp"/>
-                                                        <constraint firstItem="CKN-5X-vPc" firstAttribute="top" secondItem="Yx0-o8-79V" secondAttribute="top" id="zZ6-bq-gmo"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <connections>
                                                     <outlet property="checkmark" destination="XuO-7b-ZTD" id="MxD-8I-sg9"/>
+                                                    <outlet property="checkmarkLeadingSpace" destination="C0l-Up-TDG" id="j92-DW-vbd"/>
                                                     <outlet property="customBackgroundView" destination="QfX-h1-AIt" id="v6I-nE-wR7"/>
                                                     <outlet property="customSelectedBackgroundView" destination="zez-BA-29E" id="b96-ha-oxA"/>
                                                     <outlet property="label" destination="CKN-5X-vPc" id="4pE-3K-SHf"/>
+                                                    <outlet property="selectedLabel" destination="GfX-Tm-gkM" id="EOS-9Y-EVH"/>
+                                                    <outlet property="selectedLabelLeadingSpace" destination="tbc-7g-RZf" id="5TB-76-6fA"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
