@@ -534,7 +534,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.unidentifiedQueue = [NSMutableArray array];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
-        [self archive];
+        [self archiveFromSerialQueue];
     });
 }
 
@@ -727,6 +727,14 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)archive
 {
+   // Must archive from the serial queue to avoid conflicts from data mutation
+   dispatch_sync(self.serialQueue, ^{
+      [self archiveFromSerialQueue];
+   });
+}
+
+- (void)archiveFromSerialQueue
+{
     [self archiveEvents];
     [self archivePeople];
     [self archiveProperties];
@@ -866,7 +874,7 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ application will terminate", self);
     dispatch_async(self.serialQueue, ^{
-        [self archive];
+        [self archiveFromSerialQueue];
     });
 }
 
