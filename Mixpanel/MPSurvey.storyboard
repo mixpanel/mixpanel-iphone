@@ -168,8 +168,8 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <tableView opaque="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="51D-Sg-9Sy">
-                                        <rect key="frame" x="15" y="44" width="290" height="400"/>
-                                        <color key="backgroundColor" red="0.60839075119999997" green="0.61332512579999998" blue="0.75" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="15" y="0.0" width="290" height="488"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <inset key="scrollIndicatorInsets" minX="0.0" minY="44" maxX="0.0" maxY="44"/>
                                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
@@ -251,10 +251,10 @@
                                         </connections>
                                     </tableView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="51D-Sg-9Sy" firstAttribute="top" secondItem="LTJ-6W-TtT" secondAttribute="top" constant="44" id="ISZ-mc-dTM"/>
-                                    <constraint firstAttribute="bottom" secondItem="51D-Sg-9Sy" secondAttribute="bottom" constant="44" id="SiD-sE-M89"/>
+                                    <constraint firstItem="51D-Sg-9Sy" firstAttribute="top" secondItem="LTJ-6W-TtT" secondAttribute="top" id="ISZ-mc-dTM"/>
+                                    <constraint firstAttribute="bottom" secondItem="51D-Sg-9Sy" secondAttribute="bottom" id="SiD-sE-M89"/>
                                     <constraint firstAttribute="trailing" secondItem="51D-Sg-9Sy" secondAttribute="trailing" constant="15" id="dzK-ex-k8D"/>
                                     <constraint firstItem="51D-Sg-9Sy" firstAttribute="leading" secondItem="LTJ-6W-TtT" secondAttribute="leading" constant="15" id="ktY-WG-0rc"/>
                                 </constraints>
