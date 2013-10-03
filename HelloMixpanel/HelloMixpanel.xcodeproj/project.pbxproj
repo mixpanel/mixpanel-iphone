@@ -39,6 +39,8 @@
 		289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497917D913D50035439B /* NSData+MPBase64.m */; };
 		289B497E17D913EA0035439B /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497D17D913EA0035439B /* ODIN.m */; };
 		289B497F17D913EA0035439B /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497D17D913EA0035439B /* ODIN.m */; };
+		28C6C7D917FE2A5A00F07F70 /* DismissKeyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C6C7D717FE2A5A00F07F70 /* DismissKeyboard.png */; };
+		28C6C7DA17FE2A5A00F07F70 /* DismissKeyboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C6C7D817FE2A5A00F07F70 /* DismissKeyboard@2x.png */; };
 		28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E666161530BF00F78E49 /* Icon@2x.png */; };
 		28C7E6691615311100F78E49 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E6681615311100F78E49 /* Icon.png */; };
 		28C7E66B1615317400F78E49 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E66A1615317400F78E49 /* Icon-72.png */; };
@@ -107,6 +109,8 @@
 		289B497917D913D50035439B /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		289B497C17D913EA0035439B /* ODIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODIN.h; sourceTree = "<group>"; };
 		289B497D17D913EA0035439B /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
+		28C6C7D717FE2A5A00F07F70 /* DismissKeyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DismissKeyboard.png; sourceTree = "<group>"; };
+		28C6C7D817FE2A5A00F07F70 /* DismissKeyboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DismissKeyboard@2x.png"; sourceTree = "<group>"; };
 		28C7E666161530BF00F78E49 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		28C7E6681615311100F78E49 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		28C7E66A1615317400F78E49 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
@@ -269,6 +273,8 @@
 				28ECB34517CEB6920075ADE7 /* ArrowRight@2x.png */,
 				289B497417D68DE40035439B /* Checkmark.png */,
 				289B497517D68DE50035439B /* Checkmark@2x.png */,
+				28C6C7D717FE2A5A00F07F70 /* DismissKeyboard.png */,
+				28C6C7D817FE2A5A00F07F70 /* DismissKeyboard@2x.png */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -347,6 +353,7 @@
 			files = (
 				2808F99C1610EFE3005772B7 /* InfoPlist.strings in Resources */,
 				2808F9A81610EFE3005772B7 /* ViewController.xib in Resources */,
+				28C6C7DA17FE2A5A00F07F70 /* DismissKeyboard@2x.png in Resources */,
 				2808F9CC1610F0DE005772B7 /* logo_white.png in Resources */,
 				28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */,
 				28C7E6691615311100F78E49 /* Icon.png in Resources */,
@@ -354,6 +361,7 @@
 				286903FF17C6D2CF00DCA073 /* Default-568h@2x.png in Resources */,
 				2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */,
 				28ECB34617CEB6920075ADE7 /* ArrowLeft.png in Resources */,
+				28C6C7D917FE2A5A00F07F70 /* DismissKeyboard.png in Resources */,
 				28ECB34717CEB6920075ADE7 /* ArrowLeft@2x.png in Resources */,
 				28ECB34817CEB6920075ADE7 /* ArrowRight.png in Resources */,
 				28ECB34917CEB6920075ADE7 /* ArrowRight@2x.png in Resources */,
