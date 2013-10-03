@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGFloat midx = CGRectGetMidX(rect);
     CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
     CGFloat miny = CGRectGetMinY(rect) + 0.5;
-    CGFloat maxy = CGRectGetMaxY(rect) - 0.5;
+    CGFloat maxy = CGRectGetMaxY(rect);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextBeginPath(context);
     CGContextSetLineWidth(context, 1.0);
@@ -134,8 +134,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     } else if (_position == MPSurveyTableViewCellPositionBottom) {
         CGContextMoveToPoint(context, minx, miny);
         CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, 5.0);
-        CGContextAddArcToPoint(context, minx, maxy, minx, miny, 5.0);
+        CGContextAddArcToPoint(context, maxx, maxy - 0.5, midx, maxy - 0.5, 5.0); // hack to fit pixel on bottom cell
+        CGContextAddArcToPoint(context, minx, maxy - 0.5, minx, miny, 5.0);
         CGContextAddLineToPoint(context, minx, miny);
     } else {
         // MPSurveyTableViewCellBackgroundPositionSingle
