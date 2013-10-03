@@ -49,7 +49,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 @property(nonatomic,retain) IBOutlet UIView *keyboardAccessory;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
 @property(nonatomic,retain) IBOutlet UILabel *charactersLeftLabel;
-@property(nonatomic,retain) IBOutlet UIButton *doneButton;
 @end
 
 @implementation MPSurveyQuestionViewController
@@ -356,16 +355,20 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSInteger newLength = [textView.text length] + ([text length] - range.length);
-    BOOL shouldChange = newLength <= 255;
-    if (shouldChange) {
-        [UIView animateWithDuration:0.3 animations:^{
-            _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ character%@ left", @(255 - newLength), (255 - newLength == 1) ? @"": @"s"];
-            _charactersLeftLabel.alpha = (newLength > 155) ? 1.0 : 0.0;
-            _doneButton.enabled = newLength > 0;
-            _doneButton.alpha = (newLength > 0) ? 1.0 : 0.3;
-
-        }];
+    BOOL shouldChange;
+    if ([text isEqualToString:@"\n"]) {
+        // submit answer
+        shouldChange = NO;
+        [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
+    } else {
+        NSInteger newLength = [textView.text length] + ([text length] - range.length);
+        shouldChange = newLength <= 255;
+        if (shouldChange) {
+            [UIView animateWithDuration:0.3 animations:^{
+                _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ character%@ left", @(255 - newLength), (255 - newLength == 1) ? @"": @"s"];
+                _charactersLeftLabel.alpha = (newLength > 155) ? 1.0 : 0.0;
+            }];
+        }
     }
     return shouldChange;
 }
@@ -415,11 +418,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (IBAction)cancelEditingText
 {
     [_textView resignFirstResponder];
-}
-
-- (IBAction)submitText
-{
-    [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": _textView.text}];
 }
 
 @end

@@ -331,7 +331,7 @@
                                                 </constraints>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                             </textView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -370,7 +370,6 @@
                         <outlet property="contentHeight" destination="5Uz-ks-2Fk" id="DzB-pa-K53"/>
                         <outlet property="contentView" destination="FOg-xd-7Td" id="Ns2-b4-9Vl"/>
                         <outlet property="contentWidth" destination="McZ-ec-I7U" id="LMB-JN-jNx"/>
-                        <outlet property="doneButton" destination="ate-xY-FeB" id="Kwx-7T-rKb"/>
                         <outlet property="keyboardAccessory" destination="svP-JH-3n8" id="dmq-ze-SYv"/>
                         <outlet property="keyboardAccessoryWidth" destination="YNx-KC-6sd" id="gAG-uy-7ID"/>
                         <outlet property="promptHeight" destination="3oE-KU-Uof" id="k4w-87-oIK"/>
@@ -385,38 +384,20 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxL-nA-eon">
-                            <rect key="frame" x="5" y="0.0" width="65" height="44"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxL-nA-eon" userLabel="Dismiss Keyboard Button">
+                            <rect key="frame" x="15" y="15" width="30" height="14"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="65" id="RKz-UL-uMk"/>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="65" id="h2y-gp-VNw"/>
+                                <constraint firstAttribute="height" constant="14" id="C8M-Fj-Vo3"/>
+                                <constraint firstAttribute="width" constant="30" id="RKz-UL-uMk"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                            <state key="normal" title="Cancel"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" image="DismissKeyboard.png"/>
                             <connections>
                                 <action selector="cancelEditingText" destination="tDf-fb-udT" eventType="touchUpInside" id="ys3-MF-nN6"/>
                             </connections>
                         </button>
-                        <button opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ate-xY-FeB">
-                            <rect key="frame" x="262" y="0.0" width="53" height="44"/>
-                            <constraints>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="53" id="FaV-10-pyv"/>
-                                <constraint firstAttribute="width" constant="53" id="eYw-Vk-5hM"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                            <state key="normal" title="Done">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="submitText" destination="tDf-fb-udT" eventType="touchUpInside" id="27Z-vj-0YA"/>
-                            </connections>
-                        </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="20 characters left" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fr7-FM-QMp">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <rect key="frame" x="104" y="13" width="112" height="18"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -425,17 +406,11 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="86i-m2-Ixr"/>
-                        <constraint firstItem="BxL-nA-eon" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" constant="5" id="ENw-1z-acL"/>
-                        <constraint firstAttribute="trailing" secondItem="Fr7-FM-QMp" secondAttribute="trailing" id="Ix6-mZ-pfV"/>
-                        <constraint firstItem="Fr7-FM-QMp" firstAttribute="top" secondItem="svP-JH-3n8" secondAttribute="top" id="LhI-cu-TA8"/>
-                        <constraint firstItem="ate-xY-FeB" firstAttribute="top" secondItem="svP-JH-3n8" secondAttribute="top" id="SKY-do-IEE"/>
+                        <constraint firstItem="BxL-nA-eon" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" constant="15" id="ApZ-84-3ZM"/>
+                        <constraint firstAttribute="centerX" secondItem="Fr7-FM-QMp" secondAttribute="centerX" id="BJH-PO-e04"/>
                         <constraint firstAttribute="width" constant="320" id="YNx-KC-6sd"/>
-                        <constraint firstAttribute="bottom" secondItem="BxL-nA-eon" secondAttribute="bottom" id="YRZ-ic-1sN"/>
-                        <constraint firstAttribute="bottom" secondItem="ate-xY-FeB" secondAttribute="bottom" id="bEk-MC-weB"/>
-                        <constraint firstItem="BxL-nA-eon" firstAttribute="top" secondItem="svP-JH-3n8" secondAttribute="top" id="eKw-3t-kQh"/>
-                        <constraint firstAttribute="bottom" secondItem="Fr7-FM-QMp" secondAttribute="bottom" id="fJz-2f-co7"/>
-                        <constraint firstItem="Fr7-FM-QMp" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" id="kan-2W-5qF"/>
-                        <constraint firstAttribute="trailing" secondItem="ate-xY-FeB" secondAttribute="trailing" constant="5" id="xd0-tt-lJ4"/>
+                        <constraint firstAttribute="centerY" secondItem="Fr7-FM-QMp" secondAttribute="centerY" id="eH8-LX-r20"/>
+                        <constraint firstAttribute="centerY" secondItem="BxL-nA-eon" secondAttribute="centerY" id="zdc-ne-S3X"/>
                     </constraints>
                 </view>
             </objects>
@@ -446,6 +421,7 @@
         <image name="ArrowLeft.png" width="24" height="16"/>
         <image name="ArrowRight.png" width="24" height="16"/>
         <image name="Checkmark.png" width="13" height="14"/>
+        <image name="DismissKeyboard.png" width="30" height="14"/>
         <image name="Dots.png" width="32" height="10"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
