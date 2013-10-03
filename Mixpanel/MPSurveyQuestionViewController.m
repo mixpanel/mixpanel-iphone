@@ -11,8 +11,7 @@
 @property(nonatomic,retain) MPSurveyMultipleChoiceQuestion *question;
 @property(nonatomic,retain) IBOutlet UITableView *tableView;
 @property(nonatomic,retain) IBOutlet UIView *tableContainer;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerLeadingSpace;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerTrailingSpace;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerVerticalPadding;
 @end
 
 typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
@@ -111,6 +110,11 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)drawRect:(CGRect)rect
 {
+//    rect.size.height += 1;
+    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:5.0f];
+    [[UIColor colorWithWhite:0.8 alpha:0.5] setFill];
+    [roundedRect fillWithBlendMode:kCGBlendModeNormal alpha:1];
+    return;
     CGFloat minx = CGRectGetMinX(rect) + 0.5; // pixel fit
     CGFloat midx = CGRectGetMidX(rect);
     CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
@@ -208,14 +212,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
-        _tableContainerLeadingSpace.constant = 5.0;
-        _tableContainerTrailingSpace.constant = 5.0;
-    } else {
-        _tableContainerLeadingSpace.constant = 15.0;
-        _tableContainerTrailingSpace.constant = 15.0;
-    }
+    _tableView.contentInset = UIEdgeInsetsMake(44, 0, 44, 0);
 }
 
 - (void)viewDidLayoutSubviews
@@ -226,9 +223,9 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
     fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
     // add 20 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 20.0 / _tableContainer.bounds.size.height;
+    CGFloat offset = _tableContainerVerticalPadding.constant / _tableContainer.bounds.size.height;
     fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
-    fadeLayer.bounds = self.tableContainer.bounds;
+    fadeLayer.bounds = _tableContainer.bounds;
     fadeLayer.anchorPoint = CGPointZero;
     _tableContainer.layer.mask = fadeLayer;
 }
@@ -255,11 +252,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         label = [val description];
     }
     return label;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -316,7 +308,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.1; // for some reason, 0.0 doesn't work
+    return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) ? 0 : 0.1; // for some reason, 0 doesn't work in ios7
 }
 
 @end
