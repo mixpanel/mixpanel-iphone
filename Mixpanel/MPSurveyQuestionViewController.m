@@ -104,52 +104,44 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)setPosition:(MPSurveyTableViewCellPosition)position
 {
+    BOOL changed = _position != position;
     _position = position;
-    [self setNeedsDisplay];
+    if (changed) {
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)drawRect:(CGRect)rect
 {
-//    rect.size.height += 1;
-    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:5.0f];
-    [[UIColor colorWithWhite:0.8 alpha:0.5] setFill];
-    [roundedRect fillWithBlendMode:kCGBlendModeNormal alpha:1];
-    return;
-    CGFloat minx = CGRectGetMinX(rect) + 0.5; // pixel fit
-    CGFloat midx = CGRectGetMidX(rect);
-    CGFloat maxx = CGRectGetMaxX(rect) - 0.5;
-    CGFloat miny = CGRectGetMinY(rect) + 0.5;
-    CGFloat maxy = CGRectGetMaxY(rect);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextBeginPath(context);
-    CGContextSetLineWidth(context, 1.0);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, _strokeColor.CGColor);
+    UIRectCorner corners;
     if (_position == MPSurveyTableViewCellPositionTop) {
-        CGContextMoveToPoint(context, minx, maxy);
-        CGContextAddArcToPoint(context, minx, miny, midx, miny, 5.0);
-        CGContextAddArcToPoint(context, maxx, miny, maxx, maxy, 5.0);
-        CGContextAddLineToPoint(context, maxx, maxy);
+        corners = UIRectCornerTopLeft | UIRectCornerTopRight;
     } else if (_position == MPSurveyTableViewCellPositionMiddle) {
-        CGContextMoveToPoint(context, minx, maxy);
-        CGContextAddLineToPoint(context, minx, miny);
-        CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddLineToPoint(context, maxx, maxy);
+        corners = 0;
     } else if (_position == MPSurveyTableViewCellPositionBottom) {
-        CGContextMoveToPoint(context, minx, miny);
-        CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddArcToPoint(context, maxx, maxy - 0.5, midx, maxy - 0.5, 5.0); // hack to fit pixel on bottom cell
-        CGContextAddArcToPoint(context, minx, maxy - 0.5, minx, miny, 5.0);
-        CGContextAddLineToPoint(context, minx, miny);
+        corners = UIRectCornerBottomLeft | UIRectCornerBottomRight;
     } else {
         // MPSurveyTableViewCellBackgroundPositionSingle
-        CGContextMoveToPoint(context, minx, maxy);
-        CGContextAddLineToPoint(context, minx, miny);
-        CGContextAddLineToPoint(context, maxx, miny);
-        CGContextAddLineToPoint(context, maxx, maxy);
+        corners = UIRectCornerAllCorners;
     }
-    CGContextSetFillColorWithColor(context, _fillColor.CGColor);
-    CGContextDrawPath(context, kCGPathFillStroke);
+
+    // pixel fitting
+    rect.origin.x += 0.5;
+    rect.origin.y += 0.5;
+    rect.size.width -= 1;
+    if (_position == MPSurveyTableViewCellPositionBottom) {
+        rect.size.height -= 1;
+    }
+
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect
+                                               byRoundingCorners:corners
+                                                     cornerRadii:CGSizeMake(5, 5)];
+
+    [path setLineCapStyle:kCGLineCapSquare];
+    [_strokeColor setStroke];
+    [_fillColor setFill];
+    [path stroke];
+    [path fill];
 }
 
 @end
