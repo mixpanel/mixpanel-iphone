@@ -158,7 +158,7 @@
                         <viewControllerLayoutGuide type="top" id="0dc-oD-fBd"/>
                         <viewControllerLayoutGuide type="bottom" id="pb1-Oq-4Kx"/>
                     </layoutGuides>
-                    <view key="view" opaque="NO" contentMode="scaleToFill" id="dcL-M9-gG3">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="dcL-M9-gG3" userLabel="Main View">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -301,82 +301,52 @@
                         <viewControllerLayoutGuide type="top" id="0Dc-CW-5y3"/>
                         <viewControllerLayoutGuide type="bottom" id="Z0K-Vd-ax9"/>
                     </layoutGuides>
-                    <view key="view" opaque="NO" contentMode="scaleToFill" id="LG7-cL-aRp" userLabel="Scroll View Container">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="LG7-cL-aRp" userLabel="Main View">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgE-Y8-pxY" customClass="UIScrollView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FOg-xd-7Td" userLabel="Content View">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="208"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="3Vm-1Z-umb" userLabel="Prompt">
-                                                <rect key="frame" x="15" y="0.0" width="290" height="72"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="72" id="3oE-KU-Uof"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtB-0d-D3n">
-                                                <rect key="frame" x="15" y="80" width="290" height="120"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="120" id="cCS-Ln-myf"/>
-                                                </constraints>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
-                                            </textView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="vtB-0d-D3n" secondAttribute="trailing" constant="15" id="36R-VX-jpK"/>
-                                            <constraint firstAttribute="height" constant="208" id="5Uz-ks-2Fk"/>
-                                            <constraint firstAttribute="trailing" secondItem="3Vm-1Z-umb" secondAttribute="trailing" constant="15" id="7Bk-GZ-RHu"/>
-                                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="leading" secondItem="FOg-xd-7Td" secondAttribute="leading" constant="15" id="HqU-be-74b"/>
-                                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="top" secondItem="FOg-xd-7Td" secondAttribute="top" id="Iqi-4d-AIO"/>
-                                            <constraint firstAttribute="width" constant="320" id="McZ-ec-I7U"/>
-                                            <constraint firstItem="vtB-0d-D3n" firstAttribute="leading" secondItem="FOg-xd-7Td" secondAttribute="leading" constant="15" id="jL7-Pg-xf0"/>
-                                            <constraint firstItem="vtB-0d-D3n" firstAttribute="top" secondItem="3Vm-1Z-umb" secondAttribute="bottom" constant="8" id="m5s-yo-W8t"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="3Vm-1Z-umb" userLabel="Prompt">
+                                <rect key="frame" x="15" y="0.0" width="290" height="72"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="FOg-xd-7Td" secondAttribute="trailing" id="12u-At-zZK"/>
-                                    <constraint firstItem="FOg-xd-7Td" firstAttribute="leading" secondItem="EgE-Y8-pxY" secondAttribute="leading" id="OGv-0H-3FD"/>
-                                    <constraint firstItem="FOg-xd-7Td" firstAttribute="top" secondItem="EgE-Y8-pxY" secondAttribute="top" id="hAd-rw-dat"/>
+                                    <constraint firstAttribute="height" constant="72" id="aIO-iT-n0h"/>
                                 </constraints>
-                            </view>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtB-0d-D3n">
+                                <rect key="frame" x="15" y="80" width="290" height="72"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="72" id="cCS-Ln-myf"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="EgE-Y8-pxY" secondAttribute="bottom" id="NhO-fi-MXr"/>
-                            <constraint firstItem="EgE-Y8-pxY" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" id="UNQ-zh-AaC"/>
-                            <constraint firstAttribute="trailing" secondItem="EgE-Y8-pxY" secondAttribute="trailing" id="tUg-38-4IY"/>
-                            <constraint firstItem="EgE-Y8-pxY" firstAttribute="top" secondItem="LG7-cL-aRp" secondAttribute="top" id="wXc-Pq-b44"/>
+                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="15" id="50g-S9-NE2"/>
+                            <constraint firstAttribute="trailing" secondItem="vtB-0d-D3n" secondAttribute="trailing" constant="15" id="Eg8-yR-WOM"/>
+                            <constraint firstItem="vtB-0d-D3n" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="15" id="Nez-6b-jfl"/>
+                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="top" secondItem="LG7-cL-aRp" secondAttribute="top" id="Sy6-5L-FrW"/>
+                            <constraint firstAttribute="trailing" secondItem="3Vm-1Z-umb" secondAttribute="trailing" constant="15" id="chN-Xp-1nK"/>
+                            <constraint firstItem="vtB-0d-D3n" firstAttribute="top" secondItem="3Vm-1Z-umb" secondAttribute="bottom" constant="8" id="nhj-1f-Ats"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="charactersLeftLabel" destination="Fr7-FM-QMp" id="OH5-Lh-iUs"/>
-                        <outlet property="contentHeight" destination="5Uz-ks-2Fk" id="DzB-pa-K53"/>
-                        <outlet property="contentView" destination="FOg-xd-7Td" id="Ns2-b4-9Vl"/>
-                        <outlet property="contentWidth" destination="McZ-ec-I7U" id="LMB-JN-jNx"/>
                         <outlet property="keyboardAccessory" destination="svP-JH-3n8" id="dmq-ze-SYv"/>
                         <outlet property="keyboardAccessoryWidth" destination="YNx-KC-6sd" id="gAG-uy-7ID"/>
-                        <outlet property="promptHeight" destination="3oE-KU-Uof" id="k4w-87-oIK"/>
+                        <outlet property="promptHeight" destination="aIO-iT-n0h" id="4zA-cI-KG7"/>
                         <outlet property="promptLabel" destination="3Vm-1Z-umb" id="qb6-7t-46D"/>
-                        <outlet property="scrollView" destination="EgE-Y8-pxY" id="luQ-dA-w4G"/>
-                        <outlet property="scrollViewBottomSpace" destination="NhO-fi-MXr" id="jhL-jN-eGx"/>
+                        <outlet property="promptTop" destination="Sy6-5L-FrW" id="7EX-kL-eyX"/>
                         <outlet property="textView" destination="vtB-0d-D3n" id="49Z-Lp-eh1"/>
+                        <outlet property="textViewHeight" destination="cCS-Ln-myf" id="044-yT-9Jz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIy-O6-XdD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -384,7 +354,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxL-nA-eon" userLabel="Dismiss Keyboard Button">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxL-nA-eon" userLabel="Hide Keyboard Button">
                             <rect key="frame" x="15" y="15" width="30" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="14" id="C8M-Fj-Vo3"/>
@@ -393,7 +363,7 @@
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="DismissKeyboard.png"/>
                             <connections>
-                                <action selector="cancelEditingText" destination="tDf-fb-udT" eventType="touchUpInside" id="ys3-MF-nN6"/>
+                                <action selector="hideKeyboard" destination="tDf-fb-udT" eventType="touchUpInside" id="OKc-rP-Afg"/>
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" text="20 characters left" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fr7-FM-QMp">

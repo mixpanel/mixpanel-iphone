@@ -40,12 +40,9 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
-@property(nonatomic,retain) IBOutlet UIScrollView *scrollView;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *scrollViewBottomSpace;
-@property(nonatomic,retain) IBOutlet UIView *contentView;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentWidth;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *contentHeight;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptTop;
 @property(nonatomic,retain) IBOutlet UITextView *textView;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *textViewHeight;
 @property(nonatomic,retain) IBOutlet UIView *keyboardAccessory;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
 @property(nonatomic,retain) IBOutlet UILabel *charactersLeftLabel;
@@ -312,7 +309,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     [super viewDidLoad];
     _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3];
     _textView.delegate = self;
-    _textView.layer.borderColor = [UIColor colorWithWhite:1.0 alpha:0.5].CGColor;
+    _textView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.5].CGColor;
     _textView.layer.borderWidth = 1;
     _textView.layer.cornerRadius = 5;
     _textView.inputAccessoryView = _keyboardAccessory;
@@ -332,25 +329,17 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_textView resignFirstResponder];
-    _scrollViewBottomSpace.constant = 0;
 }
 
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     _keyboardAccessoryWidth.constant = self.view.bounds.size.width;
-    _contentWidth.constant = self.view.bounds.size.width;
     if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        _contentHeight.constant = 208;
+        _textViewHeight.constant = 72;
     } else {
-        _contentHeight.constant = 184;
+        _textViewHeight.constant = 48;
     }
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    _scrollView.contentSize = CGSizeMake(_contentWidth.constant, _contentHeight.constant);
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -366,7 +355,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         if (shouldChange) {
             [UIView animateWithDuration:0.3 animations:^{
                 _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ character%@ left", @(255 - newLength), (255 - newLength == 1) ? @"": @"s"];
-                _charactersLeftLabel.alpha = (newLength > 155) ? 1.0 : 0.0;
+                _charactersLeftLabel.alpha = (newLength > 155) ? 1 : 0;
             }];
         }
     }
@@ -376,46 +365,56 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidShow:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardDidShow:(NSNotification*)note
+- (void)keyboardWillShow:(NSNotification*)note
 {
+    CGFloat promptTop, promptAlpha;
+    if (UIDeviceOrientationIsPortrait(([UIApplication sharedApplication].statusBarOrientation))) {
+        promptTop = 0;
+        promptAlpha = 1;
+    } else {
+        promptTop = -(self.promptLabel.bounds.size.height + 8);
+        promptAlpha = 0;
+    }
+    _promptTop.constant = promptTop;
     NSDictionary* info = [note userInfo];
-    CGSize kbSize = [info[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
-    CGFloat height;
-    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        height = kbSize.height;
-    } else {
-        height = kbSize.width;
-    }
-    height -= 44.0;
-    _scrollViewBottomSpace.constant = height;
-    CGRect textViewTop = _textView.frame;
-    textViewTop.size.height = 48.0;
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | curve
                      animations:^{
+                         self.promptLabel.alpha = promptAlpha;
                          [self.view layoutIfNeeded];
-                         [_scrollView scrollRectToVisible:textViewTop animated:YES];
                      }
                      completion:nil];
 }
 
 - (void)keyboardWillHide:(NSNotification *)note
 {
-    _scrollViewBottomSpace.constant = 0;
+    NSLog(@"kbwillhide");
+    _promptTop.constant = 0;
+    NSDictionary* info = [note userInfo];
+    NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState | curve
+                     animations:^{
+                         self.promptLabel.alpha = 1;
+                         [self.view layoutIfNeeded];
+                     }
+                     completion:nil];
 }
 
-- (IBAction)cancelEditingText
+- (IBAction)hideKeyboard
 {
     [_textView resignFirstResponder];
 }
