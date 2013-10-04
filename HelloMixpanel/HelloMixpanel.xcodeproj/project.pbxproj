@@ -327,6 +327,11 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Mixpanel;
+				TargetAttributes = {
+					2808F98C1610EFE3005772B7 = {
+						DevelopmentTeam = E8FVX7QLET;
+					};
+				};
 			};
 			buildConfigurationList = 2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -593,7 +598,7 @@
 		2808F9C41610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Neil Rahilly (JLY92MT8BF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Neil Rahilly (JLY92MT8BF)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
@@ -606,8 +611,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0F04113F-09FD-44B4-ADA7-57E333A0D34C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0F04113F-09FD-44B4-ADA7-57E333A0D34C";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "51E0C174-3F78-4D8E-B5A7-74E961634929";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -615,8 +620,8 @@
 		2808F9C51610EFE4005772B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
@@ -624,6 +629,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -730,8 +736,8 @@
 		28C2136616376D3300696E4F /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
@@ -739,6 +745,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = AppStore;
