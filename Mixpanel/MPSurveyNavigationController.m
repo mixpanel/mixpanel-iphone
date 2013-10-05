@@ -21,7 +21,6 @@
 @property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
-@property(nonatomic) BOOL answeredOneQuestion;
 
 @end
 
@@ -56,43 +55,34 @@
     [self updateButtons:0];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         self.view.alpha = 0.0;
-                         _header.center = CGPointMake(_header.center.x, _header.center.y - _header.bounds.size.height * 5);
-                         _containerView.center = CGPointMake(_containerView.center.x, _containerView.center.y + self.view.bounds.size.height);
-                         _footer.center = CGPointMake(_footer.center.x, _footer.center.y + _footer.bounds.size.height * 5);
-                     }
-                     completion:nil];
+    if (isAppearing) {
+        _header.alpha = 0;
+        _containerView.alpha = 0;
+        _footer.alpha = 0;
+    }
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)endAppearanceTransition
 {
-    [super viewDidAppear:NO];
-    NSTimeInterval duration = 0.75;
+    NSTimeInterval duration = 0.25;
+    _header.alpha = 1;
+    _containerView.alpha = 1;
+    _footer.alpha = 1;
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         NSArray *keyTimes = @[@0.0, @0.4, @0.6, @1.0];
-
-                         // fade in background
-                         CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-                         anim.duration = duration;
-                         anim.keyTimes = keyTimes;
-                         anim.values = @[@0.0, @1.0, @1.0, @1.0];
-                         [self.view.layer addAnimation:anim forKey:nil];
+                         NSArray *keyTimes = @[@0.0, @0.3, @1.0];
 
                          // slide header down
-                         anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
+                         CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
                          anim.duration = duration;
                          anim.keyTimes = keyTimes;
                          CGFloat y1 = _header.bounds.origin.y - _header.bounds.size.height;
                          CGFloat y2 = _header.bounds.origin.y;
-                         anim.values = @[@(y1), @(y1), @(y2), @(y2)];
+                         anim.values = @[@(y1), @(y2), @(y2)];
                          [_header.layer addAnimation:anim forKey:nil];
 
                          // slide question container and footer up
@@ -101,7 +91,7 @@
                          anim.keyTimes = keyTimes;
                          y1 = _containerView.bounds.origin.y + _containerView.bounds.size.height + _footer.bounds.size.height;
                          y2 = _containerView.bounds.origin.y;
-                         anim.values = @[@(y1), @(y1), @(y1), @(y2)];
+                         anim.values = @[@(y1), @(y1), @(y2)];
                          [_containerView.layer addAnimation:anim forKey:nil];
 
                          anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
@@ -109,13 +99,11 @@
                          anim.keyTimes = keyTimes;
                          y1 = _footer.bounds.origin.y + _containerView.bounds.size.height + _footer.bounds.size.height;
                          y2 = _footer.bounds.origin.y;
-                         anim.values = @[@(y1), @(y1), @(y1), @(y2)];
+                         anim.values = @[@(y1), @(y1), @(y2)];
                          [_footer.layer addAnimation:anim forKey:nil];
 
                      }
-                     completion:^(BOOL finished){
-                         self.view.alpha = 1;
-                     }];
+                     completion:nil];
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
@@ -153,15 +141,15 @@
             MPSurveyQuestion *question = _survey.questions[index];
             NSString *storyboardIdentifier = [NSString stringWithFormat:@"%@ViewController", NSStringFromClass([question class])];
             controller = [self.storyboard instantiateViewControllerWithIdentifier:storyboardIdentifier];
-            if (!controller) {
+            if (controller) {
+                controller.delegate = self;
+                controller.question = question;
+                controller.highlightColor = [_backgroundImage mp_averageColor];
+                controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
+                _questionControllers[index] = controller;
+            } else {
                 NSLog(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
-                return;
             }
-            controller.delegate = self;
-            controller.question = question;
-            controller.highlightColor = [_backgroundImage mp_averageColor];
-            controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
-            _questionControllers[index] = controller;
         }
     }
 }

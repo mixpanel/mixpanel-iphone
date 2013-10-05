@@ -30,6 +30,7 @@
 
 @implementation ViewController
 
+/*
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -43,6 +44,23 @@
         [self showSurvey:nil];
     });
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    UIViewController *ctl = [[UIViewController alloc] initWithCoder:nil];
+    ctl.view.frame = self.view.bounds;
+    ctl.view.backgroundColor = [UIColor redColor];
+    [self presentViewController:ctl animated:YES completion:^{
+        NSLog(@"presented view controller");
+    }];
+    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2.0 * NSEC_PER_SEC));
+    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+        [self showSurvey:nil];
+    });
+}
+ */
+
 
 - (void)dealloc
 {

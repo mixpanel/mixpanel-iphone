@@ -74,7 +74,7 @@
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
 @property(nonatomic,retain) NSMutableSet *shownSurveys;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
-@property(nonatomic) BOOL hasSurveyReceivedFirstAnswer;
+@property(nonatomic) BOOL surveyReceivedFirstAnswer;
 
 @end
 
@@ -1045,12 +1045,12 @@ static Mixpanel *sharedInstance = nil;
         controller.survey = survey;
         controller.delegate = self;
         UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         while (rootViewController.presentedViewController) {
             rootViewController = rootViewController.presentedViewController;
         }
+        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         [rootViewController presentViewController:controller animated:YES completion:nil];
-        _hasSurveyReceivedFirstAnswer = NO;
+        _surveyReceivedFirstAnswer = NO;
         [self markSurveyShown:survey];
     });
 }
@@ -1071,10 +1071,10 @@ static Mixpanel *sharedInstance = nil;
 - (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer
 {
     NSDictionary *properties;
-    if (!_hasSurveyReceivedFirstAnswer) {
+    if (!_surveyReceivedFirstAnswer) {
         // only append to responses once, on first answer
         properties = @{@"$answers": answer, @"$responses": @(controller.survey.collectionID)};
-        _hasSurveyReceivedFirstAnswer = YES;
+        _surveyReceivedFirstAnswer = YES;
     } else {
         properties = @{@"$answers": answer};
     }
