@@ -146,8 +146,9 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)setChecked:(BOOL)checked animatedWithCompletion:(void (^)(BOOL))completion
 {
     _checked = checked;
+    NSTimeInterval duration = 0.25;
     if (checked) {
-        [UIView animateWithDuration:0.25
+        [UIView animateWithDuration:duration * 0.5
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
@@ -158,16 +159,15 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                              _customSelectedBackgroundView.alpha = 1.0;
                          }
                          completion:^(BOOL finished) {
-                             NSTimeInterval duration = 0.25;
                              _checkmarkLeadingSpace.constant = 20.0;
-                             [UIView animateWithDuration:duration
+                             [UIView animateWithDuration:duration * 0.5
                                                    delay:0.0
                                                  options:UIViewAnimationOptionCurveEaseOut
                                               animations:^{
                                                   [self.contentView layoutIfNeeded];
                                                   _selectedLabelLeadingSpace.constant = 46.0;
-                                                  [UIView animateWithDuration:duration * 0.5
-                                                                        delay:duration * 0.5
+                                                  [UIView animateWithDuration:duration * 0.5 * 0.5
+                                                                        delay:duration * 0.5 * 0.5
                                                                       options:0
                                                                    animations:^{
                                                                        [self.contentView layoutIfNeeded];
@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     } else {
         _checkmarkLeadingSpace.constant = 15.0;
         _selectedLabelLeadingSpace.constant = 30.0;
-        [UIView animateWithDuration:0.5
+        [UIView animateWithDuration:duration
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
@@ -207,6 +207,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    NSLog(@"called");
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
     CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
     CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;

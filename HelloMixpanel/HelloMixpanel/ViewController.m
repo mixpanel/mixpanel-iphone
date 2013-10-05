@@ -30,38 +30,6 @@
 
 @implementation ViewController
 
-/*
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    // show alert, then survey
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Yo" message:@"Dere" delegate:nil cancelButtonTitle:@"Gaway" otherButtonTitles:@"Fosho", nil];
-    [alert show];
-    UIAlertView *alert2 = [[UIAlertView alloc] initWithTitle:@"Another" message:@"Alert" delegate:nil cancelButtonTitle:@"Boo" otherButtonTitles:@"Ya", nil];
-    [alert2 show];
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2.0 * NSEC_PER_SEC));
-    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
-        [self showSurvey:nil];
-    });
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    UIViewController *ctl = [[UIViewController alloc] initWithCoder:nil];
-    ctl.view.frame = self.view.bounds;
-    ctl.view.backgroundColor = [UIColor redColor];
-    [self presentViewController:ctl animated:YES completion:^{
-        NSLog(@"presented view controller");
-    }];
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2.0 * NSEC_PER_SEC));
-    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
-        [self showSurvey:nil];
-    });
-}
- */
-
-
 - (void)dealloc
 {
     self.genderControl = nil;
@@ -107,7 +75,7 @@
                                      @{
                                          @"id": @3,
                                          @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care?",
+                                         @"prompt": @"If we discontinued our service, how much would you care? Or if this was a really really really long long question?",
                                          @"extra_data": @{
                                                  @"$choices": @[
                                                          @"A lot",

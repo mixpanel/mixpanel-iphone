@@ -57,6 +57,7 @@
 
 - (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
 {
+    [super beginAppearanceTransition:isAppearing animated:animated];
     if (isAppearing) {
         _header.alpha = 0;
         _containerView.alpha = 0;
@@ -66,6 +67,7 @@
 
 - (void)endAppearanceTransition
 {
+    [super endAppearanceTransition];
     NSTimeInterval duration = 0.25;
     _header.alpha = 1;
     _containerView.alpha = 1;
