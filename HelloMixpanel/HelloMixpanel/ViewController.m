@@ -30,6 +30,20 @@
 
 @implementation ViewController
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    // show alert, then survey
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Yo" message:@"Dere" delegate:nil cancelButtonTitle:@"Gaway" otherButtonTitles:@"Fosho", nil];
+    [alert show];
+    UIAlertView *alert2 = [[UIAlertView alloc] initWithTitle:@"Another" message:@"Alert" delegate:nil cancelButtonTitle:@"Boo" otherButtonTitles:@"Ya", nil];
+    [alert2 show];
+    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (2.0 * NSEC_PER_SEC));
+    dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+        [self showSurvey:nil];
+    });
+}
+
 - (void)dealloc
 {
     self.genderControl = nil;

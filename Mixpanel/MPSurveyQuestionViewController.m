@@ -83,7 +83,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)viewDidLayoutSubviews
 {
-    // TODO: is this the correct callback?
     [self resizePromptText];
 }
 
@@ -178,6 +177,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                                               completion:nil];
                          }];
     } else {
+        _checkmarkLeadingSpace.constant = 15.0;
+        _selectedLabelLeadingSpace.constant = 30.0;
         [UIView animateWithDuration:0.5
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseOut
@@ -185,10 +186,9 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                              _checkmark.alpha = 0.0;
                              _selectedLabel.alpha = 0.0;
                              _customSelectedBackgroundView.alpha = 0.0;
-                             _checkmarkLeadingSpace.constant = 15.0;
-                             _selectedLabelLeadingSpace.constant = 30.0;
                              _label.alpha = 1.0;
                              _customBackgroundView.alpha = 1.0;
+                             [self.contentView layoutIfNeeded];
                          }
                          completion:completion];
     }
@@ -375,6 +375,9 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)keyboardWillShow:(NSNotification*)note
 {
+    NSDictionary* info = [note userInfo];
+    NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
     CGFloat promptTop, promptAlpha;
     if (UIDeviceOrientationIsPortrait(([UIApplication sharedApplication].statusBarOrientation))) {
         promptTop = 0;
@@ -383,24 +386,18 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         promptTop = -(self.promptLabel.bounds.size.height + 8);
         promptAlpha = 0;
     }
-    _promptTop.constant = promptTop;
-    NSDictionary* info = [note userInfo];
-    NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | curve
                      animations:^{
+                         _promptTop.constant = promptTop;
                          self.promptLabel.alpha = promptAlpha;
-                         [self.view layoutIfNeeded];
                      }
                      completion:nil];
 }
 
 - (void)keyboardWillHide:(NSNotification *)note
 {
-    NSLog(@"kbwillhide");
-    _promptTop.constant = 0;
     NSDictionary* info = [note userInfo];
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
@@ -408,8 +405,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | curve
                      animations:^{
+                         _promptTop.constant = 0;
                          self.promptLabel.alpha = 1;
-                         [self.view layoutIfNeeded];
                      }
                      completion:nil];
 }

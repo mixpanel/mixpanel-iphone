@@ -1044,10 +1044,13 @@ static Mixpanel *sharedInstance = nil;
         MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
         controller.survey = survey;
         controller.delegate = self;
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        controller.backgroundImage = [window.rootViewController.view mp_snapshotImage];
+        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+        while (rootViewController.presentedViewController) {
+            rootViewController = rootViewController.presentedViewController;
+        }
+        [rootViewController presentViewController:controller animated:YES completion:nil];
         _hasSurveyReceivedFirstAnswer = NO;
-        [window.rootViewController presentViewController:controller animated:NO completion:nil];
         [self markSurveyShown:survey];
     });
 }
@@ -1062,10 +1065,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller
 {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    if (window.rootViewController.presentedViewController == controller) {
-        [window.rootViewController dismissViewControllerAnimated:NO completion:nil];
-    }
+    [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer
