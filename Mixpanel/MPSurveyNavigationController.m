@@ -202,8 +202,8 @@
                                     CAAnimationGroup *group;
                                     NSArray *keyTimes;
 
-                                    CGFloat slideDistance = _containerView.bounds.size.width * 1.3;
-                                    CGFloat dropDistance = _containerView.bounds.size.height / 4.0;
+                                    CGFloat slideDistance = _containerView.bounds.size.width * 1.3f;
+                                    CGFloat dropDistance = _containerView.bounds.size.height / 4.0f;
 
                                     if (forward) {
 

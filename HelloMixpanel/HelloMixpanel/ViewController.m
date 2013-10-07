@@ -40,18 +40,19 @@
 - (IBAction)trackEvent:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel track:@"Player Create" properties:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                 [self.genderControl titleForSegmentAtIndex:self.genderControl.selectedSegmentIndex], @"gender",
-                                                 [self.weaponControl titleForSegmentAtIndex:self.weaponControl.selectedSegmentIndex], @"weapon",
-                                                 nil]];
+    NSString *gender = [self.genderControl titleForSegmentAtIndex:(NSUInteger)self.genderControl.selectedSegmentIndex];
+    NSString *weapon = [self.weaponControl titleForSegmentAtIndex:(NSUInteger)self.weaponControl.selectedSegmentIndex];
+    [mixpanel track:@"Player Create" properties:@{@"gender": gender, @"weapon": weapon}];
 }
 
 - (IBAction)setPeopleProperties:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    NSString *gender = [self.genderControl titleForSegmentAtIndex:(NSUInteger)self.genderControl.selectedSegmentIndex];
+    NSString *weapon = [self.weaponControl titleForSegmentAtIndex:(NSUInteger)self.weaponControl.selectedSegmentIndex];
     [mixpanel.people set:@{
-                           @"gender": [self.genderControl titleForSegmentAtIndex:self.genderControl.selectedSegmentIndex],
-                           @"weapon": [self.weaponControl titleForSegmentAtIndex:self.weaponControl.selectedSegmentIndex],
+                           @"gender": gender,
+                           @"weapon": weapon,
                            @"$first_name": @"Demo",
                            @"$last_name": @"User",
                            @"$email": @"user@example.com"
