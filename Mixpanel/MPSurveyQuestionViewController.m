@@ -319,7 +319,13 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self registerForKeyboardNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
     if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
         [_textView becomeFirstResponder];
     }
@@ -328,8 +334,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_textView resignFirstResponder];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillLayoutSubviews
@@ -363,17 +369,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     return shouldChange;
 }
 
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
 - (void)keyboardWillShow:(NSNotification*)note
 {
     NSDictionary* info = [note userInfo];
@@ -387,11 +382,11 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         promptTop = -(self.promptLabel.bounds.size.height + 8);
         promptAlpha = 0;
     }
+    _promptTop.constant = promptTop;
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | curve
                      animations:^{
-                         _promptTop.constant = promptTop;
                          self.promptLabel.alpha = promptAlpha;
                      }
                      completion:nil];
@@ -402,11 +397,11 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSDictionary* info = [note userInfo];
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
+    _promptTop.constant = 0;
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | curve
                      animations:^{
-                         _promptTop.constant = 0;
                          self.promptLabel.alpha = 1;
                      }
                      completion:nil];
