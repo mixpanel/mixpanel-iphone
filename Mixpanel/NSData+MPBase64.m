@@ -107,9 +107,9 @@ void *MP_NewBase64Decode(
 		//
 		// Store the 6 bits from each of the 4 characters as 3 bytes
 		//
-		outputBuffer[j] = (accumulated[0] << 2) | (accumulated[1] >> 4);
-		outputBuffer[j + 1] = (accumulated[1] << 4) | (accumulated[2] >> 2);
-		outputBuffer[j + 2] = (accumulated[2] << 6) | accumulated[3];
+		outputBuffer[j] = (unsigned char)(accumulated[0] << 2) | (accumulated[1] >> 4);
+		outputBuffer[j + 1] = (unsigned char)(accumulated[1] << 4) | (accumulated[2] >> 2);
+		outputBuffer[j + 2] = (unsigned char)(accumulated[2] << 6) | accumulated[3];
 		j += accumulateIndex - 1;
 	}
 	
@@ -193,12 +193,12 @@ char *MP_NewBase64Encode(
 			//
 			// Inner loop: turn 48 bytes into 64 base64 characters
 			//
-			outputBuffer[j++] = base64EncodeLookup[(inputBuffer[i] & 0xFC) >> 2];
-			outputBuffer[j++] = base64EncodeLookup[((inputBuffer[i] & 0x03) << 4)
+			outputBuffer[j++] = (char)base64EncodeLookup[(inputBuffer[i] & 0xFC) >> 2];
+			outputBuffer[j++] = (char)base64EncodeLookup[((inputBuffer[i] & 0x03) << 4)
 				| ((inputBuffer[i + 1] & 0xF0) >> 4)];
-			outputBuffer[j++] = base64EncodeLookup[((inputBuffer[i + 1] & 0x0F) << 2)
+			outputBuffer[j++] = (char)base64EncodeLookup[((inputBuffer[i + 1] & 0x0F) << 2)
 				| ((inputBuffer[i + 2] & 0xC0) >> 6)];
-			outputBuffer[j++] = base64EncodeLookup[inputBuffer[i + 2] & 0x3F];
+			outputBuffer[j++] = (char)base64EncodeLookup[inputBuffer[i + 2] & 0x3F];
 		}
 		
 		if (lineEnd == length)
@@ -219,10 +219,10 @@ char *MP_NewBase64Encode(
 		//
 		// Handle the single '=' case
 		//
-		outputBuffer[j++] = base64EncodeLookup[(inputBuffer[i] & 0xFC) >> 2];
-		outputBuffer[j++] = base64EncodeLookup[((inputBuffer[i] & 0x03) << 4)
+		outputBuffer[j++] = (char)base64EncodeLookup[(inputBuffer[i] & 0xFC) >> 2];
+		outputBuffer[j++] = (char)base64EncodeLookup[((inputBuffer[i] & 0x03) << 4)
 			| ((inputBuffer[i + 1] & 0xF0) >> 4)];
-		outputBuffer[j++] = base64EncodeLookup[(inputBuffer[i + 1] & 0x0F) << 2];
+		outputBuffer[j++] = (char)base64EncodeLookup[(inputBuffer[i + 1] & 0x0F) << 2];
 		outputBuffer[j++] =	'=';
 	}
 	else if (i < length)
@@ -230,8 +230,8 @@ char *MP_NewBase64Encode(
 		//
 		// Handle the double '=' case
 		//
-		outputBuffer[j++] = base64EncodeLookup[(inputBuffer[i] & 0xFC) >> 2];
-		outputBuffer[j++] = base64EncodeLookup[(inputBuffer[i] & 0x03) << 4];
+		outputBuffer[j++] = (char)base64EncodeLookup[(inputBuffer[i] & 0xFC) >> 2];
+		outputBuffer[j++] = (char)base64EncodeLookup[(inputBuffer[i] & 0x03) << 4];
 		outputBuffer[j++] = '=';
 		outputBuffer[j++] = '=';
 	}

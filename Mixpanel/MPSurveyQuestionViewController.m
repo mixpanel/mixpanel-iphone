@@ -207,8 +207,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
     fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
     // add 20 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 44.0 / _tableContainer.bounds.size.height;
-    fadeLayer.locations = @[@0.0, @(0.0 + offset), @(1.0 - offset), @1.0];
+    CGFloat offset = 44.0f / _tableContainer.bounds.size.height;
+    fadeLayer.locations = @[@0, @(0.0f + offset), @(1.0f - offset), @1];
     fadeLayer.bounds = _tableContainer.bounds;
     fadeLayer.anchorPoint = CGPointZero;
     _tableContainer.layer.mask = fadeLayer;
@@ -240,13 +240,13 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.question.choices count];
+    return (NSInteger)[self.question.choices count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
-    NSString *text = [self labelForValue:[self.question.choices objectAtIndex:indexPath.row]];
+    NSString *text = [self labelForValue:[self.question.choices objectAtIndex:(NSUInteger)indexPath.row]];
     cell.label.text = text;
     cell.selectedLabel.text = text;
     UIColor *strokeColor = [UIColor colorWithWhite:1.0 alpha:0.5];
@@ -276,7 +276,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (!cell.isChecked) {
         [cell setChecked:YES animatedWithCompletion:^(BOOL finished){
-            id value = [self.question.choices objectAtIndex:indexPath.row];
+            id value = [self.question.choices objectAtIndex:(NSUInteger)indexPath.row];
             [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
         }];
     }

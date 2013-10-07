@@ -37,8 +37,6 @@
 		289B497717D68DE50035439B /* Checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289B497517D68DE50035439B /* Checkmark@2x.png */; };
 		289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497917D913D50035439B /* NSData+MPBase64.m */; };
 		289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497917D913D50035439B /* NSData+MPBase64.m */; };
-		289B497E17D913EA0035439B /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497D17D913EA0035439B /* ODIN.m */; };
-		289B497F17D913EA0035439B /* ODIN.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B497D17D913EA0035439B /* ODIN.m */; };
 		28C6C7D917FE2A5A00F07F70 /* DismissKeyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C6C7D717FE2A5A00F07F70 /* DismissKeyboard.png */; };
 		28C6C7DA17FE2A5A00F07F70 /* DismissKeyboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C6C7D817FE2A5A00F07F70 /* DismissKeyboard@2x.png */; };
 		28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E666161530BF00F78E49 /* Icon@2x.png */; };
@@ -107,8 +105,6 @@
 		289B497517D68DE50035439B /* Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Checkmark@2x.png"; sourceTree = "<group>"; };
 		289B497817D913D40035439B /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
 		289B497917D913D50035439B /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
-		289B497C17D913EA0035439B /* ODIN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODIN.h; sourceTree = "<group>"; };
-		289B497D17D913EA0035439B /* ODIN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODIN.m; sourceTree = "<group>"; };
 		28C6C7D717FE2A5A00F07F70 /* DismissKeyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DismissKeyboard.png; sourceTree = "<group>"; };
 		28C6C7D817FE2A5A00F07F70 /* DismissKeyboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DismissKeyboard@2x.png"; sourceTree = "<group>"; };
 		28C7E666161530BF00F78E49 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
@@ -257,8 +253,6 @@
 				2869040017C7EC8100DCA073 /* MPSurvey.storyboard */,
 				289B497817D913D40035439B /* NSData+MPBase64.h */,
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
-				289B497C17D913EA0035439B /* ODIN.h */,
-				289B497D17D913EA0035439B /* ODIN.m */,
 				28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */,
 				28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
@@ -420,7 +414,6 @@
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,
 				289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */,
-				289B497E17D913EA0035439B /* ODIN.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +423,6 @@
 			files = (
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
-				289B497F17D913EA0035439B /* ODIN.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,6 +590,8 @@
 		2808F9C41610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Neil Rahilly (JLY92MT8BF)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -607,6 +601,10 @@
 					"MIXPANEL_LOG=1",
 					"MIXPANEL_DEBUG=1",
 				);
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "";
@@ -620,11 +618,17 @@
 		2808F9C51610EFE4005772B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "";
@@ -736,11 +740,17 @@
 		28C2136616376D3300696E4F /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "";
