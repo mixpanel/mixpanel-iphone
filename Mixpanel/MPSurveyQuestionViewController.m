@@ -75,14 +75,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewWillLayoutSubviews
 {
     if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        _promptHeight.constant = 72.0;
+        _promptHeight.constant = 72;
     } else {
-        _promptHeight.constant = 48.0;
+        _promptHeight.constant = 48;
     }
-}
-
-- (void)viewDidLayoutSubviews
-{
     [self resizePromptText];
 }
 
@@ -206,8 +202,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)viewDidLayoutSubviews
 {
-    [super viewDidLayoutSubviews];
-    NSLog(@"called");
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
     CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
     CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
@@ -220,26 +214,26 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     _tableContainer.layer.mask = fadeLayer;
 }
 
-- (NSString *)labelForValue:(id)val
+- (NSString *)labelForValue:(id)value
 {
     NSString *label;
-    if ([val isKindOfClass:[NSString class]]) {
-        label = val;
-    } else if ([val isKindOfClass:[NSNumber class]]) {
-        int i = [val intValue];
-        if (CFNumberGetType((CFNumberRef)val) == kCFNumberCharType && (i == 0 || i == 1)) {
+    if ([value isKindOfClass:[NSString class]]) {
+        label = value;
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        int i = [value intValue];
+        if (CFNumberGetType((CFNumberRef)value) == kCFNumberCharType && (i == 0 || i == 1)) {
             label = i ? @"Yes" : @"No";
         } else {
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
             [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-            label = [formatter stringFromNumber:val];
+            label = [formatter stringFromNumber:value];
             [formatter release];
         }
-    } else if ([val isKindOfClass:[NSNull class]]) {
+    } else if ([value isKindOfClass:[NSNull class]]) {
         label = @"None";
     } else {
-        NSLog(@"%@ unexpected value for survey choice: %@", self, val);
-        label = [val description];
+        NSLog(@"%@ unexpected value for survey choice: %@", self, value);
+        label = [value description];
     }
     return label;
 }
@@ -319,13 +313,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
+    [self registerForKeyboardNotifications];
     if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
         [_textView becomeFirstResponder];
     }
@@ -369,7 +357,18 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     return shouldChange;
 }
 
-- (void)keyboardWillShow:(NSNotification*)note
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)keyboardWillShow:(NSNotification *)note
 {
     NSDictionary* info = [note userInfo];
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -385,9 +384,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     _promptTop.constant = promptTop;
     [UIView animateWithDuration:duration
                           delay:0
-                        options:UIViewAnimationOptionBeginFromCurrentState | curve
+                        options:curve | UIViewKeyframeAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.promptLabel.alpha = promptAlpha;
+                         [self.view layoutIfNeeded];
                      }
                      completion:nil];
 }
@@ -400,9 +400,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     _promptTop.constant = 0;
     [UIView animateWithDuration:duration
                           delay:0
-                        options:UIViewAnimationOptionBeginFromCurrentState | curve
+                        options:curve | UIViewKeyframeAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.promptLabel.alpha = 1;
+                         [self.view layoutIfNeeded];
                      }
                      completion:nil];
 }
