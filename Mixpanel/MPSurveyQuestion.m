@@ -66,18 +66,24 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt
 {
-    if (!prompt || prompt.length == 0) {
-        NSLog(@"invalid question prompt: %@", prompt);
-        return self;
-    }
-    if (!type || (![type isEqualToString:MPSurveyQuestionTypeMultipleChoice] && ![type isEqualToString:MPSurveyQuestionTypeText])) {
-        NSLog(@"invalid question type: %@", type);
-        return self;
-    }
     if (self = [super init]) {
+        BOOL valid = NO;
         _ID = ID;
-        self.type = type;
-        self.prompt = prompt;
+        if ([type isEqualToString:MPSurveyQuestionTypeMultipleChoice] || [type isEqualToString:MPSurveyQuestionTypeText]) {
+            self.type = type;
+            if (prompt && [prompt length] > 0) {
+                self.prompt = prompt;
+                valid = YES;
+            } else {
+                NSLog(@"invalid question type: %@", type);
+            }
+        } else {
+            NSLog(@"invalid question type: %@", type);
+        }
+        if (!valid) {
+            [self release];
+            self = nil;
+        }
     }
     return self;
 }
