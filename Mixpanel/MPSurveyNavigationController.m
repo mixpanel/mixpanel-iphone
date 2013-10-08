@@ -108,11 +108,6 @@
                      completion:nil];
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationPortrait;
-}
-
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
