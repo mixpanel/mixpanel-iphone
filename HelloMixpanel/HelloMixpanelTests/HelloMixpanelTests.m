@@ -19,7 +19,6 @@
 #import "HelloMixpanelTests.h"
 
 #import "Mixpanel.h"
-#import "MPCJSONSerializer.h"
 
 #define TEST_TOKEN @"abc123"
 
