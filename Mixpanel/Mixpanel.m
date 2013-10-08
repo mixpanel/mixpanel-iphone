@@ -1010,28 +1010,33 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
             return;
         }
-        MPSurvey *survey = nil;
-        for (NSDictionary *dict in object[@"surveys"]) {
-            MPSurvey *potentialSurvey = [MPSurvey surveyWithJSONObject:dict];
-            if (potentialSurvey) {
+        NSArray *surveys = object[@"surveys"];
+        if (!surveys || ![surveys isKindOfClass:[NSArray class]]) {
+            MixpanelDebug(@"%@ survey check response format error: %@", self, object);
+            return;
+        }
+        MPSurvey *validSurvey = nil;
+        for (NSDictionary *obj in surveys) {
+            MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
+            if (survey) {
                 NSSet *filtered = [_shownSurveys objectsPassingTest:^BOOL(NSNumber *collectionID, BOOL *stop){
-                    return [collectionID isEqualToNumber:@(potentialSurvey.collectionID)];
+                    return [collectionID isEqualToNumber:@(survey.collectionID)];
                 }];
                 if ([filtered count] > 0) {
-                    MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, potentialSurvey);
+                    MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
                 } else {
-                    survey = potentialSurvey;
+                    validSurvey = survey;
                     break;
                 }
             }
         }
-        if (survey) {
-            MixpanelDebug(@"%@ survey check found available survey: %@", self, survey);
+        if (validSurvey) {
+            MixpanelDebug(@"%@ survey check found available survey: %@", self, validSurvey);
         } else {
             MixpanelDebug(@"%@ survey check found no survey", self);
         }
         if (completion) {
-            completion(survey);
+            completion(validSurvey);
         }
     });
 }

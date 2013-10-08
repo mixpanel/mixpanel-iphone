@@ -53,14 +53,16 @@
 
 - (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
-    if (questions != nil && [questions count] > 0) {
-        if (self = [super init]) {
-            _ID = ID;
-            _collectionID = collectionID;
+    if (self = [super init]) {
+        _ID = ID;
+        _collectionID = collectionID;
+        if (questions && [questions count] > 0) {
             self.questions = questions;
+        } else {
+            NSLog(@"survey has no questions: %@", questions);
+            [self release];
+            self = nil;
         }
-    } else {
-        NSLog(@"survey has no questions: %@", questions);
     }
     return self;
 }

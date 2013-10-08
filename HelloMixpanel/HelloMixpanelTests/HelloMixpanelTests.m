@@ -19,6 +19,8 @@
 #import "HelloMixpanelTests.h"
 
 #import "Mixpanel.h"
+#import "MPSurvey.h"
+#import "MPSurveyQuestion.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -646,6 +648,124 @@
     STAssertEqualObjects(r[@"$set"][@"i"], @(5), nil);
     r = [self.mixpanel.peopleQueue lastObject];
     STAssertEqualObjects(r[@"$set"][@"i"], @(504), nil);
+}
+
+- (void)testParseSurvey
+{
+    // valid
+    NSDictionary *o = @{@"id": @3,
+                        @"collections": @[@{@"id": @9}],
+                        @"questions": @[@{
+                                            @"id": @12,
+                                            @"type": @"text",
+                                            @"prompt": @"Anything else?",
+                                            @"extra_data": @{}}]};
+    STAssertNotNil([MPSurvey surveyWithJSONObject:o], nil);
+
+    // nil
+    STAssertNil([MPSurvey surveyWithJSONObject:nil], nil);
+
+    // empty
+    STAssertNil([MPSurvey surveyWithJSONObject:@{}], nil);
+
+    // garbage keys
+    STAssertNil([MPSurvey surveyWithJSONObject:@{@"blah": @"foo"}], nil);
+
+    NSMutableDictionary *m;
+
+    // invalid id
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"id"] = @NO;
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // invalid collections
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"collections"] = @NO;
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // empty collections
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"collections"] = @[];
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // invalid collections item
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"collections"] = @[@NO];
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // collections item with no id
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"collections"] = @[@{@"bo": @"knows"}];
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // no questions
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"questions"] = @[];
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // 1 invalid question
+    NSArray *q = @[@{
+                       @"id": @NO,
+                       @"type": @"text",
+                       @"prompt": @"Anything else?",
+                       @"extra_data": @{}}];
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"questions"] = q;
+    STAssertNil([MPSurvey surveyWithJSONObject:m], nil);
+
+    // 1 invalid question, 1 good question
+    q = @[@{
+              @"id": @NO,
+              @"type": @"text",
+              @"prompt": @"Anything else?",
+              @"extra_data": @{}},
+          @{
+              @"id": @3,
+              @"type": @"text",
+              @"prompt": @"Anything else?",
+              @"extra_data": @{}}];
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"questions"] = q;
+    MPSurvey *s = [MPSurvey surveyWithJSONObject:m];
+    STAssertNotNil(s, nil);
+    STAssertEquals([s.questions count], (NSUInteger)1, nil);
+}
+
+- (void)testParseSurveyQuestion
+{
+    // valid
+    NSDictionary *o = @{
+                        @"id": @12,
+                        @"type": @"text",
+                        @"prompt": @"Anything else?",
+                        @"extra_data": @{}};
+    STAssertNotNil([MPSurveyQuestion questionWithJSONObject:o], nil);
+
+    // nil
+    STAssertNil([MPSurveyQuestion questionWithJSONObject:nil], nil);
+
+    // empty
+    STAssertNil([MPSurveyQuestion questionWithJSONObject:@{}], nil);
+
+    // garbage keys
+    STAssertNil([MPSurveyQuestion questionWithJSONObject:@{@"blah": @"foo"}], nil);
+
+    NSMutableDictionary *m;
+
+    // invalid id
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"id"] = @NO;
+    STAssertNil([MPSurveyQuestion questionWithJSONObject:m], nil);
+
+    // invalid question type
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"type"] = @"not_supported";
+    STAssertNil([MPSurveyQuestion questionWithJSONObject:m], nil);
+
+    // empty prompt
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"prompt"] = @"";
+    STAssertNil([MPSurveyQuestion questionWithJSONObject:m], nil);
 }
 
 @end
