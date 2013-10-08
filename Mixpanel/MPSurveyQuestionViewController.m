@@ -292,7 +292,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) ? 0 : 0.1; // for some reason, 0 doesn't work in ios7
+    return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) ? 0.0f : 0.1f; // for some reason, 0 doesn't work in ios7
 }
 
 @end
@@ -345,7 +345,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         shouldChange = NO;
         [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
     } else {
-        NSInteger newLength = [textView.text length] + ([text length] - range.length);
+        NSUInteger newLength = [textView.text length] + ([text length] - range.length);
         shouldChange = newLength <= 255;
         if (shouldChange) {
             [UIView animateWithDuration:0.3 animations:^{
