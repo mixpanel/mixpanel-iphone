@@ -47,11 +47,8 @@
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
 
-    // Name a user in Mixpanel Streams
-    self.mixpanel.nameTag = @"Walter Sobchak";
-
     // Set some super properties, which will be added to every tracked event
-    [self.mixpanel registerSuperProperties:[NSDictionary dictionaryWithObjectsAndKeys:@"Premium", @"Plan", nil]];
+    [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
     
     self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
     self.window.rootViewController = self.viewController;
@@ -120,7 +117,7 @@
 
         // track some events and set some people properties
         Mixpanel *mixpanel = [Mixpanel sharedInstance];
-        [mixpanel registerSuperProperties:[NSDictionary dictionaryWithObject:@"Hi!" forKey:@"Background Super Property"]];
+        [mixpanel registerSuperProperties:@{@"Background Super Property": @"Hi!"}];
         [mixpanel track:@"Background Event"];
         [mixpanel.people set:@"Background Property" to:[NSDate date]];
 

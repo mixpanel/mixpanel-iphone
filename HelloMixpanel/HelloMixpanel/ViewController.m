@@ -21,10 +21,11 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
+@property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
 
 @end
 
@@ -34,6 +35,7 @@
 {
     self.genderControl = nil;
     self.weaponControl = nil;
+    self.fakeBackground = nil;
     [super dealloc];
 }
 
@@ -50,13 +52,7 @@
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     NSString *gender = [self.genderControl titleForSegmentAtIndex:(NSUInteger)self.genderControl.selectedSegmentIndex];
     NSString *weapon = [self.weaponControl titleForSegmentAtIndex:(NSUInteger)self.weaponControl.selectedSegmentIndex];
-    [mixpanel.people set:@{
-                           @"gender": gender,
-                           @"weapon": weapon,
-                           @"$first_name": @"Demo",
-                           @"$last_name": @"User",
-                           @"$email": @"user@example.com"
-                           }];
+    [mixpanel.people set:@{@"gender": gender, @"weapon": weapon}];
     // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
     // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
     // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
@@ -76,42 +72,15 @@
                                      @{
                                          @"id": @3,
                                          @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care? Or if this was a really really really long long question?",
-                                         @"extra_data": @{
-                                                 @"$choices": @[
-                                                         @"A lot",
-                                                         @"A little",
-                                                         @"Not at all",
-                                                         @"I'd prefer you didn't exist... and I like really, really long answers",
-                                                         [NSNull null]
-                                                         ]
-                                                 }
-                                         },
-                                     @{
-                                         @"id": @7,
-                                         @"type": @"text",
-                                         @"prompt": @"Anything else to add?",
-                                         @"extra_data": @{}
-                                         },
-                                     @{
-                                         @"id": @3,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care? A lot or a little?",
+                                         @"prompt": @"If we discontinued our service, how much would you care?",
                                          @"extra_data": @{
                                                  @"$choices": @[
                                                          @"A lot",
                                                          @"A little",
                                                          @"Not at all",
                                                          @"I'd prefer you didn't exist",
-                                                         [NSNull null]
                                                          ]
                                                  }
-                                         },
-                                     @{
-                                         @"id": @7,
-                                         @"type": @"text",
-                                         @"prompt": @"Another text question djklsfjjs kladfj lsadkfj kldsajf kladsjf klasjf dklasj dfklajsd fklajs dfklj askldfj aklsdfj aslkjf ;adkslfj lasjflkasjflk;ajsflk ajsfdlk ajsdfklj asdlkfj adsklfj askldfj aklsdfj adklsfj adklsfj kladsj flasdj f",
-                                         @"extra_data": @{}
                                          },
                                      @{
                                          @"id": @4,
@@ -120,29 +89,18 @@
                                          @"extra_data": @{
                                                  @"$choices": @[
                                                          @1,
-                                                         @1.5,
+                                                         @10,
                                                          @100,
                                                          @1000,
                                                          @10000,
-                                                         @(-2.0),
-                                                         @33333333333.33,
-                                                         @9,
-                                                         @2314,
-                                                         @2
                                                          ]
                                                  }
                                          },
                                      @{
-                                         @"id": @6,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"Is this question too long or just long enough to be effective in getting to the exact point we were trying to get across when engaging you in as efficient a manner as possible?",
-                                         @"property": @"Promoter",
-                                         @"extra_data": @{
-                                                 @"$choices": @[
-                                                         @YES,
-                                                         @NO
-                                                         ]
-                                                 }
+                                         @"id": @7,
+                                         @"type": @"text",
+                                         @"prompt": @"Anything else to add?",
+                                         @"extra_data": @{}
                                          }
                                      ]
                              };
@@ -151,17 +109,31 @@
     [mixpanel showSurvey:survey];
 }
 
-- (IBAction)changeBackgroundColor:(id)sender
+- (IBAction)changeBackground
 {
-    NSArray *colors = @[
-                        [UIColor redColor],
-                        [UIColor greenColor],
-                        [UIColor blueColor],
-                        [UIColor yellowColor],
-                        [UIColor whiteColor],
-                        [UIColor blackColor]
-                        ];
-    self.view.backgroundColor = colors[arc4random() % [colors count]];
+    if (_fakeBackground.image) {
+        _fakeBackground.image = nil;
+        _fakeBackground.hidden = YES;
+    } else {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePickerController.delegate = self;
+        [self presentViewController:imagePickerController animated:YES completion:nil];
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    _fakeBackground.image = image;
+    _fakeBackground.hidden = NO;
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 @end
