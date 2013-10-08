@@ -20,10 +20,10 @@
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrk-0y-OIL">
-                                        <rect key="frame" x="5" y="0.0" width="44" height="44"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrk-0y-OIL" userLabel="Previous Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="54" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="44" id="FM8-ST-ULZ"/>
+                                            <constraint firstAttribute="width" constant="54" id="FM8-ST-ULZ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="ArrowLeft.png">
@@ -37,10 +37,10 @@
                                             <action selector="showPreviousQuestion" destination="RIP-po-dgx" eventType="touchUpInside" id="G0J-o8-YdM"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZ0-zi-Urm">
-                                        <rect key="frame" x="271" y="0.0" width="44" height="44"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZ0-zi-Urm" userLabel="Next Button">
+                                        <rect key="frame" x="266" y="0.0" width="54" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="44" id="YhL-l3-mCL"/>
+                                            <constraint firstAttribute="width" constant="54" id="YhL-l3-mCL"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" image="ArrowRight.png">
@@ -66,11 +66,11 @@
                                     <constraint firstAttribute="height" constant="44" id="3O0-gA-8wR"/>
                                     <constraint firstAttribute="bottom" secondItem="Rrk-0y-OIL" secondAttribute="bottom" id="Ift-pK-pBV"/>
                                     <constraint firstItem="JbJ-sK-oCv" firstAttribute="top" secondItem="vot-vr-03f" secondAttribute="top" id="QQ9-Vf-0Ka"/>
-                                    <constraint firstItem="Rrk-0y-OIL" firstAttribute="leading" secondItem="vot-vr-03f" secondAttribute="leading" constant="5" id="UGr-so-KLP"/>
+                                    <constraint firstItem="Rrk-0y-OIL" firstAttribute="leading" secondItem="vot-vr-03f" secondAttribute="leading" id="UGr-so-KLP"/>
                                     <constraint firstAttribute="bottom" secondItem="kZ0-zi-Urm" secondAttribute="bottom" id="UcZ-G5-onf"/>
                                     <constraint firstItem="kZ0-zi-Urm" firstAttribute="top" secondItem="vot-vr-03f" secondAttribute="top" id="Yoq-fy-pIT"/>
                                     <constraint firstItem="JbJ-sK-oCv" firstAttribute="leading" secondItem="vot-vr-03f" secondAttribute="leading" id="fVv-zJ-mxX"/>
-                                    <constraint firstAttribute="trailing" secondItem="kZ0-zi-Urm" secondAttribute="trailing" constant="5" id="fi2-DQ-qJg"/>
+                                    <constraint firstAttribute="trailing" secondItem="kZ0-zi-Urm" secondAttribute="trailing" id="fi2-DQ-qJg"/>
                                     <constraint firstAttribute="trailing" secondItem="JbJ-sK-oCv" secondAttribute="trailing" id="vg2-RV-abC"/>
                                     <constraint firstAttribute="bottom" secondItem="JbJ-sK-oCv" secondAttribute="bottom" id="vgw-Y6-edb"/>
                                     <constraint firstItem="Rrk-0y-OIL" firstAttribute="top" secondItem="vot-vr-03f" secondAttribute="top" id="vwN-Ft-BC8"/>
@@ -85,9 +85,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vP-xd-w4j">
-                                        <rect key="frame" x="267" y="0.0" width="48" height="44"/>
+                                        <rect key="frame" x="262" y="0.0" width="58" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="48" id="JL9-Xf-Tqm"/>
+                                            <constraint firstAttribute="width" constant="58" id="JL9-Xf-Tqm"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <state key="normal" title="Exit">
@@ -95,7 +95,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="dismiss" destination="RIP-po-dgx" eventType="touchUpInside" id="o74-Ja-Cor"/>
@@ -112,7 +112,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="tHb-kq-3y4" secondAttribute="bottom" constant="17" id="6X7-Fe-smU"/>
-                                    <constraint firstAttribute="trailing" secondItem="8vP-xd-w4j" secondAttribute="trailing" constant="5" id="BOS-xG-STD"/>
+                                    <constraint firstAttribute="trailing" secondItem="8vP-xd-w4j" secondAttribute="trailing" id="BOS-xG-STD"/>
                                     <constraint firstItem="8vP-xd-w4j" firstAttribute="top" secondItem="0dH-sL-neW" secondAttribute="top" id="CeE-TT-bZQ"/>
                                     <constraint firstAttribute="bottom" secondItem="8vP-xd-w4j" secondAttribute="bottom" id="Q7c-AG-Vej"/>
                                     <constraint firstItem="tHb-kq-3y4" firstAttribute="top" secondItem="0dH-sL-neW" secondAttribute="top" constant="17" id="Rcf-7P-5eo"/>
@@ -355,10 +355,10 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BxL-nA-eon" userLabel="Hide Keyboard Button">
-                            <rect key="frame" x="15" y="15" width="30" height="14"/>
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="14" id="C8M-Fj-Vo3"/>
-                                <constraint firstAttribute="width" constant="30" id="RKz-UL-uMk"/>
+                                <constraint firstAttribute="height" constant="44" id="C8M-Fj-Vo3"/>
+                                <constraint firstAttribute="width" constant="60" id="RKz-UL-uMk"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="DismissKeyboard.png"/>
@@ -376,7 +376,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="86i-m2-Ixr"/>
-                        <constraint firstItem="BxL-nA-eon" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" constant="15" id="ApZ-84-3ZM"/>
+                        <constraint firstItem="BxL-nA-eon" firstAttribute="leading" secondItem="svP-JH-3n8" secondAttribute="leading" id="ApZ-84-3ZM"/>
                         <constraint firstAttribute="centerX" secondItem="Fr7-FM-QMp" secondAttribute="centerX" id="BJH-PO-e04"/>
                         <constraint firstAttribute="width" constant="320" id="YNx-KC-6sd"/>
                         <constraint firstAttribute="centerY" secondItem="Fr7-FM-QMp" secondAttribute="centerY" id="eH8-LX-r20"/>
