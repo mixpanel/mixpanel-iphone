@@ -31,7 +31,6 @@
 #import "MPSurveyNavigationController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
-#import "ODIN.h"
 #import "UIView+MPSnapshotImage.h"
 
 #define VERSION @"2.1.0"
@@ -412,10 +411,11 @@ static Mixpanel *sharedInstance = nil;
         distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
     }
     if (!distinctId) {
-        distinctId = ODIN1();
+        NSLog(@"%@ error getting ifa: falling back to uuid", self);
+        distinctId = [[NSUUID UUID] UUIDString];
     }
     if (!distinctId) {
-        NSLog(@"%@ error getting default distinct id: both iOS IFA and ODIN1 failed", self);
+        NSLog(@"%@ error getting uuid: no default distinct id could be generated", self);
     }
     return distinctId;
 }

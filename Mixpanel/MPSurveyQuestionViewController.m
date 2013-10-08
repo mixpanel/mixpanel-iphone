@@ -145,23 +145,23 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSTimeInterval duration = 0.25;
     if (checked) {
         [UIView animateWithDuration:duration * 0.5
-                              delay:0.0
+                              delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
-                             _label.alpha = 0.0;
-                             _customBackgroundView.alpha = 0.0;
-                             _checkmark.alpha = 1.0;
-                             _selectedLabel.alpha = 1.0;
-                             _customSelectedBackgroundView.alpha = 1.0;
+                             _label.alpha = 0;
+                             _customBackgroundView.alpha = 0;
+                             _checkmark.alpha = 1;
+                             _selectedLabel.alpha = 1;
+                             _customSelectedBackgroundView.alpha = 1;
                          }
                          completion:^(BOOL finished) {
-                             _checkmarkLeadingSpace.constant = 20.0;
+                             _checkmarkLeadingSpace.constant = 20;
                              [UIView animateWithDuration:duration * 0.5
-                                                   delay:0.0
+                                                   delay:0
                                                  options:UIViewAnimationOptionCurveEaseOut
                                               animations:^{
                                                   [self.contentView layoutIfNeeded];
-                                                  _selectedLabelLeadingSpace.constant = 46.0;
+                                                  _selectedLabelLeadingSpace.constant = 46;
                                                   [UIView animateWithDuration:duration * 0.5 * 0.5
                                                                         delay:duration * 0.5 * 0.5
                                                                       options:0
@@ -173,17 +173,17 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                                               completion:nil];
                          }];
     } else {
-        _checkmarkLeadingSpace.constant = 15.0;
-        _selectedLabelLeadingSpace.constant = 30.0;
+        _checkmarkLeadingSpace.constant = 15;
+        _selectedLabelLeadingSpace.constant = 30;
         [UIView animateWithDuration:duration
-                              delay:0.0
+                              delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
-                             _checkmark.alpha = 0.0;
-                             _selectedLabel.alpha = 0.0;
-                             _customSelectedBackgroundView.alpha = 0.0;
-                             _label.alpha = 1.0;
-                             _customBackgroundView.alpha = 1.0;
+                             _checkmark.alpha = 0;
+                             _selectedLabel.alpha = 0;
+                             _customSelectedBackgroundView.alpha = 0;
+                             _label.alpha = 1;
+                             _customBackgroundView.alpha = 1;
                              [self.contentView layoutIfNeeded];
                          }
                          completion:completion];
@@ -203,12 +203,12 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLayoutSubviews
 {
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
-    CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
-    CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
+    CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
+    CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
     fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
     // add 20 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 44.0f / _tableContainer.bounds.size.height;
-    fadeLayer.locations = @[@0, @(0.0f + offset), @(1.0f - offset), @1];
+    CGFloat offset = 44 / _tableContainer.bounds.size.height;
+    fadeLayer.locations = @[@0, @(0 + offset), @(1 - offset), @1];
     fadeLayer.bounds = _tableContainer.bounds;
     fadeLayer.anchorPoint = CGPointZero;
     _tableContainer.layer.mask = fadeLayer;
@@ -249,7 +249,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSString *text = [self labelForValue:[self.question.choices objectAtIndex:(NSUInteger)indexPath.row]];
     cell.label.text = text;
     cell.selectedLabel.text = text;
-    UIColor *strokeColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    UIColor *strokeColor = [UIColor colorWithWhite:1 alpha:0.5];
     cell.customBackgroundView.strokeColor = strokeColor;
     cell.customSelectedBackgroundView.strokeColor = strokeColor;
     cell.customBackgroundView.fillColor = [UIColor clearColor];
@@ -292,7 +292,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) ? 0.0f : 0.1f; // for some reason, 0 doesn't work in ios7
+    return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) ? 0 : 0.1f; // for some reason, 0 doesn't work in ios7
 }
 
 @end

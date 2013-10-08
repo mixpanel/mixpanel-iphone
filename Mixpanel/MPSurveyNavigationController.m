@@ -76,7 +76,7 @@
                           delay:0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         NSArray *keyTimes = @[@0.0, @0.3, @1.0];
+                         NSArray *keyTimes = @[@0, @0.3, @1];
 
                          // slide header down
                          CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
@@ -182,7 +182,7 @@
         [self addChildViewController:toController];
 
         // reset after being faded out last time
-        toController.view.alpha = 1.0;
+        toController.view.alpha = 1;
 
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
@@ -214,14 +214,14 @@
                                         basicAnim.byValue = @(-slideDistance);
                                         [anims addObject:basicAnim];
                                         // after a moment, rotates counterclockwise and shrinks a bit as it moves offscreen
-                                        keyTimes = @[@0.0, @0.4, @1.0];
+                                        keyTimes = @[@0, @0.4, @1];
                                         keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
                                         keyFrameAnim.keyTimes = keyTimes;
-                                        keyFrameAnim.values = @[@0.0, @0.0, @(-M_PI_4)];
+                                        keyFrameAnim.values = @[@0, @0, @(-M_PI_4)];
                                         [anims addObject:keyFrameAnim];
                                         keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
                                         keyFrameAnim.keyTimes = keyTimes;
-                                        keyFrameAnim.values = @[@1.0, @1.0, @0.8];
+                                        keyFrameAnim.values = @[@1, @1, @0.8];
                                         [anims addObject:keyFrameAnim];
                                         group = [CAAnimationGroup animation];
                                         group.animations = anims;
@@ -275,14 +275,14 @@
                                         basicAnim.byValue = @(slideDistance);
                                         [anims addObject:basicAnim];
                                         // grows and rotates clockwise at the beginning
-                                        keyTimes = @[@0.0, @0.6, @1.0];
+                                        keyTimes = @[@0, @0.6, @1];
                                         keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
                                         keyFrameAnim.keyTimes = keyTimes;
-                                        keyFrameAnim.values = @[@(-M_PI_4), @0.0, @0.0];
+                                        keyFrameAnim.values = @[@(-M_PI_4), @0, @0];
                                         [anims addObject:keyFrameAnim];
                                         keyFrameAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
                                         keyFrameAnim.keyTimes = keyTimes;
-                                        keyFrameAnim.values = @[@0.8, @1.0, @1.0];
+                                        keyFrameAnim.values = @[@0.8, @1, @1];
                                         [anims addObject:keyFrameAnim];
                                         group = [CAAnimationGroup animation];
                                         group.animations = anims;
@@ -291,7 +291,7 @@
                                     }
 
                                     // hack to hide animation flashing fromController.view at the end
-                                    fromController.view.alpha = 0.0;
+                                    fromController.view.alpha = 0;
 
                                }
                                 completion:^(BOOL finished){
