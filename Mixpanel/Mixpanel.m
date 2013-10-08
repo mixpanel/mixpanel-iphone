@@ -986,9 +986,9 @@ static Mixpanel *sharedInstance = nil;
 - (void)checkForSurveyWithCompletion:(void (^)(MPSurvey *))completion
 {
     dispatch_async(self.serialQueue, ^{
-        MixpanelLog(@"%@ survey check started", self);
+        MixpanelDebug(@"%@ survey check started", self);
         if (!self.people.distinctId) {
-            NSLog(@"%@ survey check skipped because no user has been identified", self);
+            MixpanelDebug(@"%@ survey check skipped because no user has been identified", self);
             return;
         }
         NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
@@ -1007,7 +1007,7 @@ static Mixpanel *sharedInstance = nil;
             return;
         }
         if (object[@"error"]) {
-            NSLog(@"%@ survey check api error: %@", self, object[@"error"]);
+            MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
             return;
         }
         MPSurvey *survey = nil;
@@ -1015,7 +1015,6 @@ static Mixpanel *sharedInstance = nil;
             MPSurvey *potentialSurvey = [MPSurvey surveyWithJSONObject:dict];
             if (potentialSurvey) {
                 NSSet *filtered = [_shownSurveys objectsPassingTest:^BOOL(NSNumber *collectionID, BOOL *stop){
-                    NSLog(@"checking number: %@", collectionID);
                     return [collectionID isEqualToNumber:@(potentialSurvey.collectionID)];
                 }];
                 if ([filtered count] > 0) {
@@ -1057,7 +1056,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)markSurveyShown:(MPSurvey *)survey
 {
-    NSLog(@"marking survey shown: %@, %@", @(survey.collectionID), _shownSurveys);
+    MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveys);
     [_shownSurveys addObject:@(survey.collectionID)];
     [self.people append:@{@"$surveys": @(survey.ID), @"$collections": @(survey.collectionID)}];
     [self flush];
