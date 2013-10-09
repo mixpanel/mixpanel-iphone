@@ -3,7 +3,7 @@
 #import "MPSurveyQuestionViewController.h"
 
 @interface MPSurveyQuestionViewController ()
-@property(nonatomic,retain) IBOutlet UILabel *promptLabel;
+@property(nonatomic,retain) IBOutlet UILabel *prompt;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptHeight;
 @end
 
@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
 @property(nonatomic,retain) MPSurveyTextQuestion *question;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptTop;
+@property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptTopSpace;
 @property(nonatomic,retain) IBOutlet UITextView *textView;
 @property(nonatomic,retain) IBOutlet NSLayoutConstraint *textViewHeight;
 @property(nonatomic,retain) IBOutlet UIView *keyboardAccessory;
@@ -53,33 +53,29 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _promptLabel.text = self.question.prompt;
-}
-
-- (void)resizePromptText
-{
-    // shrink font size to fit frame. can't use adjustsFontSizeToFitWidth and minimumScaleFactor,
-    // since they only work on single line labels. minimum font size is 9.
-    UIFont *font = _promptLabel.font;
-    for (CGFloat size = 20; size >= 9; size--) {
-        font = [font fontWithSize:size];
-        CGSize constraintSize = CGSizeMake(_promptLabel.bounds.size.width, MAXFLOAT);
-        CGSize sizeToFit = [_promptLabel.text sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:_promptLabel.lineBreakMode];
-        if (sizeToFit.height <= _promptLabel.bounds.size.height) {
-            break;
-        }
-    }
-    _promptLabel.font = font;
+    _prompt.text = self.question.prompt;
 }
 
 - (void)viewWillLayoutSubviews
 {
-    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        _promptHeight.constant = 72;
-    } else {
-        _promptHeight.constant = 48;
+    // can't use _prompt.bounds here cause it hasn't been calculated yet
+    CGFloat promptWidth = self.view.bounds.size.width - 30; // 2x 15 point horizontal padding on prompt
+    CGFloat maxPromptHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
+    UIFont *font;
+    CGSize sizeToFit;
+    CGSize constraintSize = CGSizeMake(promptWidth, MAXFLOAT);
+    // lower prompt font size until it fits (or hits min of 9 points)
+    for (CGFloat size = 20; size >= 9; size--) {
+        font = [_prompt.font fontWithSize:size];
+        sizeToFit = [_prompt.text sizeWithFont:font
+                                  constrainedToSize:constraintSize
+                                      lineBreakMode:_prompt.lineBreakMode];
+        if (sizeToFit.height <= maxPromptHeight) {
+            break;
+        }
     }
-    [self resizePromptText];
+    _prompt.font = font;
+    _promptHeight.constant = ceilf((sizeToFit.height <= maxPromptHeight) ? sizeToFit.height : maxPromptHeight);
 }
 
 - (void)dealloc
@@ -330,11 +326,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 {
     [super viewWillLayoutSubviews];
     _keyboardAccessoryWidth.constant = self.view.bounds.size.width;
-    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        _textViewHeight.constant = 72;
-    } else {
-        _textViewHeight.constant = 48;
-    }
+    _textViewHeight.constant = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -373,20 +365,20 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSDictionary* info = [note userInfo];
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
-    CGFloat promptTop, promptAlpha;
+    CGFloat promptTopSpace, promptAlpha;
     if (UIDeviceOrientationIsPortrait(([UIApplication sharedApplication].statusBarOrientation))) {
-        promptTop = 0;
+        promptTopSpace = 15;
         promptAlpha = 1;
     } else {
-        promptTop = -(self.promptLabel.bounds.size.height + 8);
+        promptTopSpace = -(self.prompt.bounds.size.height + 15); // +15 for text view top space
         promptAlpha = 0;
     }
-    _promptTop.constant = promptTop;
+    _promptTopSpace.constant = promptTopSpace;
     [UIView animateWithDuration:duration
                           delay:0
                         options:curve | UIViewKeyframeAnimationOptionBeginFromCurrentState
                      animations:^{
-                         self.promptLabel.alpha = promptAlpha;
+                         self.prompt.alpha = promptAlpha;
                          [self.view layoutIfNeeded];
                      }
                      completion:nil];
@@ -397,12 +389,12 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSDictionary* info = [note userInfo];
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
-    _promptTop.constant = 0;
+    _promptTopSpace.constant = 15;
     [UIView animateWithDuration:duration
                           delay:0
                         options:curve | UIViewKeyframeAnimationOptionBeginFromCurrentState
                      animations:^{
-                         self.promptLabel.alpha = 1;
+                         self.prompt.alpha = 1;
                          [self.view layoutIfNeeded];
                      }
                      completion:nil];

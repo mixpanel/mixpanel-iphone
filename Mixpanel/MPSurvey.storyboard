@@ -163,11 +163,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LTJ-6W-TtT" userLabel="Table Container">
-                                <rect key="frame" x="0.0" y="80" width="320" height="488"/>
+                                <rect key="frame" x="0.0" y="95" width="320" height="473"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <tableView opaque="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="51D-Sg-9Sy">
-                                        <rect key="frame" x="15" y="0.0" width="290" height="488"/>
+                                        <rect key="frame" x="15" y="0.0" width="290" height="473"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <inset key="scrollIndicatorInsets" minX="0.0" minY="44" maxX="0.0" maxY="44"/>
                                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -259,7 +259,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="nTV-Im-rNp" userLabel="Prompt">
-                                <rect key="frame" x="15" y="0.0" width="290" height="72"/>
+                                <rect key="frame" x="15" y="15" width="290" height="72"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="72" id="528-lL-aoE"/>
@@ -274,7 +274,7 @@
                             <constraint firstItem="LTJ-6W-TtT" firstAttribute="top" secondItem="nTV-Im-rNp" secondAttribute="bottom" constant="8" symbolic="YES" id="0ws-09-7he"/>
                             <constraint firstAttribute="trailing" secondItem="LTJ-6W-TtT" secondAttribute="trailing" id="3hJ-o1-tx3"/>
                             <constraint firstItem="LTJ-6W-TtT" firstAttribute="leading" secondItem="dcL-M9-gG3" secondAttribute="leading" id="Kxt-t7-3Iq"/>
-                            <constraint firstItem="nTV-Im-rNp" firstAttribute="top" secondItem="dcL-M9-gG3" secondAttribute="top" id="PrQ-oW-6wh"/>
+                            <constraint firstItem="nTV-Im-rNp" firstAttribute="top" secondItem="dcL-M9-gG3" secondAttribute="top" constant="15" id="PrQ-oW-6wh"/>
                             <constraint firstAttribute="trailing" secondItem="nTV-Im-rNp" secondAttribute="trailing" constant="15" id="QOZ-Ue-MY7"/>
                             <constraint firstAttribute="bottom" secondItem="LTJ-6W-TtT" secondAttribute="bottom" id="SGF-32-kf8"/>
                             <constraint firstItem="nTV-Im-rNp" firstAttribute="leading" secondItem="dcL-M9-gG3" secondAttribute="leading" constant="15" id="kur-JV-Ynh"/>
@@ -282,8 +282,8 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="prompt" destination="nTV-Im-rNp" id="Psa-r5-MB2"/>
                         <outlet property="promptHeight" destination="528-lL-aoE" id="N8Q-LT-Guq"/>
-                        <outlet property="promptLabel" destination="nTV-Im-rNp" id="eHf-Iy-792"/>
                         <outlet property="tableContainer" destination="LTJ-6W-TtT" id="EAp-So-SSe"/>
                         <outlet property="tableContainerVerticalPadding" destination="ISZ-mc-dTM" id="iK7-aw-mUC"/>
                         <outlet property="tableView" destination="51D-Sg-9Sy" id="J6L-7l-xcA"/>
@@ -306,7 +306,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="3Vm-1Z-umb" userLabel="Prompt">
-                                <rect key="frame" x="15" y="0.0" width="290" height="72"/>
+                                <rect key="frame" x="15" y="15" width="290" height="72"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="72" id="aIO-iT-n0h"/>
@@ -316,7 +316,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtB-0d-D3n">
-                                <rect key="frame" x="15" y="80" width="290" height="72"/>
+                                <rect key="frame" x="15" y="107" width="290" height="72"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="72" id="cCS-Ln-myf"/>
@@ -331,9 +331,9 @@
                             <constraint firstItem="3Vm-1Z-umb" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="15" id="50g-S9-NE2"/>
                             <constraint firstAttribute="trailing" secondItem="vtB-0d-D3n" secondAttribute="trailing" constant="15" id="Eg8-yR-WOM"/>
                             <constraint firstItem="vtB-0d-D3n" firstAttribute="leading" secondItem="LG7-cL-aRp" secondAttribute="leading" constant="15" id="Nez-6b-jfl"/>
-                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="top" secondItem="LG7-cL-aRp" secondAttribute="top" id="Sy6-5L-FrW"/>
+                            <constraint firstItem="3Vm-1Z-umb" firstAttribute="top" secondItem="LG7-cL-aRp" secondAttribute="top" constant="15" id="Sy6-5L-FrW"/>
                             <constraint firstAttribute="trailing" secondItem="3Vm-1Z-umb" secondAttribute="trailing" constant="15" id="chN-Xp-1nK"/>
-                            <constraint firstItem="vtB-0d-D3n" firstAttribute="top" secondItem="3Vm-1Z-umb" secondAttribute="bottom" constant="8" id="nhj-1f-Ats"/>
+                            <constraint firstItem="vtB-0d-D3n" firstAttribute="top" secondItem="3Vm-1Z-umb" secondAttribute="bottom" constant="20" id="nhj-1f-Ats"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -342,9 +342,9 @@
                         <outlet property="charactersLeftLabel" destination="Fr7-FM-QMp" id="OH5-Lh-iUs"/>
                         <outlet property="keyboardAccessory" destination="svP-JH-3n8" id="dmq-ze-SYv"/>
                         <outlet property="keyboardAccessoryWidth" destination="YNx-KC-6sd" id="gAG-uy-7ID"/>
+                        <outlet property="prompt" destination="3Vm-1Z-umb" id="7Gg-O7-PSz"/>
                         <outlet property="promptHeight" destination="aIO-iT-n0h" id="4zA-cI-KG7"/>
-                        <outlet property="promptLabel" destination="3Vm-1Z-umb" id="qb6-7t-46D"/>
-                        <outlet property="promptTop" destination="Sy6-5L-FrW" id="7EX-kL-eyX"/>
+                        <outlet property="promptTopSpace" destination="Sy6-5L-FrW" id="zn3-Qq-GUM"/>
                         <outlet property="textView" destination="vtB-0d-D3n" id="49Z-Lp-eh1"/>
                         <outlet property="textViewHeight" destination="cCS-Ln-myf" id="044-yT-9Jz"/>
                     </connections>
