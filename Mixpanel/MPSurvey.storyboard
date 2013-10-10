@@ -101,21 +101,21 @@
                                             <action selector="dismiss" destination="RIP-po-dgx" eventType="touchUpInside" id="o74-Ja-Cor"/>
                                         </connections>
                                     </button>
-                                    <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.6000000000000002" contentMode="scaleToFill" image="Dots.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
-                                        <rect key="frame" x="15" y="17" width="32" height="10"/>
+                                    <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.50000000000000011" contentMode="scaleToFill" image="Logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
+                                        <rect key="frame" x="15" y="11" width="66" height="22"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="32" id="DeQ-2M-CRw"/>
+                                            <constraint firstAttribute="width" constant="66" id="DeQ-2M-CRw"/>
+                                            <constraint firstAttribute="height" constant="22" id="RZa-E3-gm9"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="tHb-kq-3y4" secondAttribute="bottom" constant="17" id="6X7-Fe-smU"/>
                                     <constraint firstAttribute="trailing" secondItem="8vP-xd-w4j" secondAttribute="trailing" id="BOS-xG-STD"/>
                                     <constraint firstItem="8vP-xd-w4j" firstAttribute="top" secondItem="0dH-sL-neW" secondAttribute="top" id="CeE-TT-bZQ"/>
+                                    <constraint firstAttribute="centerY" secondItem="tHb-kq-3y4" secondAttribute="centerY" id="Czs-Nc-r4M"/>
                                     <constraint firstAttribute="bottom" secondItem="8vP-xd-w4j" secondAttribute="bottom" id="Q7c-AG-Vej"/>
-                                    <constraint firstItem="tHb-kq-3y4" firstAttribute="top" secondItem="0dH-sL-neW" secondAttribute="top" constant="17" id="Rcf-7P-5eo"/>
                                     <constraint firstItem="tHb-kq-3y4" firstAttribute="leading" secondItem="0dH-sL-neW" secondAttribute="leading" constant="15" id="qB4-79-zGp"/>
                                     <constraint firstAttribute="height" constant="44" id="sNH-QZ-iV0"/>
                                 </constraints>
@@ -392,7 +392,7 @@
         <image name="ArrowRight.png" width="24" height="16"/>
         <image name="Checkmark.png" width="13" height="14"/>
         <image name="DismissKeyboard.png" width="30" height="14"/>
-        <image name="Dots.png" width="32" height="10"/>
+        <image name="Logo.png" width="66" height="22"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
