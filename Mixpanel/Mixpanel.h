@@ -432,6 +432,8 @@
  */
 - (void)showSurvey:(MPSurvey *)survey;
 
+- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
+
 @end
 
 /*!
