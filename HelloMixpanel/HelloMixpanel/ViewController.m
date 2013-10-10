@@ -72,7 +72,7 @@
                                      @{
                                          @"id": @3,
                                          @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care? jdsfklfjdsklf sdklfjklds fjklsd fdsklfj sdklfjads",
+                                         @"prompt": @"If we discontinued our service, how much would you care?",
                                          @"extra_data": @{
                                                  @"$choices": @[
                                                          @"A lot",
