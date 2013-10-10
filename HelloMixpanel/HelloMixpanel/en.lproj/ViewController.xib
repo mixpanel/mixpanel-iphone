@@ -18,7 +18,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="center" image="Logo.png" id="8">
+                <imageView userInteractionEnabled="NO" contentMode="center" image="MPLogo.png" id="8">
                     <rect key="frame" x="93" y="20" width="134" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -96,6 +96,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Logo.png" width="66" height="22"/>
+        <image name="MPLogo.png" width="51" height="17"/>
     </resources>
 </document>
