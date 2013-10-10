@@ -381,6 +381,23 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (NSString *)defaultDistinctId
+{
+    NSString *distinctId = nil;
+    if (NSClassFromString(@"ASIdentifierManager")) {
+        distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
+    }
+    if (!distinctId) {
+        NSLog(@"%@ error getting ifa: falling back to uuid", self);
+        distinctId = [[NSUUID UUID] UUIDString];
+    }
+    if (!distinctId) {
+        NSLog(@"%@ error getting uuid: no default distinct id could be generated", self);
+    }
+    return distinctId;
+}
+
+
 - (void)identify:(NSString *)distinctId
 {
     if (distinctId == nil || distinctId.length == 0) {
@@ -404,20 +421,17 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (NSString *)defaultDistinctId
+- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
 {
-    NSString *distinctId = nil;
-    if (NSClassFromString(@"ASIdentifierManager")) {
-        distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
+    if (!alias || [alias length] == 0) {
+        NSLog(@"%@ create alias called with empty alias: %@", self, alias);
+        return;
     }
-    if (!distinctId) {
-        NSLog(@"%@ error getting ifa: falling back to uuid", self);
-        distinctId = [[NSUUID UUID] UUIDString];
+    if (!distinctID || [distinctID length] == 0) {
+        NSLog(@"%@ create alias called with empty distinct id: %@", self, distinctID);
+        return;
     }
-    if (!distinctId) {
-        NSLog(@"%@ error getting uuid: no default distinct id could be generated", self);
-    }
-    return distinctId;
+    [self track:@"$create_alias" properties:@{@"distinct_id": distinctID, @"alias": alias}];
 }
 
 - (void)track:(NSString *)event
