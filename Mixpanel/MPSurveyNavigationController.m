@@ -11,6 +11,7 @@
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
 @property(nonatomic,retain) IBOutlet UIImageView *view;
+@property(nonatomic,retain) IBOutlet UIColor *highlightColor;
 @property(nonatomic,retain) IBOutlet UIView *containerView;
 @property(nonatomic,retain) IBOutlet UILabel *pageNumberLabel;
 @property(nonatomic,retain) IBOutlet UIButton *nextButton;
@@ -38,6 +39,17 @@
 {
     [super viewDidLoad];
     self.view.image = [_backgroundImage mp_applyDarkEffect];
+
+    // set highlight color based on average background color
+    UIColor *avgColor = [_backgroundImage mp_averageColor];
+    CGFloat hue;
+    CGFloat brightness;
+    CGFloat saturation;
+    CGFloat alpha;
+    if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
+        avgColor = [UIColor colorWithHue:hue saturation:1 brightness:brightness alpha:alpha];
+    }
+    self.highlightColor = avgColor;
     self.questionControllers = [NSMutableArray array];
     for (NSUInteger i = 0; i < _survey.questions.count; i++) {
         [_questionControllers addObject:[NSNull null]];
@@ -141,7 +153,7 @@
             if (controller) {
                 controller.delegate = self;
                 controller.question = question;
-                controller.highlightColor = [_backgroundImage mp_averageColor];
+                controller.highlightColor = _highlightColor;
                 controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
                 _questionControllers[index] = controller;
             } else {
