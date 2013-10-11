@@ -101,12 +101,12 @@
                                             <action selector="dismiss" destination="RIP-po-dgx" eventType="touchUpInside" id="o74-Ja-Cor"/>
                                         </connections>
                                     </button>
-                                    <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.50000000000000011" contentMode="scaleToFill" image="MPLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
-                                        <rect key="frame" x="15" y="14" width="51" height="17"/>
+                                    <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" image="MPLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="tHb-kq-3y4">
+                                        <rect key="frame" x="15" y="11" width="66" height="22"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="51" id="DeQ-2M-CRw"/>
-                                            <constraint firstAttribute="height" constant="17" id="RZa-E3-gm9"/>
+                                            <constraint firstAttribute="width" constant="66" id="DeQ-2M-CRw"/>
+                                            <constraint firstAttribute="height" constant="22" id="RZa-E3-gm9"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
@@ -392,7 +392,7 @@
         <image name="MPArrowRight.png" width="24" height="16"/>
         <image name="MPCheckmark.png" width="13" height="14"/>
         <image name="MPDismissKeyboard.png" width="30" height="14"/>
-        <image name="MPLogo.png" width="51" height="17"/>
+        <image name="MPLogo.png" width="66" height="22"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
