@@ -96,6 +96,6 @@
         </view>
     </objects>
     <resources>
-        <image name="MPLogo.png" width="51" height="17"/>
+        <image name="MPLogo.png" width="66" height="22"/>
     </resources>
 </document>
