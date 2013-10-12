@@ -70,6 +70,7 @@
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
+@property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
 @property(nonatomic,retain) NSMutableSet *shownSurveys;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
@@ -151,6 +152,12 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
         _serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+        self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+        [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        self.shownSurveys = [NSMutableSet set];
+
+        // wifi reachability
         BOOL reachabilityOk = NO;
         if ((self.reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
             SCNetworkReachabilityContext context = {0, NULL, NULL, NULL, NULL};
@@ -168,11 +175,23 @@ static Mixpanel *sharedInstance = nil;
         if (!reachabilityOk) {
             NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
         }
-        self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        self.shownSurveys = [NSMutableSet set];
+
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+        // cellular info
+        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+            _telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
+            _automaticProperties[@"$radio"] = [self currentRadio];
+            [notificationCenter addObserverForName:CTRadioAccessTechnologyDidChangeNotification
+                                            object:nil
+                                             queue:nil
+                                        usingBlock:^(NSNotification *note) {
+                                            dispatch_async(_serialQueue, ^(){
+                                                _automaticProperties[@"$radio"] = [self currentRadio];
+                                            });
+                                        }];
+        }
+
         [notificationCenter addObserver:self
                                selector:@selector(applicationWillTerminate:)
                                    name:UIApplicationWillTerminateNotification
@@ -227,6 +246,7 @@ static Mixpanel *sharedInstance = nil;
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
         self.reachability = nil;
     }
+    self.telephonyInfo = nil;
     if (_serialQueue) {
         dispatch_release(_serialQueue);
         _serialQueue = NULL;
@@ -247,6 +267,15 @@ static Mixpanel *sharedInstance = nil;
     sysctlbyname("hw.machine", answer, &size, NULL, 0);
     NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
     return results;
+}
+
+- (NSString *)currentRadio
+{
+    NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
+    if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
+        return [radio substringFromIndex:23];
+    }
+    return radio;
 }
 
 - (NSMutableDictionary *)collectAutomaticProperties
