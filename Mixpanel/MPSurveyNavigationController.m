@@ -47,7 +47,7 @@
     CGFloat saturation;
     CGFloat alpha;
     if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
-        avgColor = [UIColor colorWithHue:hue saturation:1 brightness:brightness alpha:alpha];
+        avgColor = [UIColor colorWithHue:hue saturation:0.8f brightness:brightness alpha:alpha];
     }
     self.highlightColor = avgColor;
     self.questionControllers = [NSMutableArray array];
