@@ -272,8 +272,10 @@ static Mixpanel *sharedInstance = nil;
 - (NSString *)currentRadio
 {
     NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
-    if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
-        return [radio substringFromIndex:23];
+    if (!radio) {
+        radio = @"None";
+    } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
+        radio = [radio substringFromIndex:23];
     }
     return radio;
 }
