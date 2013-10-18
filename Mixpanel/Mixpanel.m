@@ -782,11 +782,17 @@ static Mixpanel *sharedInstance = nil;
     return [self filePathForData:@"properties"];
 }
 
+- (NSString *)surveysFilePath
+{
+    return [self filePathForData:@"surveys"];
+}
+
 - (void)archive
 {
     [self archiveEvents];
     [self archivePeople];
     [self archiveProperties];
+    [self archiveSurveys];
 }
 
 - (void)archiveEvents
@@ -822,11 +828,22 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)archiveSurveys
+{
+    NSString *filePath = [self surveysFilePath];
+    NSDictionary *surveyData = @{@"shownSurveys": self.shownSurveys};
+    MixpanelDebug(@"%@ archiving survey data to %@: %@", self, filePath, surveyData);
+    if (![NSKeyedArchiver archiveRootObject:surveyData toFile:filePath]) {
+        NSLog(@"%@ unable to archive survey data", self);
+    }
+}
+
 - (void)unarchive
 {
     [self unarchiveEvents];
     [self unarchivePeople];
     [self unarchiveProperties];
+    [self unarchiveSurveys];
 }
 
 - (void)unarchiveEvents
@@ -881,6 +898,25 @@ static Mixpanel *sharedInstance = nil;
         self.superProperties = [properties objectForKey:@"superProperties"];
         self.people.distinctId = [properties objectForKey:@"peopleDistinctId"];
         self.people.unidentifiedQueue = [properties objectForKey:@"peopleUnidentifiedQueue"];
+    }
+}
+
+- (void)unarchiveSurveys
+{
+    NSString *filePath = [self surveysFilePath];
+    NSDictionary *surveyData = nil;
+    @try {
+        surveyData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        MixpanelDebug(@"%@ unarchived survey data: %@", self, surveyData);
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@ unable to unarchive survey data, starting fresh", self);
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+    if (surveyData) {
+        self.shownSurveys = [surveyData objectForKey:@"shownSurveys"];
+    } else {
+        self.shownSurveys = [NSMutableSet set];
     }
 }
 
@@ -1064,10 +1100,7 @@ static Mixpanel *sharedInstance = nil;
         for (NSDictionary *obj in surveys) {
             MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
             if (survey) {
-                NSSet *filtered = [_shownSurveys objectsPassingTest:^BOOL(NSNumber *collectionID, BOOL *stop){
-                    return [collectionID isEqualToNumber:@(survey.collectionID)];
-                }];
-                if ([filtered count] > 0) {
+                if ([_shownSurveys member:@(survey.collectionID)]) {
                     MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
                 } else {
                     validSurvey = survey;
