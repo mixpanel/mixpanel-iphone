@@ -1112,22 +1112,17 @@ static Mixpanel *sharedInstance = nil;
     [self flush];
 }
 
-- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller
+- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller withAnswers:(NSArray *)answers
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
-- (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer
-{
-    NSDictionary *properties;
-    if (!_surveyReceivedFirstAnswer) {
-        // only append to responses once, on first answer
-        properties = @{@"$answers": answer, @"$responses": @(controller.survey.collectionID)};
-        _surveyReceivedFirstAnswer = YES;
-    } else {
-        properties = @{@"$answers": answer};
+    for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
+        NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:[answers objectAtIndex:i], @"$answers", nil];
+        if (i == 0) {
+            properties[@"$responses"] = @(controller.survey.collectionID);
+        }
+        [self.people append:properties];
     }
-    [self.people append:properties];
 }
 
 #pragma mark - UIAlertViewDelegate

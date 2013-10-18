@@ -14,6 +14,5 @@
 @end
 
 @protocol MPSurveyNavigationControllerDelegate <NSObject>
-- (void)surveyController:(MPSurveyNavigationController *)controller didReceiveAnswer:(NSDictionary *)answer;
-- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller;
+- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller withAnswers:(NSArray *)answers;
 @end
