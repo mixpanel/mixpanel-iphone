@@ -109,6 +109,11 @@
     [mixpanel showSurvey:survey];
 }
 
+- (IBAction)showNotif:(id)sender
+{
+    NSLog(@"Show survey!");
+}
+
 - (IBAction)changeBackground
 {
     if (_fakeBackground.image) {
