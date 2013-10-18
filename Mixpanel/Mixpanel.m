@@ -782,17 +782,11 @@ static Mixpanel *sharedInstance = nil;
     return [self filePathForData:@"properties"];
 }
 
-- (NSString *)surveysFilePath
-{
-    return [self filePathForData:@"surveys"];
-}
-
 - (void)archive
 {
     [self archiveEvents];
     [self archivePeople];
     [self archiveProperties];
-    [self archiveSurveys];
 }
 
 - (void)archiveEvents
@@ -822,19 +816,10 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+    [p setValue:self.shownSurveys forKey:@"shownSurveys"];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         NSLog(@"%@ unable to archive properties data", self);
-    }
-}
-
-- (void)archiveSurveys
-{
-    NSString *filePath = [self surveysFilePath];
-    NSDictionary *surveyData = @{@"shownSurveys": self.shownSurveys};
-    MixpanelDebug(@"%@ archiving survey data to %@: %@", self, filePath, surveyData);
-    if (![NSKeyedArchiver archiveRootObject:surveyData toFile:filePath]) {
-        NSLog(@"%@ unable to archive survey data", self);
     }
 }
 
@@ -843,7 +828,6 @@ static Mixpanel *sharedInstance = nil;
     [self unarchiveEvents];
     [self unarchivePeople];
     [self unarchiveProperties];
-    [self unarchiveSurveys];
 }
 
 - (void)unarchiveEvents
@@ -898,25 +882,7 @@ static Mixpanel *sharedInstance = nil;
         self.superProperties = [properties objectForKey:@"superProperties"];
         self.people.distinctId = [properties objectForKey:@"peopleDistinctId"];
         self.people.unidentifiedQueue = [properties objectForKey:@"peopleUnidentifiedQueue"];
-    }
-}
-
-- (void)unarchiveSurveys
-{
-    NSString *filePath = [self surveysFilePath];
-    NSDictionary *surveyData = nil;
-    @try {
-        surveyData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        MixpanelDebug(@"%@ unarchived survey data: %@", self, surveyData);
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@ unable to unarchive survey data, starting fresh", self);
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-    }
-    if (surveyData) {
-        self.shownSurveys = [surveyData objectForKey:@"shownSurveys"];
-    } else {
-        self.shownSurveys = [NSMutableSet set];
+        self.shownSurveys = [properties objectForKey: @"shownSurveys"];
     }
 }
 
