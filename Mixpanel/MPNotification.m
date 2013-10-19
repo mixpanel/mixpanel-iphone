@@ -47,13 +47,13 @@
         return nil;
     }
     
-    NSString *title = collection[@"title"];
+    NSString *title = object[@"title"];
     if (![title isKindOfClass:[NSString class]]) {
         NSLog(@"invalid notif title: %@", title);
         return nil;
     }
     
-    NSString *body = collection[@"body"];
+    NSString *body = object[@"body"];
     if (![body isKindOfClass:[NSString class]]) {
         NSLog(@"invalid notif body: %@", body);
         return nil;
