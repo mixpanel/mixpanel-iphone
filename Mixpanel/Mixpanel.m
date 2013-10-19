@@ -30,6 +30,7 @@
 
 #import "MPSurveyNavigationController.h"
 #import "MPNotification.h"
+#import "MPNotificationViewController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
@@ -1136,6 +1137,17 @@ static Mixpanel *sharedInstance = nil;
 - (void)showNotification:(MPNotification *)notification
 {
     NSLog(@"showing notif");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
+        MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
+        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        
+        while (rootViewController.presentedViewController) {
+            rootViewController = rootViewController.presentedViewController;
+        }
+        
+        [rootViewController presentViewController:controller animated:YES completion:nil];
+    });
 }
 
 #pragma mark - UIAlertViewDelegate
