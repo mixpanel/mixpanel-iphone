@@ -21,6 +21,7 @@
 
 #import "MPSurvey.h"
 
+@class MPNotification;
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
@@ -431,6 +432,18 @@
  You do not need to call this method on the main thread.
  */
 - (void)showSurvey:(MPSurvey *)survey;
+
+/*!
+ @method
+ 
+ @abstract
+ Shows the notification in a <code>MPNotificationController</code> in the view of the
+ root view controller.
+ 
+ @discussion
+ You do not need to call this method on the main thread.
+ */
+- (void)showNotification:(MPNotification *)notification;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 

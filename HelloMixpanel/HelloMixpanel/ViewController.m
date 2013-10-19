@@ -18,6 +18,7 @@
 
 #import "Mixpanel.h"
 #import "MPSurvey.h"
+#import "MPNotification.h"
 
 #import "ViewController.h"
 
@@ -111,7 +112,17 @@
 
 - (IBAction)showNotif:(id)sender
 {
-    NSLog(@"Show survey!");
+    NSDictionary *notifJson = @{
+        @"version": @0,
+        @"id": @1,
+        @"collections": @[@{@"id": @2}],
+        @"title": @"Congratulations!",
+        @"body": @"You're our 543212th app opener. You'll win a trip to Midland, Texas as well as a subscription to our all-you-can-'drink' queso program.",
+        @"images": @[@"https://cdn2.mxpnl.com/site_media/images/jobs/photos/photo-07.jpg"]
+    };
+    
+    MPNotification *notif = [MPNotification notificationWithJSONObject:notifJson];
+    [[Mixpanel sharedInstance] showNotification:notif];
 }
 
 - (IBAction)changeBackground

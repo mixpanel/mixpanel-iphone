@@ -29,6 +29,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 #import "MPSurveyNavigationController.h"
+#import "MPNotification.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
@@ -1128,6 +1129,13 @@ static Mixpanel *sharedInstance = nil;
         properties = @{@"$answers": answer};
     }
     [self.people append:properties];
+}
+
+#pragma mark - MPNotification stuff
+
+- (void)showNotification:(MPNotification *)notification
+{
+    NSLog(@"showing notif");
 }
 
 #pragma mark - UIAlertViewDelegate
