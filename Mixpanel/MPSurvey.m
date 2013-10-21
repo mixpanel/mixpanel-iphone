@@ -7,7 +7,7 @@
 @property (nonatomic) NSUInteger collectionID;
 @property (nonatomic, retain) NSArray *questions;
 
-- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
+- (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
 
 @end
 
@@ -24,8 +24,13 @@
         NSLog(@"invalid survey id: %@", ID);
         return nil;
     }
+    NSString *name = object[@"name"];
+    if (!([name isKindOfClass:[NSString class]] && name.length > 0)) {
+        NSLog(@"invalid survey name: %@", name);
+        return nil;
+    }
     NSArray *collections = object[@"collections"];
-    if (!([collections isKindOfClass:[NSArray class]] && [collections count] > 0)) {
+    if (!([collections isKindOfClass:[NSArray class]] && collections.count > 0)) {
         NSLog(@"invalid survey collections: %@", collections);
         return nil;
     }
@@ -47,14 +52,16 @@
         }
     }
     return [[[MPSurvey alloc] initWithID:[ID unsignedIntegerValue]
+                                    name:name
                             collectionID:[collectionID unsignedIntegerValue]
                             andQuestions:[NSArray arrayWithArray:questions]] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
+- (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
     if (self = [super init]) {
         _ID = ID;
+        _name = name;
         _collectionID = collectionID;
         if (questions && [questions count] > 0) {
             self.questions = questions;

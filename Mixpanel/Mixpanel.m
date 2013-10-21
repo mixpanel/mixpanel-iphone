@@ -72,6 +72,7 @@
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
+@property(nonatomic,retain) NSDictionary *surveys;
 @property(nonatomic,retain) NSMutableSet *shownSurveys;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
 @property(nonatomic) BOOL surveyReceivedFirstAnswer;
@@ -1057,27 +1058,32 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
             return;
         }
-        NSArray *surveys = object[@"surveys"];
-        if (!surveys || ![surveys isKindOfClass:[NSArray class]]) {
+        if (!object[@"surveys"] || ![object[@"surveys"] isKindOfClass:[NSArray class]]) {
             MixpanelDebug(@"%@ survey check response format error: %@", self, object);
             return;
         }
-        MPSurvey *validSurvey = nil;
-        for (NSDictionary *obj in surveys) {
+
+        NSMutableDictionary *surveys = [NSMutableDictionary dictionary];
+        __block MPSurvey *validSurvey = nil;
+
+        [(NSArray *)(object[@"surveys"]) enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
-            if (survey) {
-                if ([_shownSurveys member:@(survey.collectionID)]) {
-                    MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
-                } else {
+            if (survey && [_shownSurveys member:@(survey.collectionID)] == nil) {
+                [surveys setObject:survey forKey:survey.name];
+                if (!validSurvey) {
                     validSurvey = survey;
-                    break;
                 }
+            } else if (survey) {
+                MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
             }
-        }
+        }];
+
+        self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
+
         if (validSurvey) {
             MixpanelDebug(@"%@ survey check found available survey: %@", self, validSurvey);
         } else {
-            MixpanelDebug(@"%@ survey check found no survey", self);
+            MixpanelDebug(@"%@ survey check found no valid survey", self);
         }
         if (completion) {
             completion(validSurvey);
@@ -1087,6 +1093,10 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurvey:(MPSurvey *)survey
 {
+    if (!survey) {
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
         MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
