@@ -418,7 +418,7 @@
  @discussion
  The completion block will be passed the survey if one is found and nil if not.
  */
-- (void)checkForSurveyWithCompletion:(void (^)(MPSurvey *survey))completion;
+- (void)checkForSurveysWithCompletion:(void (^)(MPSurvey *survey))completion;
 
 /*!
  @method
