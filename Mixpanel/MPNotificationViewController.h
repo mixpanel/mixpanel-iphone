@@ -15,4 +15,6 @@
 @property (nonatomic, retain) UIImage *backgroundImage;
 @property (nonatomic, retain) MPNotification *notification;
 
+- (void)setDismissTarget:(id)target action:(SEL)action;
+
 @end

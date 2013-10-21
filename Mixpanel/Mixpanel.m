@@ -1148,9 +1148,15 @@ static Mixpanel *sharedInstance = nil;
         
         controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         controller.notification = notification;
+        [controller setDismissTarget:self action:@selector(notificationControllerWasDismissed:)];
         
         [rootViewController presentViewController:controller animated:YES completion:nil];
     });
+}
+
+- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller
+{
+    [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIAlertViewDelegate
