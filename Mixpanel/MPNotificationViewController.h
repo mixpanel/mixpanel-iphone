@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class MPNotification;
+
 @interface MPNotificationViewController : UIViewController
+
+@property (nonatomic, retain) UIImage *backgroundImage;
+@property (nonatomic, retain) MPNotification *notification;
 
 @end
