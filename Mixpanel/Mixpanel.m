@@ -895,7 +895,7 @@ static Mixpanel *sharedInstance = nil;
     [self startFlushTimer];
     if (self.showSurveyOnActive) {
         NSDate *start = [NSDate date];
-        [self checkForSurveyWithCompletion:^(MPSurvey *survey){
+        [self checkForSurveysWithCompletion:^(MPSurvey *survey){
             if (survey) {
                 if ([start timeIntervalSinceNow] < -2.0) {
                     self.lateSurvey = survey;
@@ -1031,7 +1031,7 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-- (void)checkForSurveyWithCompletion:(void (^)(MPSurvey *))completion
+- (void)checkForSurveysWithCompletion:(void (^)(MPSurvey *))completion
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ survey check started", self);
