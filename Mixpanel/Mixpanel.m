@@ -1079,12 +1079,8 @@ static Mixpanel *sharedInstance = nil;
         }];
 
         self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
+        MixpanelDebug(@"%@ survey check found %d available surveys: %@", self, surveys.count, surveys);
 
-        if (validSurvey) {
-            MixpanelDebug(@"%@ survey check found available survey: %@", self, validSurvey);
-        } else {
-            MixpanelDebug(@"%@ survey check found no valid survey", self);
-        }
         if (completion) {
             completion(validSurvey);
         }
