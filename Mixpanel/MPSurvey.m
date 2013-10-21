@@ -74,6 +74,11 @@
     return self;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@, (ID:%d, questions:%d)", self.name, self.ID, self.questions.count];
+}
+
 - (void)dealloc
 {
     self.questions = nil;
