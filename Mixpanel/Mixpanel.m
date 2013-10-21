@@ -1146,6 +1146,9 @@ static Mixpanel *sharedInstance = nil;
             rootViewController = rootViewController.presentedViewController;
         }
         
+        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+        controller.notification = notification;
+        
         [rootViewController presentViewController:controller animated:YES completion:nil];
     });
 }
