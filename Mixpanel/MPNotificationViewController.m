@@ -10,7 +10,10 @@
 
 #import "MPNotification.h"
 
-@interface MPNotificationViewController ()
+@interface MPNotificationViewController () {
+    id _target;
+    SEL _action;
+}
 
 @property (nonatomic, retain) IBOutlet UIImageView *imageView;
 @property (nonatomic, retain) IBOutlet UILabel *titleView;
@@ -42,6 +45,8 @@
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
     }
+    
+    [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchDown];
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,6 +61,19 @@
     
     [self.titleView sizeToFit];
     [self.bodyView sizeToFit];
+}
+
+- (void)pressedOkay
+{
+    if (_target) {
+        [_target performSelector:_action withObject:self];
+    }
+}
+
+- (void)setDismissTarget:(id)target action:(SEL)action
+{
+    _target = target;
+    _action = action;
 }
 
 @end
