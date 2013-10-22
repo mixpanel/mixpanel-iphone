@@ -42,7 +42,7 @@
     }
     
     NSMutableArray *images = [NSMutableArray array];
-    NSArray *imageUrls = object[@"images"];
+    NSArray *imageUrls = object[@"image_urls"];
     if (![imageUrls isKindOfClass:[NSArray class]]) {
         NSLog(@"inavlid notif image urls array: %@", imageUrls);
         return nil;
@@ -72,19 +72,27 @@
     return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                          title:title
                                           body:body
-                            images:[NSArray arrayWithArray:images]] autorelease];
+                                        images:[NSArray arrayWithArray:images]] autorelease];
 }
 
 - (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body images:(NSArray *)images
 {
     if (self = [super init]) {
         _ID = ID;
-        _title = title;
-        _body = body;
-        _images = images;
+        self.title = title;
+        self.body = body;
+        self.images = images;
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+    self.title = nil;
+    self.body = nil;
+    self.images = nil;
+    [super dealloc];
 }
 
 @end
