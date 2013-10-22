@@ -10,7 +10,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID title:(NSString *)title body:(NSString *)body images:(NSArray *)images;
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body images:(NSArray *)images;
 
 @end
 
@@ -26,24 +26,6 @@
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
         NSLog(@"invalid notif id: %@", ID);
-        return nil;
-    }
-    
-    NSArray *collections = object[@"collections"];
-    if (!([collections isKindOfClass:[NSArray class]] && [collections count] > 0)) {
-        NSLog(@"invalid notif collections: %@", collections);
-        return nil;
-    }
-    
-    NSDictionary *collection = collections[0];
-    if (![collection isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"invalid notif collection: %@", collection);
-        return nil;
-    }
-    
-    NSNumber *collectionID = collection[@"id"];
-    if (!([collectionID isKindOfClass:[NSNumber class]] && [collectionID integerValue] > 0)) {
-        NSLog(@"invalid notif collection id: %@", collectionID);
         return nil;
     }
     
@@ -88,17 +70,15 @@
     }
     
     return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
-                            collectionID:[collectionID unsignedIntegerValue]
                                          title:title
                                           body:body
                             images:[NSArray arrayWithArray:images]] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID title:(NSString *)title body:(NSString *)body images:(NSArray *)images
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body images:(NSArray *)images
 {
     if (self = [super init]) {
         _ID = ID;
-        _collectionID = collectionID;
         _title = title;
         _body = body;
         _images = images;
