@@ -1157,6 +1157,18 @@ static Mixpanel *sharedInstance = nil;
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    NSDictionary *properties = @{
+        @"$campaigns": @(controller.notification.ID),
+        @"$notifications": @{
+                @"campaign_id": @(controller.notification.ID),
+                @"type": @"inapp",
+                // maybe should do this in the consumer?
+                @"time": @([NSDate timeIntervalSinceReferenceDate])
+        }
+    };
+    
+    [self.people append:properties];
 }
 
 #pragma mark - UIAlertViewDelegate
