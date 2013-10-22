@@ -145,7 +145,10 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
+        // REMOVE THIS
+        self.decideURL = @"http://kyle.dev.mixpanel.org";
         self.showSurveyOnActive = YES;
+        self.showNotificationOnActive = YES;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -892,9 +895,12 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
-    if (self.showSurveyOnActive) {
+    
+    if (self.showSurveyOnActive || self.showNotificationOnActive) {
         NSDate *start = [NSDate date];
-        [self checkForSurveyWithCompletion:^(MPSurvey *survey){
+        
+        [self checkForDecideResponseWithCompletion:^(MPSurvey *survey, MPNotification *inappNotif) {
+            // TODO: decide on order and priority of decisions
             if (survey) {
                 if ([start timeIntervalSinceNow] < -2.0) {
                     self.lateSurvey = survey;
@@ -909,6 +915,8 @@ static Mixpanel *sharedInstance = nil;
                 } else {
                     [self showSurvey:survey];
                 }
+            } else if (inappNotif) {
+                [self showNotification:inappNotif];
             }
         }];
     }
@@ -1029,6 +1037,101 @@ static Mixpanel *sharedInstance = nil;
 }
 
 #pragma mark - Surveys
+
+- (void)checkForDecideResponseWithCompletion:(void (^)(MPSurvey *, MPNotification *))completion
+{
+    dispatch_async(self.serialQueue, ^{
+        MixpanelDebug(@"%@ decide check started", self);
+        if (!self.people.distinctId) {
+            MixpanelDebug(@"%@ decide check skipped because no user has been identified", self);
+            return;
+        }
+        NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
+        NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        NSError *error = nil;
+        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+        
+        if (error) {
+            NSLog(@"%@ decide check http error: %@", self, error);
+            return;
+        }
+        NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        if (error) {
+            NSLog(@"%@ decide check json error: %@", self, error);
+            return;
+        }
+        if (object[@"error"]) {
+            MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
+            return;
+        }
+        
+        MPSurvey *validSurvey = [self checkDictionaryForSurvey:object];
+        MPNotification *notification = [self checkDictionaryForNotification:object];
+        
+        if (completion) {
+            completion(validSurvey, notification);
+        }
+    });
+}
+
+- (MPSurvey *)checkDictionaryForSurvey:(NSDictionary *)object
+{
+    NSArray *surveys = object[@"surveys"];
+    if (!surveys || ![surveys isKindOfClass:[NSArray class]]) {
+        MixpanelDebug(@"%@ survey check response format error: %@", self, object);
+        return nil;
+    }
+    MPSurvey *validSurvey = nil;
+    for (NSDictionary *obj in surveys) {
+        MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
+        if (survey) {
+            NSSet *filtered = [_shownSurveys objectsPassingTest:^BOOL(NSNumber *collectionID, BOOL *stop){
+                return [collectionID isEqualToNumber:@(survey.collectionID)];
+            }];
+            if ([filtered count] > 0) {
+                MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
+            } else {
+                validSurvey = survey;
+                break;
+            }
+        }
+    }
+    if (validSurvey) {
+        MixpanelDebug(@"%@ survey check found available survey: %@", self, validSurvey);
+    } else {
+        MixpanelDebug(@"%@ survey check found no survey", self);
+    }
+    
+    return validSurvey;
+}
+
+- (MPNotification *)checkDictionaryForNotification:(NSDictionary *)object
+{
+    NSArray *notifs = object[@"notifications"];
+    if (!notifs || ![notifs isKindOfClass:[NSArray class]]) {
+        MixpanelDebug(@"%@ in-app notif check response format error: %@", self, object);
+        return nil;
+    }
+    
+    MPNotification *validNotif = nil;
+    for (NSDictionary *obj in notifs) {
+        MPNotification *notif = [MPNotification notificationWithJSONObject:obj];
+        if (notif) {
+            // TODO: set test like above
+            validNotif = notif;
+        }
+    }
+    
+    if (validNotif) {
+        MixpanelDebug(@"%@ in-app notif check found available notification: %@", self, validNotif);
+    } else {
+        MixpanelDebug(@"%@ in-app notif check found no notification", self);
+    }
+    
+    return validNotif;
+}
 
 - (void)checkForSurveyWithCompletion:(void (^)(MPSurvey *))completion
 {

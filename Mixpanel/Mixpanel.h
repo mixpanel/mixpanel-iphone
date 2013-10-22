@@ -162,6 +162,18 @@
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to automatically check for and show in-app notifications
+ for the currently identified user when the application becomes active.
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property(atomic) BOOL showNotificationOnActive;
+
+/*!
+ @property
 
  @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
