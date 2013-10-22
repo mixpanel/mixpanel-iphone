@@ -38,6 +38,8 @@
     [super viewDidLoad];
     
     if (self.notification) {
+        NSLog(@"notif: %@", self.notification.body);
+        
         if (self.notification.images.count > 0) {
             self.imageView.image = self.notification.images[0];
         }

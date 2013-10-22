@@ -11,9 +11,9 @@
 @interface MPNotification : NSObject
 
 @property(nonatomic,readonly) NSUInteger ID;
-@property(nonatomic,readonly) NSArray *images;
-@property(nonatomic,readonly) NSString *title;
-@property(nonatomic,readonly) NSString *body;
+@property(nonatomic,retain) NSArray *images;
+@property(nonatomic,retain) NSString *title;
+@property(nonatomic,retain) NSString *body;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
