@@ -23,7 +23,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"1a59f812e0366298ffad1b458e199c93"
+#define MIXPANEL_TOKEN @"metrics-1"
 
 @implementation AppDelegate
 
@@ -46,6 +46,9 @@
 
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
+    
+    // REMOVE THIS
+    [self.mixpanel identify:@"189321"];
 
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
