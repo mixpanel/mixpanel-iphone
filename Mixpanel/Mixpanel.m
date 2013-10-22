@@ -33,7 +33,7 @@
 #import "NSData+MPBase64.h"
 #import "ODIN.h"
 
-#define VERSION @"2.0.1"
+#define VERSION @"2.0.3"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
@@ -419,11 +419,12 @@ static Mixpanel *sharedInstance = nil;
         event = @"mp_event";
     }
     [Mixpanel assertPropertyTypes:properties];
+    NSNumber *epochSeconds = @(round([[NSDate date] timeIntervalSince1970]));
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [p addEntriesFromDictionary:self.automaticProperties];
         [p setObject:self.apiToken forKey:@"token"];
-        [p setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"time"];
+        [p setObject:epochSeconds forKey:@"time"];
         if (self.nameTag) {
             [p setObject:self.nameTag forKey:@"mp_name_tag"];
         }
@@ -1006,14 +1007,14 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
+    NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     dispatch_async(self.mixpanel.serialQueue, ^{
         NSMutableDictionary *r = [NSMutableDictionary dictionary];
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [r setObject:self.mixpanel.apiToken forKey:@"$token"];
         if (![r objectForKey:@"$time"]) {
             // milliseconds unix timestamp
-            NSNumber *time = [NSNumber numberWithUnsignedLongLong:(uint64_t)([[NSDate date] timeIntervalSince1970] * 1000)];
-            [r setObject:time forKey:@"$time"];
+            [r setObject:epochMilliseconds forKey:@"$time"];
         }
         if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
             [p addEntriesFromDictionary:self.automaticProperties];
