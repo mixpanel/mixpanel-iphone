@@ -613,8 +613,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ flushing %lu of %lu queued events: %@", self, (unsigned long)[eventsBatch count], (unsigned long)[self.eventsQueue count], self.eventsQueue);
         NSURLRequest *request = [self apiRequestWithEndpoint:@"/track/" andBody:postBody];
         NSError *error = nil;
-        NSURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
         NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
         
         if (error) {
@@ -650,8 +649,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ flushing %lu of %lu queued people: %@", self, (unsigned long)[peopleBatch count], (unsigned long)[self.peopleQueue count], self.peopleQueue);
         NSURLRequest *request = [self apiRequestWithEndpoint:@"/engage/" andBody:postBody];
         NSError *error = nil;
-        NSURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
         NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
         
         if (error) {
