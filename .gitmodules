@@ -1,0 +1,3 @@
+[submodule "HTTP"]
+	path = HelloMixpanel/HelloMixpanelTests/HTTP
+	url = https://github.com/robbiehanson/CocoaHTTPServer.git
