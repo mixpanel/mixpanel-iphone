@@ -61,12 +61,6 @@
 @property(nonatomic,retain) NSTimer *timer;
 @property(nonatomic,retain) NSMutableArray *eventsQueue;
 @property(nonatomic,retain) NSMutableArray *peopleQueue;
-@property(nonatomic,retain) NSArray *eventsBatch;
-@property(nonatomic,retain) NSArray *peopleBatch;
-//@property(nonatomic,retain) NSURLConnection *eventsConnection;
-//@property(nonatomic,retain) NSURLConnection *peopleConnection;
-//@property(nonatomic,retain) NSMutableData *eventsResponseData;
-//@property(nonatomic,retain) NSMutableData *peopleResponseData;
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
@@ -202,12 +196,6 @@ static Mixpanel *sharedInstance = nil;
     self.timer = nil;
     self.eventsQueue = nil;
     self.peopleQueue = nil;
-    self.eventsBatch = nil;
-    self.peopleBatch = nil;
-    //self.eventsConnection = nil;
-    //self.peopleConnection = nil;
-    //self.eventsResponseData = nil;
-    //self.peopleResponseData = nil;
     self.dateFormatter = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
@@ -618,11 +606,11 @@ static Mixpanel *sharedInstance = nil;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     while ([self.eventsQueue count] > 0) {
-        self.eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, MIN(50U, [self.eventsQueue count]))];
+        NSArray *eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, MIN(50U, [self.eventsQueue count]))];
 
-        NSString *requestData = [self encodeAPIData:self.eventsBatch];
+        NSString *requestData = [self encodeAPIData:eventsBatch];
         NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu queued events: %@", self, (unsigned long)[self.eventsBatch count], (unsigned long)[self.eventsQueue count], self.eventsQueue);
+        MixpanelDebug(@"%@ flushing %lu of %lu queued events: %@", self, (unsigned long)[eventsBatch count], (unsigned long)[self.eventsQueue count], self.eventsQueue);
         NSURLRequest *request = [self apiRequestWithEndpoint:@"/track/" andBody:postBody];
         NSError *error = nil;
         NSURLResponse *urlResponse = nil;
@@ -638,7 +626,7 @@ static Mixpanel *sharedInstance = nil;
             [self archiveEvents];
             return;
         } else {
-            [self.eventsQueue removeObjectsInArray:self.eventsBatch];
+            [self.eventsQueue removeObjectsInArray:eventsBatch];
             [self archiveEvents];
         }
     }
@@ -655,11 +643,11 @@ static Mixpanel *sharedInstance = nil;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     while ([self.peopleQueue count] > 0) {
-        self.peopleBatch = [self.peopleQueue subarrayWithRange:NSMakeRange(0, MIN(50U, [self.peopleQueue count]))];
+        NSArray *peopleBatch = [self.peopleQueue subarrayWithRange:NSMakeRange(0, MIN(50U, [self.peopleQueue count]))];
         
-        NSString *requestData = [self encodeAPIData:self.peopleBatch];
+        NSString *requestData = [self encodeAPIData:peopleBatch];
         NSString *postBody = [NSString stringWithFormat:@"data=%@", requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu queued people: %@", self, (unsigned long)[self.peopleBatch count], (unsigned long)[self.peopleQueue count], self.peopleQueue);
+        MixpanelDebug(@"%@ flushing %lu of %lu queued people: %@", self, (unsigned long)[peopleBatch count], (unsigned long)[self.peopleQueue count], self.peopleQueue);
         NSURLRequest *request = [self apiRequestWithEndpoint:@"/engage/" andBody:postBody];
         NSError *error = nil;
         NSURLResponse *urlResponse = nil;
@@ -675,7 +663,7 @@ static Mixpanel *sharedInstance = nil;
             [self archivePeople];
             return;
         } else {
-            [self.peopleQueue removeObjectsInArray:self.peopleBatch];
+            [self.peopleQueue removeObjectsInArray:peopleBatch];
             [self archivePeople];
         }
     }
