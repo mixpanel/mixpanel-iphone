@@ -203,6 +203,36 @@
     STAssertEquals(requestCount + 2, [MixpanelDummyHTTPConnection getRequestCount], @"60 events should have been batched in 2 HTTP requests");
 }
 
+
+- (void)testFlushPeople
+{
+    [self setupHTTPServer];
+    self.mixpanel.serverURL = @"http://localhost:31337";
+    self.mixpanel.delegate = self;
+    self.mixpanelWillFlush = YES;
+    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+    
+    [self.mixpanel identify:@"d1"];
+    for(uint i=0, n=50; i<n; i++) {
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+    }
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+    
+    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
+    STAssertEquals(requestCount + 1, [MixpanelDummyHTTPConnection getRequestCount], @"50 people properties should have been batched in 1 HTTP request");
+    
+    requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+    for(uint i=0, n=60; i<n; i++) {
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+    }
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+    
+    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
+    STAssertEquals(requestCount + 2, [MixpanelDummyHTTPConnection getRequestCount], @"60 people properties should have been batched in 2 HTTP requests");
+}
+
 - (void)testJSONSerializeObject {
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
