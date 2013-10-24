@@ -62,6 +62,7 @@
 @property(nonatomic,retain) NSMutableArray *eventsQueue;
 @property(nonatomic,retain) NSMutableArray *peopleQueue;
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
+@property(atomic) BOOL flushing;
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
@@ -572,28 +573,35 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flush
 {
+    if (self.flushing) {
+        MixpanelDebug(@"%@ flush already in progress", self);
+        return;
+    }
+    
+    self.flushing = YES;
     dispatch_async(self.serialQueue, ^{
-        if (self.taskId != UIBackgroundTaskInvalid) {
-            MixpanelDebug(@"%@ flush already in progress", self);
+
+        if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![self.delegate mixpanelWillFlush:self]) {
+            MixpanelDebug(@"%@ flush deferred by delegate", self);
             return;
         }
-
-        if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
-            if (![self.delegate mixpanelWillFlush:self]) {
-                MixpanelDebug(@"%@ flush deferred by delegate", self);
-                return;
-            }
-        }
-        self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
-            [self endBackgroundTask];
-        }];
         
         MixpanelDebug(@"%@ flush %lu starting", self, (unsigned long)self.taskId);
         [self flushEvents];
         [self flushPeople];
-        [self endBackgroundTask];
+        [self endFlush];
     });
+}
+
+- (void)endFlush
+{
+    MixpanelDebug(@"%@ flush finished", self);
+    self.flushing = NO;
+    if (self.taskId != UIBackgroundTaskInvalid) {
+        MixpanelDebug(@"%@ ending background task %lu", self, (unsigned long)self.taskId);
+        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+        self.taskId = UIBackgroundTaskInvalid;
+    }
 }
 
 - (void)flushEvents
@@ -677,13 +685,6 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)endBackgroundTask
-{
-    MixpanelDebug(@"%@ flush %lu finished", self, (unsigned long)self.taskId);
-    [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-    self.taskId = UIBackgroundTaskInvalid;
-}
-
 - (NSURLRequest *)apiRequestWithEndpoint:(NSString *)endpoint andBody:(NSString *)body
 {
     NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:endpoint]];
@@ -693,13 +694,6 @@ static Mixpanel *sharedInstance = nil;
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     MixpanelDebug(@"%@ http request: %@?%@", self, url, body);
     return request;
-}
-
-- (NSURLConnection *)apiConnectionWithEndpoint:(NSString *)endpoint andBody:(NSString *)body
-{
-    NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:body];
-    
-    return [[[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] autorelease];
 }
 
 #pragma mark - Persistence
@@ -853,8 +847,17 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationDidEnterBackground:(NSNotificationCenter *)notification
 {
     MixpanelDebug(@"%@ did enter background", self);
-    if (self.flushOnBackground) {
+    [self archive];
+    if (!self.flushing && self.flushOnBackground) {
         [self flush];
+    }
+    
+    if (self.flushing) {
+        self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
+            [self endFlush];
+        }];
+        MixpanelDebug(@"%@ starting background task to complete flush %lu", self, (unsigned long)self.taskId);
     }
 }
 
@@ -863,7 +866,7 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ will enter foreground", self);
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
-            [self endBackgroundTask];
+            [self endFlush];
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         }
     });
@@ -872,9 +875,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application will terminate", self);
-    dispatch_async(self.serialQueue, ^{
-        [self archiveFromSerialQueue];
-    });
+    [self archive];
 }
 
 @end
