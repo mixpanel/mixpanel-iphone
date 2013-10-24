@@ -105,7 +105,6 @@
 {
     NSLog(@"starting wait for serial queue...");
     dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
-    dispatch_debug(self.mixpanel.serialQueue, "serial queue debug");
     NSLog(@"finished wait for serial queue");
 }
 
