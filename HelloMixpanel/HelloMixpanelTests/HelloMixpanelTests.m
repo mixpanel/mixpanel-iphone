@@ -203,7 +203,6 @@
     STAssertEquals(requestCount + 2, [MixpanelDummyHTTPConnection getRequestCount], @"60 events should have been batched in 2 HTTP requests");
 }
 
-
 - (void)testFlushPeople
 {
     [self setupHTTPServer];
