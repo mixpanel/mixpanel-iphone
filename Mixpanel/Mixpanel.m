@@ -582,6 +582,8 @@ static Mixpanel *sharedInstance = nil;
 
         [self flushEvents];
         [self flushPeople];
+
+        MixpanelDebug(@"%@ flush complete", self);
     });
 }
 
@@ -818,14 +820,14 @@ static Mixpanel *sharedInstance = nil;
         [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
         self.taskId = UIBackgroundTaskInvalid;
     }];
-    MixpanelDebug(@"%@ starting background task to complete flush %lu", self, (unsigned long)self.taskId);
+    MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
 
     [self archive];
     if (self.flushOnBackground) {
         [self flush];
     }
     dispatch_async(_serialQueue, ^{
-        MixpanelDebug(@"%@ ending background task %lu", self, (unsigned long)self.taskId);
+        MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;

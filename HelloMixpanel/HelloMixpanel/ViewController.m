@@ -47,17 +47,6 @@
     tempScrollView.contentSize = CGSizeMake(320, 342);
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
-}
-
 - (IBAction)trackEvent:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
