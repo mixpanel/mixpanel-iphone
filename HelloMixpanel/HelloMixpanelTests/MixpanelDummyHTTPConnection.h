@@ -11,5 +11,6 @@
 @interface MixpanelDummyHTTPConnection : HTTPConnection
 
 +(int) getRequestCount;
++(void) setResponseCode:(NSString *)code;
 
 @end

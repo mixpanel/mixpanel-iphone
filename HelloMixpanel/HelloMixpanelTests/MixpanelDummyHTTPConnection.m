@@ -12,10 +12,12 @@
 @implementation MixpanelDummyHTTPConnection
 
 static int requestCount;
+static NSString *responseCode;
 
 + (void)initialize
 {
     requestCount = 0;
+    responseCode = @"1";
 }
 
 +(int) getRequestCount
@@ -23,11 +25,15 @@ static int requestCount;
     return requestCount;
 }
 
++(void) setResponseCode:(NSString *)code
+{
+    responseCode = code;
+}
+
 - (NSObject<HTTPResponse> *)httpResponseForMethod:(NSString *)method URI:(NSString *)path
 {
     requestCount += 1;
-    NSString *retval = @"1";
-    return [[HTTPDataResponse alloc] initWithData:[retval dataUsingEncoding:NSUTF8StringEncoding]];
+    return [[HTTPDataResponse alloc] initWithData:[responseCode dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 - (BOOL) supportsMethod:(NSString *)method atPath:(NSString *)path
