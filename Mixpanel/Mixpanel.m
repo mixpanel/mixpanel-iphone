@@ -62,7 +62,6 @@
 @property(nonatomic,retain) NSMutableArray *eventsQueue;
 @property(nonatomic,retain) NSMutableArray *peopleQueue;
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
-@property(atomic) BOOL flushing;
 @property(nonatomic,assign) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
@@ -573,108 +572,84 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flush
 {
-    if (self.flushing) {
-        MixpanelDebug(@"%@ flush already in progress", self);
-        return;
-    }
-    
-    self.flushing = YES;
     dispatch_async(self.serialQueue, ^{
-
+        MixpanelDebug(@"%@ flush starting", self);
+        
         if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![self.delegate mixpanelWillFlush:self]) {
             MixpanelDebug(@"%@ flush deferred by delegate", self);
             return;
         }
-        
-        MixpanelDebug(@"%@ flush %lu starting", self, (unsigned long)self.taskId);
+
         [self flushEvents];
         [self flushPeople];
-        [self endFlush];
     });
-}
-
-- (void)endFlush
-{
-    MixpanelDebug(@"%@ flush finished", self);
-    self.flushing = NO;
-    if (self.taskId != UIBackgroundTaskInvalid) {
-        MixpanelDebug(@"%@ ending background task %lu", self, (unsigned long)self.taskId);
-        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-        self.taskId = UIBackgroundTaskInvalid;
-    }
 }
 
 - (void)flushEvents
 {
-    if ([self.eventsQueue count] == 0) {
-        MixpanelDebug(@"%@ no events to flush", self);
-        return;
-    }
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    while ([self.eventsQueue count] > 0) {
-        NSArray *eventsBatch = [self.eventsQueue subarrayWithRange:NSMakeRange(0, MIN(50U, [self.eventsQueue count]))];
-
-        NSString *requestData = [self encodeAPIData:eventsBatch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu queued events: %@", self, (unsigned long)[eventsBatch count], (unsigned long)[self.eventsQueue count], self.eventsQueue);
-        NSURLRequest *request = [self apiRequestWithEndpoint:@"/track/" andBody:postBody];
-        NSError *error = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
-        NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-        
-        if (error) {
-            NSLog(@"%@ network failure: %@", self, error);
-            [self archiveEvents];
-            return;
-        } else if ([response intValue] == 0) {
-            NSLog(@"%@ track api error: %@", self, response);
-            [self archiveEvents];
-            return;
-        } else {
-            [self.eventsQueue removeObjectsInArray:eventsBatch];
-            [self archiveEvents];
-        }
-    }
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self updateNetworkActivityIndicator:NO];
+    [self flushQueue:_eventsQueue
+            withName:@"events"
+          toEndpoint:@"/track/"
+      withDataFormat:@"ip=1&data=%@"
+  andSuccessCallback:^{
+      [self archiveEvents];
+  }];
 }
 
 - (void)flushPeople
 {
-    if ([self.peopleQueue count] == 0) {
-        MixpanelDebug(@"%@ no people to flush", self);
+    [self flushQueue:_peopleQueue
+            withName:@"people"
+          toEndpoint:@"/engage/"
+      withDataFormat:@"data=%@"
+  andSuccessCallback:^{
+      [self archivePeople];
+  }];
+}
+
+- (void)flushQueue:(NSMutableArray *)queue withName:(NSString *)name toEndpoint:(NSString *)endpoint withDataFormat:(NSString *)format andSuccessCallback:(void(^)())callback
+{
+    if ([queue count] == 0) {
+        MixpanelDebug(@"%@ no %@ to flush", self, name);
         return;
     }
     
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self updateNetworkActivityIndicator:YES];
     
-    while ([self.peopleQueue count] > 0) {
-        NSArray *peopleBatch = [self.peopleQueue subarrayWithRange:NSMakeRange(0, MIN(50U, [self.peopleQueue count]))];
+    while ([queue count] > 0) {
+        NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, MIN(50U, [queue count]))];
         
-        NSString *requestData = [self encodeAPIData:peopleBatch];
-        NSString *postBody = [NSString stringWithFormat:@"data=%@", requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu queued people: %@", self, (unsigned long)[peopleBatch count], (unsigned long)[self.peopleQueue count], self.peopleQueue);
-        NSURLRequest *request = [self apiRequestWithEndpoint:@"/engage/" andBody:postBody];
+        NSString *requestData = [self encodeAPIData:batch];
+        NSString *postBody = [NSString stringWithFormat:format, requestData];
+        MixpanelDebug(@"%@ flushing %lu of %lu queued %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], name, queue);
+        NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
         NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
         
-        if (error) {
-            NSLog(@"%@ network failure: %@", self, error);
-            [self archivePeople];
-            return;
-        } else if ([response intValue] == 0) {
-            NSLog(@"%@ engage api error: %@", self, response);
-            [self archivePeople];
-            return;
+        BOOL requestFailed = (error || [response intValue] == 0);
+        if (!requestFailed) {
+            [queue removeObjectsInArray:batch];
+            callback();
         } else {
-            [self.peopleQueue removeObjectsInArray:peopleBatch];
-            [self archivePeople];
+            if (error) {
+                NSLog(@"%@ network failure: %@", self, error);
+            } else if ([response intValue] == 0) {
+                NSLog(@"%@ %@ api error: %@", self, endpoint, response);
+            }
+            break;
         }
     }
     
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self updateNetworkActivityIndicator:NO];
+}
+
+- (void)updateNetworkActivityIndicator:(BOOL)on
+{
+    if (_showNetworkActivityIndicator) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = on;
+    }
 }
 
 - (void)reachabilityChanged:(SCNetworkReachabilityFlags)flags
@@ -847,18 +822,26 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationDidEnterBackground:(NSNotificationCenter *)notification
 {
     MixpanelDebug(@"%@ did enter background", self);
+
+    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
+        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+        self.taskId = UIBackgroundTaskInvalid;
+    }];
+    MixpanelDebug(@"%@ starting background task to complete flush %lu", self, (unsigned long)self.taskId);
+    
     [self archive];
-    if (!self.flushing && self.flushOnBackground) {
+    if (self.flushOnBackground) {
         [self flush];
     }
-    
-    if (self.flushing) {
-        self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
-            [self endFlush];
-        }];
-        MixpanelDebug(@"%@ starting background task to complete flush %lu", self, (unsigned long)self.taskId);
-    }
+    dispatch_async(_serialQueue, ^{
+        MixpanelDebug(@"%@ flush finished", self);
+        if (self.taskId != UIBackgroundTaskInvalid) {
+            MixpanelDebug(@"%@ ending background task %lu", self, (unsigned long)self.taskId);
+            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+            self.taskId = UIBackgroundTaskInvalid;
+        }
+    });
 }
 
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
@@ -866,8 +849,9 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ will enter foreground", self);
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
-            [self endFlush];
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+            self.taskId = UIBackgroundTaskInvalid;
+            [self updateNetworkActivityIndicator:NO];
         }
     });
 }

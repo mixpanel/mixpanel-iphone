@@ -23,7 +23,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"97a6811950e8b2299edbd4d8e1b1f76f"
+#define MIXPANEL_TOKEN @"YOUR MIXPANEL PROJECT TOKEN"
 
 @implementation AppDelegate
 
