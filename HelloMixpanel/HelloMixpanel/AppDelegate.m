@@ -38,9 +38,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    
+
     // Override point for customization after application launch.
-    
+
     // Initialize the MixpanelAPI object
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
 
@@ -49,16 +49,16 @@
 
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
-    
+
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:[NSDictionary dictionaryWithObjectsAndKeys:@"Premium", @"Plan", nil]];
-    
+
     self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
-    
+
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    
+
     return YES;
 }
 
