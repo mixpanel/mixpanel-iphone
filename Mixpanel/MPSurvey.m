@@ -30,7 +30,7 @@
         return nil;
     }
     NSArray *collections = object[@"collections"];
-    if (!([collections isKindOfClass:[NSArray class]] && collections.count > 0)) {
+    if (!([collections isKindOfClass:[NSArray class]] && [collections count] > 0)) {
         NSLog(@"invalid survey collections: %@", collections);
         return nil;
     }
@@ -76,7 +76,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@, (ID:%d, questions:%d)", self.name, self.ID, self.questions.count];
+    return [NSString stringWithFormat:@"%@, (ID:%d, questions:%d)", self.name, self.ID, [self.questions count]];
 }
 
 - (void)dealloc

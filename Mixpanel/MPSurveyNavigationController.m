@@ -22,7 +22,7 @@
 @property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
-@property(nonatomic, retain) NSMutableDictionary *answers;
+@property(nonatomic,retain) NSMutableDictionary *answers;
 
 @end
 

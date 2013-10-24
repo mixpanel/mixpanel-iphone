@@ -73,7 +73,7 @@
 @property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
 @property(nonatomic,retain) NSDictionary *surveys;
-@property(nonatomic,retain) NSMutableSet *shownSurveys;
+@property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
 @property(nonatomic) BOOL surveyReceivedFirstAnswer;
 
@@ -156,7 +156,7 @@ static Mixpanel *sharedInstance = nil;
         self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        self.shownSurveys = [NSMutableSet set];
+        self.shownSurveyCollections = [NSMutableSet set];
 
         // wifi reachability
         BOOL reachabilityOk = NO;
@@ -240,7 +240,7 @@ static Mixpanel *sharedInstance = nil;
     self.eventsResponseData = nil;
     self.peopleResponseData = nil;
     self.dateFormatter = nil;
-    self.shownSurveys = nil;
+    self.shownSurveyCollections = nil;
     self.lateSurvey = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
@@ -817,7 +817,7 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    [p setValue:self.shownSurveys forKey:@"shownSurveys"];
+    [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         NSLog(@"%@ unable to archive properties data", self);
@@ -883,7 +883,7 @@ static Mixpanel *sharedInstance = nil;
         self.superProperties = [properties objectForKey:@"superProperties"];
         self.people.distinctId = [properties objectForKey:@"peopleDistinctId"];
         self.people.unidentifiedQueue = [properties objectForKey:@"peopleUnidentifiedQueue"];
-        self.shownSurveys = [properties objectForKey: @"shownSurveys"];
+        self.shownSurveyCollections = [properties objectForKey: @"shownSurveyCollections"];
     }
 }
 
@@ -1058,17 +1058,19 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
             return;
         }
-        if (!object[@"surveys"] || ![object[@"surveys"] isKindOfClass:[NSArray class]]) {
+
+        NSArray *rawSurveys = object[@"surveys"];
+        if (!rawSurveys || ![rawSurveys isKindOfClass:[NSArray class]]) {
             MixpanelDebug(@"%@ survey check response format error: %@", self, object);
             return;
         }
 
         NSMutableDictionary *surveys = [NSMutableDictionary dictionary];
-        __block MPSurvey *validSurvey = nil;
-
-        [(NSArray *)(object[@"surveys"]) enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        MPSurvey *validSurvey = nil;
+        
+        for (id obj in rawSurveys) {
             MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
-            if (survey && [_shownSurveys member:@(survey.collectionID)] == nil) {
+            if (survey && [_shownSurveyCollections member:@(survey.collectionID)] == nil) {
                 [surveys setObject:survey forKey:survey.name];
                 if (!validSurvey) {
                     validSurvey = survey;
@@ -1076,7 +1078,7 @@ static Mixpanel *sharedInstance = nil;
             } else if (survey) {
                 MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
             }
-        }];
+        }
 
         self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
         MixpanelDebug(@"%@ survey check found %d available surveys: %@", self, surveys.count, surveys);
@@ -1105,22 +1107,22 @@ static Mixpanel *sharedInstance = nil;
         controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         [rootViewController presentViewController:controller animated:YES completion:nil];
         _surveyReceivedFirstAnswer = NO;
-        [self markSurveyShown:survey];
     });
 }
 
 - (void)markSurveyShown:(MPSurvey *)survey
 {
-    MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveys);
-    [_shownSurveys addObject:@(survey.collectionID)];
+    MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
+    [_shownSurveyCollections addObject:@(survey.collectionID)];
     [self.people append:@{@"$surveys": @(survey.ID), @"$collections": @(survey.collectionID)}];
-    [self flush];
 }
 
 - (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller withAnswers:(NSArray *)answers
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-
+    
+    [self markSurveyShown:controller.survey];
+    
     for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
         NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:[answers objectAtIndex:i], @"$answers", nil];
         if (i == 0) {
