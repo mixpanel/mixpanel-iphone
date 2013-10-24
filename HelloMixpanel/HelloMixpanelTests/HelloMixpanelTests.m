@@ -68,7 +68,7 @@
     [self.mixpanel reset];
     self.mixpanelWillFlush = NO;
     [self waitForSerialQueue];
-    
+
     NSLog(@"finished test setup");
 }
 
@@ -85,10 +85,10 @@
         [self.httpServer setConnectionClass:[MixpanelDummyHTTPConnection class]];
         [self.httpServer setType:@"_http._tcp."];
         [self.httpServer setPort:31337];
-        
+
         NSString *webPath = [[NSBundle mainBundle] resourcePath];
         [self.httpServer setDocumentRoot:webPath];
-        
+
         NSError *error;
         if([self.httpServer start:&error])
         {
@@ -158,7 +158,7 @@
 - (void)testHTTPServer {
     [self setupHTTPServer];
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    
+
     NSString *post = @"Test Data";
     NSURL *url = [NSURL URLWithString:[@"http://localhost:31337" stringByAppendingString:@"/engage/"]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -169,7 +169,7 @@
     NSURLResponse *urlResponse = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
     NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-    
+
     STAssertTrue([response length] > 0, @"HTTP server response not valid");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"One server request should have been made");
 }
@@ -181,24 +181,24 @@
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    
+
     [self.mixpanel identify:@"d1"];
     for(uint i=0, n=50; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
-    
+
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"50 events should have been batched in 1 HTTP request");
-    
+
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     for(uint i=0, n=60; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
-    
+
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 events should have been batched in 2 HTTP requests");
 }
@@ -210,24 +210,24 @@
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    
+
     [self.mixpanel identify:@"d1"];
     for(uint i=0, n=50; i<n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
-    
+
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
     STAssertEquals(requestCount + 1, [MixpanelDummyHTTPConnection getRequestCount], @"50 people properties should have been batched in 1 HTTP request");
-    
+
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     for(uint i=0, n=60; i<n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
-    
+
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 people properties should have been batched in 2 HTTP requests");
 }
@@ -239,7 +239,7 @@
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    
+
     [self.mixpanel identify:@"d1"];
     for(uint i=0, n=50; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
@@ -248,7 +248,7 @@
     STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"50 events should be queued up");
     [self.mixpanel flush];
     [self waitForSerialQueue];
-    
+
     STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"events should still be in the queue if flush fails");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 0, @"The request should have failed.");
 }
@@ -260,7 +260,7 @@
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    
+
     [self.mixpanel identify:@"d1"];
     for(uint i=0, n=10; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
@@ -275,7 +275,7 @@
     STAssertEquals(self.mixpanel.eventsQueue.count, 5U, @"5 more events should be queued up");
     [self.mixpanel flush];
     [self waitForSerialQueue];
-    
+
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
 }

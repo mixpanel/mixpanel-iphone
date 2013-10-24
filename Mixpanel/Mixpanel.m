@@ -574,7 +574,7 @@ static Mixpanel *sharedInstance = nil;
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ flush starting", self);
-        
+
         if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![self.delegate mixpanelWillFlush:self]) {
             MixpanelDebug(@"%@ flush deferred by delegate", self);
             return;
@@ -819,7 +819,7 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
     }];
     MixpanelDebug(@"%@ starting background task to complete flush %lu", self, (unsigned long)self.taskId);
-    
+
     [self archive];
     if (self.flushOnBackground) {
         [self flush];
