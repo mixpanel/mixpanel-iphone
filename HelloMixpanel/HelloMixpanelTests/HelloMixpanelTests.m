@@ -157,7 +157,6 @@
 
 - (void)testHTTPServer {
     [self setupHTTPServer];
-    [MixpanelDummyHTTPConnection setResponseCode:@"Test"];
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     
     NSString *post = @"Test Data";
@@ -171,14 +170,13 @@
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
     NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
     
-    STAssertTrue([response isEqualToString:@"Test"], @"HTTP server response not valid");
+    STAssertTrue([response length] > 0, @"HTTP server response not valid");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"One server request should have been made");
 }
 
 - (void)testFlushEvents
 {
     [self setupHTTPServer];
-    [MixpanelDummyHTTPConnection setResponseCode:@"1"];
     self.mixpanel.serverURL = @"http://localhost:31337";
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
@@ -208,7 +206,6 @@
 - (void)testFlushPeople
 {
     [self setupHTTPServer];
-    [MixpanelDummyHTTPConnection setResponseCode:@"1"];
     self.mixpanel.serverURL = @"http://localhost:31337";
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
@@ -238,8 +235,7 @@
 - (void)testFlushFailure
 {
     [self setupHTTPServer];
-    [MixpanelDummyHTTPConnection setResponseCode:@"0"];
-    self.mixpanel.serverURL = @"http://localhost:31337";
+    self.mixpanel.serverURL = @"http://0.0.0.0";
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
@@ -254,13 +250,12 @@
     [self waitForSerialQueue];
     
     STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"events should still be in the queue if flush fails");
-    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"There should be 1 (failed) HTTP request");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 0, @"The request should have failed.");
 }
 
 - (void)testAddingEventsAfterFlush
 {
     [self setupHTTPServer];
-    [MixpanelDummyHTTPConnection setResponseCode:@"1"];
     self.mixpanel.serverURL = @"http://localhost:31337";
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
