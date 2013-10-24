@@ -587,62 +587,52 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flushEvents
 {
-    [self updateNetworkActivityIndicator:NO];
     [self flushQueue:_eventsQueue
-            withName:@"events"
-          toEndpoint:@"/track/"
-      withDataFormat:@"ip=1&data=%@"
-  andSuccessCallback:^{
-      [self archiveEvents];
-  }];
+            endpoint:@"/track/"
+       batchComplete:^{
+           [self archiveEvents];
+       }];
 }
 
 - (void)flushPeople
 {
     [self flushQueue:_peopleQueue
-            withName:@"people"
-          toEndpoint:@"/engage/"
-      withDataFormat:@"data=%@"
-  andSuccessCallback:^{
-      [self archivePeople];
-  }];
+            endpoint:@"/engage/"
+       batchComplete:^{
+           [self archivePeople];
+       }];
 }
 
-- (void)flushQueue:(NSMutableArray *)queue withName:(NSString *)name toEndpoint:(NSString *)endpoint withDataFormat:(NSString *)format andSuccessCallback:(void(^)())callback
+- (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint batchComplete:(void(^)())batchCompleteCallback
 {
-    if ([queue count] == 0) {
-        MixpanelDebug(@"%@ no %@ to flush", self, name);
-        return;
-    }
-    
-    [self updateNetworkActivityIndicator:YES];
-    
     while ([queue count] > 0) {
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, MIN(50U, [queue count]))];
-        
+
         NSString *requestData = [self encodeAPIData:batch];
-        NSString *postBody = [NSString stringWithFormat:format, requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu queued %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], name, queue);
+        NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
+        MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
+
+        [self updateNetworkActivityIndicator:YES];
+
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
-        NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-        
-        BOOL requestFailed = (error || [response intValue] == 0);
-        if (!requestFailed) {
-            [queue removeObjectsInArray:batch];
-            callback();
-        } else {
-            if (error) {
-                NSLog(@"%@ network failure: %@", self, error);
-            } else if ([response intValue] == 0) {
-                NSLog(@"%@ %@ api error: %@", self, endpoint, response);
-            }
+
+        [self updateNetworkActivityIndicator:NO];
+
+        if (error) {
+            NSLog(@"%@ network failure: %@", self, error);
             break;
         }
+
+        NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+        if ([response intValue] == 0) {
+            NSLog(@"%@ %@ api rejected some items", self, endpoint);
+        };
+
+        [queue removeObjectsInArray:batch];
+        batchCompleteCallback();
     }
-    
-    [self updateNetworkActivityIndicator:NO];
 }
 
 - (void)updateNetworkActivityIndicator:(BOOL)on
@@ -835,9 +825,8 @@ static Mixpanel *sharedInstance = nil;
         [self flush];
     }
     dispatch_async(_serialQueue, ^{
-        MixpanelDebug(@"%@ flush finished", self);
+        MixpanelDebug(@"%@ ending background task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
-            MixpanelDebug(@"%@ ending background task %lu", self, (unsigned long)self.taskId);
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
