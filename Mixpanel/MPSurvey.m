@@ -20,12 +20,12 @@
         return nil;
     }
     NSNumber *ID = object[@"id"];
-    if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
+    if (![ID isKindOfClass:[NSNumber class]]) {
         NSLog(@"invalid survey id: %@", ID);
         return nil;
     }
     NSString *name = object[@"name"];
-    if (!([name isKindOfClass:[NSString class]] && name.length > 0)) {
+    if (![name isKindOfClass:[NSString class]]) {
         NSLog(@"invalid survey name: %@", name);
         return nil;
     }
@@ -60,13 +60,18 @@
 - (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
     if (self = [super init]) {
-        _ID = ID;
-        _name = name;
-        _collectionID = collectionID;
-        if (questions && [questions count] > 0) {
+        BOOL valid = YES;
+        valid = valid && name.length > 0;
+        valid = valid && questions && [questions count] > 0;
+        valid = valid && ID > 0;
+
+        if (valid) {
+            _ID = ID;
+            _name = name;
+            _collectionID = collectionID;
             self.questions = questions;
         } else {
-            NSLog(@"survey has no questions: %@", questions);
+            NSLog(@"Not a valid survey");
             [self release];
             self = nil;
         }
