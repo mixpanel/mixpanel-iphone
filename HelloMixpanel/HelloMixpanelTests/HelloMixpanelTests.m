@@ -21,7 +21,6 @@
 #import "Mixpanel.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
-#import "MPCJSONSerializer.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyHTTPConnection.h"
 
@@ -219,7 +218,7 @@
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
     STAssertEquals(requestCount + 1, [MixpanelDummyHTTPConnection getRequestCount], @"50 people properties should have been batched in 1 HTTP request");
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
@@ -229,7 +228,7 @@
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 people properties should have been batched in 2 HTTP requests");
 }
 
@@ -246,11 +245,11 @@
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
-    STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"50 events should be queued up");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"50 events should be queued up");
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"events should still be in the queue if flush fails");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"events should still be in the queue if flush fails");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 0, @"The request should have failed.");
 }
 
@@ -267,17 +266,17 @@
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
-    STAssertEquals(self.mixpanel.eventsQueue.count, 10U, @"10 events should be queued up");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
     [self.mixpanel flush];
     for(uint i=0, n=5; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
-    STAssertEquals(self.mixpanel.eventsQueue.count, 5U, @"5 more events should be queued up");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 5U, @"5 more events should be queued up");
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"events should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
 }
 
