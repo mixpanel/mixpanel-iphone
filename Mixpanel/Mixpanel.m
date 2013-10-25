@@ -139,6 +139,7 @@ static Mixpanel *sharedInstance = nil;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
         self.showSurveyOnActive = YES;
+        self.checkForSurveysOnActive = YES;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -863,10 +864,10 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
-    if (self.showSurveyOnActive) {
+    if (self.checkForSurveysOnActive) {
         NSDate *start = [NSDate date];
         [self checkForSurveysWithCompletion:^(MPSurvey *survey){
-            if (survey) {
+            if (survey && self.showSurveyOnActive) {
                 if ([start timeIntervalSinceNow] < -2.0) {
                     self.lateSurvey = survey;
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
@@ -985,7 +986,7 @@ static Mixpanel *sharedInstance = nil;
         }
 
         self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
-        MixpanelDebug(@"%@ survey check found %d available surveys: %@", self, surveys.count, surveys);
+        MixpanelDebug(@"%@ survey check found %lu available surveys: %@", self, surveys.count, surveys);
 
         if (completion) {
             completion(validSurvey);

@@ -149,13 +149,30 @@
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to automatically check for surveys for the
+ currently identified user when the application becomes active.
+ 
+ @discussion
+ Defaults to YES. Will fire a network request on 
+ <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
+ for the currently identified user.
+ */
+@property(atomic) BOOL checkForSurveysOnActive;
+
+/*!
+ @property
 
  @abstract
- Controls whether to automatically check for and show surveys for the
+ Controls whether to automatically show a survey for the
  currently identified user when the application becomes active.
 
  @discussion
- Defaults to YES.
+ Defaults to YES. This will only show a survey if
+ <code>checkForSurveysOnActive</code> is also set to YES, and the
+ survey check retrieves at least 1 valid survey for the currently
+ identified user.
  */
 @property(atomic) BOOL showSurveyOnActive;
 
