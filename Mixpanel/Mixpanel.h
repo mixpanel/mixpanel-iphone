@@ -449,6 +449,22 @@
  */
 - (BOOL)showSurveyWithName:(NSString *)name;
 
+/*!
+ @method
+ 
+ @abstract
+ Returns a list of available survey names to show.
+ 
+ @discussion
+ Once checkForSurveysWithCompletion has completed. This gives you the names
+ of the surveys that the Library has retrieved for the currently identified user.
+ 
+ @return
+ A NSArray of the stored surveys that can be shown with showSurveyWithName:.
+ */
+
+- (NSArray *)availableSurveys;
+
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 @end
