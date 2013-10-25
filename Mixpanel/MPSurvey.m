@@ -20,7 +20,7 @@
         return nil;
     }
     NSNumber *ID = object[@"id"];
-    if (![ID isKindOfClass:[NSNumber class]]) {
+    if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
         NSLog(@"invalid survey id: %@", ID);
         return nil;
     }
@@ -63,7 +63,6 @@
         BOOL valid = YES;
         valid = valid && name.length > 0;
         valid = valid && questions && [questions count] > 0;
-        valid = valid && ID > 0;
 
         if (valid) {
             _ID = ID;
