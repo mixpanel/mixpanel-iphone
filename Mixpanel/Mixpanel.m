@@ -1018,6 +1018,7 @@ static Mixpanel *sharedInstance = nil;
 - (BOOL)showSurveyWithName:(NSString *)name
 {
     MixpanelLog(@"Looking for survey with name: %@", name);
+    MixpanelLog(@"Available surveys are: %@", [self availableSurveys]);
     MPSurvey *survey = [_surveys objectForKey:name];
     if (survey) {
         [self showSurvey:survey];
