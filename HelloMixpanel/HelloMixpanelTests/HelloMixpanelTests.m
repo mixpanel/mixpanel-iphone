@@ -807,9 +807,20 @@
 
 - (void)testParseSurvey
 {
+    // invalid (no name)
+    NSDictionary *invalid = @{@"id": @3,
+                        @"collections": @[@{@"id": @9}],
+                        @"questions": @[@{
+                                            @"id": @12,
+                                            @"type": @"text",
+                                            @"prompt": @"Anything else?",
+                                            @"extra_data": @{}}]};
+    STAssertNil([MPSurvey surveyWithJSONObject:invalid], nil);
+    
     // valid
     NSDictionary *o = @{@"id": @3,
-                        @"collections": @[@{@"id": @9}],
+                        @"name": @"survey",
+                        @"collections": @[@{@"id": @9, @"name": @"collection"}],
                         @"questions": @[@{
                                             @"id": @12,
                                             @"type": @"text",
