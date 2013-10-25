@@ -432,6 +432,23 @@
  */
 - (void)showSurvey:(MPSurvey *)survey;
 
+/*!
+ @method
+ 
+ @abstract
+ Shows the survey with the given name.
+ 
+ @discussion
+ Once checkForSurveysWithCompletion has completed. The Library will store
+ all the available surveys internally. This method allows you to explicitly
+ show a named survey at the time of your choosing.
+
+ @return
+ Boolean YES or NO indicating whether a survey with the provided name was
+ found in the surveys list and shown.
+ */
+- (BOOL)showSurveyWithName:(NSString *)name;
+
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 @end
