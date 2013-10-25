@@ -1015,6 +1015,22 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
+- (BOOL)showSurveyWithName:(NSString *)name
+{
+    MixpanelLog(@"Looking for survey with name: %@", name);
+    MPSurvey *survey = [_surveys objectForKey:name];
+    if (survey) {
+        [self showSurvey:survey];
+        return YES;
+    }
+    return NO;
+}
+
+- (NSArray *)availableSurveys
+{
+    return [_surveys allKeys];
+}
+
 - (void)markSurveyShown:(MPSurvey *)survey
 {
     MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
