@@ -21,7 +21,6 @@
 #import "Mixpanel.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
-#import "MPCJSONSerializer.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyHTTPConnection.h"
 
@@ -219,7 +218,7 @@
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
     STAssertEquals(requestCount + 1, [MixpanelDummyHTTPConnection getRequestCount], @"50 people properties should have been batched in 1 HTTP request");
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
@@ -229,7 +228,7 @@
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"people should have been flushed");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 people properties should have been batched in 2 HTTP requests");
 }
 
@@ -246,11 +245,11 @@
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
-    STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"50 events should be queued up");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"50 events should be queued up");
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertEquals(self.mixpanel.eventsQueue.count, 50U, @"events should still be in the queue if flush fails");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"events should still be in the queue if flush fails");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 0, @"The request should have failed.");
 }
 
@@ -267,17 +266,17 @@
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
-    STAssertEquals(self.mixpanel.eventsQueue.count, 10U, @"10 events should be queued up");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
     [self.mixpanel flush];
     for(uint i=0, n=5; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
-    STAssertEquals(self.mixpanel.eventsQueue.count, 5U, @"5 more events should be queued up");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 5U, @"5 more events should be queued up");
     [self.mixpanel flush];
     [self waitForSerialQueue];
 
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"events should have been flushed");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
 }
 
@@ -286,7 +285,7 @@
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", @"json serialization failed");
+    STAssertEqualObjects(json, @"[{\"string\":\"yello\",\"number\":3,\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"dictionary\":{\"k\":\"v\"},\"null\":null,\"date\":\"2012-09-29T02:14:36.000Z\",\"array\":[\"1\"],\"float\":1.3,\"url\":\"https:\\/\\/mixpanel.com\\/\"}]", @"json serialization failed");
     test = [NSDictionary dictionaryWithObject:@"non-string key" forKey:@3];
     data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
@@ -343,7 +342,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 16, @"incorrect number of properties");
+    STAssertTrue(p.count == 17, @"incorrect number of properties");
     STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
     STAssertNotNil([p objectForKey:@"$app_release"], @"$app_release not set");
     STAssertNotNil([p objectForKey:@"$lib_version"], @"$lib_version not set");
@@ -376,7 +375,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 19, @"incorrect number of properties");
+    STAssertTrue(p.count == 20, @"incorrect number of properties");
     STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
