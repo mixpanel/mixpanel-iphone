@@ -285,7 +285,7 @@
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", @"json serialization failed");
+    STAssertEqualObjects(json, @"[{\"string\":\"yello\",\"number\":3,\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"dictionary\":{\"k\":\"v\"},\"null\":null,\"date\":\"2012-09-29T02:14:36.000Z\",\"array\":[\"1\"],\"float\":1.3,\"url\":\"https:\\/\\/mixpanel.com\\/\"}]", @"json serialization failed");
     test = [NSDictionary dictionaryWithObject:@"non-string key" forKey:@3];
     data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
@@ -342,7 +342,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 16, @"incorrect number of properties");
+    STAssertTrue(p.count == 17, @"incorrect number of properties");
     STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
     STAssertNotNil([p objectForKey:@"$app_release"], @"$app_release not set");
     STAssertNotNil([p objectForKey:@"$lib_version"], @"$lib_version not set");
@@ -375,7 +375,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 19, @"incorrect number of properties");
+    STAssertTrue(p.count == 20, @"incorrect number of properties");
     STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
