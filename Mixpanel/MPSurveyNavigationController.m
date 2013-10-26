@@ -342,7 +342,7 @@
 
 - (IBAction)dismiss
 {
-    [_delegate surveyControllerWasDismissed:self withAnswers:[[self answers] allValues]];
+    [_delegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
 }
 
 - (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties

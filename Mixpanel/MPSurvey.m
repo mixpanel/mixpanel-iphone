@@ -61,8 +61,14 @@
 {
     if (self = [super init]) {
         BOOL valid = YES;
-        valid = valid && name.length > 0;
-        valid = valid && questions && [questions count] > 0;
+        if (!(name.length > 0)) {
+            valid = NO;
+            NSLog(@"Survey must have a non-blank name");
+        }
+        if (!(questions && [questions count] > 0)) {
+            valid = NO;
+            NSLog(@"Survey must have at least one question %@", questions);
+        }
 
         if (valid) {
             _ID = ID;
@@ -70,7 +76,6 @@
             _collectionID = collectionID;
             self.questions = questions;
         } else {
-            NSLog(@"Not a valid survey");
             [self release];
             self = nil;
         }
