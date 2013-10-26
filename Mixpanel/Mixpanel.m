@@ -997,7 +997,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey:(MPSurvey *)survey
 {
     if (!survey) {
-        MixpanelLog(@"%@ cannot showSurvey with a nil survey", self);
+        NSLog(@"%@ cannot showSurvey with a nil survey", self);
         return;
     }
 
