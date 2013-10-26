@@ -997,7 +997,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey:(MPSurvey *)survey
 {
     if (!survey) {
-        MixpanelLog(@"cannot showSurvey with a nil survey");
+        MixpanelLog(@"%@ cannot showSurvey with a nil survey", self);
         return;
     }
 
@@ -1018,8 +1018,8 @@ static Mixpanel *sharedInstance = nil;
 
 - (BOOL)showSurveyWithName:(NSString *)name
 {
-    MixpanelLog(@"Looking for survey with name: %@", name);
-    MixpanelLog(@"Available surveys are: %@", [self availableSurveys]);
+    MixpanelDebug(@"%@ Looking for survey with name: %@", self, name);
+    MixpanelDebug(@"%@ Available surveys are: %@", self, [self availableSurveys]);
     MPSurvey *survey = [_surveys objectForKey:name];
     if (survey) {
         [self showSurvey:survey];
