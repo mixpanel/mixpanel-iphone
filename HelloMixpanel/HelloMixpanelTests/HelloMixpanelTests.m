@@ -285,7 +285,7 @@
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    STAssertEqualObjects(json, @"[{\"string\":\"yello\",\"number\":3,\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"dictionary\":{\"k\":\"v\"},\"null\":null,\"date\":\"2012-09-29T02:14:36.000Z\",\"array\":[\"1\"],\"float\":1.3,\"url\":\"https:\\/\\/mixpanel.com\\/\"}]", @"json serialization failed");
+    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", nil);
     test = [NSDictionary dictionaryWithObject:@"non-string key" forKey:@3];
     data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
