@@ -149,13 +149,13 @@
 
 /*!
  @property
- 
+
  @abstract
  Controls whether to automatically check for surveys for the
  currently identified user when the application becomes active.
- 
+
  @discussion
- Defaults to YES. Will fire a network request on 
+ Defaults to YES. Will fire a network request on
  <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
  for the currently identified user.
  */
@@ -440,15 +440,29 @@
 
 /*!
  @method
- 
+
  @abstract
  Shows the survey with the given name.
- 
+
  @discussion
  This method allows you to explicitly show a named survey at the time of your choosing.
 
  */
 - (void)showSurveyWithName:(NSString *)name;
+
+/*!
+ @method
+
+ @abstract
+ Show a survey if one is available.
+
+ @discussion
+ This method allows you to display the first available survey targeted to the currently
+ identified user at the time of your choosing. You would typically pair this with
+ setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
+
+ */
+- (void)showSurveyIfAvailable;
 
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;

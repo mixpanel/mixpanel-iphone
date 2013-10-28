@@ -870,20 +870,22 @@ static Mixpanel *sharedInstance = nil;
     if (self.checkForSurveysOnActive) {
         NSDate *start = [NSDate date];
         [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
-            MPSurvey *survey = [self nextSurvey];
-            if (survey && self.showSurveyOnActive) {
-                if ([start timeIntervalSinceNow] < -2.0) {
-                    self.lateSurvey = survey;
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                    message:@"Mind taking a quick survey?"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"No, Thanks"
-                                                          otherButtonTitles:@"Sure", nil];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [alert show];
-                    });
-                } else {
-                    [self showSurvey:survey];
+            if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
+                MPSurvey *survey = [surveys objectForKey:[surveys allKeys][0]];
+                if (survey) {
+                    if ([start timeIntervalSinceNow] < -2.0) {
+                        self.lateSurvey = survey;
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
+                                                                        message:@"Mind taking a quick survey?"
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"No, Thanks"
+                                                              otherButtonTitles:@"Sure", nil];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [alert show];
+                        });
+                    } else {
+                        [self showSurvey:survey];
+                    }
                 }
             }
         }];
@@ -1025,7 +1027,7 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)showNextSurvey
+- (void)showSurveyIfAvailable
 {
     [self checkForSurveysWithCompletion:^void (NSDictionary *surveys){
         MixpanelDebug(@"%@ Looking for next available survey", self);
@@ -1051,19 +1053,6 @@ static Mixpanel *sharedInstance = nil;
             }
         }
     }];
-}
-
-- (MPSurvey *)nextSurvey
-{
-    if (_surveys) {
-        for (NSString *name in _surveys) {
-            MPSurvey *survey = [_surveys objectForKey:name];
-            if (survey && [_shownSurveyCollections member:@(survey.collectionID)] == nil) {
-                return survey;
-            }
-        }
-    }
-    return nil;
 }
 
 - (void)markSurveyShown:(MPSurvey *)survey
