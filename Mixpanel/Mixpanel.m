@@ -1029,7 +1029,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurveyIfAvailable
 {
-    [self checkForSurveysWithCompletion:^void (NSDictionary *surveys){
+    [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
         MixpanelDebug(@"%@ Looking for next available survey", self);
         MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
         if (surveys && [surveys count] > 0) {
@@ -1043,7 +1043,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurveyWithName:(NSString *)name
 {
-    [self checkForSurveysWithCompletion:^void (NSDictionary *surveys){
+    [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
         MixpanelDebug(@"%@ Looking for survey with name: %@", self, name);
         MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
         if (surveys) {
