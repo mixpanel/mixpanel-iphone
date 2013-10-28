@@ -815,7 +815,7 @@
                                             @"prompt": @"Anything else?",
                                             @"extra_data": @{}}]};
     STAssertNil([MPSurvey surveyWithJSONObject:invalid], nil);
-    
+
     // valid
     NSDictionary *o = @{@"id": @3,
                         @"name": @"survey",

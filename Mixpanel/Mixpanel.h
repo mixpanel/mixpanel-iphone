@@ -430,17 +430,6 @@
  @method
 
  @abstract
- Checks for a survey for the currently identified user.
-
- @discussion
- The completion block will be passed the survey if one is found and nil if not.
- */
-- (void)checkForSurveysWithCompletion:(void (^)(MPSurvey *survey))completion;
-
-/*!
- @method
-
- @abstract
  Shows the survey in a <code>MPSurveyNavigationController</code> in the view of the
  root view controller.
 
@@ -456,15 +445,10 @@
  Shows the survey with the given name.
  
  @discussion
- Once checkForSurveysWithCompletion has completed. The Library will store
- all the available surveys internally. This method allows you to explicitly
- show a named survey at the time of your choosing.
+ This method allows you to explicitly show a named survey at the time of your choosing.
 
- @return
- Boolean YES or NO indicating whether a survey with the provided name was
- found in the surveys list and shown.
  */
-- (BOOL)showSurveyWithName:(NSString *)name;
+- (void)showSurveyWithName:(NSString *)name;
 
 /*!
  @method
@@ -473,8 +457,8 @@
  Returns a list of available survey names to show.
  
  @discussion
- Once checkForSurveysWithCompletion has completed. This gives you the names
- of the surveys that the Library has retrieved for the currently identified user.
+ This gives you the names of the surveys that the Library has retrieved for 
+ the currently identified user.
  
  @return
  A NSArray of the stored surveys that can be shown with showSurveyWithName:.
