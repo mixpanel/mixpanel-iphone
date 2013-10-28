@@ -69,7 +69,6 @@
 @property(nonatomic,retain) NSDictionary *surveys;
 @property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
-@property(nonatomic) BOOL surveyReceivedFirstAnswer;
 
 @end
 
@@ -1023,7 +1022,6 @@ static Mixpanel *sharedInstance = nil;
         }
         controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         [rootViewController presentViewController:controller animated:YES completion:nil];
-        _surveyReceivedFirstAnswer = NO;
     });
 }
 
