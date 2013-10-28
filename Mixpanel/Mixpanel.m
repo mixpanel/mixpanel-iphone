@@ -869,7 +869,7 @@ static Mixpanel *sharedInstance = nil;
     [self startFlushTimer];
     if (self.checkForSurveysOnActive) {
         NSDate *start = [NSDate date];
-        [self checkForSurveysWithCompletion:^(){
+        [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
             MPSurvey *survey = [self nextSurvey];
             if (survey && self.showSurveyOnActive) {
                 if ([start timeIntervalSinceNow] < -2.0) {
@@ -941,7 +941,7 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-- (void)checkForSurveysWithCompletion:(void (^)(void))completion
+- (void)checkForSurveysWithCompletion:(void (^)(NSDictionary *surveys))completion
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ survey check started", self);
@@ -949,52 +949,56 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ survey check skipped because no user has been identified", self);
             return;
         }
-        NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
-        NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-        [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-        NSError *error = nil;
-        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
-        if (error) {
-            NSLog(@"%@ survey check http error: %@", self, error);
-            return;
-        }
-        NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error) {
-            NSLog(@"%@ survey check json error: %@", self, error);
-            return;
-        }
-        if (object[@"error"]) {
-            MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
-            return;
-        }
 
-        NSArray *rawSurveys = object[@"surveys"];
-        if (!rawSurveys || ![rawSurveys isKindOfClass:[NSArray class]]) {
-            MixpanelDebug(@"%@ survey check response format error: %@", self, object);
-            return;
-        }
+        if (!_surveys) {
+            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
+            NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+            [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+            NSError *error = nil;
+            NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+            if (error) {
+                NSLog(@"%@ survey check http error: %@", self, error);
+                return;
+            }
+            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            if (error) {
+                NSLog(@"%@ survey check json error: %@", self, error);
+                return;
+            }
+            if (object[@"error"]) {
+                MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
+                return;
+            }
 
-        NSMutableDictionary *surveys = [NSMutableDictionary dictionary];
-        MPSurvey *validSurvey = nil;
+            NSArray *rawSurveys = object[@"surveys"];
+            if (!rawSurveys || ![rawSurveys isKindOfClass:[NSArray class]]) {
+                MixpanelDebug(@"%@ survey check response format error: %@", self, object);
+                return;
+            }
 
-        for (id obj in rawSurveys) {
-            MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
-            if (survey && [_shownSurveyCollections member:@(survey.collectionID)] == nil) {
-                [surveys setObject:survey forKey:survey.name];
-                if (!validSurvey) {
-                    validSurvey = survey;
+            NSMutableDictionary *surveys = [NSMutableDictionary dictionary];
+            for (id obj in rawSurveys) {
+                MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
+                if (survey) {
+                    [surveys setObject:survey forKey:survey.name];
                 }
-            } else if (survey) {
-                MixpanelDebug(@"%@ survey check found survey that's already been shown: %@", self, survey);
+            }
+            self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
+        }
+
+        NSMutableDictionary *filteredSurveys = [NSMutableDictionary dictionary];
+        for (NSString *name in _surveys) {
+            MPSurvey *survey = [_surveys objectForKey:name];
+            if([_shownSurveyCollections member:@(survey.collectionID)] == nil) {
+                [filteredSurveys setObject:survey forKey:survey.name];
             }
         }
 
-        self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
-        MixpanelDebug(@"%@ survey check found %lu available surveys: %@", self, surveys.count, surveys);
+        MixpanelDebug(@"%@ survey check found %lu available surveys out of %lu total: %@", self, [filteredSurveys count], [_surveys count], filteredSurveys);
 
         if (completion) {
-            completion();
+            completion([NSDictionary dictionaryWithDictionary:filteredSurveys]);
         }
     });
 }
@@ -1023,47 +1027,30 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNextSurvey
 {
-    dispatch_async(self.serialQueue, ^{
-        void (^completion)(void) =  ^{
-            MixpanelDebug(@"%@ Looking for next available survey", self);
-            MixpanelDebug(@"%@ Available surveys are: %@", self, [self availableSurveys]);
-            MPSurvey *survey = [self nextSurvey];
+    [self checkForSurveysWithCompletion:^void (NSDictionary *surveys){
+        MixpanelDebug(@"%@ Looking for next available survey", self);
+        MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
+        if (surveys && [surveys count] > 0) {
+            MPSurvey *survey = [surveys objectForKey:[surveys allKeys][0]];
             if (survey) {
-                [self showSurvey:survey];
+                [self showSurvey: survey];
             }
-        };
-
-        if (!_surveys) {
-            [self checkForSurveysWithCompletion:completion];
-        } else {
-            completion();
         }
-    });
+    }];
 }
 
 - (void)showSurveyWithName:(NSString *)name
 {
-    dispatch_async(self.serialQueue, ^{
-        void (^completion)() =  ^(){
-            MixpanelDebug(@"%@ Looking for survey with name: %@", self, name);
-            MixpanelDebug(@"%@ Available surveys are: %@", self, [self availableSurveys]);
-            MPSurvey *survey = [_surveys objectForKey:name];
+    [self checkForSurveysWithCompletion:^void (NSDictionary *surveys){
+        MixpanelDebug(@"%@ Looking for survey with name: %@", self, name);
+        MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
+        if (surveys) {
+            MPSurvey *survey = [surveys objectForKey:name];
             if (survey) {
                 [self showSurvey:survey];
             }
-        };
-
-        if (!_surveys) {
-            [self checkForSurveysWithCompletion:completion];
-        } else {
-            completion();
         }
-    });
-}
-
-- (NSArray *)availableSurveys
-{
-    return [_surveys allKeys];
+    }];
 }
 
 - (MPSurvey *)nextSurvey
