@@ -43,7 +43,7 @@
 
     // Initialize the MixpanelAPI object
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-    
+
     self.mixpanel.checkForSurveysOnActive = YES;
     self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
 
@@ -52,7 +52,7 @@
 
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
-    
+
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
 
@@ -133,7 +133,6 @@
     });
 
     NSLog(@"%@ dispatched background task %lu", self, (unsigned long)self.bgTask);
-
 }
 
 #pragma mark - MixpanelDelegate callbacks

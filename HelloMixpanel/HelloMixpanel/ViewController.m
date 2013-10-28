@@ -66,7 +66,7 @@
 - (IBAction)showSurvey:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
+
     if ([_surveyNameField.text length] > 0) {
         [mixpanel showSurveyWithName:_surveyNameField.text];
         [_surveyNameField resignFirstResponder];
