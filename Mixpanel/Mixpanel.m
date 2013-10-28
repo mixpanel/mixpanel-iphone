@@ -950,6 +950,9 @@ static Mixpanel *sharedInstance = nil;
         }
 
         if (!_surveys) {
+
+            MixpanelDebug(@"%@ survey cache not found, starting network request", self);
+
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
             NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -984,6 +987,8 @@ static Mixpanel *sharedInstance = nil;
                 }
             }
             self.surveys = parsedSurveys;
+        } else {
+            MixpanelDebug(@"%@ survey cache found, skipping network request", self);
         }
 
         NSMutableArray *unseenSurveys = [NSMutableArray array];
