@@ -4,6 +4,7 @@
 @interface MPSurvey ()
 
 @property (nonatomic) NSUInteger ID;
+@property (nonatomic, retain) NSString *name;
 @property (nonatomic) NSUInteger collectionID;
 @property (nonatomic, retain) NSArray *questions;
 
@@ -61,9 +62,9 @@
 {
     if (self = [super init]) {
         BOOL valid = YES;
-        if (!(name.length > 0)) {
+        if (!(name && name.length > 0)) {
             valid = NO;
-            NSLog(@"Survey must have a non-blank name");
+            NSLog(@"Invalid survey name %@", name);
         }
         if (!(questions && [questions count] > 0)) {
             valid = NO;
@@ -72,7 +73,7 @@
 
         if (valid) {
             _ID = ID;
-            _name = name;
+            self.name = name;
             _collectionID = collectionID;
             self.questions = questions;
         } else {
@@ -91,6 +92,7 @@
 - (void)dealloc
 {
     self.questions = nil;
+    self.name = nil;
     [super dealloc];
 }
 
