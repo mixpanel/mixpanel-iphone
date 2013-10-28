@@ -21,6 +21,8 @@
 #import "Mixpanel.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
+#import "HTTPServer.h"
+#import "MixpanelDummyHTTPConnection.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -52,6 +54,8 @@
 @interface HelloMixpanelTests ()  <MixpanelDelegate>
 
 @property(nonatomic,retain) Mixpanel *mixpanel;
+@property(nonatomic,retain) HTTPServer *httpServer;
+@property(atomic) BOOL mixpanelWillFlush;
 
 @end
 
@@ -63,7 +67,9 @@
     [super setUp];
     self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
     [self.mixpanel reset];
+    self.mixpanelWillFlush = NO;
     [self waitForSerialQueue];
+
     NSLog(@"finished test setup");
 }
 
@@ -73,17 +79,39 @@
     self.mixpanel = nil;
 }
 
+- (void) setupHTTPServer
+{
+    if (!self.httpServer) {
+        self.httpServer = [[HTTPServer alloc] init];
+        [self.httpServer setConnectionClass:[MixpanelDummyHTTPConnection class]];
+        [self.httpServer setType:@"_http._tcp."];
+        [self.httpServer setPort:31337];
+
+        NSString *webPath = [[NSBundle mainBundle] resourcePath];
+        [self.httpServer setDocumentRoot:webPath];
+
+        NSError *error;
+        if([self.httpServer start:&error])
+        {
+            NSLog(@"Started HTTP Server on port %hu", [self.httpServer listeningPort]);
+        }
+        else
+        {
+            NSLog(@"Error starting HTTP Server: %@", error);
+        }
+    }
+}
+
 - (void)waitForSerialQueue
 {
     NSLog(@"starting wait for serial queue...");
     dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
-    dispatch_debug(self.mixpanel.serialQueue, "serial queue debug");
     NSLog(@"finished wait for serial queue");
 }
 
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel
 {
-    return NO;
+    return self.mixpanelWillFlush;
 }
 
 - (NSDictionary *)allPropertyTypes
@@ -127,11 +155,137 @@
     STAssertNotNil([p objectForKey:@"$ios_ifa"], @"missing $ios_ifa property");
 }
 
+- (void)testHTTPServer {
+    [self setupHTTPServer];
+    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+
+    NSString *post = @"Test Data";
+    NSURL *url = [NSURL URLWithString:[@"http://localhost:31337" stringByAppendingString:@"/engage/"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[post dataUsingEncoding:NSUTF8StringEncoding]];
+    NSError *error = nil;
+    NSURLResponse *urlResponse = nil;
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+
+    STAssertTrue([response length] > 0, @"HTTP server response not valid");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"One server request should have been made");
+}
+
+- (void)testFlushEvents
+{
+    [self setupHTTPServer];
+    self.mixpanel.serverURL = @"http://localhost:31337";
+    self.mixpanel.delegate = self;
+    self.mixpanelWillFlush = YES;
+    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+
+    [self.mixpanel identify:@"d1"];
+    for(uint i=0, n=50; i<n; i++) {
+        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+    }
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+
+    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"50 events should have been batched in 1 HTTP request");
+
+    requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+    for(uint i=0, n=60; i<n; i++) {
+        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+    }
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+
+    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 events should have been batched in 2 HTTP requests");
+}
+
+- (void)testFlushPeople
+{
+    [self setupHTTPServer];
+    self.mixpanel.serverURL = @"http://localhost:31337";
+    self.mixpanel.delegate = self;
+    self.mixpanelWillFlush = YES;
+    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+
+    [self.mixpanel identify:@"d1"];
+    for(uint i=0, n=50; i<n; i++) {
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+    }
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
+    STAssertEquals(requestCount + 1, [MixpanelDummyHTTPConnection getRequestCount], @"50 people properties should have been batched in 1 HTTP request");
+
+    requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+    for(uint i=0, n=60; i<n; i++) {
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+    }
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 people properties should have been batched in 2 HTTP requests");
+}
+
+- (void)testFlushFailure
+{
+    [self setupHTTPServer];
+    self.mixpanel.serverURL = @"http://0.0.0.0";
+    self.mixpanel.delegate = self;
+    self.mixpanelWillFlush = YES;
+    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+
+    [self.mixpanel identify:@"d1"];
+    for(uint i=0, n=50; i<n; i++) {
+        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+    }
+    [self waitForSerialQueue];
+    STAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"50 events should be queued up");
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+
+    STAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"events should still be in the queue if flush fails");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 0, @"The request should have failed.");
+}
+
+- (void)testAddingEventsAfterFlush
+{
+    [self setupHTTPServer];
+    self.mixpanel.serverURL = @"http://localhost:31337";
+    self.mixpanel.delegate = self;
+    self.mixpanelWillFlush = YES;
+    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+
+    [self.mixpanel identify:@"d1"];
+    for(uint i=0, n=10; i<n; i++) {
+        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+    }
+    [self waitForSerialQueue];
+    STAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
+    [self.mixpanel flush];
+    for(uint i=0, n=5; i<n; i++) {
+        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+    }
+    [self waitForSerialQueue];
+    STAssertTrue([self.mixpanel.eventsQueue count] == 5U, @"5 more events should be queued up");
+    [self.mixpanel flush];
+    [self waitForSerialQueue];
+
+    STAssertTrue([self.mixpanel.eventsQueue count] == 0, @"events should have been flushed");
+    STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
+}
+
+
 - (void)testJSONSerializeObject {
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", @"json serialization failed");
+    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", nil);
     test = [NSDictionary dictionaryWithObject:@"non-string key" forKey:@3];
     data = [self.mixpanel JSONSerializeObject:[NSArray arrayWithObject:test]];
     json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
@@ -188,7 +342,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 16, @"incorrect number of properties");
+    STAssertTrue(p.count == 17, @"incorrect number of properties");
     STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
     STAssertNotNil([p objectForKey:@"$app_release"], @"$app_release not set");
     STAssertNotNil([p objectForKey:@"$lib_version"], @"$lib_version not set");
@@ -221,7 +375,7 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 19, @"incorrect number of properties");
+    STAssertTrue(p.count == 20, @"incorrect number of properties");
     STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
