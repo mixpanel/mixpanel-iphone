@@ -871,7 +871,7 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
             if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                MPSurvey *survey = [surveys objectForKey:[surveys allKeys][0]];
+                MPSurvey *survey = [surveys allValues][0];
                 if (survey) {
                     if ([start timeIntervalSinceNow] < -2.0) {
                         self.lateSurvey = survey;
@@ -1033,7 +1033,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ Looking for next available survey", self);
         MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
         if (surveys && [surveys count] > 0) {
-            MPSurvey *survey = [surveys objectForKey:[surveys allKeys][0]];
+            MPSurvey *survey = [surveys allValues][0];
             if (survey) {
                 [self showSurvey: survey];
             }
