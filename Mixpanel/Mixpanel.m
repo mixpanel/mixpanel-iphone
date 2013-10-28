@@ -66,7 +66,7 @@
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
 @property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
-@property(nonatomic,retain) NSDictionary *surveys;
+@property(nonatomic,retain) NSArray *surveys;
 @property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
 
@@ -868,23 +868,20 @@ static Mixpanel *sharedInstance = nil;
     [self startFlushTimer];
     if (self.checkForSurveysOnActive) {
         NSDate *start = [NSDate date];
-        [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
+        [self checkForSurveysWithCompletion:^(NSArray *surveys){
             if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                MPSurvey *survey = [surveys allValues][0];
-                if (survey) {
-                    if ([start timeIntervalSinceNow] < -2.0) {
-                        self.lateSurvey = survey;
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                        message:@"Mind taking a quick survey?"
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"No, Thanks"
-                                                              otherButtonTitles:@"Sure", nil];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [alert show];
-                        });
-                    } else {
-                        [self showSurvey:survey];
-                    }
+                if ([start timeIntervalSinceNow] < -2.0) {
+                    self.lateSurvey = surveys[0];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
+                                                                    message:@"Mind taking a quick survey?"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"No, Thanks"
+                                                          otherButtonTitles:@"Sure", nil];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [alert show];
+                    });
+                } else {
+                    [self showSurvey:surveys[0]];
                 }
             }
         }];
@@ -942,7 +939,7 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-- (void)checkForSurveysWithCompletion:(void (^)(NSDictionary *surveys))completion
+- (void)checkForSurveysWithCompletion:(void (^)(NSArray *surveys))completion
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ survey check started", self);
@@ -978,28 +975,27 @@ static Mixpanel *sharedInstance = nil;
                 return;
             }
 
-            NSMutableDictionary *surveys = [NSMutableDictionary dictionary];
+            NSMutableArray *parsedSurveys = [NSMutableArray array];
             for (id obj in rawSurveys) {
                 MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
                 if (survey) {
-                    [surveys setObject:survey forKey:survey.name];
+                    [parsedSurveys addObject:survey];
                 }
             }
-            self.surveys = [NSDictionary dictionaryWithDictionary:surveys];
+            self.surveys = parsedSurveys;
         }
 
-        NSMutableDictionary *filteredSurveys = [NSMutableDictionary dictionary];
-        for (NSString *name in _surveys) {
-            MPSurvey *survey = [_surveys objectForKey:name];
+        NSMutableArray *unseenSurveys = [NSMutableArray array];
+        for (MPSurvey *survey in _surveys) {
             if([_shownSurveyCollections member:@(survey.collectionID)] == nil) {
-                [filteredSurveys setObject:survey forKey:survey.name];
+                [unseenSurveys addObject:survey];
             }
         }
 
-        MixpanelDebug(@"%@ survey check found %lu available surveys out of %lu total: %@", self, [filteredSurveys count], [_surveys count], filteredSurveys);
+        MixpanelDebug(@"%@ survey check found %lu available surveys out of %lu total: %@", self, [unseenSurveys count], [_surveys count], unseenSurveys);
 
         if (completion) {
-            completion([NSDictionary dictionaryWithDictionary:filteredSurveys]);
+            completion([NSArray arrayWithArray:unseenSurveys]);
         }
     });
 }
@@ -1027,27 +1023,20 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurveyIfAvailable
 {
-    [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
-        MixpanelDebug(@"%@ Looking for next available survey", self);
-        MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
+    [self checkForSurveysWithCompletion:^(NSArray *surveys){
         if (surveys && [surveys count] > 0) {
-            MPSurvey *survey = [surveys allValues][0];
-            if (survey) {
-                [self showSurvey: survey];
-            }
+            [self showSurvey:surveys[0]];
         }
     }];
 }
 
 - (void)showSurveyWithName:(NSString *)name
 {
-    [self checkForSurveysWithCompletion:^(NSDictionary *surveys){
-        MixpanelDebug(@"%@ Looking for survey with name: %@", self, name);
-        MixpanelDebug(@"%@ Available surveys are: %@", self, [surveys allKeys]);
-        if (surveys) {
-            MPSurvey *survey = [surveys objectForKey:name];
-            if (survey) {
+    [self checkForSurveysWithCompletion:^(NSArray *surveys){
+        for (MPSurvey *survey in surveys) {
+            if ([survey.name isEqualToString:name]) {
                 [self showSurvey:survey];
+                break;
             }
         }
     }];
