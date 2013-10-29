@@ -872,7 +872,7 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         [self checkForSurveysWithCompletion:^(NSArray *surveys){
             if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                [self showSurvey:surveys[0] withPermissionAlert:([start timeIntervalSinceNow] < -2.0)];
+                [self showSurvey:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
         }];
     }
