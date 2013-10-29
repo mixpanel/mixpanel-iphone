@@ -1071,13 +1071,17 @@ static Mixpanel *sharedInstance = nil;
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     self.currentlyShowingSurvey = nil;
-    [self markSurveyShown:controller.survey];
-    for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
-        NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:[answers objectAtIndex:i], @"$answers", nil];
-        if (i == 0) {
-            properties[@"$responses"] = @(controller.survey.collectionID);
+    if ([controller.survey.name isEqualToString:@"$ignore"]) {
+        MixpanelDebug(@"%@ not sending survey %@ result", self, controller.survey);
+    } else {
+        [self markSurveyShown:controller.survey];
+        for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
+            NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:[answers objectAtIndex:i], @"$answers", nil];
+            if (i == 0) {
+                properties[@"$responses"] = @(controller.survey.collectionID);
+            }
+            [self.people append:properties];
         }
-        [self.people append:properties];
     }
 }
 

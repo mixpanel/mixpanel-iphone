@@ -86,7 +86,7 @@
         NSDictionary *object = @{
                                  @"version": @0,
                                  @"id": @1,
-                                 @"name": @"Test Survey",
+                                 @"name": @"$ignore",
                                  @"collections": @[@{@"id": @2}],
                                  @"questions": @[
                                          @{
