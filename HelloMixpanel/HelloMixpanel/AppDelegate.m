@@ -23,7 +23,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR MIXPANEL PROJECT TOKEN"
+#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
 
 @implementation AppDelegate
 
@@ -44,12 +44,15 @@
     // Initialize the MixpanelAPI object
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
 
+    self.mixpanel.checkForSurveysOnActive = YES;
+    self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
+
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
 
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
-    
+
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
 
@@ -130,7 +133,6 @@
     });
 
     NSLog(@"%@ dispatched background task %lu", self, (unsigned long)self.bgTask);
-
 }
 
 #pragma mark - MixpanelDelegate callbacks
