@@ -1009,7 +1009,7 @@ static Mixpanel *sharedInstance = nil;
     [rootViewController presentViewController:controller animated:YES completion:nil];
 }
 
-- (void)showSurvey:(MPSurvey *)survey withPermissionAlert:(BOOL)showAlert
+- (void)showSurvey:(MPSurvey *)survey withAlert:(BOOL)showAlert
 {
     if (survey) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1036,7 +1036,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showSurvey:(MPSurvey *)survey
 {
-    [self showSurvey:survey withPermissionAlert:NO];
+    [self showSurvey:survey withAlert:NO];
 }
 
 - (void)showSurveyIfAvailable
