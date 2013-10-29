@@ -26,6 +26,7 @@
 @property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
 @property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
+@property(nonatomic, retain) IBOutlet UITextField *surveyNameField;
 
 @end
 
@@ -64,49 +65,55 @@
 
 - (IBAction)showSurvey:(id)sender
 {
-    NSDictionary *object = @{
-                             @"version": @0,
-                             @"id": @1,
-                             @"collections": @[@{@"id": @2}],
-                             @"questions": @[
-                                     @{
-                                         @"id": @3,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care?",
-                                         @"extra_data": @{
-                                                 @"$choices": @[
-                                                         @"A lot",
-                                                         @"A little",
-                                                         @"Not at all",
-                                                         @"I'd prefer you didn't exist",
-                                                         ]
-                                                 }
-                                         },
-                                     @{
-                                         @"id": @4,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"How many employees does your company have?",
-                                         @"extra_data": @{
-                                                 @"$choices": @[
-                                                         @1,
-                                                         @10,
-                                                         @100,
-                                                         @1000,
-                                                         @10000,
-                                                         ]
-                                                 }
-                                         },
-                                     @{
-                                         @"id": @7,
-                                         @"type": @"text",
-                                         @"prompt": @"Anything else to add?",
-                                         @"extra_data": @{}
-                                         }
-                                     ]
-                             };
-    MPSurvey *survey = [MPSurvey surveyWithJSONObject:object];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel showSurvey:survey];
+
+    if ([_surveyNameField.text length] > 0) {
+        [mixpanel showSurveyWithName:_surveyNameField.text];
+        [_surveyNameField resignFirstResponder];
+    } else {
+        NSDictionary *object = @{
+                                 @"version": @0,
+                                 @"id": @1,
+                                 @"name": @"Test Survey",
+                                 @"collections": @[@{@"id": @2}],
+                                 @"questions": @[
+                                         @{
+                                             @"id": @3,
+                                             @"type": @"multiple_choice",
+                                             @"prompt": @"If we discontinued our service, how much would you care?",
+                                             @"extra_data": @{
+                                                     @"$choices": @[
+                                                             @"A lot",
+                                                             @"A little",
+                                                             @"Not at all",
+                                                             @"I'd prefer you didn't exist",
+                                                             ]
+                                                     }
+                                             },
+                                         @{
+                                             @"id": @4,
+                                             @"type": @"multiple_choice",
+                                             @"prompt": @"How many employees does your company have?",
+                                             @"extra_data": @{
+                                                     @"$choices": @[
+                                                             @1,
+                                                             @10,
+                                                             @100,
+                                                             @1000,
+                                                             @10000,
+                                                             ]
+                                                     }
+                                             },
+                                         @{
+                                             @"id": @7,
+                                             @"type": @"text",
+                                             @"prompt": @"Anything else to add?",
+                                             @"extra_data": @{}
+                                             }
+                                         ]
+                                 };
+        [mixpanel showSurvey:[MPSurvey surveyWithJSONObject:object]];
+    }
 }
 
 - (IBAction)changeBackground

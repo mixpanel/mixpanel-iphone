@@ -22,6 +22,7 @@
 @property(nonatomic,retain) IBOutlet UIView *footer;
 @property(nonatomic,retain) NSMutableArray *questionControllers;
 @property(nonatomic) UIViewController *currentQuestionController;
+@property(nonatomic,retain) NSMutableDictionary *answers;
 
 @end
 
@@ -32,6 +33,7 @@
     self.survey = nil;
     self.backgroundImage = nil;
     self.questionControllers = nil;
+    self.answers = nil;
     [super dealloc];
 }
 
@@ -51,6 +53,7 @@
     }
     self.highlightColor = avgColor;
     self.questionControllers = [NSMutableArray array];
+    self.answers = [NSMutableDictionary dictionary];
     for (NSUInteger i = 0; i < _survey.questions.count; i++) {
         [_questionControllers addObject:[NSNull null]];
     }
@@ -132,7 +135,7 @@
 
 - (void)updatePageNumber:(NSUInteger)index
 {
-    _pageNumberLabel.text = [NSString stringWithFormat:@"%d of %d", index + 1, _survey.questions.count];
+    _pageNumberLabel.text = [NSString stringWithFormat:@"%lu of %lu", index + 1, (unsigned long)[_survey.questions count]];
 }
 
 - (void)updateButtons:(NSUInteger)index
@@ -339,7 +342,7 @@
 
 - (IBAction)dismiss
 {
-    [_delegate surveyControllerWasDismissed:self];
+    [_delegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
 }
 
 - (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties
@@ -350,7 +353,9 @@
     answer[@"$question_type"] = controller.question.type;
     answer[@"$survey_id"] = @(_survey.ID);
     answer[@"$time"] = [NSDate date];
-    [_delegate surveyController:self didReceiveAnswer:answer];
+
+    _answers[@(controller.question.ID)] = answer;
+
     if ([self currentIndex] < ([_survey.questions count] - 1)) {
         [self showNextQuestion];
     } else {
