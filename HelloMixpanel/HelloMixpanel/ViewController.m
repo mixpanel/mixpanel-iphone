@@ -27,6 +27,7 @@
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
 @property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
 @property(nonatomic, retain) IBOutlet UITextField *surveyNameField;
+@property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -38,6 +39,17 @@
     self.weaponControl = nil;
     self.fakeBackground = nil;
     [super dealloc];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _scrollView.contentSize = self.view.bounds.size;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
 }
 
 - (IBAction)trackEvent:(id)sender
@@ -141,6 +153,11 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)dismissKeyboard
+{
+    [_surveyNameField resignFirstResponder];
 }
 
 @end
