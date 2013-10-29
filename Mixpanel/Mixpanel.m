@@ -67,8 +67,8 @@
 @property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
 @property(nonatomic,retain) NSArray *surveys;
+@property(nonatomic,retain) MPSurvey *currentlyShowingSurvey;
 @property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
-@property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
 
 @end
 
@@ -152,6 +152,7 @@ static Mixpanel *sharedInstance = nil;
         self.showSurveyOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.surveys = nil;
+        self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
 
         // wifi reachability
@@ -230,9 +231,9 @@ static Mixpanel *sharedInstance = nil;
     self.eventsQueue = nil;
     self.peopleQueue = nil;
     self.dateFormatter = nil;
-    self.shownSurveyCollections = nil;
-    self.lateSurvey = nil;
     self.surveys = nil;
+    self.currentlyShowingSurvey = nil;
+    self.shownSurveyCollections = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
@@ -871,19 +872,7 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         [self checkForSurveysWithCompletion:^(NSArray *surveys){
             if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                if ([start timeIntervalSinceNow] < -2.0) {
-                    self.lateSurvey = surveys[0];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                    message:@"Mind taking a quick survey?"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"No, Thanks"
-                                                          otherButtonTitles:@"Sure", nil];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [alert show];
-                    });
-                } else {
-                    [self showSurvey:surveys[0]];
-                }
+                [self showSurvey:surveys[0] withPermissionAlert:([start timeIntervalSinceNow] < -2.0)];
             }
         }];
     }
@@ -1006,31 +995,54 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+    MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
+    controller.survey = survey;
+    controller.delegate = self;
+    controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+    [rootViewController presentViewController:controller animated:YES completion:nil];
+}
+
+- (void)showSurvey:(MPSurvey *)survey withAlert:(BOOL)showAlert
+{
+    if (survey) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_currentlyShowingSurvey) {
+                MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
+            } else {
+                self.currentlyShowingSurvey = survey;
+                if (showAlert) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
+                                                                    message:@"Mind taking a quick survey?"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"No, Thanks"
+                                                          otherButtonTitles:@"Sure", nil];
+                    [alert show];
+                } else {
+                    [self presentSurveyWithRootViewController:survey];
+                }
+            }
+        });
+    } else {
+        NSLog(@"%@ cannot show nil survey", self);
+    }
+}
+
 - (void)showSurvey:(MPSurvey *)survey
 {
-    if (!survey) {
-        NSLog(@"%@ cannot showSurvey with a nil survey", self);
-        return;
-    }
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-        MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
-        controller.survey = survey;
-        controller.delegate = self;
-        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        while (rootViewController.presentedViewController) {
-            rootViewController = rootViewController.presentedViewController;
-        }
-        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
-        [rootViewController presentViewController:controller animated:YES completion:nil];
-    });
+    [self showSurvey:survey withAlert:NO];
 }
 
 - (void)showSurveyIfAvailable
 {
     [self checkForSurveysWithCompletion:^(NSArray *surveys){
-        if (surveys && [surveys count] > 0) {
+        if ([surveys count] > 0) {
             [self showSurvey:surveys[0]];
         }
     }];
@@ -1058,9 +1070,8 @@ static Mixpanel *sharedInstance = nil;
 - (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller withAnswers:(NSArray *)answers
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-
+    self.currentlyShowingSurvey = nil;
     [self markSurveyShown:controller.survey];
-
     for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
         NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:[answers objectAtIndex:i], @"$answers", nil];
         if (i == 0) {
@@ -1075,13 +1086,13 @@ static Mixpanel *sharedInstance = nil;
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     [alertView release];
-    if (_lateSurvey) {
+    if (_currentlyShowingSurvey) {
         if (buttonIndex == 1) {
-            [self showSurvey:_lateSurvey];
+            [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
         } else {
-            [self markSurveyShown:_lateSurvey];
+            [self markSurveyShown:_currentlyShowingSurvey];
+            self.currentlyShowingSurvey = nil;
         }
-        self.lateSurvey = nil;
     }
 }
 
