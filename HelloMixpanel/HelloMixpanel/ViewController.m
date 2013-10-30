@@ -44,10 +44,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _scrollView.contentSize = self.view.bounds.size;
-    
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 }
@@ -81,7 +81,7 @@
 
     if ([_surveyIDField.text length] > 0) {
         [mixpanel showSurveyWithID:(NSUInteger)([_surveyIDField.text integerValue])];
-        
+
     } else {
         [mixpanel showSurvey];
     }
