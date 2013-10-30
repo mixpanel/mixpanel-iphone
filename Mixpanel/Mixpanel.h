@@ -103,18 +103,6 @@
  @property
 
  @abstract
- The base URL used for Mixpanel Decide requests.
-
- @discussion
- Useful if you need to proxy Mixpanel requests. Defaults to
- https://decide.mixpanel.com.
- */
-@property(atomic,copy) NSString *decideURL;
-
-/*!
- @property
-
- @abstract
  Flush timer's interval.
 
  @discussion
