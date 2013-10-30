@@ -1132,6 +1132,7 @@ static Mixpanel *sharedInstance = nil;
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     [p setValue:[self.mixpanel deviceModel] forKey:@"$ios_device_model"];
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
+    [p setValue:VERSION forKey:@"$ios_lib_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
     if (NSClassFromString(@"ASIdentifierManager")) {
