@@ -10,7 +10,7 @@ The easiest way to set up Mixpanel in your iOS project is to use [CocoaPods](htt
         pod 'Mixpanel'
         
 3. Run `pod install` in your xcode project directory. CocoaPods should download and
-install the Mixpanel library, and create a new Xcode workspace. Open up this workspace in XCode.
+install the Mixpanel library, and create a new Xcode workspace. Open up this workspace in Xcode.
 4. Add the following line to `application:didFinishLaunchingWithOptions` in your `AppDelegate.m`.
 
         - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
