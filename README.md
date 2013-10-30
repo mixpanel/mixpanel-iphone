@@ -15,8 +15,7 @@ install the pod, and create a new `.xcworkspace` file.
 and a cocoapods project containing the Mixpanel source.
     
 ## Or the hard way ##
-If you want to track user behavior on your iPhone\iPad application, first
-download the Mixpanel iOS API by cloning the git repository:
+You can also get the Mixpanel iOS library by cloning the git repository:
 
 	git clone http://github.com/mixpanel/mixpanel-iphone.git
 
