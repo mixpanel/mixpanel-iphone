@@ -86,7 +86,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@, (ID:%lu, questions:%lu)", self.name, (unsigned long)self.ID, (unsigned long)[self.questions count]];
+    return [NSString stringWithFormat:@"%@, (ID:%lu, collection:%lu questions:%lu)", self.name, (unsigned long)self.ID, (unsigned long)self.collectionID, (unsigned long)[self.questions count]];
 }
 
 - (void)dealloc
