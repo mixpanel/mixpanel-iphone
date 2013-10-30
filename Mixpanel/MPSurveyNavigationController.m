@@ -34,6 +34,7 @@
     self.backgroundImage = nil;
     self.questionControllers = nil;
     self.answers = nil;
+    self.highlightColor = nil;
     [super dealloc];
 }
 
