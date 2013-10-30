@@ -135,7 +135,7 @@
 
 - (void)updatePageNumber:(NSUInteger)index
 {
-    _pageNumberLabel.text = [NSString stringWithFormat:@"%lu of %lu", index + 1, (unsigned long)[_survey.questions count]];
+    _pageNumberLabel.text = [NSString stringWithFormat:@"%lu of %lu", (unsigned long)(index + 1), (unsigned long)[_survey.questions count]];
 }
 
 - (void)updateButtons:(NSUInteger)index

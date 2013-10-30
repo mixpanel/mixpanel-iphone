@@ -135,11 +135,4 @@
     NSLog(@"%@ dispatched background task %lu", self, (unsigned long)self.bgTask);
 }
 
-#pragma mark - MixpanelDelegate callbacks
-
-- (void)mixpanel:(Mixpanel *)mixpanel didReceiveSurvey:(MPSurvey *)survey
-{
-    [mixpanel showSurvey:survey];
-}
-
 @end

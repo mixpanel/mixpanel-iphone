@@ -10,7 +10,7 @@
                 <outlet property="fakeBackground" destination="Bzr-6S-6We" id="nRe-7X-cQ9"/>
                 <outlet property="genderControl" destination="9" id="33"/>
                 <outlet property="scrollView" destination="6" id="e9g-HV-KAS"/>
-                <outlet property="surveyNameField" destination="Ja3-5J-l1N" id="ehO-cK-X9q"/>
+                <outlet property="surveyIDField" destination="Ja3-5J-l1N" id="tU0-dw-cbK"/>
                 <outlet property="view" destination="KE1-NB-lNZ" id="6ua-fz-m5T"/>
                 <outlet property="weaponControl" destination="10" id="32"/>
             </connections>
@@ -96,7 +96,7 @@
                                 <action selector="changeBackground" destination="-1" eventType="touchUpInside" id="rdZ-7h-qpm"/>
                             </connections>
                         </button>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Survey Name" textAlignment="center" minimumFontSize="17" id="Ja3-5J-l1N">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Survey ID" textAlignment="center" minimumFontSize="17" id="Ja3-5J-l1N">
                             <rect key="frame" x="92" y="193" width="135" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Survey Name" label=""/>

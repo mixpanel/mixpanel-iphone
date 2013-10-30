@@ -26,7 +26,7 @@
 @property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
 @property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
-@property(nonatomic, retain) IBOutlet UITextField *surveyNameField;
+@property(nonatomic, retain) IBOutlet UITextField *surveyIDField;
 @property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @end
@@ -79,53 +79,13 @@
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
-    if ([_surveyNameField.text length] > 0) {
-        [mixpanel showSurveyWithName:_surveyNameField.text];
-        [_surveyNameField resignFirstResponder];
+    if ([_surveyIDField.text length] > 0) {
+        [mixpanel showSurveyWithID:(NSUInteger)([_surveyIDField.text integerValue])];
+        
     } else {
-        NSDictionary *object = @{
-                                 @"version": @0,
-                                 @"id": @1,
-                                 @"name": @"$ignore",
-                                 @"collections": @[@{@"id": @2}],
-                                 @"questions": @[
-                                         @{
-                                             @"id": @3,
-                                             @"type": @"multiple_choice",
-                                             @"prompt": @"If we discontinued our service, how much would you care?",
-                                             @"extra_data": @{
-                                                     @"$choices": @[
-                                                             @"A lot",
-                                                             @"A little",
-                                                             @"Not at all",
-                                                             @"I'd prefer you didn't exist",
-                                                             ]
-                                                     }
-                                             },
-                                         @{
-                                             @"id": @4,
-                                             @"type": @"multiple_choice",
-                                             @"prompt": @"How many employees does your company have?",
-                                             @"extra_data": @{
-                                                     @"$choices": @[
-                                                             @1,
-                                                             @10,
-                                                             @100,
-                                                             @1000,
-                                                             @10000,
-                                                             ]
-                                                     }
-                                             },
-                                         @{
-                                             @"id": @7,
-                                             @"type": @"text",
-                                             @"prompt": @"Anything else to add?",
-                                             @"extra_data": @{}
-                                             }
-                                         ]
-                                 };
-        [mixpanel showSurvey:[MPSurvey surveyWithJSONObject:object]];
+        [mixpanel showSurvey];
     }
+    [_surveyIDField resignFirstResponder];
 }
 
 - (IBAction)changeBackground
@@ -157,7 +117,7 @@
 
 - (void)dismissKeyboard
 {
-    [_surveyNameField resignFirstResponder];
+    [_surveyIDField resignFirstResponder];
 }
 
 @end

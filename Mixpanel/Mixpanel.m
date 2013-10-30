@@ -136,7 +136,7 @@ static Mixpanel *sharedInstance = nil;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
-        self.decideURL = @"https://decide.mixpanel.com";
+        self.decideURL = @"https://api.mixpanel.com";
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -853,12 +853,12 @@ static Mixpanel *sharedInstance = nil;
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
     if (properties) {
-        self.distinctId = [properties objectForKey:@"distinctId"];
-        self.nameTag = [properties objectForKey:@"nameTag"];
-        self.superProperties = [properties objectForKey:@"superProperties"];
-        self.people.distinctId = [properties objectForKey:@"peopleDistinctId"];
-        self.people.unidentifiedQueue = [properties objectForKey:@"peopleUnidentifiedQueue"];
-        self.shownSurveyCollections = [properties objectForKey: @"shownSurveyCollections"];
+        self.distinctId = properties[@"distinctId"] ? properties[@"distinctId"] : [self defaultDistinctId];
+        self.nameTag = properties[@"nameTag"];
+        self.superProperties = properties[@"superProperties"] ? properties[@"superProperties"] : [NSMutableDictionary dictionary];
+        self.people.distinctId = properties[@"peopleDistinctId"];
+        self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ? properties[@"peopleUnidentifiedQueue"] : [NSMutableArray array];
+        self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
     }
 }
 
@@ -872,7 +872,7 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         [self checkForSurveysWithCompletion:^(NSArray *surveys){
             if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                [self showSurvey:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
+                [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
         }];
     }
@@ -987,7 +987,7 @@ static Mixpanel *sharedInstance = nil;
             }
         }
 
-        MixpanelDebug(@"%@ survey check found %lu available surveys out of %lu total: %@", self, [unseenSurveys count], [_surveys count], unseenSurveys);
+        MixpanelDebug(@"%@ survey check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[_surveys count], unseenSurveys);
 
         if (completion) {
             completion([NSArray arrayWithArray:unseenSurveys]);
@@ -1009,7 +1009,7 @@ static Mixpanel *sharedInstance = nil;
     [rootViewController presentViewController:controller animated:YES completion:nil];
 }
 
-- (void)showSurvey:(MPSurvey *)survey withAlert:(BOOL)showAlert
+- (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
 {
     if (survey) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1034,26 +1034,26 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)showSurvey:(MPSurvey *)survey
+- (void)showSurveyWithObject:(MPSurvey *)survey
 {
-    [self showSurvey:survey withAlert:NO];
+    [self showSurveyWithObject:survey withAlert:NO];
 }
 
-- (void)showSurveyIfAvailable
+- (void)showSurvey
 {
     [self checkForSurveysWithCompletion:^(NSArray *surveys){
         if ([surveys count] > 0) {
-            [self showSurvey:surveys[0]];
+            [self showSurveyWithObject:surveys[0]];
         }
     }];
 }
 
-- (void)showSurveyWithName:(NSString *)name
+- (void)showSurveyWithID:(NSUInteger)ID
 {
     [self checkForSurveysWithCompletion:^(NSArray *surveys){
         for (MPSurvey *survey in surveys) {
-            if ([survey.name isEqualToString:name]) {
-                [self showSurvey:survey];
+            if (survey.ID == ID) {
+                [self showSurveyWithObject:survey];
                 break;
             }
         }
