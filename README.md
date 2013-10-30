@@ -1,4 +1,18 @@
 # Using Mixpanel Analytics on iOS #
+
+## Using CocoaPods ##
+
+The easiest way to set up Mixpanel in your iOS project is to use [CocoaPods](http://cocoapods.org/).
+
+1. Install cocoapods with `gem install cocoapods`
+2. Create a file in your XCode project called `Podfile` and add the following line:
+        pod 'Mixpanel'
+3. Run `pod install` in your xcode project directory. CocoaPods should download and
+install the pod, and create a new `.xcworkspace` file.
+4. Open the new workspace in XCode, you should see it contains your original project
+and a cocoapods project containing the Mixpanel source.
+    
+## Or the hard way ##
 If you want to track user behavior on your iPhone\iPad application, first
 download the Mixpanel iOS API by cloning the git repository:
 
@@ -13,7 +27,6 @@ extract the files. The respository has three folders:
 properties using Mixpanel.
 4. Docs - Headerdoc API reference.
 
-# Setup #
 Adding Mixpanel to your Xcode project is as easy as:
 
 1. Drag and drop the Mixpanel folder into your project.
