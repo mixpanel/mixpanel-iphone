@@ -149,6 +149,7 @@
 - (void)assertDefaultPeopleProperties:(NSDictionary *)p
 {
     STAssertNotNil([p objectForKey:@"$ios_device_model"], @"missing $ios_device_model property");
+    STAssertNotNil([p objectForKey:@"$ios_lib_version"], @"missing $ios_lib_version property");
     STAssertNotNil([p objectForKey:@"$ios_version"], @"missing $ios_version property");
     STAssertNotNil([p objectForKey:@"$ios_app_version"], @"missing $ios_app_version property");
     STAssertNotNil([p objectForKey:@"$ios_app_release"], @"missing $ios_app_release property");
@@ -342,7 +343,6 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     NSDictionary *p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 17, @"incorrect number of properties");
     STAssertNotNil([p objectForKey:@"$app_version"], @"$app_version not set");
     STAssertNotNil([p objectForKey:@"$app_release"], @"$app_release not set");
     STAssertNotNil([p objectForKey:@"$lib_version"], @"$lib_version not set");
@@ -375,7 +375,6 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     STAssertEquals([e objectForKey:@"event"], @"Something Happened", @"incorrect event name");
     p = [e objectForKey:@"properties"];
-    STAssertTrue(p.count == 20, @"incorrect number of properties");
     STAssertEqualObjects([p objectForKey:@"$app_version"], @"override", @"reserved property override failed");
 }
 
