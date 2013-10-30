@@ -430,25 +430,13 @@
  @method
 
  @abstract
- Shows the survey in a <code>MPSurveyNavigationController</code> in the view of the
- root view controller.
-
- @discussion
- You do not need to call this method on the main thread.
- */
-- (void)showSurvey:(MPSurvey *)survey;
-
-/*!
- @method
-
- @abstract
  Shows the survey with the given name.
 
  @discussion
  This method allows you to explicitly show a named survey at the time of your choosing.
 
  */
-- (void)showSurveyWithName:(NSString *)name;
+- (void)showSurveyWithID:(NSUInteger)ID;
 
 /*!
  @method
@@ -462,7 +450,7 @@
  setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
 
  */
-- (void)showSurveyIfAvailable;
+- (void)showSurvey;
 
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
