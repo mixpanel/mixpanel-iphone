@@ -10,7 +10,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body images:(NSArray *)images;
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url images:(NSArray *)images;
 
 @end
 
@@ -41,6 +41,23 @@
         return nil;
     }
     
+    NSString *cta = object[@"cta"];
+    if (![cta isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid notif cta: %@", cta);
+        return nil;
+    }
+    
+    NSURL *url = nil;
+    NSString *url_string = object[@"url"];
+    if (url_string != nil) {
+        if (![url_string isKindOfClass:[NSString class]]) {
+            NSLog(@"invalid notif url: %@", url_string);
+            return nil;
+        }
+        
+        url = [NSURL URLWithString:url_string];
+    }
+    
     NSMutableArray *images = [NSMutableArray array];
     NSArray *imageUrls = object[@"image_urls"];
     if (![imageUrls isKindOfClass:[NSArray class]]) {
@@ -48,15 +65,15 @@
         return nil;
     }
     
-    for (NSString *url in imageUrls) {
-        if (![url isKindOfClass:[NSString class]] || !url) {
-            NSLog(@"invalid notif image url string: %@", url);
+    for (NSString *imageUrl in imageUrls) {
+        if (![imageUrl isKindOfClass:[NSString class]] || !imageUrl) {
+            NSLog(@"invalid notif image url string: %@", imageUrl);
         }
         
         NSError *error = nil;
-        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:url] options:NSDataReadingMappedIfSafe error:&error];
+        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl] options:NSDataReadingMappedIfSafe error:&error];
         if (error || !imageData) {
-            NSLog(@"image failed to load from url: %@", url);
+            NSLog(@"image failed to load from url: %@", imageUrl);
             return nil;
         }
         
@@ -72,16 +89,20 @@
     return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                          title:title
                                           body:body
+                                           cta:cta
+                                           url:url
                                         images:[NSArray arrayWithArray:images]] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body images:(NSArray *)images
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url images:(NSArray *)images
 {
     if (self = [super init]) {
         _ID = ID;
         self.title = title;
         self.body = body;
         self.images = images;
+        self.cta = cta;
+        self.url = url;
     }
     
     return self;
@@ -91,6 +112,8 @@
 {
     self.title = nil;
     self.body = nil;
+    self.cta = nil;
+    self.url = nil;
     self.images = nil;
     [super dealloc];
 }

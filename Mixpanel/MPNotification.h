@@ -14,6 +14,8 @@
 @property(nonatomic,retain) NSArray *images;
 @property(nonatomic,retain) NSString *title;
 @property(nonatomic,retain) NSString *body;
+@property(nonatomic,retain) NSString *cta;
+@property(nonatomic,retain) NSURL *url;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
