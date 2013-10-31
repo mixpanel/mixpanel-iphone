@@ -25,7 +25,7 @@
 #import <AdSupport/ASIdentifierManager.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>1
 #import <SystemConfiguration/SystemConfiguration.h>
 
 #import "MPSurveyNavigationController.h"
@@ -69,6 +69,7 @@
 @property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
 @property(nonatomic,retain) NSMutableSet *shownSurveys;
+@property(nonatomic,retain) NSMutableSet *shownNotifications;
 @property(nonatomic,retain) MPSurvey *lateSurvey; // for holding survey during survey permission alert
 @property(nonatomic) BOOL surveyReceivedFirstAnswer;
 
@@ -156,6 +157,7 @@ static Mixpanel *sharedInstance = nil;
         [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         self.shownSurveys = [NSMutableSet set];
+        self.shownNotifications = [NSMutableSet set];
 
         // wifi reachability
         BOOL reachabilityOk = NO;
@@ -234,6 +236,7 @@ static Mixpanel *sharedInstance = nil;
     self.peopleQueue = nil;
     self.dateFormatter = nil;
     self.shownSurveys = nil;
+    self.shownNotifications = nil;
     self.lateSurvey = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
@@ -873,7 +876,7 @@ static Mixpanel *sharedInstance = nil;
         
         [self checkForDecideResponseWithCompletion:^(MPSurvey *survey, MPNotification *inappNotif) {
             // TODO: decide on order and priority of decisions
-            if (survey) {
+            if (self.showSurveyOnActive && survey) {
                 if ([start timeIntervalSinceNow] < -2.0) {
                     self.lateSurvey = survey;
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
@@ -1027,8 +1030,16 @@ static Mixpanel *sharedInstance = nil;
     for (NSDictionary *obj in notifs) {
         MPNotification *notif = [MPNotification notificationWithJSONObject:obj];
         if (notif) {
-            // TODO: set test like above
-            validNotif = notif;
+            NSSet *filtered = [_shownNotifications objectsPassingTest:^BOOL(NSNumber *notificationID, BOOL *stop) {
+                return [notificationID isEqualToNumber:@(notif.ID)];
+            }];
+            
+            if ([filtered count] > 0) {
+                MixpanelDebug(@"%@ in-app notif check found notification that's already been shown: %@", self, notif);
+            } else {
+                validNotif = notif;
+                break;
+            }
         }
     }
     
@@ -1104,22 +1115,29 @@ static Mixpanel *sharedInstance = nil;
         [controller setDismissTarget:self action:@selector(notificationControllerWasDismissed:)];
         
         [rootViewController presentViewController:controller animated:YES completion:nil];
+        
+        [self markNotificationShown:notification];
     });
 }
 
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)markNotificationShown:(MPNotification *)notification
+{
+    MixpanelDebug(@"%@ marking notification shown: %@, %@", self, @(notification.ID), _shownNotifications);
     
     NSDictionary *properties = @{
-        @"$campaigns": @(controller.notification.ID),
-        @"$notifications": @{
-                @"campaign_id": @(controller.notification.ID),
-                @"type": @"inapp",
-                // maybe should do this in the consumer?
-                @"time": @([NSDate timeIntervalSinceReferenceDate])
-        }
-    };
+                                 @"$campaigns": @(notification.ID),
+                                 @"$notifications": @{
+                                         @"campaign_id": @(notification.ID),
+                                         @"type": @"inapp",
+                                         // maybe should do this in the consumer?
+                                         @"time": @([NSDate timeIntervalSinceReferenceDate])
+                                         }
+                                 };
     
     [self.people append:properties];
 }
