@@ -118,7 +118,7 @@
         @"collections": @[@{@"id": @2}],
         @"title": @"Congratulations!",
         @"body": @"You're our 543212th app opener. You'll win a trip to Midland, Texas as well as a subscription to our all-you-can-'drink' queso program.",
-        @"images": @[@"https://cdn2.mxpnl.com/site_media/images/jobs/photos/photo-07.jpg"]
+        @"image_urls": @[@"https://cdn2.mxpnl.com/site_media/images/jobs/photos/photo-07.jpg"]
     };
     
     MPNotification *notif = [MPNotification notificationWithJSONObject:notifJson];
