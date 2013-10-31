@@ -46,6 +46,8 @@
         
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
+        [self.okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
+        [self.okayButton sizeToFit];
     }
     
     [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchDown];
@@ -63,6 +65,8 @@
     
     [self.titleView sizeToFit];
     [self.bodyView sizeToFit];
+    //[self.okayButton.titleLabel sizeToFit];
+    [self.okayButton sizeToFit];
 }
 
 - (void)pressedOkay
