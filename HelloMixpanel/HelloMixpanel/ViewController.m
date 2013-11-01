@@ -120,7 +120,8 @@
         @"body": @"You're our 543212th app opener. You'll win a trip to Midland, Texas as well as a subscription to our all-you-can-'drink' queso program.",
         @"cta": @"Okay thats cool!",
         @"url": @"settings://",
-        @"image_urls": @[@"https://cdn2.mxpnl.com/site_media/images/jobs/photos/photo-07.jpg"]
+        @"image_urls": @[@"https://cdn.mxpnl.com/cache/a0592c8bd84cb20ad974642056d1b1ec/images/static/landing/surveys/section_ask_img_3.png",
+                         @"https://cdn2.mxpnl.com/site_media/images/jobs/photos/photo-07.jpg"]
     };
     
     MPNotification *notif = [MPNotification notificationWithJSONObject:notifJson];
