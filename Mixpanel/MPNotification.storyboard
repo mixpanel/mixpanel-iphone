@@ -85,7 +85,7 @@
                             <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="44" id="dxg-4s-FD6"/>
                             <constraint firstAttribute="trailing" secondItem="OWs-og-FP7" secondAttribute="trailing" id="g4V-zo-36q"/>
                             <constraint firstItem="MmD-8U-og7" firstAttribute="top" secondItem="eF7-ct-CP3" secondAttribute="bottom" constant="5" id="hDC-Mi-ipg"/>
-                            <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-20" id="lca-fD-jgb"/>
+                            <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-55" id="lca-fD-jgb"/>
                             <constraint firstItem="LDp-cp-cpg" firstAttribute="top" secondItem="MmD-8U-og7" secondAttribute="bottom" constant="15" id="vCY-0M-x1R"/>
                             <constraint firstAttribute="centerX" secondItem="LDp-cp-cpg" secondAttribute="centerX" constant="-0.5" id="vQ8-41-fqj"/>
                         </constraints>
