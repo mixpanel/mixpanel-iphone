@@ -134,3 +134,39 @@
 }
 
 @end
+
+@interface MPRadialGradientView : UIView
+
+@end
+
+@implementation MPRadialGradientView
+
+- (void)drawRect:(CGRect)rect
+{
+    CGSize size = self.bounds.size;
+    CGPoint center = self.bounds.origin;
+    center.x += size.width;
+    center.y += size.height;
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat comps[] = {43.0f / 255.0f, 43.0f / 255.0f, 57.0f / 255.0f, 1.0f, 43.0f / 255.0f, 43.0f / 255.0f, 57.0f / 255.0f, 0.0f};
+    CGFloat locs[] = {0.0f, 1.0f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 2);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, center.x, center.y);
+    CGPathAddLineToPoint(path, NULL, center.x - size.width, center.y);
+    CGPathAddArcToPoint(path, NULL, center.x - size.width, center.y - size.width, center.x, center.y - size.width, size.width);
+    CGPathAddLineToPoint(path, NULL, center.x, center.y);
+    
+    CGContextAddPath(ctx, path);
+    CGContextClip(ctx);
+    
+    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, size.width, 0);
+    
+    CGContextRestoreGState(ctx);
+}
+
+@end
