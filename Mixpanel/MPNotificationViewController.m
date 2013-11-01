@@ -104,6 +104,16 @@
     self.bodyBg.layer.mask.bounds = self.bodyBg.bounds;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
+{
+    return UIStatusBarAnimationFade;
+}
+
 - (void)pressedOkay
 {
     if (_target) {
