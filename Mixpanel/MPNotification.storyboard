@@ -55,7 +55,7 @@
                                 <rect key="frame" x="121" y="518" width="79" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="contentEdgeInsets" minX="10" minY="6" maxX="10" maxY="7"/>
+                                <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
                                 <state key="normal" title="Cool!">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>

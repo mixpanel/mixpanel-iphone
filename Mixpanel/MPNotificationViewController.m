@@ -58,7 +58,8 @@
         [self.okayButton sizeToFit];
     }
     
-    self.okayButton.layer.cornerRadius = 15.0f;
+    self.okayButton.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
+    self.okayButton.layer.cornerRadius = 17.0f;
     self.okayButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.okayButton.layer.borderWidth = 2.0f;
     
