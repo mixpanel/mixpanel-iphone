@@ -1101,7 +1101,6 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotification:(MPNotification *)notification
 {
-    NSLog(@"showing notif");
     dispatch_async(dispatch_get_main_queue(), ^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
         MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
@@ -1124,9 +1123,13 @@ static Mixpanel *sharedInstance = nil;
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller
 {
     if (controller.notification.url) {
-        [[UIApplication sharedApplication] openURL:controller.notification.url];
         MixpanelDebug(@"opening url %@", controller.notification.url);
-        [controller.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+        BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
+        [controller.presentingViewController dismissViewControllerAnimated:!success completion:nil];
+        
+        if (!success) {
+            NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
+        }
     } else {
         [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
