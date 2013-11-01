@@ -65,11 +65,15 @@
     
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
     CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
+    CGColorRef outerFadeColor = [UIColor colorWithWhite:1 alpha:0.1f].CGColor;
+    CGColorRef innerFadeColor = [UIColor colorWithWhite:1 alpha:0.3f].CGColor;
     CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
-    fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor];
-    // add 20 pixels of fade in and out at top and bottom of table view container
+    fadeLayer.colors = @[(id)outerColor, (id)outerFadeColor, (id)innerFadeColor, (id)innerColor, (id)innerColor];
+    // add 44 pixels of fade in and out at top and bottom of table view container
     CGFloat offset = 44.0f / self.bodyBg.bounds.size.height;
-    fadeLayer.locations = @[@0, @(0 + offset), @1];
+    CGFloat offset2 = 10.0f / self.bodyBg.bounds.size.height;
+    CGFloat offset3 = 20.0f / self.bodyBg.bounds.size.height;
+    fadeLayer.locations = @[@0, @(offset2), @(offset3), @(offset), @1];
     fadeLayer.bounds = self.bodyBg.bounds;
     fadeLayer.anchorPoint = CGPointZero;
     self.bodyBg.layer.mask = fadeLayer;
@@ -100,7 +104,9 @@
     [self.okayButton sizeToFit];
     
     CGFloat offset = 44.0f / self.bodyBg.bounds.size.height;
-    ((CAGradientLayer *) self.bodyBg.layer.mask).locations = @[@0, @(0 + offset), @1];
+    CGFloat offset2 = 10.0f / self.bodyBg.bounds.size.height;
+    CGFloat offset3 = 20.0f / self.bodyBg.bounds.size.height;
+    ((CAGradientLayer *) self.bodyBg.layer.mask).locations = @[@0, @(offset2), @(offset3), @(offset), @1];
     self.bodyBg.layer.mask.bounds = self.bodyBg.bounds;
 }
 
