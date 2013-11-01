@@ -1123,7 +1123,13 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller
 {
-    [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    if (controller.notification.url) {
+        [[UIApplication sharedApplication] openURL:controller.notification.url];
+        MixpanelDebug(@"opening url %@", controller.notification.url);
+        [controller.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    } else {
+        [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)markNotificationShown:(MPNotification *)notification
