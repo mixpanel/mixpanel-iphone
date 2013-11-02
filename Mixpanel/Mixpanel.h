@@ -152,11 +152,28 @@
  @property
 
  @abstract
- Controls whether to automatically check for and show surveys for the
+ Controls whether to automatically check for surveys for the
  currently identified user when the application becomes active.
 
  @discussion
- Defaults to YES.
+ Defaults to YES. Will fire a network request on
+ <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
+ for the currently identified user.
+ */
+@property(atomic) BOOL checkForSurveysOnActive;
+
+/*!
+ @property
+
+ @abstract
+ Controls whether to automatically show a survey for the
+ currently identified user when the application becomes active.
+
+ @discussion
+ Defaults to YES. This will only show a survey if
+ <code>checkForSurveysOnActive</code> is also set to YES, and the
+ survey check retrieves at least 1 valid survey for the currently
+ identified user.
  */
 @property(atomic) BOOL showSurveyOnActive;
 
@@ -431,19 +448,34 @@
  @discussion
  The completion block will be passed the survey and notification if either is found and nil if not.
  */
-- (void)checkForDecideResponseWithCompletion:(void (^)(MPSurvey *survey, MPNotification *notification))completion;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications))completion;
+
+/*!
+ @method
+ 
+ @abstract
+ Shows the survey with the given name.
+
+ @discussion
+ This method allows you to explicitly show a named survey at the time of your choosing.
+
+ */
+- (void)showSurveyWithID:(NSUInteger)ID;
 
 /*!
  @method
 
  @abstract
- Shows the survey in a <code>MPSurveyNavigationController</code> in the view of the
- root view controller.
+ Show a survey if one is available.
 
  @discussion
- You do not need to call this method on the main thread.
+ This method allows you to display the first available survey targeted to the currently
+ identified user at the time of your choosing. You would typically pair this with
+ setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
+
  */
-- (void)showSurvey:(MPSurvey *)survey;
+- (void)showSurvey;
+
 
 /*!
  @method

@@ -27,6 +27,8 @@
 @property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
 @property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
+@property(nonatomic, retain) IBOutlet UITextField *surveyIDField;
+@property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -38,6 +40,17 @@
     self.weaponControl = nil;
     self.fakeBackground = nil;
     [super dealloc];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _scrollView.contentSize = self.view.bounds.size;
+
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
 }
 
 - (IBAction)trackEvent:(id)sender
@@ -65,49 +78,15 @@
 
 - (IBAction)showSurvey:(id)sender
 {
-    NSDictionary *object = @{
-                             @"version": @0,
-                             @"id": @1,
-                             @"collections": @[@{@"id": @2}],
-                             @"questions": @[
-                                     @{
-                                         @"id": @3,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"If we discontinued our service, how much would you care?",
-                                         @"extra_data": @{
-                                                 @"$choices": @[
-                                                         @"A lot",
-                                                         @"A little",
-                                                         @"Not at all",
-                                                         @"I'd prefer you didn't exist",
-                                                         ]
-                                                 }
-                                         },
-                                     @{
-                                         @"id": @4,
-                                         @"type": @"multiple_choice",
-                                         @"prompt": @"How many employees does your company have?",
-                                         @"extra_data": @{
-                                                 @"$choices": @[
-                                                         @1,
-                                                         @10,
-                                                         @100,
-                                                         @1000,
-                                                         @10000,
-                                                         ]
-                                                 }
-                                         },
-                                     @{
-                                         @"id": @7,
-                                         @"type": @"text",
-                                         @"prompt": @"Anything else to add?",
-                                         @"extra_data": @{}
-                                         }
-                                     ]
-                             };
-    MPSurvey *survey = [MPSurvey surveyWithJSONObject:object];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel showSurvey:survey];
+
+    if ([_surveyIDField.text length] > 0) {
+        [mixpanel showSurveyWithID:(NSUInteger)([_surveyIDField.text integerValue])];
+
+    } else {
+        [mixpanel showSurvey];
+    }
+    [_surveyIDField resignFirstResponder];
 }
 
 - (IBAction)showNotif:(id)sender
@@ -153,6 +132,11 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)dismissKeyboard
+{
+    [_surveyIDField resignFirstResponder];
 }
 
 @end
