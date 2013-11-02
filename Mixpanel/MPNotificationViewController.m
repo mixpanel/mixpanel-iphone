@@ -24,6 +24,7 @@
 @property (nonatomic, retain) IBOutlet UILabel *titleView;
 @property (nonatomic, retain) IBOutlet UILabel *bodyView;
 @property (nonatomic, retain) IBOutlet UIButton *okayButton;
+@property (nonatomic, retain) IBOutlet UIButton *closeButton;
 @property (nonatomic, retain) IBOutlet UIView *bodyBg;
 @property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
 
@@ -85,7 +86,8 @@
     self.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
     //self.bodyBg.backgroundColor = [UIColor blackColor];
     
-    [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchDown];
+    [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchUpInside];
+    [self.closeButton addTarget:self action:@selector(pressedClose) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)didReceiveMemoryWarning
@@ -123,7 +125,14 @@
 - (void)pressedOkay
 {
     if (_target) {
-        [_target performSelector:_action withObject:self];
+        [_target performSelector:_action withObject:self withObject:@(YES)];
+    }
+}
+
+- (void)pressedClose
+{
+    if (_target) {
+        [_target performSelector:_action withObject:self withObject:@(NO)];
     }
 }
 

@@ -955,7 +955,7 @@ static Mixpanel *sharedInstance = nil;
             return;
         }
         
-        if (false && !_surveys) {
+        if (!_surveys || !_notifications) {
             MixpanelDebug(@"%@ survey cache not found, starting network request", self);
             
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
@@ -1032,6 +1032,15 @@ static Mixpanel *sharedInstance = nil;
             completion([NSArray arrayWithArray:unseenSurveys], [NSArray arrayWithArray:unseenNotifications]);
         }
     });
+}
+
+- (void)checkForSurveysWithCompletion:(void (^)(NSArray *surveys))completion
+{
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
+        if (completion) {
+            completion(surveys);
+        }
+    }];
 }
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
@@ -1139,7 +1148,7 @@ static Mixpanel *sharedInstance = nil;
         
         controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         controller.notification = notification;
-        [controller setDismissTarget:self action:@selector(notificationControllerWasDismissed:)];
+        [controller setDismissTarget:self action:@selector(notificationControllerWasDismissed:status:)];
         
         [rootViewController presentViewController:controller animated:YES completion:nil];
         
@@ -1147,9 +1156,9 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller
+- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(NSNumber *)status
 {
-    if (controller.notification.url) {
+    if (status.boolValue && controller.notification.url) {
         MixpanelDebug(@"opening url %@", controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
         [controller.presentingViewController dismissViewControllerAnimated:!success completion:nil];

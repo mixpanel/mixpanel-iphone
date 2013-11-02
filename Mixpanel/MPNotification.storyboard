@@ -36,7 +36,22 @@
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-yT-gz1" customClass="MPRadialGradientView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="218"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
+                                                <rect key="frame" x="263" y="188" width="51" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="CLOSE">
+                                                    <color key="titleColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="EGH-qT-4wM" secondAttribute="bottom" constant="20" id="XBN-aV-ZJd"/>
+                                            <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="12.5" id="s7g-Ug-vF3"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
@@ -94,6 +109,7 @@
                         <outlet property="backgroundImageView" destination="j3M-ip-xjd" id="EVc-3C-Pm6"/>
                         <outlet property="bodyBg" destination="OWs-og-FP7" id="teD-NH-LT8"/>
                         <outlet property="bodyView" destination="MmD-8U-og7" id="B7o-i2-uMk"/>
+                        <outlet property="closeButton" destination="EGH-qT-4wM" id="Xjn-Xo-pek"/>
                         <outlet property="imageView" destination="LyM-hA-PHV" id="HDE-mT-R4c"/>
                         <outlet property="okayButton" destination="LDp-cp-cpg" id="LS3-Ih-mH9"/>
                         <outlet property="titleView" destination="eF7-ct-CP3" id="1i6-Xa-Dow"/>
