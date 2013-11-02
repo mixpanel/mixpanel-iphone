@@ -4,10 +4,11 @@
 @interface MPSurvey ()
 
 @property (nonatomic) NSUInteger ID;
+@property (nonatomic, retain) NSString *name;
 @property (nonatomic) NSUInteger collectionID;
 @property (nonatomic, retain) NSArray *questions;
 
-- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
+- (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
 
 @end
 
@@ -22,6 +23,11 @@
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
         NSLog(@"invalid survey id: %@", ID);
+        return nil;
+    }
+    NSString *name = object[@"name"];
+    if (![name isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid survey name: %@", name);
         return nil;
     }
     NSArray *collections = object[@"collections"];
@@ -47,19 +53,30 @@
         }
     }
     return [[[MPSurvey alloc] initWithID:[ID unsignedIntegerValue]
+                                    name:name
                             collectionID:[collectionID unsignedIntegerValue]
                             andQuestions:[NSArray arrayWithArray:questions]] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
+- (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
     if (self = [super init]) {
-        _ID = ID;
-        _collectionID = collectionID;
-        if (questions && [questions count] > 0) {
+        BOOL valid = YES;
+        if (!(name && name.length > 0)) {
+            valid = NO;
+            NSLog(@"Invalid survey name %@", name);
+        }
+        if (!(questions && [questions count] > 0)) {
+            valid = NO;
+            NSLog(@"Survey must have at least one question %@", questions);
+        }
+
+        if (valid) {
+            _ID = ID;
+            self.name = name;
+            _collectionID = collectionID;
             self.questions = questions;
         } else {
-            NSLog(@"survey has no questions: %@", questions);
             [self release];
             self = nil;
         }
@@ -67,9 +84,15 @@
     return self;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@, (ID:%lu, collection:%lu questions:%lu)", self.name, (unsigned long)self.ID, (unsigned long)self.collectionID, (unsigned long)[self.questions count]];
+}
+
 - (void)dealloc
 {
     self.questions = nil;
+    self.name = nil;
     [super dealloc];
 }
 
