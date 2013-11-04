@@ -24,6 +24,8 @@
 @property (nonatomic, retain) IBOutlet UIButton *closeButton;
 @property (nonatomic, retain) IBOutlet UIView *bodyBg;
 @property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageWidth;
+@property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageHeight;
 
 @end
 
@@ -45,6 +47,9 @@
     
     if (self.notification) {
         if ([self.notification.images count] > 0) {
+            UIImage *image = self.notification.images[0];
+            self.imageWidth.constant = image.size.width;
+            self.imageHeight.constant = image.size.height;
             self.imageView.image = self.notification.images[0];
         }
         

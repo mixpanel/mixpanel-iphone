@@ -73,8 +73,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
-                                <rect key="frame" x="20" y="448" width="280" height="15"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="281" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
+                                <rect key="frame" x="20" y="448" width="281" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
@@ -116,7 +116,9 @@
                         <outlet property="bodyBg" destination="OWs-og-FP7" id="teD-NH-LT8"/>
                         <outlet property="bodyView" destination="MmD-8U-og7" id="B7o-i2-uMk"/>
                         <outlet property="closeButton" destination="EGH-qT-4wM" id="Xjn-Xo-pek"/>
+                        <outlet property="imageHeight" destination="LQn-ew-MQG" id="UJF-hS-zLq"/>
                         <outlet property="imageView" destination="LyM-hA-PHV" id="HDE-mT-R4c"/>
+                        <outlet property="imageWidth" destination="A3b-w6-LPB" id="zeQ-mE-r1S"/>
                         <outlet property="okayButton" destination="LDp-cp-cpg" id="LS3-Ih-mH9"/>
                         <outlet property="titleView" destination="eF7-ct-CP3" id="1i6-Xa-Dow"/>
                     </connections>
