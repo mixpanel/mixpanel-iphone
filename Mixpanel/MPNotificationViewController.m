@@ -100,8 +100,6 @@
 {
     [super viewDidLayoutSubviews];
     
-    [self.titleView sizeToFit];
-    [self.bodyView sizeToFit];
     [self.okayButton sizeToFit];
     
     CGFloat offset = 44.0f / self.bodyBg.bounds.size.height;
