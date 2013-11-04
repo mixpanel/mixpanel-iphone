@@ -146,6 +146,7 @@ static Mixpanel *sharedInstance = nil;
         // REMOVE THIS
         self.decideURL = @"http://kyle.dev.mixpanel.org";
         self.showNotificationOnActive = YES;
+        self.checkForNotificationsOnActive = YES;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -881,15 +882,15 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
     
-    if (self.showSurveyOnActive || self.showNotificationOnActive) {
+    if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive) {
         NSDate *start = [NSDate date];
         
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
             // TODO: decide on order and priority of decisions
             if (self.showSurveyOnActive && surveys && surveys.count > 0) {
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
-            } else if (notifications && notifications.count > 0) {
-                [self showNotification:notifications[0]];
+            } else if (self.showNotificationOnActive && notifications && notifications.count > 0) {
+                [self showNotificationWithObject:notifications[0]];
             }
         }];
     }
@@ -944,7 +945,7 @@ static Mixpanel *sharedInstance = nil;
     [self archive];
 }
 
-#pragma mark - Surveys
+#pragma mark - Decide
 
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications))completion
 {
@@ -1043,6 +1044,17 @@ static Mixpanel *sharedInstance = nil;
     }];
 }
 
+- (void)checkForNotificationsWithCompletion:(void (^)(NSArray *notifications))completion
+{
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
+        if (completion) {
+            completion(notifications);
+        }
+    }];
+}
+
+#pragma mark - Surveys
+
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -1090,7 +1102,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey
 {
     [self checkForSurveysWithCompletion:^(NSArray *surveys){
-        if ([surveys count] > 0) {
+        if (surveys.count > 0) {
             [self showSurveyWithObject:surveys[0]];
         }
     }];
@@ -1135,7 +1147,28 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - MPNotification stuff
 
-- (void)showNotification:(MPNotification *)notification
+- (void)showNotification
+{
+    [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
+        if (notifications.count > 0) {
+            [self showNotificationWithObject:notifications[0]];
+        }
+    }];
+}
+
+- (void)showNotificationWithID:(NSUInteger)ID
+{
+    [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
+        for (MPNotification *notification in notifications) {
+            if (notification.ID == ID) {
+                [self showNotificationWithObject:notification];
+                break;
+            }
+        }
+    }];
+}
+
+- (void)showNotificationWithObject:(MPNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];

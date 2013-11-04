@@ -181,6 +181,20 @@
  @property
  
  @abstract
+ Controls whether to automatically check for notifications for the
+ currently identified user when the application becomes active.
+ 
+ @discussion
+ Defaults to YES. Will fire a network request on
+ <code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
+ for the currently identified user.
+ */
+@property(atomic) BOOL checkForNotificationsOnActive;
+
+/*!
+ @property
+ 
+ @abstract
  Controls whether to automatically check for and show in-app notifications
  for the currently identified user when the application becomes active.
  
@@ -441,17 +455,6 @@
 
 /*!
  @method
-
- @abstract
- Checks for a survey or notification for the currently identified user.
-
- @discussion
- The completion block will be passed the survey and notification if either is found and nil if not.
- */
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications))completion;
-
-/*!
- @method
  
  @abstract
  Shows the survey with the given name.
@@ -481,13 +484,25 @@
  @method
  
  @abstract
- Shows the notification in a <code>MPNotificationController</code> in the view of the
- root view controller.
+ Shows the notification of the given name.
  
  @discussion
  You do not need to call this method on the main thread.
  */
-- (void)showNotification:(MPNotification *)notification;
+- (void)showNotificationWithID:(NSUInteger)ID;
+
+/*!
+ @method
+ 
+ @abstract
+ Shows a notification if one is available.
+ 
+ @discussion
+ You do not need to call this method on the main thread.
+ */
+- (void)showNotification;
+
+- (void)showNotificationWithObject:(MPNotification *)notification;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 

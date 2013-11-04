@@ -104,7 +104,7 @@
     };
     
     MPNotification *notif = [MPNotification notificationWithJSONObject:notifJson];
-    [[Mixpanel sharedInstance] showNotification:notif];
+    [[Mixpanel sharedInstance] showNotificationWithObject:notif];
 }
 
 - (IBAction)changeBackground
