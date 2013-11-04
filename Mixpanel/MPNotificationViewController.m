@@ -55,8 +55,11 @@
         
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
-        [self.okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
-        [self.okayButton sizeToFit];
+        
+        if (self.notification.cta.length > 0) {
+            [self.okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
+            [self.okayButton sizeToFit];
+        }
     }
     
     self.okayButton.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
