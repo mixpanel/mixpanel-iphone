@@ -48,7 +48,7 @@
     self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
     
     self.mixpanel.checkForNotificationsOnActive = YES;
-    self.mixpanel.showNotificationOnActive = YES; //Change this to NO to show your notifs manually.
+    self.mixpanel.showNotificationOnActive = NO; //Change this to NO to show your notifs manually.
 
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds

@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="fakeBackground" destination="Bzr-6S-6We" id="nRe-7X-cQ9"/>
                 <outlet property="genderControl" destination="9" id="33"/>
+                <outlet property="notificationIDField" destination="q88-O4-kEK" id="v1y-s6-HgU"/>
                 <outlet property="scrollView" destination="6" id="e9g-HV-KAS"/>
                 <outlet property="surveyIDField" destination="Ja3-5J-l1N" id="tU0-dw-cbK"/>
                 <outlet property="view" destination="KE1-NB-lNZ" id="6ua-fz-m5T"/>
@@ -77,7 +78,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="37">
-                            <rect key="frame" x="57" y="219" width="207" height="44"/>
+                            <rect key="frame" x="-16" y="218" width="207" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Show Survey">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -87,7 +88,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6W4-gx-0SQ">
-                            <rect key="frame" x="90" y="249" width="138" height="43"/>
+                            <rect key="frame" x="164" y="219" width="138" height="43"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Show Notification">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -107,7 +108,14 @@
                             </connections>
                         </button>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Survey ID" textAlignment="center" minimumFontSize="17" id="Ja3-5J-l1N">
-                            <rect key="frame" x="92" y="193" width="135" height="30"/>
+                            <rect key="frame" x="20" y="188" width="135" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" hint="Survey Name" label=""/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Notif ID" textAlignment="center" minimumFontSize="17" id="q88-O4-kEK">
+                            <rect key="frame" x="165" y="188" width="135" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration" hint="Survey Name" label=""/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
