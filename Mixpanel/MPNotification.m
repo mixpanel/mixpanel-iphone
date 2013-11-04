@@ -46,10 +46,13 @@
         NSLog(@"invalid notif cta: %@", cta);
         return nil;
     }
+    if ([cta isEqualToString:@""]) {
+        cta = @"Okay";
+    }
     
     NSURL *url = nil;
-    NSString *url_string = object[@"url"];
-    if (url_string != nil) {
+    NSString *url_string = object[@"cta_url"];
+    if (url_string != nil && ![url_string isKindOfClass:[NSNull class]]) {
         if (![url_string isKindOfClass:[NSString class]]) {
             NSLog(@"invalid notif url: %@", url_string);
             return nil;

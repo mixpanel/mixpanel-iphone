@@ -28,6 +28,7 @@
 @property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
 @property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
 @property(nonatomic, retain) IBOutlet UITextField *surveyIDField;
+@property(nonatomic, retain) IBOutlet UITextField *notificationIDField;
 @property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @end
@@ -91,20 +92,13 @@
 
 - (IBAction)showNotif:(id)sender
 {
-    NSDictionary *notifJson = @{
-        @"version": @0,
-        @"id": @1,
-        @"collections": @[@{@"id": @2}],
-        @"title": @"Congratulations!",
-        @"body": @"You're our 543212th app opener. You'll win a trip to Midland, Texas as well as a subscription to our all-you-can-'drink' queso program.",
-        @"cta": @"Okay thats cool!",
-        @"url": @"maps://",
-        @"image_urls": @[@"https://cdn.mxpnl.com/cache/a0592c8bd84cb20ad974642056d1b1ec/images/static/landing/surveys/section_ask_img_3.png",
-                         @"https://cdn2.mxpnl.com/site_media/images/jobs/photos/photo-07.jpg"]
-    };
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    MPNotification *notif = [MPNotification notificationWithJSONObject:notifJson];
-    [[Mixpanel sharedInstance] showNotificationWithObject:notif];
+    if (_notificationIDField.text.length > 0) {
+        [mixpanel showNotificationWithID:(NSUInteger)_notificationIDField.text.integerValue];
+    } else {
+        [mixpanel showNotification];
+    }
 }
 
 - (IBAction)changeBackground
