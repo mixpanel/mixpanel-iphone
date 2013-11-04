@@ -19,6 +19,7 @@
 #import "HelloMixpanelTests.h"
 
 #import "Mixpanel.h"
+#import "MPNotification.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
 #import "HTTPServer.h"
@@ -931,6 +932,72 @@
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"prompt"] = @"";
     STAssertNil([MPSurveyQuestion questionWithJSONObject:m], nil);
+}
+
+- (void)testParseNotification
+{
+    // invalid bad title
+    NSDictionary *invalid = @{@"id": @3,
+                              @"title": @5,
+                              @"body": @"Hi!"};
+    
+    STAssertNil([MPNotification notificationWithJSONObject:invalid], nil);
+    
+    // valid
+    NSDictionary *o = @{@"id": @3,
+                        @"title": @"title",
+                        @"body": @"body",
+                        @"cta": @"cta",
+                        @"cta_url": @"maps://",
+                        @"image_urls": @[]};
+    
+    STAssertNotNil([MPNotification notificationWithJSONObject:o], nil);
+    
+    // nil
+    STAssertNil([MPNotification notificationWithJSONObject:nil], nil);
+    
+    // empty
+    STAssertNil([MPNotification notificationWithJSONObject:@{}], nil);
+    
+    // garbage keys
+    STAssertNil([MPNotification notificationWithJSONObject:@{@"gar": @"bage"}], nil);
+    
+    NSMutableDictionary *m;
+    
+    // invalid id
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"id"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // invalid title
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"title"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // invalid body
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"body"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid cta
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"cta"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // invalid cta_url
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"cta_url"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // invalid image_urls
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"image_urls"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // invalid image_urls item
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"image_urls"] = @[@NO];
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
 }
 
 @end

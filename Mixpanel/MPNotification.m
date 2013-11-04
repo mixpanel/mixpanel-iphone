@@ -68,6 +68,7 @@
     for (NSString *imageUrl in imageUrls) {
         if (![imageUrl isKindOfClass:[NSString class]] || !imageUrl) {
             NSLog(@"invalid notif image url string: %@", imageUrl);
+            return nil;
         }
         
         NSError *error = nil;

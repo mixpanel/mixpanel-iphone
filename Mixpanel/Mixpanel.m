@@ -1194,7 +1194,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
 {
     if (status && controller.notification.url) {
-        MixpanelDebug(@"opening url %@", controller.notification.url);
+        MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
         [controller.presentingViewController dismissViewControllerAnimated:!success completion:nil];
         
