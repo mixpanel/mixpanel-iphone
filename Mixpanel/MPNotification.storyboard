@@ -38,7 +38,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
-                                                <rect key="frame" x="263" y="188" width="51" height="30"/>
+                                                <rect key="frame" x="263" y="193" width="51" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <state key="normal" title="CLOSE">
@@ -49,7 +49,7 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="EGH-qT-4wM" secondAttribute="bottom" constant="20" id="XBN-aV-ZJd"/>
+                                            <constraint firstAttribute="bottom" secondItem="EGH-qT-4wM" secondAttribute="bottom" constant="15" id="XBN-aV-ZJd"/>
                                             <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="12.5" id="s7g-Ug-vF3"/>
                                         </constraints>
                                     </view>
