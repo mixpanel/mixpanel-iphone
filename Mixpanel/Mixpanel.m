@@ -1208,6 +1208,8 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ marking notification shown: %@, %@", self, @(notification.ID), _shownNotifications);
     
+    [_shownNotifications addObject:@(notification.ID)];
+    
     NSDictionary *properties = @{
                                  @"$campaigns": @(notification.ID),
                                  @"$notifications": @{
