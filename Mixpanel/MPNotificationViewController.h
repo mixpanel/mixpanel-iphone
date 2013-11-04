@@ -9,12 +9,18 @@
 #import <UIKit/UIKit.h>
 
 @class MPNotification;
+@protocol MPNotificationViewControllerDelegate;
 
 @interface MPNotificationViewController : UIViewController
 
+@property (nonatomic, assign) id<MPNotificationViewControllerDelegate> delegate;
 @property (nonatomic, retain) UIImage *backgroundImage;
 @property (nonatomic, retain) MPNotification *notification;
 
-- (void)setDismissTarget:(id)target action:(SEL)action;
+@end
+
+@protocol MPNotificationViewControllerDelegate <NSObject>
+
+- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status;
 
 @end
