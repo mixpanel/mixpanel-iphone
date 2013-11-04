@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="575" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-ip-xjd" userLabel="Bg Image View">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-ip-xjd" userLabel="Bg Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="575"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -94,8 +94,8 @@
                         <constraints>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="bottom" constant="-7" id="1wF-9Y-JlE"/>
                             <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="2Zl-eJ-nGR"/>
+                            <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="Wch-Xc-Avw" secondAttribute="top" id="7FN-LA-fsE"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="90" id="AwM-x3-w0d"/>
-                            <constraint firstItem="en5-wb-o36" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="bottom" constant="-555" id="DOj-LF-Ko1"/>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="bottom" id="DQu-5x-5gA"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="width" secondItem="MmD-8U-og7" secondAttribute="width" id="IfC-Ls-kOm"/>
                             <constraint firstAttribute="centerX" secondItem="MmD-8U-og7" secondAttribute="centerX" id="NuK-mI-4RY"/>
