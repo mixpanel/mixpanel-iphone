@@ -806,6 +806,7 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
+    [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         NSLog(@"%@ unable to archive properties data", self);
@@ -872,6 +873,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.distinctId = properties[@"peopleDistinctId"];
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ? properties[@"peopleUnidentifiedQueue"] : [NSMutableArray array];
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
+        self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
     }
 }
 
@@ -958,7 +960,7 @@ static Mixpanel *sharedInstance = nil;
         
         if (!_surveys || !_notifications) {
             MixpanelDebug(@"%@ survey cache not found, starting network request", self);
-            
+
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
             NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
