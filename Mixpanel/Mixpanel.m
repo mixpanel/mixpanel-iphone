@@ -49,7 +49,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate> {
+@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -1181,7 +1181,7 @@ static Mixpanel *sharedInstance = nil;
         
         controller.backgroundImage = [rootViewController.view mp_snapshotImage];
         controller.notification = notification;
-        [controller setDismissTarget:self action:@selector(notificationControllerWasDismissed:status:)];
+        controller.delegate = self;
         
         [rootViewController presentViewController:controller animated:YES completion:nil];
         
@@ -1189,9 +1189,9 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(NSNumber *)status
+- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
 {
-    if (status.boolValue && controller.notification.url) {
+    if (status && controller.notification.url) {
         MixpanelDebug(@"opening url %@", controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
         [controller.presentingViewController dismissViewControllerAnimated:!success completion:nil];

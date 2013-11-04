@@ -15,10 +15,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface MPNotificationViewController () {
-    id _target;
-    SEL _action;
-}
+@interface MPNotificationViewController ()
 
 @property (nonatomic, retain) IBOutlet UIImageView *imageView;
 @property (nonatomic, retain) IBOutlet UILabel *titleView;
@@ -47,8 +44,6 @@
     self.backgroundImageView.image = [_backgroundImage mp_applyDarkEffect];
     
     if (self.notification) {
-        NSLog(@"notif: %@", self.notification.body);
-        
         if (self.notification.images.count > 0) {
             self.imageView.image = self.notification.images[0];
         }
@@ -117,22 +112,16 @@
 
 - (void)pressedOkay
 {
-    if (_target) {
-        [_target performSelector:_action withObject:self withObject:@(YES)];
+    if (self.delegate) {
+        [self.delegate notificationControllerWasDismissed:self status:YES];
     }
 }
 
 - (void)pressedClose
 {
-    if (_target) {
-        [_target performSelector:_action withObject:self withObject:@(NO)];
+    if (self.delegate) {
+        [self.delegate notificationControllerWasDismissed:self status:NO];
     }
-}
-
-- (void)setDismissTarget:(id)target action:(SEL)action
-{
-    _target = target;
-    _action = action;
 }
 
 @end
