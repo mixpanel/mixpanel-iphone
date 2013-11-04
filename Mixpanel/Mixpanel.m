@@ -1189,7 +1189,9 @@ static Mixpanel *sharedInstance = nil;
         
         [rootViewController presentViewController:controller animated:YES completion:nil];
         
-        [self markNotificationShown:notification];
+        if (![notification.title isEqualToString:@"$ignore"]) {
+            [self markNotificationShown:notification];
+        }
     });
 }
 
