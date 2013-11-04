@@ -78,7 +78,7 @@
             return nil;
         }
         
-        UIImage *image = [UIImage imageWithData:imageData];
+        UIImage *image = [UIImage imageWithData:imageData scale:2.0f];
         if (image) {
             [images addObject:image];
         } else {
