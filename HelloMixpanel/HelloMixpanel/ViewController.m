@@ -94,7 +94,7 @@
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    if (_notificationIDField.text.length > 0) {
+    if ([_notificationIDField.text length] > 0) {
         [mixpanel showNotificationWithID:(NSUInteger)_notificationIDField.text.integerValue];
     } else {
         [mixpanel showNotification];
