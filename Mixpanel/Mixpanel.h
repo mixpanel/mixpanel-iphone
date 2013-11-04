@@ -484,7 +484,7 @@
  @method
  
  @abstract
- Shows the notification of the given name.
+ Shows the notification of the given id.
  
  @discussion
  You do not need to call this method on the main thread.
