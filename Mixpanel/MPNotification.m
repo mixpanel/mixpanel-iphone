@@ -46,9 +46,6 @@
         NSLog(@"invalid notif cta: %@", cta);
         return nil;
     }
-    if ([cta isEqualToString:@""]) {
-        cta = @"Okay";
-    }
     
     NSURL *url = nil;
     NSString *url_string = object[@"cta_url"];
