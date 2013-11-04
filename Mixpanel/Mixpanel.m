@@ -959,7 +959,7 @@ static Mixpanel *sharedInstance = nil;
         }
         
         if (!_surveys || !_notifications) {
-            MixpanelDebug(@"%@ survey cache not found, starting network request", self);
+            MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
             NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
@@ -968,16 +968,16 @@ static Mixpanel *sharedInstance = nil;
             NSError *error = nil;
             NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
             if (error) {
-                NSLog(@"%@ survey check http error: %@", self, error);
+                NSLog(@"%@ decide check http error: %@", self, error);
                 return;
             }
             NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
             if (error) {
-                NSLog(@"%@ survey check json error: %@", self, error);
+                NSLog(@"%@ decide check json error: %@", self, error);
                 return;
             }
             if (object[@"error"]) {
-                MixpanelDebug(@"%@ survey check api error: %@", self, object[@"error"]);
+                MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
                 return;
             }
             
@@ -1012,7 +1012,7 @@ static Mixpanel *sharedInstance = nil;
             self.surveys = parsedSurveys;
             self.notifications = parsedNotifications;
         } else {
-            MixpanelDebug(@"%@ survey cache found, skipping network request", self);
+            MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
         
         NSMutableArray *unseenSurveys = [NSMutableArray array];
@@ -1029,7 +1029,9 @@ static Mixpanel *sharedInstance = nil;
             }
         }
         
-        MixpanelDebug(@"%@ survey check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[_surveys count], unseenSurveys);
+        MixpanelDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[_surveys count], unseenSurveys);
+        MixpanelDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)[unseenNotifications count],
+                      (unsigned long)[_notifications count], unseenNotifications);
         
         if (completion) {
             completion([NSArray arrayWithArray:unseenSurveys], [NSArray arrayWithArray:unseenNotifications]);
