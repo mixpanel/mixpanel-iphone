@@ -44,14 +44,14 @@
     self.backgroundImageView.image = [_backgroundImage mp_applyDarkEffect];
     
     if (self.notification) {
-        if (self.notification.images.count > 0) {
+        if ([self.notification.images count] > 0) {
             self.imageView.image = self.notification.images[0];
         }
         
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
         
-        if (self.notification.cta.length > 0) {
+        if ([self.notification.cta length] > 0) {
             [self.okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
             [self.okayButton sizeToFit];
         }

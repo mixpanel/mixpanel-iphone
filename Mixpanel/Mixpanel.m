@@ -887,9 +887,9 @@ static Mixpanel *sharedInstance = nil;
         
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
             // TODO: decide on order and priority of decisions
-            if (self.showSurveyOnActive && surveys && surveys.count > 0) {
+            if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
-            } else if (self.showNotificationOnActive && notifications && notifications.count > 0) {
+            } else if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
                 [self showNotificationWithObject:notifications[0]];
             }
         }];
@@ -1102,7 +1102,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showSurvey
 {
     [self checkForSurveysWithCompletion:^(NSArray *surveys){
-        if (surveys.count > 0) {
+        if ([surveys count] > 0) {
             [self showSurveyWithObject:surveys[0]];
         }
     }];
@@ -1150,7 +1150,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showNotification
 {
     [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
-        if (notifications.count > 0) {
+        if ([notifications count] > 0) {
             [self showNotificationWithObject:notifications[0]];
         }
     }];
