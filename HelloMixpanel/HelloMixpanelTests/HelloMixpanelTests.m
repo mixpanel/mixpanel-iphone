@@ -998,6 +998,11 @@
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"image_urls"] = @[@NO];
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // invalid image_urls string
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"image_urls"] = @[@"http://test test test.com"];
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
 }
 
 @end
