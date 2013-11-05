@@ -1069,7 +1069,7 @@ static Mixpanel *sharedInstance = nil;
     MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
     controller.survey = survey;
     controller.delegate = self;
-    controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+    controller.backgroundImage = [rootViewController.view mp_snapshotForBlur];
     [rootViewController presentViewController:controller animated:YES completion:nil];
 }
 
