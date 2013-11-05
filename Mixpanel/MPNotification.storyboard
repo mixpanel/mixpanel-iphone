@@ -8,7 +8,7 @@
         <!--Notification View Controller-->
         <scene sceneID="YMc-Jc-CKb">
             <objects>
-                <viewController storyboardIdentifier="MPNotificationViewController" id="puo-Hy-QiQ" customClass="MPNotificationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MPNotificationViewController" modalTransitionStyle="crossDissolve" id="puo-Hy-QiQ" customClass="MPNotificationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="en5-wb-o36"/>
                         <viewControllerLayoutGuide type="bottom" id="oJ2-nk-n4o"/>
@@ -27,7 +27,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LyM-hA-PHV" userLabel="Notif Image View">
-                                <rect key="frame" x="20" y="64" width="280" height="400"/>
+                                <rect key="frame" x="20" y="83" width="280" height="400"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="A3b-w6-LPB"/>
@@ -35,28 +35,13 @@
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="221" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-og-FP7" userLabel="Body Bg View">
-                                <rect key="frame" x="0.0" y="288" width="320" height="280"/>
+                                <rect key="frame" x="0.0" y="306" width="320" height="262"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-yT-gz1" customClass="MPRadialGradientView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="262"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
-                                                <rect key="frame" x="262" y="237" width="44" height="28"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <state key="normal" title="CLOSE">
-                                                    <color key="titleColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </state>
-                                            </button>
-                                        </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="EGH-qT-4wM" secondAttribute="bottom" constant="15" id="XBN-aV-ZJd"/>
-                                            <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="12.5" id="s7g-Ug-vF3"/>
-                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
@@ -69,7 +54,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-ct-CP3">
-                                <rect key="frame" x="20" y="422" width="280" height="21"/>
+                                <rect key="frame" x="20" y="440" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="f7M-nn-fH8"/>
@@ -79,19 +64,28 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
-                                <rect key="frame" x="20" y="448" width="280" height="15"/>
+                                <rect key="frame" x="20" y="466" width="280" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-cp-cpg">
-                                <rect key="frame" x="127" y="478" width="67" height="35"/>
+                                <rect key="frame" x="127" y="496" width="67" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
                                 <state key="normal" title="Cool!">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
+                                <rect key="frame" x="285" y="30" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" image="MPCloseBtn.png">
+                                    <color key="titleColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                         </subviews>
@@ -100,6 +94,7 @@
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="bottom" constant="-7" id="1wF-9Y-JlE"/>
                             <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="2Zl-eJ-nGR"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="Wch-Xc-Avw" secondAttribute="top" id="7FN-LA-fsE"/>
+                            <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="10" id="98S-L3-L61"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="134" id="AwM-x3-w0d"/>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="bottom" id="DQu-5x-5gA"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="width" secondItem="MmD-8U-og7" secondAttribute="width" id="IfC-Ls-kOm"/>
@@ -111,10 +106,11 @@
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="leading" secondItem="If2-9m-eT9" secondAttribute="leading" id="crJ-FY-cZ4"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="If2-9m-eT9" secondAttribute="top" id="cv2-h4-fvc"/>
                             <constraint firstItem="OWs-og-FP7" firstAttribute="leading" secondItem="Wch-Xc-Avw" secondAttribute="leading" id="dJp-W6-miA"/>
-                            <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="44" id="dxg-4s-FD6"/>
+                            <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="63" id="dxg-4s-FD6"/>
                             <constraint firstAttribute="trailing" secondItem="OWs-og-FP7" secondAttribute="trailing" id="g4V-zo-36q"/>
                             <constraint firstItem="MmD-8U-og7" firstAttribute="top" secondItem="eF7-ct-CP3" secondAttribute="bottom" constant="5" id="hDC-Mi-ipg"/>
-                            <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-55" id="lca-fD-jgb"/>
+                            <constraint firstItem="EGH-qT-4wM" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="10" id="i3W-1P-cy6"/>
+                            <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-37" id="lca-fD-jgb"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="height" secondItem="If2-9m-eT9" secondAttribute="height" id="s2w-wS-P0V"/>
                             <constraint firstItem="LDp-cp-cpg" firstAttribute="top" secondItem="MmD-8U-og7" secondAttribute="bottom" constant="15" id="vCY-0M-x1R"/>
                             <constraint firstAttribute="centerX" secondItem="LDp-cp-cpg" secondAttribute="centerX" constant="-0.5" id="vQ8-41-fqj"/>
@@ -137,6 +133,9 @@
             <point key="canvasLocation" x="278" y="248"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="MPCloseBtn.png" width="25" height="25"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
