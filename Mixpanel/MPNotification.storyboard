@@ -30,15 +30,15 @@
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="221" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-og-FP7" userLabel="Body Bg View">
-                                <rect key="frame" x="0.0" y="332" width="320" height="236"/>
+                                <rect key="frame" x="0.0" y="288" width="320" height="280"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-yT-gz1" customClass="MPRadialGradientView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="236"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
-                                                <rect key="frame" x="263" y="193" width="44" height="28"/>
+                                                <rect key="frame" x="263" y="237" width="44" height="28"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <state key="normal" title="CLOSE">
@@ -73,8 +73,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="281" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
-                                <rect key="frame" x="20" y="448" width="281" height="15"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
+                                <rect key="frame" x="20" y="448" width="280" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
@@ -95,7 +95,7 @@
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="bottom" constant="-7" id="1wF-9Y-JlE"/>
                             <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="2Zl-eJ-nGR"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="Wch-Xc-Avw" secondAttribute="top" id="7FN-LA-fsE"/>
-                            <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="90" id="AwM-x3-w0d"/>
+                            <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="134" id="AwM-x3-w0d"/>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="bottom" id="DQu-5x-5gA"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="width" secondItem="MmD-8U-og7" secondAttribute="width" id="IfC-Ls-kOm"/>
                             <constraint firstAttribute="centerX" secondItem="MmD-8U-og7" secondAttribute="centerX" id="NuK-mI-4RY"/>
