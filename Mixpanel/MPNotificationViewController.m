@@ -44,7 +44,6 @@
 {
     [super viewDidLoad];
     self.backgroundImageView.image = _backgroundImage;
-    //self.backgroundImageView.layer.mask = [self bgRadialMask];
     
     if (self.notification) {
         if ([self.notification.images count] > 0) {
@@ -121,56 +120,47 @@
 {
     [super beginAppearanceTransition:isAppearing animated:animated];
     
-    if (isAppearing) {
-        //self.backgroundImageView.alpha = 0.0f;
+    if (isAppearing && animated) {
         self.imageView.alpha = 0.0f;
         self.titleView.alpha = 0.0f;
-        self.bodyBg.alpha = 0.0f;
         self.bodyView.alpha = 0.0f;
         self.okayButton.alpha = 0.0f;
+        self.closeButton.alpha = 0.0f;
     }
 }
 
 - (void)endAppearanceTransition
 {
     [super endAppearanceTransition];
-    NSTimeInterval duration = 0.50;
+    NSTimeInterval duration = 0.2f;
     
-    //self.backgroundImageView.alpha = 1.0f;
-    self.imageView.alpha = 1.0f;
-    self.titleView.alpha = 1.0f;
     self.bodyBg.alpha = 1.0f;
-    self.bodyView.alpha = 1.0f;
-    self.okayButton.alpha = 1.0f;
     
-    [UIView animateWithDuration:duration
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseIn
-                     animations:^{
-                         NSArray *keyTimes = @[@0, @0.5, @1];
-                         
-                         // slide pic down
-                         CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
-                         anim.duration = duration;
-                         anim.keyTimes = keyTimes;
-                         CGFloat y1 = 0.0f - self.imageView.bounds.size.height;
-                         CGFloat y2 = self.imageView.bounds.origin.y;
-                         anim.values = @[@(y1), @(y2), @(y2)];
-                         [self.imageView.layer addAnimation:anim forKey:nil];
-                         
-                         // fade body in
-                         anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
-                         anim.duration = duration;
-                         anim.keyTimes = keyTimes;
-                         y1 = self.bodyBg.bounds.origin.y + self.bodyBg.bounds.size.height;
-                         y2 = self.bodyBg.bounds.origin.y;
-                         anim.values = @[@(y1), @(y1), @(y2)];
-                         [self.bodyBg.layer addAnimation:anim forKey:nil];
-                         [self.titleView.layer addAnimation:anim forKey:nil];
-                         [self.bodyView.layer addAnimation:anim forKey:nil];
-                         [self.okayButton.layer addAnimation:anim forKey:nil];
-                     }
-                     completion:nil];
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
+    transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
+    self.imageView.transform = transform;
+    self.titleView.transform = transform;
+    self.bodyView.transform = transform;
+    self.okayButton.transform = transform;
+
+    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.titleView.transform = CGAffineTransformIdentity;
+        self.titleView.alpha = 1.0f;
+        self.bodyView.transform = CGAffineTransformIdentity;
+        self.bodyView.alpha = 1.0f;
+        self.okayButton.transform = CGAffineTransformIdentity;
+        self.okayButton.alpha = 1.0f;
+    } completion:nil];
+
+    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.imageView.transform = CGAffineTransformIdentity;
+        self.imageView.alpha = 1.0f;
+    } completion:nil];
+
+    [UIView animateWithDuration:duration delay:0.3f options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.closeButton.transform = CGAffineTransformIdentity;
+        self.closeButton.alpha = 1.0f;
+    } completion:nil];
 }
 
 - (void)pressedOkay
@@ -185,41 +175,6 @@
     if (self.delegate) {
         [self.delegate notificationControllerWasDismissed:self status:NO];
     }
-}
-
-- (CALayer *)bgRadialMask
-{
-    CGPoint center = CGPointMake(160.0f, 200.0f);
-    CGSize size = CGSizeMake(center.x * 2.0f, center.y * 2.0f);
-    CGRect frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
-    
-    UIGraphicsBeginImageContext(size);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat components[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f};
-    CGFloat locations[] = {0.0f, 1.0f};
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 2);
-    
-    //CGMutablePathRef path = CGPathCreateMutable();
-    //CGPathMoveToPoint(path, NULL, center.x, center.y);
-    //CGPathAddEllipseInRect(path, NULL, CGRectMake(0.0f, 0.0f, size.width, size.height));
-    //CGPathAddLineToPoint(path, NULL, center.x - size.width, center.y);
-    CGContextAddEllipseInRect(ctx, CGRectMake(0.0f, center.y - center.x, size.width, size.width));
-    CGContextClip(ctx);
-    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, size.width, 0);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    //CGLayerRef layerRef = CGLayerCreateWithContext(ctx, size, NULL);
-    
-    CGContextRestoreGState(ctx);
-    UIGraphicsEndImageContext();
-    
-    CALayer *layer = [CALayer layer];
-    layer.frame = frame;
-    layer.contents = (id) image.CGImage;
-    
-    return layer;
 }
 
 @end
