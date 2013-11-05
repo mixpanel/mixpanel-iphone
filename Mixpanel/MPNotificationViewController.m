@@ -44,6 +44,7 @@
 {
     [super viewDidLoad];
     self.backgroundImageView.image = _backgroundImage;
+    //self.backgroundImageView.layer.mask = [self bgRadialMask];
     
     if (self.notification) {
         if ([self.notification.images count] > 0) {
@@ -72,7 +73,7 @@
     CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
     fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor];
     // add 44 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 90.0f / self.bodyBg.bounds.size.height;
+    CGFloat offset = 105.0f / self.bodyBg.bounds.size.height;
     fadeLayer.locations = @[@0, @(offset), @1];
     fadeLayer.bounds = self.bodyBg.bounds;
     fadeLayer.anchorPoint = CGPointZero;
@@ -93,9 +94,16 @@
     [super viewDidLayoutSubviews];
     
     [self.okayButton sizeToFit];
-    CGFloat offset = 90.0f / self.bodyBg.bounds.size.height;
-    ((CAGradientLayer *) self.bodyBg.layer.mask).locations = @[@0, @(offset), @1];
-    self.bodyBg.layer.mask.bounds = self.bodyBg.bounds;
+    CAGradientLayer *fadeLayer = [CAGradientLayer layer];
+    CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
+    CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
+    fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor];
+    // add 44 pixels of fade in and out at top and bottom of table view container
+    CGFloat offset = 105.0f / self.bodyBg.bounds.size.height;
+    fadeLayer.locations = @[@0, @(offset), @1];
+    fadeLayer.bounds = self.bodyBg.bounds;
+    fadeLayer.anchorPoint = CGPointZero;
+    self.bodyBg.layer.mask = fadeLayer;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -120,6 +128,41 @@
     if (self.delegate) {
         [self.delegate notificationControllerWasDismissed:self status:NO];
     }
+}
+
+- (CALayer *)bgRadialMask
+{
+    CGPoint center = CGPointMake(160.0f, 200.0f);
+    CGSize size = CGSizeMake(center.x * 2.0f, center.y * 2.0f);
+    CGRect frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    
+    UIGraphicsBeginImageContext(size);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat components[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f};
+    CGFloat locations[] = {0.0f, 1.0f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 2);
+    
+    //CGMutablePathRef path = CGPathCreateMutable();
+    //CGPathMoveToPoint(path, NULL, center.x, center.y);
+    //CGPathAddEllipseInRect(path, NULL, CGRectMake(0.0f, 0.0f, size.width, size.height));
+    //CGPathAddLineToPoint(path, NULL, center.x - size.width, center.y);
+    CGContextAddEllipseInRect(ctx, CGRectMake(0.0f, center.y - center.x, size.width, size.width));
+    CGContextClip(ctx);
+    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, size.width, 0);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    //CGLayerRef layerRef = CGLayerCreateWithContext(ctx, size, NULL);
+    
+    CGContextRestoreGState(ctx);
+    UIGraphicsEndImageContext();
+    
+    CALayer *layer = [CALayer layer];
+    layer.frame = frame;
+    layer.contents = (id) image.CGImage;
+    
+    return layer;
 }
 
 @end
@@ -154,6 +197,44 @@
     CGContextClip(ctx);
     
     CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, size.width, 0);
+    
+    CGContextRestoreGState(ctx);
+}
+
+@end
+
+@interface MPBgRadialGradientView : UIView
+
+@end
+
+@implementation MPBgRadialGradientView
+
+- (void)drawRect:(CGRect)rect
+{
+    CGPoint center = CGPointMake(160.0f, 200.0f);
+    CGSize circleSize = CGSizeMake(center.x * 2.0f, center.x * 2.0f);
+    CGRect circleFrame = CGRectMake(0.0f, center.y - center.x, circleSize.width, circleSize.height);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    
+    CGColorRef colorRef = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.94f].CGColor;
+    CGContextSetFillColorWithColor(ctx, colorRef);
+    CGContextFillRect(ctx, self.bounds);
+    
+    CGContextSetBlendMode(ctx, kCGBlendModeCopy);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat comps[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
+    CGFloat locs[] = {0.0f, 0.5f, 1.0f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 3);
+    
+    CGContextAddEllipseInRect(ctx, circleFrame);
+    CGContextClip(ctx);
+    
+    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
     
     CGContextRestoreGState(ctx);
 }

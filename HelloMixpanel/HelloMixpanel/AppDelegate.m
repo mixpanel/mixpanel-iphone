@@ -45,7 +45,7 @@
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
 
     self.mixpanel.checkForSurveysOnActive = YES;
-    self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
+    self.mixpanel.showSurveyOnActive = NO; //Change this to NO to show your surveys manually.
     
     self.mixpanel.checkForNotificationsOnActive = YES;
     self.mixpanel.showNotificationOnActive = NO; //Change this to NO to show your notifs manually.

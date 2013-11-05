@@ -17,10 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-ip-xjd" userLabel="Bg Image View">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-ip-xjd" userLabel="Bg Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="575"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="If2-9m-eT9" userLabel="Bg Mask" customClass="MPBgRadialGradientView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="575"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LyM-hA-PHV" userLabel="Notif Image View">
                                 <rect key="frame" x="20" y="64" width="280" height="400"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,8 +42,8 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
-                                                <rect key="frame" x="263" y="237" width="44" height="28"/>
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM">
+                                                <rect key="frame" x="262" y="237" width="44" height="28"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <state key="normal" title="CLOSE">
@@ -98,15 +103,19 @@
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="134" id="AwM-x3-w0d"/>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="bottom" id="DQu-5x-5gA"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="width" secondItem="MmD-8U-og7" secondAttribute="width" id="IfC-Ls-kOm"/>
+                            <constraint firstItem="j3M-ip-xjd" firstAttribute="width" secondItem="If2-9m-eT9" secondAttribute="width" id="Lnc-cn-mSW"/>
                             <constraint firstAttribute="centerX" secondItem="MmD-8U-og7" secondAttribute="centerX" id="NuK-mI-4RY"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="centerX" secondItem="MmD-8U-og7" secondAttribute="centerX" id="Ple-yR-sUf"/>
                             <constraint firstAttribute="trailing" secondItem="j3M-ip-xjd" secondAttribute="trailing" id="Zgs-3K-N1E"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="leading" secondItem="Wch-Xc-Avw" secondAttribute="leading" id="bJ0-Sf-jdK"/>
+                            <constraint firstItem="j3M-ip-xjd" firstAttribute="leading" secondItem="If2-9m-eT9" secondAttribute="leading" id="crJ-FY-cZ4"/>
+                            <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="If2-9m-eT9" secondAttribute="top" id="cv2-h4-fvc"/>
                             <constraint firstItem="OWs-og-FP7" firstAttribute="leading" secondItem="Wch-Xc-Avw" secondAttribute="leading" id="dJp-W6-miA"/>
                             <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="44" id="dxg-4s-FD6"/>
                             <constraint firstAttribute="trailing" secondItem="OWs-og-FP7" secondAttribute="trailing" id="g4V-zo-36q"/>
                             <constraint firstItem="MmD-8U-og7" firstAttribute="top" secondItem="eF7-ct-CP3" secondAttribute="bottom" constant="5" id="hDC-Mi-ipg"/>
                             <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-55" id="lca-fD-jgb"/>
+                            <constraint firstItem="j3M-ip-xjd" firstAttribute="height" secondItem="If2-9m-eT9" secondAttribute="height" id="s2w-wS-P0V"/>
                             <constraint firstItem="LDp-cp-cpg" firstAttribute="top" secondItem="MmD-8U-og7" secondAttribute="bottom" constant="15" id="vCY-0M-x1R"/>
                             <constraint firstAttribute="centerX" secondItem="LDp-cp-cpg" secondAttribute="centerX" constant="-0.5" id="vQ8-41-fqj"/>
                         </constraints>
