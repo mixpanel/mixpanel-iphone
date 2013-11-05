@@ -75,8 +75,14 @@
         NSString *extension = [imageUrl pathExtension];
         imageUrl = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         
+        NSURL *imageUrlObject = [NSURL URLWithString:imageUrl];
+        if (imageUrlObject == nil) {
+            NSLog(@"inavlid notif image url: %@", imageUrl);
+            return nil;
+        }
+        
         NSError *error = nil;
-        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl] options:NSDataReadingMappedIfSafe error:&error];
+        NSData *imageData = [NSData dataWithContentsOfURL:imageUrlObject options:NSDataReadingMappedIfSafe error:&error];
         if (error || !imageData) {
             NSLog(@"image failed to load from url: %@", imageUrl);
             return nil;

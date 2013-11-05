@@ -212,8 +212,8 @@
 - (void)drawRect:(CGRect)rect
 {
     CGPoint center = CGPointMake(160.0f, 200.0f);
-    CGSize circleSize = CGSizeMake(center.x * 2.0f, center.x * 2.0f);
-    CGRect circleFrame = CGRectMake(0.0f, center.y - center.x, circleSize.width, circleSize.height);
+    CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
+    CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
@@ -227,9 +227,10 @@
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat comps[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.9f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
-    CGFloat locs[] = {0.0f, 0.5f, 1.0f};
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 3);
+    CGFloat locs[] = {0.0f, 0.5f, 0.75, 1.0f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 4);
     
     CGContextAddEllipseInRect(ctx, circleFrame);
     CGContextClip(ctx);
