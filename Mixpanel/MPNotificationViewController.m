@@ -116,6 +116,63 @@
     return UIStatusBarAnimationFade;
 }
 
+
+- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
+{
+    [super beginAppearanceTransition:isAppearing animated:animated];
+    
+    if (isAppearing) {
+        //self.backgroundImageView.alpha = 0.0f;
+        self.imageView.alpha = 0.0f;
+        self.titleView.alpha = 0.0f;
+        self.bodyBg.alpha = 0.0f;
+        self.bodyView.alpha = 0.0f;
+        self.okayButton.alpha = 0.0f;
+    }
+}
+
+- (void)endAppearanceTransition
+{
+    [super endAppearanceTransition];
+    NSTimeInterval duration = 0.50;
+    
+    //self.backgroundImageView.alpha = 1.0f;
+    self.imageView.alpha = 1.0f;
+    self.titleView.alpha = 1.0f;
+    self.bodyBg.alpha = 1.0f;
+    self.bodyView.alpha = 1.0f;
+    self.okayButton.alpha = 1.0f;
+    
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         NSArray *keyTimes = @[@0, @0.5, @1];
+                         
+                         // slide pic down
+                         CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
+                         anim.duration = duration;
+                         anim.keyTimes = keyTimes;
+                         CGFloat y1 = 0.0f - self.imageView.bounds.size.height;
+                         CGFloat y2 = self.imageView.bounds.origin.y;
+                         anim.values = @[@(y1), @(y2), @(y2)];
+                         [self.imageView.layer addAnimation:anim forKey:nil];
+                         
+                         // fade body in
+                         anim = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
+                         anim.duration = duration;
+                         anim.keyTimes = keyTimes;
+                         y1 = self.bodyBg.bounds.origin.y + self.bodyBg.bounds.size.height;
+                         y2 = self.bodyBg.bounds.origin.y;
+                         anim.values = @[@(y1), @(y1), @(y2)];
+                         [self.bodyBg.layer addAnimation:anim forKey:nil];
+                         [self.titleView.layer addAnimation:anim forKey:nil];
+                         [self.bodyView.layer addAnimation:anim forKey:nil];
+                         [self.okayButton.layer addAnimation:anim forKey:nil];
+                     }
+                     completion:nil];
+}
+
 - (void)pressedOkay
 {
     if (self.delegate) {
