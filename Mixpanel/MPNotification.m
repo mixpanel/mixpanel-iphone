@@ -71,13 +71,17 @@
             return nil;
         }
         
+        NSString *imageName = [imageUrl stringByDeletingPathExtension];
+        NSString *extension = [imageUrl pathExtension];
+        imageUrl = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        
         NSError *error = nil;
         NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl] options:NSDataReadingMappedIfSafe error:&error];
         if (error || !imageData) {
             NSLog(@"image failed to load from url: %@", imageUrl);
             return nil;
         }
-        
+
         UIImage *image = [UIImage imageWithData:imageData scale:2.0f];
         if (image) {
             [images addObject:image];
