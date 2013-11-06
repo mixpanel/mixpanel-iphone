@@ -62,10 +62,10 @@
         }
     }
     
-    self.okayButton.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
-    self.okayButton.layer.cornerRadius = 17.0f;
-    self.okayButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.okayButton.layer.borderWidth = 2.0f;
+    //self.okayButton.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
+    //self.okayButton.layer.cornerRadius = 17.0f;
+    //self.okayButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    //self.okayButton.layer.borderWidth = 2.0f;
     
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
     CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
@@ -250,6 +250,37 @@
     CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
     
     CGContextRestoreGState(ctx);
+}
+
+@end
+
+@interface MPButton : UIButton
+
+@end
+
+@implementation MPButton
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        self.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
+        self.layer.cornerRadius = 17.0f;
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+        self.layer.borderWidth = 2.0f;
+    }
+    
+    return self;
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    if (highlighted) {
+        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
+    } else {
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+    }
+    
+    [super setHighlighted:highlighted];
 }
 
 @end
