@@ -10,7 +10,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrls:(NSArray *)imageUrls;
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl;
 
 @end
 
@@ -48,40 +48,37 @@
     }
     
     NSURL *url = nil;
-    NSString *url_string = object[@"cta_url"];
-    if (url_string != nil && ![url_string isKindOfClass:[NSNull class]]) {
-        if (![url_string isKindOfClass:[NSString class]]) {
-            NSLog(@"invalid notif url: %@", url_string);
+    NSString *urlString = object[@"cta_url"];
+    if (urlString != nil && ![urlString isKindOfClass:[NSNull class]]) {
+        if (![urlString isKindOfClass:[NSString class]]) {
+            NSLog(@"invalid notif url: %@", urlString);
             return nil;
         }
         
-        url = [NSURL URLWithString:url_string];
+        url = [NSURL URLWithString:urlString];
+        if (url == nil) {
+            NSLog(@"inavlid notif url: %@", urlString);
+            return nil;
+        }
     }
     
-    NSMutableArray *images = [NSMutableArray array];
-    NSArray *imageUrls = object[@"image_urls"];
-    if (![imageUrls isKindOfClass:[NSArray class]]) {
-        NSLog(@"inavlid notif image urls array: %@", imageUrls);
-        return nil;
-    }
-    
-    for (NSString *imageUrl in imageUrls) {
-        if (![imageUrl isKindOfClass:[NSString class]] || !imageUrl) {
-            NSLog(@"invalid notif image url string: %@", imageUrl);
+    NSURL *imageUrl = nil;
+    NSString *imageUrlString = object[@"image_url"];
+    if (imageUrlString != nil && ![imageUrlString isKindOfClass:[NSNull class]]) {
+        if (![imageUrlString isKindOfClass:[NSString class]]) {
+            NSLog(@"invalid notif image url: %@", imageUrlString);
             return nil;
         }
         
-        NSString *imageName = [imageUrl stringByDeletingPathExtension];
-        NSString *extension = [imageUrl pathExtension];
-        imageUrl = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        NSString *imageName = [imageUrlString stringByDeletingPathExtension];
+        NSString *extension = [imageUrlString pathExtension];
+        imageUrlString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         
-        NSURL *imageUrlObject = [NSURL URLWithString:imageUrl];
-        if (imageUrlObject == nil) {
-            NSLog(@"inavlid notif image url: %@", imageUrl);
+        imageUrl = [NSURL URLWithString:imageUrlString];
+        if (imageUrl == nil) {
+            NSLog(@"inavlid notif image url: %@", imageUrlString);
             return nil;
         }
-        
-        [images addObject:imageUrlObject];
     }
     
     return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
@@ -89,19 +86,19 @@
                                           body:body
                                            cta:cta
                                            url:url
-                                        imageUrls:[NSArray arrayWithArray:images]] autorelease];
+                                      imageUrl:imageUrl] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrls:(NSArray *)imageUrls
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl
 {
     if (self = [super init]) {
         _ID = ID;
         self.title = title;
         self.body = body;
-        self.imageUrls = imageUrls;
+        self.imageUrl = imageUrl;
         self.cta = cta;
         self.url = url;
-        self.images = nil;
+        self.image = nil;
     }
     
     return self;
@@ -113,26 +110,21 @@
     self.body = nil;
     self.cta = nil;
     self.url = nil;
-    self.imageUrls = nil;
-    self.images = nil;
+    self.imageUrl = nil;
+    self.image = nil;
     [super dealloc];
 }
 
-- (BOOL)loadImages
+- (BOOL)loadImage
 {
-    if (self.images == nil) {
-        NSMutableArray *imagesArray = [NSMutableArray arrayWithCapacity:[self.imageUrls count]];
-        for (NSURL *imageUrl in self.imageUrls) {
-            NSError *error = nil;
-            NSData *imageData = [NSData dataWithContentsOfURL:imageUrl options:NSDataReadingMappedIfSafe error:&error];
-            if (error || !imageData) {
-                NSLog(@"image failed to load from url: %@", imageUrl);
-                return NO;
-            }
-            
-            [imagesArray addObject:imageData];
+    if (self.image == nil && self.imageUrl != nil) {
+        NSError *error = nil;
+        NSData *imageData = [NSData dataWithContentsOfURL:self.imageUrl options:NSDataReadingMappedIfSafe error:&error];
+        if (error || !imageData) {
+            NSLog(@"image failed to load from url: %@", self.imageUrl);
+            return NO;
         }
-        self.images = imagesArray;
+        self.image = imageData;
     }
     
     return YES;
