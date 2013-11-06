@@ -888,11 +888,10 @@ static Mixpanel *sharedInstance = nil;
         NSDate *start = [NSDate date];
         
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
-            // TODO: decide on order and priority of decisions
-            if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
-            } else if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
+            if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
                 [self showNotificationWithObject:notifications[0]];
+            } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
+                [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
         }];
     }
