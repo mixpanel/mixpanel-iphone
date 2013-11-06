@@ -10,7 +10,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url images:(NSArray *)images;
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrls:(NSArray *)imageUrls;
 
 @end
 
@@ -81,20 +81,7 @@
             return nil;
         }
         
-        NSError *error = nil;
-        NSData *imageData = [NSData dataWithContentsOfURL:imageUrlObject options:NSDataReadingMappedIfSafe error:&error];
-        if (error || !imageData) {
-            NSLog(@"image failed to load from url: %@", imageUrl);
-            return nil;
-        }
-
-        UIImage *image = [UIImage imageWithData:imageData scale:2.0f];
-        if (image) {
-            [images addObject:image];
-        } else {
-            NSLog(@"image failed to load from data: %@", imageData);
-            return nil;
-        }
+        [images addObject:imageUrlObject];
     }
     
     return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
@@ -102,18 +89,19 @@
                                           body:body
                                            cta:cta
                                            url:url
-                                        images:[NSArray arrayWithArray:images]] autorelease];
+                                        imageUrls:[NSArray arrayWithArray:images]] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url images:(NSArray *)images
+- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrls:(NSArray *)imageUrls
 {
     if (self = [super init]) {
         _ID = ID;
         self.title = title;
         self.body = body;
-        self.images = images;
+        self.imageUrls = imageUrls;
         self.cta = cta;
         self.url = url;
+        self.images = nil;
     }
     
     return self;
@@ -125,8 +113,29 @@
     self.body = nil;
     self.cta = nil;
     self.url = nil;
+    self.imageUrls = nil;
     self.images = nil;
     [super dealloc];
+}
+
+- (BOOL)loadImages
+{
+    if (self.images == nil) {
+        NSMutableArray *imagesArray = [NSMutableArray arrayWithCapacity:[self.imageUrls count]];
+        for (NSURL *imageUrl in self.imageUrls) {
+            NSError *error = nil;
+            NSData *imageData = [NSData dataWithContentsOfURL:imageUrl options:NSDataReadingMappedIfSafe error:&error];
+            if (error || !imageData) {
+                NSLog(@"image failed to load from url: %@", imageUrl);
+                return NO;
+            }
+            
+            [imagesArray addObject:imageData];
+        }
+        self.images = imagesArray;
+    }
+    
+    return YES;
 }
 
 @end

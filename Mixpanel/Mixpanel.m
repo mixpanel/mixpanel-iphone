@@ -1174,6 +1174,16 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
+    BOOL succes = [notification loadImages];
+    
+    // if image fail to load. throw the notif back of the queue.
+    if (!succes) {
+        NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+        [notifications removeObject:notification];
+        self.notifications = notifications;
+        return;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
         MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];

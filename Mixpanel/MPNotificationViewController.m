@@ -46,11 +46,16 @@
     self.backgroundImageView.image = _backgroundImage;
     
     if (self.notification) {
-        if ([self.notification.images count] > 0) {
-            UIImage *image = self.notification.images[0];
-            self.imageWidth.constant = image.size.width;
-            self.imageHeight.constant = image.size.height;
-            self.imageView.image = self.notification.images[0];
+        if ([self.notification.imageUrls count] > 0) {
+            NSData *imageData = self.notification.images[0];
+            UIImage *image = [UIImage imageWithData:imageData scale:2.0f];
+            if (image) {
+                self.imageWidth.constant = image.size.width;
+                self.imageHeight.constant = image.size.height;
+                self.imageView.image = image;
+            } else {
+                NSLog(@"image failed to load from data: %@", imageData);
+            }
         }
         
         self.titleView.text = self.notification.title;
@@ -61,11 +66,6 @@
             [self.okayButton sizeToFit];
         }
     }
-    
-    //self.okayButton.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
-    //self.okayButton.layer.cornerRadius = 17.0f;
-    //self.okayButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    //self.okayButton.layer.borderWidth = 2.0f;
     
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
     CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
