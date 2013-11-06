@@ -276,6 +276,7 @@
 {
     if (highlighted) {
         self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
+        self.layer.borderColor = [UIColor grayColor].CGColor;
     } else {
         self.layer.borderColor = [UIColor whiteColor].CGColor;
     }
