@@ -132,7 +132,7 @@
 - (void)endAppearanceTransition
 {
     [super endAppearanceTransition];
-    NSTimeInterval duration = 0.2f;
+    NSTimeInterval duration = 0.15f;
     
     self.bodyBg.alpha = 1.0f;
     
@@ -152,12 +152,12 @@
         self.okayButton.alpha = 1.0f;
     } completion:nil];
 
-    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.imageView.transform = CGAffineTransformIdentity;
         self.imageView.alpha = 1.0f;
     } completion:nil];
 
-    [UIView animateWithDuration:duration delay:0.3f options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.closeButton.transform = CGAffineTransformIdentity;
         self.closeButton.alpha = 1.0f;
     } completion:nil];
