@@ -72,6 +72,7 @@
 @property(nonatomic,retain) MPSurvey *currentlyShowingSurvey;
 @property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
 @property(nonatomic,retain) NSArray *notifications;
+@property(nonatomic,retain) MPNotification *currentlyShowingNotification;
 @property(nonatomic,retain) NSMutableSet *shownNotifications;
 
 
@@ -164,6 +165,7 @@ static Mixpanel *sharedInstance = nil;
         self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
+        self.currentlyShowingNotification = nil;
         self.notifications = nil;
 
         // wifi reachability
@@ -246,6 +248,7 @@ static Mixpanel *sharedInstance = nil;
     self.surveys = nil;
     self.currentlyShowingSurvey = nil;
     self.shownSurveyCollections = nil;
+    self.currentlyShowingNotification = nil;
     self.shownNotifications = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
@@ -1078,6 +1081,8 @@ static Mixpanel *sharedInstance = nil;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_currentlyShowingSurvey) {
                 MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
+            } else if (_currentlyShowingNotification) {
+                MixpanelLog(@"%@ already showing in-app notification: %@", self, _currentlyShowingNotification);
             } else {
                 self.currentlyShowingSurvey = survey;
                 if (showAlert) {
@@ -1184,28 +1189,37 @@ static Mixpanel *sharedInstance = nil;
     }   
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
-        MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
-        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        
-        while (rootViewController.presentedViewController) {
-            rootViewController = rootViewController.presentedViewController;
-        }
-        
-        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
-        controller.notification = notification;
-        controller.delegate = self;
-        
-        [rootViewController presentViewController:controller animated:YES completion:nil];
-        
-        if (![notification.title isEqualToString:@"$ignore"]) {
-            [self markNotificationShown:notification];
+        if (_currentlyShowingNotification) {
+            MixpanelLog(@"%@ already showing in-app notification: %@", self, _currentlyShowingNotification);
+        } else if (_currentlyShowingSurvey) {
+            MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
+        } else {
+            self.currentlyShowingNotification = notification;
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
+            MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
+            UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+            
+            while (rootViewController.presentedViewController) {
+                rootViewController = rootViewController.presentedViewController;
+            }
+            
+            controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+            controller.notification = notification;
+            controller.delegate = self;
+            
+            [rootViewController presentViewController:controller animated:YES completion:nil];
+            
+            if (![notification.title isEqualToString:@"$ignore"]) {
+                [self markNotificationShown:notification];
+            }
         }
     });
 }
 
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
 {
+    self.currentlyShowingNotification = nil;
+
     if (status && controller.notification.url) {
         MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
