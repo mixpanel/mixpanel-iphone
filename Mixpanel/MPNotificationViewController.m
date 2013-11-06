@@ -46,15 +46,14 @@
     self.backgroundImageView.image = _backgroundImage;
     
     if (self.notification) {
-        if ([self.notification.imageUrls count] > 0) {
-            NSData *imageData = self.notification.images[0];
-            UIImage *image = [UIImage imageWithData:imageData scale:2.0f];
+        if (self.notification.image) {
+            UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
                 self.imageWidth.constant = image.size.width;
                 self.imageHeight.constant = image.size.height;
                 self.imageView.image = image;
             } else {
-                NSLog(@"image failed to load from data: %@", imageData);
+                NSLog(@"image failed to load from data: %@", self.notification.image);
             }
         }
         
@@ -126,41 +125,41 @@
         self.bodyView.alpha = 0.0f;
         self.okayButton.alpha = 0.0f;
         self.closeButton.alpha = 0.0f;
+        
+        NSTimeInterval duration = 0.15f;
+        
+        CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
+        transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
+        self.imageView.transform = transform;
+        self.titleView.transform = transform;
+        self.bodyView.transform = transform;
+        self.okayButton.transform = transform;
+        
+        [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.titleView.transform = CGAffineTransformIdentity;
+            self.titleView.alpha = 1.0f;
+            self.bodyView.transform = CGAffineTransformIdentity;
+            self.bodyView.alpha = 1.0f;
+            self.okayButton.transform = CGAffineTransformIdentity;
+            self.okayButton.alpha = 1.0f;
+        } completion:nil];
+        
+        [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.imageView.transform = CGAffineTransformIdentity;
+            self.imageView.alpha = 1.0f;
+        } completion:nil];
+        
+        [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.closeButton.transform = CGAffineTransformIdentity;
+            self.closeButton.alpha = 1.0f;
+        } completion:nil];
     }
 }
 
 - (void)endAppearanceTransition
 {
     [super endAppearanceTransition];
-    NSTimeInterval duration = 0.15f;
-    
-    self.bodyBg.alpha = 1.0f;
-    
-    CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
-    transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
-    self.imageView.transform = transform;
-    self.titleView.transform = transform;
-    self.bodyView.transform = transform;
-    self.okayButton.transform = transform;
 
-    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.titleView.transform = CGAffineTransformIdentity;
-        self.titleView.alpha = 1.0f;
-        self.bodyView.transform = CGAffineTransformIdentity;
-        self.bodyView.alpha = 1.0f;
-        self.okayButton.transform = CGAffineTransformIdentity;
-        self.okayButton.alpha = 1.0f;
-    } completion:nil];
-
-    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.imageView.transform = CGAffineTransformIdentity;
-        self.imageView.alpha = 1.0f;
-    } completion:nil];
-
-    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.closeButton.transform = CGAffineTransformIdentity;
-        self.closeButton.alpha = 1.0f;
-    } completion:nil];
 }
 
 - (void)pressedOkay

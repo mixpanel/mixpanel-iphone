@@ -1178,7 +1178,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
-    BOOL succes = [notification loadImages];
+    BOOL succes = [notification loadImage];
     
     // if images fail to load. remove the notification from the queue
     if (!succes) {
