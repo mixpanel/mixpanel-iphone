@@ -1009,8 +1009,8 @@ static Mixpanel *sharedInstance = nil;
                 }
             }
             
-            self.surveys = parsedSurveys;
-            self.notifications = parsedNotifications;
+            self.surveys = [NSArray arrayWithArray:parsedSurveys];
+            self.notifications = [NSArray arrayWithArray:parsedNotifications];;
         } else {
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
@@ -1176,13 +1176,13 @@ static Mixpanel *sharedInstance = nil;
 {
     BOOL succes = [notification loadImages];
     
-    // if image fail to load. throw the notif back of the queue.
+    // if images fail to load. remove the notification from the queue
     if (!succes) {
         NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
         [notifications removeObject:notification];
-        self.notifications = notifications;
+        self.notifications = [NSArray arrayWithArray:notifications];
         return;
-    }
+    }   
     
     dispatch_async(dispatch_get_main_queue(), ^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
