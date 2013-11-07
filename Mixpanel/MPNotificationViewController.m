@@ -15,7 +15,10 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface MPNotificationViewController ()
+@interface MPNotificationViewController () {
+    CGPoint _viewStart;
+    BOOL _touching;
+}
 
 @property (nonatomic, retain) IBOutlet UIImageView *imageView;
 @property (nonatomic, retain) IBOutlet UILabel *titleView;
@@ -26,6 +29,7 @@
 @property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageWidth;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageHeight;
+@property (nonatomic, retain) IBOutlet UIView *imageDragView;
 
 @end
 
@@ -85,6 +89,9 @@
     
     [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchUpInside];
     [self.closeButton addTarget:self action:@selector(pressedClose) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
+    [self.imageDragView addGestureRecognizer:gesture];
 }
 
 - (void)viewDidLayoutSubviews
@@ -173,6 +180,29 @@
 {
     if (self.delegate) {
         [self.delegate notificationControllerWasDismissed:self status:NO];
+    }
+}
+
+- (void)didPan:(UIPanGestureRecognizer *)gesture
+{
+    if (gesture.numberOfTouches == 1) {
+        if (gesture.state == UIGestureRecognizerStateBegan) {
+            _viewStart = self.imageView.layer.position;
+            _touching = YES;
+        } else if (gesture.state == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [gesture translationInView:self.view];
+            self.imageView.layer.position = CGPointMake(0.3f * (translation.x) + _viewStart.x, 0.3f * (translation.y) + _viewStart.y);
+        }
+    }
+    
+    if (_touching && (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled)) {
+        _touching = NO;
+        CGPoint viewEnd = self.imageView.layer.position;
+        CGPoint viewDistance = CGPointMake(viewEnd.x - _viewStart.x, viewEnd.y - _viewStart.y);
+        CGFloat distance = sqrt(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
+        [UIView animateWithDuration:(distance / 500.0f) delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.imageView.layer.position = _viewStart;
+        } completion:nil];
     }
 }
 
@@ -286,107 +316,3 @@
 
 @end
 
-
-@interface MPElasticImageView : UIImageView {
-    CGPoint _touchStart;
-    CGPoint _viewStart;
-    BOOL _touching;
-}
-
-@end
-
-@implementation MPElasticImageView
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if ([touches count] == 1) {
-        UITouch *touch = [touches anyObject];
-        _touchStart = [touch locationInView:self];
-        _viewStart = self.layer.position;
-        _touching = YES;
-    }
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if (_touching) {
-        UITouch *touch = [touches anyObject];
-        CGPoint touchPoint = [touch locationInView:self];
-        
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        
-        self.layer.position = CGPointMake(0.7f * (touchPoint.x - _touchStart.x) + _viewStart.x, 0.7f * (touchPoint.y - _touchStart.y) + _viewStart.y);
-        
-        [CATransaction commit];
-    }
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if (_touching) {
-        CGPoint viewEnd = self.layer.position;
-        CGPoint viewDistance = CGPointMake(viewEnd.x - _viewStart.x, viewEnd.y - _viewStart.y);
-        CGFloat distance = sqrt(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
-        
-        //[CATransaction begin];
-        //[CATransaction setDisableActions:YES];
-        //[CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
-        //[CATransaction setAnimationDuration:(distance / 900.0f)];
-        
-        [UIView animateWithDuration:(distance / 400.0f) delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.layer.position = _viewStart;
-        } completion:nil];
-        
-        //[CATransaction commit];
-        _touching = NO;
-    }
-}
-
-@end
-
-@interface MPTestElasticImageView : UIImageView {
-    CGPoint _touchStart;
-    CGPoint _viewStart;
-    BOOL _touching;
-}
-
-@end
-
-@implementation MPTestElasticImageView
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
-        [self addGestureRecognizer:gesture];
-    }
-    return self;
-}
-
-- (void)didPan:(UIPanGestureRecognizer *)gesture
-{
-    if (gesture.numberOfTouches == 1) {
-        if (gesture.state == UIGestureRecognizerStateBegan) {
-            _touchStart = [gesture locationInView:self];
-            _viewStart = self.layer.position;
-            _touching = YES;
-        } else if (gesture.state == UIGestureRecognizerStateChanged) {
-            CGPoint translation = [gesture translationInView:self];
-            self.layer.position = CGPointMake(0.5f * (translation.x) + _viewStart.x, 0.5f * (translation.y) + _viewStart.y);
-        }
-    }
-    
-    if (_touching && (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled)) {
-        _touching = NO;
-        CGPoint viewEnd = self.layer.position;
-        CGPoint viewDistance = CGPointMake(viewEnd.x - _viewStart.x, viewEnd.y - _viewStart.y);
-        CGFloat distance = sqrt(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
-        [UIView animateWithDuration:(distance / 500.0f) delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.layer.position = _viewStart;
-        } completion:nil];
-    }
-}
-
-@end
