@@ -143,11 +143,11 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
 
-        self.decideURL = @"https://api.mixpanel.com";
         // REMOVE THIS
-        self.decideURL = @"http://kyle.dev.mixpanel.org";
+        self.serverURL = @"http://kyle.dev.mixpanel.org";
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
+        
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -236,7 +236,6 @@ static Mixpanel *sharedInstance = nil;
     self.distinctId = nil;
     self.nameTag = nil;
     self.serverURL = nil;
-    self.decideURL = nil;
     self.delegate = nil;
     self.apiToken = nil;
     self.superProperties = nil;
@@ -964,7 +963,7 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
-            NSURL *url = [NSURL URLWithString:[self.decideURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
+            NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
             [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
             NSError *error = nil;
@@ -1301,6 +1300,7 @@ static Mixpanel *sharedInstance = nil;
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     [p setValue:[self.mixpanel deviceModel] forKey:@"$ios_device_model"];
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
+    [p setValue:VERSION forKey:@"$ios_lib_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
     if (NSClassFromString(@"ASIdentifierManager")) {
