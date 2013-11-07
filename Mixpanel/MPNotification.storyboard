@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="puo-Hy-QiQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="puo-Hy-QiQ">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Notification View Controller-->
@@ -35,11 +35,11 @@
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="221" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-og-FP7" userLabel="Body Bg View">
-                                <rect key="frame" x="0.0" y="306" width="320" height="262"/>
+                                <rect key="frame" x="0.0" y="301" width="320" height="267"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-yT-gz1" customClass="MPRadialGradientView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="262"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="267"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
@@ -53,22 +53,25 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="sFn-sQ-ip2"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-ct-CP3">
-                                <rect key="frame" x="20" y="440" width="280" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-ct-CP3">
+                                <rect key="frame" x="30" y="435" width="260" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="280" id="f7M-nn-fH8"/>
+                                    <constraint firstAttribute="width" constant="260" id="f7M-nn-fH8"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
-                                <rect key="frame" x="20" y="466" width="280" height="15"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-8U-og7">
+                                <rect key="frame" x="30" y="460" width="260" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtW-qx-qOt" userLabel="Image Drag View">
                                 <rect key="frame" x="20" y="83" width="280" height="400"/>
@@ -122,7 +125,7 @@
                             <constraint firstItem="OWs-og-FP7" firstAttribute="leading" secondItem="Wch-Xc-Avw" secondAttribute="leading" id="dJp-W6-miA"/>
                             <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="63" id="dxg-4s-FD6"/>
                             <constraint firstAttribute="trailing" secondItem="OWs-og-FP7" secondAttribute="trailing" id="g4V-zo-36q"/>
-                            <constraint firstItem="MmD-8U-og7" firstAttribute="top" secondItem="eF7-ct-CP3" secondAttribute="bottom" constant="5" id="hDC-Mi-ipg"/>
+                            <constraint firstItem="MmD-8U-og7" firstAttribute="top" secondItem="eF7-ct-CP3" secondAttribute="bottom" id="hDC-Mi-ipg"/>
                             <constraint firstItem="EGH-qT-4wM" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="10" id="i3W-1P-cy6"/>
                             <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-37" id="lca-fD-jgb"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="height" secondItem="If2-9m-eT9" secondAttribute="height" id="s2w-wS-P0V"/>

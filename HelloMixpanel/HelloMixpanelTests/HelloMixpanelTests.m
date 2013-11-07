@@ -938,7 +938,10 @@
     // invalid bad title
     NSDictionary *invalid = @{@"id": @3,
                               @"title": @5,
-                              @"body": @"Hi!"};
+                              @"body": @"Hi!",
+                              @"cta_url": @"blah blah blah",
+                              @"cta": [NSNull null],
+                              @"image_url": @[]};
     
     STAssertNil([MPNotification notificationWithJSONObject:invalid], nil);
     
@@ -948,7 +951,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @" "};
+                        @"image_url": @"http://mixpanel.com"};
     
     STAssertNotNil([MPNotification notificationWithJSONObject:o], nil);
     
