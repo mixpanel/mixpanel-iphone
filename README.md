@@ -15,7 +15,7 @@ install the Mixpanel library, and create a new Xcode workspace. Open up this wor
             [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
         }
 
-5. Track an event in your application:
+5. Start tracking actions in your app:
 
         [[Mixpanel sharedInstance] track:@"Watched video" properties:@{@"duration": @53}];
 
