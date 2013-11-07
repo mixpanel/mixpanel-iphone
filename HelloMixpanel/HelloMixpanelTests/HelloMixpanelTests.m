@@ -948,7 +948,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_urls": @[]};
+                        @"image_url": @" "};
     
     STAssertNotNil([MPNotification notificationWithJSONObject:o], nil);
     
@@ -990,17 +990,17 @@
     
     // invalid image_urls
     m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_urls"] = @NO;
+    m[@"image_url"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
     
     // invalid image_urls item
     m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_urls"] = @[@NO];
+    m[@"image_url"] = @[@NO];
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
     
     // invalid image_urls string
     m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_urls"] = @[@"http://test test test.com"];
+    m[@"image_url"] = @"http://test test test.com";
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
 }
 
