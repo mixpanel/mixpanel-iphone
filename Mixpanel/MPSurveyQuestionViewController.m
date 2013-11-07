@@ -247,6 +247,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     cell.label.text = text;
     cell.selectedLabel.text = text;
     UIColor *strokeColor = [UIColor colorWithWhite:1 alpha:0.5];
+    cell.backgroundColor = [UIColor clearColor]; // necessary on ipad to get rid of white background in cell
     cell.customBackgroundView.strokeColor = strokeColor;
     cell.customSelectedBackgroundView.strokeColor = strokeColor;
     cell.customBackgroundView.fillColor = [UIColor clearColor];
