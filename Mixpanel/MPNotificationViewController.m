@@ -30,6 +30,7 @@
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageWidth;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageHeight;
 @property (nonatomic, retain) IBOutlet UIView *imageDragView;
+@property (nonatomic, retain) IBOutlet UIView *bgMask;
 
 @end
 
@@ -126,46 +127,47 @@
 {
     [super beginAppearanceTransition:isAppearing animated:animated];
     
-    if (isAppearing && animated) {
+    if (isAppearing) {
+        self.bodyBg.alpha = 0.0f;
+        self.bgMask.alpha = 0.0f;
         self.imageView.alpha = 0.0f;
         self.titleView.alpha = 0.0f;
         self.bodyView.alpha = 0.0f;
         self.okayButton.alpha = 0.0f;
         self.closeButton.alpha = 0.0f;
-        
-        NSTimeInterval duration = 0.15f;
-        
-        CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
-        transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
-        self.imageView.transform = transform;
-        self.titleView.transform = transform;
-        self.bodyView.transform = transform;
-        self.okayButton.transform = transform;
-        
-        [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.titleView.transform = CGAffineTransformIdentity;
-            self.titleView.alpha = 1.0f;
-            self.bodyView.transform = CGAffineTransformIdentity;
-            self.bodyView.alpha = 1.0f;
-            self.okayButton.transform = CGAffineTransformIdentity;
-            self.okayButton.alpha = 1.0f;
-        } completion:nil];
-        
-        [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.imageView.transform = CGAffineTransformIdentity;
-            self.imageView.alpha = 1.0f;
-        } completion:nil];
-        
-        [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.closeButton.transform = CGAffineTransformIdentity;
-            self.closeButton.alpha = 1.0f;
-        } completion:nil];
     }
 }
 
 - (void)endAppearanceTransition
 {
     [super endAppearanceTransition];
+    
+    NSTimeInterval duration = 0.20f;
+    
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
+    transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
+    self.imageView.transform = transform;
+    self.titleView.transform = transform;
+    self.bodyView.transform = transform;
+    self.okayButton.transform = transform;
+    
+    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.titleView.transform = CGAffineTransformIdentity;
+        self.titleView.alpha = 1.0f;
+        self.bodyView.transform = CGAffineTransformIdentity;
+        self.bodyView.alpha = 1.0f;
+        self.okayButton.transform = CGAffineTransformIdentity;
+        self.okayButton.alpha = 1.0f;
+        self.imageView.transform = CGAffineTransformIdentity;
+        self.imageView.alpha = 1.0f;
+        self.bgMask.alpha = 1.0f;
+        self.bodyBg.alpha = 1.0f;
+    } completion:nil];
+    
+    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.closeButton.transform = CGAffineTransformIdentity;
+        self.closeButton.alpha = 1.0f;
+    } completion:nil];
 
 }
 

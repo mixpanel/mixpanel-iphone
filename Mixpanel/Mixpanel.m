@@ -1207,7 +1207,7 @@ static Mixpanel *sharedInstance = nil;
             controller.notification = notification;
             controller.delegate = self;
             
-            [rootViewController presentViewController:controller animated:YES completion:nil];
+            [rootViewController presentViewController:controller animated:NO completion:nil];
             
             if (![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];
