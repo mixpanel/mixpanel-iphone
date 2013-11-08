@@ -278,13 +278,16 @@
     CGContextSaveGState(ctx);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat components[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+    CGFloat components[] = {
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.6f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.85f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.92f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
-    CGFloat locations[] = {0.0f, 0.25f, 0.325f, 0.4115f, 0.5f};
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 4);
+    CGFloat locations[] = {0.0f, 0.2f, 0.5f, 0.625f, 0.7115f, 0.8f, 0.9f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
     
     CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.bounds.size.height), 0);
     CGContextRestoreGState(ctx);
