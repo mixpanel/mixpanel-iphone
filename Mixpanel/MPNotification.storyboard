@@ -34,17 +34,17 @@
                                     <constraint firstAttribute="height" constant="400" id="LQn-ew-MQG"/>
                                 </constraints>
                             </imageView>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="221" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-og-FP7" userLabel="Body Bg View">
-                                <rect key="frame" x="0.0" y="301" width="320" height="267"/>
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="221" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-og-FP7" userLabel="Body Bg View" customClass="MPLinearGradientView">
+                                <rect key="frame" x="0.0" y="321" width="320" height="247"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-yT-gz1" customClass="MPRadialGradientView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="267"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="247"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="sjM-yT-gz1" secondAttribute="trailing" id="M2z-qy-gf4"/>
                                     <constraint firstItem="sjM-yT-gz1" firstAttribute="height" secondItem="OWs-og-FP7" secondAttribute="height" id="NKd-kh-3me"/>
@@ -108,7 +108,7 @@
                             <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="2Zl-eJ-nGR"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="Wch-Xc-Avw" secondAttribute="top" id="7FN-LA-fsE"/>
                             <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="10" id="98S-L3-L61"/>
-                            <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="134" id="AwM-x3-w0d"/>
+                            <constraint firstItem="eF7-ct-CP3" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="top" constant="114" id="AwM-x3-w0d"/>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="bottom" id="DQu-5x-5gA"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="width" secondItem="MmD-8U-og7" secondAttribute="width" id="IfC-Ls-kOm"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="width" secondItem="If2-9m-eT9" secondAttribute="width" id="Lnc-cn-mSW"/>

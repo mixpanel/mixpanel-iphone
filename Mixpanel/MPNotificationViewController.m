@@ -57,6 +57,7 @@
                 self.imageWidth.constant = image.size.width;
                 self.imageHeight.constant = image.size.height;
                 self.imageView.image = image;
+                //self.imageView.hidden = YES;
             } else {
                 NSLog(@"image failed to load from data: %@", self.notification.image);
             }
@@ -70,17 +71,6 @@
             [self.okayButton sizeToFit];
         }
     }
-    
-    CAGradientLayer *fadeLayer = [CAGradientLayer layer];
-    CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
-    CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
-    fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor];
-    // add 44 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 105.0f / self.bodyBg.bounds.size.height;
-    fadeLayer.locations = @[@0, @(offset), @1];
-    fadeLayer.bounds = self.bodyBg.bounds;
-    fadeLayer.anchorPoint = CGPointZero;
-    self.bodyBg.layer.mask = fadeLayer;
     
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
@@ -100,16 +90,6 @@
     [super viewDidLayoutSubviews];
     
     [self.okayButton sizeToFit];
-    CAGradientLayer *fadeLayer = [CAGradientLayer layer];
-    CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
-    CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
-    fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor];
-    // add 44 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 105.0f / self.bodyBg.bounds.size.height;
-    fadeLayer.locations = @[@0, @(offset), @1];
-    fadeLayer.bounds = self.bodyBg.bounds;
-    fadeLayer.anchorPoint = CGPointZero;
-    self.bodyBg.layer.mask = fadeLayer;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -201,7 +181,7 @@
         _touching = NO;
         CGPoint viewEnd = self.imageView.layer.position;
         CGPoint viewDistance = CGPointMake(viewEnd.x - _viewStart.x, viewEnd.y - _viewStart.y);
-        CGFloat distance = sqrt(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
+        CGFloat distance = sqrtf(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
         [UIView animateWithDuration:(distance / 500.0f) delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.imageView.layer.position = _viewStart;
         } completion:nil];
@@ -220,6 +200,7 @@
 {
     CGSize size = self.bounds.size;
     CGPoint center = self.bounds.origin;
+    CGFloat radius = 160.0f;
     center.x += size.width;
     center.y += size.height;
     
@@ -232,14 +213,14 @@
     
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, center.x, center.y);
-    CGPathAddLineToPoint(path, NULL, center.x - size.width, center.y);
-    CGPathAddArcToPoint(path, NULL, center.x - size.width, center.y - size.width, center.x, center.y - size.width, size.width);
+    CGPathAddLineToPoint(path, NULL, center.x - radius, center.y);
+    CGPathAddArcToPoint(path, NULL, center.x - radius, center.y - radius, center.x, center.y - radius, radius);
     CGPathAddLineToPoint(path, NULL, center.x, center.y);
     
     CGContextAddPath(ctx, path);
     CGContextClip(ctx);
     
-    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, size.width, 0);
+    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, radius, 0);
     
     CGContextRestoreGState(ctx);
 }
@@ -280,6 +261,32 @@
     
     CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
     
+    CGContextRestoreGState(ctx);
+}
+
+@end
+
+@interface MPLinearGradientView : UIView
+
+@end
+
+@implementation MPLinearGradientView
+
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat components[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.85f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.92f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
+    CGFloat locations[] = {0.0f, 0.25f, 0.325f, 0.4115f, 0.5f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 4);
+    
+    CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.bounds.size.height), 0);
     CGContextRestoreGState(ctx);
 }
 
