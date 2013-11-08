@@ -220,7 +220,7 @@
     CGContextAddPath(ctx, path);
     CGContextClip(ctx);
     
-    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, radius, 0);
+    CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, radius, 0);
     
     CGContextRestoreGState(ctx);
 }
@@ -253,13 +253,13 @@
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.9f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
-    CGFloat locs[] = {0.0f, 0.5f, 0.75, 1.0f};
+    CGFloat locs[] = {0.0f, 0.1f, 0.75, 1.0f};
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 4);
     
     CGContextAddEllipseInRect(ctx, circleFrame);
     CGContextClip(ctx);
     
-    CGContextDrawRadialGradient(ctx, gradient, center, 1.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
+    CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
     
     CGContextRestoreGState(ctx);
 }
