@@ -31,6 +31,7 @@
 #import "MPSurveyNavigationController.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
+#import "MPNotificationSmallViewController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
@@ -1181,10 +1182,10 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
-    BOOL succes = [notification loadImage];
+    BOOL success = [notification loadImage];
     
     // if images fail to load. remove the notification from the queue
-    if (!succes) {
+    if (!success) {
         NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
         [notifications removeObject:notification];
         self.notifications = [NSArray arrayWithArray:notifications];
@@ -1198,19 +1199,9 @@ static Mixpanel *sharedInstance = nil;
             MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
         } else {
             self.currentlyShowingNotification = notification;
-            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
-            MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
-            UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
             
-            while (rootViewController.presentedViewController) {
-                rootViewController = rootViewController.presentedViewController;
-            }
-            
-            controller.backgroundImage = [rootViewController.view mp_snapshotImage];
-            controller.notification = notification;
-            controller.delegate = self;
-            
-            [rootViewController presentViewController:controller animated:NO completion:nil];
+            //[self showModalNotificationWithObject:notification];
+            [self showOverAppNotificationWithObject:notification];
             
             if (![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];
@@ -1219,9 +1210,36 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
+- (void)showModalNotificationWithObject:(MPNotification *)notification
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
+    MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    
+    controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+    controller.notification = notification;
+    controller.delegate = self;
+    
+    [rootViewController presentViewController:controller animated:NO completion:nil];
+}
+
 - (void)showOverAppNotificationWithObject:(MPNotification *)notification
 {
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    
+    MPNotificationSmallViewController *controller = [[MPNotificationSmallViewController alloc] init];
+    controller.notification = notification;
+    controller.parentController = rootViewController;
+    
+    [controller show];
 }
 
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
