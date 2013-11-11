@@ -1037,6 +1037,10 @@ static Mixpanel *sharedInstance = nil;
         if (completion) {
             completion([NSArray arrayWithArray:unseenSurveys], [NSArray arrayWithArray:unseenNotifications]);
         }
+        
+        if ([unseenNotifications count] > 0) {
+            [unseenNotifications[0] loadImage];
+        }
     });
 }
 
@@ -1185,7 +1189,7 @@ static Mixpanel *sharedInstance = nil;
         [notifications removeObject:notification];
         self.notifications = [NSArray arrayWithArray:notifications];
         return;
-    }   
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_currentlyShowingNotification) {
@@ -1213,6 +1217,11 @@ static Mixpanel *sharedInstance = nil;
             }
         }
     });
+}
+
+- (void)showOverAppNotificationWithObject:(MPNotification *)notification
+{
+    
 }
 
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
