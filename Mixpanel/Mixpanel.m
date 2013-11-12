@@ -1272,19 +1272,21 @@ static Mixpanel *sharedInstance = nil;
         return;
     }
     
-    self.currentlyShowingNotification = nil;
-    
     if (status && controller.notification.url) {
         MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
         
-        [controller hideWithAnimation:!success];
+        [controller hideWithAnimation:!success completion:^{
+            self.currentlyShowingNotification = nil;
+        }];
         
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
     } else {
-        [controller hideWithAnimation:YES];
+        [controller hideWithAnimation:YES completion:^{
+            self.currentlyShowingNotification = nil;
+        }];
     }
 }
 

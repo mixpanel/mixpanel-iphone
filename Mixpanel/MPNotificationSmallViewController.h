@@ -19,7 +19,7 @@
 
 - (id)initWithPresentedViewController:(UIViewController *)controller notification:(MPNotification *)notification;
 - (void)show;
-- (void)hideWithAnimation:(BOOL)animated;
+- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion;
 
 @end
 
