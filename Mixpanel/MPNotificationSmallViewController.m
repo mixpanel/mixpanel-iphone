@@ -109,6 +109,10 @@
 	
     self.view.backgroundColor = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.9f];
     self.view.frame = CGRectMake(0.0f, 0.0f, 0.0f, 30.0f);
+    
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+    gesture.numberOfTouchesRequired = 1;
+    [self.view addGestureRecognizer:gesture];
 }
 
 - (void)dealloc
@@ -120,6 +124,7 @@
     self.imageView = nil;
     self.titleLabel = nil;
     self.bodyLabel = nil;
+    self.delegate = nil;
 }
 
 - (void)viewDidLayoutSubviews
@@ -131,34 +136,64 @@
     
     self.imageView.frame = CGRectMake(5.0f, 5.0f, kMPNotifHeight - 10.0f, kMPNotifHeight - 10.0f);
     CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 5.0f;
-    self.titleLabel.frame = CGRectMake(offsetX, 5.0f, self.view.frame.size.width - offsetX - 5.0f, 15.0f);
-    self.bodyLabel.frame = CGRectMake(offsetX, 5.0f + 15.0f, self.titleLabel.frame.size.width, 15.0f);
+    self.titleLabel.frame = CGRectMake(offsetX, 5.0f, self.view.frame.size.width - offsetX - 5.0f, 0.0f);
+    [self.titleLabel sizeToFit];
+    self.bodyLabel.frame = CGRectMake(offsetX, 5.0f + self.titleLabel.frame.size.height, self.view.frame.size.width - offsetX - 5.0f, self.titleLabel.frame.size.height);
 }
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
     [super willMoveToParentViewController:parent];
-    
-    UIView *parentView = self.parentController.view;
-    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight);
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
     [super didMoveToParentViewController:parent];
-    
-    [UIView animateWithDuration:0.5f animations:^{
-        UIView *parentView = self.parentController.view;
-        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight);
-    }];
 }
 
 - (void)show
 {
-    [self willMoveToParentViewController:self.parentController];
-    [self.parentController.view addSubview:self.view];
+    //[self willMoveToParentViewController:self.parentController];
     [self.parentController addChildViewController:self];
+    [self.parentController.view addSubview:self.view];
     [self didMoveToParentViewController:self.parentController];
+    
+    UIView *parentView = self.parentController.view;
+    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight);
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight);
+    }];
+}
+
+- (void)hideWithAnimation:(BOOL)animated
+{
+    CGFloat duration;
+    
+    if (animated) {
+        duration = 0.5f;
+    } else {
+        duration = 0.0f;
+    }
+    
+    [self willMoveToParentViewController:nil];
+    
+    [UIView animateWithDuration:duration animations:^{
+        UIView *parentView = self.parentController.view;
+        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight);
+    } completion:^(BOOL finished) {
+        [self.view removeFromSuperview];
+        [self removeFromParentViewController];
+    }];
+}
+
+- (void)didTap:(UITapGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        if (self.delegate != nil) {
+            [self.delegate notificationSmallControllerWasDismissed:self status:YES];
+        }
+    }
 }
 
 @end
