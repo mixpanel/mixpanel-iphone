@@ -50,7 +50,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
+@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate, MPNotificationSmallViewControllerDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -1238,6 +1238,7 @@ static Mixpanel *sharedInstance = nil;
     MPNotificationSmallViewController *controller = [[MPNotificationSmallViewController alloc] init];
     controller.notification = notification;
     controller.parentController = rootViewController;
+    controller.delegate = self;
     
     [controller show];
 }
@@ -1256,6 +1257,24 @@ static Mixpanel *sharedInstance = nil;
         }
     } else {
         [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)notificationSmallControllerWasDismissed:(MPNotificationSmallViewController *)controller status:(BOOL)status
+{
+    self.currentlyShowingNotification = nil;
+    
+    if (status && controller.notification.url) {
+        MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
+        BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
+        
+        [controller hideWithAnimation:!success];
+        
+        if (!success) {
+            NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
+        }
+    } else {
+        [controller hideWithAnimation:YES];
     }
 }
 
