@@ -1241,6 +1241,12 @@ static Mixpanel *sharedInstance = nil;
     controller.delegate = self;
     
     [controller show];
+    
+    double delayInSeconds = 5.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self notificationSmallControllerWasDismissed:controller status:NO];
+    });
 }
 
 - (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
@@ -1262,6 +1268,10 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)notificationSmallControllerWasDismissed:(MPNotificationSmallViewController *)controller status:(BOOL)status
 {
+    if (self.currentlyShowingNotification != controller.notification) {
+        return;
+    }
+    
     self.currentlyShowingNotification = nil;
     
     if (status && controller.notification.url) {
