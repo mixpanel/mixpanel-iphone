@@ -179,7 +179,7 @@
     }];
 }
 
-- (void)hideWithAnimation:(BOOL)animated
+- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
 {
     _canPan = NO;
     
@@ -191,15 +191,17 @@
         duration = 0.0f;
     }
     
-    [self willMoveToParentViewController:nil];
-    
     [UIView animateWithDuration:duration animations:^{
         UIView *parentView = self.parentController.view;
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
     } completion:^(BOOL finished) {
+        [self willMoveToParentViewController:nil];
         [self.view removeFromSuperview];
         [self removeFromParentViewController];
         self.parentController = nil;
+        if (completion) {
+            completion();
+        }
     }];
 }
 
