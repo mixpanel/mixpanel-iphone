@@ -12,7 +12,11 @@
 
 #define kMPNotifHeight 60.0f
 
-@interface MPNotificationSmallViewController ()
+@interface MPNotificationSmallViewController () {
+    CGPoint _panStartPoint;
+    CGPoint _position;
+    BOOL _canPan;
+}
 
 @property (nonatomic, retain) UIImageView *imageView;
 @property (nonatomic, retain) UILabel *titleLabel;
@@ -71,6 +75,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _canPan = YES;
     
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -135,7 +141,7 @@
     [super viewDidLayoutSubviews];
     
     UIView *parentView = self.parentController.view;
-    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight);
+    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
     
     self.imageView.frame = CGRectMake(5.0f, 5.0f, kMPNotifHeight - 10.0f, kMPNotifHeight - 10.0f);
     CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 5.0f;
@@ -156,21 +162,27 @@
 
 - (void)show
 {
+    _canPan = NO;
     //[self willMoveToParentViewController:self.parentController];
     [self.parentController addChildViewController:self];
     [self.parentController.view addSubview:self.view];
     [self didMoveToParentViewController:self.parentController];
     
     UIView *parentView = self.parentController.view;
-    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight);
+    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
     
     [UIView animateWithDuration:0.5f animations:^{
-        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight);
+        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
+    } completion:^(BOOL finished) {
+        _position = self.view.layer.position;
+        _canPan = YES;
     }];
 }
 
 - (void)hideWithAnimation:(BOOL)animated
 {
+    _canPan = NO;
+    
     CGFloat duration;
     
     if (animated) {
@@ -183,10 +195,11 @@
     
     [UIView animateWithDuration:duration animations:^{
         UIView *parentView = self.parentController.view;
-        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight);
+        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
     } completion:^(BOOL finished) {
         [self.view removeFromSuperview];
         [self removeFromParentViewController];
+        self.parentController = nil;
     }];
 }
 
@@ -201,26 +214,26 @@
 
 - (void)didPan:(UIPanGestureRecognizer *)gesture
 {
-    static CGPoint start;
-    static CGPoint viewPosition;
-    
-    if (gesture.state == UIGestureRecognizerStateBegan && gesture.numberOfTouches == 1) {
-        start = [gesture locationInView:self.parentController.view];
-        viewPosition = self.view.layer.position;
-    } else if (gesture.state == UIGestureRecognizerStateChanged) {
-        CGPoint position = [gesture locationInView:self.parentController.view];
-        position.y = viewPosition.y + (position.y - start.y) * 2.0f;
-        if (position.y < viewPosition.y) {
-            position.y = viewPosition.y;
-        }
-        self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
-    } else if (gesture.state == UIGestureRecognizerStateEnded) {
-        if (self.view.layer.position.y > viewPosition.y + kMPNotifHeight / 2.0f && self.delegate != nil) {
-            [self.delegate notificationSmallControllerWasDismissed:self status:NO];
-        } else {
-            [UIView animateWithDuration:0.2f animations:^{
-                self.view.layer.position = viewPosition;
-            }];
+    if (_canPan) {
+        if (gesture.state == UIGestureRecognizerStateBegan && gesture.numberOfTouches == 1) {
+            _panStartPoint = [gesture locationInView:self.parentController.view];
+        } else if (gesture.state == UIGestureRecognizerStateChanged) {
+            CGPoint position = [gesture locationInView:self.parentController.view];
+            CGFloat diffY = position.y - _panStartPoint.y;
+            if (diffY > 0) {
+                position.y = _position.y + diffY * 2.0f;
+            } else {
+                position.y = _position.y + diffY * 0.1f;
+            }
+            self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
+        } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
+            if (self.view.layer.position.y > _position.y + kMPNotifHeight / 2.0f && self.delegate != nil) {
+                [self.delegate notificationSmallControllerWasDismissed:self status:NO];
+            } else {
+                [UIView animateWithDuration:0.2f animations:^{
+                    self.view.layer.position = _position;
+                }];
+            }
         }
     }
 }
