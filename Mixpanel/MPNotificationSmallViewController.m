@@ -10,7 +10,7 @@
 
 #import "MPNotification.h"
 
-#define kMPNotifHeight 44.0f
+#define kMPNotifHeight 60.0f
 
 @interface MPNotificationSmallViewController ()
 
@@ -113,6 +113,9 @@
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     gesture.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:gesture];
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
+    [self.view addGestureRecognizer:pan];
 }
 
 - (void)dealloc
@@ -196,4 +199,31 @@
     }
 }
 
+- (void)didPan:(UIPanGestureRecognizer *)gesture
+{
+    static CGPoint start;
+    static CGPoint viewPosition;
+    
+    if (gesture.state == UIGestureRecognizerStateBegan && gesture.numberOfTouches == 1) {
+        start = [gesture locationInView:self.parentController.view];
+        viewPosition = self.view.layer.position;
+    } else if (gesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint position = [gesture locationInView:self.parentController.view];
+        position.y = viewPosition.y + (position.y - start.y) * 2.0f;
+        if (position.y < viewPosition.y) {
+            position.y = viewPosition.y;
+        }
+        self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
+    } else if (gesture.state == UIGestureRecognizerStateEnded) {
+        if (self.view.layer.position.y > viewPosition.y + kMPNotifHeight / 2.0f && self.delegate != nil) {
+            [self.delegate notificationSmallControllerWasDismissed:self status:NO];
+        } else {
+            [UIView animateWithDuration:0.2f animations:^{
+                self.view.layer.position = viewPosition;
+            }];
+        }
+    }
+}
+
 @end
+
