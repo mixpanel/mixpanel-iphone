@@ -617,7 +617,7 @@
     STAssertNotNil(r[@"$add"], @"$add dictionary missing");
     p = r[@"$add"];
     STAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
-    STAssertEqualObjects(p[@"p1"], 3, @"custom people property not queued");
+    STAssertEqualObjects(p[@"p1"], @3, @"custom people property not queued");
 }
 
 - (void)testPeopleIncrementBy
@@ -632,7 +632,7 @@
     STAssertNotNil(r[@"$add"], @"$add dictionary missing");
     NSDictionary *p = r[@"$add"];
     STAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
-    STAssertEqualObjects(p[@"p1"], 3, @"custom people property not queued");
+    STAssertEqualObjects(p[@"p1"], @3, @"custom people property not queued");
 }
 
 - (void)testPeopleDeleteUser
