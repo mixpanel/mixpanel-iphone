@@ -168,6 +168,8 @@ static Mixpanel *sharedInstance = nil;
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
+        
+        self.showMiniNotification = NO;
 
         // wifi reachability
         BOOL reachabilityOk = NO;
@@ -1200,8 +1202,11 @@ static Mixpanel *sharedInstance = nil;
         } else {
             self.currentlyShowingNotification = notification;
             
-            //[self showModalNotificationWithObject:notification];
-            [self showOverAppNotificationWithObject:notification];
+            if (self.showMiniNotification) {
+                [self showOverAppNotificationWithObject:notification];
+            } else {
+                [self showModalNotificationWithObject:notification];
+            }
             
             if (![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];

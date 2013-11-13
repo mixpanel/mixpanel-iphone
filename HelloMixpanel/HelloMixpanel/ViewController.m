@@ -31,6 +31,8 @@
 @property(nonatomic, retain) IBOutlet UITextField *notificationIDField;
 @property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
+@property(nonatomic, retain) IBOutlet UISegmentedControl *notificationTypeControl;
+
 @end
 
 @implementation ViewController
@@ -40,6 +42,7 @@
     self.genderControl = nil;
     self.weaponControl = nil;
     self.fakeBackground = nil;
+    self.notificationTypeControl = nil;
     [super dealloc];
 }
 
@@ -75,6 +78,12 @@
     // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
     // and identify them once you know their user ID.
     [mixpanel identify:mixpanel.distinctId];
+}
+
+- (IBAction)setNotificationType:(id)sender
+{
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    mixpanel.showMiniNotification = self.notificationTypeControl.selectedSegmentIndex == 1;
 }
 
 - (IBAction)showSurvey:(id)sender
