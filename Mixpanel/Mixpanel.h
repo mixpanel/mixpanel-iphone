@@ -228,7 +228,7 @@
  project, consider using <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
- @param startFlushTimer whether to start the background flush timer
+ @param flushInterval whether to start the background flush timer
  */
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
 
