@@ -92,9 +92,9 @@ static NSString *MPURLEncode(NSString *s)
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
-    if (info != NULL && [(NSObject*)info isKindOfClass:[Mixpanel class]]) {
+    if (info != NULL && [(__bridge NSObject*)info isKindOfClass:[Mixpanel class]]) {
         @autoreleasepool {
-            Mixpanel *mixpanel = (Mixpanel *)info;
+            Mixpanel *mixpanel = (__bridge Mixpanel *)info;
             [mixpanel reachabilityChanged:flags];
         }
     } else {
@@ -157,8 +157,7 @@ static Mixpanel *sharedInstance = nil;
         // wifi reachability
         BOOL reachabilityOk = NO;
         if ((self.reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
-            SCNetworkReachabilityContext context = {0, NULL, NULL, NULL, NULL};
-            context.info = (void *)self;
+            SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
             if (SCNetworkReachabilitySetCallback(self.reachability, MixpanelReachabilityCallback, &context)) {
                 if (SCNetworkReachabilitySetDispatchQueue(self.reachability, self.serialQueue)) {
                     reachabilityOk = YES;
