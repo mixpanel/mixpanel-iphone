@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
-    NSString *text = [self labelForValue:[self.question.choices objectAtIndex:(NSUInteger)indexPath.row]];
+    NSString *text = [self labelForValue:(self.question.choices)[(NSUInteger)indexPath.row]];
     cell.label.text = text;
     cell.selectedLabel.text = text;
     UIColor *strokeColor = [UIColor colorWithWhite:1 alpha:0.5];
@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (!cell.isChecked) {
         [cell setChecked:YES animatedWithCompletion:^(BOOL finished){
-            id value = [self.question.choices objectAtIndex:(NSUInteger)indexPath.row];
+            id value = (self.question.choices)[(NSUInteger)indexPath.row];
             [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
         }];
     }

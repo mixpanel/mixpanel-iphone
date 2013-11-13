@@ -101,8 +101,8 @@
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     NSLog(@"%@ will resign active", self);
-    NSNumber *seconds = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceDate:self.startTime]];
-    [[Mixpanel sharedInstance] track:@"Session" properties:[NSDictionary dictionaryWithObject:seconds forKey:@"Length"]];
+    NSNumber *seconds = @([[NSDate date] timeIntervalSinceDate:self.startTime]);
+    [[Mixpanel sharedInstance] track:@"Session" properties:@{@"Length": seconds}];
 }
 
 #pragma mark - Background task tracking test
