@@ -256,7 +256,7 @@ static Mixpanel *sharedInstance = nil;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     char answer[size];
     sysctlbyname("hw.machine", answer, &size, NULL, 0);
-    NSString *results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
+    NSString *results = @(answer);
     return results;
 }
 
@@ -278,16 +278,16 @@ static Mixpanel *sharedInstance = nil;
     NSString *deviceModel = [self deviceModel];
     [p setValue:@"iphone" forKey:@"mp_lib"];
     [p setValue:VERSION forKey:@"$lib_version"];
-    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$app_version"];
-    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$app_release"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_release"];
     [p setValue:@"Apple" forKey:@"$manufacturer"];
     [p setValue:[device systemName] forKey:@"$os"];
     [p setValue:[device systemVersion] forKey:@"$os_version"];
     [p setValue:deviceModel forKey:@"$model"];
     [p setValue:deviceModel forKey:@"mp_device_model"]; // legacy
     CGSize size = [UIScreen mainScreen].bounds.size;
-    [p setValue:[NSNumber numberWithInt:(int)size.height] forKey:@"$screen_height"];
-    [p setValue:[NSNumber numberWithInt:(int)size.width] forKey:@"$screen_width"];
+    [p setValue:@((int)size.height) forKey:@"$screen_height"];
+    [p setValue:@((int)size.width) forKey:@"$screen_width"];
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networkInfo subscriberCellularProvider];
     [networkInfo release];
@@ -392,14 +392,14 @@ static Mixpanel *sharedInstance = nil;
         // when the NSAssert's are stripped out in release, it becomes an
         // unused variable error. also, note that @YES and @NO pass as
         // instances of NSNumber class.
-        NSAssert([[properties objectForKey:k] isKindOfClass:[NSString class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSNumber class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSNull class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSArray class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSDictionary class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSDate class]] ||
-                 [[properties objectForKey:k] isKindOfClass:[NSURL class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [[properties objectForKey:k] class], [properties objectForKey:k]);
+        NSAssert([properties[k] isKindOfClass:[NSString class]] ||
+                 [properties[k] isKindOfClass:[NSNumber class]] ||
+                 [properties[k] isKindOfClass:[NSNull class]] ||
+                 [properties[k] isKindOfClass:[NSArray class]] ||
+                 [properties[k] isKindOfClass:[NSDictionary class]] ||
+                 [properties[k] isKindOfClass:[NSDate class]] ||
+                 [properties[k] isKindOfClass:[NSURL class]],
+                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [properties[k] class], properties[k]);
     }
 }
 
@@ -431,7 +431,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.distinctId = distinctId;
         if ([self.people.unidentifiedQueue count] > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                [r setObject:distinctId forKey:@"$distinct_id"];
+                r[@"$distinct_id"] = distinctId;
                 [self.peopleQueue addObject:r];
             }
             [self.people.unidentifiedQueue removeAllObjects];
@@ -472,19 +472,19 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [p addEntriesFromDictionary:self.automaticProperties];
-        [p setObject:self.apiToken forKey:@"token"];
-        [p setObject:epochSeconds forKey:@"time"];
+        p[@"token"] = self.apiToken;
+        p[@"time"] = epochSeconds;
         if (self.nameTag) {
-            [p setObject:self.nameTag forKey:@"mp_name_tag"];
+            p[@"mp_name_tag"] = self.nameTag;
         }
         if (self.distinctId) {
-            [p setObject:self.distinctId forKey:@"distinct_id"];
+            p[@"distinct_id"] = self.distinctId;
         }
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];
         }
-        NSDictionary *e = [NSDictionary dictionaryWithObjectsAndKeys:event, @"event", [NSDictionary dictionaryWithDictionary:p], @"properties", nil];
+        NSDictionary *e = @{@"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]};
         MixpanelLog(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if ([self.eventsQueue count] > 500) {
@@ -515,8 +515,8 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         for (NSString *key in properties) {
-            if ([tmp objectForKey:key] == nil) {
-                [tmp setObject:[properties objectForKey:key] forKey:key];
+            if (tmp[key] == nil) {
+                tmp[key] = properties[key];
             }
         }
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
@@ -532,9 +532,9 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         for (NSString *key in properties) {
-            id value = [tmp objectForKey:key];
+            id value = tmp[key];
             if (value == nil || [value isEqual:defaultValue]) {
-                [tmp setObject:[properties objectForKey:key] forKey:key];
+                tmp[key] = properties[key];
             }
         }
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
@@ -548,7 +548,7 @@ static Mixpanel *sharedInstance = nil;
 {
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        if ([tmp objectForKey:propertyName] != nil) {
+        if (tmp[propertyName] != nil) {
             [tmp removeObjectForKey:propertyName];
         }
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
@@ -561,7 +561,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)clearSuperProperties
 {
     dispatch_async(self.serialQueue, ^{
-        self.superProperties = [NSDictionary dictionary];
+        self.superProperties = @{};
         if ([Mixpanel inBackground]) {
             [self archiveProperties];
         }
@@ -1074,7 +1074,7 @@ static Mixpanel *sharedInstance = nil;
     } else {
         [self markSurveyShown:controller.survey];
         for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
-            NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:[answers objectAtIndex:i], @"$answers", nil];
+            NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:answers[i], @"$answers", nil];
             if (i == 0) {
                 properties[@"$responses"] = @(controller.survey.collectionID);
             }
@@ -1133,8 +1133,8 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:[self.mixpanel deviceModel] forKey:@"$ios_device_model"];
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
     [p setValue:VERSION forKey:@"$ios_lib_version"];
-    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"$ios_app_version"];
-    [p setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$ios_app_version"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
     if (NSClassFromString(@"ASIdentifierManager")) {
         [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
@@ -1147,18 +1147,18 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(self.mixpanel.serialQueue, ^{
         NSMutableDictionary *r = [NSMutableDictionary dictionary];
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        [r setObject:self.mixpanel.apiToken forKey:@"$token"];
-        if (![r objectForKey:@"$time"]) {
+        r[@"$token"] = self.mixpanel.apiToken;
+        if (!r[@"$time"]) {
             // milliseconds unix timestamp
-            [r setObject:epochMilliseconds forKey:@"$time"];
+            r[@"$time"] = epochMilliseconds;
         }
         if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
             [p addEntriesFromDictionary:self.automaticProperties];
         }
         [p addEntriesFromDictionary:properties];
-        [r setObject:[NSDictionary dictionaryWithDictionary:p] forKey:action];
+        r[action] = [NSDictionary dictionaryWithDictionary:p];
         if (self.distinctId) {
-            [r setObject:self.distinctId forKey:@"$distinct_id"];
+            r[@"$distinct_id"] = self.distinctId;
             MixpanelLog(@"%@ queueing people record: %@", self.mixpanel, r);
             [self.mixpanel.peopleQueue addObject:r];
             if ([self.mixpanel.peopleQueue count] > 500) {
@@ -1187,8 +1187,8 @@ static Mixpanel *sharedInstance = nil;
     for (NSUInteger i = 0; i < deviceToken.length; i++) {
         [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
     }
-    NSArray *tokens = [NSArray arrayWithObject:[NSString stringWithString:hex]];
-    NSDictionary *properties = [NSDictionary dictionaryWithObject:tokens forKey:@"$ios_devices"];
+    NSArray *tokens = @[[NSString stringWithString:hex]];
+    NSDictionary *properties = @{@"$ios_devices": tokens};
     [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
 }
 
@@ -1206,7 +1206,7 @@ static Mixpanel *sharedInstance = nil;
     if (property == nil || object == nil) {
         return;
     }
-    [self set:[NSDictionary dictionaryWithObject:object forKey:property]];
+    [self set:@{property: object}];
 }
 
 - (void)setOnce:(NSDictionary *)properties
@@ -1233,7 +1233,7 @@ static Mixpanel *sharedInstance = nil;
     if (property == nil || amount == nil) {
         return;
     }
-    [self increment:[NSDictionary dictionaryWithObject:amount forKey:property]];
+    [self increment:@{property: amount}];
 }
 
 - (void)append:(NSDictionary *)properties
@@ -1266,18 +1266,18 @@ static Mixpanel *sharedInstance = nil;
         if (properties) {
             [txn addEntriesFromDictionary:properties];
         }
-        [self append:[NSDictionary dictionaryWithObject:txn forKey:@"$transactions"]];
+        [self append:@{@"$transactions": txn}];
     }
 }
 
 - (void)clearCharges
 {
-    [self set:[NSDictionary dictionaryWithObject:[NSArray array] forKey:@"$transactions"]];
+    [self set:@{@"$transactions": @[]}];
 }
 
 - (void)deleteUser
 {
-    [self addPeopleRecordToQueueWithAction:@"$delete" andProperties:[NSDictionary dictionary]];
+    [self addPeopleRecordToQueueWithAction:@"$delete" andProperties:@{}];
 }
 
 @end
