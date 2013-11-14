@@ -286,11 +286,10 @@ char *MP_NewBase64Encode(
 		MP_NewBase64Encode([self bytes], [self length], false, &outputLength);
 	
 	NSString *result =
-		[[[NSString alloc]
+		[[NSString alloc]
 			initWithBytes:outputBuffer
 			length:outputLength
-			encoding:NSASCIIStringEncoding]
-		autorelease];
+			encoding:NSASCIIStringEncoding];
 	free(outputBuffer);
 	return result;
 }

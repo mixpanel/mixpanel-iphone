@@ -23,23 +23,16 @@
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
-@property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
-@property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
-@property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
-@property(nonatomic, retain) IBOutlet UITextField *surveyIDField;
-@property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property(nonatomic,strong) IBOutlet UISegmentedControl *genderControl;
+@property(nonatomic,strong) IBOutlet UISegmentedControl *weaponControl;
+@property(nonatomic,strong) IBOutlet UIImageView *fakeBackground;
+@property(nonatomic,strong) IBOutlet UITextField *surveyIDField;
+@property(nonatomic,strong) IBOutlet UIScrollView *scrollView;
 
 @end
 
 @implementation ViewController
 
-- (void)dealloc
-{
-    self.genderControl = nil;
-    self.weaponControl = nil;
-    self.fakeBackground = nil;
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {

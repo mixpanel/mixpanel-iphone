@@ -52,32 +52,32 @@
 }
 
 // re-declare internally as readwrite
-@property(atomic,retain)    MixpanelPeople *people;
+@property(atomic,strong)    MixpanelPeople *people;
 @property(atomic,copy)      NSString *distinctId;
 
 @property(nonatomic,copy)   NSString *apiToken;
-@property(atomic,retain)    NSDictionary *superProperties;
-@property(nonatomic,retain) NSMutableDictionary *automaticProperties; // mutable because we update $wifi when reachability changes
-@property(nonatomic,retain) NSTimer *timer;
-@property(nonatomic,retain) NSMutableArray *eventsQueue;
-@property(nonatomic,retain) NSMutableArray *peopleQueue;
+@property(atomic,strong)    NSDictionary *superProperties;
+@property(nonatomic,strong) NSMutableDictionary *automaticProperties; // mutable because we update $wifi when reachability changes
+@property(nonatomic,strong) NSTimer *timer;
+@property(nonatomic,strong) NSMutableArray *eventsQueue;
+@property(nonatomic,strong) NSMutableArray *peopleQueue;
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
-@property(nonatomic,retain) dispatch_queue_t serialQueue;
+@property(nonatomic,strong) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
-@property(nonatomic,retain) CTTelephonyNetworkInfo *telephonyInfo;
-@property(nonatomic,retain) NSDateFormatter *dateFormatter;
-@property(nonatomic,retain) NSArray *surveys;
-@property(nonatomic,retain) MPSurvey *currentlyShowingSurvey;
-@property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
+@property(nonatomic,strong) CTTelephonyNetworkInfo *telephonyInfo;
+@property(nonatomic,strong) NSDateFormatter *dateFormatter;
+@property(nonatomic,strong) NSArray *surveys;
+@property(nonatomic,strong) MPSurvey *currentlyShowingSurvey;
+@property(nonatomic,strong) NSMutableSet *shownSurveyCollections;
 
 @end
 
 @interface MixpanelPeople ()
 
-@property(nonatomic,assign) Mixpanel *mixpanel;
-@property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
+@property(nonatomic,weak) Mixpanel *mixpanel;
+@property(nonatomic,strong) NSMutableArray *unidentifiedQueue;
 @property(nonatomic,copy)   NSString *distinctId;
-@property(nonatomic,retain) NSDictionary *automaticProperties;
+@property(nonatomic,strong) NSDictionary *automaticProperties;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 
@@ -85,7 +85,7 @@
 
 static NSString *MPURLEncode(NSString *s)
 {
-    return [(NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8) autorelease];
+    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
 }
 
 @implementation Mixpanel
@@ -130,7 +130,7 @@ static Mixpanel *sharedInstance = nil;
         NSLog(@"%@ warning empty api token", self);
     }
     if (self = [self init]) {
-        self.people = [[[MixpanelPeople alloc] initWithMixpanel:self] autorelease];
+        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
@@ -144,7 +144,7 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        self.dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
 
@@ -212,32 +212,12 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.people = nil;
-    self.distinctId = nil;
-    self.nameTag = nil;
-    self.serverURL = nil;
     self.delegate = nil;
-    self.apiToken = nil;
-    self.superProperties = nil;
-    self.automaticProperties = nil;
-    self.timer = nil;
-    self.eventsQueue = nil;
-    self.peopleQueue = nil;
-    self.dateFormatter = nil;
-    self.surveys = nil;
-    self.currentlyShowingSurvey = nil;
-    self.shownSurveyCollections = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
         self.reachability = nil;
     }
-    self.telephonyInfo = nil;
-    if (_serialQueue) {
-        dispatch_release(_serialQueue);
-        _serialQueue = NULL;
-    }
-    [super dealloc];
 }
 
 - (NSString *)description
@@ -292,7 +272,6 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:@((int)size.width) forKey:@"$screen_width"];
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-    [networkInfo release];
     if (carrier.carrierName.length) {
         [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
@@ -375,13 +354,13 @@ static Mixpanel *sharedInstance = nil;
     NSData *data = [self JSONSerializeObject:array];
     if (data) {
         b64String = [data mp_base64EncodedString];
-        b64String = (id)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+        b64String = (id)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                 (CFStringRef)b64String,
                                                                 NULL,
                                                                 CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                kCFStringEncodingUTF8);
+                                                                kCFStringEncodingUTF8));
     }
-    return [b64String autorelease];
+    return b64String;
 }
 
 #pragma mark - Tracking
@@ -572,7 +551,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSDictionary *)currentSuperProperties
 {
-    return [[self.superProperties copy] autorelease];
+    return [self.superProperties copy];
 }
 
 - (void)reset
@@ -690,7 +669,7 @@ static Mixpanel *sharedInstance = nil;
             break;
         }
 
-        NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+        NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         if ([response intValue] == 0) {
             NSLog(@"%@ %@ api rejected some items", self, endpoint);
         };
@@ -1089,7 +1068,6 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    [alertView release];
     if (_currentlyShowingSurvey) {
         if (buttonIndex == 1) {
             [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
@@ -1117,10 +1095,6 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     self.mixpanel = nil;
-    self.distinctId = nil;
-    self.unidentifiedQueue = nil;
-    self.automaticProperties = nil;
-    [super dealloc];
 }
 
 - (NSString *)description
