@@ -82,8 +82,9 @@
 
 - (IBAction)setNotificationType:(id)sender
 {
+    NSArray *types = @[@"takeover", @"mini"];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    mixpanel.showMiniNotification = self.notificationTypeControl.selectedSegmentIndex == 1;
+    mixpanel.showNotificationType = types[self.notificationTypeControl.selectedSegmentIndex];
 }
 
 - (IBAction)showSurvey:(id)sender

@@ -10,7 +10,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl;
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl;
 
 @end
 
@@ -26,6 +26,12 @@
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
         NSLog(@"invalid notif id: %@", ID);
+        return nil;
+    }
+    
+    NSString *type = object[@"type"];
+    if (![type isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid notif title: %@", type);
         return nil;
     }
     
@@ -82,6 +88,7 @@
     }
     
     return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
+                                          type:type
                                          title:title
                                           body:body
                                            cta:cta
@@ -89,10 +96,11 @@
                                       imageUrl:imageUrl] autorelease];
 }
 
-- (id)initWithID:(NSUInteger)ID title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl
 {
     if (self = [super init]) {
         _ID = ID;
+        self.type = type;
         self.title = title;
         self.body = body;
         self.imageUrl = imageUrl;
@@ -106,6 +114,7 @@
 
 - (void)dealloc
 {
+    self.type = nil;
     self.title = nil;
     self.body = nil;
     self.cta = nil;

@@ -56,7 +56,7 @@
 @interface Mixpanel : NSObject
 
 // REMOVE THIS
-@property(nonatomic) BOOL showMiniNotification;
+@property(nonatomic,retain) NSString *showNotificationType;
 
 /*!
  @property

@@ -169,7 +169,7 @@ static Mixpanel *sharedInstance = nil;
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
         
-        self.showMiniNotification = NO;
+        self.showNotificationType = nil;
 
         // wifi reachability
         BOOL reachabilityOk = NO;
@@ -263,6 +263,8 @@ static Mixpanel *sharedInstance = nil;
         _serialQueue = NULL;
     }
     [super dealloc];
+    
+    self.showNotificationType = nil;
 }
 
 - (NSString *)description
@@ -1165,7 +1167,21 @@ static Mixpanel *sharedInstance = nil;
 {
     [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
         if ([notifications count] > 0) {
-            [self showNotificationWithObject:notifications[0]];
+            MPNotification *shownNotification = nil;
+            
+            if (self.showNotificationType != nil) {
+                for (MPNotification *notification in notifications) {
+                    if ([notification.type isEqualToString:self.showNotificationType]) {
+                        shownNotification = notification;
+                    }
+                }
+            } else {
+                shownNotification = notifications[0];
+            }
+            
+            if (shownNotification != nil) {
+                [self showNotificationWithObject:shownNotification];
+            }
         }
     }];
 }
@@ -1202,7 +1218,7 @@ static Mixpanel *sharedInstance = nil;
         } else {
             self.currentlyShowingNotification = notification;
             
-            if (self.showMiniNotification) {
+            if ([notification.type isEqualToString:@"mini"]) {
                 [self showOverAppNotificationWithObject:notification];
             } else {
                 [self showModalNotificationWithObject:notification];
