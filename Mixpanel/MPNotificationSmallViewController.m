@@ -87,9 +87,22 @@
     self.bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     self.bodyLabel.numberOfLines = 2;
     
+    UIImage *bgImage = [self.parentController.view mp_snapshotImage];
+    
     self.bgImage = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.bgImage.image = [[self.parentController.view mp_snapshotImage] mp_applyDarkEffect];
+    self.bgImage.image = [bgImage mp_applyDarkEffect];
     self.bgImage.opaque = YES;
+    
+    UIColor *avgColor = [bgImage mp_averageColor];
+    CGFloat hue;
+    CGFloat brightness;
+    CGFloat saturation;
+    CGFloat alpha;
+    if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
+        avgColor = [UIColor colorWithHue:hue saturation:0.8f brightness:brightness alpha:alpha];
+    }
+    
+    self.imageView.backgroundColor = avgColor;
     
     if (self.notification != nil) {
         if (self.notification.image != nil) {
