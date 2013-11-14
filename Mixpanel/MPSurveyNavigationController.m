@@ -334,7 +334,10 @@
 
 - (IBAction)dismiss
 {
-    [_delegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
+    __strong id<MPSurveyNavigationControllerDelegate> strongDelegate = _delegate;
+    if (strongDelegate != nil) {
+        [strongDelegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
+    }
 }
 
 - (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties

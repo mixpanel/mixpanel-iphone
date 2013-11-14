@@ -616,7 +616,8 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ flush starting", self);
 
-        if ([self.delegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![self.delegate mixpanelWillFlush:self]) {
+        __strong id<MixpanelDelegate> strongDelegate = _delegate;
+        if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![strongDelegate mixpanelWillFlush:self]) {
             MixpanelDebug(@"%@ flush deferred by delegate", self);
             return;
         }
@@ -1099,14 +1100,18 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", self, self.mixpanel.apiToken];
+    __strong Mixpanel *strongMixpanel = _mixpanel;
+    return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
 - (NSDictionary *)collectAutomaticProperties
 {
     UIDevice *device = [UIDevice currentDevice];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    [p setValue:[self.mixpanel deviceModel] forKey:@"$ios_device_model"];
+    __strong Mixpanel *strongMixpanel = _mixpanel;
+    if (strongMixpanel) {
+        [p setValue:[strongMixpanel deviceModel] forKey:@"$ios_device_model"];
+    }
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
     [p setValue:VERSION forKey:@"$ios_lib_version"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$ios_app_version"];
@@ -1120,37 +1125,40 @@ static Mixpanel *sharedInstance = nil;
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
-    dispatch_async(self.mixpanel.serialQueue, ^{
-        NSMutableDictionary *r = [NSMutableDictionary dictionary];
-        NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        r[@"$token"] = self.mixpanel.apiToken;
-        if (!r[@"$time"]) {
-            // milliseconds unix timestamp
-            r[@"$time"] = epochMilliseconds;
-        }
-        if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
-            [p addEntriesFromDictionary:self.automaticProperties];
-        }
-        [p addEntriesFromDictionary:properties];
-        r[action] = [NSDictionary dictionaryWithDictionary:p];
-        if (self.distinctId) {
-            r[@"$distinct_id"] = self.distinctId;
-            MixpanelLog(@"%@ queueing people record: %@", self.mixpanel, r);
-            [self.mixpanel.peopleQueue addObject:r];
-            if ([self.mixpanel.peopleQueue count] > 500) {
-                [self.mixpanel.peopleQueue removeObjectAtIndex:0];
+    __strong Mixpanel *strongMixpanel = _mixpanel;
+    if (strongMixpanel) {
+        dispatch_async(strongMixpanel.serialQueue, ^{
+            NSMutableDictionary *r = [NSMutableDictionary dictionary];
+            NSMutableDictionary *p = [NSMutableDictionary dictionary];
+            r[@"$token"] = strongMixpanel.apiToken;
+            if (!r[@"$time"]) {
+                // milliseconds unix timestamp
+                r[@"$time"] = epochMilliseconds;
             }
-        } else {
-            MixpanelLog(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
-            [self.unidentifiedQueue addObject:r];
-            if ([self.unidentifiedQueue count] > 500) {
-                [self.unidentifiedQueue removeObjectAtIndex:0];
+            if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
+                [p addEntriesFromDictionary:self.automaticProperties];
             }
-        }
-        if ([Mixpanel inBackground]) {
-            [self.mixpanel archivePeople];
-        }
-    });
+            [p addEntriesFromDictionary:properties];
+            r[action] = [NSDictionary dictionaryWithDictionary:p];
+            if (self.distinctId) {
+                r[@"$distinct_id"] = self.distinctId;
+                MixpanelLog(@"%@ queueing people record: %@", self.mixpanel, r);
+                [strongMixpanel.peopleQueue addObject:r];
+                if ([strongMixpanel.peopleQueue count] > 500) {
+                    [strongMixpanel.peopleQueue removeObjectAtIndex:0];
+                }
+            } else {
+                MixpanelLog(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
+                [self.unidentifiedQueue addObject:r];
+                if ([self.unidentifiedQueue count] > 500) {
+                    [self.unidentifiedQueue removeObjectAtIndex:0];
+                }
+            }
+            if ([Mixpanel inBackground]) {
+                [strongMixpanel archivePeople];
+            }
+        });
+    }
 }
 
 - (void)addPushDeviceToken:(NSData *)deviceToken

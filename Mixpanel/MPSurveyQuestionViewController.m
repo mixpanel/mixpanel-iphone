@@ -267,7 +267,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     if (!cell.isChecked) {
         [cell setChecked:YES animatedWithCompletion:^(BOOL finished){
             id value = (self.question.choices)[(NSUInteger)indexPath.row];
-            [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
+            __strong id<MPSurveyQuestionViewControllerDelegate> strongDelegate = self.delegate;
+            if (strongDelegate != nil) {
+                [strongDelegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
+            }
         }];
     }
 }
@@ -329,7 +332,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     if ([text isEqualToString:@"\n"]) {
         // submit answer
         shouldChange = NO;
-        [self.delegate questionController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
+        __strong id<MPSurveyQuestionViewControllerDelegate> strongDelegate = self.delegate;
+        if (strongDelegate != nil) {
+            [strongDelegate questionController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
+        }
     } else {
         NSUInteger newLength = [textView.text length] + ([text length] - range.length);
         shouldChange = newLength <= 255;
