@@ -126,7 +126,7 @@
                             <rect key="frame" x="48" y="260" width="225" height="29"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
-                                <segment title="Full Notification"/>
+                                <segment title="Takeover Notif"/>
                                 <segment title="Mini Notification"/>
                             </segments>
                             <connections>

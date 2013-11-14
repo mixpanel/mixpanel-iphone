@@ -11,6 +11,7 @@
 @interface MPNotification : NSObject
 
 @property(nonatomic,readonly) NSUInteger ID;
+@property(nonatomic,retain) NSString *type;
 @property(nonatomic,retain) NSURL *imageUrl;
 @property(nonatomic,retain) NSData *image;
 @property(nonatomic,retain) NSString *title;
