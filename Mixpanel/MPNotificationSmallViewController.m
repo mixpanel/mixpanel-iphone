@@ -30,47 +30,6 @@
 
 @implementation MPNotificationSmallViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (id)initWithPresentedViewController:(UIViewController *)controller notification:(MPNotification *)notification
-{
-    self = [super initWithNibName:Nil bundle:nil];
-    if (self) {
-        self.parentController = controller;
-        self.notification = notification;
-    }
-    return self;
-}
-
-- (void)setNotification:(MPNotification *)notification
-{
-    if (_notification) {
-        [_notification release];
-    }
-    _notification = notification;
-    
-    if (_notification != nil) {
-        [_notification retain];
-        
-        if (self.notification.image != nil) {
-            self.imageView.image = [UIImage imageWithData:self.notification.image scale:2.0f];
-            self.imageView.hidden = NO;
-        }
-        
-        if (self.notification.body != nil) {
-            self.bodyLabel.text = self.notification.body;
-            self.bodyLabel.hidden = NO;
-        }
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -162,16 +121,6 @@
     [self.bodyLabel sizeToFit];
 }
 
-- (void)willMoveToParentViewController:(UIViewController *)parent
-{
-    [super willMoveToParentViewController:parent];
-}
-
-- (void)didMoveToParentViewController:(UIViewController *)parent
-{
-    [super didMoveToParentViewController:parent];
-}
-
 - (void)show
 {
     _canPan = NO;
@@ -197,6 +146,10 @@
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
 {
+    if (self.parentController == nil) {
+        return;
+    }
+    
     _canPan = NO;
     
     CGFloat duration;
@@ -210,13 +163,13 @@
     [UIView animateWithDuration:duration animations:^{
         UIView *parentView = self.parentController.view;
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
-        CGPoint bgPosition = self.bgImage.layer.position;
-        self.bgImage.layer.position = CGPointMake(bgPosition.x, bgPosition.y - kMPNotifHeight);
+        self.bgImage.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
     } completion:^(BOOL finished) {
         [self willMoveToParentViewController:nil];
         [self.view removeFromSuperview];
         [self removeFromParentViewController];
         self.parentController = nil;
+        
         if (completion) {
             completion();
         }
