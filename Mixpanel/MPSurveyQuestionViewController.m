@@ -202,7 +202,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CAGradientLayer *fadeLayer = [CAGradientLayer layer];
     CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
     CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
-    fadeLayer.colors = @[(id)outerColor, (id)innerColor, (id)innerColor, (id)outerColor];
+    fadeLayer.colors = @[(__bridge id)outerColor, (__bridge id)innerColor, (__bridge id)innerColor, (__bridge id)outerColor];
     // add 20 pixels of fade in and out at top and bottom of table view container
     CGFloat offset = 44 / _tableContainer.bounds.size.height;
     fadeLayer.locations = @[@0, @(0 + offset), @(1 - offset), @1];
