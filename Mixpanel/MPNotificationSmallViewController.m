@@ -10,7 +10,11 @@
 
 #import "MPNotification.h"
 
-#define kMPNotifHeight 60.0f
+#import "UIImage+MPAverageColor.h"
+#import "UIImage+MPImageEffects.h"
+#import "UIView+MPSnapshotImage.h"
+
+#define kMPNotifHeight 65.0f
 
 @interface MPNotificationSmallViewController () {
     CGPoint _panStartPoint;
@@ -19,7 +23,7 @@
 }
 
 @property (nonatomic, retain) UIImageView *imageView;
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, retain) UIImageView *bgImage;
 @property (nonatomic, retain) UILabel *bodyLabel;
 
 @end
@@ -60,11 +64,6 @@
             self.imageView.hidden = NO;
         }
         
-        if (self.notification.title != nil) {
-            self.titleLabel.text = self.notification.title;
-            self.titleLabel.hidden = NO;
-        }
-        
         if (self.notification.body != nil) {
             self.bodyLabel.text = self.notification.body;
             self.bodyLabel.hidden = NO;
@@ -77,14 +76,20 @@
     [super viewDidLoad];
     
     _canPan = YES;
+    self.view.clipsToBounds = YES;
     
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+    self.imageView.layer.cornerRadius = 3.0f;
+    self.imageView.layer.masksToBounds = YES;
+    
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.bodyLabel.textColor = [UIColor whiteColor];
-    self.bodyLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.bodyLabel.font = [UIFont systemFontOfSize:14.0f];
+    self.bodyLabel.numberOfLines = 2;
+    
+    self.bgImage = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.bgImage.image = [[self.parentController.view mp_snapshotImage] mp_applyDarkEffect];
+    self.bgImage.opaque = YES;
     
     if (self.notification != nil) {
         if (self.notification.image != nil) {
@@ -92,13 +97,6 @@
             self.imageView.hidden = NO;
         } else {
             self.imageView.hidden = YES;
-        }
-        
-        if (self.notification.title != nil) {
-            self.titleLabel.text = self.notification.title;
-            self.titleLabel.hidden = NO;
-        } else {
-            self.titleLabel.hidden = YES;
         }
         
         if (self.notification.body != nil) {
@@ -109,8 +107,8 @@
         }
     }
     
+    [self.view addSubview:self.bgImage];
     [self.view addSubview:self.imageView];
-    [self.view addSubview:self.titleLabel];
     [self.view addSubview:self.bodyLabel];
 	
     self.view.backgroundColor = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.9f];
@@ -131,7 +129,7 @@
     self.parentController = nil;
     self.notification = nil;
     self.imageView = nil;
-    self.titleLabel = nil;
+    self.bgImage = nil;
     self.bodyLabel = nil;
     self.delegate = nil;
 }
@@ -143,11 +141,12 @@
     UIView *parentView = self.parentController.view;
     self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
     
-    self.imageView.frame = CGRectMake(5.0f, 5.0f, kMPNotifHeight - 10.0f, kMPNotifHeight - 10.0f);
-    CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 5.0f;
-    self.titleLabel.frame = CGRectMake(offsetX, 5.0f, self.view.frame.size.width - offsetX - 5.0f, 0.0f);
-    [self.titleLabel sizeToFit];
-    self.bodyLabel.frame = CGRectMake(offsetX, 5.0f + self.titleLabel.frame.size.height, self.view.frame.size.width - offsetX - 5.0f, self.titleLabel.frame.size.height);
+    CGSize parentSize = self.parentController.view.frame.size;
+    self.bgImage.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
+    self.imageView.frame = CGRectMake(12.5f, 12.5f, kMPNotifHeight - 25.0f, kMPNotifHeight - 25.0f);
+    CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 12.5f;
+    self.bodyLabel.frame = CGRectMake(offsetX, 12.5f, self.view.frame.size.width - offsetX - 12.5f, 0.0f);
+    [self.bodyLabel sizeToFit];
 }
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
@@ -163,7 +162,7 @@
 - (void)show
 {
     _canPan = NO;
-    //[self willMoveToParentViewController:self.parentController];
+    
     [self.parentController addChildViewController:self];
     [self.parentController.view addSubview:self.view];
     [self didMoveToParentViewController:self.parentController];
@@ -171,8 +170,12 @@
     UIView *parentView = self.parentController.view;
     self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
     
+    CGPoint bgPosition = self.bgImage.layer.position;
+    self.bgImage.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
+    
     [UIView animateWithDuration:0.5f animations:^{
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
+        self.bgImage.layer.position = bgPosition;
     } completion:^(BOOL finished) {
         _position = self.view.layer.position;
         _canPan = YES;
@@ -194,6 +197,8 @@
     [UIView animateWithDuration:duration animations:^{
         UIView *parentView = self.parentController.view;
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
+        CGPoint bgPosition = self.bgImage.layer.position;
+        self.bgImage.layer.position = CGPointMake(bgPosition.x, bgPosition.y - kMPNotifHeight);
     } completion:^(BOOL finished) {
         [self willMoveToParentViewController:nil];
         [self.view removeFromSuperview];
@@ -222,18 +227,26 @@
         } else if (gesture.state == UIGestureRecognizerStateChanged) {
             CGPoint position = [gesture locationInView:self.parentController.view];
             CGFloat diffY = position.y - _panStartPoint.y;
+            
             if (diffY > 0) {
                 position.y = _position.y + diffY * 2.0f;
             } else {
                 position.y = _position.y + diffY * 0.1f;
             }
+            
             self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
+            CGRect bgFrame = self.bgImage.frame;
+            bgFrame.origin.y = -self.view.frame.origin.y;
+            self.bgImage.frame = bgFrame;
         } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
             if (self.view.layer.position.y > _position.y + kMPNotifHeight / 2.0f && self.delegate != nil) {
                 [self.delegate notificationSmallControllerWasDismissed:self status:NO];
             } else {
                 [UIView animateWithDuration:0.2f animations:^{
                     self.view.layer.position = _position;
+                    CGRect bgFrame = self.bgImage.frame;
+                    bgFrame.origin.y = -self.view.frame.origin.y;
+                    self.bgImage.frame = bgFrame;
                 }];
             }
         }

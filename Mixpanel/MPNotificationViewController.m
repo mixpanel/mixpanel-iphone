@@ -279,13 +279,13 @@
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat components[] = {
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.64f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.3f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.50f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.57f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.60f};
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.60f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.80f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.90f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
     CGFloat locations[] = {0.0f, 0.2f, 0.5f, 0.625f, 0.7115f, 0.8f, 0.9f};
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
     
