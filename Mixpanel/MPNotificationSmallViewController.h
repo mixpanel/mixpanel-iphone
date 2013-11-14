@@ -17,7 +17,6 @@
 @property (nonatomic, retain) UIViewController *parentController;
 @property (nonatomic, assign) id<MPNotificationSmallViewControllerDelegate> delegate;
 
-- (id)initWithPresentedViewController:(UIViewController *)controller notification:(MPNotification *)notification;
 - (void)show;
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion;
 
