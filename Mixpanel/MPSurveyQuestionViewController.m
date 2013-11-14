@@ -3,15 +3,15 @@
 #import "MPSurveyQuestionViewController.h"
 
 @interface MPSurveyQuestionViewController ()
-@property(nonatomic,retain) IBOutlet UILabel *prompt;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptHeight;
+@property(nonatomic,strong) IBOutlet UILabel *prompt;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *promptHeight;
 @end
 
 @interface MPSurveyMultipleChoiceQuestionViewController : MPSurveyQuestionViewController <UITableViewDataSource, UITableViewDelegate>
-@property(nonatomic,retain) MPSurveyMultipleChoiceQuestion *question;
-@property(nonatomic,retain) IBOutlet UITableView *tableView;
-@property(nonatomic,retain) IBOutlet UIView *tableContainer;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *tableContainerVerticalPadding;
+@property(nonatomic,strong) MPSurveyMultipleChoiceQuestion *question;
+@property(nonatomic,strong) IBOutlet UITableView *tableView;
+@property(nonatomic,strong) IBOutlet UIView *tableContainer;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *tableContainerVerticalPadding;
 @end
 
 typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
@@ -22,30 +22,30 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 };
 
 @interface MPSurveyTableViewCellBackground : UIView
-@property(nonatomic,retain) UIColor *strokeColor;
-@property(nonatomic,retain) UIColor *fillColor;
+@property(nonatomic,strong) UIColor *strokeColor;
+@property(nonatomic,strong) UIColor *fillColor;
 @property(nonatomic) MPSurveyTableViewCellPosition position;
 @end
 
 @interface MPSurveyTableViewCell : UITableViewCell
 @property(nonatomic,getter=isChecked) BOOL checked;
-@property(nonatomic,retain) IBOutlet UILabel *label;
-@property(nonatomic,retain) IBOutlet UILabel *selectedLabel;
-@property(nonatomic,retain) IBOutlet UIImageView *checkmark;
-@property(nonatomic,retain) IBOutlet MPSurveyTableViewCellBackground *customBackgroundView;
-@property(nonatomic,retain) IBOutlet MPSurveyTableViewCellBackground *customSelectedBackgroundView;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *selectedLabelLeadingSpace;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *checkmarkLeadingSpace;
+@property(nonatomic,strong) IBOutlet UILabel *label;
+@property(nonatomic,strong) IBOutlet UILabel *selectedLabel;
+@property(nonatomic,strong) IBOutlet UIImageView *checkmark;
+@property(nonatomic,strong) IBOutlet MPSurveyTableViewCellBackground *customBackgroundView;
+@property(nonatomic,strong) IBOutlet MPSurveyTableViewCellBackground *customSelectedBackgroundView;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *selectedLabelLeadingSpace;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *checkmarkLeadingSpace;
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
-@property(nonatomic,retain) MPSurveyTextQuestion *question;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *promptTopSpace;
-@property(nonatomic,retain) IBOutlet UITextView *textView;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *textViewHeight;
-@property(nonatomic,retain) IBOutlet UIView *keyboardAccessory;
-@property(nonatomic,retain) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
-@property(nonatomic,retain) IBOutlet UILabel *charactersLeftLabel;
+@property(nonatomic,strong) MPSurveyTextQuestion *question;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *promptTopSpace;
+@property(nonatomic,strong) IBOutlet UITextView *textView;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *textViewHeight;
+@property(nonatomic,strong) IBOutlet UIView *keyboardAccessory;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
+@property(nonatomic,strong) IBOutlet UILabel *charactersLeftLabel;
 @end
 
 @implementation MPSurveyQuestionViewController
@@ -79,12 +79,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     _promptHeight.constant = ceilf(promptHeight);
 }
 
-- (void)dealloc
-{
-    self.question = nil;
-    self.highlightColor = nil;
-    [super dealloc];
-}
 
 @end
 
@@ -224,7 +218,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
             [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
             label = [formatter stringFromNumber:value];
-            [formatter release];
         }
     } else if ([value isKindOfClass:[NSNull class]]) {
         label = @"None";

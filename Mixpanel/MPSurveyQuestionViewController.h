@@ -6,9 +6,9 @@
 
 @interface MPSurveyQuestionViewController : UIViewController
 
-@property(nonatomic,assign) id<MPSurveyQuestionViewControllerDelegate> delegate;
-@property(nonatomic,retain) MPSurveyQuestion *question;
-@property(nonatomic,retain) UIColor *highlightColor;
+@property(nonatomic,weak) id<MPSurveyQuestionViewControllerDelegate> delegate;
+@property(nonatomic,strong) MPSurveyQuestion *question;
+@property(nonatomic,strong) UIColor *highlightColor;
 
 @end
 

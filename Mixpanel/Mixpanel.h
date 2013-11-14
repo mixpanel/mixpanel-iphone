@@ -63,7 +63,7 @@
  @discussion
  See the documentation for MixpanelDelegate below for more information.
  */
-@property(atomic,readonly,retain) MixpanelPeople *people;
+@property(atomic,readonly,strong) MixpanelPeople *people;
 
 /*!
  @property
@@ -175,7 +175,7 @@
  Using a delegate is optional. See the documentation for MixpanelDelegate
  below for more information.
  */
-@property(atomic,assign) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
+@property(atomic,weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
 
 /*!
  @method

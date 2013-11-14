@@ -53,8 +53,8 @@
 
 @interface HelloMixpanelTests ()  <MixpanelDelegate>
 
-@property(nonatomic,retain) Mixpanel *mixpanel;
-@property(nonatomic,retain) HTTPServer *httpServer;
+@property(nonatomic,strong) Mixpanel *mixpanel;
+@property(nonatomic,strong) HTTPServer *httpServer;
 @property(atomic) BOOL mixpanelWillFlush;
 
 @end
@@ -65,7 +65,7 @@
 {
     NSLog(@"starting test setup...");
     [super setUp];
-    self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     [self.mixpanel reset];
     self.mixpanelWillFlush = NO;
     [self waitForSerialQueue];
@@ -120,7 +120,6 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
     NSDate *date = [dateFormatter dateFromString:@"2012-09-28 19:14:36 PDT"];
-    [dateFormatter release];
     NSDictionary *dictionary = @{@"k": @"v"};
     NSArray *array = @[@"1"];
     NSNull *null = [NSNull null];
@@ -160,7 +159,7 @@
     NSError *error = nil;
     NSURLResponse *urlResponse = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-    NSString *response = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+    NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
     STAssertTrue([response length] > 0, @"HTTP server response not valid");
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"One server request should have been made");
@@ -276,11 +275,11 @@
 - (void)testJSONSerializeObject {
     NSDictionary *test = [self allPropertyTypes];
     NSData *data = [self.mixpanel JSONSerializeObject:@[test]];
-    NSString *json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", nil);
     test = @{@3: @"non-string key"};
     data = [self.mixpanel JSONSerializeObject:@[test]];
-    json = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     STAssertEqualObjects(json, @"[{\"3\":\"non-string key\"}]", @"json serialization failed");
 }
 
@@ -452,7 +451,7 @@
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset");
     STAssertNil(self.mixpanel.people.distinctId, @"people distinct id failed to reset");
     STAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people queue failed to reset");
-    self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     STAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"distinct id failed to reset after archive");
     STAssertNil(self.mixpanel.nameTag, @"name tag failed to reset after archive");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"super properties failed to reset after archive");
@@ -464,7 +463,7 @@
 - (void)testArchive
 {
     [self.mixpanel archive];
-    self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     STAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id archive failed");
     STAssertNil(self.mixpanel.nameTag, @"default name tag archive failed");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties archive failed");
@@ -479,7 +478,7 @@
     [self.mixpanel.people set:p];
     [self waitForSerialQueue];
     [self.mixpanel archive];
-    self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     STAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     STAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"custom name tag archive failed");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
@@ -497,7 +496,7 @@
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
-    self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     STAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from no file failed");
     STAssertNil(self.mixpanel.nameTag, @"default name tag archive from no file failed");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from no file failed");
@@ -514,7 +513,7 @@
     STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"garbage events archive file not found");
     STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"garbage people archive file not found");
     STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"garbage properties archive file not found");
-    self.mixpanel = [[[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0] autorelease];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     STAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from garbage failed");
     STAssertNil(self.mixpanel.nameTag, @"default name tag archive from garbage failed");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from garbage failed");
