@@ -62,9 +62,9 @@
 @property(nonatomic,retain) NSMutableArray *eventsQueue;
 @property(nonatomic,retain) NSMutableArray *peopleQueue;
 @property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
-@property(nonatomic,assign) dispatch_queue_t serialQueue;
+@property(nonatomic,retain) dispatch_queue_t serialQueue;
 @property(nonatomic,assign) SCNetworkReachabilityRef reachability;
-@property(nonatomic,assign) CTTelephonyNetworkInfo *telephonyInfo;
+@property(nonatomic,retain) CTTelephonyNetworkInfo *telephonyInfo;
 @property(nonatomic,retain) NSDateFormatter *dateFormatter;
 @property(nonatomic,retain) NSArray *surveys;
 @property(nonatomic,retain) MPSurvey *currentlyShowingSurvey;
@@ -143,7 +143,7 @@ static Mixpanel *sharedInstance = nil;
         self.peopleQueue = [NSMutableArray array];
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
-        _serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+        self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         self.dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
@@ -176,7 +176,7 @@ static Mixpanel *sharedInstance = nil;
 
         // cellular info
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-            _telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
+            self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
             _automaticProperties[@"$radio"] = [self currentRadio];
             [notificationCenter addObserver:self
                                    selector:@selector(setCurrentRadio)
