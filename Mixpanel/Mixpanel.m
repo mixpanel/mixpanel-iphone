@@ -69,6 +69,7 @@
 @property(nonatomic,retain) NSArray *surveys;
 @property(nonatomic,retain) MPSurvey *currentlyShowingSurvey;
 @property(nonatomic,retain) NSMutableSet *shownSurveyCollections;
+@property(nonatomic,retain) id radioChangeObserver;
 
 @end
 
@@ -178,13 +179,17 @@ static Mixpanel *sharedInstance = nil;
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
             _telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
             _automaticProperties[@"$radio"] = [self currentRadio];
-            [notificationCenter addObserverForName:CTRadioAccessTechnologyDidChangeNotification
+            __block Mixpanel *weakSelf = self;
+            self.radioChangeObserver = [notificationCenter addObserverForName:CTRadioAccessTechnologyDidChangeNotification
                                             object:nil
                                              queue:nil
                                         usingBlock:^(NSNotification *note) {
-                                            dispatch_async(_serialQueue, ^(){
-                                                _automaticProperties[@"$radio"] = [self currentRadio];
-                                            });
+                                            __strong Mixpanel *strongSelf = weakSelf;
+                                            if(strongSelf) {
+                                                dispatch_async(strongSelf.serialQueue, ^(){
+                                                    [strongSelf setCurrentRadio];
+                                                });
+                                            }
                                         }];
         }
 
@@ -216,6 +221,8 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:_radioChangeObserver];
+    self.radioChangeObserver = nil;
     self.people = nil;
     self.distinctId = nil;
     self.nameTag = nil;
@@ -257,6 +264,11 @@ static Mixpanel *sharedInstance = nil;
     sysctlbyname("hw.machine", answer, &size, NULL, 0);
     NSString *results = @(answer);
     return results;
+}
+
+- (void) setCurrentRadio
+{
+    _automaticProperties[@"$radio"] = [self currentRadio];
 }
 
 - (NSString *)currentRadio
