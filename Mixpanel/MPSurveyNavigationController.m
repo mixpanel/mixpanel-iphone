@@ -1,3 +1,4 @@
+#import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
 
 #import "MPSurvey.h"
@@ -115,10 +116,12 @@
                      completion:nil];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
+#endif
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
 {
