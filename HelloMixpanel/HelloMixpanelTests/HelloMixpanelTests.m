@@ -146,7 +146,8 @@
     STAssertNotNil(p[@"$ios_ifa"], @"missing $ios_ifa property");
 }
 
-- (void)testHTTPServer {
+- (void)testHTTPServer
+{
     [self setupHTTPServer];
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
