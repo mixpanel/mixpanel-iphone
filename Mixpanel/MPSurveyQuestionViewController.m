@@ -3,15 +3,19 @@
 #import "MPSurveyQuestionViewController.h"
 
 @interface MPSurveyQuestionViewController ()
-@property(nonatomic,strong) IBOutlet UILabel *prompt;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *promptHeight;
+
+@property (nonatomic, strong) IBOutlet UILabel *prompt;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *promptHeight;
+
 @end
 
 @interface MPSurveyMultipleChoiceQuestionViewController : MPSurveyQuestionViewController <UITableViewDataSource, UITableViewDelegate>
-@property(nonatomic,strong) MPSurveyMultipleChoiceQuestion *question;
-@property(nonatomic,strong) IBOutlet UITableView *tableView;
-@property(nonatomic,strong) IBOutlet UIView *tableContainer;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *tableContainerVerticalPadding;
+
+@property (nonatomic, strong) MPSurveyMultipleChoiceQuestion *question;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UIView *tableContainer;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *tableContainerVerticalPadding;
+
 @end
 
 typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
@@ -22,30 +26,36 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 };
 
 @interface MPSurveyTableViewCellBackground : UIView
-@property(nonatomic,strong) UIColor *strokeColor;
-@property(nonatomic,strong) UIColor *fillColor;
-@property(nonatomic) MPSurveyTableViewCellPosition position;
+
+@property (nonatomic, strong) UIColor *strokeColor;
+@property (nonatomic, strong) UIColor *fillColor;
+@property (nonatomic) MPSurveyTableViewCellPosition position;
+
 @end
 
 @interface MPSurveyTableViewCell : UITableViewCell
+
 @property(nonatomic,getter=isChecked) BOOL checked;
-@property(nonatomic,strong) IBOutlet UILabel *label;
-@property(nonatomic,strong) IBOutlet UILabel *selectedLabel;
-@property(nonatomic,strong) IBOutlet UIImageView *checkmark;
-@property(nonatomic,strong) IBOutlet MPSurveyTableViewCellBackground *customBackgroundView;
-@property(nonatomic,strong) IBOutlet MPSurveyTableViewCellBackground *customSelectedBackgroundView;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *selectedLabelLeadingSpace;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *checkmarkLeadingSpace;
+@property (nonatomic, strong) IBOutlet UILabel *label;
+@property (nonatomic, strong) IBOutlet UILabel *selectedLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *checkmark;
+@property (nonatomic, strong) IBOutlet MPSurveyTableViewCellBackground *customBackgroundView;
+@property (nonatomic, strong) IBOutlet MPSurveyTableViewCellBackground *customSelectedBackgroundView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *selectedLabelLeadingSpace;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *checkmarkLeadingSpace;
+
 @end
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
-@property(nonatomic,strong) MPSurveyTextQuestion *question;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *promptTopSpace;
-@property(nonatomic,strong) IBOutlet UITextView *textView;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *textViewHeight;
-@property(nonatomic,strong) IBOutlet UIView *keyboardAccessory;
-@property(nonatomic,strong) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
-@property(nonatomic,strong) IBOutlet UILabel *charactersLeftLabel;
+
+@property (nonatomic, strong) MPSurveyTextQuestion *question;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *promptTopSpace;
+@property (nonatomic, strong) IBOutlet UITextView *textView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *textViewHeight;
+@property (nonatomic, strong) IBOutlet UIView *keyboardAccessory;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *keyboardAccessoryWidth;
+@property (nonatomic, strong) IBOutlet UILabel *charactersLeftLabel;
+
 @end
 
 @implementation MPSurveyQuestionViewController

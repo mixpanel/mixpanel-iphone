@@ -29,10 +29,10 @@
 @interface Mixpanel (Test)
 
 // get access to private members
-@property(nonatomic,retain) NSMutableArray *eventsQueue;
-@property(nonatomic,retain) NSMutableArray *peopleQueue;
-@property(nonatomic,retain) NSTimer *timer;
-@property(nonatomic,assign) dispatch_queue_t serialQueue;
+@property (nonatomic, retain) NSMutableArray *eventsQueue;
+@property (nonatomic, retain) NSMutableArray *peopleQueue;
+@property (nonatomic, retain) NSTimer *timer;
+@property (nonatomic, assign) dispatch_queue_t serialQueue;
 
 - (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)defaultDistinctId;
@@ -46,16 +46,16 @@
 @interface MixpanelPeople (Test)
 
 // get access to private members
-@property(nonatomic,retain) NSMutableArray *unidentifiedQueue;
-@property(nonatomic,copy) NSMutableArray *distinctId;
+@property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
+@property (nonatomic, copy) NSMutableArray *distinctId;
 
 @end
 
 @interface HelloMixpanelTests ()  <MixpanelDelegate>
 
-@property(nonatomic,strong) Mixpanel *mixpanel;
-@property(nonatomic,strong) HTTPServer *httpServer;
-@property(atomic) BOOL mixpanelWillFlush;
+@property (nonatomic, strong) Mixpanel *mixpanel;
+@property (nonatomic, strong) HTTPServer *httpServer;
+@property (atomic) BOOL mixpanelWillFlush;
 
 @end
 
