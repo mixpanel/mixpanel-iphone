@@ -76,10 +76,10 @@ void *MP_NewBase64Decode(
 	{
 		length = strlen(inputBuffer);
 	}
-	
+
 	size_t outputBufferSize = (length / BASE64_UNIT_SIZE) * BINARY_UNIT_SIZE;
 	unsigned char *outputBuffer = (unsigned char *)malloc(outputBufferSize);
-	
+
 	size_t i = 0;
 	size_t j = 0;
 	while (i < length)
@@ -96,14 +96,14 @@ void *MP_NewBase64Decode(
 			{
 				accumulated[accumulateIndex] = decode;
 				accumulateIndex++;
-				
+
 				if (accumulateIndex == BASE64_UNIT_SIZE)
 				{
 					break;
 				}
 			}
 		}
-		
+
 		//
 		// Store the 6 bits from each of the 4 characters as 3 bytes
 		//
@@ -112,7 +112,7 @@ void *MP_NewBase64Decode(
 		outputBuffer[j + 2] = (unsigned char)(accumulated[2] << 6) | accumulated[3];
 		j += accumulateIndex - 1;
 	}
-	
+
 	if (outputLength)
 	{
 		*outputLength = j;
@@ -143,12 +143,12 @@ char *MP_NewBase64Encode(
 	size_t *outputLength)
 {
 	const unsigned char *inputBuffer = (const unsigned char *)buffer;
-	
+
 	#define MAX_NUM_PADDING_CHARS 2
 	#define OUTPUT_LINE_LENGTH 64
 	#define INPUT_LINE_LENGTH ((OUTPUT_LINE_LENGTH / BASE64_UNIT_SIZE) * BINARY_UNIT_SIZE)
 	#define CR_LF_SIZE 2
-	
+
 	//
 	// Byte accurate calculation of final buffer size
 	//
@@ -161,7 +161,7 @@ char *MP_NewBase64Encode(
 		outputBufferSize +=
 			(outputBufferSize / OUTPUT_LINE_LENGTH) * CR_LF_SIZE;
 	}
-	
+
 	//
 	// Include space for a terminating zero
 	//
@@ -180,7 +180,7 @@ char *MP_NewBase64Encode(
 	size_t j = 0;
 	const size_t lineLength = separateLines ? INPUT_LINE_LENGTH : length;
 	size_t lineEnd = lineLength;
-	
+
 	while (true)
 	{
 		if (lineEnd > length)
@@ -200,12 +200,12 @@ char *MP_NewBase64Encode(
 				| ((inputBuffer[i + 2] & 0xC0) >> 6)];
 			outputBuffer[j++] = (char)base64EncodeLookup[inputBuffer[i + 2] & 0x3F];
 		}
-		
+
 		if (lineEnd == length)
 		{
 			break;
 		}
-		
+
 		//
 		// Add the newline
 		//
@@ -213,7 +213,7 @@ char *MP_NewBase64Encode(
 		outputBuffer[j++] = '\n';
 		lineEnd += lineLength;
 	}
-	
+
 	if (i + 1 < length)
 	{
 		//
@@ -236,7 +236,7 @@ char *MP_NewBase64Encode(
 		outputBuffer[j++] = '=';
 	}
 	outputBuffer[j] = 0;
-	
+
 	//
 	// Set the output length and return the buffer
 	//
@@ -284,7 +284,7 @@ char *MP_NewBase64Encode(
 	size_t outputLength = 0;
 	char *outputBuffer =
 		MP_NewBase64Encode([self bytes], [self length], false, &outputLength);
-	
+
 	NSString *result =
 		[[NSString alloc]
 			initWithBytes:outputBuffer

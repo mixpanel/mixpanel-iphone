@@ -11,19 +11,19 @@
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
-@property(nonatomic,strong) IBOutlet UIImageView *view;
-@property(nonatomic,strong) IBOutlet UIColor *highlightColor;
-@property(nonatomic,strong) IBOutlet UIView *containerView;
-@property(nonatomic,strong) IBOutlet UILabel *pageNumberLabel;
-@property(nonatomic,strong) IBOutlet UIButton *nextButton;
-@property(nonatomic,strong) IBOutlet UIButton *previousButton;
-@property(nonatomic,strong) IBOutlet UIImageView *logo;
-@property(nonatomic,strong) IBOutlet UIButton *exitButton;
-@property(nonatomic,strong) IBOutlet UIView *header;
-@property(nonatomic,strong) IBOutlet UIView *footer;
-@property(nonatomic,strong) NSMutableArray *questionControllers;
-@property(nonatomic,weak) UIViewController *currentQuestionController;
-@property(nonatomic,strong) NSMutableDictionary *answers;
+@property (nonatomic, strong) IBOutlet UIImageView *view;
+@property (nonatomic, strong) IBOutlet UIColor *highlightColor;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
+@property (nonatomic, strong) IBOutlet UILabel *pageNumberLabel;
+@property (nonatomic, strong) IBOutlet UIButton *nextButton;
+@property (nonatomic, strong) IBOutlet UIButton *previousButton;
+@property (nonatomic, strong) IBOutlet UIImageView *logo;
+@property (nonatomic, strong) IBOutlet UIButton *exitButton;
+@property (nonatomic, strong) IBOutlet UIView *header;
+@property (nonatomic, strong) IBOutlet UIView *footer;
+@property (nonatomic, strong) NSMutableArray *questionControllers;
+@property (nonatomic, weak) UIViewController *currentQuestionController;
+@property (nonatomic, strong) NSMutableDictionary *answers;
 
 @end
 

@@ -52,32 +52,32 @@
 }
 
 // re-declare internally as readwrite
-@property(atomic,strong)    MixpanelPeople *people;
-@property(atomic,copy)      NSString *distinctId;
+@property (atomic, strong) MixpanelPeople *people;
+@property (atomic, copy) NSString *distinctId;
 
-@property(nonatomic,copy)   NSString *apiToken;
-@property(atomic,strong)    NSDictionary *superProperties;
-@property(nonatomic,strong) NSMutableDictionary *automaticProperties; // mutable because we update $wifi when reachability changes
-@property(nonatomic,strong) NSTimer *timer;
-@property(nonatomic,strong) NSMutableArray *eventsQueue;
-@property(nonatomic,strong) NSMutableArray *peopleQueue;
-@property(nonatomic,assign) UIBackgroundTaskIdentifier taskId;
-@property(nonatomic,strong) dispatch_queue_t serialQueue;
-@property(nonatomic,assign) SCNetworkReachabilityRef reachability;
-@property(nonatomic,strong) CTTelephonyNetworkInfo *telephonyInfo;
-@property(nonatomic,strong) NSDateFormatter *dateFormatter;
-@property(nonatomic,strong) NSArray *surveys;
-@property(nonatomic,strong) MPSurvey *currentlyShowingSurvey;
-@property(nonatomic,strong) NSMutableSet *shownSurveyCollections;
+@property (nonatomic, copy) NSString *apiToken;
+@property (atomic, strong) NSDictionary *superProperties;
+@property (nonatomic, strong) NSMutableDictionary *automaticProperties; // mutable because we update $wifi when reachability changes
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSMutableArray *eventsQueue;
+@property (nonatomic, strong) NSMutableArray *peopleQueue;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
+@property (nonatomic, strong) dispatch_queue_t serialQueue;
+@property (nonatomic, assign) SCNetworkReachabilityRef reachability;
+@property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSArray *surveys;
+@property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
+@property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
 
 @end
 
 @interface MixpanelPeople ()
 
-@property(nonatomic,weak) Mixpanel *mixpanel;
-@property(nonatomic,strong) NSMutableArray *unidentifiedQueue;
-@property(nonatomic,copy)   NSString *distinctId;
-@property(nonatomic,strong) NSDictionary *automaticProperties;
+@property (nonatomic, weak) Mixpanel *mixpanel;
+@property (nonatomic, strong) NSMutableArray *unidentifiedQueue;
+@property (nonatomic, copy) NSString *distinctId;
+@property (nonatomic, strong) NSDictionary *automaticProperties;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 

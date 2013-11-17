@@ -5,9 +5,9 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 @interface MPSurveyQuestion ()
 
-@property(nonatomic) NSUInteger ID;
-@property(nonatomic,strong) NSString *type;
-@property(nonatomic,strong) NSString *prompt;
+@property (nonatomic) NSUInteger ID;
+@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *prompt;
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt;
 
@@ -15,7 +15,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 @interface MPSurveyMultipleChoiceQuestion ()
 
-@property(nonatomic,strong) NSArray *choices;
+@property (nonatomic, strong) NSArray *choices;
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices;
 

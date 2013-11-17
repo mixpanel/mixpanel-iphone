@@ -23,11 +23,11 @@
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
-@property(nonatomic,strong) IBOutlet UISegmentedControl *genderControl;
-@property(nonatomic,strong) IBOutlet UISegmentedControl *weaponControl;
-@property(nonatomic,strong) IBOutlet UIImageView *fakeBackground;
-@property(nonatomic,strong) IBOutlet UITextField *surveyIDField;
-@property(nonatomic,strong) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *genderControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *weaponControl;
+@property (nonatomic, strong) IBOutlet UIImageView *fakeBackground;
+@property (nonatomic, strong) IBOutlet UITextField *surveyIDField;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 
 @end
 
