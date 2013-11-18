@@ -79,7 +79,7 @@
     self.mixpanel = nil;
 }
 
-- (void) setupHTTPServer
+- (void)setupHTTPServer
 {
     if (!self.httpServer) {
         self.httpServer = [[HTTPServer alloc] init];
