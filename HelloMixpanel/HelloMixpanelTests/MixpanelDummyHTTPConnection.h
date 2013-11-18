@@ -10,6 +10,6 @@
 
 @interface MixpanelDummyHTTPConnection : HTTPConnection
 
-+(int) getRequestCount;
++ (int)getRequestCount;
 
 @end
