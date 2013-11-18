@@ -100,12 +100,12 @@
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     _fakeBackground.image = image;
     _fakeBackground.hidden = NO;
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)dismissKeyboard
