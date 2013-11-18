@@ -235,7 +235,7 @@ static Mixpanel *sharedInstance = nil;
     return results;
 }
 
-- (void) setCurrentRadio
+- (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^(){
         _automaticProperties[@"$radio"] = [self currentRadio];
@@ -268,8 +268,8 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:deviceModel forKey:@"$model"];
     [p setValue:deviceModel forKey:@"mp_device_model"]; // legacy
     CGSize size = [UIScreen mainScreen].bounds.size;
-    [p setValue:@((int)size.height) forKey:@"$screen_height"];
-    [p setValue:@((int)size.width) forKey:@"$screen_width"];
+    [p setValue:@((NSInteger)size.height) forKey:@"$screen_height"];
+    [p setValue:@((NSInteger)size.width) forKey:@"$screen_width"];
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networkInfo subscriberCellularProvider];
     if (carrier.carrierName.length) {
