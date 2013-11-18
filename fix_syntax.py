@@ -13,6 +13,7 @@ rules = [
             (r'}\s*else\s*{', '} else {'), #correct spacing for if statements
             (r'for \([ ]*uint[ ]+', 'for (NSUInteger '), #use NSUinteger instead of uint
             (r'for \([ ]*int[ ]+', 'for (NSInteger '), #use NSinteger instead of int
+            (r'\n([+-])[ ]*\((\w+\s*\*?)\)\s*', lambda m: '\n%s (%s)' % (m.group(1), m.group(2))), #proper spacing in method definitions
         ]
 
 if __name__ == '__main__':
