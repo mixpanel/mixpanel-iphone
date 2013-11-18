@@ -491,9 +491,9 @@
     STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not found");
     STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not found");
     // no existing file
-    [fileManager removeItemAtPath:[self.mixpanel eventsFilePath] error:NULL];
-    [fileManager removeItemAtPath:[self.mixpanel peopleFilePath] error:NULL];
-    [fileManager removeItemAtPath:[self.mixpanel propertiesFilePath] error:NULL];
+    [fileManager removeItemAtPath:[self.mixpanel eventsFilePath] error:nil];
+    [fileManager removeItemAtPath:[self.mixpanel peopleFilePath] error:nil];
+    [fileManager removeItemAtPath:[self.mixpanel propertiesFilePath] error:nil];
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
