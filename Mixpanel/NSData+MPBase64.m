@@ -72,8 +72,7 @@ void *MP_NewBase64Decode(
 	size_t length,
 	size_t *outputLength)
 {
-	if (length == 0)
-	{
+	if (length == 0) {
 		length = strlen(inputBuffer);
 	}
 
@@ -92,13 +91,11 @@ void *MP_NewBase64Decode(
 		while (i < length)
 		{
 			unsigned char decode = base64DecodeLookup[inputBuffer[i++]];
-			if (decode != xx)
-			{
+			if (decode != xx) {
 				accumulated[accumulateIndex] = decode;
 				accumulateIndex++;
 
-				if (accumulateIndex == BASE64_UNIT_SIZE)
-				{
+				if (accumulateIndex == BASE64_UNIT_SIZE) {
 					break;
 				}
 			}
@@ -113,8 +110,7 @@ void *MP_NewBase64Decode(
 		j += accumulateIndex - 1;
 	}
 
-	if (outputLength)
-	{
+	if (outputLength) {
 		*outputLength = j;
 	}
 	return outputBuffer;
@@ -156,8 +152,7 @@ char *MP_NewBase64Encode(
 			((length / BINARY_UNIT_SIZE)
 				+ ((length % BINARY_UNIT_SIZE) ? 1 : 0))
 					* BASE64_UNIT_SIZE;
-	if (separateLines)
-	{
+	if (separateLines) {
 		outputBufferSize +=
 			(outputBufferSize / OUTPUT_LINE_LENGTH) * CR_LF_SIZE;
 	}
@@ -171,8 +166,7 @@ char *MP_NewBase64Encode(
 	// Allocate the output buffer
 	//
 	char *outputBuffer = (char *)malloc(outputBufferSize);
-	if (!outputBuffer)
-	{
+	if (!outputBuffer) {
 		return NULL;
 	}
 
@@ -183,13 +177,11 @@ char *MP_NewBase64Encode(
 
 	while (true)
 	{
-		if (lineEnd > length)
-		{
+		if (lineEnd > length) {
 			lineEnd = length;
 		}
 
-		for (; i + BINARY_UNIT_SIZE - 1 < lineEnd; i += BINARY_UNIT_SIZE)
-		{
+		for (; i + BINARY_UNIT_SIZE - 1 < lineEnd; i += BINARY_UNIT_SIZE) {
 			//
 			// Inner loop: turn 48 bytes into 64 base64 characters
 			//
@@ -201,8 +193,7 @@ char *MP_NewBase64Encode(
 			outputBuffer[j++] = (char)base64EncodeLookup[inputBuffer[i + 2] & 0x3F];
 		}
 
-		if (lineEnd == length)
-		{
+		if (lineEnd == length) {
 			break;
 		}
 
@@ -214,8 +205,7 @@ char *MP_NewBase64Encode(
 		lineEnd += lineLength;
 	}
 
-	if (i + 1 < length)
-	{
+	if (i + 1 < length) {
 		//
 		// Handle the single '=' case
 		//
@@ -225,8 +215,7 @@ char *MP_NewBase64Encode(
 		outputBuffer[j++] = (char)base64EncodeLookup[(inputBuffer[i + 1] & 0x0F) << 2];
 		outputBuffer[j++] =	'=';
 	}
-	else if (i < length)
-	{
+	else if (i < length) {
 		//
 		// Handle the double '=' case
 		//
@@ -240,8 +229,7 @@ char *MP_NewBase64Encode(
 	//
 	// Set the output length and return the buffer
 	//
-	if (outputLength)
-	{
+	if (outputLength) {
 		*outputLength = j;
 	}
 	return outputBuffer;

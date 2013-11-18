@@ -91,12 +91,9 @@
         [self.httpServer setDocumentRoot:webPath];
 
         NSError *error;
-        if([self.httpServer start:&error])
-        {
+        if ([self.httpServer start:&error]) {
             NSLog(@"Started HTTP Server on port %hu", [self.httpServer listeningPort]);
-        }
-        else
-        {
+        } else {
             NSLog(@"Error starting HTTP Server: %@", error);
         }
     }
@@ -175,7 +172,7 @@
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
-    for(uint i=0, n=50; i<n; i++) {
+    for (NSUInteger i=0, n=50; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self.mixpanel flush];
@@ -185,7 +182,7 @@
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"50 events should have been batched in 1 HTTP request");
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    for(uint i=0, n=60; i<n; i++) {
+    for (NSUInteger i=0, n=60; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self.mixpanel flush];
@@ -204,7 +201,7 @@
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
-    for(uint i=0, n=50; i<n; i++) {
+    for (NSUInteger i=0, n=50; i<n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
     }
     [self.mixpanel flush];
@@ -214,7 +211,7 @@
     STAssertEquals(requestCount + 1, [MixpanelDummyHTTPConnection getRequestCount], @"50 people properties should have been batched in 1 HTTP request");
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
-    for(uint i=0, n=60; i<n; i++) {
+    for (NSUInteger i=0, n=60; i<n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
     }
     [self.mixpanel flush];
@@ -233,7 +230,7 @@
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
-    for(uint i=0, n=50; i<n; i++) {
+    for (NSUInteger i=0, n=50; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
@@ -254,13 +251,13 @@
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
-    for(uint i=0, n=10; i<n; i++) {
+    for (NSUInteger i=0, n=10; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
     STAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
     [self.mixpanel flush];
-    for(uint i=0, n=5; i<n; i++) {
+    for (NSUInteger i=0, n=5; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
     }
     [self waitForSerialQueue];
@@ -287,7 +284,7 @@
 - (void)testIdentify
 {
     NSLog(@"starting testIdentify...");
-    for (int i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
+    for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *distinctId = @"d1";
         // try this for IFA, ODIN and nil
         STAssertEqualObjects(self.mixpanel.distinctId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
@@ -750,7 +747,7 @@
 
 - (void)testDropEvents
 {
-    for (int i = 0; i < 505; i++) {
+    for (NSInteger i = 0; i < 505; i++) {
         [self.mixpanel track:@"rapid_event" properties:@{@"i": @(i)}];
     }
     [self waitForSerialQueue];
@@ -763,7 +760,7 @@
 
 - (void)testDropUnidentifiedPeopleRecords
 {
-    for (int i = 0; i < 505; i++) {
+    for (NSInteger i = 0; i < 505; i++) {
         [self.mixpanel.people set:@"i" to:@(i)];
     }
     [self waitForSerialQueue];
@@ -777,7 +774,7 @@
 - (void)testDropPeopleRecords
 {
     [self.mixpanel identify:@"d1"];
-    for (int i = 0; i < 505; i++) {
+    for (NSInteger i = 0; i < 505; i++) {
         [self.mixpanel.people set:@"i" to:@(i)];
     }
     [self waitForSerialQueue];
