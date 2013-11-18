@@ -7,9 +7,9 @@
 - (UIImage *)mp_snapshotImage
 {
     UIGraphicsBeginImageContext(self.bounds.size);
-    if( [self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)] ){
+    if ( [self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)] ) {
         [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
-    }else{
+    } else {
         [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     }
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();

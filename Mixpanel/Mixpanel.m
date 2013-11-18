@@ -962,7 +962,7 @@ static Mixpanel *sharedInstance = nil;
 
         NSMutableArray *unseenSurveys = [NSMutableArray array];
         for (MPSurvey *survey in _surveys) {
-            if([_shownSurveyCollections member:@(survey.collectionID)] == nil) {
+            if ([_shownSurveyCollections member:@(survey.collectionID)] == nil) {
                 [unseenSurveys addObject:survey];
             }
         }
