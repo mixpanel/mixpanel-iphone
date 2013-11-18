@@ -370,8 +370,8 @@
                        @"distinct_id": @"d1"};
     [self.mixpanel track:@"e1" properties:p];
     [self waitForSerialQueue];
-    NSString *trackToken = (self.mixpanel.eventsQueue.lastObject)[@"properties"][@"token"];
-    NSString *trackDistinctId = (self.mixpanel.eventsQueue.lastObject)[@"properties"][@"distinct_id"];
+    NSString *trackToken = self.mixpanel.eventsQueue.lastObject[@"properties"][@"token"];
+    NSString *trackDistinctId = self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"];
     STAssertEqualObjects(trackToken, @"t1", @"user-defined distinct id not used in track. got: %@", trackToken);
     STAssertEqualObjects(trackDistinctId, @"d1", @"user-defined distinct id not used in track. got: %@", trackDistinctId);
 }
@@ -680,7 +680,7 @@
     [self waitForSerialQueue];
     // legacy behavior
     STAssertTrue(self.mixpanel.eventsQueue.count == 2, @"track with nil should create mp_event event");
-    STAssertEqualObjects((self.mixpanel.eventsQueue.lastObject)[@"event"], @"mp_event", @"track with nil should create mp_event event");
+    STAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"mp_event", @"track with nil should create mp_event event");
     STAssertNotNil([self.mixpanel currentSuperProperties], @"setting super properties to nil should have no effect");
     STAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"setting super properties to nil should have no effect");
     [self.mixpanel identify:nil];
@@ -752,7 +752,7 @@
     }
     [self waitForSerialQueue];
     STAssertTrue([self.mixpanel.eventsQueue count] == 500, nil);
-    NSDictionary *e = (self.mixpanel.eventsQueue)[0];
+    NSDictionary *e = self.mixpanel.eventsQueue[0];
     STAssertEqualObjects(e[@"properties"][@"i"], @(5), nil);
     e = [self.mixpanel.eventsQueue lastObject];
     STAssertEqualObjects(e[@"properties"][@"i"], @(504), nil);
@@ -765,7 +765,7 @@
     }
     [self waitForSerialQueue];
     STAssertTrue([self.mixpanel.people.unidentifiedQueue count] == 500, nil);
-    NSDictionary *r = (self.mixpanel.people.unidentifiedQueue)[0];
+    NSDictionary *r = self.mixpanel.people.unidentifiedQueue[0];
     STAssertEqualObjects(r[@"$set"][@"i"], @(5), nil);
     r = [self.mixpanel.people.unidentifiedQueue lastObject];
     STAssertEqualObjects(r[@"$set"][@"i"], @(504), nil);
@@ -779,7 +779,7 @@
     }
     [self waitForSerialQueue];
     STAssertTrue([self.mixpanel.peopleQueue count] == 500, nil);
-    NSDictionary *r = (self.mixpanel.peopleQueue)[0];
+    NSDictionary *r = self.mixpanel.peopleQueue[0];
     STAssertEqualObjects(r[@"$set"][@"i"], @(5), nil);
     r = [self.mixpanel.peopleQueue lastObject];
     STAssertEqualObjects(r[@"$set"][@"i"], @(504), nil);
