@@ -499,8 +499,8 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
-    [Mixpanel assertPropertyTypes:properties];
     properties = [[properties copy] autorelease];
+    [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         [tmp addEntriesFromDictionary:properties];
@@ -513,8 +513,8 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties
 {
-    [Mixpanel assertPropertyTypes:properties];
     properties = [[properties copy] autorelease];
+    [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         for (NSString *key in properties) {
@@ -531,8 +531,8 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue
 {
-    [Mixpanel assertPropertyTypes:properties];
     properties = [[properties copy] autorelease];
+    [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         for (NSString *key in properties) {
