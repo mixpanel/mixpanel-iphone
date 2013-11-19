@@ -52,7 +52,8 @@
     self.bgImage.image = [bgImage mp_applyDarkEffect];
     self.bgImage.opaque = YES;
     
-    UIColor *avgColor = [bgImage mp_averageColor];
+    UIColor *avgColor = [bgImage mp_importantColor];
+    /*
     CGFloat hue;
     CGFloat brightness;
     CGFloat saturation;
@@ -60,6 +61,7 @@
     if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
         avgColor = [UIColor colorWithHue:hue saturation:0.8f brightness:brightness alpha:alpha];
     }
+     */
     
     self.imageView.backgroundColor = avgColor;
     
