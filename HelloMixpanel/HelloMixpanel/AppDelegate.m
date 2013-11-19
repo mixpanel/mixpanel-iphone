@@ -49,8 +49,8 @@
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
 
-    self.viewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
-    self.window.rootViewController = self.viewController;
+    self.window.rootViewController = [[ViewController alloc] init];
+
     [self.window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
