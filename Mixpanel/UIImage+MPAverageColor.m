@@ -29,14 +29,15 @@
     NSUInteger indexes = 262144;
     char colorIndices[262144] = {0};
     
-    NSUInteger l = (NSUInteger) ceil(self.size.width * self.size.height);
-    for (NSUInteger i = 0; i < l; i++) {
+    // only attempt to quantize the header
+    NSUInteger l = (NSUInteger) ceil(self.size.width * 124.0f);
+    for (NSUInteger i = 40 * 640; i < l; i++) {
         uint8_t red = data[i * 4 + 2];
         uint8_t green = data[i * 4 + 1];
         uint8_t blue = data[i * 4 + 0];
         NSInteger hexColor = (red >> 2) + ((green >> 2) << 6) + ((blue >> 2) << 12);
         
-        if (hexColor > 0 && hexColor < 2621443) {
+        if (hexColor > 0 && hexColor < 2621443 && red + green + blue < 255 + 255 + 200 && red != blue && blue != green && green != red) {
             colorIndices[hexColor]++;
         }
     }
@@ -50,9 +51,9 @@
         }
     }
     
-    UIColor *color = [UIColor colorWithRed:((index & 63) << 2) / 255.0f
-									 green:((index >> 4) & 252) / 255.0f
-									  blue:((index >> 10) & 252) / 255.0f
+    UIColor *color = [UIColor colorWithRed:(((index & 63) << 2) + 3) / 255.0f
+									 green:(((index >> 4) & 252) + 3) / 255.0f
+									  blue:(((index >> 10) & 252) + 3) / 255.0f
 									 alpha:1];
 	UIGraphicsEndImageContext();
 	return color;
