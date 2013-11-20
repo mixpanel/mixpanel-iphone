@@ -123,11 +123,12 @@
     // Position images
     CGSize parentSize = self.parentController.view.frame.size;
     self.bgImage.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
-    CGRect imvf = CGRectMake(12.5f, 12.5f, kMPNotifHeight - 25.0f, kMPNotifHeight - 25.0f);
+    CGRect imvf = CGRectMake(20.0f, 20.0f, kMPNotifHeight - 40.0f, kMPNotifHeight - 40.0f);
     self.imageView.frame = imvf;
 
     // Position circle around image
-    self.circleLayer.frame = CGRectMake(imvf.origin.x - 4.0, imvf.origin.y - 4.0, imvf.size.width + 8.0, imvf.size.height + 8.0);
+    CGFloat circlePadding = 7.0f;
+    self.circleLayer.frame = CGRectMake(imvf.origin.x - circlePadding, imvf.origin.y - circlePadding, imvf.size.width + (circlePadding * 2.0f), imvf.size.height + (circlePadding * 2.0f));
 
     // Position body label
     CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 12.5f;
@@ -237,13 +238,13 @@
 
 -(void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-    CGFloat padding = 1.0f;
+    CGFloat edge = 1.0f; //the distance from the edge so we don't get clipped.
     CGContextSetAllowsAntialiasing(ctx, true);
     CGContextSetShouldAntialias(ctx, true);
 
     CGMutablePathRef thePath = CGPathCreateMutable();
     CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    CGPathAddArc(thePath, NULL, layer.frame.size.width / 2.0f, layer.frame.size.height / 2.0f, MIN(layer.frame.size.width, layer.frame.size.height) / 2.0f - (2 * padding), (float)-M_PI, (float)M_PI, YES);
+    CGPathAddArc(thePath, NULL, layer.frame.size.width / 2.0f, layer.frame.size.height / 2.0f, MIN(layer.frame.size.width, layer.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
 
     CGContextBeginPath(ctx);
     CGContextAddPath(ctx, thePath);
