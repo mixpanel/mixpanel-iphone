@@ -458,7 +458,7 @@ static Mixpanel *sharedInstance = nil;
         NSLog(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
     }
-    properties = [[properties copy] autorelease];
+    properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     NSNumber *epochSeconds = @(round([[NSDate date] timeIntervalSince1970]));
     dispatch_async(self.serialQueue, ^{
@@ -490,7 +490,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
-    properties = [[properties copy] autorelease];
+    properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
@@ -504,7 +504,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties
 {
-    properties = [[properties copy] autorelease];
+    properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
@@ -522,7 +522,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue
 {
-    properties = [[properties copy] autorelease];
+    properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
@@ -1140,7 +1140,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
-    properties = [[properties copy] autorelease];
+    properties = [properties copy];
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = _mixpanel;
     if (strongMixpanel) {
