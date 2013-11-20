@@ -133,8 +133,7 @@
         if ([tintColor getWhite:&b alpha:NULL]) {
             effectColor = [UIColor colorWithWhite:b alpha:EffectColorAlpha];
         }
-    }
-    else {
+    } else {
         CGFloat r, g, b;
         if ([tintColor getRed:&r green:&g blue:&b alpha:NULL]) {
             effectColor = [UIColor colorWithRed:r green:g blue:b alpha:EffectColorAlpha];
@@ -226,8 +225,7 @@
             if (hasBlur) {
                 vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
                 effectImageBuffersAreSwapped = YES;
-            }
-            else {
+            } else {
                 vImageMatrixMultiply_ARGB8888(&effectInBuffer, &effectOutBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
             }
         }
