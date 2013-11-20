@@ -63,7 +63,7 @@
  @discussion
  See the documentation for MixpanelDelegate below for more information.
  */
-@property(atomic,readonly,retain) MixpanelPeople *people;
+@property (atomic, readonly, strong) MixpanelPeople *people;
 
 /*!
  @property
@@ -77,7 +77,7 @@
  hash of the MAC address of the device. To change the current distinct ID,
  use the <code>identify:</code> method.
  */
-@property(atomic,readonly,copy) NSString *distinctId;
+@property (atomic, readonly, copy) NSString *distinctId;
 
 /*!
  @property
@@ -85,7 +85,7 @@
  @abstract
  Current user's name in Mixpanel Streams.
  */
-@property(atomic,copy) NSString *nameTag;
+@property (atomic, copy) NSString *nameTag;
 
 /*!
  @property
@@ -97,7 +97,7 @@
  Useful if you need to proxy Mixpanel requests. Defaults to
  https://api.mixpanel.com.
  */
-@property(atomic,copy) NSString *serverURL;
+@property (atomic, copy) NSString *serverURL;
 
 /*!
  @property
@@ -108,7 +108,7 @@
  @discussion
  Setting a flush interval of 0 will turn off the flush timer.
  */
-@property(atomic) NSUInteger flushInterval;
+@property (atomic) NSUInteger flushInterval;
 
 /*!
  @property
@@ -121,7 +121,7 @@
  Defaults to YES. Only affects apps targeted at iOS 4.0, when background
  task support was introduced, and later.
  */
-@property(atomic) BOOL flushOnBackground;
+@property (atomic) BOOL flushOnBackground;
 
 /*!
  @property
@@ -133,7 +133,7 @@
  @discussion
  Defaults to YES.
  */
-@property(atomic) BOOL showNetworkActivityIndicator;
+@property (atomic) BOOL showNetworkActivityIndicator;
 
 /*!
  @property
@@ -147,7 +147,7 @@
  <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
  for the currently identified user.
  */
-@property(atomic) BOOL checkForSurveysOnActive;
+@property (atomic) BOOL checkForSurveysOnActive;
 
 /*!
  @property
@@ -162,7 +162,7 @@
  survey check retrieves at least 1 valid survey for the currently
  identified user.
  */
-@property(atomic) BOOL showSurveyOnActive;
+@property (atomic) BOOL showSurveyOnActive;
 
 /*!
  @property
@@ -175,7 +175,7 @@
  Using a delegate is optional. See the documentation for MixpanelDelegate
  below for more information.
  */
-@property(atomic,assign) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
+@property (atomic, weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
 
 /*!
  @method
@@ -228,7 +228,7 @@
  project, consider using <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
- @param startFlushTimer whether to start the background flush timer
+ @param flushInterval   interval to run background flushing
  */
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
 
