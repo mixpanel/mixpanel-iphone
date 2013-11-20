@@ -26,8 +26,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) ViewController *viewController;
-
 @property (strong, nonatomic) Mixpanel *mixpanel;
 
 @property (strong, nonatomic, retain) NSDate *startTime;
