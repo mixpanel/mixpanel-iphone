@@ -76,9 +76,11 @@
             return nil;
         }
         
-        NSString *imageName = [imageUrlString stringByDeletingPathExtension];
-        NSString *extension = [imageUrlString pathExtension];
-        imageUrlString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        if ([type isEqualToString:@"takeover"]) {
+            NSString *imageName = [imageUrlString stringByDeletingPathExtension];
+            NSString *extension = [imageUrlString pathExtension];
+            imageUrlString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        }
         
         imageUrl = [NSURL URLWithString:imageUrlString];
         if (imageUrl == nil) {
