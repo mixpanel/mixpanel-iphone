@@ -72,16 +72,17 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGFloat promptWidth = self.view.bounds.size.width - 30; // 2x 15 point horizontal padding on prompt
     CGFloat promptHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
     UIFont *font = _prompt.font;
-    CGSize sizeToFit;
-    CGSize constraintSize = CGSizeMake(promptWidth, MAXFLOAT);
+    CGSize constraintSize = CGSizeMake(promptWidth, CGFLOAT_MAX);
+    
     // lower prompt font size until it fits (or hits min of 9 points)
     for (CGFloat size = 20; size >= 9; size--) {
         font = [font fontWithSize:size];
-        sizeToFit = [_prompt.text sizeWithFont:font
-                             constrainedToSize:constraintSize
-                                 lineBreakMode:_prompt.lineBreakMode];
-        if (sizeToFit.height <= promptHeight) {
-            promptHeight = sizeToFit.height;
+        CGRect bounds = [_prompt.text boundingRectWithSize:constraintSize
+                                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                                attributes:@{NSFontAttributeName: font}
+                                                   context:nil];
+        if (bounds.size.height <= promptHeight) {
+            promptHeight = bounds.size.height;
             break;
         }
     }
