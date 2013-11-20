@@ -27,6 +27,7 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <UIKit/UIDevice.h>
 
 #import "MPSurveyNavigationController.h"
 #import "Mixpanel.h"
@@ -275,9 +276,11 @@ static Mixpanel *sharedInstance = nil;
     if (carrier.carrierName.length) {
         [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
+#ifndef MIXPANEL_NO_IFA
     if (NSClassFromString(@"ASIdentifierManager")) {
         [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
+#endif
     return p;
 }
 
@@ -387,11 +390,18 @@ static Mixpanel *sharedInstance = nil;
 - (NSString *)defaultDistinctId
 {
     NSString *distinctId = nil;
+#ifdef MIXPANEL_NO_IFA
+    if (NSClassFromString(@"UIDevice")) {
+        distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    }
+#else
     if (NSClassFromString(@"ASIdentifierManager")) {
         distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
     }
+#endif
+    
     if (!distinctId) {
-        NSLog(@"%@ error getting ifa: falling back to uuid", self);
+        NSLog(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
     }
     if (!distinctId) {
@@ -1116,9 +1126,11 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:VERSION forKey:@"$ios_lib_version"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
+#ifndef MIXPANEL_NO_IFA
     if (NSClassFromString(@"ASIdentifierManager")) {
         [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
     }
+#endif
     return [NSDictionary dictionaryWithDictionary:p];
 }
 

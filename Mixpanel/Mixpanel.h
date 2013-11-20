@@ -241,8 +241,12 @@
  @discussion
  By default, Mixpanel will set the distinct ID to the device's iOS ID for
  Advertising (IFA). The IFA depends on the the Ad Support framework, which is
- only available in iOS 6 and later. For earlier platforms, we fallback to ODIN1
- (see https://code.google.com/p/odinmobile/wiki/ODIN1).
+ only available in iOS 6 and later. If you do not want to use the IFA, you can
+ define the MIXPANEL_NO_IFA preprocessor flag in your build settings and we will
+ use the <code>identifierForVendor</code> property on <code>UIDevice</code>.
+ 
+ If we are unable to get an IFA or identifierForVendor, we will fall back to 
+ generating a persistent UUID.
 
  For tracking events, you do not need to call <code>identify:</code> if you
  want to use the default.  However, <b>Mixpanel People always requires an
