@@ -11,13 +11,13 @@
 - (UIImage *)mp_snapshotImage
 {
     CGSize size = self.bounds.size;
-    
+
     if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
         CGFloat scale = [[UIScreen mainScreen] scale];
         size.height *= scale;
         size.width *= scale;
     }
-    
+
     UIGraphicsBeginImageContext(size);
     if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
         [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];

@@ -924,9 +924,9 @@
                               @"cta_url": @"blah blah blah",
                               @"cta": [NSNull null],
                               @"image_url": @[]};
-    
+
     STAssertNil([MPNotification notificationWithJSONObject:invalid], nil);
-    
+
     // valid
     NSDictionary *o = @{@"id": @3,
                         @"title": @"title",
@@ -934,30 +934,30 @@
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
                         @"image_url": @"http://mixpanel.com"};
-    
+
     STAssertNotNil([MPNotification notificationWithJSONObject:o], nil);
-    
+
     // nil
     STAssertNil([MPNotification notificationWithJSONObject:nil], nil);
-    
+
     // empty
     STAssertNil([MPNotification notificationWithJSONObject:@{}], nil);
-    
+
     // garbage keys
     STAssertNil([MPNotification notificationWithJSONObject:@{@"gar": @"bage"}], nil);
-    
+
     NSMutableDictionary *m;
-    
+
     // invalid id
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"id"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
-    
+
     // invalid title
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"title"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
-    
+
     // invalid body
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"body"] = @NO;
@@ -967,22 +967,22 @@
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"cta"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
-    
+
     // invalid cta_url
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"cta_url"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
-    
+
     // invalid image_urls
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"image_url"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
-    
+
     // invalid image_urls item
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"image_url"] = @[@NO];
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
-    
+
     // invalid image_urls string
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"image_url"] = @"http://test test test.com";
