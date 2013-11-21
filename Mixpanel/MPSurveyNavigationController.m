@@ -1,3 +1,8 @@
+#if ! __has_feature(objc_arc)
+#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
+#endif
+
+#import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
 
 #import "MPSurvey.h"
@@ -10,33 +15,24 @@
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
-@property(nonatomic,retain) IBOutlet UIImageView *view;
-@property(nonatomic,retain) IBOutlet UIColor *highlightColor;
-@property(nonatomic,retain) IBOutlet UIView *containerView;
-@property(nonatomic,retain) IBOutlet UILabel *pageNumberLabel;
-@property(nonatomic,retain) IBOutlet UIButton *nextButton;
-@property(nonatomic,retain) IBOutlet UIButton *previousButton;
-@property(nonatomic,retain) IBOutlet UIImageView *logo;
-@property(nonatomic,retain) IBOutlet UIButton *exitButton;
-@property(nonatomic,retain) IBOutlet UIView *header;
-@property(nonatomic,retain) IBOutlet UIView *footer;
-@property(nonatomic,retain) NSMutableArray *questionControllers;
-@property(nonatomic) UIViewController *currentQuestionController;
-@property(nonatomic,retain) NSMutableDictionary *answers;
+@property (nonatomic, strong) IBOutlet UIImageView *view;
+@property (nonatomic, strong) IBOutlet UIColor *highlightColor;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
+@property (nonatomic, strong) IBOutlet UILabel *pageNumberLabel;
+@property (nonatomic, strong) IBOutlet UIButton *nextButton;
+@property (nonatomic, strong) IBOutlet UIButton *previousButton;
+@property (nonatomic, strong) IBOutlet UIImageView *logo;
+@property (nonatomic, strong) IBOutlet UIButton *exitButton;
+@property (nonatomic, strong) IBOutlet UIView *header;
+@property (nonatomic, strong) IBOutlet UIView *footer;
+@property (nonatomic, strong) NSMutableArray *questionControllers;
+@property (nonatomic, weak) UIViewController *currentQuestionController;
+@property (nonatomic, strong) NSMutableDictionary *answers;
 
 @end
 
 @implementation MPSurveyNavigationController
 
-- (void)dealloc
-{
-    self.survey = nil;
-    self.backgroundImage = nil;
-    self.questionControllers = nil;
-    self.answers = nil;
-    self.highlightColor = nil;
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {
@@ -124,10 +120,12 @@
                      completion:nil];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
+#endif
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
 {
@@ -343,7 +341,10 @@
 
 - (IBAction)dismiss
 {
-    [_delegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
+    __strong id<MPSurveyNavigationControllerDelegate> strongDelegate = _delegate;
+    if (strongDelegate != nil) {
+        [strongDelegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
+    }
 }
 
 - (void)questionController:(MPSurveyQuestionViewController *)controller didReceiveAnswerProperties:(NSDictionary *)properties

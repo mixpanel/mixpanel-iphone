@@ -24,12 +24,12 @@
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
-@property(nonatomic, retain) IBOutlet UISegmentedControl *genderControl;
-@property(nonatomic, retain) IBOutlet UISegmentedControl *weaponControl;
-@property(nonatomic, retain) IBOutlet UIImageView *fakeBackground;
-@property(nonatomic, retain) IBOutlet UITextField *surveyIDField;
-@property(nonatomic, retain) IBOutlet UITextField *notificationIDField;
-@property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, assign) IBOutlet UISegmentedControl *genderControl;
+@property (nonatomic, assign) IBOutlet UISegmentedControl *weaponControl;
+@property (nonatomic, assign) IBOutlet UIImageView *fakeBackground;
+@property (nonatomic, assign) IBOutlet UITextField *surveyIDField;
+@property (nonatomic, assign) IBOutlet UITextField *notificationIDField;
+@property (nonatomic, assign) IBOutlet UIScrollView *scrollView;
 
 @property(nonatomic, retain) IBOutlet UISegmentedControl *notificationTypeControl;
 
@@ -37,21 +37,12 @@
 
 @implementation ViewController
 
-- (void)dealloc
-{
-    self.genderControl = nil;
-    self.weaponControl = nil;
-    self.fakeBackground = nil;
-    self.notificationTypeControl = nil;
-    [super dealloc];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _scrollView.contentSize = self.view.bounds.size;
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.scrollView.contentSize = self.view.bounds.size;
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
@@ -130,12 +121,12 @@
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     _fakeBackground.image = image;
     _fakeBackground.hidden = NO;
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)dismissKeyboard
