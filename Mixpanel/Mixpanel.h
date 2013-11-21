@@ -170,11 +170,11 @@
 
 /*!
  @property
- 
+
  @abstract
  Controls whether to automatically check for notifications for the
  currently identified user when the application becomes active.
- 
+
  @discussion
  Defaults to YES. Will fire a network request on
  <code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
@@ -184,11 +184,11 @@
 
 /*!
  @property
- 
+
  @abstract
  Controls whether to automatically check for and show in-app notifications
  for the currently identified user when the application becomes active.
- 
+
  @discussion
  Defaults to YES.
  */
@@ -450,7 +450,7 @@
 
 /*!
  @method
- 
+
  @abstract
  Shows the survey with the given name.
 
@@ -477,10 +477,10 @@
 
 /*!
  @method
- 
+
  @abstract
  Shows the notification of the given id.
- 
+
  @discussion
  You do not need to call this method on the main thread.
  */
@@ -488,10 +488,10 @@
 
 /*!
  @method
- 
+
  @abstract
  Shows a notification if one is available.
- 
+
  @discussion
  You do not need to call this method on the main thread.
  */

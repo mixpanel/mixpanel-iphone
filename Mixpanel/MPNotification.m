@@ -26,37 +26,37 @@
         NSLog(@"notif json object should not be nil");
         return nil;
     }
-    
+
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
         NSLog(@"invalid notif id: %@", ID);
         return nil;
     }
-    
+
     NSString *type = object[@"type"];
     if (![type isKindOfClass:[NSString class]]) {
         NSLog(@"invalid notif title: %@", type);
         return nil;
     }
-    
+
     NSString *title = object[@"title"];
     if (![title isKindOfClass:[NSString class]]) {
         NSLog(@"invalid notif title: %@", title);
         return nil;
     }
-    
+
     NSString *body = object[@"body"];
     if (![body isKindOfClass:[NSString class]]) {
         NSLog(@"invalid notif body: %@", body);
         return nil;
     }
-    
+
     NSString *cta = object[@"cta"];
     if (![cta isKindOfClass:[NSString class]]) {
         NSLog(@"invalid notif cta: %@", cta);
         return nil;
     }
-    
+
     NSURL *url = nil;
     NSString *urlString = object[@"cta_url"];
     if (urlString != nil && ![urlString isKindOfClass:[NSNull class]]) {
@@ -64,14 +64,14 @@
             NSLog(@"invalid notif url: %@", urlString);
             return nil;
         }
-        
+
         url = [NSURL URLWithString:urlString];
         if (url == nil) {
             NSLog(@"inavlid notif url: %@", urlString);
             return nil;
         }
     }
-    
+
     NSURL *imageUrl = nil;
     NSString *imageUrlString = object[@"image_url"];
     if (imageUrlString != nil && ![imageUrlString isKindOfClass:[NSNull class]]) {
@@ -79,20 +79,20 @@
             NSLog(@"invalid notif image url: %@", imageUrlString);
             return nil;
         }
-        
+
         if ([type isEqualToString:@"takeover"]) {
             NSString *imageName = [imageUrlString stringByDeletingPathExtension];
             NSString *extension = [imageUrlString pathExtension];
             imageUrlString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         }
-        
+
         imageUrl = [NSURL URLWithString:imageUrlString];
         if (imageUrl == nil) {
             NSLog(@"inavlid notif image url: %@", imageUrlString);
             return nil;
         }
     }
-    
+
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                           type:type
                                          title:title
@@ -114,7 +114,7 @@
         self.url = url;
         self.image = nil;
     }
-    
+
     return self;
 }
 
@@ -130,7 +130,7 @@
         }
         self.image = imageData;
     }
-    
+
     return YES;
 }
 

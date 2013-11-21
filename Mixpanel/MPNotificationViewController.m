@@ -44,7 +44,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+
     }
     return self;
 }
@@ -53,7 +53,7 @@
 {
     [super viewDidLoad];
     self.backgroundImageView.image = _backgroundImage;
-    
+
     if (self.notification) {
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
@@ -66,25 +66,25 @@
                 NSLog(@"image failed to load from data: %@", self.notification.image);
             }
         }
-        
+
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
-        
+
         if ([self.notification.cta length] > 0) {
             [self.okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
             [self.okayButton sizeToFit];
         }
     }
-    
+
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     self.imageView.layer.shadowOpacity = 1.0f;
     self.imageView.layer.shadowRadius = 5.0f;
     self.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-    
+
     [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchUpInside];
     [self.closeButton addTarget:self action:@selector(pressedClose) forControlEvents:UIControlEventTouchUpInside];
-    
+
     UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.imageDragView addGestureRecognizer:gesture];
 }
@@ -92,7 +92,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
+
     [self.okayButton sizeToFit];
 }
 
@@ -110,7 +110,7 @@
 - (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
 {
     [super beginAppearanceTransition:isAppearing animated:animated];
-    
+
     if (isAppearing) {
         self.bodyBg.alpha = 0.0f;
         self.bgMask.alpha = 0.0f;
@@ -125,16 +125,16 @@
 - (void)endAppearanceTransition
 {
     [super endAppearanceTransition];
-    
+
     NSTimeInterval duration = 0.20f;
-    
+
     CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
     transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
     self.imageView.transform = transform;
     self.titleView.transform = transform;
     self.bodyView.transform = transform;
     self.okayButton.transform = transform;
-    
+
     [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.titleView.transform = CGAffineTransformIdentity;
         self.titleView.alpha = 1.0f;
@@ -147,7 +147,7 @@
         self.bgMask.alpha = 1.0f;
         self.bodyBg.alpha = 1.0f;
     } completion:nil];
-    
+
     [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.closeButton.transform = CGAffineTransformIdentity;
         self.closeButton.alpha = 1.0f;
@@ -180,7 +180,7 @@
             self.imageView.layer.position = CGPointMake(0.3f * (translation.x) + _viewStart.x, 0.3f * (translation.y) + _viewStart.y);
         }
     }
-    
+
     if (_touching && (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled)) {
         _touching = NO;
         CGPoint viewEnd = self.imageView.layer.position;
@@ -207,25 +207,25 @@
     CGFloat radius = 160.0f;
     center.x += size.width;
     center.y += size.height;
-    
+
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat comps[] = {43.0f / 255.0f, 43.0f / 255.0f, 57.0f / 255.0f, 1.0f, 43.0f / 255.0f, 43.0f / 255.0f, 57.0f / 255.0f, 0.0f};
     CGFloat locs[] = {0.0f, 1.0f};
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 2);
-    
+
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, center.x, center.y);
     CGPathAddLineToPoint(path, NULL, center.x - radius, center.y);
     CGPathAddArcToPoint(path, NULL, center.x - radius, center.y - radius, center.x, center.y - radius, radius);
     CGPathAddLineToPoint(path, NULL, center.x, center.y);
-    
+
     CGContextAddPath(ctx, path);
     CGContextClip(ctx);
-    
+
     CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, radius, 0);
-    
+
     CGContextRestoreGState(ctx);
 }
 
@@ -242,16 +242,16 @@
     CGPoint center = CGPointMake(160.0f, 200.0f);
     CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
     CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
-    
+
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
-    
+
     CGColorRef colorRef = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.94f].CGColor;
     CGContextSetFillColorWithColor(ctx, colorRef);
     CGContextFillRect(ctx, self.bounds);
-    
+
     CGContextSetBlendMode(ctx, kCGBlendModeCopy);
-    
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat comps[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
@@ -259,12 +259,12 @@
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
     CGFloat locs[] = {0.0f, 0.1f, 0.75, 1.0f};
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 4);
-    
+
     CGContextAddEllipseInRect(ctx, circleFrame);
     CGContextClip(ctx);
-    
+
     CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
-    
+
     CGContextRestoreGState(ctx);
 }
 
@@ -280,7 +280,7 @@
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
-    
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat components[] = {
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f,
@@ -292,7 +292,7 @@
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
     CGFloat locations[] = {0.0f, 0.2f, 0.5f, 0.625f, 0.7115f, 0.8f, 0.9f};
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
-    
+
     CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.bounds.size.height), 0);
     CGContextRestoreGState(ctx);
 }
@@ -314,7 +314,7 @@
         self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 2.0f;
     }
-    
+
     return self;
 }
 
@@ -326,7 +326,7 @@
     } else {
         self.layer.borderColor = [UIColor whiteColor].CGColor;
     }
-    
+
     [super setHighlighted:highlighted];
 }
 

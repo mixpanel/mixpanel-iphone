@@ -173,7 +173,7 @@ static Mixpanel *sharedInstance = nil;
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
-        
+
         self.showNotificationType = nil;
 
         // wifi reachability
@@ -228,7 +228,7 @@ static Mixpanel *sharedInstance = nil;
                                  object:nil];
         [self unarchive];
     }
-    
+
     return self;
 }
 
@@ -886,10 +886,10 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
-    
+
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive) {
         NSDate *start = [NSDate date];
-        
+
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
             if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
                 [self showNotificationWithObject:notifications[0]];
@@ -959,7 +959,7 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ decide check skipped because no user has been identified", self);
             return;
         }
-        
+
         if (!_surveys || !_notifications) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
@@ -975,20 +975,20 @@ static Mixpanel *sharedInstance = nil;
             }
             NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
             if (error) {
-                NSLog(@"%@ decide check json error: %@", self, error);
+                NSLog(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                 return;
             }
             if (object[@"error"]) {
                 MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
                 return;
             }
-            
+
             NSArray *rawSurveys = object[@"surveys"];
             if (!rawSurveys || ![rawSurveys isKindOfClass:[NSArray class]]) {
                 MixpanelDebug(@"%@ survey check response format error: %@", self, object);
                 return;
             }
-            
+
             NSMutableArray *parsedSurveys = [NSMutableArray array];
             for (id obj in rawSurveys) {
                 MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
@@ -996,13 +996,13 @@ static Mixpanel *sharedInstance = nil;
                     [parsedSurveys addObject:survey];
                 }
             }
-            
+
             NSArray *rawNotifications = object[@"notifications"];
             if (!rawNotifications || ![rawNotifications isKindOfClass:[NSArray class]]) {
                 MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
                 return;
             }
-            
+
             NSMutableArray *parsedNotifications = [NSMutableArray array];
             for (id obj in rawNotifications) {
                 MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
@@ -1010,35 +1010,35 @@ static Mixpanel *sharedInstance = nil;
                     [parsedNotifications addObject:notification];
                 }
             }
-            
+
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];;
         } else {
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
-        
+
         NSMutableArray *unseenSurveys = [NSMutableArray array];
         for (MPSurvey *survey in _surveys) {
             if ([_shownSurveyCollections member:@(survey.collectionID)] == nil) {
                 [unseenSurveys addObject:survey];
             }
         }
-        
+
         NSMutableArray *unseenNotifications = [NSMutableArray array];
         for (MPNotification *notification in _notifications) {
             if ([_shownNotifications member:@(notification.ID)] == nil) {
                 [unseenNotifications addObject:notification];
             }
         }
-        
+
         MixpanelDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[_surveys count], unseenSurveys);
         MixpanelDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)[unseenNotifications count],
                       (unsigned long)[_notifications count], unseenNotifications);
-        
+
         if (completion) {
             completion([NSArray arrayWithArray:unseenSurveys], [NSArray arrayWithArray:unseenNotifications]);
         }
-        
+
         if ([unseenNotifications count] > 0) {
             [unseenNotifications[0] loadImage];
         }
@@ -1164,7 +1164,7 @@ static Mixpanel *sharedInstance = nil;
     [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
         if ([notifications count] > 0) {
             MPNotification *shownNotification = nil;
-            
+
             if (self.showNotificationType != nil) {
                 for (MPNotification *notification in notifications) {
                     if ([notification.type isEqualToString:self.showNotificationType]) {
@@ -1174,7 +1174,7 @@ static Mixpanel *sharedInstance = nil;
             } else {
                 shownNotification = notifications[0];
             }
-            
+
             if (shownNotification != nil) {
                 [self showNotificationWithObject:shownNotification];
             }
@@ -1197,7 +1197,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
     BOOL success = [notification loadImage];
-    
+
     // if images fail to load. remove the notification from the queue
     if (!success) {
         NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
@@ -1205,7 +1205,7 @@ static Mixpanel *sharedInstance = nil;
         self.notifications = [NSArray arrayWithArray:notifications];
         return;
     }
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_currentlyShowingNotification) {
             MixpanelLog(@"%@ already showing in-app notification: %@", self, _currentlyShowingNotification);
@@ -1213,13 +1213,13 @@ static Mixpanel *sharedInstance = nil;
             MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
         } else {
             self.currentlyShowingNotification = notification;
-            
+
             if ([notification.type isEqualToString:@"mini"]) {
                 [self showOverAppNotificationWithObject:notification];
             } else {
                 [self showModalNotificationWithObject:notification];
             }
-            
+
             if (![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];
             }
@@ -1232,33 +1232,33 @@ static Mixpanel *sharedInstance = nil;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
     MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    
+
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
     }
-    
+
     controller.backgroundImage = [rootViewController.view mp_snapshotImage];
     controller.notification = notification;
     controller.delegate = self;
-    
+
     [rootViewController presentViewController:controller animated:NO completion:nil];
 }
 
 - (void)showOverAppNotificationWithObject:(MPNotification *)notification
 {
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    
+
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
     }
-    
+
     MPNotificationSmallViewController *controller = [[MPNotificationSmallViewController alloc] init];
     controller.notification = notification;
     controller.parentController = rootViewController;
     controller.delegate = self;
-    
+
     [controller show];
-    
+
     double delayInSeconds = 5.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -1274,7 +1274,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
         [controller.presentingViewController dismissViewControllerAnimated:!success completion:nil];
-        
+
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
@@ -1288,15 +1288,15 @@ static Mixpanel *sharedInstance = nil;
     if (self.currentlyShowingNotification != controller.notification) {
         return;
     }
-    
+
     if (status && controller.notification.url) {
         MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
-        
+
         [controller hideWithAnimation:!success completion:^{
             self.currentlyShowingNotification = nil;
         }];
-        
+
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
@@ -1322,7 +1322,7 @@ static Mixpanel *sharedInstance = nil;
                                          @"time": @([NSDate timeIntervalSinceReferenceDate])
                                          }
                                  };
-    
+
     [self.people append:properties];
 }
 
