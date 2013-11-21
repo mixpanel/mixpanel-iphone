@@ -22,10 +22,10 @@
     BOOL _canPan;
 }
 
-@property (nonatomic, retain) UIImageView *imageView;
-@property (nonatomic, retain) CALayer *circleLayer;
-@property (nonatomic, retain) UIImageView *bgImage;
-@property (nonatomic, retain) UILabel *bodyLabel;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) CALayer *circleLayer;
+@property (nonatomic, strong) UIImageView *bgImage;
+@property (nonatomic, strong) UILabel *bodyLabel;
 
 @end
 
@@ -102,14 +102,7 @@
 
 - (void)dealloc
 {
-    [super dealloc];
 
-    self.parentController = nil;
-    self.notification = nil;
-    self.imageView = nil;
-    self.circleLayer = nil;
-    self.bgImage = nil;
-    self.bodyLabel = nil;
     self.delegate = nil;
 }
 
