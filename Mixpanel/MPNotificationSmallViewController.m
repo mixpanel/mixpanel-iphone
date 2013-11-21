@@ -106,7 +106,6 @@
 
 - (void)dealloc
 {
-
     self.delegate = nil;
 }
 
@@ -178,7 +177,6 @@
         self.bgImage.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
     } completion:^(BOOL finished) {
         [self willMoveToParentViewController:nil];
-        [self.view removeFromSuperview];
         [self removeFromParentViewController];
         self.parentController = nil;
 
