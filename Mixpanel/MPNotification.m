@@ -89,13 +89,13 @@
         }
     }
     
-    return [[[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
+    return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                           type:type
                                          title:title
                                           body:body
                                            cta:cta
                                            url:url
-                                      imageUrl:imageUrl] autorelease];
+                                      imageUrl:imageUrl];
 }
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl
@@ -114,17 +114,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    self.type = nil;
-    self.title = nil;
-    self.body = nil;
-    self.cta = nil;
-    self.url = nil;
-    self.imageUrl = nil;
-    self.image = nil;
-    [super dealloc];
-}
 
 - (BOOL)loadImage
 {

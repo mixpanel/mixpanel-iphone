@@ -13,9 +13,9 @@
 
 @interface MPNotificationViewController : UIViewController
 
-@property (nonatomic, assign) id<MPNotificationViewControllerDelegate> delegate;
-@property (nonatomic, retain) UIImage *backgroundImage;
-@property (nonatomic, retain) MPNotification *notification;
+@property (nonatomic, weak) id<MPNotificationViewControllerDelegate> delegate;
+@property (nonatomic, strong) UIImage *backgroundImage;
+@property (nonatomic, strong) MPNotification *notification;
 
 @end
 

@@ -11,13 +11,13 @@
 @interface MPNotification : NSObject
 
 @property(nonatomic,readonly) NSUInteger ID;
-@property(nonatomic,retain) NSString *type;
-@property(nonatomic,retain) NSURL *imageUrl;
-@property(nonatomic,retain) NSData *image;
-@property(nonatomic,retain) NSString *title;
-@property(nonatomic,retain) NSString *body;
-@property(nonatomic,retain) NSString *cta;
-@property(nonatomic,retain) NSURL *url;
+@property(nonatomic,strong) NSString *type;
+@property(nonatomic,strong) NSURL *imageUrl;
+@property(nonatomic,strong) NSData *image;
+@property(nonatomic,strong) NSString *title;
+@property(nonatomic,strong) NSString *body;
+@property(nonatomic,strong) NSString *cta;
+@property(nonatomic,strong) NSURL *url;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 

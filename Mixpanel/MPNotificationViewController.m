@@ -20,17 +20,17 @@
     BOOL _touching;
 }
 
-@property (nonatomic, retain) IBOutlet UIImageView *imageView;
-@property (nonatomic, retain) IBOutlet UILabel *titleView;
-@property (nonatomic, retain) IBOutlet UILabel *bodyView;
-@property (nonatomic, retain) IBOutlet UIButton *okayButton;
-@property (nonatomic, retain) IBOutlet UIButton *closeButton;
-@property (nonatomic, retain) IBOutlet UIView *bodyBg;
-@property (nonatomic, retain) IBOutlet UIImageView *backgroundImageView;
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageWidth;
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *imageHeight;
-@property (nonatomic, retain) IBOutlet UIView *imageDragView;
-@property (nonatomic, retain) IBOutlet UIView *bgMask;
+@property (nonatomic, strong) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) IBOutlet UILabel *titleView;
+@property (nonatomic, strong) IBOutlet UILabel *bodyView;
+@property (nonatomic, strong) IBOutlet UIButton *okayButton;
+@property (nonatomic, strong) IBOutlet UIButton *closeButton;
+@property (nonatomic, strong) IBOutlet UIView *bodyBg;
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageWidth;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageHeight;
+@property (nonatomic, strong) IBOutlet UIView *imageDragView;
+@property (nonatomic, strong) IBOutlet UIView *bgMask;
 
 @end
 
