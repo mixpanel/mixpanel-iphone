@@ -18,7 +18,7 @@ static int requestCount;
     requestCount = 0;
 }
 
-+(int) getRequestCount
++ (int)getRequestCount
 {
     return requestCount;
 }
@@ -29,7 +29,7 @@ static int requestCount;
     return [[HTTPDataResponse alloc] initWithData:[@"1" dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
-- (BOOL) supportsMethod:(NSString *)method atPath:(NSString *)path
+- (BOOL)supportsMethod:(NSString *)method atPath:(NSString *)path
 {
     return [super supportsMethod:method atPath:path] || [method isEqualToString:@"POST"];
 }
