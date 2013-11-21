@@ -128,7 +128,7 @@
     self.circleLayer.frame = CGRectMake(imvf.origin.x - circlePadding, imvf.origin.y - circlePadding, imvf.size.width + (circlePadding * 2.0f), imvf.size.height + (circlePadding * 2.0f));
 
     // Position body label
-    CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 12.5f;
+    CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 20.5f;
     self.bodyLabel.frame = CGRectMake(offsetX, 12.5f, self.view.frame.size.width - offsetX - 12.5f, 0.0f);
     [self.bodyLabel sizeToFit];
 }
