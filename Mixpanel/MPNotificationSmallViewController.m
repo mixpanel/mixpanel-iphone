@@ -20,6 +20,32 @@
 
 #define kMPNotifHeight 65.0f
 
+@interface CircleLayer : CALayer
+@end
+
+@implementation CircleLayer
+
+-(void)drawInContext:(CGContextRef)ctx
+{
+    CGFloat edge = 1.0f; //the distance from the edge so we don't get clipped.
+    CGContextSetAllowsAntialiasing(ctx, true);
+    CGContextSetShouldAntialias(ctx, true);
+
+    CGMutablePathRef thePath = CGPathCreateMutable();
+    CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    CGPathAddArc(thePath, NULL, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f, MIN(self.frame.size.width, self.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
+
+    CGContextBeginPath(ctx);
+    CGContextAddPath(ctx, thePath);
+
+    CGContextSetLineWidth(ctx, 1);
+    CGContextStrokePath(ctx);
+
+    CFRelease(thePath);
+}
+
+@end
+
 @interface MPNotificationSmallViewController () {
     CGPoint _panStartPoint;
     CGPoint _position;
@@ -28,7 +54,7 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) CALayer *circleLayer;
-@property (nonatomic, strong) UIImageView *bgImage;
+@property (nonatomic, strong) UIImageView *bgImageView;
 @property (nonatomic, strong) UILabel *bodyLabel;
 
 @end
@@ -43,18 +69,18 @@
     self.view.clipsToBounds = YES;
 
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.imageView.layer.masksToBounds = YES;
+    _imageView.layer.masksToBounds = YES;
 
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.bodyLabel.textColor = [UIColor whiteColor];
-    self.bodyLabel.font = [UIFont systemFontOfSize:14.0f];
-    self.bodyLabel.numberOfLines = 2;
+    _bodyLabel.textColor = [UIColor whiteColor];
+    _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
+    _bodyLabel.numberOfLines = 2;
 
-    UIImage *bgImage = [self.parentController.view mp_snapshotImage];
+    UIImage *bgImage = [self.parentViewController.view mp_snapshotImage];
+    self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
 
-    self.bgImage = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.bgImage.image = [bgImage mp_applyDarkEffect];
-    self.bgImage.opaque = YES;
+    _bgImageView.image = [bgImage mp_applyDarkEffect];
+    _bgImageView.opaque = YES;
 
     /*
     CGFloat hue;
@@ -68,23 +94,28 @@
 
     if (self.notification != nil) {
         if (self.notification.image != nil) {
-            self.imageView.image = [UIImage imageWithData:self.notification.image scale:2.0f];
-            self.imageView.hidden = NO;
+            _imageView.image = [UIImage imageWithData:self.notification.image scale:2.0f];
+            _imageView.hidden = NO;
         } else {
-            self.imageView.hidden = YES;
+            _imageView.hidden = YES;
         }
 
         if (self.notification.body != nil) {
-            self.bodyLabel.text = self.notification.body;
-            self.bodyLabel.hidden = NO;
+            _bodyLabel.text = self.notification.body;
+            _bodyLabel.hidden = NO;
         } else {
-            self.bodyLabel.hidden = YES;
+            _bodyLabel.hidden = YES;
         }
     }
 
-    [self.view addSubview:self.bgImage];
-    [self.view addSubview:self.imageView];
-    [self.view addSubview:self.bodyLabel];
+    self.circleLayer = [CircleLayer layer];
+    _circleLayer.contentsScale = [UIScreen mainScreen].scale;
+    [_circleLayer setNeedsDisplay];
+
+    [self.view addSubview:_bgImageView];
+    [self.view addSubview:_imageView];
+    [self.view addSubview:_bodyLabel];
+    [self.view.layer addSublayer:_circleLayer];
 	
     self.view.backgroundColor = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.9f];
     self.view.frame = CGRectMake(0.0f, 0.0f, 0.0f, 30.0f);
@@ -95,30 +126,18 @@
 
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.view addGestureRecognizer:pan];
-
-    self.circleLayer = [CALayer layer];
-    self.circleLayer.delegate = self;
-    self.circleLayer.contentsScale = [UIScreen mainScreen].scale;
-
-    [self.view.layer addSublayer:self.circleLayer];
-    [self.circleLayer setNeedsDisplay];
-}
-
-- (void)dealloc
-{
-    self.delegate = nil;
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
 
-    UIView *parentView = self.parentController.view;
+    UIView *parentView = self.parentViewController.view;
     self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
 
     // Position images
-    CGSize parentSize = self.parentController.view.frame.size;
-    self.bgImage.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
+    CGSize parentSize = parentView.frame.size;
+    self.bgImageView.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
     CGRect imvf = CGRectMake(20.0f, 20.0f, kMPNotifHeight - 40.0f, kMPNotifHeight - 40.0f);
     self.imageView.frame = imvf;
 
@@ -132,23 +151,21 @@
     [self.bodyLabel sizeToFit];
 }
 
-- (void)show
+- (void)showWithAnimation
 {
     _canPan = NO;
 
-    [self.parentController addChildViewController:self];
-    [self.parentController.view addSubview:self.view];
-    [self didMoveToParentViewController:self.parentController];
-
-    UIView *parentView = self.parentController.view;
+    UIView *parentView = self.parentViewController.view;
     self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
 
-    CGPoint bgPosition = self.bgImage.layer.position;
-    self.bgImage.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
+    CGPoint bgPosition = self.bgImageView.layer.position;
+    self.bgImageView.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
+
+    _position = self.view.layer.position;
 
     [UIView animateWithDuration:0.5f animations:^{
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
-        self.bgImage.layer.position = bgPosition;
+        self.bgImageView.layer.position = bgPosition;
     } completion:^(BOOL finished) {
         _position = self.view.layer.position;
         _canPan = YES;
@@ -157,7 +174,7 @@
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
 {
-    if (self.parentController == nil) {
+    if (self.parentViewController == nil) {
         return;
     }
 
@@ -172,14 +189,10 @@
     }
 
     [UIView animateWithDuration:duration animations:^{
-        UIView *parentView = self.parentController.view;
+        UIView *parentView = self.parentViewController.view;
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
-        self.bgImage.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
+        self.bgImageView.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
     } completion:^(BOOL finished) {
-        [self willMoveToParentViewController:nil];
-        [self removeFromParentViewController];
-        self.parentController = nil;
-
         if (completion) {
             completion();
         }
@@ -199,9 +212,9 @@
 {
     if (_canPan) {
         if (gesture.state == UIGestureRecognizerStateBegan && gesture.numberOfTouches == 1) {
-            _panStartPoint = [gesture locationInView:self.parentController.view];
+            _panStartPoint = [gesture locationInView:self.parentViewController.view];
         } else if (gesture.state == UIGestureRecognizerStateChanged) {
-            CGPoint position = [gesture locationInView:self.parentController.view];
+            CGPoint position = [gesture locationInView:self.parentViewController.view];
             CGFloat diffY = position.y - _panStartPoint.y;
 
             if (diffY > 0) {
@@ -211,45 +224,30 @@
             }
 
             self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
-            CGRect bgFrame = self.bgImage.frame;
+            CGRect bgFrame = self.bgImageView.frame;
             bgFrame.origin.y = -self.view.frame.origin.y;
-            self.bgImage.frame = bgFrame;
+            self.bgImageView.frame = bgFrame;
         } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
             if (self.view.layer.position.y > _position.y + kMPNotifHeight / 2.0f && self.delegate != nil) {
                 [self.delegate notificationSmallControllerWasDismissed:self status:NO];
             } else {
                 [UIView animateWithDuration:0.2f animations:^{
                     self.view.layer.position = _position;
-                    CGRect bgFrame = self.bgImage.frame;
+                    CGRect bgFrame = self.bgImageView.frame;
                     bgFrame.origin.y = -self.view.frame.origin.y;
-                    self.bgImage.frame = bgFrame;
+                    self.bgImageView.frame = bgFrame;
                 }];
             }
         }
     }
 }
 
-#pragma mark - CALayer delegate
 
--(void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
+- (void)dealloc
 {
-    CGFloat edge = 1.0f; //the distance from the edge so we don't get clipped.
-    CGContextSetAllowsAntialiasing(ctx, true);
-    CGContextSetShouldAntialias(ctx, true);
-
-    CGMutablePathRef thePath = CGPathCreateMutable();
-    CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    CGPathAddArc(thePath, NULL, layer.frame.size.width / 2.0f, layer.frame.size.height / 2.0f, MIN(layer.frame.size.width, layer.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
-
-    CGContextBeginPath(ctx);
-    CGContextAddPath(ctx, thePath);
-
-    CGContextSetLineWidth(ctx, 1);
-    CGContextStrokePath(ctx);
-
-    // Release the path
-    CFRelease(thePath);
+    self.delegate = nil;
 }
+
 
 @end
 

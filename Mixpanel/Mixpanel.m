@@ -152,7 +152,7 @@ static Mixpanel *sharedInstance = nil;
         self.serverURL = @"http://kyle.dev.mixpanel.org";
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
-        
+
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -421,7 +421,7 @@ static Mixpanel *sharedInstance = nil;
         distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
     }
 #endif
-    
+
     if (!distinctId) {
         NSLog(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
@@ -1254,10 +1254,14 @@ static Mixpanel *sharedInstance = nil;
 
     MPNotificationSmallViewController *controller = [[MPNotificationSmallViewController alloc] init];
     controller.notification = notification;
-    controller.parentController = rootViewController;
+    //controller.parentController = rootViewController;
     controller.delegate = self;
 
-    [controller show];
+    [rootViewController addChildViewController:controller];
+    [rootViewController.view addSubview:controller.view];
+    [controller didMoveToParentViewController:rootViewController];
+
+    [controller showWithAnimation];
 
     double delayInSeconds = 5.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -1289,30 +1293,33 @@ static Mixpanel *sharedInstance = nil;
         return;
     }
 
+    void (^completionBlock)()  = ^void(){
+        [controller willMoveToParentViewController:nil];
+        [controller.view removeFromSuperview];
+        [controller removeFromParentViewController];
+        self.currentlyShowingNotification = nil;
+    };
+
     if (status && controller.notification.url) {
         MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
 
-        [controller hideWithAnimation:!success completion:^{
-            self.currentlyShowingNotification = nil;
-        }];
+        [controller hideWithAnimation:!success completion:completionBlock];
 
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
     } else {
-        [controller hideWithAnimation:YES completion:^{
-            self.currentlyShowingNotification = nil;
-        }];
+        [controller hideWithAnimation:YES completion:completionBlock];
     }
 }
 
 - (void)markNotificationShown:(MPNotification *)notification
 {
     MixpanelDebug(@"%@ marking notification shown: %@, %@", self, @(notification.ID), _shownNotifications);
-    
+
     [_shownNotifications addObject:@(notification.ID)];
-    
+
     NSDictionary *properties = @{
                                  @"$campaigns": @(notification.ID),
                                  @"$notifications": @{

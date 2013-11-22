@@ -227,7 +227,7 @@
     CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, radius, 0);
 
     CGContextRestoreGState(ctx);
-    
+
     CGPathRelease(path);
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
@@ -270,7 +270,7 @@
     CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
 
     CGContextRestoreGState(ctx);
-    
+
     CGColorSpaceRelease(colorSpace);
     CGGradientRelease(gradient);
 }
@@ -302,7 +302,7 @@
 
     CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.bounds.size.height), 0);
     CGContextRestoreGState(ctx);
-    
+
     CGColorSpaceRelease(colorSpace);
     CGGradientRelease(gradient);
 }

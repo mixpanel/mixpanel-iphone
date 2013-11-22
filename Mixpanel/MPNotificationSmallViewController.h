@@ -14,10 +14,9 @@
 @interface MPNotificationSmallViewController : UIViewController
 
 @property (nonatomic, strong) MPNotification *notification;
-@property (nonatomic, strong) UIViewController *parentController;
 @property (nonatomic, weak) id<MPNotificationSmallViewControllerDelegate> delegate;
 
-- (void)show;
+- (void)showWithAnimation;
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion;
 
 @end
