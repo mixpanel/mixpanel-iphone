@@ -22,7 +22,7 @@
 	return color;
 }
 
-- (UIColor *)mp_importantColor
+-(UIColor *)mp_importantColor
 {
     UIGraphicsBeginImageContext(self.size);
     CGContextRef ctx = UIGraphicsGetCurrentContext();

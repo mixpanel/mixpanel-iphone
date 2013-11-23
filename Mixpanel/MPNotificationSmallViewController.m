@@ -17,6 +17,7 @@
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
 #import "UIView+MPSnapshotImage.h"
+#import "UIColor+MPColor.h"
 
 #define kMPNotifHeight 65.0f
 
@@ -79,18 +80,13 @@
     UIImage *bgImage = [self.parentViewController.view mp_snapshotImage];
     self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
 
-    _bgImageView.image = [bgImage mp_applyDarkEffect];
-    _bgImageView.opaque = YES;
-
-    /*
-    CGFloat hue;
-    CGFloat brightness;
-    CGFloat saturation;
-    CGFloat alpha;
-    if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
-        avgColor = [UIColor colorWithHue:hue saturation:0.8f brightness:brightness alpha:alpha];
+    UIColor *blurColor = [UIColor applicationPrimaryColorWithAlpha:0.7f];
+    if (!blurColor) {
+        blurColor = [bgImage mp_importantColor];
     }
-     */
+
+    _bgImageView.image = [bgImage mp_applyBlurWithRadius:5.0f tintColor:blurColor saturationDeltaFactor:1.8f maskImage:nil];
+    _bgImageView.opaque = YES;
 
     if (self.notification != nil) {
         if (self.notification.image != nil) {

@@ -98,6 +98,7 @@
 #endif
 
 #import "UIImage+MPImageEffects.h"
+#import "UIColor+MPColor.h"
 
 #import <Accelerate/Accelerate.h>
 #import <float.h>
@@ -108,21 +109,21 @@
 
 - (UIImage *)mp_applyLightEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.3f];
+    UIColor *tintColor = [UIColor lightEffectColor];
     return [self mp_applyBlurWithRadius:30.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)mp_applyExtraLightEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.97f alpha:0.82f];
+    UIColor *tintColor = [UIColor extraLightEffectColor];
     return [self mp_applyBlurWithRadius:20.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)mp_applyDarkEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.11f alpha:0.73f];
+    UIColor *tintColor = [UIColor darkEffectColor];
     return [self mp_applyBlurWithRadius:20.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
