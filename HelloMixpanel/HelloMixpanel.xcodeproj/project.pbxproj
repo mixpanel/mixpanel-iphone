@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053B4C681840191000E825FE /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 053B4C671840191000E825FE /* UIColor+MPColor.m */; };
 		059AC4941818523C0025F7C6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		059AC495181852460025F7C6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		059AC4961818525A0025F7C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9951610EFE3005772B7 /* CoreGraphics.framework */; };
@@ -74,6 +75,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		053B4C661840191000E825FE /* UIColor+MPColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MPColor.h"; sourceTree = "<group>"; };
+		053B4C671840191000E825FE /* UIColor+MPColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MPColor.m"; sourceTree = "<group>"; };
 		05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyHTTPConnection.h; sourceTree = "<group>"; };
 		05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyHTTPConnection.m; sourceTree = "<group>"; };
 		05C13E5118184DBE00848D48 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -311,6 +314,8 @@
 				28C6C7D817FE2A5A00F07F70 /* MPDismissKeyboard@2x.png */,
 				289FD4BB18088D8900385AE2 /* MPLogo.png */,
 				289FD4BC18088D8900385AE2 /* MPLogo@2x.png */,
+				053B4C661840191000E825FE /* UIColor+MPColor.h */,
+				053B4C671840191000E825FE /* UIColor+MPColor.m */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -482,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				053B4C681840191000E825FE /* UIColor+MPColor.m in Sources */,
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
