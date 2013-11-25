@@ -80,10 +80,11 @@
     UIImage *bgImage = [self.parentViewController.view mp_snapshotImage];
     self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
 
-    UIColor *blurColor = [UIColor applicationPrimaryColorWithAlpha:0.7f];
+    UIColor *blurColor = [UIColor applicationPrimaryColor];
     if (!blurColor) {
         blurColor = [bgImage mp_importantColor];
     }
+    blurColor = [blurColor colorWithAlphaComponent:0.7f];
 
     _bgImageView.image = [bgImage mp_applyBlurWithRadius:5.0f tintColor:blurColor saturationDeltaFactor:1.8f maskImage:nil];
     _bgImageView.opaque = YES;
