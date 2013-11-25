@@ -44,16 +44,6 @@
     return color;
 }
 
-+(UIColor *)applicationPrimaryColorWithAlpha:(CGFloat) alpha
-{
-    UIColor *color = [self applicationPrimaryColor];
-    CGFloat r, g, b, a;
-    if (color && [color getRed:&r green:&g blue:&b alpha:&a]) {
-        color = [UIColor colorWithRed:r green:g blue:b alpha:alpha];
-    }
-    return color;
-}
-
 +(UIColor *)lightEffectColor
 {
     return [UIColor colorWithWhite:1.0f alpha:0.3f];
@@ -69,6 +59,14 @@
     return [UIColor colorWithWhite:0.11f alpha:0.73f];
 }
 
-
+-(UIColor *)colorWithSaturationComponent:(CGFloat) saturation
+{
+    UIColor *newColor;
+    CGFloat h, s, b, a;
+    if ([self getHue:&h saturation:&s brightness:&b alpha:&a]) {
+        newColor = [UIColor colorWithHue:h saturation:saturation brightness:b alpha:a];
+    }
+    return newColor;
+}
 
 @end

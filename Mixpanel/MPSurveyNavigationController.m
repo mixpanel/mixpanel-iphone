@@ -12,6 +12,7 @@
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
 #import "UIView+MPSnapshotImage.h"
+#import "UIColor+MPColor.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
@@ -41,14 +42,7 @@
 
     // set highlight color based on average background color
     UIColor *avgColor = [_backgroundImage mp_averageColor];
-    CGFloat hue;
-    CGFloat brightness;
-    CGFloat saturation;
-    CGFloat alpha;
-    if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
-        avgColor = [UIColor colorWithHue:hue saturation:0.8f brightness:brightness alpha:alpha];
-    }
-    self.highlightColor = avgColor;
+    self.highlightColor = [avgColor colorWithSaturationComponent:0.8f];
     self.questionControllers = [NSMutableArray array];
     self.answers = [NSMutableDictionary dictionary];
     for (NSUInteger i = 0; i < [_survey.questions count]; i++) {
