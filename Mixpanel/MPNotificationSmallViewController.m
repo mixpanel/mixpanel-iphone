@@ -82,7 +82,7 @@
 
     UIColor *blurColor = [UIColor applicationPrimaryColor];
     if (!blurColor) {
-        blurColor = [bgImage mp_importantColor];
+        blurColor = [UIColor darkEffectColor];
     }
     blurColor = [blurColor colorWithAlphaComponent:0.7f];
 

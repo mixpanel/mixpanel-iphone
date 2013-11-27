@@ -17,7 +17,8 @@
 // limitations under the License.
 
 #import <UIKit/UIKit.h>
+#import <FCColorPickerViewController.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <ColorPickerViewControllerDelegate>
 
 @end
