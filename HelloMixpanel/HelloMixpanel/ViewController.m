@@ -132,6 +132,28 @@
 - (void)dismissKeyboard
 {
     [_surveyIDField resignFirstResponder];
+    [_notificationIDField resignFirstResponder];
+}
+
+- (IBAction)changeColor
+{
+    FCColorPickerViewController *colorPicker = [[FCColorPickerViewController alloc]
+                                                initWithNibName:@"FCColorPickerViewController"
+                                                bundle:[NSBundle mainBundle]];
+    colorPicker.color = [[UINavigationBar appearance] barTintColor];
+    colorPicker.delegate = self;
+    
+    [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
+    [self presentViewController:colorPicker animated:YES completion:nil];
+}
+
+-(void)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
+    [[UINavigationBar appearance] setBarTintColor:color];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
