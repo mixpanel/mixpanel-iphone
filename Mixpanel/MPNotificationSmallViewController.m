@@ -77,7 +77,14 @@
     _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     _bodyLabel.numberOfLines = 2;
 
-    UIImage *bgImage = [self.parentViewController.view mp_snapshotImage];
+    UIView *topView = [self getTopView];
+    UIImage *bgImage;
+    if (topView) {
+        bgImage = [topView mp_snapshotImage];
+    } else {
+        bgImage = [[UIImage alloc] init];
+    }
+    
     self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
 
     UIColor *blurColor = [UIColor applicationPrimaryColor];
@@ -125,11 +132,9 @@
     [self.view addGestureRecognizer:pan];
 }
 
-- (void)viewDidLayoutSubviews
+- (void)viewWillLayoutSubviews
 {
-    [super viewDidLayoutSubviews];
-
-    UIView *parentView = self.parentViewController.view;
+    UIView *parentView = self.view.superview;
     self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
 
     // Position images
@@ -148,9 +153,32 @@
     [self.bodyLabel sizeToFit];
 }
 
+-(UIView *)getTopView
+{
+    UIView *topView = nil;
+    NSArray *windows = [UIApplication sharedApplication].windows;
+    if(windows.count > 0) {
+        UIWindow *window = [windows objectAtIndex:0];
+        if(window.subviews.count > 0)
+        {
+            topView = [window.subviews objectAtIndex:0];
+        }
+    }
+    return topView;
+}
+
 - (void)showWithAnimation
 {
-    _canPan = NO;
+    [self.view removeFromSuperview];
+    
+    UIView *topView = [self getTopView];
+    if (topView) {
+        self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
+        
+        [topView addSubview:self.view];
+    }
+
+    /*_canPan = NO;
 
     UIView *parentView = self.parentViewController.view;
     self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
@@ -166,15 +194,11 @@
     } completion:^(BOOL finished) {
         _position = self.view.layer.position;
         _canPan = YES;
-    }];
+    }];*/
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
 {
-    if (self.parentViewController == nil) {
-        return;
-    }
-
     _canPan = NO;
 
     CGFloat duration;
@@ -186,10 +210,11 @@
     }
 
     [UIView animateWithDuration:duration animations:^{
-        UIView *parentView = self.parentViewController.view;
+        UIView *parentView = self.view.superview;
         self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
         self.bgImageView.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
     } completion:^(BOOL finished) {
+        [self.view removeFromSuperview];
         if (completion) {
             completion();
         }
@@ -238,6 +263,7 @@
         }
     }
 }
+
 
 
 - (void)dealloc
