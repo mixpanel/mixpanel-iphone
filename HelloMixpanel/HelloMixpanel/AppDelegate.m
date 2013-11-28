@@ -58,7 +58,7 @@
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
     self.window.rootViewController = [storyboard instantiateInitialViewController];
-    
+
     [self.window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];

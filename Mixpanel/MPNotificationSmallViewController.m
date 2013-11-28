@@ -84,7 +84,7 @@
     } else {
         bgImage = [[UIImage alloc] init];
     }
-    
+
     self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
 
     UIColor *blurColor = [UIColor applicationPrimaryColor];
@@ -170,13 +170,13 @@
 - (void)showWithAnimation
 {
     [self.view removeFromSuperview];
-    
+
     UIView *topView = [self getTopView];
     if (topView) {
         //self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
-        
+
         [topView addSubview:self.view];
-    
+
         _canPan = NO;
 
         self.view.frame = CGRectMake(0.0f, topView.frame.size.height, topView.frame.size.width, kMPNotifHeight * 3.0f);
