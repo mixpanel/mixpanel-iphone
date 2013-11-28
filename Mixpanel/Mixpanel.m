@@ -74,11 +74,14 @@
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
 @property (nonatomic, strong) NSArray *surveys;
 @property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
 @property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
-@property(nonatomic,strong) NSArray *notifications;
-@property(nonatomic,strong) MPNotification *currentlyShowingNotification;
+
+@property(nonatomic, strong) NSArray *notifications;
+@property(nonatomic, strong) MPNotification *currentlyShowingNotification;
+@property(nonatomic, strong) MPNotificationSmallViewController *miniNotificationViewController;
 @property(nonatomic,strong) NSMutableSet *shownNotifications;
 
 @end
@@ -1252,21 +1255,21 @@ static Mixpanel *sharedInstance = nil;
         rootViewController = rootViewController.presentedViewController;
     }
 
-    MPNotificationSmallViewController *controller = [[MPNotificationSmallViewController alloc] init];
-    controller.notification = notification;
+    self.miniNotificationViewController = [[MPNotificationSmallViewController alloc] init];
+    _miniNotificationViewController.notification = notification;
     //controller.parentController = rootViewController;
-    controller.delegate = self;
+    _miniNotificationViewController.delegate = self;
 
-    [rootViewController addChildViewController:controller];
-    [rootViewController.view addSubview:controller.view];
-    [controller didMoveToParentViewController:rootViewController];
+    //[rootViewController addChildViewController:controller];
+    //[rootViewController.view addSubview:controller.view];
+    //[controller didMoveToParentViewController:rootViewController];
 
-    [controller showWithAnimation];
+    [_miniNotificationViewController showWithAnimation];
 
     double delayInSeconds = 5.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self notificationSmallControllerWasDismissed:controller status:NO];
+        [self notificationSmallControllerWasDismissed:_miniNotificationViewController status:NO];
     });
 }
 
@@ -1294,9 +1297,9 @@ static Mixpanel *sharedInstance = nil;
     }
 
     void (^completionBlock)()  = ^void(){
-        [controller willMoveToParentViewController:nil];
-        [controller.view removeFromSuperview];
-        [controller removeFromParentViewController];
+        //[controller willMoveToParentViewController:nil];
+        //[controller.view removeFromSuperview];
+        //[controller removeFromParentViewController];
         self.currentlyShowingNotification = nil;
     };
 

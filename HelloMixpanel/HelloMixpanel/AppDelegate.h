@@ -22,7 +22,7 @@
 
 @class ViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, MixpanelDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, MixpanelDelegate, UINavigationControllerDelegate, UINavigationBarDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
