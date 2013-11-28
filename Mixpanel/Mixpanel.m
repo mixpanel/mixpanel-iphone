@@ -1257,12 +1257,7 @@ static Mixpanel *sharedInstance = nil;
 
     self.miniNotificationViewController = [[MPNotificationSmallViewController alloc] init];
     _miniNotificationViewController.notification = notification;
-    //controller.parentController = rootViewController;
     _miniNotificationViewController.delegate = self;
-
-    //[rootViewController addChildViewController:controller];
-    //[rootViewController.view addSubview:controller.view];
-    //[controller didMoveToParentViewController:rootViewController];
 
     [_miniNotificationViewController showWithAnimation];
 
@@ -1298,6 +1293,7 @@ static Mixpanel *sharedInstance = nil;
 
     void (^completionBlock)()  = ^void(){
         self.currentlyShowingNotification = nil;
+        self.miniNotificationViewController = nil;
     };
 
     if (status && controller.notification.url) {
