@@ -173,28 +173,27 @@
     
     UIView *topView = [self getTopView];
     if (topView) {
-        self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
+        //self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
         
         [topView addSubview:self.view];
-    }
+    
+        _canPan = NO;
 
-    /*_canPan = NO;
+        self.view.frame = CGRectMake(0.0f, topView.frame.size.height, topView.frame.size.width, kMPNotifHeight * 3.0f);
 
-    UIView *parentView = self.parentViewController.view;
-    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
+        CGPoint bgPosition = self.bgImageView.layer.position;
+        self.bgImageView.frame = CGRectMake(0.0f, 0.0f - topView.frame.size.height, self.view.frame.size.width, topView.frame.size.height);
 
-    CGPoint bgPosition = self.bgImageView.layer.position;
-    self.bgImageView.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
-
-    _position = self.view.layer.position;
-
-    [UIView animateWithDuration:0.5f animations:^{
-        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
-        self.bgImageView.layer.position = bgPosition;
-    } completion:^(BOOL finished) {
         _position = self.view.layer.position;
-        _canPan = YES;
-    }];*/
+
+        [UIView animateWithDuration:0.5f animations:^{
+            self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
+            self.bgImageView.layer.position = bgPosition;
+        } completion:^(BOOL finished) {
+            _position = self.view.layer.position;
+            _canPan = YES;
+        }];
+    }
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion

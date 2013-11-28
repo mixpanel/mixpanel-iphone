@@ -1297,9 +1297,6 @@ static Mixpanel *sharedInstance = nil;
     }
 
     void (^completionBlock)()  = ^void(){
-        //[controller willMoveToParentViewController:nil];
-        //[controller.view removeFromSuperview];
-        //[controller removeFromParentViewController];
         self.currentlyShowingNotification = nil;
     };
 
