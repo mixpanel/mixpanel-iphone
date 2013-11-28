@@ -142,7 +142,7 @@
                                                 bundle:[NSBundle mainBundle]];
     colorPicker.color = [[UINavigationBar appearance] barTintColor];
     colorPicker.delegate = self;
-    
+
     [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
     [self presentViewController:colorPicker animated:YES completion:nil];
 }
