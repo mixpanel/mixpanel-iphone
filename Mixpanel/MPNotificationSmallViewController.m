@@ -21,10 +21,20 @@
 
 #define kMPNotifHeight 65.0f
 
-@interface CircleLayer : CALayer
+@interface CircleLayer : CALayer {
+    @public
+    CGFloat circlePadding;
+}
+
 @end
 
 @implementation CircleLayer
+
++(id)layer {
+    CircleLayer *cl = (CircleLayer *)[super layer];
+    cl->circlePadding = 7.0f;
+    return cl;
+}
 
 -(void)drawInContext:(CGContextRef)ctx
 {
@@ -54,7 +64,7 @@
 }
 
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) CALayer *circleLayer;
+@property (nonatomic, strong) CircleLayer *circleLayer;
 @property (nonatomic, strong) UIImageView *bgImageView;
 @property (nonatomic, strong) UILabel *bodyLabel;
 
@@ -140,12 +150,11 @@
     // Position images
     CGSize parentSize = parentView.frame.size;
     self.bgImageView.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
-    CGRect imvf = CGRectMake(20.0f, 20.0f, kMPNotifHeight - 40.0f, kMPNotifHeight - 40.0f);
-    self.imageView.frame = imvf;
+    self.imageView.layer.position = CGPointMake(kMPNotifHeight / 2.0f, kMPNotifHeight / 2.0f);
 
     // Position circle around image
-    CGFloat circlePadding = 7.0f;
-    self.circleLayer.frame = CGRectMake(imvf.origin.x - circlePadding, imvf.origin.y - circlePadding, imvf.size.width + (circlePadding * 2.0f), imvf.size.height + (circlePadding * 2.0f));
+    self.circleLayer.position = self.imageView.layer.position;
+    [_circleLayer setNeedsDisplay];
 
     // Position body label
     CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 20.5f;
@@ -173,8 +182,7 @@
 
     UIView *topView = [self getTopView];
     if (topView) {
-        //self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
-
+        
         [topView addSubview:self.view];
 
         _canPan = NO;
@@ -186,14 +194,45 @@
 
         _position = self.view.layer.position;
 
-        [UIView animateWithDuration:0.5f animations:^{
+        [UIView animateWithDuration:0.1f animations:^{
             self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
             self.bgImageView.layer.position = bgPosition;
         } completion:^(BOOL finished) {
             _position = self.view.layer.position;
+            [self animateImage];
             _canPan = YES;
         }];
     }
+}
+
+- (void)animateImage
+{
+    
+    CGSize imageViewSize = CGSizeMake(kMPNotifHeight - 40.0f, kMPNotifHeight - 40.0f);
+    CGFloat duration = 0.2f;
+    CAMediaTimingFunction *easing = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    // Animate the circle around the image
+    CGRect before = self.circleLayer.bounds;
+    CGRect after = CGRectMake(0.0f, 0.0f, imageViewSize.width + (self.circleLayer->circlePadding * 2.0f), imageViewSize.height + (self.circleLayer->circlePadding * 2.0f));
+    CABasicAnimation *circleAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+    circleAnimation.fromValue = [NSValue valueWithCGRect:before];
+    circleAnimation.toValue = [NSValue valueWithCGRect:after];
+    circleAnimation.duration = duration;
+    [circleAnimation setTimingFunction:easing];
+    self.circleLayer.bounds = after;
+    [self.circleLayer addAnimation:circleAnimation forKey:@"bounds"];
+    
+    // Animate the image
+    before = self.imageView.bounds;
+    after = CGRectMake(0.0f, 0.0f, imageViewSize.width, imageViewSize.height);
+    CABasicAnimation *imageAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+    imageAnimation.fromValue = [NSValue valueWithCGRect:before];
+    imageAnimation.toValue = [NSValue valueWithCGRect:after];
+    imageAnimation.duration = duration;
+    [imageAnimation setTimingFunction:easing];
+    self.imageView.layer.bounds = after;
+    [self.imageView.layer addAnimation:imageAnimation forKey:@"bounds"];
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
