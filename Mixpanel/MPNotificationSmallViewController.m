@@ -41,18 +41,101 @@
     CGFloat edge = 1.0f; //the distance from the edge so we don't get clipped.
     CGContextSetAllowsAntialiasing(ctx, true);
     CGContextSetShouldAntialias(ctx, true);
-
+    
     CGMutablePathRef thePath = CGPathCreateMutable();
     CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
     CGPathAddArc(thePath, NULL, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f, MIN(self.frame.size.width, self.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
-
+    
     CGContextBeginPath(ctx);
     CGContextAddPath(ctx, thePath);
-
+    
     CGContextSetLineWidth(ctx, 1);
     CGContextStrokePath(ctx);
-
+    
     CFRelease(thePath);
+}
+
+@end
+
+@interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
+#define kFPS 60
+@end
+
+@implementation ElasticEaseOutAnimation
+
+-(id)initWithStartValue:(NSValue *)start endValue:(NSValue *)end andDuration:(double)duration
+{
+    if ((self = [super init]))
+    {
+        self.duration = duration;
+        self.values = [self generateValuesFrom:start to:end];
+    }
+    return self;
+}
+
+- (NSArray *)generateValuesFrom:(NSValue *)startValue to:(NSValue *)endValue
+{
+    NSUInteger steps = (NSUInteger)ceil(kFPS * self.duration) + 2;
+	
+	NSMutableArray *valueArray = [NSMutableArray arrayWithCapacity:steps];
+    
+    const double increment = 1.0 / (double)(steps - 1);
+    
+    double progress = 0.0,
+    v = 0.0;
+    CGRect start = [startValue CGRectValue],
+    end = [endValue CGRectValue],
+    range = [self subtractCGRect:end fromRect:start],
+    value = CGRectZero;
+    
+    NSUInteger i;
+    for (i = 0; i < steps; i++)
+    {
+        v = getValue(self.duration * progress * 1000, 0, 1, self.duration * 1000);
+        value = [self addCGRect:start toRect:[self scaleCGRect:range by:(float)v]];
+        
+        [valueArray addObject:[NSValue valueWithCGRect:value]];
+        
+        progress += increment;
+    }
+    
+    return [NSArray arrayWithArray:valueArray];
+}
+
+-(CGRect)addCGRect:(CGRect)a toRect:(CGRect)b
+{
+    return CGRectMake(a.origin.x + b.origin.x, a.origin.y + b.origin.y, a.size.width + b.size.width, a.size.height + b.size.height);
+}
+
+-(CGRect)subtractCGRect:(CGRect)b fromRect:(CGRect)a
+{
+    return CGRectMake(a.origin.x - b.origin.x, a.origin.y - b.origin.y, a.size.width - b.size.width, a.size.height - b.size.height);
+}
+
+-(CGRect)scaleCGRect:(CGRect)a by:(float)v
+{
+    return CGRectMake(a.origin.x * v, a.origin.y * v, a.size.width * v, a.size.height * v);
+}
+
+double getValue(double t, double b, double c, double d)
+{
+    double s=1.70158, p=0, a=c;
+    if (t==0) {
+        return b;
+    }
+    if ((t/=d)==1) {
+        return b+c;
+    }
+    if (!p) {
+       p=d*.3;
+    }
+    if (a < (double)abs(c)) {
+        a=c;
+        s=p/4;
+    } else {
+        s = p/(2*M_PI) * asin(c/a);
+    }
+    return a*pow(2,-10*t) * sin( (t*d-s)*(2*M_PI)/p ) + c + b;
 }
 
 @end
@@ -157,7 +240,7 @@
     [_circleLayer setNeedsDisplay];
 
     // Position body label
-    CGFloat offsetX = self.imageView.frame.size.width + self.imageView.frame.origin.x + 20.5f;
+    CGFloat offsetX = kMPNotifHeight;
     self.bodyLabel.frame = CGRectMake(offsetX, 12.5f, self.view.frame.size.width - offsetX - 12.5f, 0.0f);
     [self.bodyLabel sizeToFit];
 }
@@ -199,7 +282,7 @@
             self.bgImageView.layer.position = bgPosition;
         } completion:^(BOOL finished) {
             _position = self.view.layer.position;
-            [self animateImage];
+            [self performSelector:@selector(animateImage) withObject:nil afterDelay:0.3];
             _canPan = YES;
         }];
     }
@@ -209,28 +292,20 @@
 {
     
     CGSize imageViewSize = CGSizeMake(kMPNotifHeight - 40.0f, kMPNotifHeight - 40.0f);
-    CGFloat duration = 0.2f;
-    CAMediaTimingFunction *easing = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    CGFloat duration = 0.5f;
     
     // Animate the circle around the image
     CGRect before = self.circleLayer.bounds;
     CGRect after = CGRectMake(0.0f, 0.0f, imageViewSize.width + (self.circleLayer->circlePadding * 2.0f), imageViewSize.height + (self.circleLayer->circlePadding * 2.0f));
-    CABasicAnimation *circleAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
-    circleAnimation.fromValue = [NSValue valueWithCGRect:before];
-    circleAnimation.toValue = [NSValue valueWithCGRect:after];
-    circleAnimation.duration = duration;
-    [circleAnimation setTimingFunction:easing];
+    
+    ElasticEaseOutAnimation *circleAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:[NSValue valueWithCGRect:before] endValue:[NSValue valueWithCGRect:after] andDuration:duration];
     self.circleLayer.bounds = after;
     [self.circleLayer addAnimation:circleAnimation forKey:@"bounds"];
     
     // Animate the image
     before = self.imageView.bounds;
     after = CGRectMake(0.0f, 0.0f, imageViewSize.width, imageViewSize.height);
-    CABasicAnimation *imageAnimation = [CABasicAnimation animationWithKeyPath:@"bounds"];
-    imageAnimation.fromValue = [NSValue valueWithCGRect:before];
-    imageAnimation.toValue = [NSValue valueWithCGRect:after];
-    imageAnimation.duration = duration;
-    [imageAnimation setTimingFunction:easing];
+    ElasticEaseOutAnimation *imageAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:[NSValue valueWithCGRect:before] endValue:[NSValue valueWithCGRect:after] andDuration:duration];
     self.imageView.layer.bounds = after;
     [self.imageView.layer addAnimation:imageAnimation forKey:@"bounds"];
 }
