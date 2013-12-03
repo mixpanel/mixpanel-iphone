@@ -32,13 +32,13 @@
 
 +(id)layer {
     CircleLayer *cl = (CircleLayer *)[super layer];
-    cl->circlePadding = 7.0f;
+    cl->circlePadding = 2.5f;
     return cl;
 }
 
 -(void)drawInContext:(CGContextRef)ctx
 {
-    CGFloat edge = 1.0f; //the distance from the edge so we don't get clipped.
+    CGFloat edge = 1.5f; //the distance from the edge so we don't get clipped.
     CGContextSetAllowsAntialiasing(ctx, true);
     CGContextSetShouldAntialias(ctx, true);
     
@@ -49,7 +49,7 @@
     CGContextBeginPath(ctx);
     CGContextAddPath(ctx, thePath);
     
-    CGContextSetLineWidth(ctx, 1);
+    CGContextSetLineWidth(ctx, 1.5f);
     CGContextStrokePath(ctx);
     
     CFRelease(thePath);
@@ -253,7 +253,7 @@
 - (void)animateImage
 {
     
-    CGSize imageViewSize = CGSizeMake(kMPNotifHeight - 40.0f, kMPNotifHeight - 40.0f);
+    CGSize imageViewSize = CGSizeMake(40.0f, 40.0f);
     CGFloat duration = 0.5f;
     
     // Animate the circle around the image
