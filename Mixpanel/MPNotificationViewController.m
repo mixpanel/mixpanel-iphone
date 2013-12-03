@@ -29,7 +29,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *bodyView;
 @property (nonatomic, strong) IBOutlet UIButton *okayButton;
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
-@property (nonatomic, strong) IBOutlet UIView *bodyBg;
+@property (nonatomic, strong) IBOutlet UIView *imageAlphaMaskView;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageWidth;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageHeight;
@@ -94,6 +94,7 @@
     [super viewDidLayoutSubviews];
 
     [self.okayButton sizeToFit];
+    [self.imageAlphaMaskView sizeToFit];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -112,7 +113,6 @@
     [super beginAppearanceTransition:isAppearing animated:animated];
 
     if (isAppearing) {
-        self.bodyBg.alpha = 0.0f;
         self.bgMask.alpha = 0.0f;
         self.imageView.alpha = 0.0f;
         self.titleView.alpha = 0.0f;
@@ -145,7 +145,6 @@
         self.imageView.transform = CGAffineTransformIdentity;
         self.imageView.alpha = 1.0f;
         self.bgMask.alpha = 1.0f;
-        self.bodyBg.alpha = 1.0f;
     } completion:nil];
 
     [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -194,47 +193,6 @@
 
 @end
 
-@interface MPRadialGradientView : UIView
-
-@end
-
-@implementation MPRadialGradientView
-
-- (void)drawRect:(CGRect)rect
-{
-    CGSize size = self.bounds.size;
-    CGPoint center = self.bounds.origin;
-    CGFloat radius = 160.0f;
-    center.x += size.width;
-    center.y += size.height;
-
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat comps[] = {43.0f / 255.0f, 43.0f / 255.0f, 57.0f / 255.0f, 1.0f, 43.0f / 255.0f, 43.0f / 255.0f, 57.0f / 255.0f, 0.0f};
-    CGFloat locs[] = {0.0f, 1.0f};
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 2);
-
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, NULL, center.x, center.y);
-    CGPathAddLineToPoint(path, NULL, center.x - radius, center.y);
-    CGPathAddArcToPoint(path, NULL, center.x - radius, center.y - radius, center.x, center.y - radius, radius);
-    CGPathAddLineToPoint(path, NULL, center.x, center.y);
-
-    CGContextAddPath(ctx, path);
-    CGContextClip(ctx);
-
-    CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, radius, 0);
-
-    CGContextRestoreGState(ctx);
-
-    CGPathRelease(path);
-    CGGradientRelease(gradient);
-    CGColorSpaceRelease(colorSpace);
-}
-
-@end
-
 @interface MPBgRadialGradientView : UIView
 
 @end
@@ -277,38 +235,35 @@
 
 @end
 
-@interface MPLinearGradientView : UIView
+@interface MPAlphaMaskView : UIView
 
 @end
 
-@implementation MPLinearGradientView
+@implementation MPAlphaMaskView {
+    CAGradientLayer *_maskLayer;
+}
 
-- (void)drawRect:(CGRect)rect
+-(id)initWithCoder:(NSCoder *)aDecoder
 {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
+    if(self = [super initWithCoder:aDecoder]) {
+        _maskLayer = [CAGradientLayer layer];
+        [_maskLayer setFrame:self.bounds];
+        UIColor *topColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        UIColor *bottomColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+        _maskLayer.colors = @[(id)[topColor CGColor], (id)[bottomColor CGColor]];
+        _maskLayer.locations = @[@0.6, @0.7];
+        [self.layer setMask:_maskLayer];
+    }
+    return self;
+}
 
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat components[] = {
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.0f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.60f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.80f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.90f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
-    CGFloat locations[] = {0.0f, 0.2f, 0.5f, 0.625f, 0.7115f, 0.8f, 0.9f};
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
-
-    CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.bounds.size.height), 0);
-    CGContextRestoreGState(ctx);
-
-    CGColorSpaceRelease(colorSpace);
-    CGGradientRelease(gradient);
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_maskLayer setFrame:self.bounds];
 }
 
 @end
-
 
 @interface MPButton : UIButton
 
