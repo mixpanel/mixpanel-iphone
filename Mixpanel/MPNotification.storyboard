@@ -26,32 +26,20 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LyM-hA-PHV" userLabel="Notif Image View">
-                                <rect key="frame" x="20" y="83" width="280" height="400"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="280" id="A3b-w6-LPB"/>
-                                    <constraint firstAttribute="height" constant="400" id="LQn-ew-MQG"/>
-                                </constraints>
-                            </imageView>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="221" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-og-FP7" userLabel="Body Bg View" customClass="MPLinearGradientView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1s2-xv-3au" userLabel="Image Mask" customClass="MPAlphaMaskView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-yT-gz1" customClass="MPRadialGradientView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                    <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LyM-hA-PHV" userLabel="Notif Image View">
+                                        <rect key="frame" x="20" y="84" width="280" height="400"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    </view>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="280" id="A3b-w6-LPB"/>
+                                            <constraint firstAttribute="height" constant="400" id="LQn-ew-MQG"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="sjM-yT-gz1" secondAttribute="trailing" id="M2z-qy-gf4" userLabel="Horizontal Space - Body Bg View - Radial Gradient View"/>
-                                    <constraint firstItem="sjM-yT-gz1" firstAttribute="height" secondItem="OWs-og-FP7" secondAttribute="height" id="NKd-kh-3me"/>
-                                    <constraint firstAttribute="bottom" secondItem="sjM-yT-gz1" secondAttribute="bottom" id="SDI-Gy-3nz"/>
-                                    <constraint firstItem="sjM-yT-gz1" firstAttribute="width" secondItem="OWs-og-FP7" secondAttribute="width" id="a1G-Mq-WnL"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="sFn-sQ-ip2"/>
-                                </constraints>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-ct-CP3">
                                 <rect key="frame" x="30" y="435" width="260" height="25"/>
@@ -73,7 +61,7 @@
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NtW-qx-qOt" userLabel="Image Drag View">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NtW-qx-qOt" userLabel="Image Drag View">
                                 <rect key="frame" x="20" y="83" width="280" height="400"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -105,30 +93,24 @@
                         <color key="backgroundColor" red="0.094117647058823528" green="0.094117647058823528" blue="0.12156862745098039" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="bottom" id="1wF-9Y-JlE"/>
-                            <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="2Zl-eJ-nGR"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="Wch-Xc-Avw" secondAttribute="top" id="7FN-LA-fsE"/>
                             <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="10" id="98S-L3-L61"/>
-                            <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="OWs-og-FP7" secondAttribute="bottom" id="DQu-5x-5gA"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="width" secondItem="MmD-8U-og7" secondAttribute="width" id="IfC-Ls-kOm"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="width" secondItem="If2-9m-eT9" secondAttribute="width" id="Lnc-cn-mSW"/>
-                            <constraint firstItem="LyM-hA-PHV" firstAttribute="leading" secondItem="NtW-qx-qOt" secondAttribute="leading" id="MTD-rI-ZyC"/>
+                            <constraint firstItem="1s2-xv-3au" firstAttribute="width" secondItem="j3M-ip-xjd" secondAttribute="width" id="NWH-Fr-taF"/>
+                            <constraint firstItem="1s2-xv-3au" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="top" id="Nr5-qR-uWj"/>
                             <constraint firstAttribute="centerX" secondItem="MmD-8U-og7" secondAttribute="centerX" id="NuK-mI-4RY"/>
                             <constraint firstItem="eF7-ct-CP3" firstAttribute="centerX" secondItem="MmD-8U-og7" secondAttribute="centerX" id="Ple-yR-sUf"/>
-                            <constraint firstItem="LyM-hA-PHV" firstAttribute="width" secondItem="NtW-qx-qOt" secondAttribute="width" id="Qjt-4B-lOY"/>
-                            <constraint firstItem="LyM-hA-PHV" firstAttribute="height" secondItem="NtW-qx-qOt" secondAttribute="height" id="Ufs-Uz-dz3"/>
-                            <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="NtW-qx-qOt" secondAttribute="top" id="VEM-ri-FwV"/>
-                            <constraint firstItem="OWs-og-FP7" firstAttribute="top" secondItem="j3M-ip-xjd" secondAttribute="top" id="VtO-bR-vre"/>
+                            <constraint firstItem="1s2-xv-3au" firstAttribute="leading" secondItem="j3M-ip-xjd" secondAttribute="leading" id="Rdb-xl-vSi"/>
                             <constraint firstAttribute="trailing" secondItem="j3M-ip-xjd" secondAttribute="trailing" id="Zgs-3K-N1E"/>
+                            <constraint firstItem="oJ2-nk-n4o" firstAttribute="top" secondItem="LDp-cp-cpg" secondAttribute="bottom" constant="37" id="ZmZ-Jx-bjS"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="leading" secondItem="Wch-Xc-Avw" secondAttribute="leading" id="bJ0-Sf-jdK"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="leading" secondItem="If2-9m-eT9" secondAttribute="leading" id="crJ-FY-cZ4"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="top" secondItem="If2-9m-eT9" secondAttribute="top" id="cv2-h4-fvc"/>
-                            <constraint firstItem="OWs-og-FP7" firstAttribute="leading" secondItem="Wch-Xc-Avw" secondAttribute="leading" id="dJp-W6-miA"/>
-                            <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="63" id="dxg-4s-FD6"/>
-                            <constraint firstAttribute="trailing" secondItem="OWs-og-FP7" secondAttribute="trailing" id="g4V-zo-36q"/>
                             <constraint firstItem="MmD-8U-og7" firstAttribute="top" secondItem="eF7-ct-CP3" secondAttribute="bottom" id="hDC-Mi-ipg"/>
                             <constraint firstItem="EGH-qT-4wM" firstAttribute="top" secondItem="en5-wb-o36" secondAttribute="bottom" constant="10" id="i3W-1P-cy6"/>
-                            <constraint firstItem="LDp-cp-cpg" firstAttribute="bottom" secondItem="OWs-og-FP7" secondAttribute="bottom" constant="-37" id="lca-fD-jgb"/>
                             <constraint firstItem="j3M-ip-xjd" firstAttribute="height" secondItem="If2-9m-eT9" secondAttribute="height" id="s2w-wS-P0V"/>
+                            <constraint firstItem="1s2-xv-3au" firstAttribute="height" secondItem="j3M-ip-xjd" secondAttribute="height" id="sxS-hR-57h"/>
                             <constraint firstItem="LDp-cp-cpg" firstAttribute="top" secondItem="MmD-8U-og7" secondAttribute="bottom" constant="15" id="vCY-0M-x1R"/>
                             <constraint firstAttribute="centerX" secondItem="LDp-cp-cpg" secondAttribute="centerX" constant="-0.5" id="vQ8-41-fqj"/>
                         </constraints>
@@ -136,9 +118,9 @@
                     <connections>
                         <outlet property="backgroundImageView" destination="j3M-ip-xjd" id="EVc-3C-Pm6"/>
                         <outlet property="bgMask" destination="If2-9m-eT9" id="dIj-LB-Qog"/>
-                        <outlet property="bodyBg" destination="OWs-og-FP7" id="teD-NH-LT8"/>
                         <outlet property="bodyView" destination="MmD-8U-og7" id="B7o-i2-uMk"/>
                         <outlet property="closeButton" destination="EGH-qT-4wM" id="Xjn-Xo-pek"/>
+                        <outlet property="imageAlphaMaskView" destination="1s2-xv-3au" id="8ow-LG-krW"/>
                         <outlet property="imageDragView" destination="NtW-qx-qOt" id="VGo-AD-HKH"/>
                         <outlet property="imageHeight" destination="LQn-ew-MQG" id="UJF-hS-zLq"/>
                         <outlet property="imageView" destination="LyM-hA-PHV" id="HDE-mT-R4c"/>
