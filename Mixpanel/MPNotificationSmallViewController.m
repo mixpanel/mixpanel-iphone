@@ -76,66 +76,28 @@
 - (NSArray *)generateValuesFrom:(NSValue *)startValue to:(NSValue *)endValue
 {
     NSUInteger steps = (NSUInteger)ceil(kFPS * self.duration) + 2;
-	
 	NSMutableArray *valueArray = [NSMutableArray arrayWithCapacity:steps];
-    
     const double increment = 1.0 / (double)(steps - 1);
-    
-    double progress = 0.0,
-    v = 0.0;
-    CGRect start = [startValue CGRectValue],
-    end = [endValue CGRectValue],
-    range = [self subtractCGRect:end fromRect:start],
-    value = CGRectZero;
+    double t = 0.0;
+    CGRect start = [startValue CGRectValue];
+    CGRect end = [endValue CGRectValue];
+    CGRect range = CGRectMake(end.origin.x - start.origin.x, end.origin.y - start.origin.y, end.size.width - start.size.width, end.size.height - start.size.height);
     
     NSUInteger i;
     for (i = 0; i < steps; i++)
     {
-        v = getValue(self.duration * progress * 1000, 0, 1, self.duration * 1000);
-        value = [self addCGRect:start toRect:[self scaleCGRect:range by:(float)v]];
+        float v = (float) -(pow(M_E, -7*t) * cos(20*t)) + 1; // Cosine wave with exponential decay
         
+        CGRect value = CGRectMake(start.origin.x + v * range.origin.x,
+                           start.origin.y + v * range.origin.y,
+                           start.size.width + v * range.size.width,
+                           start.size.height + v *range.size.height);
+
         [valueArray addObject:[NSValue valueWithCGRect:value]];
-        
-        progress += increment;
+        t += increment;
     }
     
     return [NSArray arrayWithArray:valueArray];
-}
-
--(CGRect)addCGRect:(CGRect)a toRect:(CGRect)b
-{
-    return CGRectMake(a.origin.x + b.origin.x, a.origin.y + b.origin.y, a.size.width + b.size.width, a.size.height + b.size.height);
-}
-
--(CGRect)subtractCGRect:(CGRect)b fromRect:(CGRect)a
-{
-    return CGRectMake(a.origin.x - b.origin.x, a.origin.y - b.origin.y, a.size.width - b.size.width, a.size.height - b.size.height);
-}
-
--(CGRect)scaleCGRect:(CGRect)a by:(float)v
-{
-    return CGRectMake(a.origin.x * v, a.origin.y * v, a.size.width * v, a.size.height * v);
-}
-
-double getValue(double t, double b, double c, double d)
-{
-    double s=1.70158, p=0, a=c;
-    if (t==0) {
-        return b;
-    }
-    if ((t/=d)==1) {
-        return b+c;
-    }
-    if (!p) {
-       p=d*.3;
-    }
-    if (a < (double)abs(c)) {
-        a=c;
-        s=p/4;
-    } else {
-        s = p/(2*M_PI) * asin(c/a);
-    }
-    return a*pow(2,-10*t) * sin( (t*d-s)*(2*M_PI)/p ) + c + b;
 }
 
 @end
