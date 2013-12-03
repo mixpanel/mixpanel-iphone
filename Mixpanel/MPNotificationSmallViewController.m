@@ -86,7 +86,7 @@
     NSUInteger i;
     for (i = 0; i < steps; i++)
     {
-        float v = (float) -(pow(M_E, -7*t) * cos(20*t)) + 1; // Cosine wave with exponential decay
+        float v = (float) -(pow(M_E, -8*t) * cos(12*t)) + 1; // Cosine wave with exponential decay
         
         CGRect value = CGRectMake(start.origin.x + v * range.origin.x,
                            start.origin.y + v * range.origin.y,
@@ -244,7 +244,7 @@
             self.bgImageView.layer.position = bgPosition;
         } completion:^(BOOL finished) {
             _position = self.view.layer.position;
-            [self performSelector:@selector(animateImage) withObject:nil afterDelay:0.3];
+            [self performSelector:@selector(animateImage) withObject:nil afterDelay:0.1];
             _canPan = YES;
         }];
     }
