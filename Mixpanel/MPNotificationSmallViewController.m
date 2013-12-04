@@ -288,11 +288,12 @@
     } else {
         duration = 0.0f;
     }
+    
+    double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+    CGRect parentFrame = CGRectApplyAffineTransform(self.view.superview.frame, CGAffineTransformMakeRotation((float)angle));
 
     [UIView animateWithDuration:duration animations:^{
-        UIView *parentView = self.view.superview;
-        self.view.frame = CGRectMake(0.0f, parentView.frame.size.height, parentView.frame.size.width, kMPNotifHeight * 3.0f);
-        self.bgImageView.frame = CGRectMake(0.0f, 0.0f - parentView.frame.size.height, self.view.frame.size.width, parentView.frame.size.height);
+        self.view.frame = CGRectMake(0.0f, parentFrame.size.height, parentFrame.size.width, kMPNotifHeight * 3.0f);
     } completion:^(BOOL finished) {
         [self.view removeFromSuperview];
         if (completion) {
