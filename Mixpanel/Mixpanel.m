@@ -987,35 +987,35 @@ static Mixpanel *sharedInstance = nil;
             }
 
             NSArray *rawSurveys = object[@"surveys"];
-            if (!rawSurveys || ![rawSurveys isKindOfClass:[NSArray class]]) {
-                MixpanelDebug(@"%@ survey check response format error: %@", self, object);
-                return;
-            }
-
             NSMutableArray *parsedSurveys = [NSMutableArray array];
-            for (id obj in rawSurveys) {
-                MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
-                if (survey) {
-                    [parsedSurveys addObject:survey];
+
+            if (rawSurveys && [rawSurveys isKindOfClass:[NSArray class]]) {
+                for (id obj in rawSurveys) {
+                    MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
+                    if (survey) {
+                        [parsedSurveys addObject:survey];
+                    }
                 }
+            } else {
+               MixpanelDebug(@"%@ survey check response format error: %@", self, object);
             }
 
             NSArray *rawNotifications = object[@"notifications"];
-            if (!rawNotifications || ![rawNotifications isKindOfClass:[NSArray class]]) {
-                MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
-                return;
-            }
-
             NSMutableArray *parsedNotifications = [NSMutableArray array];
-            for (id obj in rawNotifications) {
-                MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
-                if (notification) {
-                    [parsedNotifications addObject:notification];
+
+            if (rawNotifications && [rawNotifications isKindOfClass:[NSArray class]]) {
+                for (id obj in rawNotifications) {
+                    MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
+                    if (notification) {
+                        [parsedNotifications addObject:notification];
+                    }
                 }
+            } else {
+                MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
             }
 
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
-            self.notifications = [NSArray arrayWithArray:parsedNotifications];;
+            self.notifications = [NSArray arrayWithArray:parsedNotifications];
         } else {
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
