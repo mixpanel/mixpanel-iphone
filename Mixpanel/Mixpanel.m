@@ -1080,6 +1080,10 @@ static Mixpanel *sharedInstance = nil;
     controller.delegate = self;
     controller.backgroundImage = [rootViewController.view mp_snapshotForBlur];
     [rootViewController presentViewController:controller animated:YES completion:nil];
+    
+    if (![survey.name isEqualToString:@"$ignore"]) {
+        [self track:@"$show_survey" properties:@{@"survey_id": [NSNumber numberWithUnsignedInt:survey.ID], @"collection_id":[NSNumber numberWithUnsignedInt:survey.collectionID]}];
+    }
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
@@ -1224,6 +1228,7 @@ static Mixpanel *sharedInstance = nil;
             }
 
             if (![notification.title isEqualToString:@"$ignore"]) {
+                [self track:@"$show_notification" properties:@{@"notification_id": [NSNumber numberWithUnsignedInt:notification.ID], @"type": notification.type}];
                 [self markNotificationShown:notification];
             }
         }
