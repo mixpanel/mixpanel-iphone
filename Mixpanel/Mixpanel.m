@@ -1228,7 +1228,9 @@ static Mixpanel *sharedInstance = nil;
             }
 
             if (![notification.title isEqualToString:@"$ignore"]) {
-                [self track:@"$show_notification" properties:@{@"notification_id": [NSNumber numberWithUnsignedInt:notification.ID], @"type": notification.type}];
+                [self track:@"$show_notification" properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
+                // campaign style
+                //[self track:@"$campaign_open" properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": @"inapp", @"notification_type": notification.type}];
                 [self markNotificationShown:notification];
             }
         }
@@ -1285,8 +1287,11 @@ static Mixpanel *sharedInstance = nil;
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
+        
+        [self trackNotification:controller.notification action:@"$notification_accepted"];
     } else {
         [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        [self trackNotification:controller.notification action:@"$notification_canceled"];
     }
 }
 
@@ -1310,8 +1315,20 @@ static Mixpanel *sharedInstance = nil;
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
+        
+        [self trackNotification:controller.notification action:@"$notification_accepted"];
     } else {
         [controller hideWithAnimation:YES completion:completionBlock];
+        [self trackNotification:controller.notification action:@"$notification_canceled"];
+    }
+}
+
+- (void)trackNotification:(MPNotification *)notification action:(NSString *)action
+{
+    if (![notification.title isEqualToString:@"$ignore"]) {
+        [self track:action properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
+    } else {
+        MixpanelDebug(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), action);
     }
 }
 
