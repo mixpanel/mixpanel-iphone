@@ -79,10 +79,10 @@
 @property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
 @property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
 
-@property(nonatomic, strong) NSArray *notifications;
-@property(nonatomic, strong) MPNotification *currentlyShowingNotification;
-@property(nonatomic, strong) MPNotificationSmallViewController *miniNotificationViewController;
-@property(nonatomic,strong) NSMutableSet *shownNotifications;
+@property (nonatomic, strong) NSArray *notifications;
+@property (nonatomic, strong) MPNotification *currentlyShowingNotification;
+@property (nonatomic, strong) MPNotificationSmallViewController *miniNotificationViewController;
+@property (nonatomic, strong) NSMutableSet *shownNotifications;
 
 @end
 

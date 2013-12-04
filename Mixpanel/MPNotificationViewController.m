@@ -24,12 +24,15 @@
 @protected
     CAGradientLayer *_maskLayer;
 }
+
 @end
 
 @interface MPButton : UIButton
+
 @end
 
 @interface MPBgRadialGradientView : UIView
+
 @end
 
 @interface MPNotificationViewController () {
@@ -112,7 +115,7 @@
     return UIStatusBarAnimationFade;
 }
 
--(NSUInteger)supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
 }
@@ -204,7 +207,7 @@
 
 @implementation MPAlphaMaskView
 
--(id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
     if(self = [super initWithCoder:aDecoder]) {
         _maskLayer = [CAGradientLayer layer];
@@ -216,7 +219,7 @@
     return self;
 }
 
--(void)layoutSubviews
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     [_maskLayer setFrame:self.bounds];

@@ -30,13 +30,13 @@
 
 @implementation CircleLayer
 
-+(id)layer {
++ (id)layer {
     CircleLayer *cl = (CircleLayer *)[super layer];
     cl->circlePadding = 2.5f;
     return cl;
 }
 
--(void)drawInContext:(CGContextRef)ctx
+- (void)drawInContext:(CGContextRef)ctx
 {
     CGFloat edge = 1.5f; //the distance from the edge so we don't get clipped.
     CGContextSetAllowsAntialiasing(ctx, true);
@@ -58,12 +58,14 @@
 @end
 
 @interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
+
 #define kFPS 60
+
 @end
 
 @implementation ElasticEaseOutAnimation
 
--(id)initWithStartValue:(NSValue *)start endValue:(NSValue *)end andDuration:(double)duration
+- (id)initWithStartValue:(NSValue *)start endValue:(NSValue *)end andDuration:(double)duration
 {
     if ((self = [super init]))
     {
@@ -84,8 +86,7 @@
     CGRect range = CGRectMake(end.origin.x - start.origin.x, end.origin.y - start.origin.y, end.size.width - start.size.width, end.size.height - start.size.height);
 
     NSUInteger i;
-    for (i = 0; i < steps; i++)
-    {
+    for (i = 0; i < steps; i++) {
         float v = (float) -(pow(M_E, -8*t) * cos(12*t)) + 1; // Cosine wave with exponential decay
 
         CGRect value = CGRectMake(start.origin.x + v * range.origin.x,
@@ -175,7 +176,7 @@
     [self.view addSubview:_imageView];
     [self.view addSubview:_bodyLabel];
     [self.view.layer addSublayer:_circleLayer];
-	
+
     self.view.backgroundColor = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.9f];
     self.view.frame = CGRectMake(0.0f, 0.0f, 0.0f, 30.0f);
 
@@ -211,7 +212,7 @@
     [self.bodyLabel sizeToFit];
 }
 
--(UIView *)getTopView
+- (UIView *)getTopView
 {
     UIView *topView = nil;
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
@@ -224,7 +225,7 @@
     return topView;
 }
 
--(double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation
+- (double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation
 {
     switch (orientation) {
         case UIInterfaceOrientationLandscapeLeft:

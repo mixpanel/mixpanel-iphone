@@ -10,7 +10,7 @@
 
 @implementation UIColor (MPColor)
 
-+(UIColor *)applicationPrimaryColor
++ (UIColor *)applicationPrimaryColor
 {
 
     UIColor *color;
@@ -44,22 +44,22 @@
     return color;
 }
 
-+(UIColor *)lightEffectColor
++ (UIColor *)lightEffectColor
 {
     return [UIColor colorWithWhite:1.0f alpha:0.3f];
 }
 
-+(UIColor *)extraLightEffectColor
++ (UIColor *)extraLightEffectColor
 {
     return [UIColor colorWithWhite:0.97f alpha:0.82f];
 }
 
-+(UIColor *)darkEffectColor
++ (UIColor *)darkEffectColor
 {
     return [UIColor colorWithWhite:0.11f alpha:0.73f];
 }
 
--(UIColor *)colorWithSaturationComponent:(CGFloat) saturation
+- (UIColor *)colorWithSaturationComponent:(CGFloat) saturation
 {
     UIColor *newColor;
     CGFloat h, s, b, a;

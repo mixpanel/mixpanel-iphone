@@ -56,7 +56,7 @@
 @interface Mixpanel : NSObject
 
 // REMOVE THIS
-@property(nonatomic,strong) NSString *showNotificationType;
+@property (nonatomic, strong) NSString *showNotificationType;
 
 /*!
  @property
@@ -180,7 +180,7 @@
  <code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
  for the currently identified user.
  */
-@property(atomic) BOOL checkForNotificationsOnActive;
+@property (atomic) BOOL checkForNotificationsOnActive;
 
 /*!
  @property
@@ -192,7 +192,7 @@
  @discussion
  Defaults to YES.
  */
-@property(atomic) BOOL showNotificationOnActive;
+@property (atomic) BOOL showNotificationOnActive;
 
 /*!
  @property
