@@ -112,6 +112,10 @@
     return UIStatusBarAnimationFade;
 }
 
+-(NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
 
 - (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
 {
