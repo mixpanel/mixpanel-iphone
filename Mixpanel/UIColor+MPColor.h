@@ -10,12 +10,12 @@
 
 @interface UIColor (MPColor)
 
-+(UIColor *)applicationPrimaryColor;
++ (UIColor *)applicationPrimaryColor;
 
-+(UIColor *)lightEffectColor;
-+(UIColor *)extraLightEffectColor;
-+(UIColor *)darkEffectColor;
++ (UIColor *)lightEffectColor;
++ (UIColor *)extraLightEffectColor;
++ (UIColor *)darkEffectColor;
 
--(UIColor *)colorWithSaturationComponent:(CGFloat) saturation;
+- (UIColor *)colorWithSaturationComponent:(CGFloat) saturation;
 
 @end

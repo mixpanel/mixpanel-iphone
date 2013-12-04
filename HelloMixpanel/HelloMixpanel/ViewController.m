@@ -31,7 +31,7 @@
 @property (nonatomic, weak) IBOutlet UITextField *notificationIDField;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 
-@property(nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
 
 @end
 
@@ -147,12 +147,12 @@
     [self presentViewController:colorPicker animated:YES completion:nil];
 }
 
--(void)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
+- (void)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
     [[UINavigationBar appearance] setBarTintColor:color];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
+- (void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
