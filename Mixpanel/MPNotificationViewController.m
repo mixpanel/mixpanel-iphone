@@ -68,7 +68,6 @@
                 self.imageWidth.constant = image.size.width;
                 self.imageHeight.constant = image.size.height;
                 self.imageView.image = image;
-                //self.imageView.hidden = YES;
             } else {
                 NSLog(@"image failed to load from data: %@", self.notification.image);
             }
