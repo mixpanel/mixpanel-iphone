@@ -23,9 +23,6 @@
 
 @protected
     CAGradientLayer *_maskLayer;
-@public
-    float fadeStart;
-    float fadeEnd;
 }
 @end
 
@@ -101,10 +98,6 @@
     [super viewDidLayoutSubviews];
 
     [self.okayButton sizeToFit];
-    
-    self.imageAlphaMaskView->fadeStart = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y - 50;
-    self.imageAlphaMaskView->fadeEnd = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y;
-    
     [self.imageAlphaMaskView sizeToFit];
 
 }
@@ -211,8 +204,6 @@
 {
     if(self = [super initWithCoder:aDecoder]) {
         _maskLayer = [CAGradientLayer layer];
-        fadeStart = 200;
-        fadeEnd = 300;
         
         _maskLayer.colors = @[(id)[[UIColor colorWithWhite:1.0 alpha:1.0] CGColor],
                               (id)[[UIColor colorWithWhite:1.0 alpha:0.0] CGColor]];
@@ -225,8 +216,8 @@
 {
     [super layoutSubviews];
     [_maskLayer setFrame:self.bounds];
-    _maskLayer.locations = @[[NSNumber numberWithFloat:(fadeStart / self.bounds.size.height)],
-                             [NSNumber numberWithFloat:(fadeEnd / self.bounds.size.height)]];
+    _maskLayer.locations = @[[NSNumber numberWithFloat:1.0f - (30.0f / self.bounds.size.height)],
+                             [NSNumber numberWithFloat:1.0f]];
 }
 
 @end
