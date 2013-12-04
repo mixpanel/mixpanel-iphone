@@ -190,10 +190,14 @@
 - (void)viewWillLayoutSubviews
 {
     UIView *parentView = self.view.superview;
-    self.view.frame = CGRectMake(0.0f, parentView.frame.size.height - kMPNotifHeight, parentView.frame.size.width, kMPNotifHeight * 3.0f);
+    
+    double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+    CGRect parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
+    
+    self.view.frame = CGRectMake(0.0f, parentFrame.size.height - kMPNotifHeight, parentFrame.size.width, kMPNotifHeight * 3.0f);
 
     // Position images
-    CGSize parentSize = parentView.frame.size;
+    CGSize parentSize = parentFrame.size;
     self.bgImageView.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
     self.imageView.layer.position = CGPointMake(kMPNotifHeight / 2.0f, kMPNotifHeight / 2.0f);
 
@@ -210,15 +214,28 @@
 -(UIView *)getTopView
 {
     UIView *topView = nil;
-    NSArray *windows = [UIApplication sharedApplication].windows;
-    if(windows.count > 0) {
-        UIWindow *window = [windows objectAtIndex:0];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if(window) {
         if(window.subviews.count > 0)
         {
             topView = [window.subviews objectAtIndex:0];
         }
     }
     return topView;
+}
+
+-(double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation
+{
+    switch (orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+            return -M_PI_2;
+        case UIInterfaceOrientationLandscapeRight:
+            return M_PI_2;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            return M_PI;
+        default:
+            return 0.0;
+    }
 }
 
 - (void)showWithAnimation
@@ -228,19 +245,22 @@
     UIView *topView = [self getTopView];
     if (topView) {
         
+        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+        CGRect topFrame = CGRectApplyAffineTransform(topView.frame, CGAffineTransformMakeRotation((float)angle));
+        
         [topView addSubview:self.view];
 
         _canPan = NO;
 
-        self.view.frame = CGRectMake(0.0f, topView.frame.size.height, topView.frame.size.width, kMPNotifHeight * 3.0f);
+        self.view.frame = CGRectMake(0.0f, topFrame.size.height, topFrame.size.width, kMPNotifHeight * 3.0f);
 
         CGPoint bgPosition = self.bgImageView.layer.position;
-        self.bgImageView.frame = CGRectMake(0.0f, 0.0f - topView.frame.size.height, self.view.frame.size.width, topView.frame.size.height);
+        self.bgImageView.frame = CGRectMake(0.0f, 0.0f - topFrame.size.height, self.view.frame.size.width, topFrame.size.height);
 
         _position = self.view.layer.position;
 
         [UIView animateWithDuration:0.1f animations:^{
-            self.view.frame = CGRectMake(0.0f, topView.frame.size.height - kMPNotifHeight, topView.frame.size.width, kMPNotifHeight * 3.0f);
+            self.view.frame = CGRectMake(0.0f, topFrame.size.height - kMPNotifHeight, topFrame.size.width, kMPNotifHeight * 3.0f);
             self.bgImageView.layer.position = bgPosition;
         } completion:^(BOOL finished) {
             _position = self.view.layer.position;
