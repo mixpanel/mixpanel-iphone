@@ -151,8 +151,6 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.serverURL = @"https://api.mixpanel.com";
 
-        // REMOVE THIS
-        self.serverURL = @"http://kyle.dev.mixpanel.org";
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
 
