@@ -102,8 +102,8 @@
 
     [self.okayButton sizeToFit];
     
-    self.imageAlphaMaskView->fadeStart = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y - 10;
-    self.imageAlphaMaskView->fadeEnd = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y + 10;
+    self.imageAlphaMaskView->fadeStart = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y - 50;
+    self.imageAlphaMaskView->fadeEnd = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y;
     
     [self.imageAlphaMaskView sizeToFit];
 

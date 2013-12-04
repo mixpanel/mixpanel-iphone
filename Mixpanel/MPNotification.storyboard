@@ -31,18 +31,23 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LyM-hA-PHV" userLabel="Notif Image View">
-                                        <rect key="frame" x="20" y="84" width="280" height="400"/>
+                                        <rect key="frame" x="20" y="82" width="280" height="400"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="280" id="A3b-w6-LPB"/>
                                             <constraint firstAttribute="height" constant="400" id="LQn-ew-MQG"/>
                                         </constraints>
                                     </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NtW-qx-qOt" userLabel="Image Drag View">
+                                        <rect key="frame" x="20" y="84" width="280" height="400"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="centerY" secondItem="LyM-hA-PHV" secondAttribute="centerY" id="rjh-R5-tYS"/>
-                                    <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="yt7-eO-p13"/>
+                                    <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="1s2-xv-3au" secondAttribute="top" constant="82" id="ZDm-Xj-EEQ"/>
+                                    <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="nOP-MM-gCn"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-ct-CP3">
@@ -65,11 +70,6 @@
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NtW-qx-qOt" userLabel="Image Drag View">
-                                <rect key="frame" x="20" y="83" width="280" height="400"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-cp-cpg" customClass="MPButton">
                                 <rect key="frame" x="127" y="496" width="67" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
