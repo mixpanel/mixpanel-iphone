@@ -111,7 +111,7 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) CircleLayer *circleLayer;
-@property (nonatomic, strong) UIImageView *bgImageView;
+@property (nonatomic, strong) UIToolbar *uiToolbarView;
 @property (nonatomic, strong) UILabel *bodyLabel;
 
 @end
@@ -133,24 +133,15 @@
     _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     _bodyLabel.numberOfLines = 2;
 
-    UIView *topView = [self getTopView];
-    UIImage *bgImage;
-    if (topView) {
-        bgImage = [topView mp_snapshotImage];
-    } else {
-        bgImage = [[UIImage alloc] init];
-    }
-
-    self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-
     UIColor *blurColor = [UIColor applicationPrimaryColor];
     if (!blurColor) {
         blurColor = [UIColor darkEffectColor];
     }
     blurColor = [blurColor colorWithAlphaComponent:0.7f];
-
-    _bgImageView.image = [bgImage mp_applyBlurWithRadius:5.0f tintColor:blurColor saturationDeltaFactor:1.8f maskImage:nil];
-    _bgImageView.opaque = YES;
+    
+    self.uiToolbarView = [[UIToolbar alloc] init];
+    [_uiToolbarView setBarTintColor:[blurColor colorWithAlphaComponent:0.8f]];
+    _uiToolbarView.translucent = YES;
 
     if (self.notification != nil) {
         if (self.notification.image != nil) {
@@ -172,12 +163,11 @@
     _circleLayer.contentsScale = [UIScreen mainScreen].scale;
     [_circleLayer setNeedsDisplay];
 
-    [self.view addSubview:_bgImageView];
+    [self.view addSubview:_uiToolbarView];
     [self.view addSubview:_imageView];
     [self.view addSubview:_bodyLabel];
     [self.view.layer addSublayer:_circleLayer];
 
-    self.view.backgroundColor = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.9f];
     self.view.frame = CGRectMake(0.0f, 0.0f, 0.0f, 30.0f);
 
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
@@ -198,8 +188,7 @@
     self.view.frame = CGRectMake(0.0f, parentFrame.size.height - kMPNotifHeight, parentFrame.size.width, kMPNotifHeight * 3.0f);
 
     // Position images
-    CGSize parentSize = parentFrame.size;
-    self.bgImageView.frame = CGRectMake(0.0f, kMPNotifHeight - parentSize.height, parentSize.width, parentSize.height);
+    self.uiToolbarView.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     self.imageView.layer.position = CGPointMake(kMPNotifHeight / 2.0f, kMPNotifHeight / 2.0f);
 
     // Position circle around image
@@ -254,15 +243,10 @@
         _canPan = NO;
 
         self.view.frame = CGRectMake(0.0f, topFrame.size.height, topFrame.size.width, kMPNotifHeight * 3.0f);
-
-        CGPoint bgPosition = self.bgImageView.layer.position;
-        self.bgImageView.frame = CGRectMake(0.0f, 0.0f - topFrame.size.height, self.view.frame.size.width, topFrame.size.height);
-
         _position = self.view.layer.position;
 
         [UIView animateWithDuration:0.1f animations:^{
             self.view.frame = CGRectMake(0.0f, topFrame.size.height - kMPNotifHeight, topFrame.size.width, kMPNotifHeight * 3.0f);
-            self.bgImageView.layer.position = bgPosition;
         } completion:^(BOOL finished) {
             _position = self.view.layer.position;
             [self performSelector:@selector(animateImage) withObject:nil afterDelay:0.1];
@@ -342,31 +326,22 @@
             }
 
             self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
-            CGRect bgFrame = self.bgImageView.frame;
-            bgFrame.origin.y = -self.view.frame.origin.y;
-            self.bgImageView.frame = bgFrame;
         } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
             if (self.view.layer.position.y > _position.y + kMPNotifHeight / 2.0f && self.delegate != nil) {
                 [self.delegate notificationSmallControllerWasDismissed:self status:NO];
             } else {
                 [UIView animateWithDuration:0.2f animations:^{
                     self.view.layer.position = _position;
-                    CGRect bgFrame = self.bgImageView.frame;
-                    bgFrame.origin.y = -self.view.frame.origin.y;
-                    self.bgImageView.frame = bgFrame;
                 }];
             }
         }
     }
 }
 
-
-
 - (void)dealloc
 {
     self.delegate = nil;
 }
-
 
 @end
 
