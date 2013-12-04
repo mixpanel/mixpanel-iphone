@@ -216,7 +216,7 @@
 {
     [super layoutSubviews];
     [_maskLayer setFrame:self.bounds];
-    _maskLayer.locations = @[[NSNumber numberWithFloat:1.0f - (30.0f / self.bounds.size.height)],
+    _maskLayer.locations = @[[NSNumber numberWithFloat:1.0f - (60.0f / self.bounds.size.height)],
                              [NSNumber numberWithFloat:1.0f]];
 }
 
