@@ -19,6 +19,22 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+@interface MPAlphaMaskView : UIView {
+
+@protected
+    CAGradientLayer *_maskLayer;
+@public
+    float fadeStart;
+    float fadeEnd;
+}
+@end
+
+@interface MPButton : UIButton
+@end
+
+@interface MPBgRadialGradientView : UIView
+@end
+
 @interface MPNotificationViewController () {
     CGPoint _viewStart;
     BOOL _touching;
@@ -29,7 +45,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *bodyView;
 @property (nonatomic, strong) IBOutlet UIButton *okayButton;
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
-@property (nonatomic, strong) IBOutlet UIView *imageAlphaMaskView;
+@property (nonatomic, strong) IBOutlet MPAlphaMaskView *imageAlphaMaskView;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageWidth;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageHeight;
@@ -39,15 +55,6 @@
 @end
 
 @implementation MPNotificationViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -94,7 +101,12 @@
     [super viewDidLayoutSubviews];
 
     [self.okayButton sizeToFit];
+    
+    self.imageAlphaMaskView->fadeStart = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y - 10;
+    self.imageAlphaMaskView->fadeEnd = [self.imageAlphaMaskView convertPoint:CGPointZero fromView:self.titleView].y + 10;
+    
     [self.imageAlphaMaskView sizeToFit];
+
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -193,7 +205,57 @@
 
 @end
 
-@interface MPBgRadialGradientView : UIView
+@implementation MPAlphaMaskView
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]) {
+        _maskLayer = [CAGradientLayer layer];
+        fadeStart = 200;
+        fadeEnd = 300;
+        
+        _maskLayer.colors = @[(id)[[UIColor colorWithWhite:1.0 alpha:1.0] CGColor],
+                              (id)[[UIColor colorWithWhite:1.0 alpha:0.0] CGColor]];
+        [self.layer setMask:_maskLayer];
+    }
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_maskLayer setFrame:self.bounds];
+    _maskLayer.locations = @[[NSNumber numberWithFloat:(fadeStart / self.bounds.size.height)],
+                             [NSNumber numberWithFloat:(fadeEnd / self.bounds.size.height)]];
+}
+
+@end
+
+@implementation MPButton
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        self.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
+        self.layer.cornerRadius = 17.0f;
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+        self.layer.borderWidth = 2.0f;
+    }
+    
+    return self;
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    if (highlighted) {
+        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
+        self.layer.borderColor = [UIColor grayColor].CGColor;
+    } else {
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+    }
+    
+    [super setHighlighted:highlighted];
+}
 
 @end
 
@@ -234,66 +296,3 @@
 }
 
 @end
-
-@interface MPAlphaMaskView : UIView
-
-@end
-
-@implementation MPAlphaMaskView {
-    CAGradientLayer *_maskLayer;
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder
-{
-    if(self = [super initWithCoder:aDecoder]) {
-        _maskLayer = [CAGradientLayer layer];
-        [_maskLayer setFrame:self.bounds];
-        UIColor *topColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-        UIColor *bottomColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        _maskLayer.colors = @[(id)[topColor CGColor], (id)[bottomColor CGColor]];
-        _maskLayer.locations = @[@0.6, @0.7];
-        [self.layer setMask:_maskLayer];
-    }
-    return self;
-}
-
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    [_maskLayer setFrame:self.bounds];
-}
-
-@end
-
-@interface MPButton : UIButton
-
-@end
-
-@implementation MPButton
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        self.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
-        self.layer.cornerRadius = 17.0f;
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-        self.layer.borderWidth = 2.0f;
-    }
-
-    return self;
-}
-
-- (void)setHighlighted:(BOOL)highlighted
-{
-    if (highlighted) {
-        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
-        self.layer.borderColor = [UIColor grayColor].CGColor;
-    } else {
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-    }
-
-    [super setHighlighted:highlighted];
-}
-
-@end
-
