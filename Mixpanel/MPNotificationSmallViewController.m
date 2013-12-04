@@ -41,17 +41,17 @@
     CGFloat edge = 1.5f; //the distance from the edge so we don't get clipped.
     CGContextSetAllowsAntialiasing(ctx, true);
     CGContextSetShouldAntialias(ctx, true);
-    
+
     CGMutablePathRef thePath = CGPathCreateMutable();
     CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
     CGPathAddArc(thePath, NULL, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f, MIN(self.frame.size.width, self.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
-    
+
     CGContextBeginPath(ctx);
     CGContextAddPath(ctx, thePath);
-    
+
     CGContextSetLineWidth(ctx, 1.5f);
     CGContextStrokePath(ctx);
-    
+
     CFRelease(thePath);
 }
 
@@ -82,12 +82,12 @@
     CGRect start = [startValue CGRectValue];
     CGRect end = [endValue CGRectValue];
     CGRect range = CGRectMake(end.origin.x - start.origin.x, end.origin.y - start.origin.y, end.size.width - start.size.width, end.size.height - start.size.height);
-    
+
     NSUInteger i;
     for (i = 0; i < steps; i++)
     {
         float v = (float) -(pow(M_E, -8*t) * cos(12*t)) + 1; // Cosine wave with exponential decay
-        
+
         CGRect value = CGRectMake(start.origin.x + v * range.origin.x,
                            start.origin.y + v * range.origin.y,
                            start.size.width + v * range.size.width,
@@ -96,7 +96,7 @@
         [valueArray addObject:[NSValue valueWithCGRect:value]];
         t += increment;
     }
-    
+
     return [NSArray arrayWithArray:valueArray];
 }
 
@@ -190,10 +190,10 @@
 - (void)viewWillLayoutSubviews
 {
     UIView *parentView = self.view.superview;
-    
+
     double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
     CGRect parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
-    
+
     self.view.frame = CGRectMake(0.0f, parentFrame.size.height - kMPNotifHeight, parentFrame.size.width, kMPNotifHeight * 3.0f);
 
     // Position images
@@ -244,10 +244,10 @@
 
     UIView *topView = [self getTopView];
     if (topView) {
-        
+
         double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
         CGRect topFrame = CGRectApplyAffineTransform(topView.frame, CGAffineTransformMakeRotation((float)angle));
-        
+
         [topView addSubview:self.view];
 
         _canPan = NO;
@@ -272,18 +272,18 @@
 
 - (void)animateImage
 {
-    
+
     CGSize imageViewSize = CGSizeMake(40.0f, 40.0f);
     CGFloat duration = 0.5f;
-    
+
     // Animate the circle around the image
     CGRect before = self.circleLayer.bounds;
     CGRect after = CGRectMake(0.0f, 0.0f, imageViewSize.width + (self.circleLayer->circlePadding * 2.0f), imageViewSize.height + (self.circleLayer->circlePadding * 2.0f));
-    
+
     ElasticEaseOutAnimation *circleAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:[NSValue valueWithCGRect:before] endValue:[NSValue valueWithCGRect:after] andDuration:duration];
     self.circleLayer.bounds = after;
     [self.circleLayer addAnimation:circleAnimation forKey:@"bounds"];
-    
+
     // Animate the image
     before = self.imageView.bounds;
     after = CGRectMake(0.0f, 0.0f, imageViewSize.width, imageViewSize.height);

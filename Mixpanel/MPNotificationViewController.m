@@ -208,7 +208,7 @@
 {
     if(self = [super initWithCoder:aDecoder]) {
         _maskLayer = [CAGradientLayer layer];
-        
+
         _maskLayer.colors = @[(id)[[UIColor colorWithWhite:1.0 alpha:1.0] CGColor],
                               (id)[[UIColor colorWithWhite:1.0 alpha:0.0] CGColor]];
         [self.layer setMask:_maskLayer];
@@ -236,7 +236,7 @@
         self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 2.0f;
     }
-    
+
     return self;
 }
 
@@ -248,7 +248,7 @@
     } else {
         self.layer.borderColor = [UIColor whiteColor].CGColor;
     }
-    
+
     [super setHighlighted:highlighted];
 }
 
