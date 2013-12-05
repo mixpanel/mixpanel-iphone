@@ -72,21 +72,31 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)viewWillLayoutSubviews
 {
-    // can't use _prompt.bounds here cause it hasn't been calculated yet
+    // Can't use _prompt.bounds here cause it hasn't been calculated yet.
     CGFloat promptWidth = self.view.bounds.size.width - 30; // 2x 15 point horizontal padding on prompt
     CGFloat promptHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
     UIFont *font = _prompt.font;
     CGSize constraintSize = CGSizeMake(promptWidth, CGFLOAT_MAX);
     
-    // lower prompt font size until it fits (or hits min of 9 points)
+    // Lower prompt font size until it fits (or hits min of 9 points).
     for (CGFloat size = 20; size >= 9; size--) {
         font = [font fontWithSize:size];
-        CGRect bounds = [_prompt.text boundingRectWithSize:constraintSize
-                                                   options:NSStringDrawingUsesLineFragmentOrigin
-                                                attributes:@{NSFontAttributeName: font}
-                                                   context:nil];
-        if (bounds.size.height <= promptHeight) {
-            promptHeight = bounds.size.height;
+        CGSize sizeToFit;
+
+        // Use boundingRectWithSize for iOS 7 and above, sizeWithFont otherwise.
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
+            sizeToFit = [_prompt.text boundingRectWithSize:constraintSize
+                                                       options:NSStringDrawingUsesLineFragmentOrigin
+                                                    attributes:@{NSFontAttributeName: font}
+                                                       context:nil].size;
+        } else {
+            sizeToFit = [_prompt.text sizeWithFont:font
+                                 constrainedToSize:constraintSize
+                                     lineBreakMode:_prompt.lineBreakMode];
+        }
+
+        if (sizeToFit.height <= promptHeight) {
+            promptHeight = sizeToFit.height;
             break;
         }
     }
