@@ -131,7 +131,8 @@
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _bodyLabel.textColor = [UIColor whiteColor];
     _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
-    _bodyLabel.numberOfLines = 2;
+    _bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    _bodyLabel.numberOfLines = 0;
 
     UIColor *blurColor = [UIColor applicationPrimaryColor];
     if (!blurColor) {
@@ -188,17 +189,20 @@
     self.view.frame = CGRectMake(0.0f, parentFrame.size.height - kMPNotifHeight, parentFrame.size.width, kMPNotifHeight * 3.0f);
 
     // Position images
-    self.uiToolbarView.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    self.imageView.layer.position = CGPointMake(kMPNotifHeight / 2.0f, kMPNotifHeight / 2.0f);
+    _uiToolbarView.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    _imageView.layer.position = CGPointMake(kMPNotifHeight / 2.0f, kMPNotifHeight / 2.0f);
 
     // Position circle around image
-    self.circleLayer.position = self.imageView.layer.position;
+    _circleLayer.position = self.imageView.layer.position;
     [_circleLayer setNeedsDisplay];
 
     // Position body label
-    CGFloat offsetX = kMPNotifHeight;
-    self.bodyLabel.frame = CGRectMake(offsetX, 12.5f, self.view.frame.size.width - offsetX - 12.5f, 0.0f);
-    [self.bodyLabel sizeToFit];
+    CGSize constraintSize = CGSizeMake(self.view.frame.size.width - kMPNotifHeight - 12.5f, CGFLOAT_MAX);
+    CGSize sizeToFit = [_bodyLabel.text sizeWithFont:_bodyLabel.font
+                         constrainedToSize:constraintSize
+                             lineBreakMode:_bodyLabel.lineBreakMode];
+
+    _bodyLabel.frame = CGRectMake(kMPNotifHeight, ceilf((kMPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, ceilf(sizeToFit.width), ceilf(sizeToFit.height));
 }
 
 - (UIView *)getTopView
