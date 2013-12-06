@@ -11,7 +11,7 @@
 @class MPNotification;
 @protocol MPNotificationSmallViewControllerDelegate;
 
-@interface MPNotificationSmallViewController : UIViewController
+@interface MPNotificationSmallViewController : UIViewController //REVIEW MPMiniNotificationViewController
 
 @property (nonatomic, strong) MPNotification *notification;
 @property (nonatomic, weak) id<MPNotificationSmallViewControllerDelegate> delegate;
@@ -24,5 +24,6 @@
 @protocol MPNotificationSmallViewControllerDelegate <NSObject>
 
 - (void)notificationSmallControllerWasDismissed:(MPNotificationSmallViewController *)controller status:(BOOL)status;
+//REVIEW miniNotificationController:controller wasDismissedWithStatus:status
 
 @end

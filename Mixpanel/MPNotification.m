@@ -5,12 +5,19 @@
 //  Created by Kyle Warren on 10/18/13.
 //  Copyright (c) 2013 Mixpanel. All rights reserved.
 //
+//REVIEW do we need the copyright headers in every file?
 
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
+//REVIEW are these ifdefs necessary? won't the compiler warn automatically?
 
 #import "MPNotification.h"
+
+//REVIEW use constants for types
+//REVIEW eg,
+//REVIEW static NSString *MPNotificationTypeMini = @"mini";
+//REVIEW static NSString *MPNotificationTypeTakeover = @"takeover";
 
 @interface MPNotification ()
 
@@ -59,6 +66,7 @@
 
     NSURL *url = nil;
     NSString *urlString = object[@"cta_url"];
+    //REVIEW url -> URL
     if (urlString != nil && ![urlString isKindOfClass:[NSNull class]]) {
         if (![urlString isKindOfClass:[NSString class]]) {
             NSLog(@"invalid notif url: %@", urlString);
@@ -92,6 +100,8 @@
             return nil;
         }
     }
+    //REVIEW does the decide api guarantee that cta_url and image_url will be strings or null? if so, the above
+    //REVIEW code could be simplified
 
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                           type:type
@@ -104,6 +114,10 @@
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl
 {
+    //REVIEW enforce everything that can be here, for example:
+    //REVIEW     type == mini or type == takeover
+    //REVIEW     title len > 0
+    //REVIEW     body len > 0
     if (self = [super init]) {
         _ID = ID;
         self.type = type;

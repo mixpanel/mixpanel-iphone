@@ -17,5 +17,6 @@
 + (UIColor *)darkEffectColor;
 
 - (UIColor *)colorWithSaturationComponent:(CGFloat) saturation;
+//REVIEW these all need to prefixed with mp_
 
 @end

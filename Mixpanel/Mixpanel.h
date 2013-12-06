@@ -21,7 +21,7 @@
 
 #import "MPSurvey.h"
 
-@class MPNotification;
+@class MPNotification; //REVIEW spacing
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
@@ -56,6 +56,7 @@
 @interface Mixpanel : NSObject
 
 // REMOVE THIS
+//REVIEW yes, remove this ;)
 @property (nonatomic, strong) NSString *showNotificationType;
 
 /*!
@@ -497,7 +498,7 @@
  */
 - (void)showNotification;
 
-- (void)showNotificationWithObject:(MPNotification *)notification;
+- (void)showNotificationWithObject:(MPNotification *)notification; //REVIEW do we want this public?
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 

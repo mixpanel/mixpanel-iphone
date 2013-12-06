@@ -12,6 +12,7 @@
 
 #import "MPNotificationViewController.h"
 
+//REVIEW unnecessary newline
 #import "MPNotification.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
@@ -61,7 +62,7 @@
     [super viewDidLoad];
     self.backgroundImageView.image = _backgroundImage;
 
-    if (self.notification) {
+    if (self.notification) { //REVIEW when would it not have a notification?
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
@@ -76,7 +77,7 @@
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
 
-        if ([self.notification.cta length] > 0) {
+        if ([self.notification.cta length] > 0) { //REVIEW should be nil or > 0
             [self.okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
             [self.okayButton sizeToFit];
         }
@@ -93,20 +94,22 @@
 
     UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.imageDragView addGestureRecognizer:gesture];
+    //REVIEW don't use self. unless you need the behavior of the property. most of these could be _imageView, for example, instead of self.imageView
 }
 
 - (void)viewDidLayoutSubviews
 {
-    [super viewDidLayoutSubviews];
+    [super viewDidLayoutSubviews]; //REVIEW unnecessary, default implementation does nothing
 
     [self.okayButton sizeToFit];
     [self.imageAlphaMaskView sizeToFit];
+    //REVIEW don't use self. throughout
 
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleLightContent; //REVIEW prob an issue in iso6, at least for ios6 sdk
 }
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
@@ -131,6 +134,7 @@
         self.okayButton.alpha = 0.0f;
         self.closeButton.alpha = 0.0f;
     }
+    //REVIEW don't use self. throughout
 }
 
 - (void)endAppearanceTransition
@@ -163,6 +167,7 @@
         self.closeButton.alpha = 1.0f;
     } completion:nil];
 
+    //REVIEW don't use self. throughout
 }
 
 - (void)pressedOkay
@@ -170,6 +175,7 @@
     if (self.delegate) {
         [self.delegate notificationControllerWasDismissed:self status:YES];
     }
+    //REVIEW don't use self. throughout
 }
 
 - (void)pressedClose
@@ -177,6 +183,7 @@
     if (self.delegate) {
         [self.delegate notificationControllerWasDismissed:self status:NO];
     }
+    //REVIEW don't use self. throughout
 }
 
 - (void)didPan:(UIPanGestureRecognizer *)gesture
@@ -200,6 +207,7 @@
             self.imageView.layer.position = _viewStart;
         } completion:nil];
     }
+    //REVIEW don't use self. throughout
 }
 
 @end
@@ -213,6 +221,7 @@
 
         _maskLayer.colors = @[(id)[[UIColor colorWithWhite:1.0 alpha:1.0] CGColor],
                               (id)[[UIColor colorWithWhite:1.0 alpha:0.0] CGColor]];
+        //REVIEW CGColor is a property, use .
         [self.layer setMask:_maskLayer];
     }
     return self;
