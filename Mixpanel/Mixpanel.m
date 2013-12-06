@@ -1226,7 +1226,7 @@ static Mixpanel *sharedInstance = nil;
             }
 
             if (![notification.title isEqualToString:@"$ignore"]) {
-                [self track:@"$show_notification" properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
+                [self track:@"$notification_shown" properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
                 // campaign style
                 //[self track:@"$campaign_open" properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": @"inapp", @"notification_type": notification.type}];
                 [self markNotificationShown:notification];
