@@ -28,6 +28,7 @@
     } while ((rootViewController = rootViewController.presentedViewController));
 
     if (topNavigationController) {
+        //REVIEW reminder: tint color stuff needs to be protected in ios 6
         color = [[topNavigationController navigationBar] barTintColor];
     }
 

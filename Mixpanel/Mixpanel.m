@@ -1081,6 +1081,7 @@ static Mixpanel *sharedInstance = nil;
 
     if (![survey.name isEqualToString:@"$ignore"]) {
         [self track:@"$show_survey" properties:@{@"survey_id": [NSNumber numberWithUnsignedInt:survey.ID], @"collection_id":[NSNumber numberWithUnsignedInt:survey.collectionID]}];
+//REVIEW $survey_shown, and additional properties we talked about.. and move into markSurveyShown
     }
 }
 
@@ -1163,12 +1164,14 @@ static Mixpanel *sharedInstance = nil;
 }
 
 #pragma mark - MPNotification stuff
+//REVIEW "MPNotification stuff" -> Notifications
 
 - (void)showNotification
+//REVIEW should probably take optional type argument instead having a shownNotificationType property
 {
     [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
         if ([notifications count] > 0) {
-            MPNotification *shownNotification = nil;
+            MPNotification *shownNotification = nil; //REVIEW misnomer.. hasn't been shown yet
 
             if (self.showNotificationType != nil) {
                 for (MPNotification *notification in notifications) {
@@ -1201,7 +1204,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
-    BOOL success = [notification loadImage];
+    BOOL success = [notification loadImage]; //REVIEW already done in checkForNotif..
 
     // if images fail to load. remove the notification from the queue
     if (!success) {
@@ -1220,6 +1223,7 @@ static Mixpanel *sharedInstance = nil;
             self.currentlyShowingNotification = notification;
 
             if ([notification.type isEqualToString:@"mini"]) {
+                //REVIEW use constants
                 [self showOverAppNotificationWithObject:notification];
             } else {
                 [self showModalNotificationWithObject:notification];
@@ -1227,6 +1231,7 @@ static Mixpanel *sharedInstance = nil;
 
             if (![notification.title isEqualToString:@"$ignore"]) {
                 [self track:@"$notification_shown" properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
+                //REVIEW yes, use $campaign_open and move it to markNotificationShown
                 // campaign style
                 //[self track:@"$campaign_open" properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": @"inapp", @"notification_type": notification.type}];
                 [self markNotificationShown:notification];
@@ -1244,6 +1249,7 @@ static Mixpanel *sharedInstance = nil;
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
     }
+    //REVIEW move this into helper method, 'leafViewController' or something
 
     controller.backgroundImage = [rootViewController.view mp_snapshotImage];
     controller.notification = notification;
@@ -1259,6 +1265,7 @@ static Mixpanel *sharedInstance = nil;
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
     }
+    //REVIEW move this into helper method, 'leafViewController' or something
 
     self.miniNotificationViewController = [[MPNotificationSmallViewController alloc] init];
     _miniNotificationViewController.notification = notification;
@@ -1285,7 +1292,7 @@ static Mixpanel *sharedInstance = nil;
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
-        
+
         [self trackNotification:controller.notification action:@"$notification_accepted"];
     } else {
         [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -1295,6 +1302,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)notificationSmallControllerWasDismissed:(MPNotificationSmallViewController *)controller status:(BOOL)status
 {
+//REVIEW notification controllers can share delegate
     if (self.currentlyShowingNotification != controller.notification) {
         return;
     }
@@ -1309,19 +1317,21 @@ static Mixpanel *sharedInstance = nil;
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
 
         [controller hideWithAnimation:!success completion:completionBlock];
+        //REVIEW again, feels wrong that controller has hide and show methods
 
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
-        
+
         [self trackNotification:controller.notification action:@"$notification_accepted"];
     } else {
         [controller hideWithAnimation:YES completion:completionBlock];
         [self trackNotification:controller.notification action:@"$notification_canceled"];
     }
+    //REVIEW before this goes out, let's settle on some events: $campaign_delivery, $campaign_open, $campaign_clicked or something that can be consistent across notif types
 }
 
-- (void)trackNotification:(MPNotification *)notification action:(NSString *)action
+- (void)trackNotification:(MPNotification *)notification action:(NSString *)action //REVIEW use 'event' in code
 {
     if (![notification.title isEqualToString:@"$ignore"]) {
         [self track:action properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
@@ -1344,7 +1354,7 @@ static Mixpanel *sharedInstance = nil;
                                          // maybe should do this in the consumer?
                                          @"time": @([NSDate timeIntervalSinceReferenceDate])
                                          }
-                                 };
+                                 }; //REVIEW need to talk about this
 
     [self.people append:properties];
 }

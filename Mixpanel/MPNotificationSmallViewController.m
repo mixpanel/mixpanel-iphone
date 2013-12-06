@@ -12,17 +12,20 @@
 
 #import "MPNotificationSmallViewController.h"
 
+//REVIEW unnecessary newline
 #import "MPNotification.h"
 
+//REVIEW unnecessary newline
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
 #import "UIView+MPSnapshotImage.h"
 #import "UIColor+MPColor.h"
+//REVIEW alphabetize
 
-#define kMPNotifHeight 65.0f
+#define kMPNotifHeight 65.0f //REVIEW don't use k prefix
 
 @interface CircleLayer : CALayer {
-    @public
+    @public //REVIEW @propery CGFloat circlePadding
     CGFloat circlePadding;
 }
 
@@ -59,13 +62,14 @@
 
 @interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
 
-#define kFPS 60
+#define kFPS 60 //REVIEW don't use k prefix, do use MP prefix
 
 @end
 
 @implementation ElasticEaseOutAnimation
 
 - (id)initWithStartValue:(NSValue *)start endValue:(NSValue *)end andDuration:(double)duration
+//REVIEW why not have start and end type be CGRect?
 {
     if ((self = [super init]))
     {
@@ -138,7 +142,7 @@
         blurColor = [UIColor darkEffectColor];
     }
     blurColor = [blurColor colorWithAlphaComponent:0.7f];
-    
+
     self.uiToolbarView = [[UIToolbar alloc] init];
     [_uiToolbarView setBarTintColor:[blurColor colorWithAlphaComponent:0.8f]];
     _uiToolbarView.translucent = YES;
@@ -216,6 +220,7 @@
 
 - (double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation
 {
+//REVIEW can we try to use autolayout for the mini ui?
     switch (orientation) {
         case UIInterfaceOrientationLandscapeLeft:
             return -M_PI_2;
@@ -229,6 +234,7 @@
 }
 
 - (void)showWithAnimation
+//REVIEW I think the show logic doens't belong in the ViewController. It should be presented by a parent controller, like survey nav or qvc
 {
     [self.view removeFromSuperview];
 
@@ -288,7 +294,7 @@
     } else {
         duration = 0.0f;
     }
-    
+
     double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
     CGRect parentFrame = CGRectApplyAffineTransform(self.view.superview.frame, CGAffineTransformMakeRotation((float)angle));
 
@@ -341,7 +347,7 @@
 
 - (void)dealloc
 {
-    self.delegate = nil;
+    self.delegate = nil; //REVIEW necessay?
 }
 
 @end

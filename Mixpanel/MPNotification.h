@@ -12,15 +12,17 @@
 
 @property (nonatomic, readonly) NSUInteger ID;
 @property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSURL *imageUrl;
+@property (nonatomic, strong) NSURL *imageUrl; //REVIEW imageURL
 @property (nonatomic, strong) NSData *image;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *body;
-@property (nonatomic, strong) NSString *cta;
-@property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) NSString *cta; //REVIEW callToAction
+@property (nonatomic, strong) NSURL *url; //REVIEW callToActionURL
+//REVIEW can most of these properties be private?
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
-- (BOOL)loadImage;
+- (BOOL)loadImage; //REVIEW MPNotification should have an -(UIImage)image method that lazy-loads the image and
+                   //REVIEW returns nil if it can't. loading can be private
 
 @end
