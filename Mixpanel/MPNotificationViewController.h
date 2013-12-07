@@ -15,9 +15,7 @@
 
 @end
 
-@interface MPTakeoverNotificationViewController : MPNotificationViewController //REVIEW MPTakeoverNotificationViewController
-
-@property (nonatomic, strong) UIImage *backgroundImage; //REVIEW private?
+@interface MPTakeoverNotificationViewController : MPNotificationViewController
 
 @end
 
