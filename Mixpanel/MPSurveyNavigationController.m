@@ -337,7 +337,7 @@
 {
     __strong id<MPSurveyNavigationControllerDelegate> strongDelegate = _delegate;
     if (strongDelegate != nil) {
-        [strongDelegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
+        [strongDelegate surveyController:self wasDismissedWithAnswers:[_answers allValues]];
     }
 }
 

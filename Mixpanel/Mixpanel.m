@@ -36,7 +36,6 @@
 #import "MPSurveyNavigationController.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
-#import "MPNotificationSmallViewController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
@@ -55,7 +54,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate, MPNotificationSmallViewControllerDelegate> {
+@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -81,7 +80,7 @@
 
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) MPNotification *currentlyShowingNotification;
-@property (nonatomic, strong) MPNotificationSmallViewController *miniNotificationViewController;
+@property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
 @end
@@ -174,8 +173,6 @@ static Mixpanel *sharedInstance = nil;
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
-
-        self.showNotificationType = nil;
 
         // wifi reachability
         BOOL reachabilityOk = NO;
@@ -1066,23 +1063,24 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-- (void)presentSurveyWithRootViewController:(MPSurvey *)survey
++ (UIViewController *)topViewController
 {
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
     }
+    return rootViewController;
+}
+
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey
+{
+    UIViewController *rootViewController = [Mixpanel topViewController];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
     MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
     controller.survey = survey;
     controller.delegate = self;
     controller.backgroundImage = [rootViewController.view mp_snapshotForBlur];
     [rootViewController presentViewController:controller animated:YES completion:nil];
-
-    if (![survey.name isEqualToString:@"$ignore"]) {
-        [self track:@"$show_survey" properties:@{@"survey_id": [NSNumber numberWithUnsignedInt:survey.ID], @"collection_id":[NSNumber numberWithUnsignedInt:survey.collectionID]}];
-//REVIEW $survey_shown, and additional properties we talked about.. and move into markSurveyShown
-    }
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
@@ -1143,9 +1141,14 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
     [_shownSurveyCollections addObject:@(survey.collectionID)];
     [self.people append:@{@"$surveys": @(survey.ID), @"$collections": @(survey.collectionID)}];
+
+    if (![survey.name isEqualToString:@"$ignore"]) {
+        [self track:@"$show_survey" properties:@{@"survey_id": [NSNumber numberWithUnsignedInt:survey.ID], @"collection_id":[NSNumber numberWithUnsignedInt:survey.collectionID]}];
+        //REVIEW $survey_shown, and additional properties we talked about.
+    }
 }
 
-- (void)surveyControllerWasDismissed:(MPSurveyNavigationController *)controller withAnswers:(NSArray *)answers
+- (void)surveyController:(MPSurveyNavigationController *)controller wasDismissedWithAnswers:(NSArray *)answers
 {
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     self.currentlyShowingSurvey = nil;
@@ -1163,28 +1166,26 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-#pragma mark - MPNotification stuff
-//REVIEW "MPNotification stuff" -> Notifications
+#pragma mark - Notifications
 
 - (void)showNotification
-//REVIEW should probably take optional type argument instead having a shownNotificationType property
 {
     [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
         if ([notifications count] > 0) {
-            MPNotification *shownNotification = nil; //REVIEW misnomer.. hasn't been shown yet
+            [self showNotificationWithObject:notifications[0]];
+        }
+    }];
+}
 
-            if (self.showNotificationType != nil) {
-                for (MPNotification *notification in notifications) {
-                    if ([notification.type isEqualToString:self.showNotificationType]) {
-                        shownNotification = notification;
-                    }
+- (void)showNotificationWithType:(NSString *)type
+{
+    [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
+        if (type != nil) {
+            for (MPNotification *notification in notifications) {
+                if ([notification.type isEqualToString:type]) {
+                    [self showNotificationWithObject:notification];
+                    break;
                 }
-            } else {
-                shownNotification = notifications[0];
-            }
-
-            if (shownNotification != nil) {
-                [self showNotificationWithObject:shownNotification];
             }
         }
     }];
@@ -1204,7 +1205,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
-    BOOL success = [notification loadImage]; //REVIEW already done in checkForNotif..
+    BOOL success = [notification loadImage]; //REVIEW already done in checkForNotif.
 
     // if images fail to load. remove the notification from the queue
     if (!success) {
@@ -1222,8 +1223,7 @@ static Mixpanel *sharedInstance = nil;
         } else {
             self.currentlyShowingNotification = notification;
 
-            if ([notification.type isEqualToString:@"mini"]) {
-                //REVIEW use constants
+            if ([notification.type isEqualToString:MPNotificationTypeMini]) {
                 [self showOverAppNotificationWithObject:notification];
             } else {
                 [self showModalNotificationWithObject:notification];
@@ -1242,74 +1242,43 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showModalNotificationWithObject:(MPNotification *)notification
 {
+    UIViewController *rootViewController = [Mixpanel topViewController];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
-    MPNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-
-    while (rootViewController.presentedViewController) {
-        rootViewController = rootViewController.presentedViewController;
-    }
-    //REVIEW move this into helper method, 'leafViewController' or something
+    MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
 
     controller.backgroundImage = [rootViewController.view mp_snapshotImage];
     controller.notification = notification;
     controller.delegate = self;
+    self.notificationViewController = controller;
 
     [rootViewController presentViewController:controller animated:NO completion:nil];
 }
 
 - (void)showOverAppNotificationWithObject:(MPNotification *)notification
 {
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    MPMiniNotificationViewController *controller = [[MPMiniNotificationViewController alloc] init];
+    controller.notification = notification;
+    controller.delegate = self;
+    self.notificationViewController = controller;
 
-    while (rootViewController.presentedViewController) {
-        rootViewController = rootViewController.presentedViewController;
-    }
-    //REVIEW move this into helper method, 'leafViewController' or something
-
-    self.miniNotificationViewController = [[MPNotificationSmallViewController alloc] init];
-    _miniNotificationViewController.notification = notification;
-    _miniNotificationViewController.delegate = self;
-
-    [_miniNotificationViewController showWithAnimation];
+    [controller showWithAnimation];
 
     double delayInSeconds = 5.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self notificationSmallControllerWasDismissed:_miniNotificationViewController status:NO];
+        [self notificationController:controller wasDismissedWithStatus:NO];
     });
 }
 
-- (void)notificationControllerWasDismissed:(MPNotificationViewController *)controller status:(BOOL)status
+- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithStatus:(BOOL)status
 {
-    self.currentlyShowingNotification = nil;
-
-    if (status && controller.notification.url) {
-        MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
-        BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
-        [controller.presentingViewController dismissViewControllerAnimated:!success completion:nil];
-
-        if (!success) {
-            NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
-        }
-
-        [self trackNotification:controller.notification action:@"$notification_accepted"];
-    } else {
-        [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-        [self trackNotification:controller.notification action:@"$notification_canceled"];
-    }
-}
-
-- (void)notificationSmallControllerWasDismissed:(MPNotificationSmallViewController *)controller status:(BOOL)status
-{
-//REVIEW notification controllers can share delegate
     if (self.currentlyShowingNotification != controller.notification) {
         return;
     }
 
     void (^completionBlock)()  = ^void(){
         self.currentlyShowingNotification = nil;
-        self.miniNotificationViewController = nil;
+        self.notificationViewController = nil;
     };
 
     if (status && controller.notification.url) {
@@ -1317,26 +1286,25 @@ static Mixpanel *sharedInstance = nil;
         BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
 
         [controller hideWithAnimation:!success completion:completionBlock];
-        //REVIEW again, feels wrong that controller has hide and show methods
 
         if (!success) {
             NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
         }
 
-        [self trackNotification:controller.notification action:@"$notification_accepted"];
+        [self trackNotification:controller.notification event:@"$notification_accepted"];
     } else {
         [controller hideWithAnimation:YES completion:completionBlock];
-        [self trackNotification:controller.notification action:@"$notification_canceled"];
+        [self trackNotification:controller.notification event:@"$notification_canceled"];
     }
     //REVIEW before this goes out, let's settle on some events: $campaign_delivery, $campaign_open, $campaign_clicked or something that can be consistent across notif types
 }
 
-- (void)trackNotification:(MPNotification *)notification action:(NSString *)action //REVIEW use 'event' in code
+- (void)trackNotification:(MPNotification *)notification event:(NSString *)event
 {
     if (![notification.title isEqualToString:@"$ignore"]) {
-        [self track:action properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
+        [self track:event properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
     } else {
-        MixpanelDebug(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), action);
+        MixpanelDebug(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), event);
     }
 }
 

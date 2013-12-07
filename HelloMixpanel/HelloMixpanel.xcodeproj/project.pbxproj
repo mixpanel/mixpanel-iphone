@@ -13,6 +13,7 @@
 		059AC495181852460025F7C6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		059AC4961818525A0025F7C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9951610EFE3005772B7 /* CoreGraphics.framework */; };
 		05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
 		2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2805EDE517C6B815003A0D72 /* Accelerate.framework */; };
@@ -60,8 +61,6 @@
 		862221F418298D42004DAAEA /* MPCloseBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 862221F218298D42004DAAEA /* MPCloseBtn@2x.png */; };
 		86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CC974D1811F82D0003EF50 /* MPNotification.m */; };
 		86CC975018120A7E0003EF50 /* MPNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86CC974F18120A7E0003EF50 /* MPNotification.storyboard */; };
-		86CC975318120B5E0003EF50 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CC975218120B5E0003EF50 /* MPNotificationViewController.m */; };
-		86CEF8911831628F0045893B /* MPNotificationSmallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CEF8901831628F0045893B /* MPNotificationSmallViewController.m */; };
 		9E3B2CB7771144A69D939405 /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A441AF641244CA893593CD /* libPods-HelloMixpanelTests.a */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
@@ -84,6 +83,8 @@
 		05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyHTTPConnection.m; sourceTree = "<group>"; };
 		05C13E5118184DBE00848D48 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		05C13E5318184DC700848D48 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
+		05F02D6218528F8C00527D93 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		05FF819D18452EA20073FBAC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		2802053F17DEC234000D71F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -148,10 +149,6 @@
 		86CC974C1811F82D0003EF50 /* MPNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotification.h; sourceTree = "<group>"; };
 		86CC974D1811F82D0003EF50 /* MPNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotification.m; sourceTree = "<group>"; };
 		86CC974F18120A7E0003EF50 /* MPNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MPNotification.storyboard; sourceTree = "<group>"; };
-		86CC975118120B5E0003EF50 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
-		86CC975218120B5E0003EF50 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
-		86CEF88F1831628F0045893B /* MPNotificationSmallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationSmallViewController.h; sourceTree = "<group>"; };
-		86CEF8901831628F0045893B /* MPNotificationSmallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationSmallViewController.m; sourceTree = "<group>"; };
 		A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanel.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.xcconfig"; path = "Pods/Pods-HelloMixpanelTests.xcconfig"; sourceTree = "<group>"; };
 		DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.xcconfig"; path = "Pods/Pods-HelloMixpanel.xcconfig"; sourceTree = "<group>"; };
@@ -300,11 +297,7 @@
 				2869040017C7EC8100DCA073 /* MPSurvey.storyboard */,
 				86CC974C1811F82D0003EF50 /* MPNotification.h */,
 				86CC974D1811F82D0003EF50 /* MPNotification.m */,
-				86CC975118120B5E0003EF50 /* MPNotificationViewController.h */,
-				86CC975218120B5E0003EF50 /* MPNotificationViewController.m */,
 				86CC974F18120A7E0003EF50 /* MPNotification.storyboard */,
-				86CEF88F1831628F0045893B /* MPNotificationSmallViewController.h */,
-				86CEF8901831628F0045893B /* MPNotificationSmallViewController.m */,
 				289B497817D913D40035439B /* NSData+MPBase64.h */,
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
 				28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */,
@@ -327,6 +320,8 @@
 				289FD4BC18088D8900385AE2 /* MPLogo@2x.png */,
 				053B4C661840191000E825FE /* UIColor+MPColor.h */,
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
+				05F02D6118528F8C00527D93 /* MPNotificationViewController.h */,
+				05F02D6218528F8C00527D93 /* MPNotificationViewController.m */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -540,9 +535,8 @@
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */,
-				86CC975318120B5E0003EF50 /* MPNotificationViewController.m in Sources */,
 				86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */,
-				86CEF8911831628F0045893B /* MPNotificationSmallViewController.m in Sources */,
+				05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */,
 				28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */,
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,

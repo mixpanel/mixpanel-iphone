@@ -19,9 +19,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "MPSurvey.h"
-
-@class MPNotification; //REVIEW spacing
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
@@ -54,10 +51,6 @@
  Library Guide</a>.
  */
 @interface Mixpanel : NSObject
-
-// REMOVE THIS
-//REVIEW yes, remove this ;)
-@property (nonatomic, strong) NSString *showNotificationType;
 
 /*!
  @property
@@ -487,6 +480,20 @@
  */
 - (void)showNotificationWithID:(NSUInteger)ID;
 
+
+/*!
+ @method
+
+ @abstract
+ Shows a notification with the given type if one is available.
+
+ @discussion
+ You do not need to call this method on the main thread.
+
+ @param type The type of notification to show, either @"mini", or @"takeover"
+ */
+- (void)showNotificationWithType:(NSString *)type;
+
 /*!
  @method
 
@@ -497,8 +504,6 @@
  You do not need to call this method on the main thread.
  */
 - (void)showNotification;
-
-- (void)showNotificationWithObject:(MPNotification *)notification; //REVIEW do we want this public?
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 

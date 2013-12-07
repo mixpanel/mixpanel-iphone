@@ -33,6 +33,8 @@
 
 @property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
 
+@property (nonatomic, copy) NSString *showNotificationType;
+
 @end
 
 @implementation ViewController
@@ -73,9 +75,8 @@
 
 - (IBAction)setNotificationType:(id)sender
 {
-    NSArray *types = @[@"takeover", @"mini"];
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    mixpanel.showNotificationType = types[self.notificationTypeControl.selectedSegmentIndex];
+    NSArray *types = @[MPNotificationTypeTakeover, MPNotificationTypeMini];
+    self.showNotificationType = types[self.notificationTypeControl.selectedSegmentIndex];
 }
 
 - (IBAction)showSurvey:(id)sender
@@ -98,7 +99,7 @@
     if ([_notificationIDField.text length] > 0) {
         [mixpanel showNotificationWithID:(NSUInteger)_notificationIDField.text.integerValue];
     } else {
-        [mixpanel showNotification];
+        [mixpanel showNotificationWithType:_showNotificationType];
     }
 }
 

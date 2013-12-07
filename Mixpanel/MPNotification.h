@@ -10,6 +10,9 @@
 
 @interface MPNotification : NSObject
 
+extern NSString *const MPNotificationTypeMini;
+extern NSString *const MPNotificationTypeTakeover;
+
 @property (nonatomic, readonly) NSUInteger ID;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSURL *imageUrl; //REVIEW imageURL
