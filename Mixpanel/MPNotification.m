@@ -16,7 +16,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl;
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageURL:(NSURL *)imageURL;
 
 @end
 
@@ -78,23 +78,23 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         }
     }
 
-    NSURL *imageUrl = nil;
-    NSString *imageUrlString = object[@"image_url"];
-    if (imageUrlString != nil && ![imageUrlString isKindOfClass:[NSNull class]]) {
-        if (![imageUrlString isKindOfClass:[NSString class]]) {
-            NSLog(@"invalid notif image url: %@", imageUrlString);
+    NSURL *imageURL = nil;
+    NSString *imageURLString = object[@"image_url"];
+    if (imageURLString != nil && ![imageURLString isKindOfClass:[NSNull class]]) {
+        if (![imageURLString isKindOfClass:[NSString class]]) {
+            NSLog(@"invalid notif image url: %@", imageURLString);
             return nil;
         }
 
         if ([type isEqualToString:MPNotificationTypeTakeover]) {
-            NSString *imageName = [imageUrlString stringByDeletingPathExtension];
-            NSString *extension = [imageUrlString pathExtension];
-            imageUrlString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+            NSString *imageName = [imageURLString stringByDeletingPathExtension];
+            NSString *extension = [imageURLString pathExtension];
+            imageURLString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         }
 
-        imageUrl = [NSURL URLWithString:imageUrlString];
-        if (imageUrl == nil) {
-            NSLog(@"inavlid notif image url: %@", imageUrlString);
+        imageURL = [NSURL URLWithString:imageURLString];
+        if (imageURL == nil) {
+            NSLog(@"inavlid notif image url: %@", imageURLString);
             return nil;
         }
     }
@@ -107,10 +107,10 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                                           body:body
                                            cta:cta
                                            url:url
-                                      imageUrl:imageUrl];
+                                      imageURL:imageURL];
 }
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageURL:(NSURL *)imageURL
 {
     //REVIEW enforce everything that can be here, for example:
     //REVIEW     type == mini or type == takeover
@@ -121,8 +121,8 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         self.type = type;
         self.title = title;
         self.body = body;
-        self.imageUrl = imageUrl;
-        self.cta = cta;
+        self.imageURL = imageURL;
+        self.callToAction = cta;
         self.url = url;
         self.image = nil;
     }
@@ -133,11 +133,11 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
 - (BOOL)loadImage
 {
-    if (self.image == nil && self.imageUrl != nil) {
+    if (self.image == nil && self.imageURL != nil) {
         NSError *error = nil;
-        NSData *imageData = [NSData dataWithContentsOfURL:self.imageUrl options:NSDataReadingMappedIfSafe error:&error];
+        NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL options:NSDataReadingMappedIfSafe error:&error];
         if (error || !imageData) {
-            NSLog(@"image failed to load from url: %@", self.imageUrl);
+            NSLog(@"image failed to load from url: %@", self.imageURL);
             return NO;
         }
         self.image = imageData;

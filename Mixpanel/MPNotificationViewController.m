@@ -60,6 +60,12 @@
 
 @end
 
+@interface MPTakeoverNotificationViewController ()
+
+@property (nonatomic, strong) UIImage *backgroundImage;
+
+@end
+
 @implementation MPTakeoverNotificationViewController
 
 - (void)viewDidLoad
@@ -82,8 +88,8 @@
         _titleView.text = self.notification.title;
         _bodyView.text = self.notification.body;
 
-        if ([self.notification.cta length] > 0) { //REVIEW should be nil or > 0
-            [_okayButton setTitle:self.notification.cta forState:UIControlStateNormal];
+        if ([self.notification.callToAction length] > 0) { //REVIEW should be nil or > 0
+            [_okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
             [_okayButton sizeToFit];
         }
     }

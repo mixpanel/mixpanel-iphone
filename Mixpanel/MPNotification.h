@@ -15,13 +15,12 @@ extern NSString *const MPNotificationTypeTakeover;
 
 @property (nonatomic, readonly) NSUInteger ID;
 @property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSURL *imageUrl; //REVIEW imageURL
+@property (nonatomic, strong) NSURL *imageURL;
 @property (nonatomic, strong) NSData *image;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *body;
-@property (nonatomic, strong) NSString *cta; //REVIEW callToAction
+@property (nonatomic, strong) NSString *callToAction;
 @property (nonatomic, strong) NSURL *url; //REVIEW callToActionURL
-//REVIEW can most of these properties be private?
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
