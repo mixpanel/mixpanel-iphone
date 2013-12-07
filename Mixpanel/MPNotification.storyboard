@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
-        <!--Notification View Controller-->
+        <!--Takeover Notification View Controller-->
         <scene sceneID="YMc-Jc-CKb">
             <objects>
-                <viewController storyboardIdentifier="MPNotificationViewController" modalTransitionStyle="crossDissolve" id="puo-Hy-QiQ" customClass="MPNotificationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MPNotificationViewController" modalTransitionStyle="crossDissolve" id="puo-Hy-QiQ" customClass="MPTakeoverNotificationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="en5-wb-o36"/>
                         <viewControllerLayoutGuide type="bottom" id="oJ2-nk-n4o"/>

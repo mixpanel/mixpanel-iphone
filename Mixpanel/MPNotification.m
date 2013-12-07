@@ -14,11 +14,6 @@
 
 #import "MPNotification.h"
 
-//REVIEW use constants for types
-//REVIEW eg,
-//REVIEW static NSString *MPNotificationTypeMini = @"mini";
-//REVIEW static NSString *MPNotificationTypeTakeover = @"takeover";
-
 @interface MPNotification ()
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageUrl:(NSURL *)imageUrl;
@@ -26,6 +21,9 @@
 @end
 
 @implementation MPNotification
+
+NSString *const MPNotificationTypeMini = @"mini";
+NSString *const MPNotificationTypeTakeover = @"takeover";
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object
 {
@@ -88,7 +86,7 @@
             return nil;
         }
 
-        if ([type isEqualToString:@"takeover"]) {
+        if ([type isEqualToString:MPNotificationTypeTakeover]) {
             NSString *imageName = [imageUrlString stringByDeletingPathExtension];
             NSString *extension = [imageUrlString pathExtension];
             imageUrlString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
