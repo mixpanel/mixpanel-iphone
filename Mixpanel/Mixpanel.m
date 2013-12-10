@@ -22,7 +22,9 @@
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 
+#ifndef MIXPANEL_NO_IFA
 #import <AdSupport/ASIdentifierManager.h>
+#endif
 #import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
