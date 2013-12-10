@@ -387,14 +387,24 @@ static Mixpanel *sharedInstance = nil;
     NSString *distinctId = nil;
 #ifndef MIXPANEL_NO_IFA
     if (NSClassFromString(@"ASIdentifierManager")) {
+        // if MIXPANEL_NO_IFA is not set and ASIdentifierManager is available (iOS 6+), use IFA
         distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
     }
 #endif
     if (!distinctId) {
+        UIDevice *device = [UIDevice currentDevice];
+        if ([device respondsToSelector:@selector(identifierForVendor)]) {
+            // if identifierForVendor is available (iOS 6+), use it
+            distinctId = [device.identifierForVendor UUIDString];
+        }
+    }
+    if (!distinctId) {
+        // otherwise, we're on iOS 5- and ODIN will work fine
         distinctId = ODIN1();
     }
     if (!distinctId) {
-        NSLog(@"%@ error getting default distinct id: both iOS IFA and ODIN1 failed", self);
+        // should never happen
+        NSLog(@"%@ error getting default distinct id: IFA, IFV and ODIN1 failed", self);
     }
     return distinctId;
 }
