@@ -62,8 +62,6 @@
 
 @interface MPTakeoverNotificationViewController ()
 
-@property (nonatomic, strong) UIImage *backgroundImage;
-
 @end
 
 @implementation MPTakeoverNotificationViewController
@@ -119,7 +117,6 @@
     [_okayButton sizeToFit];
     [_imageAlphaMaskView sizeToFit];
     //REVIEW don't use _ throughout
-
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
