@@ -62,18 +62,18 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         return nil;
     }
 
-    NSURL *url = nil;
-    NSString *urlString = object[@"cta_url"];
+    NSURL *URL = nil;
+    NSString *URLString = object[@"cta_url"];
     //REVIEW url -> URL
-    if (urlString != nil && ![urlString isKindOfClass:[NSNull class]]) {
-        if (![urlString isKindOfClass:[NSString class]]) {
-            NSLog(@"invalid notif url: %@", urlString);
+    if (URLString != nil && ![URLString isKindOfClass:[NSNull class]]) {
+        if (![URLString isKindOfClass:[NSString class]]) {
+            NSLog(@"invalid notif url: %@", URLString);
             return nil;
         }
 
-        url = [NSURL URLWithString:urlString];
-        if (url == nil) {
-            NSLog(@"inavlid notif url: %@", urlString);
+        URL = [NSURL URLWithString:URLString];
+        if (URL == nil) {
+            NSLog(@"inavlid notif url: %@", URLString);
             return nil;
         }
     }
@@ -94,7 +94,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
         imageURL = [NSURL URLWithString:imageURLString];
         if (imageURL == nil) {
-            NSLog(@"inavlid notif image url: %@", imageURLString);
+            NSLog(@"inavlid notif image URL: %@", imageURLString);
             return nil;
         }
     }
@@ -106,25 +106,42 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                                          title:title
                                           body:body
                                            cta:cta
-                                           url:url
+                                           url:URL
                                       imageURL:imageURL];
 }
 
 - (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageURL:(NSURL *)imageURL
 {
-    //REVIEW enforce everything that can be here, for example:
-    //REVIEW     type == mini or type == takeover
-    //REVIEW     title len > 0
-    //REVIEW     body len > 0
     if (self = [super init]) {
-        _ID = ID;
-        self.type = type;
-        self.title = title;
-        self.body = body;
-        self.imageURL = imageURL;
-        self.callToAction = cta;
-        self.url = url;
-        self.image = nil;
+        BOOL valid = YES;
+
+        if (!(title && title.length > 0)) {
+            valid = NO;
+            NSLog(@"Notification title nil or empty: %@", title);
+        }
+
+        if (!(body && body.length > 0)) {
+            valid = NO;
+            NSLog(@"Notification body nil or empty: %@", body);
+        }
+
+        if (!([type isEqualToString:MPNotificationTypeTakeover] || [type isEqualToString:MPNotificationTypeMini])) {
+            valid = NO;
+            NSLog(@"Invalid notification type: %@, must be %@ or %@", type, MPNotificationTypeMini, MPNotificationTypeTakeover);
+        }
+
+        if (valid) {
+            _ID = ID;
+            self.type = type;
+            self.title = title;
+            self.body = body;
+            self.imageURL = imageURL;
+            self.callToAction = cta;
+            self.url = url;
+            self.image = nil;
+        } else {
+            self = nil;
+        }
     }
 
     return self;

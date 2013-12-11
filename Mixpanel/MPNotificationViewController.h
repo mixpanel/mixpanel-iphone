@@ -17,6 +17,8 @@
 
 @interface MPTakeoverNotificationViewController : MPNotificationViewController
 
+@property (nonatomic, strong) UIImage *backgroundImage;
+
 @end
 
 @interface MPMiniNotificationViewController : MPNotificationViewController
