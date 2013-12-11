@@ -43,6 +43,7 @@
 {
     [super viewDidLoad];
 
+    self.showNotificationType = MPNotificationTypeTakeover;
     self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.scrollView.contentSize = self.view.bounds.size;
 
