@@ -311,9 +311,9 @@
 #define MPNotifHeight 65.0f
 
 @interface CircleLayer : CALayer {
-@public //REVIEW @propery CGFloat circlePadding
-    CGFloat circlePadding;
 }
+
+@property (nonatomic, assign) CGFloat circlePadding;
 
 @end
 
@@ -321,7 +321,7 @@
 
 + (id)layer {
     CircleLayer *cl = (CircleLayer *)[super layer];
-    cl->circlePadding = 2.5f;
+    cl.circlePadding = 2.5f;
     return cl;
 }
 
@@ -553,7 +553,7 @@
 
     // Animate the circle around the image
     CGRect before = _circleLayer.bounds;
-    CGRect after = CGRectMake(0.0f, 0.0f, imageViewSize.width + (_circleLayer->circlePadding * 2.0f), imageViewSize.height + (_circleLayer->circlePadding * 2.0f));
+    CGRect after = CGRectMake(0.0f, 0.0f, imageViewSize.width + (_circleLayer.circlePadding * 2.0f), imageViewSize.height + (_circleLayer.circlePadding * 2.0f));
 
     ElasticEaseOutAnimation *circleAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:[NSValue valueWithCGRect:before] endValue:[NSValue valueWithCGRect:after] andDuration:duration];
     _circleLayer.bounds = after;
