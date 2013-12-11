@@ -10,7 +10,7 @@
 
 @implementation UIColor (MPColor)
 
-+ (UIColor *)applicationPrimaryColor
++ (UIColor *)mp_applicationPrimaryColor
 {
 
     UIColor *color;
@@ -45,17 +45,17 @@
     return color;
 }
 
-+ (UIColor *)lightEffectColor
++ (UIColor *)mp_lightEffectColor
 {
     return [UIColor colorWithWhite:1.0f alpha:0.3f];
 }
 
-+ (UIColor *)extraLightEffectColor
++ (UIColor *)mp_extraLightEffectColor
 {
     return [UIColor colorWithWhite:0.97f alpha:0.82f];
 }
 
-+ (UIColor *)darkEffectColor
++ (UIColor *)mp_darkEffectColor
 {
     return [UIColor colorWithWhite:0.11f alpha:0.73f];
 }
