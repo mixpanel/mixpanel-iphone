@@ -109,21 +109,21 @@
 
 - (UIImage *)mp_applyLightEffect
 {
-    UIColor *tintColor = [UIColor lightEffectColor];
+    UIColor *tintColor = [UIColor mp_lightEffectColor];
     return [self mp_applyBlurWithRadius:30.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)mp_applyExtraLightEffect
 {
-    UIColor *tintColor = [UIColor extraLightEffectColor];
+    UIColor *tintColor = [UIColor mp_extraLightEffectColor];
     return [self mp_applyBlurWithRadius:20.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)mp_applyDarkEffect
 {
-    UIColor *tintColor = [UIColor darkEffectColor];
+    UIColor *tintColor = [UIColor mp_darkEffectColor];
     return [self mp_applyBlurWithRadius:20.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 

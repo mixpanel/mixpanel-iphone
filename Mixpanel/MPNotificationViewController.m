@@ -421,9 +421,9 @@
     _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     _bodyLabel.numberOfLines = 2;
 
-    UIColor *blurColor = [UIColor applicationPrimaryColor];
+    UIColor *blurColor = [UIColor mp_applicationPrimaryColor];
     if (!blurColor) {
-        blurColor = [UIColor darkEffectColor];
+        blurColor = [UIColor mp_darkEffectColor];
     }
     blurColor = [blurColor colorWithAlphaComponent:0.7f];
 

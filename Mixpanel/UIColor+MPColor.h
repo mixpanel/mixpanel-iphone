@@ -10,13 +10,11 @@
 
 @interface UIColor (MPColor)
 
-+ (UIColor *)applicationPrimaryColor;
-
-+ (UIColor *)lightEffectColor;
-+ (UIColor *)extraLightEffectColor;
-+ (UIColor *)darkEffectColor;
++ (UIColor *)mp_applicationPrimaryColor;
++ (UIColor *)mp_lightEffectColor;
++ (UIColor *)mp_extraLightEffectColor;
++ (UIColor *)mp_darkEffectColor;
 
 - (UIColor *)colorWithSaturationComponent:(CGFloat) saturation;
-//REVIEW these all need to prefixed with mp_
 
 @end
