@@ -78,7 +78,7 @@
         _titleView.text = self.notification.title;
         _bodyView.text = self.notification.body;
 
-        if ([self.notification.callToAction length] > 0) { //REVIEW should be nil or > 0
+        if (self.notification.callToAction && [self.notification.callToAction length] > 0) {
             [_okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
             [_okayButton sizeToFit];
         }
@@ -490,7 +490,6 @@
 
 - (double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation
 {
-    //REVIEW can we try to use autolayout for the mini ui?
     switch (orientation) {
         case UIInterfaceOrientationLandscapeLeft:
             return -M_PI_2;
