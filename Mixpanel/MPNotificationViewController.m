@@ -531,7 +531,6 @@
 
 - (void)animateImage
 {
-
     CGSize imageViewSize = CGSizeMake(40.0f, 40.0f);
     CGFloat duration = 0.5f;
 
@@ -611,11 +610,6 @@
             }
         }
     }
-}
-
-- (void)dealloc
-{
-    self.delegate = nil; //REVIEW necessay?
 }
 
 @end
