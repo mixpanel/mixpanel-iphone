@@ -503,7 +503,6 @@
 }
 
 - (void)showWithAnimation
-//REVIEW I think the show logic doens't belong in the ViewController. It should be presented by a parent controller, like survey nav or qvc
 {
     [self.view removeFromSuperview];
 
