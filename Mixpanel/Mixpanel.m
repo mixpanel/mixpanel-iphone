@@ -215,7 +215,6 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.delegate = nil;
     if (self.reachability) {
         SCNetworkReachabilitySetCallback(self.reachability, NULL, NULL);
         SCNetworkReachabilitySetDispatchQueue(self.reachability, NULL);
@@ -1018,10 +1017,6 @@ static Mixpanel *sharedInstance = nil;
         if (completion) {
             completion([NSArray arrayWithArray:unseenSurveys], [NSArray arrayWithArray:unseenNotifications]);
         }
-
-        if ([unseenNotifications count] > 0) {
-            [unseenNotifications[0] loadImage];
-        }
     });
 }
 
@@ -1187,10 +1182,10 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showNotificationWithObject:(MPNotification *)notification
 {
-    BOOL success = [notification loadImage]; //REVIEW already done in checkForNotif.
+    NSData *image = notification.image;
 
     // if images fail to load. remove the notification from the queue
-    if (!success) {
+    if (!image) {
         NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
         [notifications removeObject:notification];
         self.notifications = [NSArray arrayWithArray:notifications];
@@ -1335,11 +1330,6 @@ static Mixpanel *sharedInstance = nil;
         self.automaticProperties = [self collectAutomaticProperties];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    self.mixpanel = nil;
 }
 
 - (NSString *)description

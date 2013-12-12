@@ -16,7 +16,4 @@ extern NSString *const MPNotificationTypeTakeover;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
-- (BOOL)loadImage; //REVIEW MPNotification should have an -(UIImage)image method that lazy-loads the image and
-                   //REVIEW returns nil if it can't. loading can be private
-
 @end
