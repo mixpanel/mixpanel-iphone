@@ -64,7 +64,6 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
     NSURL *URL = nil;
     NSString *URLString = object[@"cta_url"];
-    //REVIEW url -> URL
     if (URLString != nil && ![URLString isKindOfClass:[NSNull class]]) {
         if (![URLString isKindOfClass:[NSString class]]) {
             NSLog(@"invalid notif url: %@", URLString);

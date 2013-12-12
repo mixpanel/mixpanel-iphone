@@ -112,11 +112,8 @@
 
 - (void)viewDidLayoutSubviews
 {
-    [super viewDidLayoutSubviews]; //REVIEW unnecessary, default implementation does nothing
-
     [_okayButton sizeToFit];
     [_imageAlphaMaskView sizeToFit];
-    //REVIEW don't use _ throughout
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -352,8 +349,7 @@
 
 @implementation ElasticEaseOutAnimation
 
-- (id)initWithStartValue:(NSValue *)start endValue:(NSValue *)end andDuration:(double)duration
-//REVIEW why not have start and end type be CGRect?
+- (id)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration
 {
     if ((self = [super init]))
     {
@@ -363,14 +359,12 @@
     return self;
 }
 
-- (NSArray *)generateValuesFrom:(NSValue *)startValue to:(NSValue *)endValue
+- (NSArray *)generateValuesFrom:(CGRect)start to:(CGRect)end
 {
     NSUInteger steps = (NSUInteger)ceil(60 * self.duration) + 2;
 	NSMutableArray *valueArray = [NSMutableArray arrayWithCapacity:steps];
     const double increment = 1.0 / (double)(steps - 1);
     double t = 0.0;
-    CGRect start = [startValue CGRectValue];
-    CGRect end = [endValue CGRectValue];
     CGRect range = CGRectMake(end.origin.x - start.origin.x, end.origin.y - start.origin.y, end.size.width - start.size.width, end.size.height - start.size.height);
 
     NSUInteger i;
@@ -555,14 +549,14 @@
     CGRect before = _circleLayer.bounds;
     CGRect after = CGRectMake(0.0f, 0.0f, imageViewSize.width + (_circleLayer.circlePadding * 2.0f), imageViewSize.height + (_circleLayer.circlePadding * 2.0f));
 
-    ElasticEaseOutAnimation *circleAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:[NSValue valueWithCGRect:before] endValue:[NSValue valueWithCGRect:after] andDuration:duration];
+    ElasticEaseOutAnimation *circleAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:before endValue:after andDuration:duration];
     _circleLayer.bounds = after;
     [_circleLayer addAnimation:circleAnimation forKey:@"bounds"];
 
     // Animate the image
     before = _imageView.bounds;
     after = CGRectMake(0.0f, 0.0f, imageViewSize.width, imageViewSize.height);
-    ElasticEaseOutAnimation *imageAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:[NSValue valueWithCGRect:before] endValue:[NSValue valueWithCGRect:after] andDuration:duration];
+    ElasticEaseOutAnimation *imageAnimation = [[ElasticEaseOutAnimation alloc] initWithStartValue:before endValue:after andDuration:duration];
     _imageView.layer.bounds = after;
     [_imageView.layer addAnimation:imageAnimation forKey:@"bounds"];
 }
