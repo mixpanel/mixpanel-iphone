@@ -405,7 +405,8 @@
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _bodyLabel.textColor = [UIColor whiteColor];
     _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
-    _bodyLabel.numberOfLines = 2;
+    _bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    _bodyLabel.numberOfLines = 0;
 
     UIColor *blurColor = [UIColor mp_applicationPrimaryColor];
     if (!blurColor) {
@@ -470,9 +471,12 @@
     [_circleLayer setNeedsDisplay];
 
     // Position body label
-    CGFloat offsetX = MPNotifHeight;
-    _bodyLabel.frame = CGRectMake(offsetX, 12.5f, self.view.frame.size.width - offsetX - 12.5f, 0.0f);
-    [_bodyLabel sizeToFit];
+    CGSize constraintSize = CGSizeMake(self.view.frame.size.width - MPNotifHeight - 12.5f, CGFLOAT_MAX);
+    CGSize sizeToFit = [_bodyLabel.text sizeWithFont:_bodyLabel.font
+                                   constrainedToSize:constraintSize
+                                       lineBreakMode:_bodyLabel.lineBreakMode];
+
+    _bodyLabel.frame = CGRectMake(MPNotifHeight, ceilf((MPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, ceilf(sizeToFit.width), ceilf(sizeToFit.height));
 }
 
 - (UIView *)getTopView
