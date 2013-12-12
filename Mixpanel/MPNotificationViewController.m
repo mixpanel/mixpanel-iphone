@@ -1,11 +1,3 @@
-//
-//  MPNotificationViewController.m
-//  HelloMixpanel
-//
-//  Created by Alex Hofsteede on 6/12/13.
-//  Copyright (c) 2013 Mixpanel. All rights reserved.
-//
-
 #import "MPNotificationViewController.h"
 
 #import "MPNotification.h"

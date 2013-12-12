@@ -1,11 +1,3 @@
-//
-//  UIColor+MPColor.m
-//  HelloMixpanel
-//
-//  Created by Alex Hofsteede on 22/11/13.
-//  Copyright (c) 2013 Mixpanel. All rights reserved.
-//
-
 #import "UIColor+MPColor.h"
 
 @implementation UIColor (MPColor)
