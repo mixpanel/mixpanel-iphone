@@ -731,12 +731,12 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSURLRequest *)apiRequestWithEndpoint:(NSString *)endpoint andBody:(NSString *)body
 {
-    NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:endpoint]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSURL *URL = [NSURL URLWithString:[self.serverURL stringByAppendingString:endpoint]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    MixpanelDebug(@"%@ http request: %@?%@", self, url, body);
+    MixpanelDebug(@"%@ http request: %@?%@", self, URL, body);
     return request;
 }
 
@@ -962,8 +962,8 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.distinctId)];
-            NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+            NSURL *URL = [NSURL URLWithString:[self.serverURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
             [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
             NSError *error = nil;
             NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
@@ -1281,14 +1281,14 @@ static Mixpanel *sharedInstance = nil;
         self.notificationViewController = nil;
     };
 
-    if (status && controller.notification.url) {
-        MixpanelDebug(@"%@ opening url %@", self, controller.notification.url);
-        BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.url];
+    if (status && controller.notification.callToActionURL) {
+        MixpanelDebug(@"%@ opening URL %@", self, controller.notification.callToActionURL);
+        BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.callToActionURL];
 
         [controller hideWithAnimation:!success completion:completionBlock];
 
         if (!success) {
-            NSLog(@"Mixpanel failed to open given url: %@", controller.notification.url);
+            NSLog(@"Mixpanel failed to open given URL: %@", controller.notification.callToActionURL);
         }
 
         [self trackNotification:controller.notification event:@"$notification_accepted"];
