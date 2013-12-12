@@ -1,22 +1,12 @@
-//
-//  MPNotification.m
-//  HelloMixpanel
-//
-//  Created by Kyle Warren on 10/18/13.
-//  Copyright (c) 2013 Mixpanel. All rights reserved.
-//
-//REVIEW do we need the copyright headers in every file?
-
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
-//REVIEW are these ifdefs necessary? won't the compiler warn automatically?
 
 #import "MPNotification.h"
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageURL:(NSURL *)imageURL;
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL;
 
 @end
 
@@ -56,23 +46,23 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         return nil;
     }
 
-    NSString *cta = object[@"cta"];
-    if (![cta isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid notif cta: %@", cta);
+    NSString *callToAction = object[@"cta"];
+    if (![callToAction isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid notif cta: %@", callToAction);
         return nil;
     }
 
-    NSURL *URL = nil;
+    NSURL *callToActionURL = nil;
     NSString *URLString = object[@"cta_url"];
     if (URLString != nil && ![URLString isKindOfClass:[NSNull class]]) {
         if (![URLString isKindOfClass:[NSString class]]) {
-            NSLog(@"invalid notif url: %@", URLString);
+            NSLog(@"invalid notif URL: %@", URLString);
             return nil;
         }
 
-        URL = [NSURL URLWithString:URLString];
-        if (URL == nil) {
-            NSLog(@"inavlid notif url: %@", URLString);
+        callToActionURL = [NSURL URLWithString:URLString];
+        if (callToActionURL == nil) {
+            NSLog(@"inavlid notif URL: %@", URLString);
             return nil;
         }
     }
@@ -81,7 +71,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     NSString *imageURLString = object[@"image_url"];
     if (imageURLString != nil && ![imageURLString isKindOfClass:[NSNull class]]) {
         if (![imageURLString isKindOfClass:[NSString class]]) {
-            NSLog(@"invalid notif image url: %@", imageURLString);
+            NSLog(@"invalid notif image URL: %@", imageURLString);
             return nil;
         }
 
@@ -104,12 +94,12 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                                           type:type
                                          title:title
                                           body:body
-                                           cta:cta
-                                           url:URL
+                                           callToAction:callToAction
+                                           callToActionURL:callToActionURL
                                       imageURL:imageURL];
 }
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body cta:(NSString *)cta url:(NSURL *)url imageURL:(NSURL *)imageURL
+- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
 {
     if (self = [super init]) {
         BOOL valid = YES;
@@ -135,8 +125,8 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             self.title = title;
             self.body = body;
             self.imageURL = imageURL;
-            self.callToAction = cta;
-            self.url = url;
+            self.callToAction = callToAction;
+            self.callToActionURL = callToActionURL;
             self.image = nil;
         } else {
             self = nil;
@@ -153,7 +143,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSError *error = nil;
         NSData *imageData = [NSData dataWithContentsOfURL:self.imageURL options:NSDataReadingMappedIfSafe error:&error];
         if (error || !imageData) {
-            NSLog(@"image failed to load from url: %@", self.imageURL);
+            NSLog(@"image failed to load from URL: %@", self.imageURL);
             return NO;
         }
         self.image = imageData;

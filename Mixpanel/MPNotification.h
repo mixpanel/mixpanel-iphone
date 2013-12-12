@@ -20,7 +20,7 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *body;
 @property (nonatomic, strong) NSString *callToAction;
-@property (nonatomic, strong) NSURL *url; //REVIEW callToActionURL
+@property (nonatomic, strong) NSURL *callToActionURL;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
