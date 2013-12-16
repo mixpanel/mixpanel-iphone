@@ -532,12 +532,12 @@
     CGContextSetFillColorWithColor(ctx, colorRef);
     CGContextFillRect(ctx, self.bounds);
 
-    /*CGContextSetBlendMode(ctx, kCGBlendModeCopy);
+    CGContextSetBlendMode(ctx, kCGBlendModeCopy);
 
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat comps[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.9f,
+    CGFloat comps[] = {96.0f / 255.0f, 96.0f / 255.0f, 124.0f / 255.0f, 0.94f,
+        72.0f / 255.0f, 72.0f / 255.0f, 93.0f / 255.0f, 0.94f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f,
         24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
     CGFloat locs[] = {0.0f, 0.1f, 0.75, 1.0f};
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 4);
@@ -549,7 +549,7 @@
 
 
     CGColorSpaceRelease(colorSpace);
-    CGGradientRelease(gradient);*/
+    CGGradientRelease(gradient);
 
     CGContextRestoreGState(ctx);
 }
