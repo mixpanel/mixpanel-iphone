@@ -82,7 +82,7 @@
     [super viewDidLoad];
     _backgroundImageView.image = _backgroundImage;
 
-    if (self.notification) { //REVIEW when would it not have a notification?
+    if (self.notification) {
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
@@ -127,10 +127,12 @@
     [_imageAlphaMaskView sizeToFit];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent; //REVIEW prob an issue in iso6, at least for ios6 sdk
+    return UIStatusBarStyleLightContent;
 }
+#endif
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
 {

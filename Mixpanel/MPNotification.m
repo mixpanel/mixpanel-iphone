@@ -87,8 +87,6 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
     }
-    //REVIEW does the decide api guarantee that cta_url and image_url will be strings or null? if so, the above
-    //REVIEW code could be simplified
 
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                           type:type
