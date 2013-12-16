@@ -9,11 +9,22 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
-@interface MPNotificationViewController ()
+#define MPNotifHeight 65.0f
+
+
+@interface CircleLayer : CALayer {}
+
+@property (nonatomic, assign) CGFloat circlePadding;
 
 @end
 
-@implementation MPNotificationViewController
+@interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
+
+- (id)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration;
+
+@end
+
+@interface GradientMaskLayer : CALayer {}
 
 @end
 
@@ -25,11 +36,19 @@
 
 @end
 
+@interface MPBgRadialGradientView : UIView
+
+@end
+
 @interface MPButton : UIButton
 
 @end
 
-@interface MPBgRadialGradientView : UIView
+@interface MPNotificationViewController ()
+
+@end
+
+@implementation MPNotificationViewController
 
 @end
 
@@ -203,176 +222,6 @@
             _imageView.layer.position = _viewStart;
         } completion:nil];
     }
-}
-
-@end
-
-@implementation MPAlphaMaskView
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if(self = [super initWithCoder:aDecoder]) {
-        _maskLayer = [CAGradientLayer layer];
-
-        _maskLayer.colors = @[(id)[UIColor colorWithWhite:1.0 alpha:1.0].CGColor,
-                              (id)[UIColor colorWithWhite:1.0 alpha:0.0].CGColor];
-        [self.layer setMask:_maskLayer];
-    }
-    return self;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    [_maskLayer setFrame:self.bounds];
-    _maskLayer.locations = @[[NSNumber numberWithFloat:1.0f - (60.0f / self.bounds.size.height)],
-                             [NSNumber numberWithFloat:1.0f]];
-}
-
-@end
-
-@implementation MPButton
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        self.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
-        self.layer.cornerRadius = 17.0f;
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-        self.layer.borderWidth = 2.0f;
-    }
-
-    return self;
-}
-
-- (void)setHighlighted:(BOOL)highlighted
-{
-    if (highlighted) {
-        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
-        self.layer.borderColor = [UIColor grayColor].CGColor;
-    } else {
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-    }
-
-    [super setHighlighted:highlighted];
-}
-
-@end
-
-@implementation MPBgRadialGradientView
-
-- (void)drawRect:(CGRect)rect
-{
-    CGPoint center = CGPointMake(160.0f, 200.0f);
-    CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
-    CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
-
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-
-    CGColorRef colorRef = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.94f].CGColor;
-    CGContextSetFillColorWithColor(ctx, colorRef);
-    CGContextFillRect(ctx, self.bounds);
-
-    CGContextSetBlendMode(ctx, kCGBlendModeCopy);
-
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGFloat comps[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.9f,
-        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
-    CGFloat locs[] = {0.0f, 0.1f, 0.75, 1.0f};
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 4);
-
-    CGContextAddEllipseInRect(ctx, circleFrame);
-    CGContextClip(ctx);
-
-    CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
-
-    CGContextRestoreGState(ctx);
-
-    CGColorSpaceRelease(colorSpace);
-    CGGradientRelease(gradient);
-}
-
-@end
-
-#define MPNotifHeight 65.0f
-
-@interface CircleLayer : CALayer {
-}
-
-@property (nonatomic, assign) CGFloat circlePadding;
-
-@end
-
-@implementation CircleLayer
-
-+ (id)layer {
-    CircleLayer *cl = (CircleLayer *)[super layer];
-    cl.circlePadding = 2.5f;
-    return cl;
-}
-
-- (void)drawInContext:(CGContextRef)ctx
-{
-    CGFloat edge = 1.5f; //the distance from the edge so we don't get clipped.
-    CGContextSetAllowsAntialiasing(ctx, true);
-    CGContextSetShouldAntialias(ctx, true);
-
-    CGMutablePathRef thePath = CGPathCreateMutable();
-    CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    CGPathAddArc(thePath, NULL, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f, MIN(self.frame.size.width, self.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
-
-    CGContextBeginPath(ctx);
-    CGContextAddPath(ctx, thePath);
-
-    CGContextSetLineWidth(ctx, 1.5f);
-    CGContextStrokePath(ctx);
-
-    CFRelease(thePath);
-}
-
-@end
-
-@interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
-
-@end
-
-@implementation ElasticEaseOutAnimation
-
-- (id)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration
-{
-    if ((self = [super init]))
-    {
-        self.duration = duration;
-        self.values = [self generateValuesFrom:start to:end];
-    }
-    return self;
-}
-
-- (NSArray *)generateValuesFrom:(CGRect)start to:(CGRect)end
-{
-    NSUInteger steps = (NSUInteger)ceil(60 * self.duration) + 2;
-	NSMutableArray *valueArray = [NSMutableArray arrayWithCapacity:steps];
-    const double increment = 1.0 / (double)(steps - 1);
-    double t = 0.0;
-    CGRect range = CGRectMake(end.origin.x - start.origin.x, end.origin.y - start.origin.y, end.size.width - start.size.width, end.size.height - start.size.height);
-
-    NSUInteger i;
-    for (i = 0; i < steps; i++) {
-        float v = (float) -(pow(M_E, -8*t) * cos(12*t)) + 1; // Cosine wave with exponential decay
-
-        CGRect value = CGRectMake(start.origin.x + v * range.origin.x,
-                                  start.origin.y + v * range.origin.y,
-                                  start.size.width + v * range.size.width,
-                                  start.size.height + v *range.size.height);
-
-        [valueArray addObject:[NSValue valueWithCGRect:value]];
-        t += increment;
-    }
-
-    return [NSArray arrayWithArray:valueArray];
 }
 
 @end
@@ -618,3 +467,199 @@
 
 @end
 
+@implementation MPAlphaMaskView
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]) {
+        _maskLayer = [GradientMaskLayer layer];
+        [self.layer setMask:_maskLayer];
+        self.opaque = NO;
+        _maskLayer.opaque = NO;
+        [_maskLayer setNeedsDisplay];
+    }
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_maskLayer setFrame:self.bounds];
+}
+
+@end
+
+@implementation MPButton
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        self.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
+        self.layer.cornerRadius = 17.0f;
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+        self.layer.borderWidth = 2.0f;
+    }
+
+    return self;
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    if (highlighted) {
+        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
+        self.layer.borderColor = [UIColor grayColor].CGColor;
+    } else {
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+    }
+
+    [super setHighlighted:highlighted];
+}
+
+@end
+
+@implementation MPBgRadialGradientView
+
+- (void)drawRect:(CGRect)rect
+{
+    CGPoint center = CGPointMake(160.0f, 200.0f);
+    CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
+    CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
+
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+
+    CGColorRef colorRef = [UIColor colorWithRed:24.0f / 255.0f green:24.0f / 255.0f blue:31.0f / 255.0f alpha:0.94f].CGColor;
+    CGContextSetFillColorWithColor(ctx, colorRef);
+    CGContextFillRect(ctx, self.bounds);
+
+    /*CGContextSetBlendMode(ctx, kCGBlendModeCopy);
+
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGFloat comps[] = {24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.7f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.9f,
+        24.0f / 255.0f, 24.0f / 255.0f, 31.0f / 255.0f, 0.94f};
+    CGFloat locs[] = {0.0f, 0.1f, 0.75, 1.0f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, comps, locs, 4);
+
+    CGContextAddEllipseInRect(ctx, circleFrame);
+    CGContextClip(ctx);
+
+    CGContextDrawRadialGradient(ctx, gradient, center, 0.0f, center, circleSize.width / 2.0f, kCGGradientDrawsAfterEndLocation);
+
+
+    CGColorSpaceRelease(colorSpace);
+    CGGradientRelease(gradient);*/
+
+    CGContextRestoreGState(ctx);
+}
+
+@end
+
+@implementation CircleLayer
+
++ (id)layer {
+    CircleLayer *cl = (CircleLayer *)[super layer];
+    cl.circlePadding = 2.5f;
+    return cl;
+}
+
+- (void)drawInContext:(CGContextRef)ctx
+{
+    CGFloat edge = 1.5f; //the distance from the edge so we don't get clipped.
+    CGContextSetAllowsAntialiasing(ctx, true);
+    CGContextSetShouldAntialias(ctx, true);
+
+    CGMutablePathRef thePath = CGPathCreateMutable();
+    CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    CGPathAddArc(thePath, NULL, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f, MIN(self.frame.size.width, self.frame.size.height) / 2.0f - (2 * edge), (float)-M_PI, (float)M_PI, YES);
+
+    CGContextBeginPath(ctx);
+    CGContextAddPath(ctx, thePath);
+
+    CGContextSetLineWidth(ctx, 1.5f);
+    CGContextStrokePath(ctx);
+
+    CFRelease(thePath);
+}
+
+@end
+
+@implementation GradientMaskLayer
+
+- (void)drawInContext:(CGContextRef)ctx
+{
+
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGFloat components[] = {
+        1.0f, 1.0f,
+        1.0f, 1.0f,
+        1.0f, 0.9f,
+        1.0f, 0.0f};
+
+    CGFloat locations[] = {0.0f, 0.7f, 0.8f, 1.0f};
+
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
+    CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(5.0f, self.bounds.size.height), 0);
+
+
+    NSUInteger bits = fabs(self.bounds.size.width) * fabs(self.bounds.size.height);
+    char *rgba = (char *)malloc(bits);
+    srand(124);
+
+    for(NSUInteger i = 0; i < bits; ++i) {
+        rgba[i] = (rand() % 8);
+    }
+
+    CGContextRef noise = CGBitmapContextCreate(rgba, fabs(self.bounds.size.width), fabs(self.bounds.size.height), 8, fabs(self.bounds.size.width), NULL, (CGBitmapInfo)kCGImageAlphaOnly);
+    CGImageRef image = CGBitmapContextCreateImage(noise);
+
+    CGContextSetBlendMode(ctx, kCGBlendModeSourceOut);
+    CGContextDrawImage(ctx, self.bounds, image);
+
+
+    CGColorSpaceRelease(colorSpace);
+    CGGradientRelease(gradient);
+    CGContextRelease(noise);
+    free(rgba);
+}
+
+@end
+
+@implementation ElasticEaseOutAnimation
+
+- (id)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration
+{
+    if ((self = [super init]))
+    {
+        self.duration = duration;
+        self.values = [self generateValuesFrom:start to:end];
+    }
+    return self;
+}
+
+- (NSArray *)generateValuesFrom:(CGRect)start to:(CGRect)end
+{
+    NSUInteger steps = (NSUInteger)ceil(60 * self.duration) + 2;
+	NSMutableArray *valueArray = [NSMutableArray arrayWithCapacity:steps];
+    const double increment = 1.0 / (double)(steps - 1);
+    double t = 0.0;
+    CGRect range = CGRectMake(end.origin.x - start.origin.x, end.origin.y - start.origin.y, end.size.width - start.size.width, end.size.height - start.size.height);
+
+    NSUInteger i;
+    for (i = 0; i < steps; i++) {
+        float v = (float) -(pow(M_E, -8*t) * cos(12*t)) + 1; // Cosine wave with exponential decay
+
+        CGRect value = CGRectMake(start.origin.x + v * range.origin.x,
+                                  start.origin.y + v * range.origin.y,
+                                  start.size.width + v * range.size.width,
+                                  start.size.height + v *range.size.height);
+
+        [valueArray addObject:[NSValue valueWithCGRect:value]];
+        t += increment;
+    }
+
+    return [NSArray arrayWithArray:valueArray];
+}
+
+@end
