@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGFloat promptHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
     UIFont *font = _prompt.font;
     CGSize constraintSize = CGSizeMake(promptWidth, CGFLOAT_MAX);
-    
+
     // Lower prompt font size until it fits (or hits min of 9 points).
     for (CGFloat size = 20; size >= 9; size--) {
         font = [font fontWithSize:size];
