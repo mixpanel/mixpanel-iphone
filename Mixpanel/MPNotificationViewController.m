@@ -605,7 +605,7 @@
     CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(5.0f, self.bounds.size.height), 0);
 
 
-    NSUInteger bits = fabs(self.bounds.size.width) * fabs(self.bounds.size.height);
+    NSUInteger bits = (NSUInteger)fabs(self.bounds.size.width) * (NSUInteger)fabs(self.bounds.size.height);
     char *rgba = (char *)malloc(bits);
     srand(124);
 
@@ -613,7 +613,7 @@
         rgba[i] = (rand() % 8);
     }
 
-    CGContextRef noise = CGBitmapContextCreate(rgba, fabs(self.bounds.size.width), fabs(self.bounds.size.height), 8, fabs(self.bounds.size.width), NULL, (CGBitmapInfo)kCGImageAlphaOnly);
+    CGContextRef noise = CGBitmapContextCreate(rgba, (NSUInteger)fabs(self.bounds.size.width), (NSUInteger)fabs(self.bounds.size.height), 8, (NSUInteger)fabs(self.bounds.size.width), NULL, (CGBitmapInfo)kCGImageAlphaOnly);
     CGImageRef image = CGBitmapContextCreateImage(noise);
 
     CGContextSetBlendMode(ctx, kCGBlendModeSourceOut);
