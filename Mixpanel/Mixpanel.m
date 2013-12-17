@@ -1113,15 +1113,18 @@ static Mixpanel *sharedInstance = nil;
     }];
 }
 
-- (void)markSurveyShown:(MPSurvey *)survey
+- (void)markSurvey:(MPSurvey *)survey shown:(BOOL)shown withAnswerCount:(NSUInteger)count
 {
     MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
     [_shownSurveyCollections addObject:@(survey.collectionID)];
     [self.people append:@{@"$surveys": @(survey.ID), @"$collections": @(survey.collectionID)}];
 
     if (![survey.name isEqualToString:@"$ignore"]) {
-        [self track:@"$show_survey" properties:@{@"survey_id": [NSNumber numberWithUnsignedInt:survey.ID], @"collection_id":[NSNumber numberWithUnsignedInt:survey.collectionID]}];
-        //REVIEW $survey_shown, and additional properties we talked about.
+        [self track:@"$show_survey" properties:@{@"survey_id": @(survey.ID),
+                                                 @"collection_id": @(survey.collectionID),
+                                                 @"$survey_shown": @(shown),
+                                                 @"$answer_count": @(count)
+                                                 }];
     }
 }
 
@@ -1132,7 +1135,7 @@ static Mixpanel *sharedInstance = nil;
     if ([controller.survey.name isEqualToString:@"$ignore"]) {
         MixpanelDebug(@"%@ not sending survey %@ result", self, controller.survey);
     } else {
-        [self markSurveyShown:controller.survey];
+        [self markSurvey:controller.survey shown:YES withAnswerCount:[answers count]];
         for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
             NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:answers[i], @"$answers", nil];
             if (i == 0) {
@@ -1207,10 +1210,6 @@ static Mixpanel *sharedInstance = nil;
             }
 
             if (![notification.title isEqualToString:@"$ignore"]) {
-                [self track:@"$notification_shown" properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
-                //REVIEW yes, use $campaign_open and move it to markNotificationShown
-                // campaign style
-                //[self track:@"$campaign_open" properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": @"inapp", @"notification_type": notification.type}];
                 [self markNotificationShown:notification];
             }
         }
@@ -1302,6 +1301,8 @@ static Mixpanel *sharedInstance = nil;
                                  }; //REVIEW need to talk about this
 
     [self.people append:properties];
+
+    [self track:@"$campaign_open" properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": @"inapp", @"notification_type": notification.type}];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -1312,7 +1313,7 @@ static Mixpanel *sharedInstance = nil;
         if (buttonIndex == 1) {
             [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
         } else {
-            [self markSurveyShown:_currentlyShowingSurvey];
+            [self markSurvey:_currentlyShowingSurvey shown:NO withAnswerCount:0];
             self.currentlyShowingSurvey = nil;
         }
     }
