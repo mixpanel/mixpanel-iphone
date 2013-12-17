@@ -620,7 +620,7 @@
     CGContextSetBlendMode(ctx, kCGBlendModeSourceOut);
     CGContextDrawImage(ctx, self.bounds, image);
 
-
+    CGImageRelease(image);
     CGColorSpaceRelease(colorSpace);
     CGGradientRelease(gradient);
     CGContextRelease(noise);
