@@ -26,8 +26,11 @@
     [super viewDidLoad];
 
     self.showNotificationType = MPNotificationTypeTakeover;
-    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.scrollView.contentSize = self.view.bounds.size;
+    UIScrollView *strongScrollView = _scrollView;
+    if (strongScrollView != nil) {
+        strongScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        strongScrollView.contentSize = self.view.bounds.size;
+    }
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
@@ -36,24 +39,33 @@
 - (IBAction)trackEvent:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    NSString *gender = [self.genderControl titleForSegmentAtIndex:(NSUInteger)self.genderControl.selectedSegmentIndex];
-    NSString *weapon = [self.weaponControl titleForSegmentAtIndex:(NSUInteger)self.weaponControl.selectedSegmentIndex];
-    [mixpanel track:@"Player Create" properties:@{@"gender": gender, @"weapon": weapon}];
+    UISegmentedControl * strongWeaponControl = _weaponControl;
+    UISegmentedControl * strongGenderControl = _genderControl;
+    if (strongGenderControl != nil && strongWeaponControl != nil) {
+        NSString *gender = [strongGenderControl titleForSegmentAtIndex:(NSUInteger)strongGenderControl.selectedSegmentIndex];
+        NSString *weapon = [strongWeaponControl titleForSegmentAtIndex:(NSUInteger)strongWeaponControl.selectedSegmentIndex];
+        [mixpanel track:@"Player Create" properties:@{@"gender": gender, @"weapon": weapon}];
+    }
 }
 
 - (IBAction)setPeopleProperties:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    NSString *gender = [self.genderControl titleForSegmentAtIndex:(NSUInteger)self.genderControl.selectedSegmentIndex];
-    NSString *weapon = [self.weaponControl titleForSegmentAtIndex:(NSUInteger)self.weaponControl.selectedSegmentIndex];
-    [mixpanel.people set:@{@"gender": gender, @"weapon": weapon}];
-    // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
-    // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
-    // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
-    // Note that the call to Mixpanel People identify: can come after properties have been set. We queue them until
-    // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
-    // and identify them once you know their user ID.
-    [mixpanel identify:mixpanel.distinctId];
+    UISegmentedControl * strongWeaponControl = _weaponControl;
+    UISegmentedControl * strongGenderControl = _genderControl;
+    if (strongGenderControl != nil && strongWeaponControl != nil) {
+        NSString *gender = [strongGenderControl titleForSegmentAtIndex:(NSUInteger)strongGenderControl.selectedSegmentIndex];
+        NSString *weapon = [strongWeaponControl titleForSegmentAtIndex:(NSUInteger)strongWeaponControl.selectedSegmentIndex];
+
+        [mixpanel.people set:@{@"gender": gender, @"weapon": weapon}];
+        // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
+        // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
+        // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
+        // Note that the call to Mixpanel People identify: can come after properties have been set. We queue them until
+        // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
+        // and identify them once you know their user ID.
+        [mixpanel identify:mixpanel.distinctId];
+    }
 }
 
 - (IBAction)setNotificationType:(id)sender
@@ -65,32 +77,34 @@
 - (IBAction)showSurvey:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-    if ([_surveyIDField.text length] > 0) {
-        [mixpanel showSurveyWithID:(NSUInteger)([_surveyIDField.text integerValue])];
-
+    UITextField *strongSurveyIDField = _surveyIDField;
+    if (strongSurveyIDField != nil && [strongSurveyIDField.text length] > 0) {
+        [mixpanel showSurveyWithID:(NSUInteger)([strongSurveyIDField.text integerValue])];
     } else {
         [mixpanel showSurvey];
     }
-    [_surveyIDField resignFirstResponder];
+
+    [strongSurveyIDField resignFirstResponder];
 }
 
 - (IBAction)showNotif:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
-    if ([_notificationIDField.text length] > 0) {
-        [mixpanel showNotificationWithID:(NSUInteger)_notificationIDField.text.integerValue];
+    UITextField *strongNotificationIDField = _notificationIDField;
+    if (strongNotificationIDField != nil && [strongNotificationIDField.text length] > 0) {
+        [mixpanel showNotificationWithID:(NSUInteger)strongNotificationIDField.text.integerValue];
     } else {
         [mixpanel showNotificationWithType:_showNotificationType];
     }
+    [strongNotificationIDField resignFirstResponder];
 }
 
 - (IBAction)changeBackground
 {
-    if (_fakeBackground.image) {
-        _fakeBackground.image = nil;
-        _fakeBackground.hidden = YES;
+    UIImageView *strongFakeBackground = _fakeBackground;
+    if (strongFakeBackground != nil && strongFakeBackground.image != nil) {
+        strongFakeBackground.image = nil;
+        strongFakeBackground.hidden = YES;
     } else {
         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
         imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -102,9 +116,12 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    _fakeBackground.image = image;
-    _fakeBackground.hidden = NO;
+    UIImageView *strongFakeBackground = _fakeBackground;
+    if (strongFakeBackground != nil) {
+        UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+        strongFakeBackground.image = image;
+        strongFakeBackground.hidden = NO;
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -115,8 +132,11 @@
 
 - (void)dismissKeyboard
 {
-    [_surveyIDField resignFirstResponder];
-    [_notificationIDField resignFirstResponder];
+    UITextField *strongSurveyIDField = _surveyIDField;
+    UITextField *strongNotificationIDField = _notificationIDField;
+
+    [strongSurveyIDField resignFirstResponder];
+    [strongNotificationIDField resignFirstResponder];
 }
 
 - (IBAction)changeColor
