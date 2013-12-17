@@ -236,7 +236,6 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) CircleLayer *circleLayer;
-@property (nonatomic, strong) UIToolbar *uiToolbarView;
 @property (nonatomic, strong) UILabel *bodyLabel;
 
 @end
@@ -259,15 +258,12 @@
     _bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _bodyLabel.numberOfLines = 0;
 
-    UIColor *blurColor = [UIColor mp_applicationPrimaryColor];
-    if (!blurColor) {
-        blurColor = [UIColor mp_darkEffectColor];
+    UIColor *backgroundColor = [UIColor mp_applicationPrimaryColor];
+    if (!backgroundColor) {
+        backgroundColor = [UIColor mp_darkEffectColor];
     }
-    blurColor = [blurColor colorWithAlphaComponent:0.7f];
-
-    self.uiToolbarView = [[UIToolbar alloc] init];
-    [_uiToolbarView setBarTintColor:[blurColor colorWithAlphaComponent:0.8f]];
-    _uiToolbarView.translucent = YES;
+    backgroundColor = [backgroundColor colorWithAlphaComponent:0.95f];
+    self.view.backgroundColor = backgroundColor;
 
     if (self.notification != nil) {
         if (self.notification.image != nil) {
@@ -289,7 +285,6 @@
     _circleLayer.contentsScale = [UIScreen mainScreen].scale;
     [_circleLayer setNeedsDisplay];
 
-    [self.view addSubview:_uiToolbarView];
     [self.view addSubview:_imageView];
     [self.view addSubview:_bodyLabel];
     [self.view.layer addSublayer:_circleLayer];
@@ -314,7 +309,6 @@
     self.view.frame = CGRectMake(0.0f, parentFrame.size.height - MPNotifHeight, parentFrame.size.width, MPNotifHeight * 3.0f);
 
     // Position images
-    _uiToolbarView.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     _imageView.layer.position = CGPointMake(MPNotifHeight / 2.0f, MPNotifHeight / 2.0f);
 
     // Position circle around image
