@@ -50,6 +50,11 @@
 
 @implementation MPNotificationViewController
 
+- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
+{
+    return;
+}
+
 @end
 
 @interface MPTakeoverNotificationViewController () {
