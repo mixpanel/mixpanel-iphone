@@ -196,15 +196,17 @@
 
 - (void)pressedOkay
 {
-    if (self.delegate) {
-        [self.delegate notificationController:self wasDismissedWithStatus:YES];
+    id strongDelegate = self.delegate;
+    if (strongDelegate) {
+        [strongDelegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
 - (void)pressedClose
 {
-    if (self.delegate) {
-        [self.delegate notificationController:self wasDismissedWithStatus:NO];
+    id strongDelegate = self.delegate;
+    if (strongDelegate) {
+        [strongDelegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
 
@@ -431,10 +433,9 @@
 
 - (void)didTap:(UITapGestureRecognizer *)gesture
 {
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        if (self.delegate != nil) {
-            [self.delegate notificationController:self wasDismissedWithStatus:YES];
-        }
+    id strongDelegate = self.delegate;
+    if (gesture.state == UIGestureRecognizerStateEnded && strongDelegate != nil) {
+        [strongDelegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
@@ -455,8 +456,9 @@
 
             self.view.layer.position = CGPointMake(self.view.layer.position.x, position.y);
         } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
-            if (self.view.layer.position.y > _position.y + MPNotifHeight / 2.0f && self.delegate != nil) {
-                [self.delegate notificationController:self wasDismissedWithStatus:NO];
+            id strongDelegate = self.delegate;
+            if (self.view.layer.position.y > _position.y + MPNotifHeight / 2.0f && strongDelegate != nil) {
+                [strongDelegate notificationController:self wasDismissedWithStatus:NO];
             } else {
                 [UIView animateWithDuration:0.2f animations:^{
                     self.view.layer.position = _position;
