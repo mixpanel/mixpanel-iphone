@@ -20,17 +20,18 @@
     } while ((rootViewController = rootViewController.presentedViewController));
 
     if (topNavigationController) {
-        //REVIEW reminder: tint color stuff needs to be protected in ios 6
-        color = [[topNavigationController navigationBar] barTintColor];
+        if ([[topNavigationController navigationBar] respondsToSelector:@selector(barTintColor)]) {
+            color = [[topNavigationController navigationBar] barTintColor];
+        }
     }
 
     // Then try and use the UINavigationBar default color for the app
-    if (!color) {
+    if (!color && [[UINavigationBar appearance] respondsToSelector:@selector(barTintColor)]) {
         color = [[UINavigationBar appearance] barTintColor];
     }
 
     // Or the UITabBar default color
-    if (!color) {
+    if (!color && [[UITabBar appearance] respondsToSelector:@selector(barTintColor)]) {
         color = [[UITabBar appearance] barTintColor];
     }
 
