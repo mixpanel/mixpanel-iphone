@@ -403,7 +403,7 @@ static Mixpanel *sharedInstance = nil;
         distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
     }
 #endif
-    
+
     if (!distinctId) {
         NSLog(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
@@ -927,6 +927,18 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
++ (UIViewController *)topViewController
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    if (rootViewController == nil || [rootViewController isBeingPresented] || [rootViewController isBeingDismissed]) {
+        return nil;
+    }
+    return rootViewController;
+}
+
 - (void)checkForSurveysWithCompletion:(void (^)(NSArray *surveys))completion
 {
     dispatch_async(self.serialQueue, ^{
@@ -995,16 +1007,15 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    while (rootViewController.presentedViewController) {
-        rootViewController = rootViewController.presentedViewController;
+    UIViewController *rootViewController = [Mixpanel topViewController];
+    if (rootViewController) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+        MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
+        controller.survey = survey;
+        controller.delegate = self;
+        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
+        [rootViewController presentViewController:controller animated:YES completion:nil];
     }
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-    MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
-    controller.survey = survey;
-    controller.delegate = self;
-    controller.backgroundImage = [rootViewController.view mp_snapshotImage];
-    [rootViewController presentViewController:controller animated:YES completion:nil];
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert

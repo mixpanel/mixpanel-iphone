@@ -23,6 +23,7 @@
 #import "MPSurveyQuestion.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyHTTPConnection.h"
+#import "MPSurveyNavigationController.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -141,6 +142,14 @@
     STAssertNotNil(p[@"$ios_app_version"], @"missing $ios_app_version property");
     STAssertNotNil(p[@"$ios_app_release"], @"missing $ios_app_release property");
     STAssertNotNil(p[@"$ios_ifa"], @"missing $ios_ifa property");
+}
+
+-(UIViewController *)topViewController {
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    return rootViewController;
 }
 
 - (void)testHTTPServer
@@ -914,6 +923,36 @@
     STAssertNil([MPSurveyQuestion questionWithJSONObject:m], nil);
 }
 
+- (void)testNoShowSurveyOnPresentingVC
+{
+    NSDictionary *o = @{@"id": @3,
+                        @"name": @"survey",
+                        @"collections": @[@{@"id": @9, @"name": @"collection"}],
+                        @"questions": @[@{
+                                            @"id": @12,
+                                            @"type": @"text",
+                                            @"prompt": @"Anything else?",
+                                            @"extra_data": @{}}]};
+
+    MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
+
+    //Start presenting a View Controller on the current root
+    UIViewController *topViewController = [self topViewController];
+
+    __block BOOL waitForBlock = YES;
+    [topViewController presentViewController:[[UIViewController alloc]init] animated:YES completion:^{ waitForBlock = NO; }];
+
+    //Survey should not show as it cannot present on top of a currently presenting view controller
+    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+
+    STAssertFalse([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was presented when it shouldn't have been");
+
+    //Wait for original VC to present, so we don't interfere with subsequent tests.
+    while(waitForBlock) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    }
+}
+
 - (void)testShowSurvey
 {
     NSDictionary *o = @{@"id": @3,
@@ -928,7 +967,8 @@
     MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
 
     [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
-    // No assertions, test pass = no crash
+
+    STAssertTrue([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was not presented");
 }
 
 
