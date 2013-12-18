@@ -971,4 +971,21 @@
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
 }
 
+- (void)testShowSurvey
+{
+    NSDictionary *o = @{@"id": @3,
+                        @"name": @"survey",
+                        @"collections": @[@{@"id": @9, @"name": @"collection"}],
+                        @"questions": @[@{
+                                            @"id": @12,
+                                            @"type": @"text",
+                                            @"prompt": @"Anything else?",
+                                            @"extra_data": @{}}]};
+
+    MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
+
+    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    // No assertions, test pass = no crash
+}
+
 @end

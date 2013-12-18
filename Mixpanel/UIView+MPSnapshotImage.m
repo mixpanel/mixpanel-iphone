@@ -19,11 +19,16 @@
     }
 
     UIGraphicsBeginImageContext(size);
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
         [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
     } else {
         [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     }
+#else
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+#endif
+
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 

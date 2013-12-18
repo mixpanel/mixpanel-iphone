@@ -22,7 +22,7 @@
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
 
-#define VERSION @"2.2.0"
+#define VERSION @"2.2.1"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
@@ -177,6 +177,7 @@ static Mixpanel *sharedInstance = nil;
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
         // cellular info
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
             self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
             _automaticProperties[@"$radio"] = [self currentRadio];
@@ -185,6 +186,7 @@ static Mixpanel *sharedInstance = nil;
                                        name:CTRadioAccessTechnologyDidChangeNotification
                                      object:nil];
         }
+#endif
 
         [notificationCenter addObserver:self
                                selector:@selector(applicationWillTerminate:)
@@ -237,6 +239,7 @@ static Mixpanel *sharedInstance = nil;
     return results;
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^(){
@@ -254,6 +257,7 @@ static Mixpanel *sharedInstance = nil;
     }
     return radio;
 }
+#endif
 
 - (NSMutableDictionary *)collectAutomaticProperties
 {
