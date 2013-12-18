@@ -927,16 +927,13 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-+ (UIViewController *)topViewController
++ (UIViewController *)topPresentedViewController
 {
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    while (rootViewController.presentedViewController) {
-        rootViewController = rootViewController.presentedViewController;
+    UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (controller.presentedViewController) {
+        controller = controller.presentedViewController;
     }
-    if (rootViewController == nil || [rootViewController isBeingPresented] || [rootViewController isBeingDismissed]) {
-        return nil;
-    }
-    return rootViewController;
+    return controller;
 }
 
 - (void)checkForSurveysWithCompletion:(void (^)(NSArray *surveys))completion
@@ -1007,14 +1004,18 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
-    UIViewController *rootViewController = [Mixpanel topViewController];
-    if (rootViewController) {
+    UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
+
+    // This fixes the NSInternalInconsistencyException caused when we try present a
+    // survey on a viewcontroller that is itself being presented.
+    if (![presentingViewController isBeingPresented] && ![presentingViewController isBeingDismissed]) {
+
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
         MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
         controller.survey = survey;
         controller.delegate = self;
-        controller.backgroundImage = [rootViewController.view mp_snapshotImage];
-        [rootViewController presentViewController:controller animated:YES completion:nil];
+        controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
+        [presentingViewController presentViewController:controller animated:YES completion:nil];
     }
 }
 
