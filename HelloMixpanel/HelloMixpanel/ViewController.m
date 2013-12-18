@@ -1,6 +1,7 @@
 #import "Mixpanel.h"
 #import "MPSurvey.h"
 #import "MPNotification.h"
+#import "UIColor+MPColor.h"
 
 #import "ViewController.h"
 
@@ -144,7 +145,7 @@
     FCColorPickerViewController *colorPicker = [[FCColorPickerViewController alloc]
                                                 initWithNibName:@"FCColorPickerViewController"
                                                 bundle:[NSBundle mainBundle]];
-    colorPicker.color = [[UINavigationBar appearance] barTintColor];
+    colorPicker.color = [UIColor mp_applicationPrimaryColor];
     colorPicker.delegate = self;
 
     [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
@@ -152,7 +153,18 @@
 }
 
 - (void)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
-    [[UINavigationBar appearance] setBarTintColor:color];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+    if ([[UINavigationBar appearance] respondsToSelector:@selector(setBarTintColor:)]) {
+        [[UINavigationBar appearance] setBarTintColor:color];
+    } else if (self.navigationController != nil && self.navigationController.navigationBar != nil) {
+        self.navigationController.navigationBar.tintColor = color;
+    }
+#else
+    if (self.navigationController != nil && self.navigationController.navigationBar != nil) {
+        self.navigationController.navigationBar.tintColor = color;
+    }
+#endif
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
