@@ -22,7 +22,7 @@
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
 
-#define VERSION @"2.2.1"
+#define VERSION @"2.2.2"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
@@ -934,6 +934,15 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Decide
 
++ (UIViewController *)topPresentedViewController
+{
+    UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (controller.presentedViewController) {
+        controller = controller.presentedViewController;
+    }
+    return controller;
+}
+
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications))completion
 {
     dispatch_async(self.serialQueue, ^{
@@ -1044,24 +1053,21 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - Surveys
 
-+ (UIViewController *)topViewController
-{
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    while (rootViewController.presentedViewController) {
-        rootViewController = rootViewController.presentedViewController;
-    }
-    return rootViewController;
-}
-
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
-    UIViewController *rootViewController = [Mixpanel topViewController];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
-    MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
-    controller.survey = survey;
-    controller.delegate = self;
-    controller.backgroundImage = [rootViewController.view mp_snapshotForBlur];
-    [rootViewController presentViewController:controller animated:YES completion:nil];
+    UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
+
+    // This fixes the NSInternalInconsistencyException caused when we try present a
+    // survey on a viewcontroller that is itself being presented.
+    if (![presentingViewController isBeingPresented] && ![presentingViewController isBeingDismissed]) {
+
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+        MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
+        controller.survey = survey;
+        controller.delegate = self;
+        controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
+        [presentingViewController presentViewController:controller animated:YES completion:nil];
+    }
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
@@ -1222,16 +1228,21 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)showModalNotificationWithObject:(MPNotification *)notification
 {
-    UIViewController *rootViewController = [Mixpanel topViewController];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
-    MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
+    UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
-    controller.backgroundImage = [rootViewController.view mp_snapshotImage];
-    controller.notification = notification;
-    controller.delegate = self;
-    self.notificationViewController = controller;
+    // This fixes the NSInternalInconsistencyException caused when we try present a
+    // notification on a viewcontroller that is itself being presented.
+    if (![presentingViewController isBeingPresented] && ![presentingViewController isBeingDismissed]) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
+        MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
 
-    [rootViewController presentViewController:controller animated:NO completion:nil];
+        controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
+        controller.notification = notification;
+        controller.delegate = self;
+        self.notificationViewController = controller;
+
+        [presentingViewController presentViewController:controller animated:NO completion:nil];
+    }
 }
 
 - (void)showOverAppNotificationWithObject:(MPNotification *)notification
@@ -1271,18 +1282,18 @@ static Mixpanel *sharedInstance = nil;
             NSLog(@"Mixpanel failed to open given URL: %@", controller.notification.callToActionURL);
         }
 
-        [self trackNotification:controller.notification event:@"$notification_accepted"];
+        [self trackNotification:controller.notification event:@"$campaign_open"];
     } else {
         [controller hideWithAnimation:YES completion:completionBlock];
-        [self trackNotification:controller.notification event:@"$notification_canceled"];
     }
-    //REVIEW before this goes out, let's settle on some events: $campaign_delivery, $campaign_open, $campaign_clicked or something that can be consistent across notif types
 }
 
 - (void)trackNotification:(MPNotification *)notification event:(NSString *)event
 {
     if (![notification.title isEqualToString:@"$ignore"]) {
-        [self track:event properties:@{@"notification_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": notification.type}];
+        [self track:event properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID],
+                                       @"message_type": @"inapp",
+                                       @"message_subtype": notification.type}];
     } else {
         MixpanelDebug(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), event);
     }
@@ -1299,14 +1310,13 @@ static Mixpanel *sharedInstance = nil;
                                  @"$notifications": @{
                                          @"campaign_id": @(notification.ID),
                                          @"type": @"inapp",
-                                         // maybe should do this in the consumer?
                                          @"time": @([NSDate timeIntervalSinceReferenceDate])
                                          }
-                                 }; //REVIEW need to talk about this
+                                 };
 
     [self.people append:properties];
 
-    [self track:@"$campaign_open" properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID], @"type": @"inapp", @"notification_type": notification.type}];
+    [self trackNotification:notification event:@"$campaign_delivery"];
 }
 
 #pragma mark - UIAlertViewDelegate
