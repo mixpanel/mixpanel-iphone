@@ -30,7 +30,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
     NSString *type = object[@"type"];
     if (![type isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid notif title: %@", type);
+        NSLog(@"invalid notif type: %@", type);
         return nil;
     }
 

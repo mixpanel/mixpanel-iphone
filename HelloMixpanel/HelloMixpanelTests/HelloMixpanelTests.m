@@ -911,6 +911,7 @@
     // invalid bad title
     NSDictionary *invalid = @{@"id": @3,
                               @"title": @5,
+                              @"type": @"takeover",
                               @"body": @"Hi!",
                               @"cta_url": @"blah blah blah",
                               @"cta": [NSNull null],
@@ -921,6 +922,7 @@
     // valid
     NSDictionary *o = @{@"id": @3,
                         @"title": @"title",
+                        @"type": @"takeover",
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",

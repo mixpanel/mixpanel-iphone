@@ -164,7 +164,7 @@
         self.navigationController.navigationBar.tintColor = color;
     }
 #endif
-    
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
