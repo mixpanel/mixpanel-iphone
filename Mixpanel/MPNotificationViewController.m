@@ -239,6 +239,7 @@
     CGPoint _panStartPoint;
     CGPoint _position;
     BOOL _canPan;
+    BOOL _isBeingDismissed;
 }
 
 @property (nonatomic, strong) UIImageView *imageView;
@@ -254,6 +255,7 @@
     [super viewDidLoad];
 
     _canPan = YES;
+    _isBeingDismissed = NO;
     self.view.clipsToBounds = YES;
 
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
@@ -261,6 +263,7 @@
 
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _bodyLabel.textColor = [UIColor whiteColor];
+    _bodyLabel.backgroundColor = [UIColor clearColor];
     _bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     _bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _bodyLabel.numberOfLines = 0;
@@ -410,31 +413,35 @@
 {
     _canPan = NO;
 
-    CGFloat duration;
+    if (!_isBeingDismissed) {
+        _isBeingDismissed = YES;
 
-    if (animated) {
-        duration = 0.5f;
-    } else {
-        duration = 0.0f;
-    }
+        CGFloat duration;
 
-    double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-    CGRect parentFrame = CGRectApplyAffineTransform(self.view.superview.frame, CGAffineTransformMakeRotation((float)angle));
-
-    [UIView animateWithDuration:duration animations:^{
-        self.view.frame = CGRectMake(0.0f, parentFrame.size.height, parentFrame.size.width, MPNotifHeight * 3.0f);
-    } completion:^(BOOL finished) {
-        [self.view removeFromSuperview];
-        if (completion) {
-            completion();
+        if (animated) {
+            duration = 0.5f;
+        } else {
+            duration = 0.0f;
         }
-    }];
+
+        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+        CGRect parentFrame = CGRectApplyAffineTransform(self.view.superview.frame, CGAffineTransformMakeRotation((float)angle));
+
+        [UIView animateWithDuration:duration animations:^{
+            self.view.frame = CGRectMake(0.0f, parentFrame.size.height, parentFrame.size.width, MPNotifHeight * 3.0f);
+        } completion:^(BOOL finished) {
+            [self.view removeFromSuperview];
+            if (completion) {
+                completion();
+            }
+        }];
+    }
 }
 
 - (void)didTap:(UITapGestureRecognizer *)gesture
 {
     id strongDelegate = self.delegate;
-    if (gesture.state == UIGestureRecognizerStateEnded && strongDelegate != nil) {
+    if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded && strongDelegate != nil) {
         [strongDelegate notificationController:self wasDismissedWithStatus:YES];
     }
 }

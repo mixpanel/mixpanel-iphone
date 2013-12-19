@@ -1214,9 +1214,9 @@ static Mixpanel *sharedInstance = nil;
             self.currentlyShowingNotification = notification;
 
             if ([notification.type isEqualToString:MPNotificationTypeMini]) {
-                [self showOverAppNotificationWithObject:notification];
+                [self showMiniNotificationWithObject:notification];
             } else {
-                [self showModalNotificationWithObject:notification];
+                [self showTakeoverNotificationWithObject:notification];
             }
 
             if (![notification.title isEqualToString:@"$ignore"]) {
@@ -1226,12 +1226,10 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)showModalNotificationWithObject:(MPNotification *)notification
+- (void)showTakeoverNotificationWithObject:(MPNotification *)notification
 {
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
-    // This fixes the NSInternalInconsistencyException caused when we try present a
-    // notification on a viewcontroller that is itself being presented.
     if (![presentingViewController isBeingPresented] && ![presentingViewController isBeingDismissed]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
         MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
@@ -1245,7 +1243,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)showOverAppNotificationWithObject:(MPNotification *)notification
+- (void)showMiniNotificationWithObject:(MPNotification *)notification
 {
     MPMiniNotificationViewController *controller = [[MPMiniNotificationViewController alloc] init];
     controller.notification = notification;
@@ -1263,7 +1261,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithStatus:(BOOL)status
 {
-    if (self.currentlyShowingNotification != controller.notification) {
+    if (controller == nil || self.currentlyShowingNotification != controller.notification) {
         return;
     }
 
