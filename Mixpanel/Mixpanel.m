@@ -582,7 +582,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.unidentifiedQueue = [NSMutableArray array];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
-        [self archiveFromSerialQueue];
+        [self archive];
     });
 }
 
@@ -750,14 +750,6 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)archive
 {
-   // Must archive from the serial queue to avoid conflicts from data mutation
-   dispatch_sync(self.serialQueue, ^{
-      [self archiveFromSerialQueue];
-   });
-}
-
-- (void)archiveFromSerialQueue
-{
     [self archiveEvents];
     [self archivePeople];
     [self archiveProperties];
@@ -813,9 +805,9 @@ static Mixpanel *sharedInstance = nil;
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive events data, starting fresh", self);
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         self.eventsQueue = nil;
     }
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     if (!self.eventsQueue) {
         self.eventsQueue = [NSMutableArray array];
     }
@@ -830,9 +822,9 @@ static Mixpanel *sharedInstance = nil;
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive people data, starting fresh", self);
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         self.peopleQueue = nil;
     }
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     if (!self.peopleQueue) {
         self.peopleQueue = [NSMutableArray array];
     }
@@ -848,8 +840,8 @@ static Mixpanel *sharedInstance = nil;
     }
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive properties data, starting fresh", self);
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     if (properties) {
         self.distinctId = properties[@"distinctId"] ? properties[@"distinctId"] : [self defaultDistinctId];
         self.nameTag = properties[@"nameTag"];
@@ -893,11 +885,11 @@ static Mixpanel *sharedInstance = nil;
     }];
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
 
-    [self archive];
-    if (self.flushOnBackground) {
-        [self flush];
-    }
     dispatch_async(_serialQueue, ^{
+        [self archive];
+        if (self.flushOnBackground) {
+            [self flush];
+        }
         MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
@@ -922,7 +914,9 @@ static Mixpanel *sharedInstance = nil;
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application will terminate", self);
-    [self archive];
+    dispatch_async(_serialQueue, ^{
+       [self archive];
+    });
 }
 
 #pragma mark - Surveys
