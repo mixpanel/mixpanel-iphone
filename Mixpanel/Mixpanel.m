@@ -651,18 +651,14 @@ static Mixpanel *sharedInstance = nil;
 {
     [self flushQueue:_eventsQueue
             endpoint:@"/track/"
-       batchComplete:^{
-           [self archiveEvents];
-       }];
+       batchComplete:^{}];
 }
 
 - (void)flushPeople
 {
     [self flushQueue:_peopleQueue
             endpoint:@"/engage/"
-       batchComplete:^{
-           [self archivePeople];
-       }];
+       batchComplete:^{}];
 }
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint batchComplete:(void(^)())batchCompleteCallback
@@ -896,16 +892,13 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
     }];
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
-
-    dispatch_async(_serialQueue, ^{
-        [self archive];
-    });
     
     if (self.flushOnBackground) {
         [self flush];
     }
     
     dispatch_async(_serialQueue, ^{
+        [self archive];
         MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
