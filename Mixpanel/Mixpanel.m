@@ -887,9 +887,13 @@ static Mixpanel *sharedInstance = nil;
 
     dispatch_async(_serialQueue, ^{
         [self archive];
-        if (self.flushOnBackground) {
-            [self flush];
-        }
+    });
+    
+    if (self.flushOnBackground) {
+        [self flush];
+    }
+    
+    dispatch_async(_serialQueue, ^{
         MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
