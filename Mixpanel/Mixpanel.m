@@ -650,18 +650,16 @@ static Mixpanel *sharedInstance = nil;
 - (void)flushEvents
 {
     [self flushQueue:_eventsQueue
-            endpoint:@"/track/"
-       batchComplete:^{}];
+            endpoint:@"/track/"];
 }
 
 - (void)flushPeople
 {
     [self flushQueue:_peopleQueue
-            endpoint:@"/engage/"
-       batchComplete:^{}];
+            endpoint:@"/engage/"];
 }
 
-- (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint batchComplete:(void(^)())batchCompleteCallback
+- (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
     while ([queue count] > 0) {
         NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
@@ -690,7 +688,6 @@ static Mixpanel *sharedInstance = nil;
         };
 
         [queue removeObjectsInArray:batch];
-        batchCompleteCallback();
     }
 }
 
