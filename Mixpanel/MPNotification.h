@@ -6,6 +6,7 @@ extern NSString *const MPNotificationTypeMini;
 extern NSString *const MPNotificationTypeTakeover;
 
 @property (nonatomic, readonly) NSUInteger ID;
+@property (nonatomic, readonly) NSUInteger messageID;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSURL *imageURL;
 @property (nonatomic, strong) NSData *image;
