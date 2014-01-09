@@ -754,8 +754,9 @@ static Mixpanel *sharedInstance = nil;
 - (void)archiveEvents
 {
     NSString *filePath = [self eventsFilePath];
-    MixpanelDebug(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
-    if (![NSKeyedArchiver archiveRootObject:self.eventsQueue toFile:filePath]) {
+    NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
+    MixpanelDebug(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
+    if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
         NSLog(@"%@ unable to archive events data", self);
     }
 }
@@ -763,8 +764,9 @@ static Mixpanel *sharedInstance = nil;
 - (void)archivePeople
 {
     NSString *filePath = [self peopleFilePath];
-    MixpanelDebug(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
-    if (![NSKeyedArchiver archiveRootObject:self.peopleQueue toFile:filePath]) {
+    NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
+    MixpanelDebug(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
+    if (![NSKeyedArchiver archiveRootObject:peopleQueueCopy toFile:filePath]) {
         NSLog(@"%@ unable to archive people data", self);
     }
 }
