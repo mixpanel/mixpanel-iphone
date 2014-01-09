@@ -1289,7 +1289,8 @@ static Mixpanel *sharedInstance = nil;
 - (void)trackNotification:(MPNotification *)notification event:(NSString *)event
 {
     if (![notification.title isEqualToString:@"$ignore"]) {
-        [self track:event properties:@{@"campaign_id": [NSNumber numberWithUnsignedLong:notification.ID],
+        [self track:event properties:@{@"campaign_id": @(notification.ID),
+                                       @"message_id": @(notification.messageID),
                                        @"message_type": @"inapp",
                                        @"message_subtype": notification.type}];
     } else {
@@ -1307,6 +1308,7 @@ static Mixpanel *sharedInstance = nil;
                                  @"$campaigns": @(notification.ID),
                                  @"$notifications": @{
                                          @"campaign_id": @(notification.ID),
+                                         @"message_id": @(notification.messageID),
                                          @"type": @"inapp",
                                          @"time": @([NSDate timeIntervalSinceReferenceDate])
                                          }

@@ -27,6 +27,12 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSLog(@"invalid notif id: %@", ID);
         return nil;
     }
+    
+    NSNumber *messageID = object[@"message_id"];
+    if (!([messageID isKindOfClass:[NSNumber class]] && [messageID integerValue] > 0)) {
+        NSLog(@"invalid notif message id: %@", messageID);
+        return nil;
+    }
 
     NSString *type = object[@"type"];
     if (![type isKindOfClass:[NSString class]]) {
@@ -89,6 +95,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     }
 
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
+                                    messageID:[messageID unsignedIntegerValue]
                                           type:type
                                          title:title
                                           body:body
@@ -97,7 +104,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                                       imageURL:imageURL];
 }
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
+- (id)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
 {
     if (self = [super init]) {
         BOOL valid = YES;
@@ -119,6 +126,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
         if (valid) {
             _ID = ID;
+            _messageID = messageID;
             self.type = type;
             self.title = title;
             self.body = body;
