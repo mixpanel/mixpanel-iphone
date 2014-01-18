@@ -87,7 +87,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             imageURLString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         }
 
-        imageURL = [NSURL URLWithString:imageURLString];
+        imageURL = [NSURL URLWithString:[imageURLString stringByAddingPercentEscapesUsingEncoding:NSStringEncodingConversionExternalRepresentation]];
         if (imageURL == nil) {
             NSLog(@"inavlid notif image URL: %@", imageURLString);
             return nil;
