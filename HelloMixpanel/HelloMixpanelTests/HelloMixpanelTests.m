@@ -914,6 +914,7 @@
 
     // valid
     NSDictionary *o = @{@"id": @3,
+                        @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
                         @"body": @"body",
@@ -969,10 +970,11 @@
     m[@"image_url"] = @[@NO];
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
 
-    // invalid image_urls string
+    // an image with a space in the URL should be % encoded
     m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @"http://test test test.com";
-    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    m[@"image_url"] = @"http://test.com/animagewithaspace init.jpg";
+    STAssertNotNil([MPNotification notificationWithJSONObject:m], nil);
+
 }
 
 - (void)testNoShowSurveyOnPresentingVC
