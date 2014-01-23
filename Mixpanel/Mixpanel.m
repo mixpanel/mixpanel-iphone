@@ -804,10 +804,12 @@ static Mixpanel *sharedInstance = nil;
         NSLog(@"%@ unable to unarchive events data, starting fresh", self);
         self.eventsQueue = nil;
     }
-    NSError *error;
-    BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-    if (!removed) {
-        NSLog(@"%@ unable to remove archived events file at %@ - %@", self, filePath, error);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        NSError *error;
+        BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+        if (!removed) {
+            NSLog(@"%@ unable to remove archived events file at %@ - %@", self, filePath, error);
+        }
     }
     if (!self.eventsQueue) {
         self.eventsQueue = [NSMutableArray array];
@@ -825,10 +827,12 @@ static Mixpanel *sharedInstance = nil;
         NSLog(@"%@ unable to unarchive people data, starting fresh", self);
         self.peopleQueue = nil;
     }
-    NSError *error;
-    BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-    if (!removed) {
-        NSLog(@"%@ unable to remove archived people file at %@ - %@", self, filePath, error);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        NSError *error;
+        BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+        if (!removed) {
+            NSLog(@"%@ unable to remove archived people file at %@ - %@", self, filePath, error);
+        }
     }
     if (!self.peopleQueue) {
         self.peopleQueue = [NSMutableArray array];
@@ -846,10 +850,12 @@ static Mixpanel *sharedInstance = nil;
     @catch (NSException *exception) {
         NSLog(@"%@ unable to unarchive properties data, starting fresh", self);
     }
-    NSError *error;
-    BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-    if (!removed) {
-        NSLog(@"%@ unable to remove archived properties file at %@ - %@", self, filePath, error);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        NSError *error;
+        BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+        if (!removed) {
+            NSLog(@"%@ unable to remove archived properties file at %@ - %@", self, filePath, error);
+        }
     }
     if (properties) {
         self.distinctId = properties[@"distinctId"] ? properties[@"distinctId"] : [self defaultDistinctId];
