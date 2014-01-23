@@ -40,7 +40,7 @@
 
 @end
 
-@interface MPButton : UIButton
+@interface MPActionButton : UIButton
 
 @end
 
@@ -499,7 +499,7 @@
 
 @end
 
-@implementation MPButton
+@implementation MPActionButton
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
