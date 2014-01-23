@@ -70,7 +70,7 @@
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-cp-cpg" customClass="MPButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-cp-cpg" customClass="MPActionButton">
                                 <rect key="frame" x="127" y="496" width="67" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
