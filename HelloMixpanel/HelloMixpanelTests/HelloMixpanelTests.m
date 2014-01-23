@@ -959,6 +959,11 @@
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"cta_url"] = @NO;
     STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+    
+    // empty cta_url
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"cta_url"] = @"";
+    STAssertNotNil([MPNotification notificationWithJSONObject:o], nil);
 
     // invalid image_urls
     m = [NSMutableDictionary dictionaryWithDictionary:o];
