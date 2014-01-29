@@ -1318,7 +1318,7 @@ static Mixpanel *sharedInstance = nil;
                                          @"campaign_id": @(notification.ID),
                                          @"message_id": @(notification.messageID),
                                          @"type": @"inapp",
-                                         @"time": @([NSDate timeIntervalSinceReferenceDate])
+                                         @"time": @([[NSDate date] timeIntervalSince1970])
                                          }
                                  };
 
