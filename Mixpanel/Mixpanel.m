@@ -240,7 +240,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSString *)IFA
 {
-    NSString* ifa = nil;
+    NSString *ifa = nil;
 #ifndef MIXPANEL_NO_IFA
     Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
     if (ASIdentifierManagerClass) {
