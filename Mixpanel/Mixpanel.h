@@ -245,14 +245,24 @@
  Sets the distinct ID of the current user.
 
  @discussion
- By default, Mixpanel will set the distinct ID to the device's iOS ID for
- Advertising (IFA). The IFA depends on the the Ad Support framework, which is
- only available in iOS 6 and later. If you do not want to use the IFA, you can
- define the <code>MIXPANEL_NO_IFA</code> preprocessor flag in your build settings and we will
- use the <code>identifierForVendor</code> property on <code>UIDevice</code> instead.
+ As of version 2.3.1, Mixpanel will choose a default distinct ID based on
+ whether you are using the AdSupport.framework or not.
 
- If we are unable to get an IFA or identifierForVendor, we will fall back to
- generating a persistent UUID.
+ If you are not using the AdSupport Framework (iAds), then we use the
+ <code>[UIDevice currentDevice].identifierForVendor</code> (IFV) string as the
+ default distinct ID.  This ID will identify a user across all apps by the same
+ vendor, but cannot be used to link the same user across apps from different
+ vendors.
+
+ If you are showing iAds in your application, you are allowed use the iOS ID
+ for Advertising (IFA) to identify users. If you have this framework in your
+ app, Mixpanel will use the IFA as the default distinct ID. If you have
+ AdSupport installed but still don't want to use the IFA, you can define the
+ <code>MIXPANEL_NO_IFA</code> preprocessor flag in your build settings, and
+ Mixpanel will use the IFV as the default distinct ID.
+
+ If we are unable to get an IFA or IFV, we will fall back to generating a
+ random persistent UUID.
 
  For tracking events, you do not need to call <code>identify:</code> if you
  want to use the default.  However, <b>Mixpanel People always requires an

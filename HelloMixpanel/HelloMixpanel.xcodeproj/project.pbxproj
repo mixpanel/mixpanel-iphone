@@ -28,7 +28,6 @@
 		2808F9B41610EFE4005772B7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		2808F9B51610EFE4005772B7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9931610EFE3005772B7 /* Foundation.framework */; };
 		2808F9BD1610EFE4005772B7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2808F9BB1610EFE4005772B7 /* InfoPlist.strings */; };
-		283CEC53171F5E2800ACACB5 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 283CEC52171F5E2800ACACB5 /* AdSupport.framework */; };
 		28526F0517C4103200A0F32F /* MPSurveyNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0417C4103200A0F32F /* MPSurveyNavigationController.m */; };
 		28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0717C4107400A0F32F /* MPSurveyQuestionViewController.m */; };
 		28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 28526F0A17C417E000A0F32F /* MPSurvey.m */; };
@@ -161,7 +160,6 @@
 			files = (
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
 				2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */,
-				283CEC53171F5E2800ACACB5 /* AdSupport.framework in Frameworks */,
 				2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */,
 				2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */,
 				2808F9921610EFE3005772B7 /* UIKit.framework in Frameworks */,
@@ -723,6 +721,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
 					"MIXPANEL_LOG=1",
+					MIXPANEL_NO_IFA,
 					"MIXPANEL_DEBUG=1",
 				);
 				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
