@@ -8,7 +8,6 @@
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 
-#import <AdSupport/ASIdentifierManager.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -239,6 +238,22 @@ static Mixpanel *sharedInstance = nil;
     return results;
 }
 
+- (NSString *)ifa
+{
+    NSString* ifa = nil;
+#ifndef MIXPANEL_NO_IFA
+    Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
+    if (ASIdentifierManagerClass) {
+        SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
+        id sharedManager = ((id (*)(id, SEL))[ASIdentifierManagerClass methodForSelector:sharedManagerSelector])(ASIdentifierManagerClass, sharedManagerSelector);
+        SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+        NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
+        ifa = [uuid UUIDString];
+    }
+#endif
+    return ifa;
+}
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (void)setCurrentRadio
 {
@@ -281,11 +296,9 @@ static Mixpanel *sharedInstance = nil;
     if (carrier.carrierName.length) {
         [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
-#ifndef MIXPANEL_NO_IFA
-    if (NSClassFromString(@"ASIdentifierManager")) {
-        [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
+    if ([self ifa]) {
+        [p setValue:[self ifa] forKey:@"$ios_ifa"];
     }
-#endif
     return p;
 }
 
@@ -394,17 +407,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSString *)defaultDistinctId
 {
-    NSString *distinctId = nil;
-#ifdef MIXPANEL_NO_IFA
-    if (NSClassFromString(@"UIDevice")) {
+    NSString *distinctId = [self ifa];
+
+    if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
-#else
-    if (NSClassFromString(@"ASIdentifierManager")) {
-        distinctId = [[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString];
-    }
-#endif
-
     if (!distinctId) {
         NSLog(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
@@ -1368,16 +1375,14 @@ static Mixpanel *sharedInstance = nil;
     __strong Mixpanel *strongMixpanel = _mixpanel;
     if (strongMixpanel) {
         [p setValue:[strongMixpanel deviceModel] forKey:@"$ios_device_model"];
+        if ([strongMixpanel ifa]) {
+            [p setValue:[strongMixpanel ifa] forKey:@"$ios_ifa"];
+        }
     }
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
     [p setValue:VERSION forKey:@"$ios_lib_version"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$ios_app_version"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
-#ifndef MIXPANEL_NO_IFA
-    if (NSClassFromString(@"ASIdentifierManager")) {
-        [p setValue:[[ASIdentifierManager sharedManager].advertisingIdentifier UUIDString] forKey:@"$ios_ifa"];
-    }
-#endif
     return [NSDictionary dictionaryWithDictionary:p];
 }
 
