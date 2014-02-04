@@ -238,7 +238,7 @@ static Mixpanel *sharedInstance = nil;
     return results;
 }
 
-- (NSString *)ifa
+- (NSString *)IFA
 {
     NSString* ifa = nil;
 #ifndef MIXPANEL_NO_IFA
@@ -296,9 +296,7 @@ static Mixpanel *sharedInstance = nil;
     if (carrier.carrierName.length) {
         [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
-    if ([self ifa]) {
-        [p setValue:[self ifa] forKey:@"$ios_ifa"];
-    }
+    [p setValue:[self IFA] forKey:@"$ios_ifa"];
     return p;
 }
 
@@ -407,7 +405,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSString *)defaultDistinctId
 {
-    NSString *distinctId = [self ifa];
+    NSString *distinctId = [self IFA];
 
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
@@ -1375,9 +1373,7 @@ static Mixpanel *sharedInstance = nil;
     __strong Mixpanel *strongMixpanel = _mixpanel;
     if (strongMixpanel) {
         [p setValue:[strongMixpanel deviceModel] forKey:@"$ios_device_model"];
-        if ([strongMixpanel ifa]) {
-            [p setValue:[strongMixpanel ifa] forKey:@"$ios_ifa"];
-        }
+        [p setValue:[strongMixpanel IFA] forKey:@"$ios_ifa"];
     }
     [p setValue:[device systemVersion] forKey:@"$ios_version"];
     [p setValue:VERSION forKey:@"$ios_lib_version"];
