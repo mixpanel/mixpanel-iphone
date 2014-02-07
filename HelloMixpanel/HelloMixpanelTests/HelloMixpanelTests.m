@@ -975,6 +975,31 @@
 
 }
 
+- (void)testNoDoubleShowNotification
+{
+    NSDictionary *o = @{@"id": @3,
+                        @"message_id": @1,
+                        @"title": @"title",
+                        @"type": @"takeover",
+                        @"body": @"body",
+                        @"cta": @"cta",
+                        @"cta_url": @"maps://",
+                        @"image_url": @"http://mixpanel.com"};
+    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+
+    //wait for notifs to be shown from main queue
+      __block BOOL hasCalledBack = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{ hasCalledBack = true; });
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
+    while (hasCalledBack == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
+    STAssertTrue([self.mixpanel.eventsQueue.lastObject[@"event"] isEqualToString:@"$campaign_delivery"], @"last event should be campaign delivery");
+}
+
 - (void)testNoShowSurveyOnPresentingVC
 {
     NSDictionary *o = @{@"id": @3,
