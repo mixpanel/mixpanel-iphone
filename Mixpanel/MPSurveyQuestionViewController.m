@@ -91,9 +91,14 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                                                     attributes:@{NSFontAttributeName: font}
                                                        context:nil].size;
         } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+
             sizeToFit = [_prompt.text sizeWithFont:font
                                  constrainedToSize:constraintSize
                                      lineBreakMode:_prompt.lineBreakMode];
+
+#pragma clang diagnostic pop
         }
 #else
         sizeToFit = [_prompt.text sizeWithFont:font
