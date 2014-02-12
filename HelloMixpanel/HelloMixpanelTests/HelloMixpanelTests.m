@@ -260,18 +260,6 @@
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
 }
 
-
-- (void)testJSONSerializeObject {
-    NSDictionary *test = [self allPropertyTypes];
-    NSData *data = [self.mixpanel JSONSerializeObject:@[test]];
-    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", nil);
-    test = @{@3: @"non-string key"};
-    data = [self.mixpanel JSONSerializeObject:@[test]];
-    json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    STAssertEqualObjects(json, @"[{\"3\":\"non-string key\"}]", @"json serialization failed");
-}
-
 - (void)testIdentify
 {
     NSLog(@"starting testIdentify...");
