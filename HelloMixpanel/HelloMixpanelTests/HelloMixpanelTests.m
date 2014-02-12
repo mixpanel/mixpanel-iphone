@@ -124,7 +124,6 @@
     STAssertNotNil(p[@"$ios_version"], @"missing $ios_version property");
     STAssertNotNil(p[@"$ios_app_version"], @"missing $ios_app_version property");
     STAssertNotNil(p[@"$ios_app_release"], @"missing $ios_app_release property");
-    STAssertNotNil(p[@"$ios_ifa"], @"missing $ios_ifa property");
 }
 
 -(UIViewController *)topViewController {
@@ -336,7 +335,6 @@
     STAssertNotNil(p[@"mp_device_model"], @"mp_device_model not set");
     STAssertEqualObjects(p[@"mp_lib"], @"iphone", @"incorrect mp_lib");
     STAssertNotNil(p[@"time"], @"time not set");
-    STAssertNotNil(p[@"$ios_ifa"], @"$ios_ifa not set");
     STAssertEqualObjects(p[@"token"], TEST_TOKEN, @"incorrect token");
     NSLog(@"finished testTrack");
 }
