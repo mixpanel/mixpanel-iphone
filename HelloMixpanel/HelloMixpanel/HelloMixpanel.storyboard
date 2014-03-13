@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Top Nav View Controller - Mixpanel-->
@@ -142,7 +142,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="D5279D33-3B2A-4BD8-AC1C-20D0D0CBADDE" translatesAutoresizingMaskIntoConstraints="NO" id="4FA-CV-aBK">
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="05351C44-45CF-45E5-8CE8-DF417F454351" translatesAutoresizingMaskIntoConstraints="NO" id="4FA-CV-aBK">
                                 <rect key="frame" x="127" y="122" width="66" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -461,7 +461,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="D5279D33-3B2A-4BD8-AC1C-20D0D0CBADDE" width="66" height="22">
+        <image name="05351C44-45CF-45E5-8CE8-DF417F454351" width="66" height="22">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

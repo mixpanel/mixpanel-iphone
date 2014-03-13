@@ -374,7 +374,8 @@
 		2808F9841610EFE3005772B7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastTestingUpgradeCheck = 0510;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
 					2808F98C1610EFE3005772B7 = {
@@ -586,7 +587,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -650,7 +650,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -730,7 +729,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "283B764C-8A0C-4D6A-A95C-F0B80310466F";
@@ -757,7 +756,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CF2EA511-76C8-46E4-A4FC-575B7B2C6851";
@@ -770,7 +769,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -804,7 +802,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -838,7 +835,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -908,7 +904,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -920,7 +916,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
