@@ -209,7 +209,7 @@ static Mixpanel *sharedInstance = nil;
                                  object:nil];
         [self unarchive];
     }
-    
+
     return self;
 }
 
