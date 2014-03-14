@@ -209,7 +209,7 @@ static Mixpanel *sharedInstance = nil;
                                  object:nil];
         [self unarchive];
     }
-
+    
     return self;
 }
 
@@ -1029,9 +1029,14 @@ static Mixpanel *sharedInstance = nil;
             }
         }
 
+        NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+        BOOL portraitIsNotSupported = ![supportedOrientations containsObject:@"UIInterfaceOrientationPortrait"];
+        
         NSMutableArray *unseenNotifications = [NSMutableArray array];
         for (MPNotification *notification in _notifications) {
-            if ([_shownNotifications member:@(notification.ID)] == nil) {
+            if (portraitIsNotSupported && [notification.type isEqualToString:@"takeover"]) {
+                MixpanelLog(@"%@ takeover notifications are not supported in landscape-only apps: %@", self, notification);
+            } else if ([_shownNotifications member:@(notification.ID)] == nil) {
                 [unseenNotifications addObject:notification];
             }
         }
@@ -1210,7 +1215,7 @@ static Mixpanel *sharedInstance = nil;
 {
     NSData *image = notification.image;
 
-    // if images fail to load. remove the notification from the queue
+    // if images fail to load, remove the notification from the queue
     if (!image) {
         NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
         [notifications removeObject:notification];
