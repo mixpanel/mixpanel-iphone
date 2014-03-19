@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Mixpanel"
-  s.version      = "2.3.3"
+  s.version      = "2.3.4"
   s.summary      = "iPhone tracking library for Mixpanel Analytics"
   s.homepage     = "http://mixpanel.com"
   s.license      = 'Apache License, Version 2.0'
