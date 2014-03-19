@@ -12,5 +12,4 @@ Pod::Spec.new do |s|
   s.resources 	 = ["Mixpanel/**/*.{png,storyboard}"]
   s.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
   s.requires_arc = true
-  s.compiler_flags = '-Wno-gnu'
 end
