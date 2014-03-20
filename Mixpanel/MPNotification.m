@@ -59,17 +59,19 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     }
 
     NSURL *callToActionURL = nil;
-    NSObject *URLString = object[@"cta_url"];
+    NSString *URLString = object[@"cta_url"];
     if (URLString != nil && ![URLString isKindOfClass:[NSNull class]]) {
-        if (![URLString isKindOfClass:[NSString class]] || [(NSString *)URLString length] == 0) {
+        if (![URLString isKindOfClass:[NSString class]]) {
             NSLog(@"invalid notif URL: %@", URLString);
             return nil;
         }
 
-        callToActionURL = [NSURL URLWithString:(NSString *)URLString];
-        if (callToActionURL == nil) {
-            NSLog(@"invalid notif URL: %@", URLString);
-            return nil;
+        if ([URLString length] != 0) {
+            callToActionURL = [NSURL URLWithString:URLString];
+            if (callToActionURL == nil) {
+                NSLog(@"invalid notif URL: %@", URLString);
+                return nil;
+            }
         }
     }
 
