@@ -759,7 +759,7 @@ static Mixpanel *sharedInstance = nil;
     NSError *error;
     BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
     if (!removed) {
-        NSLog(@"%@ unabled to remove archived events file at %@ - %@", self, filePath, error);
+        NSLog(@"%@ unable to remove archived events file at %@ - %@", self, filePath, error);
     }
     if (!self.eventsQueue) {
         self.eventsQueue = [NSMutableArray array];
@@ -780,7 +780,7 @@ static Mixpanel *sharedInstance = nil;
     NSError *error;
     BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
     if (!removed) {
-        NSLog(@"%@ unabled to remove archived events file at %@ - %@", self, filePath, error);
+        NSLog(@"%@ unable to remove archived properties file at %@ - %@", self, filePath, error);
     }
     if (!self.peopleQueue) {
         self.peopleQueue = [NSMutableArray array];
