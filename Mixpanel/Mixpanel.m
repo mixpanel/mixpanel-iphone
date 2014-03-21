@@ -35,7 +35,7 @@
 #import "NSData+MPBase64.h"
 #import "ODIN.h"
 
-#define VERSION @"2.0.5"
+#define VERSION @"2.0.6"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
