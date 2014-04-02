@@ -386,7 +386,7 @@ static Mixpanel *sharedInstance = nil;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties
 {
-    for (id k in properties) {
+    for (id __unused k in properties) {
         NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
         // would be convenient to do: id v = [properties objectForKey:k]; but
         // when the NSAssert's are stripped out in release, it becomes an
@@ -1469,7 +1469,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)increment:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    for (id v in [properties allValues]) {
+    for (id __unused v in [properties allValues]) {
         NSAssert([v isKindOfClass:[NSNumber class]],
                  @"%@ increment property values should be NSNumber. found: %@", self, v);
     }
@@ -1496,7 +1496,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)union:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    for (id v in [properties allValues]) {
+    for (id __unused v in [properties allValues]) {
         NSAssert([v isKindOfClass:[NSArray class]],
                  @"%@ union property values should be NSArray. found: %@", self, v);
     }
