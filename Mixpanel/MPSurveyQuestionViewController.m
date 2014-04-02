@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         }
     }
     _prompt.font = font;
-    _promptHeight.constant = ceilf(promptHeight);
+    _promptHeight.constant = (CGFloat)ceil(promptHeight);
 }
 
 
