@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         }
     }
     _prompt.font = font;
-    _promptHeight.constant = ceilf(promptHeight);
+    _promptHeight.constant = (CGFloat)ceil(promptHeight);
 }
 
 
@@ -280,7 +280,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     cell.customBackgroundView.strokeColor = strokeColor;
     cell.customSelectedBackgroundView.strokeColor = strokeColor;
     cell.customBackgroundView.fillColor = [UIColor clearColor];
-    cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3];
+    cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3f];
     MPSurveyTableViewCellPosition position;
     if (indexPath.row == 0) {
         if ([self.question.choices count] == 1) {
@@ -327,7 +327,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3];
+    _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3f];
     _textView.delegate = self;
     _textView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.5].CGColor;
     _textView.layer.borderWidth = 1;

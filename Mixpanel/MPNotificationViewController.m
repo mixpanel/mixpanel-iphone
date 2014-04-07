@@ -226,7 +226,7 @@
         _touching = NO;
         CGPoint viewEnd = _imageView.layer.position;
         CGPoint viewDistance = CGPointMake(viewEnd.x - _viewStart.x, viewEnd.y - _viewStart.y);
-        CGFloat distance = sqrtf(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
+        CGFloat distance = (CGFloat)sqrt(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
         [UIView animateWithDuration:(distance / 500.0f) delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
             _imageView.layer.position = _viewStart;
         } completion:nil];
@@ -331,7 +331,7 @@
                                    constrainedToSize:constraintSize
                                        lineBreakMode:_bodyLabel.lineBreakMode];
 
-    _bodyLabel.frame = CGRectMake(MPNotifHeight, ceilf((MPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, ceilf(sizeToFit.width), ceilf(sizeToFit.height));
+    _bodyLabel.frame = CGRectMake(MPNotifHeight, (CGFloat)ceil((MPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, (CGFloat)ceil(sizeToFit.width), (CGFloat)ceil(sizeToFit.height));
 }
 
 - (UIView *)getTopView
