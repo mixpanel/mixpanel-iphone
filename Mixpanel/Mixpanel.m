@@ -1230,21 +1230,21 @@ static Mixpanel *sharedInstance = nil;
             MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
         } else {
             self.currentlyShowingNotification = notification;
-
+            BOOL shown = false;
             if ([notification.type isEqualToString:MPNotificationTypeMini]) {
-                [self showMiniNotificationWithObject:notification];
+                shown = [self showMiniNotificationWithObject:notification];
             } else {
-                [self showTakeoverNotificationWithObject:notification];
+                shown = [self showTakeoverNotificationWithObject:notification];
             }
 
-            if (![notification.title isEqualToString:@"$ignore"]) {
+            if (shown && ![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];
             }
         }
     });
 }
 
-- (void)showTakeoverNotificationWithObject:(MPNotification *)notification
+- (BOOL)showTakeoverNotificationWithObject:(MPNotification *)notification
 {
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
@@ -1258,10 +1258,13 @@ static Mixpanel *sharedInstance = nil;
         self.notificationViewController = controller;
 
         [presentingViewController presentViewController:controller animated:NO completion:nil];
+        return YES;
+    } else {
+        return NO;
     }
 }
 
-- (void)showMiniNotificationWithObject:(MPNotification *)notification
+- (BOOL)showMiniNotificationWithObject:(MPNotification *)notification
 {
     MPMiniNotificationViewController *controller = [[MPMiniNotificationViewController alloc] init];
     controller.notification = notification;
@@ -1275,6 +1278,7 @@ static Mixpanel *sharedInstance = nil;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self notificationController:controller wasDismissedWithStatus:NO];
     });
+    return YES;
 }
 
 - (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithStatus:(BOOL)status
