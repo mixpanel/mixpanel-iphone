@@ -20,6 +20,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
+#import "MPDeviceNamer.h"
 
 #define VERSION @"2.3.4"
 
@@ -286,8 +287,8 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:@"Apple" forKey:@"$manufacturer"];
     [p setValue:[device systemName] forKey:@"$os"];
     [p setValue:[device systemVersion] forKey:@"$os_version"];
-    [p setValue:deviceModel forKey:@"$model"];
-    [p setValue:deviceModel forKey:@"mp_device_model"]; // legacy
+    [p setValue:[MPDeviceNamer readableNameWithDeviceName:deviceModel] forKey:@"$model"];
+    [p setValue:[MPDeviceNamer readableNameWithDeviceName:deviceModel] forKey:@"mp_device_model"]; // legacy
     CGSize size = [UIScreen mainScreen].bounds.size;
     [p setValue:@((NSInteger)size.height) forKey:@"$screen_height"];
     [p setValue:@((NSInteger)size.width) forKey:@"$screen_width"];
