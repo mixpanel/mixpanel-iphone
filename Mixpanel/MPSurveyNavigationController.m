@@ -12,6 +12,7 @@
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
 #import "UIView+MPSnapshotImage.h"
+#import "UIColor+MPColor.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
@@ -41,17 +42,10 @@
 
     // set highlight color based on average background color
     UIColor *avgColor = [_backgroundImage mp_averageColor];
-    CGFloat hue;
-    CGFloat brightness;
-    CGFloat saturation;
-    CGFloat alpha;
-    if ([avgColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
-        avgColor = [UIColor colorWithHue:hue saturation:0.8f brightness:brightness alpha:alpha];
-    }
-    self.highlightColor = avgColor;
+    self.highlightColor = [avgColor colorWithSaturationComponent:0.8f];
     self.questionControllers = [NSMutableArray array];
     self.answers = [NSMutableDictionary dictionary];
-    for (NSUInteger i = 0; i < _survey.questions.count; i++) {
+    for (NSUInteger i = 0; i < [_survey.questions count]; i++) {
         [_questionControllers addObject:[NSNull null]];
     }
     [self loadQuestion:0];
@@ -145,7 +139,7 @@
 
 - (void)loadQuestion:(NSUInteger)index
 {
-    if (index < _survey.questions.count) {
+    if (index < [_survey.questions count]) {
         MPSurveyQuestionViewController *controller = _questionControllers[index];
         // replace the placeholder if necessary
         if ((NSNull *)controller == [NSNull null]) {
@@ -326,7 +320,7 @@
 - (IBAction)showNextQuestion
 {
     NSUInteger currentIndex = [self currentIndex];
-    if (currentIndex < (_survey.questions.count - 1)) {
+    if (currentIndex < ([_survey.questions count] - 1)) {
         [self showQuestionAtIndex:currentIndex + 1 animatingForward:YES];
     }
 }
@@ -343,7 +337,7 @@
 {
     __strong id<MPSurveyNavigationControllerDelegate> strongDelegate = _delegate;
     if (strongDelegate != nil) {
-        [strongDelegate surveyControllerWasDismissed:self withAnswers:[_answers allValues]];
+        [strongDelegate surveyController:self wasDismissedWithAnswers:[_answers allValues]];
     }
 }
 

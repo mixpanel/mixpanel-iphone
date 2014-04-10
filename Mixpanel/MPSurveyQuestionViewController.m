@@ -72,26 +72,47 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)viewWillLayoutSubviews
 {
-    // can't use _prompt.bounds here cause it hasn't been calculated yet
+    // Can't use _prompt.bounds here cause it hasn't been calculated yet.
     CGFloat promptWidth = self.view.bounds.size.width - 30; // 2x 15 point horizontal padding on prompt
     CGFloat promptHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
     UIFont *font = _prompt.font;
     CGSize constraintSize = CGSizeMake(promptWidth, CGFLOAT_MAX);
-    
-    // lower prompt font size until it fits (or hits min of 9 points)
+
+    // Lower prompt font size until it fits (or hits min of 9 points).
     for (CGFloat size = 20; size >= 9; size--) {
         font = [font fontWithSize:size];
-        CGRect bounds = [_prompt.text boundingRectWithSize:constraintSize
-                                                   options:NSStringDrawingUsesLineFragmentOrigin
-                                                attributes:@{NSFontAttributeName: font}
-                                                   context:nil];
-        if (bounds.size.height <= promptHeight) {
-            promptHeight = bounds.size.height;
+        CGSize sizeToFit;
+
+        // Use boundingRectWithSize for iOS 7 and above, sizeWithFont otherwise.
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
+            sizeToFit = [_prompt.text boundingRectWithSize:constraintSize
+                                                       options:NSStringDrawingUsesLineFragmentOrigin
+                                                    attributes:@{NSFontAttributeName: font}
+                                                       context:nil].size;
+        } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+
+            sizeToFit = [_prompt.text sizeWithFont:font
+                                 constrainedToSize:constraintSize
+                                     lineBreakMode:_prompt.lineBreakMode];
+
+#pragma clang diagnostic pop
+        }
+#else
+        sizeToFit = [_prompt.text sizeWithFont:font
+                             constrainedToSize:constraintSize
+                                 lineBreakMode:_prompt.lineBreakMode];
+#endif
+
+        if (sizeToFit.height <= promptHeight) {
+            promptHeight = sizeToFit.height;
             break;
         }
     }
     _prompt.font = font;
-    _promptHeight.constant = ceilf(promptHeight);
+    _promptHeight.constant = (CGFloat)ceil(promptHeight);
 }
 
 
@@ -212,7 +233,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGColorRef outerColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
     CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
     fadeLayer.colors = @[(__bridge id)outerColor, (__bridge id)innerColor, (__bridge id)innerColor, (__bridge id)outerColor];
-    // add 20 pixels of fade in and out at top and bottom of table view container
+    // add 44 pixels of fade in and out at top and bottom of table view container
     CGFloat offset = 44 / _tableContainer.bounds.size.height;
     fadeLayer.locations = @[@0, @(0 + offset), @(1 - offset), @1];
     fadeLayer.bounds = _tableContainer.bounds;
@@ -259,7 +280,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     cell.customBackgroundView.strokeColor = strokeColor;
     cell.customSelectedBackgroundView.strokeColor = strokeColor;
     cell.customBackgroundView.fillColor = [UIColor clearColor];
-    cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3];
+    cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3f];
     MPSurveyTableViewCellPosition position;
     if (indexPath.row == 0) {
         if ([self.question.choices count] == 1) {
@@ -299,11 +320,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) ? 0 : 0.1f; // for some reason, 0 doesn't work in ios7
-}
-
 @end
 
 @implementation MPSurveyTextQuestionViewController
@@ -311,7 +327,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3];
+    _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3f];
     _textView.delegate = self;
     _textView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.5].CGColor;
     _textView.layer.borderWidth = 1;
@@ -392,7 +408,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     _promptTopSpace.constant = promptTopSpace;
     [UIView animateWithDuration:duration
                           delay:0
-                        options:curve | UIViewKeyframeAnimationOptionBeginFromCurrentState
+                        options:curve | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.prompt.alpha = promptAlpha;
                          [self.view layoutIfNeeded];
@@ -408,7 +424,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     _promptTopSpace.constant = 15;
     [UIView animateWithDuration:duration
                           delay:0
-                        options:curve | UIViewKeyframeAnimationOptionBeginFromCurrentState
+                        options:curve | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          self.prompt.alpha = 1;
                          [self.view layoutIfNeeded];

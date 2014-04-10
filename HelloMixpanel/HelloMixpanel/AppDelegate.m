@@ -1,21 +1,3 @@
-//
-// AppDelegate.m
-// HelloMixpanel
-//
-// Copyright 2012 Mixpanel
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 #import "Mixpanel.h"
 
 #import "AppDelegate.h"
@@ -40,6 +22,9 @@
     self.mixpanel.checkForSurveysOnActive = YES;
     self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
 
+    self.mixpanel.checkForNotificationsOnActive = YES;
+    self.mixpanel.showNotificationOnActive = YES; //Change this to NO to show your notifs manually.
+
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
 
@@ -49,7 +34,8 @@
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
 
-    self.window.rootViewController = [[ViewController alloc] init];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
+    self.window.rootViewController = [storyboard instantiateInitialViewController];
 
     [self.window makeKeyAndVisible];
 

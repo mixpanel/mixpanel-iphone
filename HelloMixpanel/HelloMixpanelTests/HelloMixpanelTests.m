@@ -1,28 +1,12 @@
-//
-//  HelloMixpanelTests.m
-//  HelloMixpanelTests
-//
-// Copyright 2012 Mixpanel
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 #import "HelloMixpanelTests.h"
 
 #import "Mixpanel.h"
+#import "MPNotification.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyHTTPConnection.h"
+#import "MPSurveyNavigationController.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -140,7 +124,14 @@
     STAssertNotNil(p[@"$ios_version"], @"missing $ios_version property");
     STAssertNotNil(p[@"$ios_app_version"], @"missing $ios_app_version property");
     STAssertNotNil(p[@"$ios_app_release"], @"missing $ios_app_release property");
-    STAssertNotNil(p[@"$ios_ifa"], @"missing $ios_ifa property");
+}
+
+-(UIViewController *)topViewController {
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    return rootViewController;
 }
 
 - (void)testHTTPServer
@@ -269,18 +260,6 @@
     STAssertEquals([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
 }
 
-
-- (void)testJSONSerializeObject {
-    NSDictionary *test = [self allPropertyTypes];
-    NSData *data = [self.mixpanel JSONSerializeObject:@[test]];
-    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    STAssertEqualObjects(json, @"[{\"float\":1.3,\"string\":\"yello\",\"url\":\"https:\\/\\/mixpanel.com\\/\",\"nested\":{\"p1\":{\"p2\":[{\"p3\":[\"bottom\"]}]}},\"array\":[\"1\"],\"date\":\"2012-09-29T02:14:36.000Z\",\"dictionary\":{\"k\":\"v\"},\"null\":null,\"number\":3}]", nil);
-    test = @{@3: @"non-string key"};
-    data = [self.mixpanel JSONSerializeObject:@[test]];
-    json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    STAssertEqualObjects(json, @"[{\"3\":\"non-string key\"}]", @"json serialization failed");
-}
-
 - (void)testIdentify
 {
     NSLog(@"starting testIdentify...");
@@ -344,7 +323,6 @@
     STAssertNotNil(p[@"mp_device_model"], @"mp_device_model not set");
     STAssertEqualObjects(p[@"mp_lib"], @"iphone", @"incorrect mp_lib");
     STAssertNotNil(p[@"time"], @"time not set");
-    STAssertNotNil(p[@"$ios_ifa"], @"$ios_ifa not set");
     STAssertEqualObjects(p[@"token"], TEST_TOKEN, @"incorrect token");
     NSLog(@"finished testTrack");
 }
@@ -484,13 +462,6 @@
     STAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     STAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not found");
-    STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not found");
-    STAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not found");
-    // no existing file
-    [fileManager removeItemAtPath:[self.mixpanel eventsFilePath] error:nil];
-    [fileManager removeItemAtPath:[self.mixpanel peopleFilePath] error:nil];
-    [fileManager removeItemAtPath:[self.mixpanel propertiesFilePath] error:nil];
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
     STAssertFalse([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
@@ -912,6 +883,157 @@
     m = [NSMutableDictionary dictionaryWithDictionary:o];
     m[@"prompt"] = @"";
     STAssertNil([MPSurveyQuestion questionWithJSONObject:m], nil);
+}
+
+- (void)testParseNotification
+{
+    // invalid bad title
+    NSDictionary *invalid = @{@"id": @3,
+                              @"title": @5,
+                              @"type": @"takeover",
+                              @"body": @"Hi!",
+                              @"cta_url": @"blah blah blah",
+                              @"cta": [NSNull null],
+                              @"image_url": @[]};
+
+    STAssertNil([MPNotification notificationWithJSONObject:invalid], nil);
+
+    // valid
+    NSDictionary *o = @{@"id": @3,
+                        @"message_id": @1,
+                        @"title": @"title",
+                        @"type": @"takeover",
+                        @"body": @"body",
+                        @"cta": @"cta",
+                        @"cta_url": @"maps://",
+                        @"image_url": @"http://mixpanel.com"};
+
+    STAssertNotNil([MPNotification notificationWithJSONObject:o], nil);
+
+    // nil
+    STAssertNil([MPNotification notificationWithJSONObject:nil], nil);
+
+    // empty
+    STAssertNil([MPNotification notificationWithJSONObject:@{}], nil);
+
+    // garbage keys
+    STAssertNil([MPNotification notificationWithJSONObject:@{@"gar": @"bage"}], nil);
+
+    NSMutableDictionary *m;
+
+    // invalid id
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"id"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid title
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"title"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid body
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"body"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid cta
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"cta"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid cta_url
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"cta_url"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid image_urls
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"image_url"] = @NO;
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // invalid image_urls item
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"image_url"] = @[@NO];
+    STAssertNil([MPNotification notificationWithJSONObject:m], nil);
+
+    // an image with a space in the URL should be % encoded
+    m = [NSMutableDictionary dictionaryWithDictionary:o];
+    m[@"image_url"] = @"http://test.com/animagewithaspace init.jpg";
+    STAssertNotNil([MPNotification notificationWithJSONObject:m], nil);
+
+}
+
+- (void)testNoDoubleShowNotification
+{
+    NSDictionary *o = @{@"id": @3,
+                        @"message_id": @1,
+                        @"title": @"title",
+                        @"type": @"takeover",
+                        @"body": @"body",
+                        @"cta": @"cta",
+                        @"cta_url": @"maps://",
+                        @"image_url": @"http://mixpanel.com"};
+    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+
+    //wait for notifs to be shown from main queue
+      __block BOOL hasCalledBack = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{ hasCalledBack = true; });
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
+    while (hasCalledBack == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
+    STAssertTrue([self.mixpanel.eventsQueue.lastObject[@"event"] isEqualToString:@"$campaign_delivery"], @"last event should be campaign delivery");
+}
+
+- (void)testNoShowSurveyOnPresentingVC
+{
+    NSDictionary *o = @{@"id": @3,
+                        @"name": @"survey",
+                        @"collections": @[@{@"id": @9, @"name": @"collection"}],
+                        @"questions": @[@{
+                                            @"id": @12,
+                                            @"type": @"text",
+                                            @"prompt": @"Anything else?",
+                                            @"extra_data": @{}}]};
+
+    MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
+
+    //Start presenting a View Controller on the current root
+    UIViewController *topViewController = [self topViewController];
+
+    __block BOOL waitForBlock = YES;
+    [topViewController presentViewController:[[UIViewController alloc]init] animated:YES completion:^{ waitForBlock = NO; }];
+
+    //Survey should not show as it cannot present on top of a currently presenting view controller
+    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+
+    STAssertFalse([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was presented when it shouldn't have been");
+
+    //Wait for original VC to present, so we don't interfere with subsequent tests.
+    while(waitForBlock) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    }
+}
+
+- (void)testShowSurvey
+{
+    NSDictionary *o = @{@"id": @3,
+                        @"name": @"survey",
+                        @"collections": @[@{@"id": @9, @"name": @"collection"}],
+                        @"questions": @[@{
+                                            @"id": @12,
+                                            @"type": @"text",
+                                            @"prompt": @"Anything else?",
+                                            @"extra_data": @{}}]};
+
+    MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
+
+    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+
+    STAssertTrue([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was not presented");
 }
 
 @end

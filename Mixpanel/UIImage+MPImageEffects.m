@@ -98,6 +98,7 @@
 #endif
 
 #import "UIImage+MPImageEffects.h"
+#import "UIColor+MPColor.h"
 
 #import <Accelerate/Accelerate.h>
 #import <float.h>
@@ -108,21 +109,21 @@
 
 - (UIImage *)mp_applyLightEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.3f];
+    UIColor *tintColor = [UIColor mp_lightEffectColor];
     return [self mp_applyBlurWithRadius:30.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)mp_applyExtraLightEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.97f alpha:0.82f];
+    UIColor *tintColor = [UIColor mp_extraLightEffectColor];
     return [self mp_applyBlurWithRadius:20.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
 
 - (UIImage *)mp_applyDarkEffect
 {
-    UIColor *tintColor = [UIColor colorWithWhite:0.11f alpha:0.73f];
+    UIColor *tintColor = [UIColor mp_darkEffectColor];
     return [self mp_applyBlurWithRadius:20.0f tintColor:tintColor saturationDeltaFactor:1.8f maskImage:nil];
 }
 
@@ -203,7 +204,7 @@
             // ... if d is odd, use three box-blurs of size 'd', centered on the output pixel.
             //
             CGFloat inputRadius = blurRadius * [[UIScreen mainScreen] scale];
-            NSUInteger radius = (NSUInteger)floor(inputRadius * 3. * sqrt(2 * M_PI) / 4 + 0.5);
+            uint32_t radius = (uint32_t)floor(inputRadius * 3. * sqrt(2 * M_PI) / 4 + 0.5);
             if (radius % 2 != 1) {
                 radius += 1; // force radius to be odd so that the three box-blur methodology works.
             }
@@ -224,7 +225,7 @@
             NSUInteger matrixSize = sizeof(floatingPointSaturationMatrix)/sizeof(floatingPointSaturationMatrix[0]);
             int16_t saturationMatrix[matrixSize];
             for (NSUInteger i = 0; i < matrixSize; ++i) {
-                saturationMatrix[i] = (int16_t)roundf(floatingPointSaturationMatrix[i] * divisor);
+                saturationMatrix[i] = (int16_t)round(floatingPointSaturationMatrix[i] * divisor);
             }
             if (hasBlur) {
                 vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
