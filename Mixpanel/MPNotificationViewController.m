@@ -360,9 +360,11 @@
     UIView *topView = nil;
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     if(window) {
-        if(window.subviews.count > 0)
-        {
-            topView = [window.subviews objectAtIndex:0];
+        for(UIView *subview in window.subviews) {
+            if (!subview.hidden && subview.alpha != 0.0) {
+                topView = subview;
+                break;
+            }
         }
     }
     return topView;
