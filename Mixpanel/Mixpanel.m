@@ -1312,7 +1312,7 @@ static Mixpanel *sharedInstance = nil;
 {
     if (![notification.title isEqualToString:@"$ignore"]) {
         [self track:event properties:@{@"campaign_id": @(notification.ID),
-                                       @"message_id": @(notification.messageID),
+                                       @"$message_id": @(notification.messageID),
                                        @"message_type": @"inapp",
                                        @"message_subtype": notification.type}];
     } else {
