@@ -379,7 +379,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2808F99C1610EFE3005772B7 /* InfoPlist.strings in Resources */,
-				2808F9A81610EFE3005772B7 /* ViewController.xib in Resources */,
 				28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */,
 				28C7E6691615311100F78E49 /* Icon.png in Resources */,
 				28C7E66B1615317400F78E49 /* Icon-72.png in Resources */,
@@ -387,15 +386,7 @@
 				86CC975018120A7E0003EF50 /* MPNotification.storyboard in Resources */,
 				2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */,
 				053B4C63183E963100E825FE /* Media.xcassets in Resources */,
-				28ECB34617CEB6920075ADE7 /* MPArrowLeft.png in Resources */,
-				28C6C7D917FE2A5A00F07F70 /* MPDismissKeyboard.png in Resources */,
-				28ECB34717CEB6920075ADE7 /* MPArrowLeft@2x.png in Resources */,
 				0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */,
-				28ECB34817CEB6920075ADE7 /* MPArrowRight.png in Resources */,
-				28ECB34917CEB6920075ADE7 /* MPArrowRight@2x.png in Resources */,
-				289B497617D68DE50035439B /* MPCheckmark.png in Resources */,
-				289B497717D68DE50035439B /* MPCheckmark@2x.png in Resources */,
-				289FD4C118088D8900385AE2 /* MPLogo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,8 +689,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "283B764C-8A0C-4D6A-A95C-F0B80310466F";
+				PROVISIONING_PROFILE = "F6A2AB45-9BB5-4A0A-9051-7CDB542B5B97";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F6A2AB45-9BB5-4A0A-9051-7CDB542B5B97";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
@@ -725,8 +716,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CF2EA511-76C8-46E4-A4FC-575B7B2C6851";
+				PROVISIONING_PROFILE = "F6A2AB45-9BB5-4A0A-9051-7CDB542B5B97";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F6A2AB45-9BB5-4A0A-9051-7CDB542B5B97";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
