@@ -329,7 +329,6 @@
     CGSize constraintSize = CGSizeMake(self.view.frame.size.width - MPNotifHeight - 12.5f, CGFLOAT_MAX);
     CGSize sizeToFit;
     // Use boundingRectWithSize for iOS 7 and above, sizeWithFont otherwise.
-    NSLog(@"max allowed = %d", __IPHONE_OS_VERSION_MAX_ALLOWED);
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
         sizeToFit = [_bodyLabel.text boundingRectWithSize:constraintSize
