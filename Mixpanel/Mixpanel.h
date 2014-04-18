@@ -307,6 +307,10 @@
  */
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 
+
+- (void)trackPushNotificationWithPayload:(NSDictionary *)payload;
+- (void)trackLaunchOptions:(NSDictionary *)options;
+
 /*!
  @method
 
@@ -695,6 +699,7 @@
  revenue analytics to see which products are generating the most revenue.
  */
 - (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties;
+
 
 /*!
  @method

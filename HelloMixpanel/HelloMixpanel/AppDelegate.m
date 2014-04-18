@@ -5,7 +5,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"40b7c226f7e891b8920f80f17476b3d7"
 
 @implementation AppDelegate
 
@@ -33,6 +33,9 @@
 
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
+    
+    // Possibly track a push notification
+    [self.mixpanel trackLaunchOptions:launchOptions];
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
     self.window.rootViewController = [storyboard instantiateInitialViewController];
@@ -67,6 +70,8 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
+    
+    [self.mixpanel trackPushNotificationWithPayload:userInfo];
 }
 
 #pragma mark - Session timing example

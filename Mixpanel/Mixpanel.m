@@ -207,6 +207,10 @@ static Mixpanel *sharedInstance = nil;
                                selector:@selector(applicationWillEnterForeground:)
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidFinishLaunching:)
+                                   name:UIApplicationDidFinishLaunchingNotification
+                                 object:nil];
         [self unarchive];
     }
 
@@ -943,6 +947,44 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(_serialQueue, ^{
        [self archive];
     });
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{
+    MixpanelDebug(@"%@ application did finish launching", self);
+    
+    if (notification.userInfo) {
+        NSDictionary *push = notification.userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (push && push[@"mp_c"] && push[@"mp_m"]) {
+            dispatch_async(self.serialQueue, ^{
+                [self track:@"$campaign_open" properties:@{@"campaign_id": push[@"mp_c"],
+                                                           @"message_id": push[@"mp_m"],
+                                                           @"message_type": @"inapp"}];
+            });
+        }
+    }
+}
+
+- (void)trackLaunchOptions:(NSDictionary *)options {
+    NSLog(@"options %@", options);
+    if (options && options[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        [self trackPushNotificationWithPayload:options[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$campaign_open"];
+    }
+}
+
+- (void)trackPushNotificationWithPayload:(NSDictionary *)payload event:(NSString *)event
+{
+    NSLog(@"payload %@", payload);
+    if (payload && payload[@"mp_c"] && payload[@"mp_m"]) {
+        [self track:event properties:@{@"campaign_id": payload[@"mp_c"],
+                                       @"message_id": payload[@"mp_m"],
+                                       @"message_type": @"inapp"}];
+    }
+}
+
+- (void)trackPushNotificationWithPayload:(NSDictionary *)payload
+{
+    [self trackPushNotificationWithPayload:payload event:@"$campaign_receive"];
 }
 
 #pragma mark - Decide
