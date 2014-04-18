@@ -16,3 +16,5 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+
+HelloMixpanel/build/
