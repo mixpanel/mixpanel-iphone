@@ -72,7 +72,7 @@
 - (IBAction)setNotificationType:(id)sender
 {
     NSArray *types = @[MPNotificationTypeTakeover, MPNotificationTypeMini];
-    self.showNotificationType = types[self.notificationTypeControl.selectedSegmentIndex];
+    self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
 }
 
 - (IBAction)showSurvey:(id)sender
