@@ -308,8 +308,38 @@
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 
 
+/*!
+ @method
+ 
+ @abstract
+ Track a push notification using its payload sent from Mixpanel.
+ 
+ @discussion
+ To simplify user interaction tracking and a/b testing, Mixpanel
+ automatically sends IDs for the relevant notification and a/b variants
+ of each push. This method parses the standard payload and queues a
+ track call using this information.
+ 
+ @param payload         remote notification payload dictionary
+ */
 - (void)trackPushNotificationWithPayload:(NSDictionary *)payload;
+
+
+/*!
+ @method
+ 
+ @abstract
+ Send a track call for any Mixpanel-specific launch options.
+ 
+ @discussion
+ Currently this only searches for remote notification information
+ and passes it to trackNotificationWithPayload. It is provided
+ as a convenience.
+ 
+ @param options         launch options dictionary
+ */
 - (void)trackLaunchOptions:(NSDictionary *)options;
+
 
 /*!
  @method
