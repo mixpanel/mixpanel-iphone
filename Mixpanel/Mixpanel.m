@@ -952,6 +952,7 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
+// probably remove this
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application did finish launching", self);
@@ -969,7 +970,8 @@ static Mixpanel *sharedInstance = nil;
 }
 
 - (void)trackLaunchOptions:(NSDictionary *)options {
-    NSLog(@"options %@", options);
+    MixpanelDebug(@"%@ tracking launch options %@", self, options);
+    
     if (options && options[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self trackPushNotificationWithPayload:options[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$campaign_open"];
     }
@@ -977,11 +979,19 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)trackPushNotificationWithPayload:(NSDictionary *)payload event:(NSString *)event
 {
-    NSLog(@"payload %@", payload);
-    if (payload && payload[@"mp_c"] && payload[@"mp_m"]) {
-        [self track:event properties:@{@"campaign_id": payload[@"mp_c"],
-                                       @"message_id": payload[@"mp_m"],
-                                       @"message_type": @"inapp"}];
+    MixpanelDebug(@"%@ tracking push payload %@", self, payload);
+    
+    if (payload && payload[@"mp"]) {
+        NSDictionary *mp_payload = payload[@"mp"];
+        
+        if (![mp_payload isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"%@ malformed mixpanel push payload %@", self, mp_payload);
+            
+        } else if (mp_payload[@"m"] && mp_payload[@"c"]) {
+            [self track:event properties:@{@"campaign_id": mp_payload[@"c"],
+                                           @"message_id": mp_payload[@"m"],
+                                           @"message_type": @"inapp"}];
+        }
     }
 }
 
