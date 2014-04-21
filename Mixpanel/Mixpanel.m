@@ -206,6 +206,9 @@ static Mixpanel *sharedInstance = nil;
                                selector:@selector(applicationWillEnterForeground:)
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
+        // not sure we can actually register this before being instantiated
+        // which happens inside the applicationDidFinishLaunchingWithOptions
+        // method.
         [notificationCenter addObserver:self
                                selector:@selector(applicationDidFinishLaunching:)
                                    name:UIApplicationDidFinishLaunchingNotification
@@ -952,20 +955,14 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-// probably remove this
+// it doens't look like we can register anything until after the app has launched
+// so we should probably remove this before a merge.
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application did finish launching", self);
     
     if (notification.userInfo) {
-        NSDictionary *push = notification.userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
-        if (push && push[@"mp_c"] && push[@"mp_m"]) {
-            dispatch_async(self.serialQueue, ^{
-                [self track:@"$campaign_open" properties:@{@"campaign_id": push[@"mp_c"],
-                                                           @"message_id": push[@"mp_m"],
-                                                           @"message_type": @"inapp"}];
-            });
-        }
+        [self trackLaunchOptions:notification.userInfo];
     }
 }
 
