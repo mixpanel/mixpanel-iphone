@@ -1,3 +1,189 @@
+Changes with version v2.3.5					18 April 2014
+
+2.3.5: General bug fixes and improvements.
+
+This release contains the following:    - Image assets are in an Asset
+Catalog  - Podspec updated for Cocoapods 0.31.1  - Removed 'unused
+variable' warnings.  - We are now using `boundingRectWithSize` on iOS7
+to compute font size for notifications  - Show notifications on the
+topmost *visible* view so they aren't hidden inside invisible views.
+- Only track notifications when they are *really* shown.  - Fixed
+crash bug when tracking wifi/radio connectivity properties.
+
+
+Changes with version v2.0.6					21 March 2014
+
+Backport for v2.2.3 fixes to archiving.
+
+This is a backport for apps that have not upgraded to ARC and intend
+to support iOS 5. It is NOT intended to be the latest release.
+Info:  Fixed an issue where archiving synchronously on the serial
+queue would block indefinitely.
+
+
+Changes with version v2.3.4					19 March 2014
+
+Reverted some changes from v2.3.3 to fix Podspec lint issues
+
+Commits relating to XCode 5.1 warning suppression were reverted
+because Cocoapods would not accept the podspec with a warning
+suppression compiler flag. These commits will return in a later
+release when we can find a cleaner solution.
+
+
+Changes with version v2.3.3					14 March 2014
+
+Fix for Landscape Takeovers Notifs, Tiny fixes for Xcode 5.1
+
+In-App notifications set to type takeover were crashing landscape-only
+apps. This version filters them out and logs the issue silently.
+Xcode 5.1 presented some new warnings having to do with typecasting
+(from double to float) that were fixed.
+
+
+Changes with version v2.3.2					19 February 2014
+
+Minor fix to in-app tracking timestamps
+
+```[NSDate timeSinceReferenceDate]``` does not produce a standard unix
+timestamp and was being used in an in-app notifications tracking call.
+By changing it to ```[NSDate date]```, the mixpanel library  is able
+to handle the conversion from an NSDate object to the appropriate
+timestamp further down the line.    This tracking call only affects a
+planned dashboard for in-app notifications and will not cause any
+noticeable or functional changes to apps regardless of whether or not
+they are using the feature.
+
+
+Changes with version v2.3.1					04 February 2014
+
+Only use IFA if AdSupport is included.
+
+As of this version (2.3.1) Mixpanel no longer requires the
+AdSupport.framework due to reports of app-store rejections for apps
+that do not serve ads where Mixpanel is using the IFA to identify
+users    From now on, Mixpanel will detect if the host application is
+using AdSupport.framework and, if so, will automatically continue to
+use IFA as the default identifier. For apps that do not serve ads and
+do not have the AdSupport.framework included, Mixpanel will now
+default to using the identifierForVendor (IFV).    Also thanks to
+@orta, @ksm, and @dblock for some other bugfixes in this release.
+
+
+Changes with version v2.3.0					22 January 2014
+
+In-App Notifications
+
+This release includes the new in-app notifications feature. See
+https://mixpanel.com/inapp-notifications/
+
+
+Changes with version v2.2.3					10 January 2014
+
+Archive bug fix
+
+Fixed an issue where archiving was locking up the main app thread when
+a user backgrounded and immediately foregrounded his or her app.
+Archiving also now copies relevant queue objects before archiving them
+to avoid errors associated with nonatomic modifying of the originals.
+
+
+Changes with version v2.2.2					19 December 2013
+
+Fix survey presentation bug
+
+There were circumstances where the Mixpanel library would attempt to
+show a survey on top of a ViewController that was itself in the
+process of going through a presentation transition, leading to a
+NSInternalInconsistencyException.     This release fixes the issue by
+making sure that the current ViewController is not in the process of
+being presented before showing a survey.
+
+
+Changes with version v2.0.5					10 December 2013
+
+Add MIXPANEL_NO_IFA to older version of lib
+
+Apple's app review team may reject apps that use the AdSupport
+framework's advertisingIdentifier (IFA) but do not show ads. The
+MIXPANEL_NO_IFA preprocessor macro—you can set it in your target's
+XCode build settings—will strip IFA usage out of the Mixpanel lib.
+Instead of IFA, we'll use UIDevice's identifierForVendor as the
+default Mixpanel distinct ID.    This functionality is already in the
+most recent versions of the lib. However, apps that still want to
+support iOS 5 must use the 2.0.x releases. This release makes
+MIXPANEL_NO_IFA available to them.
+
+
+Changes with version v2.2.1					05 December 2013
+
+Fix bug using surveys with iOS6.
+
+This release fixes a bug in version 2.2.0 of the Mixpanel library
+where surveys shown iOS6 devices would cause an application crash.
+#### Cause    We switched to using [boundingRectWithSize:options:attri
+butes:context:](https://developer.apple.com/library/iOS/documentation/
+UIKit/Reference/NSString_UIKit_Additions/Reference/Reference.html#//ap
+ple_ref/occ/instm/NSString/boundingRectWithSize:options:attributes:con
+text:) instead of the deprecated [sizeWithFont:](https://developer.app
+le.com/library/iOS/documentation/UIKit/Reference/NSString_UIKit_Additi
+ons/DeprecationAppendix/AppendixADeprecatedAPI.html#//apple_ref/occ/in
+stm/NSString/sizeWithFont:) without doing a runtime check to see if
+the feature was supported on the user's device.    #### Affected users
+Users were affected if all the following conditions were met.   - The
+user was running iOS6  - They were running an app using Mixpanel
+library v2.2.0  - They were shown a [survey](https://mixpanel.com
+/mobile-surveys/)    #### Solution    This release (2.2.1) fixes the
+issue in the Mixpanel library. We have also modified our server code
+so that affected users will *not* be shown surveys, and will therefore
+not encounter the bug.
+
+
+Changes with version v2.2.0					20 November 2013
+
+ARC Compatibility
+
+This release makes the Mixpanel library ARC compatible.    If you were
+previously using this library in an ARC-enabled project and you were
+using the `-fno-objc-arc` flag on all Mixpanel files, you can now
+remove that flag.     If you are using Mixpanel in a project that
+*doesn't* have ARC enabled, you will have to add the `-fobjc-arc` flag
+to all the Mixpanel files.     You can add and remove compiler flags
+on a per-file basis in XCode, in your project settings under `Build
+Phases > Compile Sources`.
+
+
+Changes with version v2.1.0					30 October 2013
+
+Surveys
+
+Adds Mixpanel Surveys functionality.
+
+
+Changes with version v2.0.4					24 October 2013
+
+Super property persistence fix
+
+Improves reliability of archiving and flushing on background.
+
+
+Changes with version v2.0.3					21 October 2013
+
+Time bug fix
+
+We were setting the time on events and records inside async blocks.
+This resulted in incorrect, delayed time values. Time is now set at
+the moment track: or any of the Mixpanel People property methods,
+e.g., set:, append:, etc., are called.
+
+
+Changes with version v2.0.2					12 September 2013
+
+64-bit compatibilty
+
+Adds some required casting for 64-bit builds.
+
+
 Changes with version 2.0.0                                         25 Apr 2013
 
     * New [mixpanel identify:], removed [mixpanel.people identify:]. 
