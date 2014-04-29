@@ -2,8 +2,8 @@
 #import "MPSurvey.h"
 #import "MPNotification.h"
 #import "UIColor+MPColor.h"
-
 #import "ViewController.h"
+#import "Shelley.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -170,6 +170,51 @@
 
 - (void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)selectViewElement:(id)sender {
+    NSUInteger v = UIControlStateNormal;
+    NSArray *inArgs = @[@"A/B", [NSValue value:&v withObjCType:@encode(NSUInteger)]];
+    SEL selector = NSSelectorFromString(@"setTitle:forState:");
+    NSString *path = @"button";
+
+    [ViewController executeSelector:selector withArgs:inArgs onPath:path fromRoot:self.view];
+}
+
++ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(UIView *)root
+{
+    Shelley *shelley = [[Shelley alloc] initWithSelectorString:path];
+    NSArray *views = [shelley selectFrom:root];
+    if ([views count] > 0) {
+        for (NSObject *o in views) {
+            NSMethodSignature *signature = [o methodSignatureForSelector:selector];
+            if (signature != nil) {
+                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                uint requiredArgs = [signature numberOfArguments] - 2;
+                if ([args count] >= requiredArgs) {
+                    [invocation setSelector:selector];
+                    for (uint i = 0; i < requiredArgs; i++) {
+                        NSObject *arg = [args objectAtIndex:i];
+                        // convert NSValues into their base types
+                        if( [arg isKindOfClass:[NSValue class]] ) {
+                            void *buf = malloc(sizeof([(NSValue *)arg objCType]));
+                            [(NSValue *)arg getValue:buf];
+                            [invocation setArgument:(void *)buf atIndex:(int)(i+2)];
+                        } else {
+                            [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
+                        }
+                    }
+                    [invocation invokeWithTarget:o];
+                } else {
+                    NSLog(@"Not enough args");
+                }
+            } else {
+                NSLog(@"No selector");
+            }
+        }
+    } else {
+        NSLog(@"No objects matching pattern");
+    }
 }
 
 @end
