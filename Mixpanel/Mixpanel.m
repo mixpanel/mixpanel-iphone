@@ -899,6 +899,8 @@ static Mixpanel *sharedInstance = nil;
             }
         }];
     }
+
+    [self checkForABTestEditMode];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1429,6 +1431,14 @@ static Mixpanel *sharedInstance = nil;
         }
     } else {
         NSLog(@"No objects matching pattern");
+    }
+}
+
+- (void)checkForABTestEditMode {
+    NSString *pasteData = [[NSString alloc] initWithData:[[UIPasteboard generalPasteboard] dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"mixpanel" options:0 error:nil];
+    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1) {
+        NSLog(@"Starting A/B Test mode");
     }
 }
 
