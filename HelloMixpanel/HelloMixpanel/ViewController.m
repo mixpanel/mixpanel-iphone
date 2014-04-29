@@ -172,11 +172,6 @@
 }
 
 - (IBAction)selectViewElement:(id)sender {
-    NSUInteger v = UIControlStateNormal;
-    NSArray *inArgs = @[@"A/B", [NSValue value:&v withObjCType:@encode(NSUInteger)]];
-    SEL selector = NSSelectorFromString(@"setTitle:forState:");
-    NSString *path = @"button";
-
-    [Mixpanel executeSelector:selector withArgs:inArgs onPath:path fromRoot:self.view];
+    [[Mixpanel sharedInstance] executeVariant];
 }
 @end
