@@ -21,6 +21,8 @@
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
 
+#import "Shelley.h"
+
 #define VERSION @"2.3.5"
 
 #ifdef MIXPANEL_LOG
@@ -1358,7 +1360,64 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+#pragma mark - A/B Testing
+
++ (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(UIView *)root
+{
+    Shelley *shelley = [[Shelley alloc] initWithSelectorString:path];
+    return [shelley selectFrom:root];
+}
+
++ (void)setValue:(id)value forKey:(NSString *)key onPath:(NSString *)path fromRoot:(UIView *)root
+{
+    NSArray *views = [self getViewsOnPath:path fromRoot:root];
+    if ([views count] > 0) {
+        for (NSObject *o in views) {
+            [o setValue:value forKey:key];
+        }
+    } else {
+        NSLog(@"No objects matching pattern");
+    }
+}
+
++ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(UIView *)root
+{
+    NSArray *views = [self getViewsOnPath:path fromRoot:root];
+    if ([views count] > 0) {
+        for (NSObject *o in views) {
+            NSMethodSignature *signature = [o methodSignatureForSelector:selector];
+            if (signature != nil) {
+                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                uint requiredArgs = [signature numberOfArguments] - 2;
+                if ([args count] >= requiredArgs) {
+                    [invocation setSelector:selector];
+                    for (uint i = 0; i < requiredArgs; i++) {
+                        NSObject *arg = [args objectAtIndex:i];
+                        // convert NSValues into their base types
+                        if( [arg isKindOfClass:[NSValue class]] ) {
+                            void *buf = malloc(sizeof([(NSValue *)arg objCType]));
+                            [(NSValue *)arg getValue:buf];
+                            [invocation setArgument:(void *)buf atIndex:(int)(i+2)];
+                        } else {
+                            [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
+                        }
+                    }
+                    [invocation invokeWithTarget:o];
+                } else {
+                    NSLog(@"Not enough args");
+                }
+            } else {
+                NSLog(@"No selector");
+            }
+        }
+    } else {
+        NSLog(@"No objects matching pattern");
+    }
+}
+
 @end
+
+#pragma mark - People
 
 @implementation MixpanelPeople
 
