@@ -20,6 +20,7 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
+#import "MPVariant.h"
 
 #import "Shelley.h"
 
@@ -65,6 +66,8 @@
 @property (nonatomic, strong) MPNotification *currentlyShowingNotification;
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
+
+@property (nonatomic, strong) NSArray *variants;
 
 @end
 
@@ -914,11 +917,11 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
     }];
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
-    
+
     if (self.flushOnBackground) {
         [self flush];
     }
-    
+
     dispatch_async(_serialQueue, ^{
         [self archive];
         MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
@@ -1021,8 +1024,22 @@ static Mixpanel *sharedInstance = nil;
                 MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
             }
 
+            /*NSArray *rawVariants = object[@"variants"];
+            NSMutableArray *parsedVariants = [NSMutableArray array];
+
+            if (rawVariants && [rawVariants isKindOfClass:[NSArray class]]) {
+                for (id obj in rawVariants) {
+                    MPVariant *variant = [MPVariant variantWithJSONObject:obj];
+                    if (variant) {
+                        [parsedVariants addObject:variant];
+                    }
+                }
+            }*/
+            NSArray *parsedVariants = @[[MPVariant variantWithDummyJSONObject]];
+
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];
+            self.variants = [NSArray arrayWithArray:parsedVariants];
         } else {
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
@@ -1036,7 +1053,7 @@ static Mixpanel *sharedInstance = nil;
 
         NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
         BOOL portraitIsNotSupported = ![supportedOrientations containsObject:@"UIInterfaceOrientationPortrait"];
-        
+
         NSMutableArray *unseenNotifications = [NSMutableArray array];
         for (MPNotification *notification in _notifications) {
             if (portraitIsNotSupported && [notification.type isEqualToString:@"takeover"]) {
@@ -1412,6 +1429,18 @@ static Mixpanel *sharedInstance = nil;
         }
     } else {
         NSLog(@"No objects matching pattern");
+    }
+}
+
+- (void)executeVariant {
+    for (MPVariant *variant in _variants) {
+        for (NSDictionary *action in variant.actions) {
+            [Mixpanel executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                             withArgs:[action objectForKey:@"args"]
+                               onPath:[action objectForKey:@"path"]
+                             fromRoot:[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]];
+        }
+        break; // only execute one variant
     }
 }
 

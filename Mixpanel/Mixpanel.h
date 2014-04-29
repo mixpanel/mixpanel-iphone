@@ -499,8 +499,7 @@
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
-+ (void)setValue:(id)value forKey:(NSString *)key onPath:(NSString *)path fromRoot:(UIView *)root;
-+ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(UIView *)root;
+- (void)executeVariant;
 
 @end
 
