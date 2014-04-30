@@ -1,5 +1,8 @@
 //
-//   Copyright 2012 Square Inc.
+// Copyright (c) 2014 Mixpanel. All rights reserved.
+//
+
+//   Portions Copyright 2012 Square Inc.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -18,27 +21,27 @@
 #import <Security/SecCertificate.h>
 
 typedef enum {
-    SR_CONNECTING   = 0,
-    SR_OPEN         = 1,
-    SR_CLOSING      = 2,
-    SR_CLOSED       = 3,
-} SRReadyState;
+    MPWebSocketStateConnecting = 0,
+    MPWebSocketStateOpen = 1,
+    MPWebSocketStateClosing = 2,
+    MPWebSocketStateClosed = 3,
+} MPWebSocketReadyState;
 
-@class SRWebSocket;
+@class MPWebSocket;
 
-extern NSString *const SRWebSocketErrorDomain;
+extern NSString *const MPWebSocketErrorDomain;
 
-#pragma mark - SRWebSocketDelegate
+#pragma mark - MPWebSocketDelegate
 
-@protocol SRWebSocketDelegate;
+@protocol MPWebSocketDelegate;
 
-#pragma mark - SRWebSocket
+#pragma mark - MPWebSocket
 
-@interface SRWebSocket : NSObject <NSStreamDelegate>
+@interface MPWebSocket : NSObject <NSStreamDelegate>
 
-@property (nonatomic, assign) id <SRWebSocketDelegate> delegate;
+@property (nonatomic, assign) id <MPWebSocketDelegate> delegate;
 
-@property (nonatomic, readonly) SRReadyState readyState;
+@property (nonatomic, readonly) MPWebSocketReadyState readyState;
 @property (nonatomic, readonly, retain) NSURL *url;
 
 // This returns the negotiated protocol.
@@ -58,11 +61,11 @@ extern NSString *const SRWebSocketErrorDomain;
 - (void)setDelegateOperationQueue:(NSOperationQueue*) queue;
 - (void)setDelegateDispatchQueue:(dispatch_queue_t) queue;
 
-// By default, it will schedule itself on +[NSRunLoop SR_networkRunLoop] using defaultModes.
+// By default, it will schedule itself on +[NSRunLoop mp_networkRunLoop] using defaultModes.
 - (void)scheduleInRunLoop:(NSRunLoop *)aRunLoop forMode:(NSString *)mode;
 - (void)unscheduleFromRunLoop:(NSRunLoop *)aRunLoop forMode:(NSString *)mode;
 
-// SRWebSockets are intended for one-time-use only.  Open should be called once and only once.
+// MPWebSockets are intended for one-time-use only.  Open should be called once and only once.
 - (void)open;
 
 - (void)close;
@@ -73,19 +76,19 @@ extern NSString *const SRWebSocketErrorDomain;
 
 @end
 
-#pragma mark - SRWebSocketDelegate
+#pragma mark - MPWebSocketDelegate
 
-@protocol SRWebSocketDelegate <NSObject>
+@protocol MPWebSocketDelegate <NSObject>
 
 // message will either be an NSString if the server is using text
 // or NSData if the server is using binary.
-- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
+- (void)webSocket:(MPWebSocket *)webSocket didReceiveMessage:(id)message;
 
 @optional
 
-- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
-- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+- (void)webSocketDidOpen:(MPWebSocket *)webSocket;
+- (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error;
+- (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 
 @end
 
@@ -93,7 +96,7 @@ extern NSString *const SRWebSocketErrorDomain;
 
 @interface NSURLRequest (CertificateAdditions)
 
-@property (nonatomic, retain, readonly) NSArray *SR_SSLPinnedCertificates;
+@property (nonatomic, retain, readonly) NSArray *mp_SSLPinnedCertificates;
 
 @end
 
@@ -101,14 +104,14 @@ extern NSString *const SRWebSocketErrorDomain;
 
 @interface NSMutableURLRequest (CertificateAdditions)
 
-@property (nonatomic, retain) NSArray *SR_SSLPinnedCertificates;
+@property (nonatomic, retain) NSArray *mp_SSLPinnedCertificates;
 
 @end
 
 #pragma mark - NSRunLoop (SRWebSocket)
 
-@interface NSRunLoop (SRWebSocket)
+@interface NSRunLoop (MPWebSocket)
 
-+ (NSRunLoop *)SR_networkRunLoop;
++ (NSRunLoop *)mp_networkRunLoop;
 
 @end
