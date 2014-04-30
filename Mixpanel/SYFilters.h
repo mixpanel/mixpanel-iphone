@@ -32,7 +32,7 @@
 
 @end
 //
-//  SYClassFilter.h
+//  SYViewFilter.h
 //  Shelley
 //
 //  Created by Pete Hodgson on 7/22/11.
@@ -40,12 +40,27 @@
 //
 
 
-@interface SYClassFilter : SYArrayFilterTemplate {
+@interface SYViewFilter : SYArrayFilterTemplate {
     Class _targetClass;
 	BOOL _includeSelf;
     BOOL _justFilter;
 }
 @property (readonly) Class target;
+
+- (id)initWithClass:(Class)class;
+- (id)initWithClass:(Class)class includeSelf:(BOOL)includeSelf;
+
+@end
+
+//
+//  SYViewControllerFilter.h
+//  Shelley
+//
+//  Created by Alex Hofsteede on 4/29/14.
+//  Copyright 2014 Mixpanel. All rights reserved.
+//
+
+@interface SYViewControllerFilter : SYArrayFilterTemplate
 
 - (id)initWithClass:(Class)class;
 - (id)initWithClass:(Class)class includeSelf:(BOOL)includeSelf;

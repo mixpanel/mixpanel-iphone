@@ -35,50 +35,28 @@
 
 @end
 //
-//  SYClassFilter.m
+//  SYViewFilter.m
 //  Shelley
 //
 //  Created by Pete Hodgson on 7/22/11.
 //  Copyright 2011 ThoughtWorks. All rights reserved.
 //
 
-#if !TARGET_OS_IPHONE
-@interface NSApplication (FrankAutomation)
-- (NSSet*) FEX_menus;
-@end
-#endif
-
-@implementation SYClassFilter
+@implementation SYViewFilter
 @synthesize target=_targetClass;
 
 + (NSArray *) allDescendantsOf:(ShelleyView *)view{
     NSMutableArray *descendants = [NSMutableArray array];
 
-#if TARGET_OS_IPHONE
     for (ShelleyView *subview in [view subviews]) {
         [descendants addObject:subview];
         [descendants addObjectsFromArray:[self allDescendantsOf:subview]];
     }
-#else
-    if ([view respondsToSelector: @selector(FEX_children)])
-    {
-        for (id child in [view performSelector: @selector(FEX_children)])
-        {
-            [descendants addObject: child];
-            [descendants addObjectsFromArray: [self allDescendantsOf: child]];
-        }
-    }
-
-#endif
     return descendants;
 }
 
 - (id)initWithClass:(Class)class {
-#if TARGET_OS_IPHONE
     return [self initWithClass:class includeSelf:NO];
-#else
-    return [self initWithClass:class includeSelf:YES];
-#endif
 }
 
 - (id)initWithClass:(Class)class includeSelf:(BOOL)includeSelf {
@@ -100,10 +78,9 @@
         return [NSArray arrayWithObject:view];
 
     NSMutableArray *allViews = _includeSelf ? [NSMutableArray arrayWithObject:view] : [NSMutableArray array];
-    [allViews addObjectsFromArray:[SYClassFilter allDescendantsOf:view]];
+    [allViews addObjectsFromArray:[SYViewFilter allDescendantsOf:view]];
     return allViews;
 }
-
 
 -(NSArray *)applyToView:(ShelleyView *)view{
     NSArray *allViews = [self viewsToConsiderFromView:view];
@@ -117,6 +94,28 @@
     }
 
     return filteredDescendants;
+}
+
+@end
+
+//
+//  SYViewControllerFilter.h
+//  Shelley
+//
+//  Created by Alex Hofsteede on 4/29/14.
+//  Copyright 2014 Mixpanel. All rights reserved.
+//
+
+@implementation SYViewControllerFilter
+
+- (id)initWithClass:(Class)class
+{
+    
+}
+
+- (id)initWithClass:(Class)class includeSelf:(BOOL)includeSelf
+{
+    
 }
 
 @end
@@ -170,31 +169,11 @@
 -(NSArray *)applyToView:(ShelleyView *)view{
     NSMutableArray *ancestors = [NSMutableArray array];
 
-#if TARGET_OS_IPHONE
     ShelleyView *currentView = view;
 
     while(( currentView = [currentView superview] )){
         [ancestors addObject:currentView];
     }
-#else
-    id currentView = view;
-
-    while (currentView != nil) {
-        if ([currentView respondsToSelector: @selector(FEX_parent)])
-        {
-            currentView = [currentView performSelector: @selector(FEX_parent)];
-        }
-        else
-        {
-            currentView = nil;
-        }
-
-        if (currentView != nil) {
-            [ancestors addObject: currentView];
-        }
-    }
-
-#endif
 
     return ancestors;
 }
