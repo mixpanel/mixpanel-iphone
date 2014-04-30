@@ -23,6 +23,7 @@
 #import "MPVariant.h"
 
 #import "Shelley.h"
+#import "MPWebSocket.h"
 
 #define VERSION @"2.3.5"
 
@@ -38,7 +39,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
+@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate, MPWebSocketDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -67,6 +68,7 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
+@property (nonatomic, strong) MPWebSocket *webSocket;
 @property (nonatomic, strong) NSArray *variants;
 
 @end
@@ -1434,16 +1436,6 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)checkForABTestEditMode {
-    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    NSString *pasteData = [[NSString alloc] initWithData:[pasteboard dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"mixpanel" options:0 error:nil];
-    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1) {
-        NSLog(@"Starting A/B Test mode");
-        [pasteboard setData:[NSData data] forPasteboardType:@"public.text"];
-    }
-}
-
 - (void)executeVariant {
     for (MPVariant *variant in _variants) {
         for (NSDictionary *action in variant.actions) {
@@ -1454,6 +1446,26 @@ static Mixpanel *sharedInstance = nil;
         }
         break; // only execute one variant
     }
+}
+
+
+- (void)checkForABTestEditMode {
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    NSString *pasteData = [[NSString alloc] initWithData:[pasteboard dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[a-zA-Z0-9]+" options:0 error:nil];
+    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1) {
+        [pasteboard setData:[NSData data] forPasteboardType:@"public.text"];
+
+        NSString *socketURL = [NSString stringWithFormat:@"ws://alex.dev.mixpanel.org/websocket_proxy/%@", pasteData];
+        self.webSocket = [[MPWebSocket alloc] initWithURL:[NSURL URLWithString:socketURL]];
+        [self.webSocket open];
+        [self.webSocket send:@"Sup?"];
+    }
+}
+
+- (void)webSocket:(MPWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    NSLog(@"Got a message: %@", message);
 }
 
 @end
