@@ -11,7 +11,7 @@
 @implementation MPVariant
 
 + (MPVariant *)variantWithDummyJSONObject {
-    NSString *json = @"{\"actions\":[{\"path\": \"button\", \"args\": [\"Test\", 0], \"selector\": \"setTitle:forState:\"}]}";
+    NSString *json = @"{\"actions\":[{\"path\": \"UIButton\", \"args\": [\"Test\", 0], \"selector\": \"setTitle:forState:\"}]}";
 
     NSError *error = nil;
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];

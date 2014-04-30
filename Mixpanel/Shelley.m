@@ -28,7 +28,7 @@
 
 - (void) removeDuplicatesFromArray:(NSMutableArray *)mutableArray{
     NSArray *copy = [mutableArray copy];
-    NSInteger index = [copy count] - 1;
+    NSUInteger index = [copy count] - 1;
     for (id object in [copy reverseObjectEnumerator]) {
         if ([mutableArray indexOfObject:object inRange:NSMakeRange(0, index)] != NSNotFound) {
             [mutableArray removeObjectAtIndex:index];
