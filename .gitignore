@@ -17,4 +17,7 @@ xcuserdata
 profile
 *.moved-aside
 
+# AppCode
+.idea
+
 HelloMixpanel/build/
