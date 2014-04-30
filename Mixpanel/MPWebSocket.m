@@ -493,8 +493,8 @@ static __strong NSData *CRLFCRLF;
         _receivedHTTPHeaders = CFHTTPMessageCreateEmpty(NULL, NO);
     }
                         
-        CFHTTPMessageAppendBytes(_receivedHTTPHeaders, (const UInt8 *)data.bytes, data.length);
     [self _readUntilHeaderCompleteWithCallback:^(MPWebSocket *websocket,  NSData *data) {
+        CFHTTPMessageAppendBytes(_receivedHTTPHeaders, (const UInt8 *)data.bytes, (CFIndex)data.length);
         
         if (CFHTTPMessageIsHeaderComplete(_receivedHTTPHeaders)) {
             MPLog(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(_receivedHTTPHeaders)));
@@ -1066,7 +1066,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
              return;
         }
         
-        _outputBufferOffset += bytesWritten;
+        _outputBufferOffset += (NSUInteger) bytesWritten;
         
         if (_outputBufferOffset > 4096 && _outputBufferOffset > (_outputBuffer.length >> 1)) {
             _outputBuffer = [[NSMutableData alloc] initWithBytes:(char *)_outputBuffer.bytes + _outputBufferOffset length:_outputBuffer.length - _outputBufferOffset];
@@ -1240,7 +1240,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
                         });
                         return didWork;
                     } else {
-                        _currentStringScanPosition += valid_utf8_size;
+                        _currentStringScanPosition += (uint32_t)valid_utf8_size;
                     }
                 } 
                 
@@ -1451,10 +1451,10 @@ static const size_t MPFrameHeaderOverhead = 32;
                 uint8_t buffer[bufferSize];
                 
                 while (_inputStream.hasBytesAvailable) {
-                    int bytes_read = [_inputStream read:buffer maxLength:bufferSize];
+                    NSInteger bytes_read = [_inputStream read:buffer maxLength:bufferSize];
                     
                     if (bytes_read > 0) {
-                        [_readBuffer appendBytes:buffer length:bytes_read];
+                        [_readBuffer appendBytes:buffer length:(NSUInteger)bytes_read];
                     } else if (bytes_read < 0) {
                         [self _failWithError:_inputStream.streamError];
                     }
@@ -1614,7 +1614,7 @@ static inline void MPLog(NSString *format, ...) {
 
 static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
     const void * contents = [data bytes];
-    long size = [data length];
+    long size = (long)[data length];
     
     const uint8_t *str = (const uint8_t *)contents;
     
@@ -1647,7 +1647,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
         }
     }
     
-    if (size != -1 && ![[NSString alloc] initWithBytesNoCopy:(char *)[data bytes] length:size encoding:NSUTF8StringEncoding freeWhenDone:NO]) {
+    if (size != -1 && ![[NSString alloc] initWithBytesNoCopy:(char *)[data bytes] length:(NSUInteger)size encoding:NSUTF8StringEncoding freeWhenDone:NO]) {
         size = -1;
     }
     
