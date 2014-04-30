@@ -73,6 +73,7 @@
 		A7B462DC191075DE00774977 /* MPPropertyDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462CC191075DE00774977 /* MPPropertyDescription.m */; };
 		A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462CE191075DE00774977 /* MPSequenceGenerator.m */; };
 		A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */; };
+		A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462EA1910899C00774977 /* MPWebSocket.m */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
 
@@ -189,6 +190,8 @@
 		A7B462CE191075DE00774977 /* MPSequenceGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSequenceGenerator.m; sourceTree = "<group>"; };
 		A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIColorToNSStringValueTransformer.h; sourceTree = "<group>"; };
 		A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIColorToNSStringValueTransformer.m; sourceTree = "<group>"; };
+		A7B462E91910899C00774977 /* MPWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebSocket.h; sourceTree = "<group>"; };
+		A7B462EA1910899C00774977 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
 		A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.xcconfig"; path = "Pods/Pods-HelloMixpanelTests.xcconfig"; sourceTree = "<group>"; };
 		DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.xcconfig"; path = "Pods/Pods-HelloMixpanel.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -340,6 +343,7 @@
 			children = (
 				A7B462B31910759E00774977 /* ABTestingSupport */,
 				05E98D8619106CA400AFF3E1 /* Shelley */,
+				A7B462E81910898E00774977 /* WebSocket */,
 				286760B91611982600B1BEC8 /* Mixpanel.h */,
 				286760BA1611982600B1BEC8 /* Mixpanel.m */,
 				28526F0317C4103200A0F32F /* MPSurveyNavigationController.h */,
@@ -416,6 +420,15 @@
 				A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */,
 			);
 			name = ValueTransformers;
+			sourceTree = "<group>";
+		};
+		A7B462E81910898E00774977 /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				A7B462E91910899C00774977 /* MPWebSocket.h */,
+				A7B462EA1910899C00774977 /* MPWebSocket.m */,
+			);
+			name = WebSocket;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -630,6 +643,7 @@
 				A7B462D8191075DE00774977 /* MPClassDescription.m in Sources */,
 				05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */,
 				28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */,
+				A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */,
 				05E98DD61910751400AFF3E1 /* SYParser.m in Sources */,
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				A7B462DC191075DE00774977 /* MPPropertyDescription.m in Sources */,
