@@ -91,7 +91,7 @@ static NSString *const MPWebSocketAppendToSecKeyString = @"258EAFA5-E914-47DA-95
 
 static inline int32_t validate_dispatch_data_partial_string(NSData *data);
 static inline dispatch_queue_t log_queue();
-static inline void MPFastLog(NSString *format, ...);
+static inline void MPLog(NSString *format, ...);
 
 @interface NSData (MPWebSocket)
 
@@ -452,7 +452,7 @@ static __strong NSData *CRLFCRLF;
     NSInteger responseCode = CFHTTPMessageGetResponseStatusCode(_receivedHTTPHeaders);
     
     if (responseCode >= 400) {
-        MPFastLog(@"Request failed with response code %d", responseCode);
+        MPLog(@"Request failed with response code %d", responseCode);
         [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %d", responseCode] forKey:NSLocalizedDescriptionKey]]];
         return;
 
@@ -508,7 +508,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MPFastLog(@"Connected");
+    MPLog(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
     
     // Set host first so it defaults
@@ -630,7 +630,7 @@ static __strong NSData *CRLFCRLF;
         
         self.readyState = MPWebSocketStateClosing;
         
-        MPFastLog(@"Closing with code %d reason %@", code, reason);
+        MPLog(@"Closing with code %d reason %@", code, reason);
         
         if (wasConnecting) {
             [self _disconnect];
@@ -688,7 +688,7 @@ static __strong NSData *CRLFCRLF;
             self.readyState = MPWebSocketStateClosed;
             _selfRetain = nil;
 
-            MPFastLog(@"Failing with error %@", error.localizedDescription);
+            MPLog(@"Failing with error %@", error.localizedDescription);
             
             [self _disconnect];
         }
@@ -740,7 +740,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)_handleMessage:(id)message
 {
-    MPFastLog(@"Received message");
+    MPLog(@"Received message");
     [self _performDelegateBlock:^{
         [self.delegate webSocket:self didReceiveMessage:message];
     }];
@@ -786,7 +786,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     size_t dataSize = data.length;
     __block uint16_t closeCode = 0;
 
-    MPFastLog(@"Received close frame");
+    MPLog(@"Received close frame");
     
     if (dataSize == 1) {
         // TODO handle error
@@ -823,7 +823,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 - (void)_disconnect;
 {
     [self assertOnWorkQueue];
-    MPFastLog(@"Trying to disconnect");
+    MPLog(@"Trying to disconnect");
     _closeWhenFinishedWriting = YES;
     [self _pumpWriting];
 }
@@ -1397,7 +1397,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     dispatch_async(_workQueue, ^{
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
-                MPFastLog(@"NSStreamEventOpenCompleted %@", aStream);
+                MPLog(@"NSStreamEventOpenCompleted %@", aStream);
                 if (self.readyState >= MPWebSocketStateClosing) {
                     return;
                 }
@@ -1423,7 +1423,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                 
             case NSStreamEventEndEncountered: {
                 [self _pumpScanner];
-                MPFastLog(@"NSStreamEventEndEncountered %@", aStream);
+                MPLog(@"NSStreamEventEndEncountered %@", aStream);
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
@@ -1447,7 +1447,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
                 
             case NSStreamEventHasBytesAvailable: {
-                MPFastLog(@"NSStreamEventHasBytesAvailable %@", aStream);
+                MPLog(@"NSStreamEventHasBytesAvailable %@", aStream);
                 const int bufferSize = 2048;
                 uint8_t buffer[bufferSize];
                 
@@ -1469,13 +1469,13 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
                 
             case NSStreamEventHasSpaceAvailable: {
-                MPFastLog(@"NSStreamEventHasSpaceAvailable %@", aStream);
+                MPLog(@"NSStreamEventHasSpaceAvailable %@", aStream);
                 [self _pumpWriting];
                 break;
             }
                 
             default:
-                MPFastLog(@"(default)  %@", aStream);
+                MPLog(@"(default)  %@", aStream);
                 break;
         }
     });
@@ -1607,7 +1607,7 @@ static inline dispatch_queue_t log_queue() {
 
 //#define MP_ENABLE_LOG
 
-static inline void MPFastLog(NSString *format, ...) {
+static inline void MPLog(NSString *format, ...) {
 #ifdef MP_ENABLE_LOG
     __block va_list arg_list;
     va_start (arg_list, format);
