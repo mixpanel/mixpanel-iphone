@@ -499,6 +499,8 @@
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
+- (void)executeVariant;
+
 @end
 
 /*!

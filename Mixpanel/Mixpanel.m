@@ -20,8 +20,11 @@
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
+#import "MPVariant.h"
 
-#define VERSION @"2.3.4"
+#import "Shelley.h"
+
+#define VERSION @"2.3.5"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
@@ -45,7 +48,7 @@
 
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSDictionary *superProperties;
-@property (nonatomic, strong) NSMutableDictionary *automaticProperties; // mutable because we update $wifi when reachability changes
+@property (atomic, strong) NSDictionary *automaticProperties;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSMutableArray *eventsQueue;
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
@@ -64,6 +67,8 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
+@property (nonatomic, strong) NSArray *variants;
+
 @end
 
 @interface MixpanelPeople ()
@@ -71,7 +76,7 @@
 @property (nonatomic, weak) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSMutableArray *unidentifiedQueue;
 @property (nonatomic, copy) NSString *distinctId;
-@property (nonatomic, strong) NSDictionary *automaticProperties;
+@property (nonatomic, strong) NSDictionary *automaticPeopleProperties;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
 
@@ -178,8 +183,7 @@ static Mixpanel *sharedInstance = nil;
         // cellular info
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-            self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
-            _automaticProperties[@"$radio"] = [self currentRadio];
+            [self setCurrentRadio];
             [notificationCenter addObserver:self
                                    selector:@selector(setCurrentRadio)
                                        name:CTRadioAccessTechnologyDidChangeNotification
@@ -258,7 +262,9 @@ static Mixpanel *sharedInstance = nil;
 - (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^(){
-        _automaticProperties[@"$radio"] = [self currentRadio];
+        NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+        properties[@"$radio"] = [self currentRadio];
+        self.automaticProperties = [properties copy];
     });
 }
 
@@ -274,11 +280,15 @@ static Mixpanel *sharedInstance = nil;
 }
 #endif
 
-- (NSMutableDictionary *)collectAutomaticProperties
+- (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     UIDevice *device = [UIDevice currentDevice];
     NSString *deviceModel = [self deviceModel];
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+
     [p setValue:@"iphone" forKey:@"mp_lib"];
     [p setValue:VERSION forKey:@"$lib_version"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
@@ -288,16 +298,12 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:[device systemVersion] forKey:@"$os_version"];
     [p setValue:deviceModel forKey:@"$model"];
     [p setValue:deviceModel forKey:@"mp_device_model"]; // legacy
-    CGSize size = [UIScreen mainScreen].bounds.size;
     [p setValue:@((NSInteger)size.height) forKey:@"$screen_height"];
     [p setValue:@((NSInteger)size.width) forKey:@"$screen_width"];
-    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-    if (carrier.carrierName.length) {
-        [p setValue:carrier.carrierName forKey:@"$carrier"];
-    }
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
-    return p;
+    [p setValue:carrier.carrierName forKey:@"$carrier"];
+
+    return [p copy];
 }
 
 + (BOOL)inBackground
@@ -708,7 +714,9 @@ static Mixpanel *sharedInstance = nil;
 {
     dispatch_async(self.serialQueue, ^{
         BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
-        self.automaticProperties[@"$wifi"] = wifi ? @YES : @NO;
+        NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
+        properties[@"$wifi"] = wifi ? @YES : @NO;
+        self.automaticProperties = [properties copy];
     });
 }
 
@@ -891,6 +899,8 @@ static Mixpanel *sharedInstance = nil;
             }
         }];
     }
+
+    [self checkForABTestEditMode];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -909,11 +919,11 @@ static Mixpanel *sharedInstance = nil;
         self.taskId = UIBackgroundTaskInvalid;
     }];
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
-    
+
     if (self.flushOnBackground) {
         [self flush];
     }
-    
+
     dispatch_async(_serialQueue, ^{
         [self archive];
         MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
@@ -1016,8 +1026,22 @@ static Mixpanel *sharedInstance = nil;
                 MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
             }
 
+            /*NSArray *rawVariants = object[@"variants"];
+            NSMutableArray *parsedVariants = [NSMutableArray array];
+
+            if (rawVariants && [rawVariants isKindOfClass:[NSArray class]]) {
+                for (id obj in rawVariants) {
+                    MPVariant *variant = [MPVariant variantWithJSONObject:obj];
+                    if (variant) {
+                        [parsedVariants addObject:variant];
+                    }
+                }
+            }*/
+            NSArray *parsedVariants = @[[MPVariant variantWithDummyJSONObject]];
+
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];
+            self.variants = [NSArray arrayWithArray:parsedVariants];
         } else {
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
@@ -1031,7 +1055,7 @@ static Mixpanel *sharedInstance = nil;
 
         NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
         BOOL portraitIsNotSupported = ![supportedOrientations containsObject:@"UIInterfaceOrientationPortrait"];
-        
+
         NSMutableArray *unseenNotifications = [NSMutableArray array];
         for (MPNotification *notification in _notifications) {
             if (portraitIsNotSupported && [notification.type isEqualToString:@"takeover"]) {
@@ -1230,21 +1254,21 @@ static Mixpanel *sharedInstance = nil;
             MixpanelLog(@"%@ already showing survey: %@", self, _currentlyShowingSurvey);
         } else {
             self.currentlyShowingNotification = notification;
-
+            BOOL shown = false;
             if ([notification.type isEqualToString:MPNotificationTypeMini]) {
-                [self showMiniNotificationWithObject:notification];
+                shown = [self showMiniNotificationWithObject:notification];
             } else {
-                [self showTakeoverNotificationWithObject:notification];
+                shown = [self showTakeoverNotificationWithObject:notification];
             }
 
-            if (![notification.title isEqualToString:@"$ignore"]) {
+            if (shown && ![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];
             }
         }
     });
 }
 
-- (void)showTakeoverNotificationWithObject:(MPNotification *)notification
+- (BOOL)showTakeoverNotificationWithObject:(MPNotification *)notification
 {
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
@@ -1258,10 +1282,13 @@ static Mixpanel *sharedInstance = nil;
         self.notificationViewController = controller;
 
         [presentingViewController presentViewController:controller animated:NO completion:nil];
+        return YES;
+    } else {
+        return NO;
     }
 }
 
-- (void)showMiniNotificationWithObject:(MPNotification *)notification
+- (BOOL)showMiniNotificationWithObject:(MPNotification *)notification
 {
     MPMiniNotificationViewController *controller = [[MPMiniNotificationViewController alloc] init];
     controller.notification = notification;
@@ -1275,6 +1302,7 @@ static Mixpanel *sharedInstance = nil;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self notificationController:controller wasDismissedWithStatus:NO];
     });
+    return YES;
 }
 
 - (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithStatus:(BOOL)status
@@ -1351,7 +1379,84 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+#pragma mark - A/B Testing
+
++ (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(UIView *)root
+{
+    Shelley *shelley = [[Shelley alloc] initWithSelectorString:path];
+    return [shelley selectFrom:root];
+}
+
++ (void)setValue:(id)value forKey:(NSString *)key onPath:(NSString *)path fromRoot:(UIView *)root
+{
+    NSArray *views = [self getViewsOnPath:path fromRoot:root];
+    if ([views count] > 0) {
+        for (NSObject *o in views) {
+            [o setValue:value forKey:key];
+        }
+    } else {
+        NSLog(@"No objects matching pattern");
+    }
+}
+
++ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(UIView *)root
+{
+    NSArray *views = [self getViewsOnPath:path fromRoot:root];
+    if ([views count] > 0) {
+        for (NSObject *o in views) {
+            NSMethodSignature *signature = [o methodSignatureForSelector:selector];
+            if (signature != nil) {
+                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                uint requiredArgs = [signature numberOfArguments] - 2;
+                if ([args count] >= requiredArgs) {
+                    [invocation setSelector:selector];
+                    for (uint i = 0; i < requiredArgs; i++) {
+                        NSObject *arg = [args objectAtIndex:i];
+                        // convert NSValues into their base types
+                        if( [arg isKindOfClass:[NSValue class]] ) {
+                            void *buf = malloc(sizeof([(NSValue *)arg objCType]));
+                            [(NSValue *)arg getValue:buf];
+                            [invocation setArgument:(void *)buf atIndex:(int)(i+2)];
+                        } else {
+                            [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
+                        }
+                    }
+                    [invocation invokeWithTarget:o];
+                } else {
+                    NSLog(@"Not enough args");
+                }
+            } else {
+                NSLog(@"No selector");
+            }
+        }
+    } else {
+        NSLog(@"No objects matching pattern");
+    }
+}
+
+- (void)checkForABTestEditMode {
+    NSString *pasteData = [[NSString alloc] initWithData:[[UIPasteboard generalPasteboard] dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"mixpanel" options:0 error:nil];
+    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1) {
+        NSLog(@"Starting A/B Test mode");
+    }
+}
+
+- (void)executeVariant {
+    for (MPVariant *variant in _variants) {
+        for (NSDictionary *action in variant.actions) {
+            [Mixpanel executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                             withArgs:[action objectForKey:@"args"]
+                               onPath:[action objectForKey:@"path"]
+                             fromRoot:[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]];
+        }
+        break; // only execute one variant
+    }
+}
+
 @end
+
+#pragma mark - People
 
 @implementation MixpanelPeople
 
@@ -1360,7 +1465,7 @@ static Mixpanel *sharedInstance = nil;
     if (self = [self init]) {
         self.mixpanel = mixpanel;
         self.unidentifiedQueue = [NSMutableArray array];
-        self.automaticProperties = [self collectAutomaticProperties];
+        self.automaticPeopleProperties = [self collectAutomaticPeopleProperties];
     }
     return self;
 }
@@ -1371,7 +1476,7 @@ static Mixpanel *sharedInstance = nil;
     return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
-- (NSDictionary *)collectAutomaticProperties
+- (NSDictionary *)collectAutomaticPeopleProperties
 {
     UIDevice *device = [UIDevice currentDevice];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
@@ -1402,7 +1507,7 @@ static Mixpanel *sharedInstance = nil;
                 r[@"$time"] = epochMilliseconds;
             }
             if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
-                [p addEntriesFromDictionary:self.automaticProperties];
+                [p addEntriesFromDictionary:self.automaticPeopleProperties];
             }
             [p addEntriesFromDictionary:properties];
             r[action] = [NSDictionary dictionaryWithDictionary:p];
