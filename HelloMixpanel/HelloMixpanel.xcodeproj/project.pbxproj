@@ -77,6 +77,7 @@
 		A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */; };
 		A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462EA1910899C00774977 /* MPWebSocket.m */; };
 		A7B462ED1910A2E500774977 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B462EC1910A2E500774977 /* libicucore.dylib */; };
+		C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
 
@@ -199,6 +200,8 @@
 		A7B462EA1910899C00774977 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
 		A7B462EC1910A2E500774977 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.xcconfig"; path = "Pods/Pods-HelloMixpanelTests.xcconfig"; sourceTree = "<group>"; };
+		C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPBOOLToNSNumberValueTransformer.h; sourceTree = "<group>"; };
+		C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPBOOLToNSNumberValueTransformer.m; sourceTree = "<group>"; };
 		DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.xcconfig"; path = "Pods/Pods-HelloMixpanel.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -427,6 +430,8 @@
 				A7B462CA191075DE00774977 /* MPPassThroughValueTransformer.m */,
 				A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */,
 				A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */,
+				C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */,
+				C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -665,6 +670,7 @@
 				289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */,
 				A7B462D9191075DE00774977 /* MPObjectSerializer.m in Sources */,
 				A7B462D5191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
+				C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
