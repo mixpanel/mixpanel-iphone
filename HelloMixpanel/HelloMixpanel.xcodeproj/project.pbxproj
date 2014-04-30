@@ -23,6 +23,8 @@
 		05E98DD71910751400AFF3E1 /* SYParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD11910751400AFF3E1 /* SYParser.m */; };
 		05E98DD81910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
 		05E98DD91910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
+		05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DDA19115FB200AFF3E1 /* libicucore.dylib */; };
+		05E98DDD1911632B00AFF3E1 /* ClassDefinitions.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E98DDC1911632B00AFF3E1 /* ClassDefinitions.json */; };
 		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
@@ -106,6 +108,8 @@
 		05E98DD11910751400AFF3E1 /* SYParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYParser.m; sourceTree = "<group>"; };
 		05E98DD21910751400AFF3E1 /* SYFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYFilters.h; sourceTree = "<group>"; };
 		05E98DD31910751400AFF3E1 /* SYFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYFilters.m; sourceTree = "<group>"; };
+		05E98DDA19115FB200AFF3E1 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		05E98DDC1911632B00AFF3E1 /* ClassDefinitions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ClassDefinitions.json; sourceTree = "<group>"; };
 		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
 		05F02D6218528F8C00527D93 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */,
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
 				2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */,
 				2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */,
@@ -269,6 +274,7 @@
 		2808F9901610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05E98DDA19115FB200AFF3E1 /* libicucore.dylib */,
 				05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */,
 				2805EDE517C6B815003A0D72 /* Accelerate.framework */,
 				05C13E5318184DC700848D48 /* Security.framework */,
@@ -381,6 +387,7 @@
 		A7B462B31910759E00774977 /* ABTestingSupport */ = {
 			isa = PBXGroup;
 			children = (
+				05E98DDC1911632B00AFF3E1 /* ClassDefinitions.json */,
 				A7B462B4191075DE00774977 /* MPApplicationStateSerializer.h */,
 				A7B462B5191075DE00774977 /* MPApplicationStateSerializer.m */,
 				A7B462C2191075DE00774977 /* MPClassDescription.h */,
@@ -519,6 +526,7 @@
 				2808F99C1610EFE3005772B7 /* InfoPlist.strings in Resources */,
 				28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */,
 				28C7E6691615311100F78E49 /* Icon.png in Resources */,
+				05E98DDD1911632B00AFF3E1 /* ClassDefinitions.json in Resources */,
 				28C7E66B1615317400F78E49 /* Icon-72.png in Resources */,
 				286903FF17C6D2CF00DCA073 /* Default-568h@2x.png in Resources */,
 				86CC975018120A7E0003EF50 /* MPNotification.storyboard in Resources */,
