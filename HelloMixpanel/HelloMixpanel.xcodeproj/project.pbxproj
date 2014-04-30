@@ -74,6 +74,7 @@
 		A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462CE191075DE00774977 /* MPSequenceGenerator.m */; };
 		A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */; };
 		A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462EA1910899C00774977 /* MPWebSocket.m */; };
+		A7B462ED1910A2E500774977 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B462EC1910A2E500774977 /* libicucore.dylib */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
 
@@ -192,6 +193,7 @@
 		A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIColorToNSStringValueTransformer.m; sourceTree = "<group>"; };
 		A7B462E91910899C00774977 /* MPWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebSocket.h; sourceTree = "<group>"; };
 		A7B462EA1910899C00774977 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
+		A7B462EC1910A2E500774977 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.xcconfig"; path = "Pods/Pods-HelloMixpanelTests.xcconfig"; sourceTree = "<group>"; };
 		DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.xcconfig"; path = "Pods/Pods-HelloMixpanel.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -201,6 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7B462ED1910A2E500774977 /* libicucore.dylib in Frameworks */,
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
 				2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */,
 				2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */,
@@ -269,6 +272,7 @@
 		2808F9901610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7B462EC1910A2E500774977 /* libicucore.dylib */,
 				05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */,
 				2805EDE517C6B815003A0D72 /* Accelerate.framework */,
 				05C13E5318184DC700848D48 /* Security.framework */,
