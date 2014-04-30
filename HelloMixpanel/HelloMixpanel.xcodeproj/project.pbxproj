@@ -16,6 +16,13 @@
 		059AC4961818525A0025F7C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9951610EFE3005772B7 /* CoreGraphics.framework */; };
 		05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		05E98D82190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */; };
+		05E98D85190F4B2D00AFF3E1 /* MPVariant.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98D84190F4B2D00AFF3E1 /* MPVariant.m */; };
+		05E98DD41910751400AFF3E1 /* Shelley.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DCF1910751400AFF3E1 /* Shelley.m */; };
+		05E98DD51910751400AFF3E1 /* Shelley.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DCF1910751400AFF3E1 /* Shelley.m */; };
+		05E98DD61910751400AFF3E1 /* SYParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD11910751400AFF3E1 /* SYParser.m */; };
+		05E98DD71910751400AFF3E1 /* SYParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD11910751400AFF3E1 /* SYParser.m */; };
+		05E98DD81910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
+		05E98DD91910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
 		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
@@ -75,6 +82,15 @@
 		05C13E5118184DBE00848D48 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		05C13E5318184DC700848D48 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-HelloMixpanel-Shelley.a"; path = "Pods/build/Debug-iphoneos/libPods-HelloMixpanel-Shelley.a"; sourceTree = "<group>"; };
+		05E98D83190F4B2D00AFF3E1 /* MPVariant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVariant.h; sourceTree = "<group>"; };
+		05E98D84190F4B2D00AFF3E1 /* MPVariant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVariant.m; sourceTree = "<group>"; };
+		05E98DCD1910751400AFF3E1 /* LoadableCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadableCategory.h; sourceTree = "<group>"; };
+		05E98DCE1910751400AFF3E1 /* Shelley.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shelley.h; sourceTree = "<group>"; };
+		05E98DCF1910751400AFF3E1 /* Shelley.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shelley.m; sourceTree = "<group>"; };
+		05E98DD01910751400AFF3E1 /* SYParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYParser.h; sourceTree = "<group>"; };
+		05E98DD11910751400AFF3E1 /* SYParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYParser.m; sourceTree = "<group>"; };
+		05E98DD21910751400AFF3E1 /* SYFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYFilters.h; sourceTree = "<group>"; };
+		05E98DD31910751400AFF3E1 /* SYFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYFilters.m; sourceTree = "<group>"; };
 		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
 		05F02D6218528F8C00527D93 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -168,6 +184,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05E98D8619106CA400AFF3E1 /* Shelley */ = {
+			isa = PBXGroup;
+			children = (
+				05E98DCD1910751400AFF3E1 /* LoadableCategory.h */,
+				05E98DCE1910751400AFF3E1 /* Shelley.h */,
+				05E98DCF1910751400AFF3E1 /* Shelley.m */,
+				05E98DD01910751400AFF3E1 /* SYParser.h */,
+				05E98DD11910751400AFF3E1 /* SYParser.m */,
+				05E98DD21910751400AFF3E1 /* SYFilters.h */,
+				05E98DD31910751400AFF3E1 /* SYFilters.m */,
+			);
+			name = Shelley;
+			sourceTree = "<group>";
+		};
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +295,7 @@
 		286760AD1611982600B1BEC8 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
+				05E98D8619106CA400AFF3E1 /* Shelley */,
 				286760B91611982600B1BEC8 /* Mixpanel.h */,
 				286760BA1611982600B1BEC8 /* Mixpanel.m */,
 				28526F0317C4103200A0F32F /* MPSurveyNavigationController.h */,
@@ -292,6 +323,8 @@
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
 				05F02D6118528F8C00527D93 /* MPNotificationViewController.h */,
 				05F02D6218528F8C00527D93 /* MPNotificationViewController.m */,
+				05E98D83190F4B2D00AFF3E1 /* MPVariant.h */,
+				05E98D84190F4B2D00AFF3E1 /* MPVariant.m */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -494,13 +527,17 @@
 				28526F0517C4103200A0F32F /* MPSurveyNavigationController.m in Sources */,
 				28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */,
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
+				05E98DD41910751400AFF3E1 /* Shelley.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */,
+				05E98DD81910751400AFF3E1 /* SYFilters.m in Sources */,
 				86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */,
 				05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */,
 				28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */,
+				05E98DD61910751400AFF3E1 /* SYParser.m in Sources */,
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,
+				05E98D85190F4B2D00AFF3E1 /* MPVariant.m in Sources */,
 				289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -510,7 +547,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
+				05E98DD91910751400AFF3E1 /* SYFilters.m in Sources */,
+				05E98DD71910751400AFF3E1 /* SYParser.m in Sources */,
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
+				05E98DD51910751400AFF3E1 /* Shelley.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -559,6 +599,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
@@ -622,6 +663,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
@@ -674,6 +716,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -706,6 +749,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -733,6 +777,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -770,6 +815,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -815,6 +861,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = NO;
@@ -862,6 +909,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -888,6 +936,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
