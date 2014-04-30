@@ -386,14 +386,10 @@
 				A7B462C6191075DE00774977 /* MPObjectSerializer.m */,
 				A7B462C7191075DE00774977 /* MPObjectSerializerContext.h */,
 				A7B462C8191075DE00774977 /* MPObjectSerializerContext.m */,
-				A7B462C9191075DE00774977 /* MPPassThroughValueTransformer.h */,
-				A7B462CA191075DE00774977 /* MPPassThroughValueTransformer.m */,
 				A7B462CB191075DE00774977 /* MPPropertyDescription.h */,
 				A7B462CC191075DE00774977 /* MPPropertyDescription.m */,
 				A7B462CD191075DE00774977 /* MPSequenceGenerator.h */,
 				A7B462CE191075DE00774977 /* MPSequenceGenerator.m */,
-				A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */,
-				A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */,
 				A7B462DF191075E700774977 /* ValueTransformers */,
 			);
 			name = ABTestingSupport;
@@ -414,6 +410,10 @@
 				A7B462BF191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.m */,
 				A7B462C0191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.h */,
 				A7B462C1191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m */,
+				A7B462C9191075DE00774977 /* MPPassThroughValueTransformer.h */,
+				A7B462CA191075DE00774977 /* MPPassThroughValueTransformer.m */,
+				A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */,
+				A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
