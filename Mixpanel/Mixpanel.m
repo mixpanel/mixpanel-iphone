@@ -1435,10 +1435,12 @@ static Mixpanel *sharedInstance = nil;
 }
 
 - (void)checkForABTestEditMode {
-    NSString *pasteData = [[NSString alloc] initWithData:[[UIPasteboard generalPasteboard] dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    NSString *pasteData = [[NSString alloc] initWithData:[pasteboard dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"mixpanel" options:0 error:nil];
     if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1) {
         NSLog(@"Starting A/B Test mode");
+        [pasteboard setData:[NSData data] forPasteboardType:@"public.text"];
     }
 }
 
