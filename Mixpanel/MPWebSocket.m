@@ -90,8 +90,7 @@ typedef struct {
 static NSString *const MPWebSocketAppendToSecKeyString = @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
 static inline int32_t validate_dispatch_data_partial_string(NSData *data);
-static inline dispatch_queue_t log_queue();
-static inline void MPFastLog(NSString *format, ...);
+static inline void MPLog(NSString *format, ...);
 
 @interface NSData (MPWebSocket)
 
@@ -150,7 +149,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 @end
 
-NSString *const MPWebSocketErrorDomain = @"MPWebSocketErrorDomain";
+NSString *const MPWebSocketErrorDomain = @"com.mixpanel.error.WebSocket";
 
 // Returns number of bytes consumed. Returning 0 means you didn't match.
 // Sends bytes to callback handler;
@@ -452,8 +451,8 @@ static __strong NSData *CRLFCRLF;
     NSInteger responseCode = CFHTTPMessageGetResponseStatusCode(_receivedHTTPHeaders);
     
     if (responseCode >= 400) {
-        MPFastLog(@"Request failed with response code %d", responseCode);
-        [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %d", responseCode] forKey:NSLocalizedDescriptionKey]]];
+        MPLog(@"Request failed with response code %d", responseCode);
+        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %d", responseCode] forKey:NSLocalizedDescriptionKey]]];
         return;
 
     }
@@ -494,21 +493,21 @@ static __strong NSData *CRLFCRLF;
         _receivedHTTPHeaders = CFHTTPMessageCreateEmpty(NULL, NO);
     }
                         
-    [self _readUntilHeaderCompleteWithCallback:^(MPWebSocket *self,  NSData *data) {
-        CFHTTPMessageAppendBytes(_receivedHTTPHeaders, (const UInt8 *)data.bytes, data.length);
+    [self _readUntilHeaderCompleteWithCallback:^(MPWebSocket *websocket,  NSData *data) {
+        CFHTTPMessageAppendBytes(websocket->_receivedHTTPHeaders, (const UInt8 *)data.bytes, (CFIndex)data.length);
         
-        if (CFHTTPMessageIsHeaderComplete(_receivedHTTPHeaders)) {
-            MPFastLog(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(_receivedHTTPHeaders)));
-            [self _HTTPHeadersDidFinish];
+        if (CFHTTPMessageIsHeaderComplete(websocket->_receivedHTTPHeaders)) {
+            MPLog(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
+            [websocket _HTTPHeadersDidFinish];
         } else {
-            [self _readHTTPHeader];
+            [websocket _readHTTPHeader];
         }
     }];
 }
 
 - (void)didConnect
 {
-    MPFastLog(@"Connected");
+    MPLog(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
     
     // Set host first so it defaults
@@ -630,7 +629,7 @@ static __strong NSData *CRLFCRLF;
         
         self.readyState = MPWebSocketStateClosing;
         
-        MPFastLog(@"Closing with code %d reason %@", code, reason);
+        MPLog(@"Closing with code %d reason %@", code, reason);
         
         if (wasConnecting) {
             [self _disconnect];
@@ -644,7 +643,7 @@ static __strong NSData *CRLFCRLF;
         ((uint16_t *)mutablePayload.mutableBytes)[0] = EndianU16_BtoN(code);
         
         if (reason) {
-            NSRange remainingRange = {0};
+            NSRange remainingRange = { .location = 0, .length = 0 };
             
             NSUInteger usedLength = 0;
             
@@ -668,7 +667,7 @@ static __strong NSData *CRLFCRLF;
     // Need to shunt this on the _callbackQueue first to see if they received any messages 
     [self _performDelegateBlock:^{
         [self closeWithCode:MPStatusCodeProtocolError reason:message];
-        dispatch_async(_workQueue, ^{
+        dispatch_async(self->_workQueue, ^{
             [self _disconnect];
         });
     }];
@@ -678,7 +677,7 @@ static __strong NSData *CRLFCRLF;
 {
     dispatch_async(_workQueue, ^{
         if (self.readyState != MPWebSocketStateClosed) {
-            _failed = YES;
+            self->_failed = YES;
             [self _performDelegateBlock:^{
                 if ([self.delegate respondsToSelector:@selector(webSocket:didFailWithError:)]) {
                     [self.delegate webSocket:self didFailWithError:error];
@@ -686,9 +685,9 @@ static __strong NSData *CRLFCRLF;
             }];
 
             self.readyState = MPWebSocketStateClosed;
-            _selfRetain = nil;
+            self->_selfRetain = nil;
 
-            MPFastLog(@"Failing with error %@", error.localizedDescription);
+            MPLog(@"Failing with error %@", error.localizedDescription);
             
             [self _disconnect];
         }
@@ -727,7 +726,7 @@ static __strong NSData *CRLFCRLF;
 {
     // Need to pingpong this off _callbackQueue first to make sure messages happen in order
     [self _performDelegateBlock:^{
-        dispatch_async(_workQueue, ^{
+        dispatch_async(self->_workQueue, ^{
             [self _sendFrameWithOpcode:MPOpCodePong data:pingData];
         });
     }];
@@ -740,7 +739,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)_handleMessage:(id)message
 {
-    MPFastLog(@"Received message");
+    MPLog(@"Received message");
     [self _performDelegateBlock:^{
         [self.delegate webSocket:self didReceiveMessage:message];
     }];
@@ -786,7 +785,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     size_t dataSize = data.length;
     __block uint16_t closeCode = 0;
 
-    MPFastLog(@"Received close frame");
+    MPLog(@"Received close frame");
     
     if (dataSize == 1) {
         // TODO handle error
@@ -823,7 +822,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 - (void)_disconnect;
 {
     [self assertOnWorkQueue];
-    MPFastLog(@"Trying to disconnect");
+    MPLog(@"Trying to disconnect");
     _closeWhenFinishedWriting = YES;
     [self _pumpWriting];
 }
@@ -912,15 +911,15 @@ static inline BOOL closeCodeIsValid(int closeCode) {
             }
         }
     } else {
-        [self _addConsumerWithDataLength:frame_header.payload_length callback:^(MPWebSocket *self, NSData *newData) {
+        [self _addConsumerWithDataLength:(size_t)frame_header.payload_length callback:^(MPWebSocket *websocket, NSData *newData) {
             if (isControlFrame) {
-                [self _handleFrameWithData:newData opCode:frame_header.opcode];
+                [websocket _handleFrameWithData:newData opCode:frame_header.opcode];
             } else {
                 if (frame_header.fin) {
-                    [self _handleFrameWithData:self->_currentFrameData opCode:frame_header.opcode];
+                    [websocket _handleFrameWithData:websocket->_currentFrameData opCode:frame_header.opcode];
                 } else {
                     // TODO add assert that opcode is not a control;
-                    [self _readFrameContinue];
+                    [websocket _readFrameContinue];
                 }
                 
             }
@@ -961,14 +960,14 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 {
     assert((_currentFrameCount == 0 && _currentFrameOpcode == 0) || (_currentFrameCount > 0 && _currentFrameOpcode > 0));
 
-    [self _addConsumerWithDataLength:2 callback:^(MPWebSocket *self, NSData *data) {
-        __block frame_header header = {0};
+    [self _addConsumerWithDataLength:2 callback:^(MPWebSocket *websocket, NSData *data) {
+        __block frame_header header = { .fin = NO, .opcode = 0, .masked = NO, .payload_length = 0 };
         
         const uint8_t *headerBuffer = data.bytes;
         assert(data.length >= 2);
         
         if (headerBuffer[0] & MPRsvMask) {
-            [self _closeWithProtocolError:@"Server used RSV bits"];
+            [websocket _closeWithProtocolError:@"Server used RSV bits"];
             return;
         }
         
@@ -976,17 +975,17 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         
         BOOL isControlFrame = (receivedOpcode == MPOpCodePing || receivedOpcode == MPOpCodePong || receivedOpcode == MPOpCodeConnectionClose);
         
-        if (!isControlFrame && receivedOpcode != 0 && self->_currentFrameCount > 0) {
-            [self _closeWithProtocolError:@"all data frames after the initial data frame must have opcode 0"];
+        if (!isControlFrame && receivedOpcode != 0 && websocket->_currentFrameCount > 0) {
+            [websocket _closeWithProtocolError:@"all data frames after the initial data frame must have opcode 0"];
             return;
         }
         
-        if (receivedOpcode == 0 && self->_currentFrameCount == 0) {
-            [self _closeWithProtocolError:@"cannot continue a message"];
+        if (receivedOpcode == 0 && websocket->_currentFrameCount == 0) {
+            [websocket _closeWithProtocolError:@"cannot continue a message"];
             return;
         }
         
-        header.opcode = receivedOpcode == 0 ? self->_currentFrameOpcode : receivedOpcode;
+        header.opcode = receivedOpcode == 0 ? websocket->_currentFrameOpcode : receivedOpcode;
         
         header.fin = !!(MPFinMask & headerBuffer[0]);
         
@@ -997,10 +996,10 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         headerBuffer = NULL;
         
         if (header.masked) {
-            [self _closeWithProtocolError:@"Client must receive unmasked data"];
+            [websocket _closeWithProtocolError:@"Client must receive unmasked data"];
         }
         
-        size_t extra_bytes_needed = header.masked ? sizeof(_currentReadMaskKey) : 0;
+        size_t extra_bytes_needed = header.masked ? sizeof(websocket->_currentReadMaskKey) : 0;
         
         if (header.payload_length == 126) {
             extra_bytes_needed += sizeof(uint16_t);
@@ -1009,11 +1008,11 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         }
         
         if (extra_bytes_needed == 0) {
-            [self _handleFrameHeader:header curData:self->_currentFrameData];
+            [websocket _handleFrameHeader:header curData:websocket->_currentFrameData];
         } else {
-            [self _addConsumerWithDataLength:extra_bytes_needed callback:^(MPWebSocket *self, NSData *data) {
-                size_t mapped_size = data.length;
-                const void *mapped_buffer = data.bytes;
+            [websocket _addConsumerWithDataLength:extra_bytes_needed callback:^(MPWebSocket *websocket2, NSData *data2) {
+                size_t mapped_size = data2.length;
+                const void *mapped_buffer = data2.bytes;
                 size_t offset = 0;
                 
                 if (header.payload_length == 126) {
@@ -1031,11 +1030,11 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
                 
                 
                 if (header.masked) {
-                    assert(mapped_size >= sizeof(_currentReadMaskOffset) + offset);
-                    memcpy(self->_currentReadMaskKey, ((uint8_t *)mapped_buffer) + offset, sizeof(self->_currentReadMaskKey));
+                    assert(mapped_size >= sizeof(websocket2->_currentReadMaskOffset) + offset);
+                    memcpy(websocket2->_currentReadMaskKey, ((uint8_t *)mapped_buffer) + offset, sizeof(websocket2->_currentReadMaskKey));
                 }
                 
-                [self _handleFrameHeader:header curData:self->_currentFrameData];
+                [websocket2 _handleFrameHeader:header curData:websocket2->_currentFrameData];
             } readToCurrentFrame:NO unmaskBytes:NO];
         }
     } readToCurrentFrame:NO unmaskBytes:NO];
@@ -1044,12 +1043,12 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 - (void)_readFrameNew;
 {
     dispatch_async(_workQueue, ^{
-        [_currentFrameData setLength:0];
+        [self->_currentFrameData setLength:0];
         
-        _currentFrameOpcode = 0;
-        _currentFrameCount = 0;
-        _readOpCount = 0;
-        _currentStringScanPosition = 0;
+        self->_currentFrameOpcode = 0;
+        self->_currentFrameCount = 0;
+        self->_readOpCount = 0;
+        self->_currentStringScanPosition = 0;
         
         [self _readFrameContinue];
     });
@@ -1061,16 +1060,16 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     
     NSUInteger dataLength = _outputBuffer.length;
     if (dataLength - _outputBufferOffset > 0 && _outputStream.hasSpaceAvailable) {
-        NSInteger bytesWritten = [_outputStream write:_outputBuffer.bytes + _outputBufferOffset maxLength:dataLength - _outputBufferOffset];
+        NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
-            [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
+            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
              return;
         }
         
-        _outputBufferOffset += bytesWritten;
+        _outputBufferOffset += (NSUInteger) bytesWritten;
         
         if (_outputBufferOffset > 4096 && _outputBufferOffset > (_outputBuffer.length >> 1)) {
-            _outputBuffer = [[NSMutableData alloc] initWithBytes:(char *)_outputBuffer.bytes + _outputBufferOffset length:_outputBuffer.length - _outputBufferOffset];
+            _outputBuffer = [[NSMutableData alloc] initWithBytes:((char *)_outputBuffer.bytes + _outputBufferOffset) length:(_outputBuffer.length - _outputBufferOffset)];
             _outputBufferOffset = 0;
         }
     }
@@ -1093,7 +1092,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         if (!_failed) {
             [self _performDelegateBlock:^{
                 if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                    [self.delegate webSocket:self didCloseWithCode:_closeCode reason:_closeReason wasClean:YES];
+                    [self.delegate webSocket:self didCloseWithCode:self->_closeCode reason:self->_closeReason wasClean:YES];
                 }
             }];
         }
@@ -1241,7 +1240,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
                         });
                         return didWork;
                     } else {
-                        _currentStringScanPosition += valid_utf8_size;
+                        _currentStringScanPosition += (uint32_t)valid_utf8_size;
                     }
                 } 
                 
@@ -1292,7 +1291,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     
     NSAssert(data == nil || [data isKindOfClass:[NSData class]] || [data isKindOfClass:[NSString class]], @"Function expects nil, NSString or NSData");
     
-    size_t payloadLength = [data isKindOfClass:[NSString class]] ? [(NSString *)data lengthOfBytesUsingEncoding:NSUTF8StringEncoding] : [data length];
+    size_t payloadLength = [data isKindOfClass:[NSString class]] ? [(NSString *)data lengthOfBytesUsingEncoding:NSUTF8StringEncoding] : [(NSData *)data length];
         
     NSMutableData *frame = [[NSMutableData alloc] initWithLength:payloadLength + MPFrameHeaderOverhead];
     if (!frame) {
@@ -1397,13 +1396,13 @@ static const size_t MPFrameHeaderOverhead = 32;
     dispatch_async(_workQueue, ^{
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
-                MPFastLog(@"NSStreamEventOpenCompleted %@", aStream);
+                MPLog(@"NSStreamEventOpenCompleted %@", aStream);
                 if (self.readyState >= MPWebSocketStateClosing) {
                     return;
                 }
-                assert(_readBuffer);
+                assert(self->_readBuffer);
                 
-                if (self.readyState == MPWebSocketStateConnecting && aStream == _inputStream) {
+                if (self.readyState == MPWebSocketStateConnecting && aStream == self->_inputStream) {
                     [self didConnect];
                 }
                 [self _pumpWriting];
@@ -1412,28 +1411,28 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
                 
             case NSStreamEventErrorOccurred: {
-                MPFastLog(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
+                MPLog(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
                 /// TODO specify error better!
                 [self _failWithError:aStream.streamError];
-                _readBufferOffset = 0;
-                [_readBuffer setLength:0];
+                self->_readBufferOffset = 0;
+                [self->_readBuffer setLength:0];
                 break;
                 
             }
                 
             case NSStreamEventEndEncountered: {
                 [self _pumpScanner];
-                MPFastLog(@"NSStreamEventEndEncountered %@", aStream);
+                MPLog(@"NSStreamEventEndEncountered %@", aStream);
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
                     if (self.readyState != MPWebSocketStateClosed) {
                         self.readyState = MPWebSocketStateClosed;
-                        _selfRetain = nil;
+                        self->_selfRetain = nil;
                     }
 
-                    if (!_sentClose && !_failed) {
-                        _sentClose = YES;
+                    if (!self->_sentClose && !self->_failed) {
+                        self->_sentClose = YES;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages
                         [self _performDelegateBlock:^{
                             if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
@@ -1447,17 +1446,17 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
                 
             case NSStreamEventHasBytesAvailable: {
-                MPFastLog(@"NSStreamEventHasBytesAvailable %@", aStream);
+                MPLog(@"NSStreamEventHasBytesAvailable %@", aStream);
                 const int bufferSize = 2048;
                 uint8_t buffer[bufferSize];
                 
-                while (_inputStream.hasBytesAvailable) {
-                    int bytes_read = [_inputStream read:buffer maxLength:bufferSize];
+                while (self->_inputStream.hasBytesAvailable) {
+                    NSInteger bytes_read = [self->_inputStream read:buffer maxLength:bufferSize];
                     
                     if (bytes_read > 0) {
-                        [_readBuffer appendBytes:buffer length:bytes_read];
+                        [self->_readBuffer appendBytes:buffer length:(NSUInteger)bytes_read];
                     } else if (bytes_read < 0) {
-                        [self _failWithError:_inputStream.streamError];
+                        [self _failWithError:self->_inputStream.streamError];
                     }
                     
                     if (bytes_read != bufferSize) {
@@ -1469,13 +1468,13 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
                 
             case NSStreamEventHasSpaceAvailable: {
-                MPFastLog(@"NSStreamEventHasSpaceAvailable %@", aStream);
+                MPLog(@"NSStreamEventHasSpaceAvailable %@", aStream);
                 [self _pumpWriting];
                 break;
             }
                 
             default:
-                MPFastLog(@"(default)  %@", aStream);
+                MPLog(@"(default)  %@", aStream);
                 break;
         }
     });
@@ -1595,19 +1594,9 @@ static const size_t MPFrameHeaderOverhead = 32;
 
 @end
 
-static inline dispatch_queue_t log_queue() {
-    static dispatch_queue_t queue = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        queue = dispatch_queue_create("fast log queue", DISPATCH_QUEUE_SERIAL);
-    });
-    
-    return queue;
-}
-
 //#define MP_ENABLE_LOG
 
-static inline void MPFastLog(NSString *format, ...) {
+static inline void MPLog(NSString *format, ...) {
 #ifdef MP_ENABLE_LOG
     __block va_list arg_list;
     va_start (arg_list, format);
@@ -1625,7 +1614,7 @@ static inline void MPFastLog(NSString *format, ...) {
 
 static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
     const void * contents = [data bytes];
-    long size = [data length];
+    long size = (long)[data length];
     
     const uint8_t *str = (const uint8_t *)contents;
     
@@ -1658,7 +1647,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
         }
     }
     
-    if (size != -1 && ![[NSString alloc] initWithBytesNoCopy:(char *)[data bytes] length:size encoding:NSUTF8StringEncoding freeWhenDone:NO]) {
+    if (size != -1 && ![[NSString alloc] initWithBytesNoCopy:(char *)[data bytes] length:(NSUInteger)size encoding:NSUTF8StringEncoding freeWhenDone:NO]) {
         size = -1;
     }
     
@@ -1692,7 +1681,7 @@ static NSRunLoop *networkRunLoop = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         networkThread = [[_MPRunLoopThread alloc] init];
-        networkThread.name = @"com.squareup.SocketRocket.NetworkThread";
+        networkThread.name = @"com.mixpanel.WebSocket.NetworkThread";
         [networkThread start];
         networkRunLoop = networkThread.runLoop;
     });
