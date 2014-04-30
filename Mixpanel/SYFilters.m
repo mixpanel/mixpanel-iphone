@@ -20,7 +20,7 @@
     NSMutableArray *filteredViews = [NSMutableArray array];
     for (ShelleyView *view in views) {
         [filteredViews addObjectsFromArray:[self applyToView:view]];
-    }    
+    }
     return filteredViews;
 }
 
@@ -53,7 +53,7 @@
 
 + (NSArray *) allDescendantsOf:(ShelleyView *)view{
     NSMutableArray *descendants = [NSMutableArray array];
-    
+
 #if TARGET_OS_IPHONE
     for (ShelleyView *subview in [view subviews]) {
         [descendants addObject:subview];
@@ -68,7 +68,7 @@
             [descendants addObjectsFromArray: [self allDescendantsOf: child]];
         }
     }
-    
+
 #endif
     return descendants;
 }
@@ -98,7 +98,7 @@
 -(NSArray *)viewsToConsiderFromView:(ShelleyView *)view{
     if( _justFilter )
         return [NSArray arrayWithObject:view];
-    
+
     NSMutableArray *allViews = _includeSelf ? [NSMutableArray arrayWithObject:view] : [NSMutableArray array];
     [allViews addObjectsFromArray:[SYClassFilter allDescendantsOf:view]];
     return allViews;
@@ -115,7 +115,7 @@
             [filteredDescendants addObject:v];
         }
     }
-    
+
     return filteredDescendants;
 }
 
@@ -169,16 +169,16 @@
 
 -(NSArray *)applyToView:(ShelleyView *)view{
     NSMutableArray *ancestors = [NSMutableArray array];
-    
+
 #if TARGET_OS_IPHONE
     ShelleyView *currentView = view;
-    
+
     while(( currentView = [currentView superview] )){
         [ancestors addObject:currentView];
     }
 #else
     id currentView = view;
-    
+
     while (currentView != nil) {
         if ([currentView respondsToSelector: @selector(FEX_parent)])
         {
@@ -188,14 +188,14 @@
         {
             currentView = nil;
         }
-        
+
         if (currentView != nil) {
             [ancestors addObject: currentView];
         }
     }
-    
+
 #endif
-    
+
     return ancestors;
 }
 
@@ -204,6 +204,7 @@
 }
 
 @end
+
 //
 //  SYPredicateFilter.m
 //  Shelley
@@ -231,7 +232,7 @@
 	}else if( !strcmp(objCType, @encode(uint)) ){
 		*((uint *)buffer) = [number unsignedIntValue];
 	}else {
-		NSLog(@"Didn't know how to convert NSNumber to type %s", objCType); 
+		NSLog(@"Didn't know how to convert NSNumber to type %s", objCType);
 	}	
 }
 
@@ -239,23 +240,19 @@
     NSMethodSignature *signature = [object methodSignatureForSelector:_selector];
     if( !signature )
         return nil;
-    
+
     if( strcmp([signature methodReturnType], @encode(BOOL)) ){
-        [NSException raise:@"wrong return type" 
+        [NSException raise:@"wrong return type"
 					format:@"predicate does not return a BOOL"];
     }
-    
+
     NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-    
+
     NSUInteger requiredNumberOfArguments = signature.numberOfArguments - 2; // Indices 0 and 1 indicate the hidden arguments self and _cmd, respectively
 	if( requiredNumberOfArguments != [_args count] )
-#if TARGET_OS_IPHONE
-		[NSException raise:@"wrong number of arguments"
-					format:@"%@ takes %i arguments, but %i were supplied", NSStringFromSelector(_selector), requiredNumberOfArguments, [_args count] ];
-#else
+
     [NSException raise:@"wrong number of arguments"
-                format:@"%@ takes %li arguments, but %li were supplied", NSStringFromSelector(_selector), requiredNumberOfArguments, [_args count] ];
-#endif
+                format:@"%@ takes %i arguments, but %i were supplied", NSStringFromSelector(_selector), requiredNumberOfArguments, [_args count] ];
 	
 	[invocation setSelector:_selector];
 	
@@ -272,7 +269,7 @@
 		}
 		index++;
 	}
-    
+
     return invocation;
 }
 
@@ -286,10 +283,10 @@
     NSInvocation *invocation = [self createInvocationForObject:view];
     if( !invocation )
         return [NSArray array];
-     
+
     [invocation invokeWithTarget:view];
     BOOL predicatePassed = [self extractBooleanReturnValueFromInvocation:invocation];
-    
+
     if( predicatePassed )
         return [NSArray arrayWithObject:view];
     else

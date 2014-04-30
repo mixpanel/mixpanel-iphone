@@ -13,10 +13,8 @@
     NSScanner *_scanner;
     NSCharacterSet *_paramChars;
     NSCharacterSet *_numberChars;
-    NSMutableArray *_params;
-    NSMutableArray *_args;
 }
-@property(readonly) NSArray *params, *args;
+@property(readonly) NSMutableArray *params, *args;
 
 - (id)initWithScanner: (NSScanner *)scanner;
 - (void) parse;
@@ -24,14 +22,13 @@
 @end
 
 @implementation SYSectionParser
-@synthesize params=_params,args=_args;
 
 - (id)initWithScanner: (NSScanner *)scanner{
     self = [super init];
     if (self) {
         _scanner = scanner;
-        
-        _paramChars = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"];        
+
+        _paramChars = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"];
         _numberChars = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
         _params = [[NSMutableArray alloc] init];
         _args = [[NSMutableArray alloc] init];
@@ -46,6 +43,7 @@
 - (BOOL) parseParamWithoutColon{
     NSString *paramString;
     if( [_scanner scanCharactersFromSet:_paramChars intoString:&paramString] ){
+
         [_params addObject:paramString];
         return YES;
     }else{
@@ -76,20 +74,20 @@
 - (NSString *)parseSingleQuotedString{
     if( ![self parseSingleQuote] )
         return nil;
-    
+
     NSString *string;
     [_scanner scanUpToCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@"'"] intoString:&string];
-    [self parseSingleQuote];    
+    [self parseSingleQuote];
     return string;
 }
 
 - (NSString *)parseDoubleQuotedString{
     if( ![self parseDoubleQuote] )
         return nil;
-    
+
     NSString *string;
     [_scanner scanUpToCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@"\""] intoString:&string];
-    [self parseDoubleQuote];    
+    [self parseDoubleQuote];
     return string;
 }
 
@@ -98,7 +96,7 @@
     NSString *string = [self parseSingleQuotedString];
     if( !string )
         string = [self parseDoubleQuotedString];
-    
+
     return string;
 }
 
@@ -106,7 +104,7 @@
     NSString *numberString;
     if( ![_scanner scanCharactersFromSet:_numberChars intoString:&numberString] )
         return nil;
-    
+
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     return [f numberFromString:numberString];
 }
@@ -115,7 +113,7 @@
     NSString *parsedString = [self parseQuotedString];
     if( parsedString )
         return parsedString;
-    
+
     return [self parseNumber];
 }
 
@@ -128,10 +126,10 @@
 - (void) parse{
     [self parseParamWithoutColon];
     if( ![self parseColon] ){
-        return; 
+        return;
     }
-    
-    
+
+
     [self parseArgAndCollect];
     while( YES ){
         if( ![self parseParamWithColon] )
@@ -150,7 +148,7 @@
     if (self) {
         _scanner = [[NSScanner alloc] initWithString:selectorString];
         [_scanner setCharactersToBeSkipped:nil];
-        
+
         _paramChars = [NSCharacterSet letterCharacterSet];
         _numberChars = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
         _currentParams = [[NSMutableArray alloc] init];
@@ -165,9 +163,9 @@
     if( ![parsedSection hasNoArgs] ){
         return nil;
     }
-    
+
     NSString *firstParam = nil;
-    
+
     if ([[parsedSection params] count] > 0)
     {
         firstParam = [[parsedSection params] objectAtIndex:0];
@@ -177,45 +175,9 @@
         [NSException raise:@"missing paramater"
 					format:@"no paramater found at position %lu in string \"%@\"", (unsigned long) [_scanner scanLocation], [_scanner string] ];
     }
- 
- 
-    Class shorthandClass = nil;
-    
-#if TARGET_OS_IPHONE
-    if( [firstParam isEqualToString:@"view"] )
-        shorthandClass = [UIView class];
-    else if( [firstParam isEqualToString:@"button"] )
-        shorthandClass = [UIButton class];
-    else if( [firstParam isEqualToString:@"label"] )
-        shorthandClass = [UILabel class];
-    else if( [firstParam isEqualToString:@"alertView"] )
-        shorthandClass = [UIAlertView class];
-    else if( [firstParam isEqualToString:@"actionSheet"] )
-      shorthandClass = [UIActionSheet class];
-    else if( [firstParam isEqualToString:@"navigationButton"] )
-        shorthandClass = NSClassFromString(@"UINavigationButton");
-    else if( [firstParam isEqualToString:@"navigationItemView"] )
-        shorthandClass = NSClassFromString(@"UINavigationItemView");
-    else if( [firstParam isEqualToString:@"navigationItemButtonView"] )
-      shorthandClass = NSClassFromString(@"UINavigationItemButtonView");
-    else if( [firstParam isEqualToString:@"textField"] )
-        shorthandClass = [UITextField class];
-    else if( [firstParam isEqualToString:@"tableView"] )
-        shorthandClass = [UITableView class];
-    else if( [firstParam isEqualToString:@"tableViewCell"] )
-        shorthandClass = [UITableViewCell class];
-    else if( [firstParam isEqualToString:@"threePartButton"] )
-      shorthandClass = NSClassFromString(@"UIThreePartButton");
-#else
-    if( [firstParam isEqualToString:@"view"] )
-        shorthandClass = [NSObject class];
-    else if( [firstParam isEqualToString:@"button"] )
-        shorthandClass = [NSButton class];
-    else if( [firstParam isEqualToString:@"textField"] )
-        shorthandClass = [NSTextField class];
-    else if( [firstParam isEqualToString:@"tableView"] )
-        shorthandClass = [NSTableView class];
-#endif
+
+
+    Class shorthandClass = NSClassFromString(firstParam);
 
     if( shorthandClass )
         return [[SYClassFilter alloc] initWithClass:shorthandClass];
@@ -224,14 +186,14 @@
 }
 
 - (id<SYFilter>) interpretSectionIntoFilter:(SYSectionParser *)parsedSection{
-    
+
     id<SYFilter> classFilter = [self interpretSectionAsClassFilterShorthand:parsedSection];
-    
+
     if( classFilter )
         return classFilter;
-    
+
     NSString *firstParam = [[parsedSection params] objectAtIndex:0];
-    
+
     if( [parsedSection hasNoArgs] ){
         if( [firstParam isEqualToString:@"parent"] )
             return [[SYParents alloc] init];
@@ -245,31 +207,31 @@
             return [[SYClassFilter alloc] initWithClass:(NSClassFromString(firstArg))];
         }else if( [firstParam isEqualToString:@"index"] ) {
             NSNumber *firstArg = [[parsedSection args] objectAtIndex:0];
-            return [[SYNthElementFilter alloc] initWithIndex:[firstArg unsignedIntValue]];            
+            return [[SYNthElementFilter alloc] initWithIndex:[firstArg unsignedIntValue]];
         }
     }
-    
+
     NSString *selectorDesc;
     if( [parsedSection hasNoArgs] ){
         selectorDesc = [[parsedSection params] objectAtIndex:0];
     }else{
         selectorDesc = [[[parsedSection params] componentsJoinedByString:@":"] stringByAppendingString:@":"];
     }
-    
-    return [[SYPredicateFilter alloc] initWithSelector:NSSelectorFromString(selectorDesc) 
+
+    return [[SYPredicateFilter alloc] initWithSelector:NSSelectorFromString(selectorDesc)
                                                    args:[parsedSection args]];
 }
 
 - (id<SYFilter>) nextFilter{
-    
+
     [_scanner scanCharactersFromSet:[NSCharacterSet whitespaceCharacterSet] intoString:nil];
-    
+
     if( [_scanner isAtEnd] )
         return nil;
-    
+
     SYSectionParser *sectionParser = [[SYSectionParser alloc] initWithScanner:_scanner];
     [sectionParser parse];
-    
+
     return [self interpretSectionIntoFilter:sectionParser];
 }
 
