@@ -334,6 +334,18 @@ unless the existing value is equal to defaultValue.
 <dd><p>Initializes and returns a singleton instance of the API.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/showNotification" target="_top">-showNotification</a></tt></dt>
+<dd><p>Shows a notification if one is available.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/showNotificationWithID:" target="_top">-showNotificationWithID:</a></tt></dt>
+<dd><p>Shows the notification of the given id.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/showNotificationWithType:" target="_top">-showNotificationWithType:</a></tt></dt>
+<dd><p>Shows a notification with the given type if one is available.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/showSurvey" target="_top">-showSurvey</a></tt></dt>
 <dd><p>Show a survey if one is available.
 </p>
@@ -421,10 +433,24 @@ method manually if you want to force a flush at a particular moment.
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/identify:;name=start --><p>By default, Mixpanel will set the distinct ID to the device's iOS ID for
-Advertising (IFA). The IFA depends on the the Ad Support framework, which is
-only available in iOS 6 and later. For earlier platforms, we fallback to ODIN1
-(see https://code.google.com/p/odinmobile/wiki/ODIN1).
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/identify:;name=start --><p>As of version 2.3.1, Mixpanel will choose a default distinct ID based on
+whether you are using the AdSupport.framework or not.
+</p>
+<p>If you are not using the AdSupport Framework (iAds), then we use the
+<code>[UIDevice currentDevice].identifierForVendor</code> (IFV) string as the
+default distinct ID.  This ID will identify a user across all apps by the same
+vendor, but cannot be used to link the same user across apps from different
+vendors.
+</p>
+<p>If you are showing iAds in your application, you are allowed use the iOS ID
+for Advertising (IFA) to identify users. If you have this framework in your
+app, Mixpanel will use the IFA as the default distinct ID. If you have
+AdSupport installed but still don't want to use the IFA, you can define the
+<code>MIXPANEL_NO_IFA</code> preprocessor flag in your build settings, and
+Mixpanel will use the IFV as the default distinct ID.
+</p>
+<p>If we are unable to get an IFA or IFV, we will fall back to generating a
+random persistent UUID.
 </p>
 <p>For tracking events, you do not need to call <code>identify:</code> if you
 want to use the default.  However, <b>Mixpanel People always requires an
@@ -454,9 +480,9 @@ flushed once <code>identify:</code> is called.
 <dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:andFlushInterval:/apiToken;   name=initWithToken:andFlushInterval:::apiToken -->
 <a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:andFlushInterval:/apiToken"></a>
 <code>apiToken</code></dt><dd><p>your project token</dd>
-<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:andFlushInterval:/startFlushTimer;   name=initWithToken:andFlushInterval:::startFlushTimer -->
-<a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:andFlushInterval:/startFlushTimer"></a>
-<code>startFlushTimer</code></dt><dd><p>whether to start the background flush timer</dd>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:andFlushInterval:/flushInterval;   name=initWithToken:andFlushInterval:::flushInterval -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:andFlushInterval:/flushInterval"></a>
+<code>flushInterval</code></dt><dd><p>interval to run background flushing</dd>
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
@@ -601,6 +627,51 @@ elsewhere in your code, you can use <code>sharedInstance</code>.
 the API.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/showNotification;   name=Mixpanel::showNotification -->
+<a name="//apple_ref/occ/instm/Mixpanel/showNotification"></a>
+<h3><a name="showNotification">showNotification</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showNotification;name=start --><!-- begin abstract --><p>Shows a notification if one is available.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showNotification;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showNotification;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/showNotification //apple_ref/occ/data/Mixpanel/showNotification //apple_ref/occ/data/showNotification //apple_ref/occ/clconst/Mixpanel/showNotification " machineGenerated="true" --><span class="var">showNotification</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showNotification;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotification;name=start --><p>You do not need to call this method on the main thread.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotification;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;   name=Mixpanel::showNotificationWithID: -->
+<a name="//apple_ref/occ/instm/Mixpanel/showNotificationWithID:"></a>
+<h3><a name="showNotificationWithID:">showNotificationWithID:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;name=start --><!-- begin abstract --><p>Shows the notification of the given id.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/showNotificationWithID //apple_ref/occ/clm/Mixpanel/showNotificationWithID //apple_ref/occ/intfcm/Mixpanel/showNotificationWithID //apple_ref/occ/intfm/Mixpanel/showNotificationWithID //apple_ref/occ/func/showNotificationWithID //apple_ref/occ/ftmplt/Mixpanel/showNotificationWithID //apple_ref/occ/defn/showNotificationWithID //apple_ref/occ/macro/showNotificationWithID //apple_ref/doc/anysymbol/showNotificationWithID" machineGenerated="true" --><span class="function">showNotificationWithID</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/intf/NSUInteger //apple_ref/doc/anysymbol/NSUInteger" machineGenerated="true" --><span class="type">NSUInteger</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/ID //apple_ref/occ/data/Mixpanel/ID //apple_ref/occ/data/ID //apple_ref/occ/clconst/Mixpanel/ID " machineGenerated="true" --><span class="var">ID</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;name=start --><p>You do not need to call this method on the main thread.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithID:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;   name=Mixpanel::showNotificationWithType: -->
+<a name="//apple_ref/occ/instm/Mixpanel/showNotificationWithType:"></a>
+<h3><a name="showNotificationWithType:">showNotificationWithType:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=start --><!-- begin abstract --><p>Shows a notification with the given type if one is available.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/showNotificationWithType //apple_ref/occ/clm/Mixpanel/showNotificationWithType //apple_ref/occ/intfcm/Mixpanel/showNotificationWithType //apple_ref/occ/intfm/Mixpanel/showNotificationWithType //apple_ref/occ/func/showNotificationWithType //apple_ref/occ/ftmplt/Mixpanel/showNotificationWithType //apple_ref/occ/defn/showNotificationWithType //apple_ref/occ/macro/showNotificationWithType //apple_ref/doc/anysymbol/showNotificationWithType" machineGenerated="true" --><span class="function">showNotificationWithType</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/type //apple_ref/occ/data/Mixpanel/type //apple_ref/occ/data/type //apple_ref/occ/clconst/Mixpanel/type " machineGenerated="true" --><span class="var">type</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/showNotificationWithType:/type;   name=showNotificationWithType:::type -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/showNotificationWithType:/type"></a>
+<code>type</code></dt><dd><p>The type of notification to show, either @"mini", or @"takeover"</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=start --><p>You do not need to call this method on the main thread.
+</p>
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/showSurvey;   name=Mixpanel::showSurvey -->
 <a name="//apple_ref/occ/instm/Mixpanel/showSurvey"></a>
 <h3><a name="showSurvey">showSurvey</a></h3>
@@ -706,13 +777,14 @@ registered.
 <a name="HeaderDoc_props"></a>
 <h2 class="h2tight">Properties</h2>
 <dl>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive" target="_top">checkForSurveysOnActive</a></tt></dt>
-<dd><p>Controls whether to automatically check for surveys for the
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive" target="_top">checkForNotificationsOnActive</a></tt></dt>
+<dd><p>Controls whether to automatically check for notifications for the
 currently identified user when the application becomes active.
 </p>
 </dd>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/decideURL" target="_top">decideURL</a></tt></dt>
-<dd><p>The base URL used for Mixpanel Decide requests.
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive" target="_top">checkForSurveysOnActive</a></tt></dt>
+<dd><p>Controls whether to automatically check for surveys for the
+currently identified user when the application becomes active.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/delegate" target="_top">delegate</a></tt></dt>
@@ -749,12 +821,32 @@ enters the background.
 data to the Mixpanel servers.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/showNotificationOnActive" target="_top">showNotificationOnActive</a></tt></dt>
+<dd><p>Controls whether to automatically check for and show in-app notifications
+for the currently identified user when the application becomes active.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/showSurveyOnActive" target="_top">showSurveyOnActive</a></tt></dt>
 <dd><p>Controls whether to automatically show a survey for the
 currently identified user when the application becomes active.
 </p>
 </dd>
 </dl>
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;   name=Mixpanel::checkForNotificationsOnActive -->
+<a name="//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive"></a>
+<h3><a name="checkForNotificationsOnActive">checkForNotificationsOnActive</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=start --><!-- begin abstract --><p>Controls whether to automatically check for notifications for the
+currently identified user when the application becomes active.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/checkForNotificationsOnActive //apple_ref/occ/data/Mixpanel/checkForNotificationsOnActive //apple_ref/occ/data/checkForNotificationsOnActive //apple_ref/occ/clconst/Mixpanel/checkForNotificationsOnActive " machineGenerated="true" --><span class="var">checkForNotificationsOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=start --><p>Defaults to YES. Will fire a network request on
+<code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
+for the currently identified user.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;   name=Mixpanel::checkForSurveysOnActive -->
 <a name="//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive"></a>
 <h3><a name="checkForSurveysOnActive">checkForSurveysOnActive</a></h3>
@@ -763,27 +855,13 @@ currently identified user when the application becomes active.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=start -->@property(<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/checkForSurveysOnActive //apple_ref/occ/data/Mixpanel/checkForSurveysOnActive //apple_ref/occ/data/checkForSurveysOnActive //apple_ref/occ/clconst/Mixpanel/checkForSurveysOnActive " machineGenerated="true" --><span class="var">checkForSurveysOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/checkForSurveysOnActive //apple_ref/occ/data/Mixpanel/checkForSurveysOnActive //apple_ref/occ/data/checkForSurveysOnActive //apple_ref/occ/clconst/Mixpanel/checkForSurveysOnActive " machineGenerated="true" --><span class="var">checkForSurveysOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=start --><p>Defaults to YES. Will fire a network request on
 <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
 for the currently identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --><!-- end discussion -->
-<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/decideURL;   name=Mixpanel::decideURL -->
-<a name="//apple_ref/occ/instp/Mixpanel/decideURL"></a>
-<h3><a name="decideURL">decideURL</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/decideURL;name=start --><!-- begin abstract --><p>The base URL used for Mixpanel Decide requests.
-</p>
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/decideURL;name=end --></p>
-<div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/decideURL;name=start -->@property(<span class="param">atomic</span>,
-    <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/decideURL //apple_ref/occ/data/Mixpanel/decideURL //apple_ref/occ/data/decideURL //apple_ref/occ/clconst/Mixpanel/decideURL " machineGenerated="true" --><span class="var">decideURL</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/decideURL;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/decideURL;name=start --><p>Useful if you need to proxy Mixpanel requests. Defaults to
-https://decide.mixpanel.com.
-<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/decideURL;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/delegate;   name=Mixpanel::delegate -->
 <a name="//apple_ref/occ/instp/Mixpanel/delegate"></a>
 <h3><a name="delegate">delegate</a></h3>
@@ -792,8 +870,8 @@ over Mixpanel network activity.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=start -->@property(<span class="param">atomic</span>,
-    <span class="param">assign</span>) <!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/struct/id //apple_ref/occ/intf/id //apple_ref/doc/anysymbol/id" machineGenerated="true" --><span class="type">id</span><!-- /a -->&lt;<span class="template">MixpanelDelegate</span>&gt; <!-- a logicalPath="//apple_ref/occ/econst/delegate //apple_ref/occ/data/Mixpanel/delegate //apple_ref/occ/data/delegate //apple_ref/occ/clconst/Mixpanel/delegate " machineGenerated="true" --><span class="var">delegate</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=start -->@property (<span class="param">atomic</span>,
+    <span class="param">weak</span>) <!-- a logicalPath="//apple_ref/occ/cl/id //apple_ref/occ/tdef/id //apple_ref/occ/tag/id //apple_ref/occ/struct/id //apple_ref/occ/intf/id //apple_ref/doc/anysymbol/id" machineGenerated="true" --><span class="type">id</span><!-- /a -->&lt;<span class="template">MixpanelDelegate</span>&gt; <!-- a logicalPath="//apple_ref/occ/econst/delegate //apple_ref/occ/data/Mixpanel/delegate //apple_ref/occ/data/delegate //apple_ref/occ/clconst/Mixpanel/delegate " machineGenerated="true" --><span class="var">delegate</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/delegate;name=start --><p>Using a delegate is optional. See the documentation for MixpanelDelegate
@@ -806,7 +884,7 @@ below for more information.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start -->@property(<span class="param">atomic</span>,
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start -->@property (<span class="param">atomic</span>,
     <span class="param">readonly</span>,
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/distinctId //apple_ref/occ/data/Mixpanel/distinctId //apple_ref/occ/data/distinctId //apple_ref/occ/clconst/Mixpanel/distinctId " machineGenerated="true" --><span class="var">distinctId</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=end --></pre>
 </div>
@@ -823,7 +901,7 @@ use the <code>identify:</code> method.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=start -->@property(<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/intf/NSUInteger //apple_ref/doc/anysymbol/NSUInteger" machineGenerated="true" --><span class="type">NSUInteger</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/flushInterval //apple_ref/occ/data/Mixpanel/flushInterval //apple_ref/occ/data/flushInterval //apple_ref/occ/clconst/Mixpanel/flushInterval " machineGenerated="true" --><span class="var">flushInterval</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/intf/NSUInteger //apple_ref/doc/anysymbol/NSUInteger" machineGenerated="true" --><span class="type">NSUInteger</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/flushInterval //apple_ref/occ/data/Mixpanel/flushInterval //apple_ref/occ/data/flushInterval //apple_ref/occ/clconst/Mixpanel/flushInterval " machineGenerated="true" --><span class="var">flushInterval</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushInterval;name=start --><p>Setting a flush interval of 0 will turn off the flush timer.
@@ -836,7 +914,7 @@ enters the background.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start -->@property(<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/flushOnBackground //apple_ref/occ/data/Mixpanel/flushOnBackground //apple_ref/occ/data/flushOnBackground //apple_ref/occ/clconst/Mixpanel/flushOnBackground " machineGenerated="true" --><span class="var">flushOnBackground</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/flushOnBackground //apple_ref/occ/data/Mixpanel/flushOnBackground //apple_ref/occ/data/flushOnBackground //apple_ref/occ/clconst/Mixpanel/flushOnBackground " machineGenerated="true" --><span class="var">flushOnBackground</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
@@ -848,7 +926,7 @@ task support was introduced, and later.
 <hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=start --><!-- begin abstract --><p>Current user's name in Mixpanel Streams.
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=start -->@property(<span class="param">atomic</span>,
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=start -->@property (<span class="param">atomic</span>,
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/nameTag //apple_ref/occ/data/Mixpanel/nameTag //apple_ref/occ/data/nameTag //apple_ref/occ/clconst/Mixpanel/nameTag " machineGenerated="true" --><span class="var">nameTag</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/nameTag;name=end --></pre>
 </div>
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/people;   name=Mixpanel::people -->
@@ -858,9 +936,9 @@ task support was introduced, and later.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/people;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/people;name=start -->@property(<span class="param">atomic</span>,
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/people;name=start -->@property (<span class="param">atomic</span>,
     <span class="param">readonly</span>,
-    <span class="param">retain</span>) <!-- a logicalPath="//apple_ref/occ/cl/MixpanelPeople //apple_ref/occ/tdef/MixpanelPeople //apple_ref/occ/tag/MixpanelPeople //apple_ref/occ/struct/MixpanelPeople //apple_ref/occ/intf/MixpanelPeople //apple_ref/doc/anysymbol/MixpanelPeople" machineGenerated="true" --><span class="type">MixpanelPeople</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/people //apple_ref/occ/data/Mixpanel/people //apple_ref/occ/data/people //apple_ref/occ/clconst/Mixpanel/people " machineGenerated="true" --><span class="var">people</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/people;name=end --></pre>
+    <span class="param">strong</span>) <!-- a logicalPath="//apple_ref/occ/cl/MixpanelPeople //apple_ref/occ/tdef/MixpanelPeople //apple_ref/occ/tag/MixpanelPeople //apple_ref/occ/struct/MixpanelPeople //apple_ref/occ/intf/MixpanelPeople //apple_ref/doc/anysymbol/MixpanelPeople" machineGenerated="true" --><span class="type">MixpanelPeople</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/people //apple_ref/occ/data/Mixpanel/people //apple_ref/occ/data/people //apple_ref/occ/clconst/Mixpanel/people " machineGenerated="true" --><span class="var">people</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/people;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/people;name=start --><p>See the documentation for MixpanelDelegate below for more information.
@@ -872,7 +950,7 @@ task support was introduced, and later.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start -->@property(<span class="param">atomic</span>,
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=start -->@property (<span class="param">atomic</span>,
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/serverURL //apple_ref/occ/data/Mixpanel/serverURL //apple_ref/occ/data/serverURL //apple_ref/occ/clconst/Mixpanel/serverURL " machineGenerated="true" --><span class="var">serverURL</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/serverURL;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
@@ -887,11 +965,24 @@ data to the Mixpanel servers.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start -->@property(<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showNetworkActivityIndicator //apple_ref/occ/data/Mixpanel/showNetworkActivityIndicator //apple_ref/occ/data/showNetworkActivityIndicator //apple_ref/occ/clconst/Mixpanel/showNetworkActivityIndicator " machineGenerated="true" --><span class="var">showNetworkActivityIndicator</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showNetworkActivityIndicator //apple_ref/occ/data/Mixpanel/showNetworkActivityIndicator //apple_ref/occ/data/showNetworkActivityIndicator //apple_ref/occ/clconst/Mixpanel/showNetworkActivityIndicator " machineGenerated="true" --><span class="var">showNetworkActivityIndicator</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNetworkActivityIndicator;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;   name=Mixpanel::showNotificationOnActive -->
+<a name="//apple_ref/occ/instp/Mixpanel/showNotificationOnActive"></a>
+<h3><a name="showNotificationOnActive">showNotificationOnActive</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=start --><!-- begin abstract --><p>Controls whether to automatically check for and show in-app notifications
+for the currently identified user when the application becomes active.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showNotificationOnActive //apple_ref/occ/data/Mixpanel/showNotificationOnActive //apple_ref/occ/data/showNotificationOnActive //apple_ref/occ/clconst/Mixpanel/showNotificationOnActive " machineGenerated="true" --><span class="var">showNotificationOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=start --><p>Defaults to YES.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;   name=Mixpanel::showSurveyOnActive -->
 <a name="//apple_ref/occ/instp/Mixpanel/showSurveyOnActive"></a>
 <h3><a name="showSurveyOnActive">showSurveyOnActive</a></h3>
@@ -900,7 +991,7 @@ currently identified user when the application becomes active.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=start -->@property(<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showSurveyOnActive //apple_ref/occ/data/Mixpanel/showSurveyOnActive //apple_ref/occ/data/showSurveyOnActive //apple_ref/occ/clconst/Mixpanel/showSurveyOnActive " machineGenerated="true" --><span class="var">showSurveyOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showSurveyOnActive //apple_ref/occ/data/Mixpanel/showSurveyOnActive //apple_ref/occ/data/showSurveyOnActive //apple_ref/occ/clconst/Mixpanel/showSurveyOnActive " machineGenerated="true" --><span class="var">showSurveyOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=start --><p>Defaults to YES. This will only show a survey if
@@ -909,7 +1000,7 @@ survey check retrieves at least 1 valid survey for the currently
 identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Tuesday, October 29, 2013
+<p class="hd_timestamp">Last Updated: Friday, April 18, 2014
 </p></div>
 </td></tr></table>
 </body></html>

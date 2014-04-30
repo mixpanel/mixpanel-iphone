@@ -43,9 +43,13 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM" userLabel="Button - Close">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM" userLabel="Button - Close">
                                         <rect key="frame" x="275" y="30" width="35" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="SzV-36-Kff"/>
+                                            <constraint firstAttribute="width" constant="35" id="bKp-so-XDQ"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="10"/>
                                         <state key="normal" image="MPCloseBtn">
@@ -58,6 +62,8 @@
                                 <constraints>
                                     <constraint firstItem="LyM-hA-PHV" firstAttribute="top" secondItem="1s2-xv-3au" secondAttribute="top" constant="82" id="ZDm-Xj-EEQ"/>
                                     <constraint firstAttribute="centerX" secondItem="LyM-hA-PHV" secondAttribute="centerX" id="nOP-MM-gCn"/>
+                                    <constraint firstAttribute="trailing" secondItem="EGH-qT-4wM" secondAttribute="trailing" constant="10" id="r9m-WG-rMb"/>
+                                    <constraint firstItem="EGH-qT-4wM" firstAttribute="top" secondItem="1s2-xv-3au" secondAttribute="top" constant="30" id="uqp-oq-tHF"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="eF7-ct-CP3">

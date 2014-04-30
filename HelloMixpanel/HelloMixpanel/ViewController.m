@@ -2,7 +2,6 @@
 #import "MPSurvey.h"
 #import "MPNotification.h"
 #import "UIColor+MPColor.h"
-
 #import "ViewController.h"
 #import "MPApplicationStateSerializer.h"
 
@@ -201,4 +200,7 @@
     }
 }
 
+- (IBAction)selectViewElement:(id)sender {
+    [[Mixpanel sharedInstance] executeVariant];
+}
 @end
