@@ -497,7 +497,7 @@ static __strong NSData *CRLFCRLF;
     [self _readUntilHeaderCompleteWithCallback:^(MPWebSocket *websocket,  NSData *data) {
         
         if (CFHTTPMessageIsHeaderComplete(_receivedHTTPHeaders)) {
-            MPFastLog(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(_receivedHTTPHeaders)));
+            MPLog(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(_receivedHTTPHeaders)));
             [websocket _HTTPHeadersDidFinish];
         } else {
             [websocket _readHTTPHeader];
@@ -1411,7 +1411,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
                 
             case NSStreamEventErrorOccurred: {
-                MPFastLog(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
+                MPLog(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
                 /// TODO specify error better!
                 [self _failWithError:aStream.streamError];
                 _readBufferOffset = 0;
