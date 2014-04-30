@@ -1681,7 +1681,7 @@ static NSRunLoop *networkRunLoop = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         networkThread = [[_MPRunLoopThread alloc] init];
-        networkThread.name = @"com.squareup.SocketRocket.NetworkThread";
+        networkThread.name = @"com.mixpanel.WebSocket.NetworkThread";
         [networkThread start];
         networkRunLoop = networkThread.runLoop;
     });
