@@ -176,11 +176,10 @@
 					format:@"no paramater found at position %lu in string \"%@\"", (unsigned long) [_scanner scanLocation], [_scanner string] ];
     }
 
-
     Class shorthandClass = NSClassFromString(firstParam);
 
     if( shorthandClass )
-        return [[SYClassFilter alloc] initWithClass:shorthandClass];
+        return [[SYViewFilter alloc] initWithClass:shorthandClass];
     else
         return nil;
 }
@@ -200,11 +199,11 @@
         if( [firstParam isEqualToString:@"first"] )
             return [[SYNthElementFilter alloc] initWithIndex:0];
         else if( [firstParam isEqualToString:@"descendant"] )
-            return [[SYClassFilter alloc] initWithClass:[ShelleyView class] includeSelf:YES];
+            return [[SYViewFilter alloc] initWithClass:[ShelleyView class] includeSelf:YES];
     }else if( [[parsedSection args] count] == 1 ){
         if( [firstParam isEqualToString:@"view"] ) {
             NSString *firstArg = [[parsedSection args] objectAtIndex:0];
-            return [[SYClassFilter alloc] initWithClass:(NSClassFromString(firstArg))];
+            return [[SYViewFilter alloc] initWithClass:(NSClassFromString(firstArg))];
         }else if( [firstParam isEqualToString:@"index"] ) {
             NSNumber *firstArg = [[parsedSection args] objectAtIndex:0];
             return [[SYNthElementFilter alloc] initWithIndex:[firstArg unsignedIntValue]];
