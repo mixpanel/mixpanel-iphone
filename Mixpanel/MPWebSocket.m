@@ -643,7 +643,7 @@ static __strong NSData *CRLFCRLF;
         ((uint16_t *)mutablePayload.mutableBytes)[0] = EndianU16_BtoN(code);
         
         if (reason) {
-            NSRange remainingRange = {0};
+            NSRange remainingRange = { .location = 0, .length = 0 };
             
             NSUInteger usedLength = 0;
             
@@ -960,8 +960,8 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 {
     assert((_currentFrameCount == 0 && _currentFrameOpcode == 0) || (_currentFrameCount > 0 && _currentFrameOpcode > 0));
 
-        __block frame_header header = {0};
     [self _addConsumerWithDataLength:2 callback:^(MPWebSocket *websocket, NSData *data) {
+        __block frame_header header = { .fin = NO, .opcode = 0, .masked = NO, .payload_length = 0 };
         
         const uint8_t *headerBuffer = data.bytes;
         assert(data.length >= 2);
