@@ -80,7 +80,7 @@
     UIWindow *window = [self windowAtIndex:index];
     if (window)
     {
-        return [_serializer serializedObjectsWithRootObject:window.rootViewController];
+        return [_serializer serializedObjectsWithRootObject:window];
     }
 
     return @{};
