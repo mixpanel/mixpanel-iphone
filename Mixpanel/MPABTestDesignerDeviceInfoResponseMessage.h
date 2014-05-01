@@ -1,0 +1,17 @@
+//
+// Copyright (c) 2014 Mixpanel. All rights reserved.
+
+#import <Foundation/Foundation.h>
+#import "MPAbstractABTestDesignerMessage.h"
+
+@interface MPABTestDesignerDeviceInfoResponseMessage : MPAbstractABTestDesignerMessage
+
++ (instancetype)message;
+
+@property (nonatomic, copy) NSString *systemName;
+@property (nonatomic, copy) NSString *systemVersion;
+@property (nonatomic, copy) NSString *deviceName;
+@property (nonatomic, copy) NSString *deviceModel;
+@property (nonatomic, copy) NSString *mainBundleIdentifier;
+
+@end
