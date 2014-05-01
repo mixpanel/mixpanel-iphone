@@ -3,9 +3,10 @@
 
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerMessage.h"
-#import "MPABTestDesignerSnapshotMessage.h"
+#import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPABTestDesignerSnapshotRequestMessage.h"
-#import "MPABTestDesignerChangesMessage.h"
+#import "MPABTestDesignerChangeRequestMessage.h"
+#import "MPABTestDesignerDeviceInfoRequestMessage.h"
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
 @end
@@ -23,8 +24,9 @@
     if (self)
     {
         _typeToMessageClassMap = @{
-                @"snapshot_request": [MPABTestDesignerSnapshotRequestMessage class],
-                @"changes": [MPABTestDesignerChangesMessage class],
+            MPABTestDesignerSnapshotRequestMessageType   : [MPABTestDesignerSnapshotRequestMessage class],
+            MPABTestDesignerChangeRequestMessageType     : [MPABTestDesignerChangeRequestMessage class],
+            MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
         };
 
         _webSocket = [[MPWebSocket alloc] initWithURL:url];
