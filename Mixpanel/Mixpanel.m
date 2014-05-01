@@ -24,6 +24,7 @@
 
 #import "Shelley.h"
 #import "MPWebSocket.h"
+#import "MPABTestDesignerConnection.h"
 
 #define VERSION @"2.3.5"
 
@@ -39,7 +40,7 @@
 #define MixpanelDebug(...)
 #endif
 
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate, MPWebSocketDelegate> {
+@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
 }
 
@@ -68,7 +69,7 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
-@property (nonatomic, strong) MPWebSocket *webSocket;
+@property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSArray *variants;
 
 @end
@@ -1449,23 +1450,20 @@ static Mixpanel *sharedInstance = nil;
 }
 
 
-- (void)checkForABTestEditMode {
+- (void)checkForABTestEditMode
+{
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     NSString *pasteData = [[NSString alloc] initWithData:[pasteboard dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[a-zA-Z0-9]+" options:0 error:nil];
-    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1) {
+    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1)
+    {
         [pasteboard setData:[NSData data] forPasteboardType:@"public.text"];
 
-        NSString *socketURL = [NSString stringWithFormat:@"ws://alex.dev.mixpanel.org/websocket_proxy/%@", pasteData];
-        self.webSocket = [[MPWebSocket alloc] initWithURL:[NSURL URLWithString:socketURL]];
-        [self.webSocket open];
-        [self.webSocket send:@"Sup?"];
-    }
-}
+        NSString *designerURLString = [NSString stringWithFormat:@"ws://echo.websocket.org/", pasteData];
+        NSURL *designerURL = [NSURL URLWithString:designerURLString];
 
-- (void)webSocket:(MPWebSocket *)webSocket didReceiveMessage:(id)message
-{
-    NSLog(@"Got a message: %@", message);
+        self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
+    }
 }
 
 @end
