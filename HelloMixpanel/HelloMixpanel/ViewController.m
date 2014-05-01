@@ -209,6 +209,6 @@
 }
 
 - (IBAction)selectViewElement:(id)sender {
-    [[Mixpanel sharedInstance] executeVariant];
+    [UIView performSelector:@selector(swizzle)];
 }
 @end
