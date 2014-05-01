@@ -908,6 +908,9 @@ static Mixpanel *sharedInstance = nil;
             }
         }];
     }
+#if TARGET_IPHONE_SIMULATOR
+    [self connectToABTestDesigner];
+#endif
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
