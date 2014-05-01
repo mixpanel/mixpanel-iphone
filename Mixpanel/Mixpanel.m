@@ -217,6 +217,12 @@ static Mixpanel *sharedInstance = nil;
         [self unarchive];
     }
 
+    UILongPressGestureRecognizer *fiveFingerPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(fiveFingerPressDetected:)];
+    fiveFingerPressRecognizer.minimumPressDuration = 3;
+    fiveFingerPressRecognizer.numberOfTouchesRequired = 5;
+    [[[UIApplication sharedApplication].delegate window] addGestureRecognizer:fiveFingerPressRecognizer];
+    NSLog(@"set up designer connect gesture recognizer");
+
     return self;
 }
 
@@ -902,8 +908,6 @@ static Mixpanel *sharedInstance = nil;
             }
         }];
     }
-
-    [self checkForABTestEditMode];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1449,19 +1453,20 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-
-- (void)checkForABTestEditMode
+- (void)fiveFingerPressDetected:(UILongPressGestureRecognizer *)sender
 {
-    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    NSString *pasteData = [[NSString alloc] initWithData:[pasteboard dataForPasteboardType:@"public.text"] encoding:NSUTF8StringEncoding];
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[a-zA-Z0-9]+" options:0 error:nil];
-    if ([regex numberOfMatchesInString:pasteData options:0 range:NSMakeRange(0, [pasteData length])] == 1)
-    {
-        [pasteboard setData:[NSData data] forPasteboardType:@"public.text"];
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        [self connectToABTestDesigner];
+    }
+}
 
-        NSString *designerURLString = [NSString stringWithFormat:@"ws://kyle.dev.mixpanel.org/websocket_proxy/%@", pasteData];
+- (void)connectToABTestDesigner
+{
+    if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
+        NSLog(@"A/B test designer connection already exists");
+    } else {
+        NSString *designerURLString = [NSString stringWithFormat:@"ws://neil.dev.mixpanel.org/websocket_proxy/%@", self.apiToken];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
-
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
     }
 }
