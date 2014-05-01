@@ -4,6 +4,8 @@
 #import "UIColor+MPColor.h"
 #import "ViewController.h"
 #import "MPApplicationStateSerializer.h"
+#import "MPABTestDesignerSnapshotRequestMessage.h"
+#import "MPABTestDesignerConnection.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -174,6 +176,11 @@
 
 - (IBAction)snapshotWindow:(id)sender
 {
+    id mp = [Mixpanel sharedInstance];
+
+    id conn = [mp performSelector:@selector(abtestDesignerConnection)];
+    [conn sendMessage:[MPABTestDesignerSnapshotRequestMessage message]];
+/*
 #pragma message("FIXME: just plumbing this in here to give us a quick and dirty test bed")
     MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[UIApplication sharedApplication]];
 
@@ -198,6 +205,7 @@
     {
         NSLog(@"Unable to serialize JSON from snapshot: %@", error);
     }
+    */
 }
 
 - (IBAction)selectViewElement:(id)sender {
