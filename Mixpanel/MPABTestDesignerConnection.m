@@ -13,6 +13,7 @@
 
 @implementation MPABTestDesignerConnection
 {
+    NSMutableDictionary *_session;
     NSDictionary *_typeToMessageClassMap;
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
@@ -29,6 +30,7 @@
             MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
         };
 
+        _session = [[NSMutableDictionary alloc] init];
         _webSocket = [[MPWebSocket alloc] initWithURL:url];
         _webSocket.delegate = self;
 
@@ -47,6 +49,27 @@
 {
     _webSocket.delegate = nil;
     [_webSocket close];
+}
+
+- (void)setSessionObject:(id)object forKey:(NSString *)key
+{
+    NSParameterAssert(key != nil);
+
+    @synchronized (_session)
+    {
+        _session[key] = object ?: [NSNull null];
+    }
+}
+
+- (id)sessionObjectForKey:(NSString *)key
+{
+    NSParameterAssert(key != nil);
+
+    @synchronized (_session)
+    {
+        id object = _session[key];
+        return [object isEqual:[NSNull null]] ? nil : object;
+    }
 }
 
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message
