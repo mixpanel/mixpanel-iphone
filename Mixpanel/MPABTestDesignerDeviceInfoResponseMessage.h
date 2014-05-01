@@ -8,4 +8,10 @@
 
 + (instancetype)message;
 
+@property (nonatomic, copy) NSString *systemName;
+@property (nonatomic, copy) NSString *systemVersion;
+@property (nonatomic, copy) NSString *deviceName;
+@property (nonatomic, copy) NSString *deviceModel;
+@property (nonatomic, copy) NSString *mainBundleIdentifier;
+
 @end
