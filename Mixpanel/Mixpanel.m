@@ -1459,7 +1459,7 @@ static Mixpanel *sharedInstance = nil;
     {
         [pasteboard setData:[NSData data] forPasteboardType:@"public.text"];
 
-        NSString *designerURLString = [NSString stringWithFormat:@"ws://echo.websocket.org/", pasteData];
+        NSString *designerURLString = [NSString stringWithFormat:@"ws://kyle.dev.mixpanel.org/websocket_proxy/%@", pasteData];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
 
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
