@@ -77,7 +77,13 @@
 		A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */; };
 		A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462EA1910899C00774977 /* MPWebSocket.m */; };
 		A7B462ED1910A2E500774977 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B462EC1910A2E500774977 /* libicucore.dylib */; };
+		C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */; };
 		C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */; };
+		C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */; };
+		C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangesMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D58453399B01B470D3993 /* MPABTestDesignerChangesMessage.m */; };
+		C38D5BAA83DEE244F3E2F69A /* MPABTestDesignerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */; };
+		C38D5BBCDD16904A9D99BDB6 /* MPABTestDesignerSnapshotMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5DF058742F8D8B919676 /* MPABTestDesignerSnapshotMessage.m */; };
+		C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoMessage.m */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
 
@@ -200,7 +206,20 @@
 		A7B462EA1910899C00774977 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
 		A7B462EC1910A2E500774977 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.xcconfig"; path = "Pods/Pods-HelloMixpanelTests.xcconfig"; sourceTree = "<group>"; };
+		C38D516C062CC4EC5DA58D44 /* MPABTestDesignerChangesMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangesMessage.h; sourceTree = "<group>"; };
+		C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerConnection.h; sourceTree = "<group>"; };
+		C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerConnection.m; sourceTree = "<group>"; };
+		C38D54F927EDE7223F214F4B /* MPABTestDesignerSnapshotRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotRequestMessage.h; sourceTree = "<group>"; };
+		C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotRequestMessage.m; sourceTree = "<group>"; };
+		C38D55C83387B909D63C9C51 /* MPABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerMessage.h; sourceTree = "<group>"; };
+		C38D5740CD1C124D8200944D /* MPAbstractABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAbstractABTestDesignerMessage.h; sourceTree = "<group>"; };
+		C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoMessage.m; sourceTree = "<group>"; };
+		C38D58453399B01B470D3993 /* MPABTestDesignerChangesMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangesMessage.m; sourceTree = "<group>"; };
+		C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
 		C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPBOOLToNSNumberValueTransformer.h; sourceTree = "<group>"; };
+		C38D5D20034D0E52454F0552 /* MPABTestDesignerSnapshotMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotMessage.h; sourceTree = "<group>"; };
+		C38D5DF058742F8D8B919676 /* MPABTestDesignerSnapshotMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotMessage.m; sourceTree = "<group>"; };
+		C38D5E33208664B1FFAE2974 /* MPABTestDesignerDeviceInfoMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoMessage.h; sourceTree = "<group>"; };
 		C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPBOOLToNSNumberValueTransformer.m; sourceTree = "<group>"; };
 		DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.xcconfig"; path = "Pods/Pods-HelloMixpanel.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -407,6 +426,9 @@
 				A7B462CD191075DE00774977 /* MPSequenceGenerator.h */,
 				A7B462CE191075DE00774977 /* MPSequenceGenerator.m */,
 				A7B462DF191075E700774977 /* ValueTransformers */,
+				C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */,
+				C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */,
+				C38D59C874C4A08A62849CB2 /* Messages */,
 			);
 			name = ABTestingSupport;
 			sourceTree = "<group>";
@@ -443,6 +465,24 @@
 				A7B462EA1910899C00774977 /* MPWebSocket.m */,
 			);
 			name = WebSocket;
+			sourceTree = "<group>";
+		};
+		C38D59C874C4A08A62849CB2 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				C38D5740CD1C124D8200944D /* MPAbstractABTestDesignerMessage.h */,
+				C38D5E33208664B1FFAE2974 /* MPABTestDesignerDeviceInfoMessage.h */,
+				C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoMessage.m */,
+				C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */,
+				C38D54F927EDE7223F214F4B /* MPABTestDesignerSnapshotRequestMessage.h */,
+				C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */,
+				C38D55C83387B909D63C9C51 /* MPABTestDesignerMessage.h */,
+				C38D5DF058742F8D8B919676 /* MPABTestDesignerSnapshotMessage.m */,
+				C38D5D20034D0E52454F0552 /* MPABTestDesignerSnapshotMessage.h */,
+				C38D58453399B01B470D3993 /* MPABTestDesignerChangesMessage.m */,
+				C38D516C062CC4EC5DA58D44 /* MPABTestDesignerChangesMessage.h */,
+			);
+			name = Messages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -671,6 +711,12 @@
 				A7B462D9191075DE00774977 /* MPObjectSerializer.m in Sources */,
 				A7B462D5191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
+				C38D5BAA83DEE244F3E2F69A /* MPABTestDesignerConnection.m in Sources */,
+				C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoMessage.m in Sources */,
+				C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
+				C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */,
+				C38D5BBCDD16904A9D99BDB6 /* MPABTestDesignerSnapshotMessage.m in Sources */,
+				C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangesMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
