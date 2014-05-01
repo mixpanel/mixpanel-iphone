@@ -25,7 +25,6 @@
 		05E98DD91910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
 		05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DDA19115FB200AFF3E1 /* libicucore.dylib */; };
 		05E98DDD1911632B00AFF3E1 /* ClassDefinitions.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E98DDC1911632B00AFF3E1 /* ClassDefinitions.json */; };
-		05E98DE11911C0D500AFF3E1 /* UIView+Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DE01911C0D500AFF3E1 /* UIView+Mixpanel.m */; };
 		05E98DE41912F73A00AFF3E1 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */; };
 		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
@@ -78,7 +77,6 @@
 		A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462CE191075DE00774977 /* MPSequenceGenerator.m */; };
 		A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */; };
 		A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462EA1910899C00774977 /* MPWebSocket.m */; };
-		A7B462ED1910A2E500774977 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = A7B462EC1910A2E500774977 /* libicucore.dylib */; };
 		C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */; };
 		C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */; };
 		C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */; };
@@ -122,7 +120,6 @@
 		05E98DD31910751400AFF3E1 /* SYFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYFilters.m; sourceTree = "<group>"; };
 		05E98DDA19115FB200AFF3E1 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		05E98DDC1911632B00AFF3E1 /* ClassDefinitions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ClassDefinitions.json; sourceTree = "<group>"; };
-		05E98DE01911C0D500AFF3E1 /* UIView+Mixpanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Mixpanel.m"; sourceTree = "<group>"; };
 		05E98DE21912F73A00AFF3E1 /* MPSwizzler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzler.h; sourceTree = "<group>"; };
 		05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
 		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
@@ -413,7 +410,6 @@
 				05F02D6218528F8C00527D93 /* MPNotificationViewController.m */,
 				05E98D83190F4B2D00AFF3E1 /* MPVariant.h */,
 				05E98D84190F4B2D00AFF3E1 /* MPVariant.m */,
-				05E98DE01911C0D500AFF3E1 /* UIView+Mixpanel.m */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -709,7 +705,6 @@
 				28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */,
 				A7B462DA191075DE00774977 /* MPObjectSerializerContext.m in Sources */,
 				A7B462D2191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
-				05E98DE11911C0D500AFF3E1 /* UIView+Mixpanel.m in Sources */,
 				A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				05E98DD81910751400AFF3E1 /* SYFilters.m in Sources */,
 				86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */,
