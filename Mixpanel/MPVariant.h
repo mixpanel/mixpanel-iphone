@@ -15,4 +15,6 @@
 + (MPVariant *)variantWithDummyJSONObject;
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
 
+- (void)execute;
+
 @end
