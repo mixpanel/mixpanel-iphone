@@ -11,39 +11,16 @@
     UIApplication *_application;
 }
 
-- (id)initWithApplication:(UIApplication *)application
+- (id)initWithApplication:(UIApplication *)application classDescriptions:(NSArray *)classDescriptions
 {
+    NSParameterAssert(application != nil);
+    NSParameterAssert(classDescriptions != nil);
+
     self = [super init];
     if (self)
     {
         _application = application;
-
-        #pragma message("TODO: WIP this should be supplied via constructor param (and loaded from network).")
-        NSURL *classDefinitionsURL = [[NSBundle mainBundle] URLForResource:@"ClassDefinitions" withExtension:@"json"];
-        NSError *error = nil;
-        NSData *classDefinitionsData = [NSData dataWithContentsOfURL:classDefinitionsURL options:NSDataReadingMappedIfSafe error:&error];
-        if (classDefinitionsData)
-        {
-            NSDictionary *classDefinitions = [NSJSONSerialization JSONObjectWithData:classDefinitionsData options:0 error:&error];
-            NSAssert([classDefinitions isKindOfClass:[NSDictionary class]] && [classDefinitions objectForKey:@"classes"] != nil, @"Expected dictionary with classes element!");
-
-            NSMutableDictionary *classDescriptions = [[NSMutableDictionary alloc] init];
-            for (NSDictionary *dictionary in classDefinitions[@"classes"])
-            {
-                NSString *superclassName = dictionary[@"superclass"];
-                MPClassDescription *superclassDescription = superclassName ? classDescriptions[superclassName] : nil;
-                MPClassDescription *classDescription = [[MPClassDescription alloc] initWithSuperclassDescription:superclassDescription
-                                                                                                      dictionary:dictionary];
-                
-                [classDescriptions setObject:classDescription forKey:classDescription.name];
-            }
-
-            _serializer = [[MPObjectSerializer alloc] initWithClassDescriptions:[classDescriptions allValues]];
-        }
-        else
-        {
-            NSLog(@"Error reading class definitions: %@", error);
-        }
+        _serializer = [[MPObjectSerializer alloc] initWithClassDescriptions:classDescriptions];
     }
 
     return self;
@@ -74,9 +51,8 @@
     return _application.windows[index];
 }
 
-- (NSDictionary *)viewControllerHierarchyForWindowAtIndex:(NSUInteger)index
+- (NSDictionary *)objectHierarchyForWindowAtIndex:(NSUInteger)index
 {
-
     UIWindow *window = [self windowAtIndex:index];
     if (window)
     {

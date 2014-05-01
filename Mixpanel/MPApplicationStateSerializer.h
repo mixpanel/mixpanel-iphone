@@ -5,10 +5,10 @@
 
 @interface MPApplicationStateSerializer : NSObject
 
-- (id)initWithApplication:(UIApplication *)application;
+- (id)initWithApplication:(UIApplication *)application classDescriptions:(NSArray *)classDescriptions;
 
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index;
 
-- (NSDictionary *)viewControllerHierarchyForWindowAtIndex:(NSUInteger)index;
+- (NSDictionary *)objectHierarchyForWindowAtIndex:(NSUInteger)index;
 
 @end
