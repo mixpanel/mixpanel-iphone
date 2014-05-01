@@ -6,6 +6,7 @@
 #import "MPApplicationStateSerializer.h"
 #import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
+#import "MPSwizzler.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -208,7 +209,12 @@
     */
 }
 
-- (IBAction)selectViewElement:(id)sender {
-    [UIView performSelector:@selector(swizzle)];
+- (IBAction)swizzle:(id)sender {
+    [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
+}
+
+- (IBAction)unswizzle:(id)sender {
+    [MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
+
 }
 @end
