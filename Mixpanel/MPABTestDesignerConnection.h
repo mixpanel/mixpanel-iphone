@@ -10,6 +10,9 @@
 
 - (id)initWithURL:(NSURL *)url;
 
+- (void)setSessionObject:(id)object forKey:(NSString *)key;
+- (id)sessionObjectForKey:(NSString *)key;
+
 @property (nonatomic, assign) BOOL connected;
 
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message;
