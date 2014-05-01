@@ -4,6 +4,8 @@
 #import <Foundation/Foundation.h>
 #import "MPAbstractABTestDesignerMessage.h"
 
+extern NSString *const MPABTestDesignerSnapshotRequestMessageType;
+
 @interface MPABTestDesignerSnapshotRequestMessage : MPAbstractABTestDesignerMessage
 
 + (instancetype)message;

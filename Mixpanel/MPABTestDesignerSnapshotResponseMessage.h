@@ -5,7 +5,7 @@
 #import "MPAbstractABTestDesignerMessage.h"
 
 
-@interface MPABTestDesignerSnapshotMessage : MPAbstractABTestDesignerMessage
+@interface MPABTestDesignerSnapshotResponseMessage : MPAbstractABTestDesignerMessage
 
 + (instancetype)message;
 

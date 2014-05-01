@@ -4,8 +4,11 @@
 #import <Foundation/Foundation.h>
 #import "MPAbstractABTestDesignerMessage.h"
 
-@interface MPABTestDesignerDeviceInfoMessage : MPAbstractABTestDesignerMessage
+
+@interface MPABTestDesignerChangeResponseMessage : MPAbstractABTestDesignerMessage
 
 + (instancetype)message;
+
+@property (nonatomic, copy) NSString *status;
 
 @end

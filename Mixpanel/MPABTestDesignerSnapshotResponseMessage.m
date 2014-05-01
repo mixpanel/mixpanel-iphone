@@ -1,15 +1,15 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPABTestDesignerSnapshotMessage.h"
+#import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "NSData+MPBase64.h"
 
 
-@implementation MPABTestDesignerSnapshotMessage
+@implementation MPABTestDesignerSnapshotResponseMessage
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"snapshot"];
+    return [[self alloc] initWithType:@"snapshot_response"];
 }
 
 - (void)setScreenshot:(UIImage *)screenshot
