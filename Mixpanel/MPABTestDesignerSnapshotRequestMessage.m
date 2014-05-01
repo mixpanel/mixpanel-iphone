@@ -3,8 +3,10 @@
 
 #import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
-#import "MPABTestDesignerSnapshotMessage.h"
+#import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPApplicationStateSerializer.h"
+
+NSString *const MPABTestDesignerSnapshotRequestMessageType = @"snapshot_request";
 
 @implementation MPABTestDesignerSnapshotRequestMessage
 
@@ -30,7 +32,7 @@
 
         });
 
-        MPABTestDesignerSnapshotMessage *snapshotMessage = [MPABTestDesignerSnapshotMessage message];
+        MPABTestDesignerSnapshotResponseMessage *snapshotMessage = [MPABTestDesignerSnapshotResponseMessage message];
         snapshotMessage.screenshot = screenshot;
         snapshotMessage.serializedObjects = serializedObjects;
         [conn sendMessage:snapshotMessage];
