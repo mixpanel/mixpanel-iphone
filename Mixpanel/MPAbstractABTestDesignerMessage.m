@@ -45,6 +45,11 @@
     return [object isEqual:[NSNull null]] ? nil : object;
 }
 
+- (NSDictionary *)payload
+{
+    return [_payload copy];
+}
+
 - (NSData *)JSONData
 {
     NSDictionary *jsonObject = @{ @"type" : _type, @"payload" : [_payload copy] };

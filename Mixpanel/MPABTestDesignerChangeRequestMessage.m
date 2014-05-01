@@ -5,6 +5,7 @@
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPABTestDesignerChangeResponseMessage.h"
+#import "MPVariant.h"
 
 NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
@@ -21,9 +22,9 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
         MPABTestDesignerConnection *conn = weak_connection;
 
-
         dispatch_sync(dispatch_get_main_queue(), ^{
-            // TODO: apply changes
+            MPVariant *variant = [MPVariant variantWithJSONObject:[self payload]];
+            [variant execute];
         });
 
         MPABTestDesignerChangeResponseMessage *changeResponseMessage = [MPABTestDesignerChangeResponseMessage message];
