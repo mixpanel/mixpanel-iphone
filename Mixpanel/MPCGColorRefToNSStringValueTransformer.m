@@ -21,4 +21,11 @@
     return nil;
 }
 
+- (id)reverseTransformedValue:(id)value
+{
+    NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
+    UIColor *uiColor =  [transformer reverseTransformedValue:value];
+    return (id)[uiColor CGColor];
+}
+
 @end
