@@ -13,7 +13,7 @@
 @implementation MPVariant
 
 + (MPVariant *)variantWithDummyJSONObject {
-    NSString *json = @"{\"actions\":[{\"path\": \"UIButton\", \"args\": [\"Test\", 0], \"selector\": \"setTitle:forState:\"}]}";
+    NSString *json = @"{\"actions\":[{\"path\": \"UIButton\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
 
     NSError *error = nil;
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
@@ -54,9 +54,24 @@
     }
 }
 
++ (id) convertArg:(id)arg toType:(NSString *)type
+{
+    NSString *fromType = @"NSString";
+    NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", type, fromType];
+    NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
+    if (!toTransformer) {
+        toTransformer = [NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"];
+    }
+
+    if (toTransformer && [[toTransformer class] allowsReverseTransformation]) {
+        arg = [toTransformer reverseTransformedValue:arg];
+    }
+    return arg;
+}
+
 + (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(UIView *)root
 {
-    NSArray *views = [self getViewsOnPath:path fromRoot:root];
+    NSArray *views = [[self class] getViewsOnPath:path fromRoot:root];
     if ([views count] > 0) {
         for (NSObject *o in views) {
             NSMethodSignature *signature = [o methodSignatureForSelector:selector];
@@ -66,13 +81,16 @@
                 if ([args count] >= requiredArgs) {
                     [invocation setSelector:selector];
                     for (uint i = 0; i < requiredArgs; i++) {
-                        NSObject *arg = [args objectAtIndex:i];
-                        #pragma message("TODO: Deserialize arguments, eg CGColorRef from r,g,b values")
-                        // convert NSValues into their base types
+
+                        NSArray *argTuple = [args objectAtIndex:i];
+                        NSObject *arg = [[self class] convertArg:argTuple[0] toType:argTuple[1]];
+
+                        // Unpack NSValues to their base types.
                         if( [arg isKindOfClass:[NSValue class]] ) {
                             void *buf = malloc(sizeof([(NSValue *)arg objCType]));
                             [(NSValue *)arg getValue:buf];
                             [invocation setArgument:(void *)buf atIndex:(int)(i+2)];
+                            free(buf);
                         } else {
                             [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
                         }

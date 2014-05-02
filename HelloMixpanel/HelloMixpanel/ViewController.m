@@ -209,6 +209,11 @@
     */
 }
 
+- (IBAction)runDummyABTest:(id)sender
+{
+    [[Mixpanel sharedInstance] executeVariant];
+}
+
 - (IBAction)swizzle:(id)sender {
     [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
 }
