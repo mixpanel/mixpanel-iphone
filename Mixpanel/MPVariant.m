@@ -8,12 +8,13 @@
 
 #import "MPVariant.h"
 
-#import "ObjectSelector.h"
+#import "MPObjectSelector.h"
+#import "MPSwizzler.h"
 
 @implementation MPVariant
 
 + (MPVariant *)variantWithDummyJSONObject {
-    NSString *json = @"{\"actions\":[{\"path\": \"/*/UINavigationTransitionView/UIViewControllerWrapperView/UIView/UIButton[SELF.currentTitle == \\\"Unswizzle\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
+    NSString *json = @"{\"actions\":[{\"path\": \"/ViewController/UIView/UIButton[SELF.currentTitle == \\\"Track Event\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
 
     NSError *error = nil;
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
@@ -37,10 +38,9 @@
 
 + (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(NSObject *)root
 {
-    ObjectSelector *selector = [[ObjectSelector alloc] initWithString:path];
+    MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
     return [selector selectFromRoot:root];
 }
-
 
 + (void)setValue:(id)value forKey:(NSString *)key onPath:(NSString *)path fromRoot:(UIView *)root
 {

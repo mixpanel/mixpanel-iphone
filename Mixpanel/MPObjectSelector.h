@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ObjectSelector : NSObject
+@interface MPObjectSelector : NSObject
 
 -(id) initWithString:(NSString *)string;
 -(id)selectFromRoot:(NSObject *)root;
