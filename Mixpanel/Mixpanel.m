@@ -22,7 +22,6 @@
 #import "UIView+MPSnapshotImage.h"
 #import "MPVariant.h"
 
-#import "Shelley.h"
 #import "MPWebSocket.h"
 #import "MPABTestDesignerConnection.h"
 

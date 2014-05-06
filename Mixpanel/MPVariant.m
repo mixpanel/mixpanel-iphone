@@ -13,7 +13,7 @@
 @implementation MPVariant
 
 + (MPVariant *)variantWithDummyJSONObject {
-    NSString *json = @"{\"actions\":[{\"path\": \"/UINavigationTransitionView/UIViewControllerWrapperView/UIView/UIButton[SELF.restorationIdentifier == \\\"ABC\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
+    NSString *json = @"{\"actions\":[{\"path\": \"/.view/UINavigationTransitionView/UIViewControllerWrapperView/UIView/UIButton[SELF.currentTitle == \\\"Unswizzle\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
 
     NSError *error = nil;
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
@@ -35,7 +35,7 @@
     return [[MPVariant alloc] initWithActions:actions];
 }
 
-+ (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(UIView *)root
++ (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(NSObject *)root
 {
     ObjectSelector *selector = [[ObjectSelector alloc] initWithString:path];
     return [selector selectFromRoot:root];
@@ -69,7 +69,7 @@
     return arg;
 }
 
-+ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(UIView *)root
++ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
 {
     NSArray *views = [[self class] getViewsOnPath:path fromRoot:root];
     if ([views count] > 0) {
@@ -122,7 +122,7 @@
         [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                          withArgs:[action objectForKey:@"args"]
                            onPath:[action objectForKey:@"path"]
-                         fromRoot:[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]];
+                         fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
     }
 }
 
