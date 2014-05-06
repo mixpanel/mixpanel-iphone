@@ -46,7 +46,7 @@
     return self;
 }
 
--(id)selectFromRoot:(UIView *)root
+-(id)selectFromRoot:(NSObject *)root
 {
     NSArray *views = @[root];
     ObjectFilter *filter = [self nextFilter];
@@ -85,14 +85,14 @@
 {
     NSMutableArray *result = [NSMutableArray array];
 
-    // Select subviews by class (or property of superview).
     if (!_name) {
-        // By default include all subviews, if no class or property is specified.
+        // Select all children
         for (NSObject *view in views) {
-            [result addObjectsFromArray:[self getSubviewsOfView:view ofType:[UIView class]]];
+            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:[UIView class]]];
         }
     } else {
         if ([_name hasPrefix:@"."]) {
+            // Select children by property name on parent
             NSString *key = [_name substringFromIndex:1];
             @try {
                 for (NSObject *view in views) {
@@ -102,12 +102,13 @@
                     }
                 }
             }
-            @catch (NSException *exception) {} //object does not know about this key
+            @catch (NSException *exception) {}
         } else {
+            // Select all children of a given class
             Class class = NSClassFromString(_name);
             if (class) {
                 for (NSObject *view in views) {
-                    [result addObjectsFromArray:[self getSubviewsOfView:view ofType:class]];
+                    [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
                 }
             }
         }
@@ -121,17 +122,24 @@
     }
 }
 
--(NSArray *)getSubviewsOfView:(NSObject *)view ofType:(Class)class
+-(NSArray *)getChildrenOfObject:(NSObject *)obj ofType:(Class)class
 {
     NSMutableArray *result = [NSMutableArray array];
-    if ([view isKindOfClass:[UIView class]]) {
-        for (UIView *subview in [(UIView *)(view) subviews]) {
-            if ([subview isKindOfClass:class]) {
-                [result addObject:subview];
+    if ([obj isKindOfClass:[UIView class]]) {
+        for (NSObject *child in [(UIView *)obj subviews]) {
+            if ([child isKindOfClass:class]) {
+                [result addObject:child];
             }
         }
+    } else if ([obj isKindOfClass:[UIViewController class]]) {
+        for (NSObject *child in [(UIViewController *)obj childViewControllers]) {
+            if ([child isKindOfClass:class]) {
+                [result addObject:child];
+            }
+        }
+        [result addObject:((UIViewController *)obj).view];
     }
-    return result;
+    return [result copy];
 }
 
 @end

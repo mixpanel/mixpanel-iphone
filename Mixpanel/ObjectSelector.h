@@ -11,8 +11,6 @@
 @interface ObjectSelector : NSObject
 
 -(id) initWithString:(NSString *)string;
--(id)selectFromRoot:(UIView *)root;
-
-
+-(id)selectFromRoot:(NSObject *)root;
 
 @end
