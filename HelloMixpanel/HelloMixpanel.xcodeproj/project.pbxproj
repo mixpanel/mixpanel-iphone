@@ -17,14 +17,9 @@
 		05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		05E98D82190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */; };
 		05E98D85190F4B2D00AFF3E1 /* MPVariant.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98D84190F4B2D00AFF3E1 /* MPVariant.m */; };
-		05E98DD41910751400AFF3E1 /* Shelley.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DCF1910751400AFF3E1 /* Shelley.m */; };
-		05E98DD51910751400AFF3E1 /* Shelley.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DCF1910751400AFF3E1 /* Shelley.m */; };
-		05E98DD61910751400AFF3E1 /* SYParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD11910751400AFF3E1 /* SYParser.m */; };
-		05E98DD71910751400AFF3E1 /* SYParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD11910751400AFF3E1 /* SYParser.m */; };
-		05E98DD81910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
-		05E98DD91910751400AFF3E1 /* SYFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DD31910751400AFF3E1 /* SYFilters.m */; };
 		05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DDA19115FB200AFF3E1 /* libicucore.dylib */; };
 		05E98DE41912F73A00AFF3E1 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */; };
+		05E98DE71918472100AFF3E1 /* ObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DE61918472100AFF3E1 /* ObjectSelector.m */; };
 		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
@@ -110,16 +105,11 @@
 		05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-HelloMixpanel-Shelley.a"; path = "Pods/build/Debug-iphoneos/libPods-HelloMixpanel-Shelley.a"; sourceTree = "<group>"; };
 		05E98D83190F4B2D00AFF3E1 /* MPVariant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPVariant.h; sourceTree = "<group>"; };
 		05E98D84190F4B2D00AFF3E1 /* MPVariant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVariant.m; sourceTree = "<group>"; };
-		05E98DCD1910751400AFF3E1 /* LoadableCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadableCategory.h; sourceTree = "<group>"; };
-		05E98DCE1910751400AFF3E1 /* Shelley.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shelley.h; sourceTree = "<group>"; };
-		05E98DCF1910751400AFF3E1 /* Shelley.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shelley.m; sourceTree = "<group>"; };
-		05E98DD01910751400AFF3E1 /* SYParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYParser.h; sourceTree = "<group>"; };
-		05E98DD11910751400AFF3E1 /* SYParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYParser.m; sourceTree = "<group>"; };
-		05E98DD21910751400AFF3E1 /* SYFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYFilters.h; sourceTree = "<group>"; };
-		05E98DD31910751400AFF3E1 /* SYFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYFilters.m; sourceTree = "<group>"; };
 		05E98DDA19115FB200AFF3E1 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		05E98DE21912F73A00AFF3E1 /* MPSwizzler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzler.h; sourceTree = "<group>"; };
 		05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
+		05E98DE51918472100AFF3E1 /* ObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectSelector.h; sourceTree = "<group>"; };
+		05E98DE61918472100AFF3E1 /* ObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectSelector.m; sourceTree = "<group>"; };
 		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
 		05F02D6218528F8C00527D93 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -264,20 +254,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		05E98D8619106CA400AFF3E1 /* Shelley */ = {
-			isa = PBXGroup;
-			children = (
-				05E98DCD1910751400AFF3E1 /* LoadableCategory.h */,
-				05E98DCE1910751400AFF3E1 /* Shelley.h */,
-				05E98DCF1910751400AFF3E1 /* Shelley.m */,
-				05E98DD01910751400AFF3E1 /* SYParser.h */,
-				05E98DD11910751400AFF3E1 /* SYParser.m */,
-				05E98DD21910751400AFF3E1 /* SYFilters.h */,
-				05E98DD31910751400AFF3E1 /* SYFilters.m */,
-			);
-			name = Shelley;
-			sourceTree = "<group>";
-		};
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
@@ -377,7 +353,6 @@
 			isa = PBXGroup;
 			children = (
 				A7B462B31910759E00774977 /* ABTestingSupport */,
-				05E98D8619106CA400AFF3E1 /* Shelley */,
 				A7B462E81910898E00774977 /* WebSocket */,
 				286760B91611982600B1BEC8 /* Mixpanel.h */,
 				286760BA1611982600B1BEC8 /* Mixpanel.m */,
@@ -416,6 +391,8 @@
 		A7B462B31910759E00774977 /* ABTestingSupport */ = {
 			isa = PBXGroup;
 			children = (
+				05E98DE61918472100AFF3E1 /* ObjectSelector.m */,
+				05E98DE51918472100AFF3E1 /* ObjectSelector.h */,
 				A7B462B4191075DE00774977 /* MPApplicationStateSerializer.h */,
 				A7B462B5191075DE00774977 /* MPApplicationStateSerializer.m */,
 				A7B462C2191075DE00774977 /* MPClassDescription.h */,
@@ -696,20 +673,17 @@
 				A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */,
 				28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */,
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
-				05E98DD41910751400AFF3E1 /* Shelley.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */,
 				A7B462DA191075DE00774977 /* MPObjectSerializerContext.m in Sources */,
 				A7B462D2191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */,
 				A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */,
-				05E98DD81910751400AFF3E1 /* SYFilters.m in Sources */,
 				86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */,
 				A7B462D7191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				A7B462D8191075DE00774977 /* MPClassDescription.m in Sources */,
 				05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */,
 				28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */,
 				A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */,
-				05E98DD61910751400AFF3E1 /* SYParser.m in Sources */,
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				A7B462DC191075DE00774977 /* MPPropertyDescription.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,
@@ -721,6 +695,7 @@
 				A7B462D9191075DE00774977 /* MPObjectSerializer.m in Sources */,
 				A7B462D5191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
+				05E98DE71918472100AFF3E1 /* ObjectSelector.m in Sources */,
 				C38D5BAA83DEE244F3E2F69A /* MPABTestDesignerConnection.m in Sources */,
 				C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
@@ -737,10 +712,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
-				05E98DD91910751400AFF3E1 /* SYFilters.m in Sources */,
-				05E98DD71910751400AFF3E1 /* SYParser.m in Sources */,
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
-				05E98DD51910751400AFF3E1 /* Shelley.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

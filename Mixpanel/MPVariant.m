@@ -8,12 +8,12 @@
 
 #import "MPVariant.h"
 
-#import "Shelley.h"
+#import "ObjectSelector.h"
 
 @implementation MPVariant
 
 + (MPVariant *)variantWithDummyJSONObject {
-    NSString *json = @"{\"actions\":[{\"path\": \"UIButton\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
+    NSString *json = @"{\"actions\":[{\"path\": \"/UINavigationTransitionView/UIViewControllerWrapperView/UIView/UIButton[SELF.restorationIdentifier == \\\"ABC\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
 
     NSError *error = nil;
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
@@ -37,8 +37,8 @@
 
 + (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(UIView *)root
 {
-    Shelley *shelley = [[Shelley alloc] initWithSelectorString:path];
-    return [shelley selectFrom:root];
+    ObjectSelector *selector = [[ObjectSelector alloc] initWithString:path];
+    return [selector selectFromRoot:root];
 }
 
 
