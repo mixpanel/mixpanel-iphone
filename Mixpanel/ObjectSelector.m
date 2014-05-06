@@ -40,7 +40,7 @@
         _separatorChars = [NSCharacterSet characterSetWithCharactersInString:@"/"];
         _predicateStartChar = [NSCharacterSet characterSetWithCharactersInString:@"["];
         _predicateEndChar = [NSCharacterSet characterSetWithCharactersInString:@"]"];
-        _classAndPropertyChars = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_."];
+        _classAndPropertyChars = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.*"];
 
     }
     return self;
@@ -66,6 +66,8 @@
         filter = [[ObjectFilter alloc] init];
         if ([_scanner scanCharactersFromSet:_classAndPropertyChars intoString:&name]) {
             filter.name = name;
+        } else {
+            filter.name = @"*";
         }
         if ([_scanner scanCharactersFromSet:_predicateStartChar intoString:nil]) {
             NSString *predicateFormat;
@@ -85,10 +87,10 @@
 {
     NSMutableArray *result = [NSMutableArray array];
 
-    if (!_name) {
+    if ([_name isEqualToString:@"*"]) {
         // Select all children
         for (NSObject *view in views) {
-            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:[UIView class]]];
+            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:nil]];
         }
     } else {
         if ([_name hasPrefix:@"."]) {
@@ -127,13 +129,13 @@
     NSMutableArray *result = [NSMutableArray array];
     if ([obj isKindOfClass:[UIView class]]) {
         for (NSObject *child in [(UIView *)obj subviews]) {
-            if ([child isKindOfClass:class]) {
+            if (!class || [child isKindOfClass:class]) {
                 [result addObject:child];
             }
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
         for (NSObject *child in [(UIViewController *)obj childViewControllers]) {
-            if ([child isKindOfClass:class]) {
+            if (!class || [child isKindOfClass:class]) {
                 [result addObject:child];
             }
         }
