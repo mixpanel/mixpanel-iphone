@@ -214,12 +214,4 @@
     [[Mixpanel sharedInstance] executeVariant];
 }
 
-- (IBAction)swizzle:(id)sender {
-    [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
-}
-
-- (IBAction)unswizzle:(id)sender {
-    [MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
-
-}
 @end

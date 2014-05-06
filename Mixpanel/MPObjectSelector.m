@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "ObjectSelector.h"
+#import "MPObjectSelector.h"
 
 
-@interface ObjectFilter : NSObject
+@interface MPObjectFilter : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSPredicate *predicate;
@@ -18,7 +18,7 @@
 
 @end
 
-@interface ObjectSelector () {
+@interface MPObjectSelector () {
     NSCharacterSet *_classAndPropertyChars;
     NSCharacterSet *_separatorChars;
     NSCharacterSet *_predicateStartChar;
@@ -30,7 +30,7 @@
 @end
 
 
-@implementation ObjectSelector
+@implementation MPObjectSelector
 
 -(id) initWithString:(NSString *)string
 {
@@ -49,7 +49,7 @@
 -(id)selectFromRoot:(NSObject *)root
 {
     NSArray *views = @[root];
-    ObjectFilter *filter = [self nextFilter];
+    MPObjectFilter *filter = [self nextFilter];
 
     do {
         views = [filter apply:views];
@@ -58,12 +58,12 @@
     return views;
 }
 
-- (ObjectFilter *)nextFilter
+- (MPObjectFilter *)nextFilter
 {
-    ObjectFilter *filter;
+    MPObjectFilter *filter;
     if ([_scanner scanCharactersFromSet:_separatorChars intoString:nil]) {
         NSString *name;
-        filter = [[ObjectFilter alloc] init];
+        filter = [[MPObjectFilter alloc] init];
         if ([_scanner scanCharactersFromSet:_classAndPropertyChars intoString:&name]) {
             filter.name = name;
         } else {
@@ -81,7 +81,7 @@
 
 @end
 
-@implementation ObjectFilter
+@implementation MPObjectFilter
 
 - (NSArray *)apply:(NSArray *)views
 {
