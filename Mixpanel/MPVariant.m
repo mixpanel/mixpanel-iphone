@@ -13,7 +13,7 @@
 @implementation MPVariant
 
 + (MPVariant *)variantWithDummyJSONObject {
-    NSString *json = @"{\"actions\":[{\"path\": \"/.view/UINavigationTransitionView/UIViewControllerWrapperView/UIView/UIButton[SELF.currentTitle == \\\"Unswizzle\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
+    NSString *json = @"{\"actions\":[{\"path\": \"/*/UINavigationTransitionView/UIViewControllerWrapperView/UIView/UIButton[SELF.currentTitle == \\\"Unswizzle\\\"]\", \"args\": [[\"rgba(255,0,0,1.0)\", \"UIColor\"], [0, \"int\"]], \"selector\": \"setTitleColor:forState:\"}]}";
 
     NSError *error = nil;
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
