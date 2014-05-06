@@ -69,8 +69,9 @@
     return arg;
 }
 
-+ (void)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
++ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
 {
+    BOOL executed = NO;
     NSArray *views = [[self class] getViewsOnPath:path fromRoot:root];
     if ([views count] > 0) {
         for (NSObject *o in views) {
@@ -96,6 +97,7 @@
                         }
                     }
                     [invocation invokeWithTarget:o];
+                    executed = YES;
                 } else {
                     NSLog(@"Not enough args");
                 }
@@ -106,6 +108,7 @@
     } else {
         NSLog(@"No objects matching pattern");
     }
+    return executed;
 }
 
 
@@ -119,10 +122,22 @@
 
 - (void)execute {
     for (NSDictionary *action in self.actions) {
-        [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+        BOOL executed = [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                          withArgs:[action objectForKey:@"args"]
                            onPath:[action objectForKey:@"path"]
                          fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+        if (!executed) {
+            [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:^{
+                NSLog(@"checking if we can execute");
+                if ([[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                                     withArgs:[action objectForKey:@"args"]
+                                       onPath:[action objectForKey:@"path"]
+                                         fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]]) {
+                    NSLog(@"executed in swizzle");
+                    [MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
+                }
+            }];
+        }
     }
 }
 
