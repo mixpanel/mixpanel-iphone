@@ -139,7 +139,12 @@
                 [result addObject:child];
             }
         }
-        [result addObject:((UIViewController *)obj).view];
+        if (((UIViewController *)obj).presentedViewController && (!class || [((UIViewController *)obj).presentedViewController isKindOfClass:class])) {
+            [result addObject:((UIViewController *)obj).presentedViewController];
+        }
+        if (!class || [((UIViewController *)obj).view isKindOfClass:class]) {
+            [result addObject:((UIViewController *)obj).view];
+        }
     }
     return [result copy];
 }
