@@ -88,6 +88,7 @@
 		C38D5C92E7ADE5F6AD8D03E0 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D56F0A718EC78712F7DD7 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */; };
 		C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoResponseMessage.m */; };
 		C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */; };
+		C38D5DD44117B25460093BF7 /* MPNSDictionaryToUIFontValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
 
@@ -228,8 +229,10 @@
 		C38D5A46C299056A07676D14 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
 		C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
 		C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
+		C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSDictionaryToUIFontValueTransformer.m; sourceTree = "<group>"; };
 		C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPBOOLToNSNumberValueTransformer.h; sourceTree = "<group>"; };
 		C38D5D20034D0E52454F0552 /* MPABTestDesignerSnapshotResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotResponseMessage.h; sourceTree = "<group>"; };
+		C38D5D23680F8A0E2EE6DE83 /* MPNSDictionaryToUIFontValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNSDictionaryToUIFontValueTransformer.h; sourceTree = "<group>"; };
 		C38D5DF058742F8D8B919676 /* MPABTestDesignerSnapshotResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotResponseMessage.m; sourceTree = "<group>"; };
 		C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTypeDescription.m; sourceTree = "<group>"; };
 		C38D5E33208664B1FFAE2974 /* MPABTestDesignerDeviceInfoResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoResponseMessage.h; sourceTree = "<group>"; };
@@ -472,6 +475,8 @@
 				C38D5FFAFD3DD888FC143D92 /* MPCGImageRefToNSDictionaryValueTransformer.h */,
 				C38D56F0A718EC78712F7DD7 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
 				C38D53C0AC75577CCC271410 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.h */,
+				C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */,
+				C38D5D23680F8A0E2EE6DE83 /* MPNSDictionaryToUIFontValueTransformer.h */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -745,6 +750,7 @@
 				C38D5828C3C5082570C5FB5D /* MPObjectSerializerConfig.m in Sources */,
 				C38D51675946A46979D18F75 /* MPCGImageRefToNSDictionaryValueTransformer.m in Sources */,
 				C38D5C92E7ADE5F6AD8D03E0 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
+				C38D5DD44117B25460093BF7 /* MPNSDictionaryToUIFontValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
