@@ -106,6 +106,39 @@
                 { "value" : 1, "display_name": "Bordered" },
                 { "value" : 2, "display_name": "Done" }
             ]
+        },
+        {
+            "name": "NSTextAlignment",
+            "base_type": "NSInteger",
+            "flag_set": false,
+            "values": [
+                { "value": 0, "display_name": "Left" },
+                { "value": 1, "display_name": "Center" },
+                { "value": 2, "display_name": "Right" },
+                { "value": 3, "display_name": "Justified" },
+                { "value": 4, "display_name": "Natural" }
+            ]
+        },
+        {
+            "name": "NSLineBreakMode",
+            "base_type": "NSInteger",
+            "values": [
+                { "value": 0, "display_name": "WordWrapping" },
+                { "value": 1, "display_name": "CharWrapping" },
+                { "value": 2, "display_name": "Clipping" },
+                { "value": 3, "display_name": "TruncatingHead" },
+                { "value": 4, "display_name": "TruncatingTail" },
+                { "value": 5, "display_name": "TruncatingMiddle" }
+            ]
+        },
+        {
+            "name": "UIBaselineAdjustment",
+            "base_type": "",
+            "values": [
+                { "value": 0, "display_name": "AlignBaselines" },
+                { "value": 1, "display_name": "AlignCenters" },
+                { "value": 2, "display_name": "None" }
+            ]
         }
     ],
     "classes": [
@@ -129,9 +162,23 @@
             ]
         },
         {
-            "name" : "UIImage",
-            "superclass" : "NSObject",
-            "properties" : [
+            "name" : "UIFont",
+            "superclass": "NSObject",
+            "properties": [
+                { "name": "familyName", "type": "NSString", "readonly":true },
+                { "name": "fontName", "type": "NSString", "readonly":true },
+                { "name": "pointSize", "type": "CGFloat", "readonly":true },
+                { "name": "ascender", "type": "CGFloat", "readonly":true },
+                { "name": "descender", "type": "CGFloat", "readonly":true },
+                { "name": "capHeight", "type": "CGFloat", "readonly":true },
+                { "name": "xHeight", "type": "CGFloat", "readonly":true },
+                { "name": "lineHeight", "type": "CGFloat", "readonly":true }
+            ]
+        },
+        {
+            "name": "UIImage",
+            "superclass": "NSObject",
+            "properties": [
                 { "name": "imageOrientation", "type": "NSInteger", "readonly":true },
                 { "name": "images", "type": "NSArray", "readonly":true },
                 { "name": "renderingMode", "type": "NSInteger", "readonly":true },
@@ -261,11 +308,31 @@
             ]
         },
         {
+            "name": "UILabel",
+            "superclass": "UIView",
+            "properties": [
+                { "name": "text", "type": "NSString" },
+                { "name": "font", "type": "UIFont" },
+                { "name": "textColor", "type": "UIColor" },
+                { "name": "textAlignment", "type": "NSTextAlignment" },
+                { "name": "lineBreakMode", "type": "NSLineBreakMode" },
+                { "name": "enabled", "type": "BOOL" },
+                { "name": "adjustsFontSizeToFitWidth", "type": "BOOL" },
+                { "name": "baselineAdjustment", "type": "UIBaselineAdjustment" },
+                { "name": "minimumScaleFactor", "type": "CGFloat" },
+                { "name": "numberOfLines", "type": "NSInteger" },
+                { "name": "highlightedTextColor", "type": "UIColor" },
+                { "name": "highlighted", "type": "BOOL" },
+                { "name": "shadowColor", "type": "UIColor" },
+                { "name": "shadowOffset", "type": "CGSize" },
+                { "name": "preferredMaxLayoutWidth", "type": "CGFloat" }
+            ]
+        },
+        {
             "name": "UIImageView",
             "superclass" : "UIView",
             "properties": [
                 { "name": "image", "type": "UIImage" },
-                { "name": "highlightedImage", "type": "UIImage" },
                 { "name": "highlightedImage", "type": "UIImage" },
                 { "name": "animationImages", "type": "NSArray" },
                 { "name": "highlightedAnimationImages", "type": "NSArray" },
