@@ -82,6 +82,7 @@
 		C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */; };
 		C38D5441C78F3F33FD640279 /* MPEnumDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D51A8381CEADEC59F3C06 /* MPEnumDescription.m */; };
 		C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */; };
+		C38D5828C3C5082570C5FB5D /* MPObjectSerializerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */; };
 		C38D5A25F71A31E130B264B4 /* MPABTestDesignerChangeResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D56E0A1C3AA8669C597CF /* MPABTestDesignerChangeResponseMessage.m */; };
 		C38D5AE963B48C6752645A38 /* MPTypeDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */; };
 		C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangeRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D58453399B01B470D3993 /* MPABTestDesignerChangeRequestMessage.m */; };
@@ -218,6 +219,7 @@
 		C38D53C0AC75577CCC271410 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIEdgeInsetsToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerConnection.h; sourceTree = "<group>"; };
 		C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerConnection.m; sourceTree = "<group>"; };
+		C38D54648ACD9502F3981E4F /* MPObjectSerializerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerConfig.h; sourceTree = "<group>"; };
 		C38D54F927EDE7223F214F4B /* MPABTestDesignerSnapshotRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotRequestMessage.h; sourceTree = "<group>"; };
 		C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotRequestMessage.m; sourceTree = "<group>"; };
 		C38D55C83387B909D63C9C51 /* MPABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerMessage.h; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 		C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoResponseMessage.m; sourceTree = "<group>"; };
 		C38D58453399B01B470D3993 /* MPABTestDesignerChangeRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeRequestMessage.m; sourceTree = "<group>"; };
 		C38D592F81395CC5C26C7FC1 /* MPTypeDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeDescription.h; sourceTree = "<group>"; };
+		C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerConfig.m; sourceTree = "<group>"; };
 		C38D5A46C299056A07676D14 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
 		C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
 		C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
@@ -455,6 +458,8 @@
 				C38D55F175876EDF40DD8E48 /* MPEnumDescription.h */,
 				C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */,
 				C38D592F81395CC5C26C7FC1 /* MPTypeDescription.h */,
+				C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */,
+				C38D54648ACD9502F3981E4F /* MPObjectSerializerConfig.h */,
 			);
 			name = ABTestingSupport;
 			sourceTree = "<group>";
@@ -755,6 +760,7 @@
 				C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				C38D5441C78F3F33FD640279 /* MPEnumDescription.m in Sources */,
 				C38D5AE963B48C6752645A38 /* MPTypeDescription.m in Sources */,
+				C38D5828C3C5082570C5FB5D /* MPObjectSerializerConfig.m in Sources */,
 				C38D51675946A46979D18F75 /* MPCGImageRefToNSDictionaryValueTransformer.m in Sources */,
 				C38D5C92E7ADE5F6AD8D03E0 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
 			);
