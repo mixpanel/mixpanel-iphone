@@ -183,4 +183,10 @@
     [MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
 
 }
+
+- (IBAction)testBarButtonItemWasPressed:(id)sender
+{
+    NSLog(@"You pressed a bar button item.");
+}
+
 @end
