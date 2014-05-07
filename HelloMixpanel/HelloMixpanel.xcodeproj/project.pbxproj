@@ -20,6 +20,7 @@
 		05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DDA19115FB200AFF3E1 /* libicucore.dylib */; };
 		05E98DE41912F73A00AFF3E1 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */; };
 		05E98DE71918472100AFF3E1 /* MPObjectSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DE61918472100AFF3E1 /* MPObjectSelector.m */; };
+		05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DF0191AE10000AFF3E1 /* MapKit.framework */; };
 		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
@@ -117,6 +118,7 @@
 		05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
 		05E98DE51918472100AFF3E1 /* MPObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSelector.h; sourceTree = "<group>"; };
 		05E98DE61918472100AFF3E1 /* MPObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSelector.m; sourceTree = "<group>"; };
+		05E98DF0191AE10000AFF3E1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
 		05F02D6218528F8C00527D93 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */,
 				A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */,
 				05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */,
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
@@ -299,6 +302,7 @@
 		2808F9901610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05E98DF0191AE10000AFF3E1 /* MapKit.framework */,
 				A7BB224419183EB800EEDCCD /* ImageIO.framework */,
 				05E98DDA19115FB200AFF3E1 /* libicucore.dylib */,
 				05E98D81190F006600AFF3E1 /* libPods-HelloMixpanel-Shelley.a */,
