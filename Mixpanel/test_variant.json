@@ -1,0 +1,1 @@
+{"actions":[{"path": "/ViewController/UIView/UIButton[SELF.currentTitle == \"Track Event\"]", "args": [["rgba(255,0,0,1.0)", "UIColor"], [0, "int"]], "selector": "setTitleColor:forState:"}]}
