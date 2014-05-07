@@ -5,11 +5,11 @@
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPApplicationStateSerializer.h"
-#import "MPClassDescription.h"
+#import "MPObjectSerializerConfig.h"
 
 NSString * const MPABTestDesignerSnapshotRequestMessageType = @"snapshot_request";
 
-static NSString * const kSnapshotClassDescriptionsKey = @"snapshot_class_descriptions";
+static NSString * const kSnapshotSerializerConfigKey = @"snapshot_class_descriptions";
 
 @implementation MPABTestDesignerSnapshotRequestMessage
 
@@ -18,33 +18,40 @@ static NSString * const kSnapshotClassDescriptionsKey = @"snapshot_class_descrip
     return [[self alloc] initWithType:@"snapshot_request"];
 }
 
-- (NSDictionary *)configuration
+- (MPObjectSerializerConfig *)configuration
 {
-    return [self payloadObjectForKey:@"config"];
+    NSDictionary *config =
+#if 0
+    [self payloadObjectForKey:@"config"];
+#else
+    [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"snapshot_config" withExtension:@"json"]]
+                                    options:0 error:nil];
+#endif
+
+    return [[MPObjectSerializerConfig alloc] initWithDictionary:config];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
 {
-    NSArray *classes = self.configuration[@"classes"];
-    __block NSArray *classDescriptions = classes ? [self classDescriptionsFromArray:classes] : nil;
+    __block MPObjectSerializerConfig *serializerConfig = self.configuration;
 
     __weak MPABTestDesignerConnection *weak_connection = connection;
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
         __strong MPABTestDesignerConnection *conn = weak_connection;
 
         // Update the class descriptions in the connection session if provided as part of the message.
-        if (classDescriptions)
+        if (serializerConfig)
         {
-            [connection setSessionObject:classDescriptions forKey:kSnapshotClassDescriptionsKey];
+            [connection setSessionObject:serializerConfig forKey:kSnapshotSerializerConfigKey];
         }
         else
         {
             // Get the class descriptions from the connection session store.
-            classDescriptions = [connection sessionObjectForKey:kSnapshotClassDescriptionsKey];
+            serializerConfig = [connection sessionObjectForKey:kSnapshotSerializerConfigKey];
         }
         
         MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[UIApplication sharedApplication]
-                                                                                           classDescriptions:classDescriptions];
+                                                                                               configuration:serializerConfig];
 
         __block UIImage *screenshot = nil;
         __block NSDictionary *serializedObjects = nil;
@@ -68,24 +75,6 @@ static NSString * const kSnapshotClassDescriptionsKey = @"snapshot_class_descrip
     }];
 
     return operation;
-}
-
-- (NSArray *)classDescriptionsFromArray:(NSArray *)classes
-{
-    NSParameterAssert(classes != nil);
-
-    NSMutableDictionary *classDescriptions = [[NSMutableDictionary alloc] init];
-    for (NSDictionary *dictionary in classes)
-    {
-        NSString *superclassName = dictionary[@"superclass"];
-        MPClassDescription *superclassDescription = superclassName ? classDescriptions[superclassName] : nil;
-        MPClassDescription *classDescription = [[MPClassDescription alloc] initWithSuperclassDescription:superclassDescription
-                                                                                              dictionary:dictionary];
-
-        [classDescriptions setObject:classDescription forKey:classDescription.name];
-    }
-
-    return [classDescriptions allValues];
 }
 
 @end

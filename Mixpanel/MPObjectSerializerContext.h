@@ -3,22 +3,19 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MPObjectIdentifierProvider;
-
 @interface MPObjectSerializerContext : NSObject
 
-- (id)initWithRootObject:(id)object objectIdentifierProvider:(id<MPObjectIdentifierProvider>)identifierProvider;
+- (id)initWithRootObject:(id)object;
 
 - (BOOL)hasUnvisitedObjects;
 
 - (void)enqueueUnvisitedObject:(NSObject *)object;
-
 - (NSObject *)dequeueUnvisitedObject;
 
-- (void)addVisitedObject:(NSObject *)object propertyValues:(NSDictionary *)propertyValues;
-
+- (void)addVisitedObject:(NSObject *)object;
 - (BOOL)isVisitedObject:(NSObject *)object;
 
-- (NSArray *)propertiesOfVisitedObjects;
+- (void)addSerializedObject:(NSDictionary *)serializedObject;
+- (NSArray *)allSerializedObjects;
 
 @end
