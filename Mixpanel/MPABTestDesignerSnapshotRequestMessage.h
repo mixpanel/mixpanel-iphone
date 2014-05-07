@@ -4,12 +4,14 @@
 #import <Foundation/Foundation.h>
 #import "MPAbstractABTestDesignerMessage.h"
 
+@class MPObjectSerializerConfig;
+
 extern NSString *const MPABTestDesignerSnapshotRequestMessageType;
 
 @interface MPABTestDesignerSnapshotRequestMessage : MPAbstractABTestDesignerMessage
 
 + (instancetype)message;
 
-@property (nonatomic, readonly) NSDictionary *configuration;
+@property (nonatomic, readonly) MPObjectSerializerConfig *configuration;
 
 @end

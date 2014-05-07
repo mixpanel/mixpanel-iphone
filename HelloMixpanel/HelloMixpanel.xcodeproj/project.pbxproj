@@ -84,6 +84,7 @@
 		C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */; };
 		C38D5828C3C5082570C5FB5D /* MPObjectSerializerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */; };
 		C38D5A25F71A31E130B264B4 /* MPABTestDesignerChangeResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D56E0A1C3AA8669C597CF /* MPABTestDesignerChangeResponseMessage.m */; };
+		C38D5AE54BD721CD32314934 /* snapshot_config.json in Resources */ = {isa = PBXBuildFile; fileRef = C38D59F22E72DE96A370172E /* snapshot_config.json */; };
 		C38D5AE963B48C6752645A38 /* MPTypeDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */; };
 		C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangeRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D58453399B01B470D3993 /* MPABTestDesignerChangeRequestMessage.m */; };
 		C38D5BAA83DEE244F3E2F69A /* MPABTestDesignerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */; };
@@ -197,7 +198,6 @@
 		A7B462C1191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGSizeToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		A7B462C2191075DE00774977 /* MPClassDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPClassDescription.h; sourceTree = "<group>"; };
 		A7B462C3191075DE00774977 /* MPClassDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPClassDescription.m; sourceTree = "<group>"; };
-		A7B462C4191075DE00774977 /* MPObjectIdentifierProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectIdentifierProvider.h; sourceTree = "<group>"; };
 		A7B462C5191075DE00774977 /* MPObjectSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializer.h; sourceTree = "<group>"; };
 		A7B462C6191075DE00774977 /* MPObjectSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializer.m; sourceTree = "<group>"; };
 		A7B462C7191075DE00774977 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
@@ -232,6 +232,7 @@
 		C38D58453399B01B470D3993 /* MPABTestDesignerChangeRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeRequestMessage.m; sourceTree = "<group>"; };
 		C38D592F81395CC5C26C7FC1 /* MPTypeDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeDescription.h; sourceTree = "<group>"; };
 		C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerConfig.m; sourceTree = "<group>"; };
+		C38D59F22E72DE96A370172E /* snapshot_config.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = snapshot_config.json; sourceTree = "<group>"; };
 		C38D5A46C299056A07676D14 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
 		C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
 		C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
@@ -299,6 +300,7 @@
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
+				2808F9981610EFE3005772B7 /* Supporting Files */,
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
 				2808F9901610EFE3005772B7 /* Frameworks */,
@@ -348,7 +350,6 @@
 				2808F9A11610EFE3005772B7 /* AppDelegate.m */,
 				2808F9A31610EFE3005772B7 /* ViewController.h */,
 				2808F9A41610EFE3005772B7 /* ViewController.m */,
-				2808F9981610EFE3005772B7 /* Supporting Files */,
 				0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */,
 				05FF819C18452EA20073FBAC /* HomeViewController.h */,
 				05FF819D18452EA20073FBAC /* HomeViewController.m */,
@@ -369,6 +370,7 @@
 				2808F99F1610EFE3005772B7 /* HelloMixpanel-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = HelloMixpanel;
 			sourceTree = "<group>";
 		};
 		2808F9B81610EFE4005772B7 /* HelloMixpanelTests */ = {
@@ -439,7 +441,6 @@
 				A7B462B5191075DE00774977 /* MPApplicationStateSerializer.m */,
 				A7B462C2191075DE00774977 /* MPClassDescription.h */,
 				A7B462C3191075DE00774977 /* MPClassDescription.m */,
-				A7B462C4191075DE00774977 /* MPObjectIdentifierProvider.h */,
 				A7B462C5191075DE00774977 /* MPObjectSerializer.h */,
 				A7B462C6191075DE00774977 /* MPObjectSerializer.m */,
 				A7B462C7191075DE00774977 /* MPObjectSerializerContext.h */,
@@ -454,6 +455,7 @@
 				C38D59C874C4A08A62849CB2 /* Messages */,
 				05E98DE21912F73A00AFF3E1 /* MPSwizzler.h */,
 				05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */,
+				C38D59F22E72DE96A370172E /* snapshot_config.json */,
 				C38D51A8381CEADEC59F3C06 /* MPEnumDescription.m */,
 				C38D55F175876EDF40DD8E48 /* MPEnumDescription.h */,
 				C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */,
@@ -618,6 +620,7 @@
 				2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */,
 				053B4C63183E963100E825FE /* Media.xcassets in Resources */,
 				0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */,
+				C38D5AE54BD721CD32314934 /* snapshot_config.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

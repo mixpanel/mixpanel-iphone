@@ -5,13 +5,14 @@
 
 @class MPClassDescription;
 @class MPObjectSerializerContext;
+@class MPObjectSerializerConfig;
 
 @interface MPObjectSerializer : NSObject
 
 /*!
  @param     An array of MPClassDescription instances.
  */
-- (id)initWithClassDescriptions:(NSArray *)classDescriptions;
+- (id)initWithConfiguration:(MPObjectSerializerConfig *)configuration;
 
 - (NSDictionary *)serializedObjectsWithRootObject:(id)rootObject;
 
