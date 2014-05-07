@@ -50,7 +50,7 @@
 
 + (id)convertArg:(id)arg toType:(NSString *)toType
 {
-    NSString *fromType= [self fromTypeForArg:arg];
+    NSString *fromType = [self fromTypeForArg:arg];
 
     NSString *forwardTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", fromType, toType];
     NSValueTransformer *forwardTransformer = [NSValueTransformer valueTransformerForName:forwardTransformerName];
