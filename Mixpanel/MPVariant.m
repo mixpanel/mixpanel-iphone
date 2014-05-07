@@ -70,7 +70,19 @@
     if (toTransformer && [[toTransformer class] allowsReverseTransformation]) {
         arg = [toTransformer reverseTransformedValue:arg];
     }
+
     return arg;
+}
+
+// For now this is a place to put custom processing for selectors/types that we know
+// need a little extra massaging.
++ (id) specialProcessArg:(id)arg atPosition:(int)position forSelector:(SEL)selector
+{
+    id result = arg;
+    if (selector == @selector(setImage:) && position == 0) {
+        result = [[UIImage alloc] initWithCGImage:(CGImageRef)arg];
+    }
+    return result;
 }
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
@@ -88,7 +100,8 @@
                     for (uint i = 0; i < requiredArgs; i++) {
 
                         NSArray *argTuple = [args objectAtIndex:i];
-                        NSObject *arg = [[self class] convertArg:argTuple[0] toType:argTuple[1]];
+                        id arg = [[self class] convertArg:argTuple[0] toType:argTuple[1]];
+                        arg = [[self class] specialProcessArg:arg atPosition:i forSelector:selector];
 
                         // Unpack NSValues to their base types.
                         if( [arg isKindOfClass:[NSValue class]] ) {
@@ -126,20 +139,20 @@
 
 - (void)execute {
     for (NSDictionary *action in self.actions) {
+
         BOOL executed = [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                          withArgs:[action objectForKey:@"args"]
                            onPath:[action objectForKey:@"path"]
                          fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
         if (!executed) {
             [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:^{
-                NSLog(@"checking if we can execute");
                 if ([[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                      withArgs:[action objectForKey:@"args"]
                                        onPath:[action objectForKey:@"path"]
                                          fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]]) {
-                    NSLog(@"executed in swizzle");
                     [MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
                 }
+
             }];
         }
     }
