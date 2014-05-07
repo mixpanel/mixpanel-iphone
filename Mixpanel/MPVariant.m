@@ -50,7 +50,17 @@
 
 + (id) convertArg:(id)arg toType:(NSString *)type
 {
-    NSString *fromType = @"NSString";
+    NSString *fromType;
+    NSDictionary *classNameMap = @{@"NSString": [NSString class],
+                                   @"NSDictionary": [NSDictionary class],
+                                   @"NSArray": [NSArray class]};
+    for (NSString *key in classNameMap) {
+        if ([arg isKindOfClass:classNameMap[key]]) {
+            fromType = key;
+            break;
+        }
+    }
+
     NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", type, fromType];
     NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
     if (!toTransformer) {
