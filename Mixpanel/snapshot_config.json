@@ -122,6 +122,7 @@
         {
             "name": "NSLineBreakMode",
             "base_type": "NSInteger",
+            "flag_set": false,
             "values": [
                 { "value": 0, "display_name": "WordWrapping" },
                 { "value": 1, "display_name": "CharWrapping" },
@@ -133,7 +134,8 @@
         },
         {
             "name": "UIBaselineAdjustment",
-            "base_type": "",
+            "base_type": "NSInteger",
+            "flag_set": false,
             "values": [
                 { "value": 0, "display_name": "AlignBaselines" },
                 { "value": 1, "display_name": "AlignCenters" },
