@@ -186,4 +186,15 @@
     NSLog(@"You pressed a bar button item.");
 }
 
+- (IBAction)popToViewController:(UIStoryboardSegue *)sender
+{
+    [self.navigationController popToViewController:self animated:YES];
+}
+
+- (IBAction)dismissModal:(UIStoryboardSegue *)sender
+{
+    UIViewController *sourceViewController = sender.sourceViewController;
+    [sourceViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
