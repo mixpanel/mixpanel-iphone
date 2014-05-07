@@ -28,7 +28,7 @@ static NSString * const kSnapshotSerializerConfigKey = @"snapshot_class_descript
                                     options:0 error:nil];
 #endif
 
-    return [[MPObjectSerializerConfig alloc] initWithDictionary:config];
+    return config ? [[MPObjectSerializerConfig alloc] initWithDictionary:config] : nil;
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
