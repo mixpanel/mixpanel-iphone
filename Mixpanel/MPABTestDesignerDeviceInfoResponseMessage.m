@@ -18,7 +18,7 @@
 
 - (void)setSystemName:(NSString *)systemName
 {
-    return [self setPayloadObject:systemName forKey:@"system_name"];
+    [self setPayloadObject:systemName forKey:@"system_name"];
 }
 
 - (NSString *)systemVersion
@@ -28,7 +28,7 @@
 
 - (void)setSystemVersion:(NSString *)systemVersion
 {
-    return [self setPayloadObject:systemVersion forKey:@"system_version"];
+    [self setPayloadObject:systemVersion forKey:@"system_version"];
 }
 
 - (NSString *)deviceName
@@ -58,7 +58,7 @@
 
 - (void)setMainBundleIdentifier:(NSString *)mainBundleIdentifier
 {
-    return [self setPayloadObject:mainBundleIdentifier forKey:@"main_bundle_identifier"];
+    [self setPayloadObject:mainBundleIdentifier forKey:@"main_bundle_identifier"];
 }
 
 @end
