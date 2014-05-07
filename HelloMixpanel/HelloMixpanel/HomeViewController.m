@@ -1,4 +1,5 @@
 #import "HomeViewController.h"
+#import "FBTweakInline.h"
 
 @interface HomeViewController ()
 
@@ -11,6 +12,8 @@
     [super viewDidLoad];
 
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"MPLogo.png"]];
+
+    FBTweakBind(self.view, alpha, @"Main Window", @"View", @"Alpha", 1.0f);
 }
 
 @end

@@ -61,4 +61,14 @@
     [self setPayloadObject:mainBundleIdentifier forKey:@"main_bundle_identifier"];
 }
 
+- (void)setTweaks:(NSArray *)tweaks
+{
+    [self setPayloadObject:tweaks forKey:@"tweaks"];
+}
+
+- (NSArray *)tweaks
+{
+    return [self payloadObjectForKey:@"tweaks"];
+}
+
 @end
