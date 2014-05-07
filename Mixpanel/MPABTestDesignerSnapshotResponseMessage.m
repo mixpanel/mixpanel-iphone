@@ -42,7 +42,7 @@
 
 - (NSDictionary *)serializedObjects
 {
-    return[self payloadObjectForKey:@"serialized_objects"];
+    return [self payloadObjectForKey:@"serialized_objects"];
 }
 
 @end
