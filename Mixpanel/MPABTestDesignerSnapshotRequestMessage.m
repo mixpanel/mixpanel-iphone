@@ -21,7 +21,7 @@ static NSString * const kSnapshotSerializerConfigKey = @"snapshot_class_descript
 - (MPObjectSerializerConfig *)configuration
 {
     NSDictionary *config =
-#if 0
+#if 1
     [self payloadObjectForKey:@"config"];
 #else
     [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"snapshot_config" withExtension:@"json"]]
