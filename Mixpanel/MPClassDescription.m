@@ -11,11 +11,10 @@
 
 - (id)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary
 {
-    self = [super init];
+    self = [super initWithDictionary:dictionary];
     if (self)
     {
         _superclassDescription = superclassDescription;
-        _name = [dictionary[@"name"] copy];
 
         NSMutableArray *propertyDescriptions = [[NSMutableArray alloc] init];
         for (NSDictionary *propertyDictionary in dictionary[@"properties"])

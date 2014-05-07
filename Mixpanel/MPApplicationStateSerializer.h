@@ -3,9 +3,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class MPObjectSerializerConfig;
+
 @interface MPApplicationStateSerializer : NSObject
 
-- (id)initWithApplication:(UIApplication *)application classDescriptions:(NSArray *)classDescriptions;
+- (id)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration;
 
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index;
 

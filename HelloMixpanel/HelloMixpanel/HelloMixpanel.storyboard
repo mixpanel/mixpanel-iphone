@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -98,6 +98,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="em1-Jj-kpt"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="fakeBackground" destination="Fgb-VT-EoI" id="bRE-qU-Ge4"/>
                         <outlet property="genderControl" destination="7Tp-Ub-ebv" id="lMk-1d-hWz"/>
@@ -183,7 +184,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="ibJ-TT-khi" kind="custom" id="Bqc-sQ-UvF"/>
+                                            <segue destination="ibJ-TT-khi" kind="push" identifier="PushToTrackEvent" id="Bqc-sQ-UvF"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="uzT-so-Vag" style="IBUITableViewCellStyleDefault" id="h24-aQ-H3f">
@@ -203,7 +204,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="lkb-Ai-epM" kind="custom" id="r5v-ch-6sf"/>
+                                            <segue destination="lkb-Ai-epM" kind="push" identifier="PushToSurveys" id="r5v-ch-6sf"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="CJv-3C-4Lz" style="IBUITableViewCellStyleDefault" id="JHh-4W-3dl">
@@ -223,7 +224,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="PAi-oO-Noz" kind="custom" id="mzj-PB-xcV"/>
+                                            <segue destination="PAi-oO-Noz" kind="push" identifier="PushToNotifications" id="mzj-PB-xcV"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="0.0" textLabel="D3f-sr-A1P" style="IBUITableViewCellStyleDefault" id="iyd-kZ-SWk">
@@ -243,7 +244,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="dag-He-PtO" kind="custom" id="y0R-J0-mX5"/>
+                                            <segue destination="dag-He-PtO" kind="push" identifier="PushToABTesting" id="y0R-J0-mX5"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -367,6 +368,7 @@
                             <constraint firstItem="auC-4E-3iO" firstAttribute="top" secondItem="Ews-8i-K8A" secondAttribute="bottom" constant="18" id="ytt-Jb-Htd"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="fakeBackground" destination="jGo-oH-Gk5" id="TPJ-z0-9sa"/>
                         <outlet property="notificationIDField" destination="auC-4E-3iO" id="BfD-i5-Btq"/>
@@ -448,6 +450,7 @@
                             <constraint firstAttribute="trailing" secondItem="Fgb-VT-EoI" secondAttribute="trailing" id="kj0-UO-SU7"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="fakeBackground" destination="Fgb-VT-EoI" id="ZXN-xz-T6e"/>
                         <outlet property="surveyIDField" destination="KGy-u2-8IA" id="cRW-HG-TQJ"/>
@@ -466,25 +469,9 @@
                         <viewControllerLayoutGuide type="bottom" id="f0c-DX-yW2"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="mJf-JM-fE2">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qhl-u2-A0D">
-                                <rect key="frame" x="57" y="172" width="206" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="206" id="9ZF-cg-qRV"/>
-                                    <constraint firstAttribute="height" constant="44" id="Hnj-pf-qR2"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Snapshot">
-                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="snapshotWindow:" destination="dag-He-PtO" eventType="touchUpInside" id="qP8-ye-Hxb"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is a label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xb-bA-KXH">
                                 <rect key="frame" x="101" y="97" width="118" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -504,11 +491,16 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="Qhl-u2-A0D" secondAttribute="centerX" id="7tE-Fo-ryY"/>
-                            <constraint firstItem="Qhl-u2-A0D" firstAttribute="top" secondItem="7aR-6P-nNX" secondAttribute="bottom" constant="172" id="Ao6-R1-0o6"/>
-                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="A/B Testing" id="1ZX-Pw-qY6">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="nl9-vb-kVe">
+                            <connections>
+                                <action selector="testBarButtonItemWasPressed:" destination="dag-He-PtO" id="y29-8H-s3b"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rfw-Ui-bcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
