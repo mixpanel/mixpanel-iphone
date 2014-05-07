@@ -2,26 +2,22 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import "MPObjectSerializerContext.h"
-#import "MPObjectIdentifierProvider.h"
-
 
 @implementation MPObjectSerializerContext
 {
     NSMutableSet *_visitedObjects;
     NSMutableSet *_unvisitedObjects;
-    NSMutableDictionary *_propertiesOfVisitedObjects;
-    id<MPObjectIdentifierProvider> _objectIdentifierProvider;
+    NSMutableDictionary *_serializedObjects;
 }
 
-- (id)initWithRootObject:(id)object objectIdentifierProvider:(id<MPObjectIdentifierProvider>)identifierProvider
+- (id)initWithRootObject:(id)object
 {
     self = [super init];
     if (self)
     {
-        _objectIdentifierProvider = identifierProvider;
         _visitedObjects = [NSMutableSet set];
         _unvisitedObjects = [NSMutableSet setWithObject:object];
-        _propertiesOfVisitedObjects = [[NSMutableDictionary alloc] init];
+        _serializedObjects = [[NSMutableDictionary alloc] init];
     }
 
     return self;
@@ -47,21 +43,25 @@
     return object;
 }
 
+- (void)addVisitedObject:(NSObject *)object
+{
+    [_visitedObjects addObject:object];
+}
+
 - (BOOL)isVisitedObject:(NSObject *)object
 {
     return object && [_visitedObjects containsObject:object];
 }
 
-- (void)addVisitedObject:(NSObject *)object propertyValues:(NSDictionary *)propertyValues
+- (void)addSerializedObject:(NSDictionary *)serializedObject
 {
-    NSString *identifierForObject = [_objectIdentifierProvider identifierForObject:object];
-    _propertiesOfVisitedObjects[identifierForObject] = propertyValues;
-    [_visitedObjects addObject:object];
+    NSParameterAssert(serializedObject[@"id"] != nil);
+    _serializedObjects[serializedObject[@"id"]] = serializedObject;
 }
 
-- (NSArray *)propertiesOfVisitedObjects
+- (NSArray *)allSerializedObjects
 {
-    return [_propertiesOfVisitedObjects allValues];
+    return [_serializedObjects allValues];
 }
 
 @end

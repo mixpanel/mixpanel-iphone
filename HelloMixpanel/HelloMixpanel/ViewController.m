@@ -175,43 +175,15 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)snapshotWindow:(id)sender
-{
-    id mp = [Mixpanel sharedInstance];
-
-    id conn = [mp performSelector:@selector(abtestDesignerConnection)];
-    [conn sendMessage:[MPABTestDesignerSnapshotRequestMessage message]];
-/*
-#pragma message("FIXME: just plumbing this in here to give us a quick and dirty test bed")
-    MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[UIApplication sharedApplication]];
-
-    UIImage *snapshotImage = [serializer screenshotImageForWindowAtIndex:0];
-    NSDictionary *snapshotViewHierarchy = [serializer viewControllerHierarchyForWindowAtIndex:0];
-
-#pragma message("FIXME: just dumping to temp for testing purposes")
-    NSData *jpegSnapshotImageData = UIImageJPEGRepresentation(snapshotImage, 0.5);
-    if (jpegSnapshotImageData)
-    {
-        [jpegSnapshotImageData writeToFile:@"/tmp/snapshot.jpeg" atomically:YES];
-    }
-
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:snapshotViewHierarchy options:0 error:&error];
-    if (jsonData)
-    {
-        [jsonData writeToFile:@"/tmp/snapshot.json" atomically:YES];
-
-    }
-    else
-    {
-        NSLog(@"Unable to serialize JSON from snapshot: %@", error);
-    }
-    */
-}
-
 - (IBAction)runDummyABTest:(id)sender
 {
     [[Mixpanel sharedInstance] executeVariant];
+}
+
+
+- (IBAction)testBarButtonItemWasPressed:(id)sender
+{
+    NSLog(@"You pressed a bar button item.");
 }
 
 @end

@@ -4,6 +4,7 @@
 #import "MPApplicationStateSerializer.h"
 #import "MPObjectSerializer.h"
 #import "MPClassDescription.h"
+#import "MPObjectSerializerConfig.h"
 
 @implementation MPApplicationStateSerializer
 {
@@ -11,16 +12,16 @@
     UIApplication *_application;
 }
 
-- (id)initWithApplication:(UIApplication *)application classDescriptions:(NSArray *)classDescriptions
+- (id)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration
 {
     NSParameterAssert(application != nil);
-    NSParameterAssert(classDescriptions != nil);
+    NSParameterAssert(configuration != nil);
 
     self = [super init];
     if (self)
     {
         _application = application;
-        _serializer = [[MPObjectSerializer alloc] initWithClassDescriptions:classDescriptions];
+        _serializer = [[MPObjectSerializer alloc] initWithConfiguration:configuration];
     }
 
     return self;
