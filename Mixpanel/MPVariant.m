@@ -48,29 +48,47 @@
     }
 }
 
-+ (id) convertArg:(id)arg toType:(NSString *)type
++ (id)convertArg:(id)arg toType:(NSString *)toType
 {
-    NSString *fromType;
+    NSString *fromType= [self fromTypeForArg:arg];
+
+    NSString *forwardTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", fromType, toType];
+    NSValueTransformer *forwardTransformer = [NSValueTransformer valueTransformerForName:forwardTransformerName];
+    if (forwardTransformer)
+    {
+        return [forwardTransformer transformedValue:arg];
+    }
+
+    NSString *reverseTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", toType, fromType];
+    NSValueTransformer *reverseTransformer = [NSValueTransformer valueTransformerForName:reverseTransformerName];
+    if (reverseTransformer && [[reverseTransformer class] allowsReverseTransformation])
+    {
+        return [reverseTransformer reverseTransformedValue:arg];
+    }
+
+    NSValueTransformer *defaultTransformer = [NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"];
+    return [defaultTransformer reverseTransformedValue:arg];
+}
+
++ (NSString *)fromTypeForArg:(id)arg
+{
     NSDictionary *classNameMap = @{@"NSString": [NSString class],
+                                   @"NSNumber": [NSNumber class],
                                    @"NSDictionary": [NSDictionary class],
                                    @"NSArray": [NSArray class]};
-    for (NSString *key in classNameMap) {
-        if ([arg isKindOfClass:classNameMap[key]]) {
+
+    NSString *fromType = nil;
+    for (NSString *key in classNameMap)
+    {
+        if ([arg isKindOfClass:classNameMap[key]])
+        {
             fromType = key;
             break;
         }
     }
 
-    NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", type, fromType];
-    NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
-    if (!toTransformer) {
-        toTransformer = [NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"];
-    }
-
-    if (toTransformer && [[toTransformer class] allowsReverseTransformation]) {
-        arg = [toTransformer reverseTransformedValue:arg];
-    }
-    return arg;
+    NSAssert(fromType != nil, @"Expected non-nil fromType!");
+    return fromType;
 }
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
