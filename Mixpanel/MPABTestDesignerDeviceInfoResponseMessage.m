@@ -51,6 +51,16 @@
     [self setPayloadObject:deviceModel forKey:@"device_model"];
 }
 
+- (NSArray *)availableFontFamilies
+{
+    return [self payloadObjectForKey:@"available_font_families"];
+}
+
+- (void)setAvailableFontFamilies:(NSArray *)availableFontFamilies
+{
+    [self setPayloadObject:availableFontFamilies forKey:@"available_font_families"];
+}
+
 - (NSString *)mainBundleIdentifier
 {
     return [self payloadObjectForKey:@"main_bundle_identifier"];
