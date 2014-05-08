@@ -141,6 +141,16 @@
                 { "value": 1, "display_name": "AlignCenters" },
                 { "value": 2, "display_name": "None" }
             ]
+        },
+        {
+            "name": "UIScrollViewIndicatorStyle",
+            "base_type": "NSInteger",
+            "flag_set": false,
+            "values": [
+                { "value": 0, "display_name": "Default" },
+                { "value": 1, "display_name": "Black" },
+                { "value": 2, "display_name": "White" }
+            ]
         }
     ],
     "classes": [
@@ -246,6 +256,27 @@
             ]
         },
         {
+            "name": "UIGestureRecognizer",
+            "superclass": "NSObject",
+            "properties": [
+                { "name": "numberOfTouches", "type": "NSUInteger" },
+                { "name": "view", "type": "UIView" },
+                { "name": "enabled", "type": "BOOL" },
+                { "name": "cancelsTouchesInView", "type": "BOOL" },
+                { "name": "delaysTouchesBegan", "type": "BOOL" },
+                { "name": "delaysTouchesEnded", "type": "BOOL" },
+                { "name": "_targets", "type": "NSArray" }
+            ]
+        },
+        {
+            "name": "UIGestureRecognizerTarget",
+            "superclass": "NSObject",
+            "properties": [
+                { "name": "_target", "type": "NSObject" },
+                { "name": "_action", "type": "SEL", "use_ivar": true }
+            ]
+        },
+        {
             "name": "UIView",
             "superclass": "UIResponder",
             "properties": [
@@ -274,6 +305,7 @@
                 { "name": "exclusiveTouch", "type": "BOOL" },
                 { "name": "translatesAutoresizingMaskIntoConstraints", "type": "BOOL" },
                 { "name": "layer", "type": "CALayer" },
+                { "name": "gestureRecognizers", "type": "NSArray" },
                 { "name": "constraints", "type": "NSArray", "readonly": true },
                 {
                     "name": "contentHuggingPriorityForAxis",
@@ -314,6 +346,7 @@
             "superclass": "UIView",
             "properties": [
                 { "name": "text", "type": "NSString" },
+                { "name": "attributedText", "type": "NSAttributedString" },
                 { "name": "font", "type": "UIFont" },
                 { "name": "textColor", "type": "UIColor" },
                 { "name": "textAlignment", "type": "NSTextAlignment" },
@@ -366,7 +399,51 @@
                 { "name": "allTargets", "type": "NSSet" },
                 { "name": "allControlEvents", "type": "UIControlEvents" },
                 { "name": "_targetActions", "type": "NSArray" }
-
+            ]
+        },
+        {
+            "name": "UISwitch",
+            "superclass": "UIControl",
+            "properties": [
+                { "name": "on", "type": "BOOL" },
+                { "name": "onTintColor", "type": "UIColor" },
+                { "name": "thumbTintColor", "type": "UIColor" },
+                { "name": "onImage", "type": "UIImage" },
+                { "name": "offImage", "type": "UIImage" }
+            ]
+        },
+        {
+            "name": "UIScrollView",
+            "superclass": "UIView",
+            "properties": [
+                { "name": "contentOffset", "type": "CGPoint" },
+                { "name": "contentSize", "type": "CGSize" },
+                { "name": "contentInset", "type": "UIEdgeInsets" },
+                { "name": "scrollEnabled", "type": "BOOL" },
+                { "name": "directionalLockEnabled", "type": "BOOL" },
+                { "name": "scrollsToTop", "type": "BOOL" },
+                { "name": "pagingEnabled", "type": "BOOL" },
+                { "name": "bounces", "type": "BOOL" },
+                { "name": "alwaysBounceVertical", "type": "BOOL" },
+                { "name": "alwaysBounceHorizontal", "type": "BOOL" },
+                { "name": "delaysContentTouches", "type": "BOOL" },
+                { "name": "decelerationRate", "type": "CGFloat" },
+                { "name": "indicatorStyle", "type": "UIScrollViewIndicatorStyle" },
+                { "name": "scrollIndicatorInsets", "type": "UIEdgeInsets" },
+                { "name": "showsHorizontalScrollIndicator", "type": "BOOL" },
+                { "name": "showsVerticalScrollIndicator", "type": "BOOL" },
+                { "name": "zoomScale", "type": "CGFloat" },
+                { "name": "maximumZoomScale", "type": "CGFloat" },
+                { "name": "minimumZoomScale", "type": "CGFloat" },
+                { "name": "bouncesZoom", "type": "BOOL" }
+            ]
+        },
+        {
+            "name": "UITextView",
+            "superclass": "UIScrollView",
+            "properties": [
+                { "name": "text", "type": "NSString" },
+                { "name": "attributedText", "type": "NSAttributedString" }
             ]
         },
         {
