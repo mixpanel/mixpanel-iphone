@@ -7,6 +7,8 @@
 #import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerChangeRequestMessage.h"
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
+#import "MPABTestDesignerTweakRequestMessage.h"
+
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
 @end
@@ -28,6 +30,7 @@
             MPABTestDesignerSnapshotRequestMessageType   : [MPABTestDesignerSnapshotRequestMessage class],
             MPABTestDesignerChangeRequestMessageType     : [MPABTestDesignerChangeRequestMessage class],
             MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
+            MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
         };
 
         _session = [[NSMutableDictionary alloc] init];
