@@ -314,6 +314,7 @@
             "superclass": "UIView",
             "properties": [
                 { "name": "text", "type": "NSString" },
+                { "name": "attributedText", "type": "NSAttributedString" },
                 { "name": "font", "type": "UIFont" },
                 { "name": "textColor", "type": "UIColor" },
                 { "name": "textAlignment", "type": "NSTextAlignment" },
@@ -366,7 +367,32 @@
                 { "name": "allTargets", "type": "NSSet" },
                 { "name": "allControlEvents", "type": "UIControlEvents" },
                 { "name": "_targetActions", "type": "NSArray" }
-
+            ]
+        },
+        {
+            "name": "UISwitch",
+            "superclass": "UIControl",
+            "properties": [
+                { "name": "on", "type": "BOOL" },
+                { "name": "onTintColor", "type": "UIColor" },
+                { "name": "thumbTintColor", "type": "UIColor" },
+                { "name": "onImage", "type": "UIImage" },
+                { "name": "offImage", "type": "UIImage" }
+            ]
+        },
+        {
+            "name": "UIScrollView",
+            "superclass": "UIView",
+            "properties": [
+                { "name": "contentOffset", "type": "CGPoint" }
+            ]
+        },
+        {
+            "name": "UITextView",
+            "superclass": "UIScrollView",
+            "properties": [
+                { "name": "text", "type": "NSString" },
+                { "name": "attributedText", "type": "NSAttributedString" }
             ]
         },
         {
