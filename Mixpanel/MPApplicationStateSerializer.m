@@ -5,6 +5,7 @@
 #import "MPObjectSerializer.h"
 #import "MPClassDescription.h"
 #import "MPObjectSerializerConfig.h"
+#import "MPObjectIdentityProvider.h"
 
 @implementation MPApplicationStateSerializer
 {
@@ -12,7 +13,7 @@
     UIApplication *_application;
 }
 
-- (id)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration
+- (id)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
 {
     NSParameterAssert(application != nil);
     NSParameterAssert(configuration != nil);
@@ -21,7 +22,7 @@
     if (self)
     {
         _application = application;
-        _serializer = [[MPObjectSerializer alloc] initWithConfiguration:configuration];
+        _serializer = [[MPObjectSerializer alloc] initWithConfiguration:configuration objectIdentityProvider:objectIdentityProvider];
     }
 
     return self;

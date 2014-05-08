@@ -6,10 +6,12 @@
 #import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPApplicationStateSerializer.h"
 #import "MPObjectSerializerConfig.h"
+#import "MPObjectIdentityProvider.h"
 
 NSString * const MPABTestDesignerSnapshotRequestMessageType = @"snapshot_request";
 
 static NSString * const kSnapshotSerializerConfigKey = @"snapshot_class_descriptions";
+static NSString * const kObjectIdentityProviderKey = @"object_identity_provider";
 
 @implementation MPABTestDesignerSnapshotRequestMessage
 
@@ -49,9 +51,18 @@ static NSString * const kSnapshotSerializerConfigKey = @"snapshot_class_descript
             // Get the class descriptions from the connection session store.
             serializerConfig = [connection sessionObjectForKey:kSnapshotSerializerConfigKey];
         }
-        
+
+        // Get the object identity provider from the connection's session store or create one if there is none already.
+        MPObjectIdentityProvider *objectIdentityProvider = [connection sessionObjectForKey:kObjectIdentityProviderKey];
+        if (objectIdentityProvider == nil)
+        {
+            objectIdentityProvider = [[MPObjectIdentityProvider alloc] init];
+            [connection setSessionObject:objectIdentityProvider forKey:kObjectIdentityProviderKey];
+        }
+
         MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[UIApplication sharedApplication]
-                                                                                               configuration:serializerConfig];
+                                                                                               configuration:serializerConfig 
+                                                                                      objectIdentityProvider:objectIdentityProvider];
 
         __block UIImage *screenshot = nil;
         __block NSDictionary *serializedObjects = nil;

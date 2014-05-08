@@ -6,9 +6,9 @@
 #import "MPClassDescription.h"
 #import "MPPropertyDescription.h"
 #import "MPObjectSerializerContext.h"
-#import "MPSequenceGenerator.h"
 #import "MPObjectSerializerConfig.h"
 #import "MPEnumDescription.h"
+#import "MPObjectIdentityProvider.h"
 
 typedef union {
     __unsafe_unretained id  _id;
@@ -41,18 +41,16 @@ typedef union {
 @implementation MPObjectSerializer
 {
     MPObjectSerializerConfig *_configuration;
-    NSMapTable *_objectToIdentifierMap;
-    MPSequenceGenerator *_sequenceGenerator;
+    MPObjectIdentityProvider *_objectIdentityProvider;
 }
 
-- (id)initWithConfiguration:(MPObjectSerializerConfig *)configuration
+- (id)initWithConfiguration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
 {
     self = [super init];
     if (self)
     {
-        _sequenceGenerator = [[MPSequenceGenerator alloc] init];
-        _objectToIdentifierMap = [NSMapTable weakToStrongObjectsMapTable];
         _configuration = configuration;
+        _objectIdentityProvider = objectIdentityProvider; 
     }
 
     return self;
@@ -71,7 +69,7 @@ typedef union {
 
     return @{
             @"objects" : [context allSerializedObjects],
-            @"rootObject": [self identifierForObject:rootObject]
+            @"rootObject": [_objectIdentityProvider identifierForObject:rootObject]
     };
 }
 
@@ -98,7 +96,7 @@ typedef union {
     }
 
     NSDictionary *serializedObject = @{
-        @"id": [self identifierForObject:object],
+        @"id": [_objectIdentityProvider identifierForObject:object],
         @"class": [self classHierarchyArrayForObject:object],
         @"properties": propertyValues
     };
@@ -320,12 +318,12 @@ typedef union {
     {
         if ([context isVisitedObject:propertyValue])
         {
-            return [self identifierForObject:propertyValue];
+            return [_objectIdentityProvider identifierForObject:propertyValue];
         }
         else if ([self isNestedObjectType:propertyDescription.type])
         {
             [context enqueueUnvisitedObject:propertyValue];
-            return [self identifierForObject:propertyValue];
+            return [_objectIdentityProvider identifierForObject:propertyValue];
         }
         else if ([propertyValue isKindOfClass:[NSArray class]] || [propertyValue isKindOfClass:[NSSet class]])
         {
@@ -337,7 +335,7 @@ typedef union {
                     [context enqueueUnvisitedObject:value];
                 }
 
-                [arrayOfIdentifiers addObject:[self identifierForObject:value]];
+                [arrayOfIdentifiers addObject:[_objectIdentityProvider identifierForObject:value]];
             }
             propertyValue = [arrayOfIdentifiers copy];
         }
@@ -409,18 +407,6 @@ typedef union {
     }
 
     return propertyValue;
-}
-
-- (NSString *)identifierForObject:(id)object
-{
-    NSString *identifier = [_objectToIdentifierMap objectForKey:object];
-    if (identifier == nil)
-    {
-        identifier = [NSString stringWithFormat:@"$%" PRIi32, [_sequenceGenerator nextValue]];
-        [_objectToIdentifierMap setObject:identifier forKey:object];
-    }
-
-    return identifier;
 }
 
 - (BOOL)isNestedObjectType:(NSString *)typeName
