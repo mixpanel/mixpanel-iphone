@@ -174,20 +174,6 @@
             ]
         },
         {
-            "name" : "UIFont",
-            "superclass": "NSObject",
-            "properties": [
-                { "name": "familyName", "type": "NSString", "readonly":true },
-                { "name": "fontName", "type": "NSString", "readonly":true },
-                { "name": "pointSize", "type": "CGFloat", "readonly":true },
-                { "name": "ascender", "type": "CGFloat", "readonly":true },
-                { "name": "descender", "type": "CGFloat", "readonly":true },
-                { "name": "capHeight", "type": "CGFloat", "readonly":true },
-                { "name": "xHeight", "type": "CGFloat", "readonly":true },
-                { "name": "lineHeight", "type": "CGFloat", "readonly":true }
-            ]
-        },
-        {
             "name" : "UIStoryboardSegueTemplate",
             "superclass" : "NSObject",
             "properties" : [
