@@ -158,7 +158,7 @@
                            onPath:[action objectForKey:@"path"]
                          fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
         if (!executed) {
-            [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:^{
+            [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:^(id window){
                 if ([[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                      withArgs:[action objectForKey:@"args"]
                                        onPath:[action objectForKey:@"path"]

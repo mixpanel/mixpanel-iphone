@@ -17,7 +17,7 @@
 @property (nonatomic, assign)Class class;
 @property (nonatomic, assign)SEL selector;
 @property (nonatomic, assign)IMP originalMethod;
-@property (nonatomic, strong)void (^block)(void);
+@property (nonatomic, strong)void (^block)(id);
 
 @end
 
@@ -27,18 +27,11 @@
 
 static NSMapTable *swizzles;
 
-static void mp_swizzledMethod(id self, SEL _cmd, ...)
+static void mp_swizzledMethod(id self, SEL _cmd, id arg)
 {
     Swizzle *swizzle = [swizzles objectForKey:[self class]];
-
-    // Call the original function with the args we were given.
-    va_list argp;
-    va_start(argp, _cmd);
-    ((void(*)(id, SEL, ...))swizzle.originalMethod)(self, _cmd, argp);
-    va_end(argp);
-
-    // Call the swizzle block
-    swizzle.block();
+    ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
+    swizzle.block(arg);
 }
 
 @implementation MPSwizzler
@@ -58,7 +51,7 @@ static void mp_swizzledMethod(id self, SEL _cmd, ...)
     [swizzles setObject:swizzle forKey:class];
 }
 
-+ (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)(void))block
++ (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)(id))block
 {
     Swizzle *swizzle = [self getSwizzleForClass:class andSelector:selector];
     if (!swizzle) {
