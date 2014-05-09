@@ -5,7 +5,6 @@
 #import "NSInvocation+MPHelpers.h"
 
 typedef union {
-    __unsafe_unretained id  _id;
     char                    _chr;
     unsigned char           _uchr;
     short                   _sht;
@@ -19,116 +18,179 @@ typedef union {
     float                   _flt;
     double                  _dbl;
     _Bool                   _bool;
-    CGRect                  _CGRect;
-    CGPoint                 _CGPoint;
-    CGSize                  _CGSize;
-    CGAffineTransform       _CGAffineTransform;
-    CATransform3D           _CATransform3D;
-    SEL                     _sel;
-    const void *            _ptr;
-    CFTypeRef               _cfTypeRef;
-} MPUnionOfObjCTypes;
+} MPObjCNumericTypes;
 
-static void MPFillArgument(MPUnionOfObjCTypes *arg, id argumentValue, const char *argumentType)
+static void MPFree(void *p)
 {
-    NSCAssert(strlen(argumentType) == 1, @"Structures and other complex argument typeas currently not supported.");
-
-    switch (argumentType[0])
+    if (p)
     {
-        case _C_ID:       arg->_id       = argumentValue;                            break;
-        case _C_CHR:      arg->_chr      = [argumentValue charValue];                break;
-        case _C_UCHR:     arg->_uchr     = [argumentValue unsignedCharValue];        break;
-        case _C_SHT:      arg->_sht      = [argumentValue shortValue];               break;
-        case _C_USHT:     arg->_usht     = [argumentValue unsignedShortValue];       break;
-        case _C_INT:      arg->_int      = [argumentValue intValue];                 break;
-        case _C_UINT:     arg->_uint     = [argumentValue unsignedIntValue];         break;
-        case _C_LNG:      arg->_lng      = [argumentValue longValue];                break;
-        case _C_ULNG:     arg->_ulng     = [argumentValue unsignedLongValue];        break;
-        case _C_LNG_LNG:  arg->_lng_lng  = [argumentValue longLongValue];            break;
-        case _C_ULNG_LNG: arg->_ulng_lng = [argumentValue unsignedLongLongValue];    break;
-        case _C_FLT:      arg->_flt      = [argumentValue floatValue];               break;
-        case _C_DBL:      arg->_dbl      = [argumentValue doubleValue];              break;
-        case _C_BOOL:     arg->_bool     = [argumentValue boolValue];                break;
-        case _C_SEL:      arg->_sel      = NSSelectorFromString(argumentValue);      break;
-        default:
-            NSCAssert(NO, @"Currently unsupported argument type!");
+        free(p);
     }
 }
 
+static void *MPAllocBufferForObjCType(const char *objCType)
+{
+    void *buffer = NULL;
+
+    NSUInteger size, alignment;
+    NSGetSizeAndAlignment(objCType, &size, &alignment);
+
+    int result = posix_memalign(&buffer, MAX(sizeof(void *), alignment), size);
+    if (result != 0)
+    {
+        NSLog(@"Error allocating aligned memory: %s", strerror(result));
+    }
+
+    if (buffer)
+    {
+        memset(buffer, 0, size);
+    }
+
+    return buffer;
+}
+
 @implementation NSInvocation (MPHelpers)
+
+- (void)mp_setArgument:(id)argumentValue atIndex:(NSUInteger)index
+{
+    const char *argumentType = [self.methodSignature getArgumentTypeAtIndex:index];
+
+    if ([argumentValue isKindOfClass:[NSNumber class]] && strlen(argumentType) == 1)
+    {
+        // Deal with NSNumber instances (converting to primitive numbers)
+        NSNumber *numberArgument = argumentValue;
+
+        MPObjCNumericTypes arg;
+        switch (argumentType[0])
+        {
+            case _C_CHR:      arg._chr      = [numberArgument charValue];                break;
+            case _C_UCHR:     arg._uchr     = [numberArgument unsignedCharValue];        break;
+            case _C_SHT:      arg._sht      = [numberArgument shortValue];               break;
+            case _C_USHT:     arg._usht     = [numberArgument unsignedShortValue];       break;
+            case _C_INT:      arg._int      = [numberArgument intValue];                 break;
+            case _C_UINT:     arg._uint     = [numberArgument unsignedIntValue];         break;
+            case _C_LNG:      arg._lng      = [numberArgument longValue];                break;
+            case _C_ULNG:     arg._ulng     = [numberArgument unsignedLongValue];        break;
+            case _C_LNG_LNG:  arg._lng_lng  = [numberArgument longLongValue];            break;
+            case _C_ULNG_LNG: arg._ulng_lng = [numberArgument unsignedLongLongValue];    break;
+            case _C_FLT:      arg._flt      = [numberArgument floatValue];               break;
+            case _C_DBL:      arg._dbl      = [numberArgument doubleValue];              break;
+            case _C_BOOL:     arg._bool     = [numberArgument boolValue];                break;
+            default:
+                NSAssert(NO, @"Currently unsupported argument type!");
+        }
+
+        [self setArgument:&arg atIndex:(NSInteger)index];
+    }
+    else if ([argumentValue isKindOfClass:[NSValue class]])
+    {
+        NSValue *valueArgument = argumentValue;
+
+        NSAssert2(strcmp([valueArgument objCType], argumentType) == 0, @"Objective-C type mismatch (%s != %s)!", [valueArgument objCType], argumentType);
+
+        void *buffer = MPAllocBufferForObjCType([valueArgument objCType]);
+
+        [valueArgument getValue:buffer];
+
+        [self setArgument:&buffer atIndex:(NSInteger)index];
+
+        MPFree(buffer);
+    }
+    else
+    {
+        switch (argumentType[0])
+        {
+            case _C_ID:
+            {
+                [self setArgument:&argumentValue atIndex:(NSInteger)index];
+                break;
+            }
+            case _C_SEL:
+            {
+                SEL sel = NSSelectorFromString(argumentValue);
+                [self setArgument:&sel atIndex:(NSInteger)index];
+                break;
+            }
+            default:
+                NSAssert(NO, @"Currently unsupported argument type!");
+        }
+    }
+}
 
 - (void)mp_setArgumentsFromArray:(NSArray *)argumentArray
 {
     NSParameterAssert([argumentArray count] == ([self.methodSignature numberOfArguments] - 2));
 
-    NSUInteger argumentCount = [argumentArray count];
-    MPUnionOfObjCTypes *arguments = calloc(argumentCount, sizeof(MPUnionOfObjCTypes));
-    memset(arguments, 0, sizeof(MPUnionOfObjCTypes) * argumentCount);
-
-    for (NSUInteger i = 0; i < argumentCount; ++i)
+    for (NSUInteger i = 0; i < [argumentArray count]; ++i)
     {
         NSUInteger argumentIndex = 2 + i;
-        const char *argumentType = [self.methodSignature getArgumentTypeAtIndex:argumentIndex];
-
-        MPFillArgument((arguments + i), argumentArray[i], argumentType);
-
-        [self setArgument:(arguments + i) atIndex:(NSInteger)argumentIndex];
+        [self mp_setArgument:argumentArray[i] atIndex:argumentIndex];
     }
-
-    free(arguments);
 }
 
 - (id)mp_returnValue
 {
+    __strong id returnValue = nil;
+
     NSMethodSignature *methodSignature = self.methodSignature;
+
     const char *objCType = [methodSignature methodReturnType];
+    void *buffer = MPAllocBufferForObjCType(objCType);
 
-    MPUnionOfObjCTypes val;
-    if ([methodSignature methodReturnLength] <= sizeof(val))
+    [self getReturnValue:buffer];
+
+    if (strlen(objCType) == 1)
     {
-        [self getReturnValue:&val];
-
         switch (objCType[0])
         {
-            case _C_ID:       return val._id;
-            case _C_CHR:      return @(val._chr);
-            case _C_UCHR:     return @(val._uchr);
-            case _C_SHT:      return @(val._sht);
-            case _C_USHT:     return @(val._usht);
-            case _C_INT:      return @(val._int);
-            case _C_UINT:     return @(val._uint);
-            case _C_LNG:      return @(val._lng);
-            case _C_ULNG:     return @(val._ulng);
-            case _C_LNG_LNG:  return @(val._lng_lng);
-            case _C_ULNG_LNG: return @(val._ulng_lng);
-            case _C_FLT:      return @(val._flt);
-            case _C_DBL:      return @(val._dbl);
-            case _C_BOOL:     return @(val._bool);
-            case _C_SEL:      return NSStringFromSelector(val._sel);
-            case _C_STRUCT_B: return [NSValue valueWithBytes:&val objCType:objCType];
-            case _C_PTR:
-            {
-                if ((strcmp(objCType, @encode(CGImageRef)) == 0 && CFGetTypeID(val._cfTypeRef) == CGImageGetTypeID()) ||
-                    (strcmp(objCType, @encode(CGColorRef)) == 0 && CFGetTypeID(val._cfTypeRef) == CGColorGetTypeID()))
-                {
-                    return (__bridge id)(val._cfTypeRef);
-                }
-
-                NSAssert(NO, @"Currently unsupported return type!");
-                break;
-            }
+            case _C_CHR:      returnValue = @(*((char *)buffer));                break;
+            case _C_UCHR:     returnValue = @(*((unsigned char *)buffer));       break;
+            case _C_SHT:      returnValue = @(*((short *)buffer));               break;
+            case _C_USHT:     returnValue = @(*((unsigned short *)buffer));      break;
+            case _C_INT:      returnValue = @(*((int *)buffer));                 break;
+            case _C_UINT:     returnValue = @(*((unsigned int *)buffer));        break;
+            case _C_LNG:      returnValue = @(*((long *)buffer));                break;
+            case _C_ULNG:     returnValue = @(*((unsigned long*)buffer));        break;
+            case _C_LNG_LNG:  returnValue = @(*((long long *)buffer));           break;
+            case _C_ULNG_LNG: returnValue = @(*((unsigned long long*)buffer));   break;
+            case _C_FLT:      returnValue = @(*((float *)buffer));               break;
+            case _C_DBL:      returnValue = @(*((double *)buffer));              break;
+            case _C_BOOL:     returnValue = @(*((_Bool *)buffer));               break;
+            case _C_ID:       returnValue = *((__unsafe_unretained id *)buffer); break;
+            case _C_SEL:      returnValue = NSStringFromSelector((SEL)buffer);   break;
             default:
-                NSAssert(NO, @"Currently unsupported return type!");
+                NSAssert1(NO, @"Unhandled return type: %s", objCType);
                 break;
-
         }
     }
     else
     {
-        NSAssert(NO, @"Return value too large!");
+        switch (objCType[0])
+        {
+            case _C_STRUCT_B: returnValue = [NSValue valueWithBytes:buffer objCType:objCType]; break;
+            case _C_PTR:
+            {
+                CFTypeRef cfTypeRef = *(CFTypeRef *)buffer;
+                if ((strcmp(objCType, @encode(CGImageRef)) == 0 && CFGetTypeID(cfTypeRef) == CGImageGetTypeID()) ||
+                    (strcmp(objCType, @encode(CGColorRef)) == 0 && CFGetTypeID(cfTypeRef) == CGColorGetTypeID()))
+                {
+                    returnValue = (__bridge id)cfTypeRef;
+                }
+                else
+                {
+                    NSAssert(NO, @"Currently unsupported return type!");
+                }
+                break;
+            }
+            default:
+                NSAssert1(NO, @"Unhandled return type: %s", objCType);
+                break;
+        }
     }
 
-    return nil;
+    MPFree(buffer);
+
+    return returnValue;
 }
 
 @end
