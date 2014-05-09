@@ -9,46 +9,49 @@
 #import <objc/runtime.h>
 #import "MPSwizzler.h"
 
-//static IMP _originalMethod;
-//static void (^_block)(void);
-
 @interface Swizzle : NSObject
-
 @property (nonatomic, assign)Class class;
 @property (nonatomic, assign)SEL selector;
 @property (nonatomic, assign)IMP originalMethod;
 @property (nonatomic, strong)void (^block)(id);
-
 @end
 
 @implementation Swizzle
-
 @end
 
 static NSMapTable *swizzles;
 
 static void mp_swizzledMethod(id self, SEL _cmd, id arg)
 {
-    Swizzle *swizzle = [swizzles objectForKey:[self class]];
-    ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
-    swizzle.block(arg);
+    Swizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
+    if (swizzle) {
+        ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
+        swizzle.block(arg);
+    }
 }
 
 @implementation MPSwizzler
 
 +(void)load
 {
-    swizzles = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory) valueOptions:(NSPointerFunctionsStrongMemory)];
+    swizzles = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
+                                     valueOptions:(NSPointerFunctionsStrongMemory |NSPointerFunctionsObjectPointerPersonality)];
 }
 
 + (Swizzle *)getSwizzleForClass:(Class)class andSelector:(SEL)selector
 {
-    return [swizzles objectForKey:class];
+    return [(NSMapTable *)[swizzles objectForKey:class] objectForKey:(__bridge id)((void *)selector)];
 }
 
 + (void)setSwizzle:(Swizzle *)swizzle forClass:(Class)class andSelector:(SEL)selector
 {
-    [swizzles setObject:swizzle forKey:class];
+    NSMapTable *selectors = [swizzles objectForKey:class];
+    if (!selectors) {
+        selectors = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
+                                          valueOptions:(NSPointerFunctionsStrongMemory |NSPointerFunctionsObjectPointerPersonality)];
+        [swizzles setObject:selectors forKey:class];
+    }
+    [selectors setObject:swizzle forKey:(__bridge id)((void *)selector)];
 }
 
 + (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)(id))block

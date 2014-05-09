@@ -90,14 +90,6 @@
     return fromType;
 }
 
-// For now this is a place to put custom processing for selectors/types that we know
-// need a little extra massaging.
-+ (id) specialProcessArg:(id)arg atPosition:(uint)position forSelector:(SEL)selector
-{
-    id result = arg;
-    return result;
-}
-
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
 {
     BOOL executed = NO;
@@ -114,7 +106,6 @@
 
                         NSArray *argTuple = [args objectAtIndex:i];
                         id arg = [[self class] convertArg:argTuple[0] toType:argTuple[1]];
-                        arg = [[self class] specialProcessArg:arg atPosition:i forSelector:selector];
 
                         // Unpack NSValues to their base types.
                         if( [arg isKindOfClass:[NSValue class]] ) {
