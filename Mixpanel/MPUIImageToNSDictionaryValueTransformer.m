@@ -78,7 +78,11 @@
         for (NSDictionary *imageDictionary in imagesDictionary)
         {
             NSNumber *scale = imageDictionary[@"scale"];
-            [images addObject:[UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:[scale floatValue]]];
+            UIImage *image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
+            if (image)
+            {
+                [images addObject:image];
+            }
         }
 
         UIImage *image = nil;
