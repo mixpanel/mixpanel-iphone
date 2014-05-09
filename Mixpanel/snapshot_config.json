@@ -188,22 +188,6 @@
             ]
         },
         {
-            "name": "UIImage",
-            "superclass": "NSObject",
-            "properties": [
-                { "name": "imageOrientation", "type": "NSInteger", "readonly":true },
-                { "name": "images", "type": "NSArray", "readonly":true },
-                { "name": "renderingMode", "type": "NSInteger", "readonly":true },
-                { "name": "size", "type": "CGSize", "readonly":true },
-                { "name": "scale", "type": "CGFloat", "readonly":true },
-                { "name": "resizingMode", "type": "NSInteger", "readonly":true },
-                { "name": "CGImage", "type": "CGImageRef", "readonly":true, "use_kvc":false },
-                { "name": "duration", "type": "NSTimeInterval", "readonly":true },
-                { "name": "capInsets", "type": "UIEdgeInsets", "readonly":true },
-                { "name": "alignmentRectInsets", "type": "UIEdgeInsets", "readonly":true }
-            ]
-        },
-        {
             "name" : "UIStoryboardSegueTemplate",
             "superclass" : "NSObject",
             "properties" : [
