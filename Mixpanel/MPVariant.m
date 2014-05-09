@@ -96,7 +96,7 @@
 {
     id result = arg;
     if (selector == @selector(setImage:) && position == 0) {
-        result = [[UIImage alloc] initWithCGImage:(CGImageRef)arg];
+        result = [[UIImage alloc] initWithCGImage:(__bridge CGImageRef)arg];
     }
     return result;
 }

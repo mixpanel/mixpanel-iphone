@@ -25,7 +25,7 @@
 {
     NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
     UIColor *uiColor =  [transformer reverseTransformedValue:value];
-    return (id)[uiColor CGColor];
+    return CFBridgingRelease(CGColorCreateCopy([uiColor CGColor]));
 }
 
 @end
