@@ -94,6 +94,7 @@
 		C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoResponseMessage.m */; };
 		C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */; };
 		C38D5DD44117B25460093BF7 /* MPNSDictionaryToUIFontValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */; };
+		C38D5F1EC13BC9516244A3D1 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 /* End PBXBuildFile section */
 
@@ -238,9 +239,11 @@
 		C38D58453399B01B470D3993 /* MPABTestDesignerChangeRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerChangeRequestMessage.m; sourceTree = "<group>"; };
 		C38D592F81395CC5C26C7FC1 /* MPTypeDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTypeDescription.h; sourceTree = "<group>"; };
 		C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerConfig.m; sourceTree = "<group>"; };
+		C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIFontToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		C38D59F22E72DE96A370172E /* snapshot_config.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = snapshot_config.json; sourceTree = "<group>"; };
 		C38D5A46C299056A07676D14 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
 		C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
+		C38D5B8C3C7D67F43EF120E7 /* MPUIFontToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIFontToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
 		C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSDictionaryToUIFontValueTransformer.m; sourceTree = "<group>"; };
 		C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPBOOLToNSNumberValueTransformer.h; sourceTree = "<group>"; };
@@ -496,6 +499,8 @@
 				C38D5D23680F8A0E2EE6DE83 /* MPNSDictionaryToUIFontValueTransformer.h */,
 				C38D5D771D15098CC3956284 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
 				C38D5316E9A94A6157D16B55 /* MPNSAttributedStringToNSDictionaryValueTransformer.h */,
+				C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */,
+				C38D5B8C3C7D67F43EF120E7 /* MPUIFontToNSDictionaryValueTransformer.h */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -779,6 +784,7 @@
 				C38D5DD44117B25460093BF7 /* MPNSDictionaryToUIFontValueTransformer.m in Sources */,
 				C38D5B33EA270064C847EDBA /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */,
 				C38D59C799F68E7CC925EB25 /* MPObjectIdentityProvider.m in Sources */,
+				C38D5F1EC13BC9516244A3D1 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
