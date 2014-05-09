@@ -10,10 +10,10 @@
 #import "MPSwizzler.h"
 
 @interface Swizzle : NSObject
-@property (nonatomic, assign)Class class;
-@property (nonatomic, assign)SEL selector;
-@property (nonatomic, assign)IMP originalMethod;
-@property (nonatomic, strong)void (^block)(id);
+@property (nonatomic, assign) Class class;
+@property (nonatomic, assign) SEL selector;
+@property (nonatomic, assign) IMP originalMethod;
+@property (nonatomic, copy) void (^block)(id);
 @end
 
 @implementation Swizzle
@@ -35,7 +35,7 @@ static void mp_swizzledMethod(id self, SEL _cmd, id arg)
 +(void)load
 {
     swizzles = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
-                                     valueOptions:(NSPointerFunctionsStrongMemory |NSPointerFunctionsObjectPointerPersonality)];
+                                     valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
 }
 
 + (Swizzle *)getSwizzleForClass:(Class)class andSelector:(SEL)selector
@@ -48,7 +48,7 @@ static void mp_swizzledMethod(id self, SEL _cmd, id arg)
     NSMapTable *selectors = [swizzles objectForKey:class];
     if (!selectors) {
         selectors = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
-                                          valueOptions:(NSPointerFunctionsStrongMemory |NSPointerFunctionsObjectPointerPersonality)];
+                                          valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
         [swizzles setObject:selectors forKey:class];
     }
     [selectors setObject:swizzle forKey:(__bridge id)((void *)selector)];
