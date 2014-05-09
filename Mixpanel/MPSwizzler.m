@@ -9,45 +9,84 @@
 #import <objc/runtime.h>
 #import "MPSwizzler.h"
 
-#pragma message("TODO: We need one of these for every pair of class/selector we want to swizzle")
-static IMP _originalMethod;
-static void (^_block)();
+//static IMP _originalMethod;
+//static void (^_block)(void);
 
-void mp_swizzledMethod(id self, SEL _cmd, UIWindow *window )
+@interface Swizzle : NSObject
+
+@property (nonatomic, assign)Class class;
+@property (nonatomic, assign)SEL selector;
+@property (nonatomic, assign)IMP originalMethod;
+@property (nonatomic, strong)void (^block)(void);
+
+@end
+
+@implementation Swizzle
+
+@end
+
+static NSMapTable *swizzles;
+
+static void mp_swizzledMethod(id self, SEL _cmd, ...)
 {
-    NSLog(@"Running swizzled method");
-    assert([NSStringFromSelector(_cmd) isEqualToString:@"willMoveToWindow:"]);
+    Swizzle *swizzle = [swizzles objectForKey:[self class]];
 
-    ((void(*)(id, SEL, UIWindow*))_originalMethod)(self, _cmd, window);
+    // Call the original function with the args we were given.
+    va_list argp;
+    va_start(argp, _cmd);
+    ((void(*)(id, SEL, ...))swizzle.originalMethod)(self, _cmd, argp);
+    va_end(argp);
 
-    _block();
-
+    // Call the swizzle block
+    swizzle.block();
 }
 
 @implementation MPSwizzler
 
-+ (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)())block
++(void)load
 {
-    if (!_originalMethod) {
+    swizzles = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory) valueOptions:(NSPointerFunctionsStrongMemory)];
+}
+
++ (Swizzle *)getSwizzleForClass:(Class)class andSelector:(SEL)selector
+{
+    return [swizzles objectForKey:class];
+}
+
++ (void)setSwizzle:(Swizzle *)swizzle forClass:(Class)class andSelector:(SEL)selector
+{
+    [swizzles setObject:swizzle forKey:class];
+}
+
++ (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)(void))block
+{
+    Swizzle *swizzle = [self getSwizzleForClass:class andSelector:selector];
+    if (!swizzle) {
         Method m = class_getInstanceMethod(class, selector);
-        _originalMethod = method_getImplementation(m);
-        _block = block;
+        IMP originalMethod = method_getImplementation(m);
 
         // In the case where we got the Method from the superclass, make sure we actually replace it
         // on this class rather than the superclass.
         if(!class_addMethod(class, selector, (IMP)mp_swizzledMethod, method_getTypeEncoding(m))) {
             method_setImplementation(m,(IMP)mp_swizzledMethod);
         }
+
+        swizzle = [[Swizzle alloc] init];
+        swizzle.class = class;
+        swizzle.selector = selector;
+        swizzle.block = block;
+        swizzle.originalMethod = originalMethod;
+        [self setSwizzle:swizzle forClass:class andSelector:selector];
     }
 }
 
 + (void)unswizzleSelector:(SEL)selector onClass:(Class)class
 {
-    if (_originalMethod) {
+    Swizzle *swizzle = [self getSwizzleForClass:class andSelector:selector];
+    if (swizzle) {
         Method m = class_getInstanceMethod(class, selector);
-        _originalMethod = method_setImplementation(m, _originalMethod);
-        _originalMethod = nil;
-        _block = nil;
+        method_setImplementation(m, swizzle.originalMethod);
+        [swizzles removeObjectForKey:class];
     }
 }
 

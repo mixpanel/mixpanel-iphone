@@ -92,7 +92,7 @@
 
 // For now this is a place to put custom processing for selectors/types that we know
 // need a little extra massaging.
-+ (id) specialProcessArg:(id)arg atPosition:(int)position forSelector:(SEL)selector
++ (id) specialProcessArg:(id)arg atPosition:(uint)position forSelector:(SEL)selector
 {
     id result = arg;
     if (selector == @selector(setImage:) && position == 0) {
@@ -110,7 +110,7 @@
             NSMethodSignature *signature = [o methodSignatureForSelector:selector];
             if (signature != nil) {
                 NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-                uint requiredArgs = [signature numberOfArguments] - 2;
+                NSUInteger requiredArgs = [signature numberOfArguments] - 2;
                 if ([args count] >= requiredArgs) {
                     [invocation setSelector:selector];
                     for (uint i = 0; i < requiredArgs; i++) {
