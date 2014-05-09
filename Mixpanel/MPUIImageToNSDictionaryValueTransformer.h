@@ -4,5 +4,5 @@
 #import <Foundation/Foundation.h>
 
 
-@interface MPCGImageRefToNSDictionaryValueTransformer : NSValueTransformer
+@interface MPUIImageToNSDictionaryValueTransformer : NSValueTransformer
 @end
