@@ -143,21 +143,21 @@ static void *MPAllocBufferForObjCType(const char *objCType)
     {
         switch (objCType[0])
         {
-            case _C_CHR:      returnValue = @(*((char *)buffer));                break;
-            case _C_UCHR:     returnValue = @(*((unsigned char *)buffer));       break;
-            case _C_SHT:      returnValue = @(*((short *)buffer));               break;
-            case _C_USHT:     returnValue = @(*((unsigned short *)buffer));      break;
-            case _C_INT:      returnValue = @(*((int *)buffer));                 break;
-            case _C_UINT:     returnValue = @(*((unsigned int *)buffer));        break;
-            case _C_LNG:      returnValue = @(*((long *)buffer));                break;
-            case _C_ULNG:     returnValue = @(*((unsigned long*)buffer));        break;
-            case _C_LNG_LNG:  returnValue = @(*((long long *)buffer));           break;
-            case _C_ULNG_LNG: returnValue = @(*((unsigned long long*)buffer));   break;
-            case _C_FLT:      returnValue = @(*((float *)buffer));               break;
-            case _C_DBL:      returnValue = @(*((double *)buffer));              break;
-            case _C_BOOL:     returnValue = @(*((_Bool *)buffer));               break;
-            case _C_ID:       returnValue = *((__unsafe_unretained id *)buffer); break;
-            case _C_SEL:      returnValue = NSStringFromSelector((SEL)buffer);   break;
+            case _C_CHR:      returnValue = @(*((char *)buffer));                   break;
+            case _C_UCHR:     returnValue = @(*((unsigned char *)buffer));          break;
+            case _C_SHT:      returnValue = @(*((short *)buffer));                  break;
+            case _C_USHT:     returnValue = @(*((unsigned short *)buffer));         break;
+            case _C_INT:      returnValue = @(*((int *)buffer));                    break;
+            case _C_UINT:     returnValue = @(*((unsigned int *)buffer));           break;
+            case _C_LNG:      returnValue = @(*((long *)buffer));                   break;
+            case _C_ULNG:     returnValue = @(*((unsigned long*)buffer));           break;
+            case _C_LNG_LNG:  returnValue = @(*((long long *)buffer));              break;
+            case _C_ULNG_LNG: returnValue = @(*((unsigned long long*)buffer));      break;
+            case _C_FLT:      returnValue = @(*((float *)buffer));                  break;
+            case _C_DBL:      returnValue = @(*((double *)buffer));                 break;
+            case _C_BOOL:     returnValue = @(*((_Bool *)buffer));                  break;
+            case _C_ID:       returnValue = *((__unsafe_unretained id *)buffer);    break;
+            case _C_SEL:      returnValue = NSStringFromSelector(*((SEL *)buffer)); break;
             default:
                 NSAssert1(NO, @"Unhandled return type: %s", objCType);
                 break;
