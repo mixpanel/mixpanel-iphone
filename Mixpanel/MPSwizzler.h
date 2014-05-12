@@ -10,7 +10,7 @@
 
 @interface MPSwizzler : NSObject
 
-+ (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)(id))block;
-+ (void)unswizzleSelector:(SEL)selector onClass:(Class)class;
++ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(void (^)(id))block;
++ (void)unswizzleSelector:(SEL)aSelector onClass:(Class)aClass;
 
 @end

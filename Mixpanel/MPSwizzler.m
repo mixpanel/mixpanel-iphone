@@ -9,21 +9,21 @@
 #import <objc/runtime.h>
 #import "MPSwizzler.h"
 
-@interface Swizzle : NSObject
-@property (nonatomic, assign)Class class;
-@property (nonatomic, assign)SEL selector;
-@property (nonatomic, assign)IMP originalMethod;
-@property (nonatomic, strong)void (^block)(id);
+@interface MPSwizzle : NSObject
+@property (nonatomic, assign) Class class;
+@property (nonatomic, assign) SEL selector;
+@property (nonatomic, assign) IMP originalMethod;
+@property (nonatomic, copy) void (^block)(id);
 @end
 
-@implementation Swizzle
+@implementation MPSwizzle
 @end
 
 static NSMapTable *swizzles;
 
 static void mp_swizzledMethod(id self, SEL _cmd, id arg)
 {
-    Swizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
+    MPSwizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
     if (swizzle) {
         ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
         swizzle.block(arg);
@@ -32,57 +32,73 @@ static void mp_swizzledMethod(id self, SEL _cmd, id arg)
 
 @implementation MPSwizzler
 
-+(void)load
++ (void)load
 {
     swizzles = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
-                                     valueOptions:(NSPointerFunctionsStrongMemory |NSPointerFunctionsObjectPointerPersonality)];
+                                     valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
 }
 
-+ (Swizzle *)getSwizzleForClass:(Class)class andSelector:(SEL)selector
++ (MPSwizzle *)swizzleForClass:(Class)aClass andSelector:(SEL)aSelector
 {
-    return [(NSMapTable *)[swizzles objectForKey:class] objectForKey:(__bridge id)((void *)selector)];
+    return [[self swizzledSelectorsForClass:aClass] objectForKey:(__bridge id)((void *)aSelector)];
 }
 
-+ (void)setSwizzle:(Swizzle *)swizzle forClass:(Class)class andSelector:(SEL)selector
++ (NSMapTable *)swizzledSelectorsForClass:(Class)aClass
 {
-    NSMapTable *selectors = [swizzles objectForKey:class];
+    return (NSMapTable *)[swizzles objectForKey:aClass];
+}
+
++ (void)removeSwizzleForClass:(Class)aClass andSelector:(SEL)aSelector
+{
+    NSMapTable *selectors = [self swizzledSelectorsForClass:aClass];
+    if (selectors)
+    {
+        [selectors removeObjectForKey:(__bridge id)((void *)aSelector)];
+    }
+}
+
++ (void)setSwizzle:(MPSwizzle *)swizzle forClass:(Class)aClass andSelector:(SEL)aSelector
+{
+    NSMapTable *selectors = [self swizzledSelectorsForClass:aClass];
     if (!selectors) {
         selectors = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
-                                          valueOptions:(NSPointerFunctionsStrongMemory |NSPointerFunctionsObjectPointerPersonality)];
-        [swizzles setObject:selectors forKey:class];
+                                          valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
+        [swizzles setObject:selectors forKey:aClass];
     }
-    [selectors setObject:swizzle forKey:(__bridge id)((void *)selector)];
+
+    [selectors setObject:swizzle forKey:(__bridge id)((void *)aSelector)];
 }
 
-+ (void)swizzleSelector:(SEL)selector onClass:(Class)class withBlock:(void (^)(id))block
++ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(void (^)(id))block
 {
-    Swizzle *swizzle = [self getSwizzleForClass:class andSelector:selector];
+    MPSwizzle *swizzle = [self swizzleForClass:aClass andSelector:aSelector];
     if (!swizzle) {
-        Method m = class_getInstanceMethod(class, selector);
+        Method m = class_getInstanceMethod(aClass, aSelector);
         IMP originalMethod = method_getImplementation(m);
 
         // In the case where we got the Method from the superclass, make sure we actually replace it
         // on this class rather than the superclass.
-        if(!class_addMethod(class, selector, (IMP)mp_swizzledMethod, method_getTypeEncoding(m))) {
+        if(!class_addMethod(aClass, aSelector, (IMP)mp_swizzledMethod, method_getTypeEncoding(m))) {
             method_setImplementation(m,(IMP)mp_swizzledMethod);
         }
 
-        swizzle = [[Swizzle alloc] init];
-        swizzle.class = class;
-        swizzle.selector = selector;
+        swizzle = [[MPSwizzle alloc] init];
+        swizzle.class = aClass;
+        swizzle.selector = aSelector;
         swizzle.block = block;
         swizzle.originalMethod = originalMethod;
-        [self setSwizzle:swizzle forClass:class andSelector:selector];
+
+        [self setSwizzle:swizzle forClass:aClass andSelector:aSelector];
     }
 }
 
-+ (void)unswizzleSelector:(SEL)selector onClass:(Class)class
++ (void)unswizzleSelector:(SEL)aSelector onClass:(Class)aClass
 {
-    Swizzle *swizzle = [self getSwizzleForClass:class andSelector:selector];
+    MPSwizzle *swizzle = [self swizzleForClass:aClass andSelector:aSelector];
     if (swizzle) {
-        Method m = class_getInstanceMethod(class, selector);
+        Method m = class_getInstanceMethod(aClass, aSelector);
         method_setImplementation(m, swizzle.originalMethod);
-        [swizzles removeObjectForKey:class];
+        [self removeSwizzleForClass:aClass andSelector:aSelector];
     }
 }
 
