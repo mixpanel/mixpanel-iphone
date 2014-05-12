@@ -10,6 +10,9 @@
 		053B4C63183E963100E825FE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053B4C62183E963100E825FE /* Media.xcassets */; };
 		053B4C64183E963100E825FE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053B4C62183E963100E825FE /* Media.xcassets */; };
 		053B4C681840191000E825FE /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 053B4C671840191000E825FE /* UIColor+MPColor.m */; };
+		05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF419214D3D0076094E /* SecretWhisperViewController.m */; };
+		05438FF819214E210076094E /* SecretTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF719214E210076094E /* SecretTableViewCell.m */; };
+		05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05438FFA192175940076094E /* HelloMixpanel.xcassets */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
 		059AC4941818523C0025F7C6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		059AC495181852460025F7C6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
@@ -113,6 +116,11 @@
 		053B4C62183E963100E825FE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		053B4C661840191000E825FE /* UIColor+MPColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MPColor.h"; sourceTree = "<group>"; };
 		053B4C671840191000E825FE /* UIColor+MPColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MPColor.m"; sourceTree = "<group>"; };
+		05438FF319214D3D0076094E /* SecretWhisperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretWhisperViewController.h; sourceTree = "<group>"; };
+		05438FF419214D3D0076094E /* SecretWhisperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretWhisperViewController.m; sourceTree = "<group>"; };
+		05438FF619214E210076094E /* SecretTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretTableViewCell.h; sourceTree = "<group>"; };
+		05438FF719214E210076094E /* SecretTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretTableViewCell.m; sourceTree = "<group>"; };
+		05438FFA192175940076094E /* HelloMixpanel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HelloMixpanel.xcassets; sourceTree = "<group>"; };
 		0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HelloMixpanel.storyboard; sourceTree = "<group>"; };
 		05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyHTTPConnection.h; sourceTree = "<group>"; };
 		05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyHTTPConnection.m; sourceTree = "<group>"; };
@@ -299,6 +307,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05438FF91921757E0076094E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				05438FFA192175940076094E /* HelloMixpanel.xcassets */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		05438FFC1921805F0076094E /* SecretWhisper */ = {
+			isa = PBXGroup;
+			children = (
+				05438FF91921757E0076094E /* Images */,
+				05438FF319214D3D0076094E /* SecretWhisperViewController.h */,
+				05438FF419214D3D0076094E /* SecretWhisperViewController.m */,
+				05438FF619214E210076094E /* SecretTableViewCell.h */,
+				05438FF719214E210076094E /* SecretTableViewCell.m */,
+			);
+			name = SecretWhisper;
+			sourceTree = "<group>";
+		};
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
@@ -349,6 +377,7 @@
 		2808F9971610EFE3005772B7 /* HelloMixpanel */ = {
 			isa = PBXGroup;
 			children = (
+				05438FFC1921805F0076094E /* SecretWhisper */,
 				2808F9A01610EFE3005772B7 /* AppDelegate.h */,
 				2808F9A11610EFE3005772B7 /* AppDelegate.m */,
 				2808F9A31610EFE3005772B7 /* ViewController.h */,
@@ -401,37 +430,37 @@
 			isa = PBXGroup;
 			children = (
 				A7B462B31910759E00774977 /* ABTestingSupport */,
-				A7B462E81910898E00774977 /* WebSocket */,
+				053B4C62183E963100E825FE /* Media.xcassets */,
 				286760B91611982600B1BEC8 /* Mixpanel.h */,
 				286760BA1611982600B1BEC8 /* Mixpanel.m */,
-				28526F0317C4103200A0F32F /* MPSurveyNavigationController.h */,
-				28526F0417C4103200A0F32F /* MPSurveyNavigationController.m */,
-				28526F0617C4107400A0F32F /* MPSurveyQuestionViewController.h */,
-				28526F0717C4107400A0F32F /* MPSurveyQuestionViewController.m */,
-				28526F0917C417E000A0F32F /* MPSurvey.h */,
-				28526F0A17C417E000A0F32F /* MPSurvey.m */,
-				28526F0C17C417F300A0F32F /* MPSurveyQuestion.h */,
-				28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */,
-				2869040017C7EC8100DCA073 /* MPSurvey.storyboard */,
 				86CC974C1811F82D0003EF50 /* MPNotification.h */,
 				86CC974D1811F82D0003EF50 /* MPNotification.m */,
 				86CC974F18120A7E0003EF50 /* MPNotification.storyboard */,
+				05F02D6118528F8C00527D93 /* MPNotificationViewController.h */,
+				05F02D6218528F8C00527D93 /* MPNotificationViewController.m */,
+				28526F0917C417E000A0F32F /* MPSurvey.h */,
+				28526F0A17C417E000A0F32F /* MPSurvey.m */,
+				2869040017C7EC8100DCA073 /* MPSurvey.storyboard */,
+				28526F0317C4103200A0F32F /* MPSurveyNavigationController.h */,
+				28526F0417C4103200A0F32F /* MPSurveyNavigationController.m */,
+				28526F0C17C417F300A0F32F /* MPSurveyQuestion.h */,
+				28526F0D17C417F300A0F32F /* MPSurveyQuestion.m */,
+				28526F0617C4107400A0F32F /* MPSurveyQuestionViewController.h */,
+				28526F0717C4107400A0F32F /* MPSurveyQuestionViewController.m */,
+				05E98D83190F4B2D00AFF3E1 /* MPVariant.h */,
+				05E98D84190F4B2D00AFF3E1 /* MPVariant.m */,
 				289B497817D913D40035439B /* NSData+MPBase64.h */,
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
-				28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */,
-				28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */,
+				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
+				053B4C661840191000E825FE /* UIColor+MPColor.h */,
+				053B4C671840191000E825FE /* UIColor+MPColor.m */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
 				28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */,
 				28FEFA0717CAE93200691355 /* UIImage+MPImageEffects.h */,
 				28FEFA0817CAE93200691355 /* UIImage+MPImageEffects.m */,
-				053B4C62183E963100E825FE /* Media.xcassets */,
-				053B4C661840191000E825FE /* UIColor+MPColor.h */,
-				053B4C671840191000E825FE /* UIColor+MPColor.m */,
-				05F02D6118528F8C00527D93 /* MPNotificationViewController.h */,
-				05F02D6218528F8C00527D93 /* MPNotificationViewController.m */,
-				05E98D83190F4B2D00AFF3E1 /* MPVariant.h */,
-				05E98D84190F4B2D00AFF3E1 /* MPVariant.m */,
-				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
+				28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */,
+				28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */,
+				A7B462E81910898E00774977 /* WebSocket */,
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
@@ -440,37 +469,37 @@
 		A7B462B31910759E00774977 /* ABTestingSupport */ = {
 			isa = PBXGroup;
 			children = (
-				05E98DE61918472100AFF3E1 /* MPObjectSelector.m */,
-				05E98DE51918472100AFF3E1 /* MPObjectSelector.h */,
+				C38D59C874C4A08A62849CB2 /* Messages */,
+				C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */,
+				C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */,
 				A7B462B4191075DE00774977 /* MPApplicationStateSerializer.h */,
 				A7B462B5191075DE00774977 /* MPApplicationStateSerializer.m */,
 				A7B462C2191075DE00774977 /* MPClassDescription.h */,
 				A7B462C3191075DE00774977 /* MPClassDescription.m */,
+				C38D55F175876EDF40DD8E48 /* MPEnumDescription.h */,
+				C38D51A8381CEADEC59F3C06 /* MPEnumDescription.m */,
+				C38D55A9D3B0373996443F6B /* MPObjectIdentityProvider.h */,
+				C38D504BD075F755A6649E33 /* MPObjectIdentityProvider.m */,
+				05E98DE51918472100AFF3E1 /* MPObjectSelector.h */,
+				05E98DE61918472100AFF3E1 /* MPObjectSelector.m */,
 				A7B462C5191075DE00774977 /* MPObjectSerializer.h */,
 				A7B462C6191075DE00774977 /* MPObjectSerializer.m */,
+				C38D54648ACD9502F3981E4F /* MPObjectSerializerConfig.h */,
+				C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */,
 				A7B462C7191075DE00774977 /* MPObjectSerializerContext.h */,
 				A7B462C8191075DE00774977 /* MPObjectSerializerContext.m */,
 				A7B462CB191075DE00774977 /* MPPropertyDescription.h */,
 				A7B462CC191075DE00774977 /* MPPropertyDescription.m */,
 				A7B462CD191075DE00774977 /* MPSequenceGenerator.h */,
 				A7B462CE191075DE00774977 /* MPSequenceGenerator.m */,
-				A7B462DF191075E700774977 /* ValueTransformers */,
-				C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */,
-				C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */,
-				C38D59C874C4A08A62849CB2 /* Messages */,
 				05E98DE21912F73A00AFF3E1 /* MPSwizzler.h */,
 				05E98DE31912F73A00AFF3E1 /* MPSwizzler.m */,
-				C38D59F22E72DE96A370172E /* snapshot_config.json */,
-				C38D51A8381CEADEC59F3C06 /* MPEnumDescription.m */,
-				C38D55F175876EDF40DD8E48 /* MPEnumDescription.h */,
-				C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */,
 				C38D592F81395CC5C26C7FC1 /* MPTypeDescription.h */,
-				C38D596A058896FF0BC3F292 /* MPObjectSerializerConfig.m */,
-				C38D54648ACD9502F3981E4F /* MPObjectSerializerConfig.h */,
-				C38D504BD075F755A6649E33 /* MPObjectIdentityProvider.m */,
-				C38D55A9D3B0373996443F6B /* MPObjectIdentityProvider.h */,
-				C38D59F0B9BAD180AC5D7064 /* NSInvocation+MPHelpers.m */,
+				C38D5DFF6DD34F4055A2740D /* MPTypeDescription.m */,
 				C38D5F4F61761A35C80A668D /* NSInvocation+MPHelpers.h */,
+				C38D59F0B9BAD180AC5D7064 /* NSInvocation+MPHelpers.m */,
+				C38D59F22E72DE96A370172E /* snapshot_config.json */,
+				A7B462DF191075E700774977 /* ValueTransformers */,
 			);
 			name = ABTestingSupport;
 			sourceTree = "<group>";
@@ -638,6 +667,7 @@
 				286903FF17C6D2CF00DCA073 /* Default-568h@2x.png in Resources */,
 				86CC975018120A7E0003EF50 /* MPNotification.storyboard in Resources */,
 				2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */,
+				05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */,
 				053B4C63183E963100E825FE /* Media.xcassets in Resources */,
 				0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */,
 				C38D5AE54BD721CD32314934 /* snapshot_config.json in Resources */,
@@ -745,6 +775,7 @@
 				05E98DE41912F73A00AFF3E1 /* MPSwizzler.m in Sources */,
 				286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */,
 				28526F0517C4103200A0F32F /* MPSurveyNavigationController.m in Sources */,
+				05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */,
 				A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */,
 				28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */,
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
@@ -767,6 +798,7 @@
 				A7B462D1191075DE00774977 /* MPApplicationStateSerializer.m in Sources */,
 				A7B462D4191075DE00774977 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				A7B462D3191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
+				05438FF819214E210076094E /* SecretTableViewCell.m in Sources */,
 				05E98D85190F4B2D00AFF3E1 /* MPVariant.m in Sources */,
 				289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */,
 				A7B462D9191075DE00774977 /* MPObjectSerializer.m in Sources */,
