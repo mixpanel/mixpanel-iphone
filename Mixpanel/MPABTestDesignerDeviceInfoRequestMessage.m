@@ -6,10 +6,10 @@
 #import "MPABTestDesignerConnection.h"
 
 // Facebook Tweaks
-#import "FBTweakStore.h"
-#import "FBTweakCollection.h"
-#import "FBTweakCategory.h"
-#import "FBTweak.h"
+#import "MPTweakStore.h"
+#import "MPTweakCollection.h"
+#import "MPTweakCategory.h"
+#import "MPTweak.h"
 
 NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_request";
 
@@ -95,10 +95,10 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
 - (NSArray *) getFacebookTweaks
 {
     NSMutableArray *tweaks = [NSMutableArray array];
-    NSArray *categories = [FBTweakStore sharedInstance].tweakCategories;
-    for (FBTweakCategory *tcat in categories) {
-        for (FBTweakCollection *tcol in tcat.tweakCollections) {
-            for (FBTweak *t in tcol.tweaks) {
+    NSArray *categories = [MPTweakStore sharedInstance].tweakCategories;
+    for (MPTweakCategory *tcat in categories) {
+        for (MPTweakCollection *tcol in tcat.tweakCollections) {
+            for (MPTweak *t in tcol.tweaks) {
                 [tweaks addObject:@{@"category": tcat.name,
                                     @"collection": tcol.name,
                                     @"tweak": t.name,

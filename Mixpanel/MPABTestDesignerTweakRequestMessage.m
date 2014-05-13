@@ -11,10 +11,10 @@
 #import "MPABTestDesignerTweakResponseMessage.h"
 
 // Facebook Tweaks
-#import "FBTweakStore.h"
-#import "FBTweakCollection.h"
-#import "FBTweakCategory.h"
-#import "FBTweak.h"
+#import "MPTweakStore.h"
+#import "MPTweakCollection.h"
+#import "MPTweakCategory.h"
+#import "MPTweak.h"
 
 NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 
@@ -34,13 +34,12 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSArray *tweaks = [self payload][@"tweaks"];
             for (NSDictionary *tweak in tweaks) {
-                FBTweakStore *store = [FBTweakStore sharedInstance];
-                FBTweakCategory *category = [store tweakCategoryWithName:tweak[@"category"]];
-                FBTweakCollection *collection = [category tweakCollectionWithName:tweak[@"collection"]];
-                FBTweak *fbTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
+                MPTweakStore *store = [MPTweakStore sharedInstance];
+                MPTweakCategory *category = [store tweakCategoryWithName:tweak[@"category"]];
+                MPTweakCollection *collection = [category tweakCollectionWithName:tweak[@"collection"]];
+                MPTweak *mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
 
-                NSLog(@"%@", tweak[@"value"]);
-                fbTweak.currentValue = tweak[@"value"];
+                mpTweak.currentValue = tweak[@"value"];
             }
 
         });
