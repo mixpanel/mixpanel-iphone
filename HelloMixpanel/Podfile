@@ -5,5 +5,4 @@ end
 
 target :HelloMixpanel do
     pod 'iOS-Color-Picker', '~> 0.0.6'
-    pod 'Tweaks'
 end

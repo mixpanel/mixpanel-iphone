@@ -13,6 +13,12 @@
 		05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF419214D3D0076094E /* SecretWhisperViewController.m */; };
 		05438FF819214E210076094E /* SecretTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF719214E210076094E /* SecretTableViewCell.m */; };
 		05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05438FFA192175940076094E /* HelloMixpanel.xcassets */; };
+		05439020192279530076094E /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439013192279530076094E /* _MPTweakBindObserver.m */; };
+		05439021192279530076094E /* MPTweak.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439015192279530076094E /* MPTweak.m */; };
+		05439022192279530076094E /* MPTweakCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439017192279530076094E /* MPTweakCategory.m */; };
+		05439023192279530076094E /* MPTweakCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439019192279530076094E /* MPTweakCollection.m */; };
+		05439024192279530076094E /* MPTweakInline.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901C192279530076094E /* MPTweakInline.m */; };
+		05439025192279530076094E /* MPTweakStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901F192279530076094E /* MPTweakStore.m */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
 		059AC4941818523C0025F7C6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		059AC495181852460025F7C6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
@@ -121,6 +127,20 @@
 		05438FF619214E210076094E /* SecretTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretTableViewCell.h; sourceTree = "<group>"; };
 		05438FF719214E210076094E /* SecretTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretTableViewCell.m; sourceTree = "<group>"; };
 		05438FFA192175940076094E /* HelloMixpanel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HelloMixpanel.xcassets; sourceTree = "<group>"; };
+		05439012192279530076094E /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
+		05439013192279530076094E /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
+		05439014192279530076094E /* MPTweak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweak.h; sourceTree = "<group>"; };
+		05439015192279530076094E /* MPTweak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweak.m; sourceTree = "<group>"; };
+		05439016192279530076094E /* MPTweakCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakCategory.h; sourceTree = "<group>"; };
+		05439017192279530076094E /* MPTweakCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakCategory.m; sourceTree = "<group>"; };
+		05439018192279530076094E /* MPTweakCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakCollection.h; sourceTree = "<group>"; };
+		05439019192279530076094E /* MPTweakCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakCollection.m; sourceTree = "<group>"; };
+		0543901A192279530076094E /* MPTweakEnabled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakEnabled.h; sourceTree = "<group>"; };
+		0543901B192279530076094E /* MPTweakInline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakInline.h; sourceTree = "<group>"; };
+		0543901C192279530076094E /* MPTweakInline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakInline.m; sourceTree = "<group>"; };
+		0543901D192279530076094E /* MPTweakInlineInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakInlineInternal.h; sourceTree = "<group>"; };
+		0543901E192279530076094E /* MPTweakStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakStore.h; sourceTree = "<group>"; };
+		0543901F192279530076094E /* MPTweakStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakStore.m; sourceTree = "<group>"; };
 		0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HelloMixpanel.storyboard; sourceTree = "<group>"; };
 		05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyHTTPConnection.h; sourceTree = "<group>"; };
 		05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyHTTPConnection.m; sourceTree = "<group>"; };
@@ -327,6 +347,27 @@
 			name = SecretWhisper;
 			sourceTree = "<group>";
 		};
+		05438FFD192276160076094E /* Tweak */ = {
+			isa = PBXGroup;
+			children = (
+				05439012192279530076094E /* _MPTweakBindObserver.h */,
+				05439013192279530076094E /* _MPTweakBindObserver.m */,
+				05439014192279530076094E /* MPTweak.h */,
+				05439015192279530076094E /* MPTweak.m */,
+				05439016192279530076094E /* MPTweakCategory.h */,
+				05439017192279530076094E /* MPTweakCategory.m */,
+				05439018192279530076094E /* MPTweakCollection.h */,
+				05439019192279530076094E /* MPTweakCollection.m */,
+				0543901A192279530076094E /* MPTweakEnabled.h */,
+				0543901B192279530076094E /* MPTweakInline.h */,
+				0543901C192279530076094E /* MPTweakInline.m */,
+				0543901D192279530076094E /* MPTweakInlineInternal.h */,
+				0543901E192279530076094E /* MPTweakStore.h */,
+				0543901F192279530076094E /* MPTweakStore.m */,
+			);
+			name = Tweak;
+			sourceTree = "<group>";
+		};
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
@@ -469,6 +510,7 @@
 		A7B462B31910759E00774977 /* ABTestingSupport */ = {
 			isa = PBXGroup;
 			children = (
+				05438FFD192276160076094E /* Tweak */,
 				C38D59C874C4A08A62849CB2 /* Messages */,
 				C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */,
 				C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */,
@@ -768,6 +810,7 @@
 			files = (
 				053B4C681840191000E825FE /* UIColor+MPColor.m in Sources */,
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
+				05439021192279530076094E /* MPTweak.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				A7B462DB191075DE00774977 /* MPPassThroughValueTransformer.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
@@ -779,6 +822,7 @@
 				A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */,
 				28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */,
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
+				05439023192279530076094E /* MPTweakCollection.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */,
 				A7B462DA191075DE00774977 /* MPObjectSerializerContext.m in Sources */,
@@ -796,6 +840,7 @@
 				A7B462DC191075DE00774977 /* MPPropertyDescription.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,
 				A7B462D1191075DE00774977 /* MPApplicationStateSerializer.m in Sources */,
+				05439025192279530076094E /* MPTweakStore.m in Sources */,
 				A7B462D4191075DE00774977 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				A7B462D3191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
 				05438FF819214E210076094E /* SecretTableViewCell.m in Sources */,
@@ -808,6 +853,7 @@
 				C38D5BAA83DEE244F3E2F69A /* MPABTestDesignerConnection.m in Sources */,
 				C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
+				05439020192279530076094E /* _MPTweakBindObserver.m in Sources */,
 				C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */,
 				C38D5BBCDD16904A9D99BDB6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
@@ -815,6 +861,7 @@
 				C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				C38D5441C78F3F33FD640279 /* MPEnumDescription.m in Sources */,
 				C38D5AE963B48C6752645A38 /* MPTypeDescription.m in Sources */,
+				05439024192279530076094E /* MPTweakInline.m in Sources */,
 				C38D5828C3C5082570C5FB5D /* MPObjectSerializerConfig.m in Sources */,
 				C38D51675946A46979D18F75 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				C38D5C92E7ADE5F6AD8D03E0 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
@@ -823,6 +870,7 @@
 				C38D59C799F68E7CC925EB25 /* MPObjectIdentityProvider.m in Sources */,
 				C38D5F1EC13BC9516244A3D1 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				C38D5BD4D198AA15E694D2B2 /* NSInvocation+MPHelpers.m in Sources */,
+				05439022192279530076094E /* MPTweakCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
