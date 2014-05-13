@@ -25,7 +25,7 @@
     _tableData = @[ @{@"text": @"Neil always takes coffee but never makes a fresh batch", @"location": @"Mixpanel", @"likes":@2, @"comments":@1, @"image": @"http://supersonicsunflower.com/wp-content/uploads/2014/01/w-Giant-Coffee-Cup75917.jpg"},
                     @{@"text": @"Sometimes I break the site just for fun.", @"location": @"Mixpanel Engineer", @"likes":@10, @"comments":@0},
                     @{@"text": @"I take naps in Tron.", @"location": @"Mixpanel", @"likes":@2, @"comments":@1},
-                    @{@"text": @"I heard ...", @"location": @"Mixpanel", @"likes":@2, @"comments":@1},
+                    @{@"text": @"I hear that you and your band sold your guitars and bought turntables.", @"location": @"Mixpanel", @"likes":@2, @"comments":@1},
                     @{@"text": @"I heard ...", @"location": @"Mixpanel", @"likes":@2, @"comments":@1}
                     ];
     
