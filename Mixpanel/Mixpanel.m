@@ -976,14 +976,14 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ tracking push payload %@", self, payload);
     
     if (payload && payload[@"mp"]) {
-        NSDictionary *mp_payload = payload[@"mp"];
+        NSDictionary *mpPayload = payload[@"mp"];
         
-        if (![mp_payload isKindOfClass:[NSDictionary class]]) {
-            NSLog(@"%@ malformed mixpanel push payload %@", self, mp_payload);
+        if (![mpPayload isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"%@ malformed mixpanel push payload %@", self, mpPayload);
             
-        } else if (mp_payload[@"m"] && mp_payload[@"c"]) {
-            [self track:event properties:@{@"campaign_id": mp_payload[@"c"],
-                                           @"message_id": mp_payload[@"m"],
+        } else if (mpPayload[@"m"] && mpPayload[@"c"]) {
+            [self track:event properties:@{@"campaign_id": mpPayload[@"c"],
+                                           @"message_id": mpPayload[@"m"],
                                            @"message_type": @"inapp"}];
         }
     }
