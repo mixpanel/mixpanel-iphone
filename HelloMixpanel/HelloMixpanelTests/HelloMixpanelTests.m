@@ -410,6 +410,40 @@
     STAssertNoThrow([self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"v"],  @"property type should be allowed");
 }
 
+- (void)testTrackLaunchOptions
+{
+    [self.mixpanel trackLaunchOptions:@{UIApplicationLaunchOptionsRemoteNotificationKey: @{@"mp": @{
+        @"m": @"the_message_id",
+        @"c": @"the_campaign_id"
+    }}}];
+    [self waitForSerialQueue];
+    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    STAssertEqualObjects(e[@"event"], @"$campaign_open", @"incorrect event name");
+    NSDictionary *p = e[@"properties"];
+    STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
+    STAssertEqualObjects(p[@"message_type"], @"inapp", @"type does not equal inapp");
+    NSLog(@"finished testTrack");
+}
+
+- (void)testTrackPushNotificationPayload
+{
+    [self.mixpanel trackPushNotificationWithPayload:@{@"mp": @{
+       @"m": @"the_message_id",
+       @"c": @"the_campaign_id"
+    }}];
+    [self waitForSerialQueue];
+    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    STAssertEqualObjects(e[@"event"], @"$campaign_receive", @"incorrect event name");
+    NSDictionary *p = e[@"properties"];
+    STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
+    STAssertEqualObjects(p[@"message_type"], @"inapp", @"type does not equal inapp");
+    NSLog(@"finished testTrack");
+}
+
 - (void)testReset
 {
     NSDictionary *p = @{@"p1": @"a"};
