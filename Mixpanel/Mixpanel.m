@@ -98,6 +98,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 static Mixpanel *sharedInstance = nil;
 
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
+{
+    Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:apiToken];
+    [mixpanel trackLaunchOptions:launchOptions];
+    return mixpanel;
+}
+
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
 {
     static dispatch_once_t onceToken;
