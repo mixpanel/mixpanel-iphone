@@ -211,6 +211,24 @@
 
 /*!
  @method
+ 
+ @abstract
+ Initializes a singleton instance of the API, uses it to track launchOptions information,
+ and then returns it.
+ 
+ @discussion
+ This is a convenience method that wraps the above selector and the [Mixpanel trackLaunchOptions:]
+ method. It should only be called once on launch to track whether or not the user opened the app
+ from a Mixpanel push notification.
+ 
+ @param apiToken        your project token
+ @param launchOptions   your application delegate's launchOptions
+ 
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
+
+/*!
+ @method
 
  @abstract
  Returns the previously instantiated singleton instance of the API.
@@ -335,6 +353,9 @@
  Currently this only searches for remote notification information
  and passes it to trackNotificationWithPayload. It is provided
  as a convenience.
+ 
+ You should only call this once per launch and only if you chose not to
+ use the [Mixpanel sharedInstanceWithToken: launchOptions:] method.
  
  @param options         launch options dictionary
  */
