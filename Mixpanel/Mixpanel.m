@@ -967,16 +967,16 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ tracking launch options %@", self, options);
     
     if (options && options[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self trackPushNotificationWithPayload:options[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$campaign_open"];
+        [self trackPushNotification:options[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$campaign_open"];
     }
 }
 
-- (void)trackPushNotificationWithPayload:(NSDictionary *)payload event:(NSString *)event
+- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
-    MixpanelDebug(@"%@ tracking push payload %@", self, payload);
+    MixpanelDebug(@"%@ tracking push payload %@", self, userInfo);
     
-    if (payload && payload[@"mp"]) {
-        NSDictionary *mpPayload = payload[@"mp"];
+    if (userInfo && userInfo[@"mp"]) {
+        NSDictionary *mpPayload = userInfo[@"mp"];
         
         if (![mpPayload isKindOfClass:[NSDictionary class]]) {
             NSLog(@"%@ malformed mixpanel push payload %@", self, mpPayload);
@@ -989,9 +989,9 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)trackPushNotificationWithPayload:(NSDictionary *)payload
+- (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotificationWithPayload:payload event:@"$campaign_receive"];
+    [self trackPushNotification:userInfo event:@"$campaign_receive"];
 }
 
 #pragma mark - Decide

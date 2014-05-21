@@ -68,7 +68,7 @@
                                           otherButtonTitles:nil];
     [alert show];
     
-    [self.mixpanel trackPushNotificationWithPayload:userInfo];
+    [self.mixpanel trackPushNotification:userInfo];
 }
 
 #pragma mark - Session timing example
