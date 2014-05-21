@@ -412,18 +412,20 @@
 
 - (void)testTrackLaunchOptions
 {
-    [self.mixpanel trackLaunchOptions:@{UIApplicationLaunchOptionsRemoteNotificationKey: @{@"mp": @{
-        @"m": @"the_message_id",
-        @"c": @"the_campaign_id"
-    }}}];
-    [self waitForSerialQueue];
-    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
-    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:TEST_TOKEN launchOptions:@{UIApplicationLaunchOptionsRemoteNotificationKey: @{@"mp": @{
+                                                                                                                     @"m": @"the_message_id",
+                                                                                                                     @"c": @"the_campaign_id"
+                                                                                                                     }}}];
+    NSLog(@"starting wait for serial queue...");
+    dispatch_sync(mixpanel.serialQueue, ^{ return; });
+    NSLog(@"finished wait for serial queue");
+    STAssertTrue(mixpanel.eventsQueue.count == 1, @"event not queued");
+    NSDictionary *e = mixpanel.eventsQueue.lastObject;
     STAssertEqualObjects(e[@"event"], @"$campaign_open", @"incorrect event name");
     NSDictionary *p = e[@"properties"];
     STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
-    STAssertEqualObjects(p[@"message_type"], @"inapp", @"type does not equal inapp");
+    STAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
     NSLog(@"finished testTrack");
 }
 
@@ -440,7 +442,7 @@
     NSDictionary *p = e[@"properties"];
     STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
-    STAssertEqualObjects(p[@"message_type"], @"inapp", @"type does not equal inapp");
+    STAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
     NSLog(@"finished testTrack");
 }
 
