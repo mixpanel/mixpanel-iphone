@@ -33,9 +33,6 @@
 
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
-    
-    // Possibly track a push notification
-    [self.mixpanel trackLaunchOptions:launchOptions];
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
     self.window.rootViewController = [storyboard instantiateInitialViewController];
