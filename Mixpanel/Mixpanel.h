@@ -217,9 +217,9 @@
  and then returns it.
  
  @discussion
- This is a convenience method that wraps the above selector and the [Mixpanel trackLaunchOptions:]
- method. It should only be called once on launch to track whether or not the user opened the app
- from a Mixpanel push notification.
+ This is the preferred method for creating a sharedInstance with a mixpanel
+ like above. With the launchOptions parameter, Mixpanel can track referral
+ information created by push notifications.
  
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
@@ -341,25 +341,6 @@
  @param userInfo         remote notification payload dictionary
  */
 - (void)trackPushNotification:(NSDictionary *)userInfo;
-
-
-/*!
- @method
- 
- @abstract
- Send a track call for any Mixpanel-specific launch options.
- 
- @discussion
- Currently this only searches for remote notification information
- and passes it to trackNotificationWithPayload. It is provided
- as a convenience.
- 
- You should only call this once per launch and only if you chose not to
- use the [Mixpanel sharedInstanceWithToken: launchOptions:] method.
- 
- @param options         launch options dictionary
- */
-- (void)trackLaunchOptions:(NSDictionary *)options;
 
 
 /*!
