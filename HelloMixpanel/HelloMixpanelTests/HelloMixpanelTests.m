@@ -455,6 +455,7 @@
     [self waitForSerialQueue];
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
     [self.mixpanel trackPushNotification:@{@"mp": @1}];
+    [self waitForSerialQueue];
     STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
     NSLog(@"finished testTrackPushNotificationMalformed");
 }
