@@ -427,9 +427,9 @@
     NSLog(@"finished testTrack");
 }
 
-- (void)testTrackPushNotificationPayload
+- (void)testTrackPushNotification
 {
-    [self.mixpanel trackPushNotificationWithPayload:@{@"mp": @{
+    [self.mixpanel trackPushNotification:@{@"mp": @{
        @"m": @"the_message_id",
        @"c": @"the_campaign_id"
     }}];

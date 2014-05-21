@@ -338,9 +338,9 @@
  of each push. This method parses the standard payload and queues a
  track call using this information.
  
- @param payload         remote notification payload dictionary
+ @param userInfo         remote notification payload dictionary
  */
-- (void)trackPushNotificationWithPayload:(NSDictionary *)payload;
+- (void)trackPushNotification:(NSDictionary *)userInfo;
 
 
 /*!
