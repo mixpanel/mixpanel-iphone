@@ -984,7 +984,7 @@ static Mixpanel *sharedInstance = nil;
         } else if (mpPayload[@"m"] && mpPayload[@"c"]) {
             [self track:event properties:@{@"campaign_id": mpPayload[@"c"],
                                            @"message_id": mpPayload[@"m"],
-                                           @"message_type": @"inapp"}];
+                                           @"message_type": @"push"}];
         }
     }
 }
