@@ -426,7 +426,7 @@
     STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
     STAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
-    NSLog(@"finished testTrack");
+    NSLog(@"finished testTrackLaunchOptions");
 }
 
 - (void)testTrackPushNotification
@@ -443,7 +443,20 @@
     STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
     STAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
-    NSLog(@"finished testTrack");
+    NSLog(@"finished testTrackPushNotification");
+}
+
+- (void)testTrackPushNotificationMalformed
+{
+    [self.mixpanel trackPushNotification:@{@"mp": @{
+                                                   @"m": @"the_message_id",
+                                                   @"cid": @"the_campaign_id"
+                                                   }}];
+    [self waitForSerialQueue];
+    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:@{@"mp": @1}];
+    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    NSLog(@"finished testTrackPushNotificationMalformed");
 }
 
 - (void)testReset
