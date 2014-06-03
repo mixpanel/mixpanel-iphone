@@ -102,7 +102,7 @@ static Mixpanel *sharedInstance = nil;
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:apiToken];
     if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [mixpanel trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$campaign_open"];
+        [mixpanel trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
     }
     return mixpanel;
 }
@@ -985,7 +985,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotification:userInfo event:@"$campaign_receive"];
+    [self trackPushNotification:userInfo event:@"$campaign_received"];
 }
 
 #pragma mark - Decide
