@@ -21,17 +21,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     _tableData = @[ @{@"text": @"Neil always takes coffee but never makes a fresh batch", @"location": @"Mixpanel", @"likes":@2, @"comments":@1, @"image": @"http://supersonicsunflower.com/wp-content/uploads/2014/01/w-Giant-Coffee-Cup75917.jpg"},
                     @{@"text": @"Sometimes I break the site just for fun.", @"location": @"Mixpanel Engineer", @"likes":@10, @"comments":@0},
                     @{@"text": @"I take naps in Tron.", @"location": @"Mixpanel", @"likes":@2, @"comments":@1},
                     @{@"text": @"I hear that you and your band sold your guitars and bought turntables.", @"location": @"Mixpanel", @"likes":@2, @"comments":@1},
                     @{@"text": @"I heard ...", @"location": @"Mixpanel", @"likes":@2, @"comments":@1}
                     ];
-    
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
+
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -58,19 +58,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SecretTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SecretTableViewCell" forIndexPath:indexPath];
-    
+
     NSDictionary *secret = _tableData[[indexPath indexAtPosition:1]];
     cell.contentLabel.text = secret[@"text"];
     cell.locationLabel.text = secret[@"location"];
     cell.likeslabel.text = [NSString stringWithFormat:@"%@", secret[@"likes"] ];
     cell.commentsLabel.text = [NSString stringWithFormat:@"%@", secret[@"comments"] ];
-    
+
     if (secret[@"image"]) {
         cell.backgroundImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:secret[@"image"]]]];
     } else {
         cell.backgroundImage.image = nil;
     }
-    
+
     return cell;
 }
 
@@ -93,7 +93,7 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
 */
 

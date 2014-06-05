@@ -27,7 +27,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSLog(@"invalid notif id: %@", ID);
         return nil;
     }
-    
+
     NSNumber *messageID = object[@"message_id"];
     if (!([messageID isKindOfClass:[NSNumber class]] && [messageID integerValue] > 0)) {
         NSLog(@"invalid notif message id: %@", messageID);

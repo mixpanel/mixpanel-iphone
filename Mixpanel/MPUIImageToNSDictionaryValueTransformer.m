@@ -51,7 +51,7 @@
         transformedValue = @{
            @"imageOrientation": @(image.imageOrientation),
            @"renderingMode": @(image.renderingMode),
-           @"size": [sizeTransformer transformedValue:sizeValue],           
+           @"size": [sizeTransformer transformedValue:sizeValue],
            @"resizingMode": @(image.resizingMode),
            @"duration": @(image.duration),
            @"capInsets": [insetsTransformer transformedValue:capInsetsValue],

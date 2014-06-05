@@ -1,7 +1,7 @@
 /**
  Copyright (c) 2014-present, Facebook, Inc.
  All rights reserved.
- 
+
  This source code is licensed under the BSD-style license found in the
  LICENSE file in the root directory of this source tree. An additional grant
  of patent rights can be found in the PATENTS file in the same directory.
@@ -30,7 +30,7 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *identifier, fb_tweak_entry *en
 {
   MPTweak *tweak = [[MPTweak alloc] initWithIdentifier:identifier];
   tweak.name = *entry->name;
-  
+
   if (strcmp(*entry->encoding, @encode(BOOL)) == 0) {
     tweak.defaultValue = @(*(BOOL *)entry->value);
   } else if (strcmp(*entry->encoding, @encode(float)) == 0) {
@@ -66,7 +66,7 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *identifier, fb_tweak_entry *en
     NSCAssert(NO, @"Unknown encoding %s for tweak %@. Value was %p.", *entry->encoding, _MPTweakIdentifier(entry), entry->value);
     tweak = nil;
   }
-  
+
   return tweak;
 }
 
@@ -81,7 +81,7 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *identifier, fb_tweak_entry *en
   if (OSAtomicTestAndSetBarrier(1, &_tweaksLoaded)) {
     return;
   }
-  
+
 #ifdef __LP64__
   typedef uint64_t fb_tweak_value;
   typedef struct section_64 fb_tweak_section;
@@ -91,34 +91,34 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *identifier, fb_tweak_entry *en
   typedef struct section fb_tweak_section;
 #define fb_tweak_getsectbynamefromheader getsectbynamefromheader
 #endif
-  
+
   MPTweakStore *store = [MPTweakStore sharedInstance];
-  
+
   Dl_info info;
   dladdr(&_MPTweakIdentifier, &info);
-  
+
   const fb_tweak_value mach_header = (fb_tweak_value)info.dli_fbase;
   const fb_tweak_section *section = fb_tweak_getsectbynamefromheader((void *)mach_header, MPTweakSegmentName, MPTweakSectionName);
-  
+
   if (section == NULL) {
     return;
   }
-  
+
   for (fb_tweak_value addr = section->offset; addr < section->offset + section->size; addr += sizeof(fb_tweak_entry)) {
     fb_tweak_entry *entry = (fb_tweak_entry *)(mach_header + addr);
-    
+
     MPTweakCategory *category = [store tweakCategoryWithName:*entry->category];
     if (category == nil) {
       category = [[MPTweakCategory alloc] initWithName:*entry->category];
       [store addTweakCategory:category];
     }
-    
+
     MPTweakCollection *collection = [category tweakCollectionWithName:*entry->collection];
     if (collection == nil) {
       collection = [[MPTweakCollection alloc] initWithName:*entry->collection];
       [category addTweakCollection:collection];
     }
-    
+
     NSString *identifier = _MPTweakIdentifier(entry);
     if ([collection tweakWithIdentifier:identifier] == nil) {
       MPTweak *tweak = _MPTweakCreateWithEntry(identifier, entry);
