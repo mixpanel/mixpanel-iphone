@@ -11,5 +11,6 @@
 
 @property (nonatomic, strong) UIImage *screenshot;
 @property (nonatomic, copy) NSDictionary *serializedObjects;
+@property (nonatomic, strong, readonly) NSString *imageHash;
 
 @end
