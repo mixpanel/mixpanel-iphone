@@ -109,7 +109,10 @@
 
                         // Unpack NSValues to their base types.
                         if( [arg isKindOfClass:[NSValue class]] ) {
-                            void *buf = malloc(sizeof([(NSValue *)arg objCType]));
+                            const char *ctype = [(NSValue *)arg objCType];
+                            NSUInteger size;
+                            NSGetSizeAndAlignment(ctype, &size, nil);
+                            void *buf = malloc(size);
                             [(NSValue *)arg getValue:buf];
                             [invocation setArgument:(void *)buf atIndex:(int)(i+2)];
                             free(buf);
@@ -117,7 +120,12 @@
                             [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
                         }
                     }
-                    [invocation invokeWithTarget:o];
+                    @try {
+                        [invocation invokeWithTarget:o];
+                    }
+                    @catch (NSException *exception) {
+                        NSLog(@"%@", exception);
+                    }
                     executed = YES;
                 } else {
                     NSLog(@"Not enough args");
@@ -144,21 +152,15 @@
 - (void)execute {
     for (NSDictionary *action in self.actions) {
 
-        BOOL executed = [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
-                         withArgs:[action objectForKey:@"args"]
-                           onPath:[action objectForKey:@"path"]
-                         fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
-        if (!executed) {
-            [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:^(id window){
-                if ([[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+        void (^executeBlock)(id) = ^(id window){
+            [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                      withArgs:[action objectForKey:@"args"]
                                        onPath:[action objectForKey:@"path"]
-                                         fromRoot:[[[UIApplication sharedApplication] keyWindow] rootViewController]]) {
-                    [MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
-                }
-
-            }];
-        }
+                                 fromRoot:[window rootViewController]];
+        };
+        executeBlock([[UIApplication sharedApplication] keyWindow]);
+        //[MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:executeBlock];
+        //[MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
     }
 }
 

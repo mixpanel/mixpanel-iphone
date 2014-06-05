@@ -11,6 +11,7 @@
 @interface MPObjectSelector : NSObject
 
 -(id) initWithString:(NSString *)string;
--(id)selectFromRoot:(NSObject *)root;
+-(NSArray *)selectFromRoot:(id)root;
+-(BOOL)isLeafSelected:(id)leaf;
 
 @end
