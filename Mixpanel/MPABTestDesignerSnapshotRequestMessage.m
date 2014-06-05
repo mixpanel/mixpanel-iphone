@@ -36,6 +36,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
 {
     __block MPObjectSerializerConfig *serializerConfig = self.configuration;
+    __block NSString *imageHash = [self payloadObjectForKey:@"image_hash"];
 
     __weak MPABTestDesignerConnection *weak_connection = connection;
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
@@ -64,23 +65,30 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
                                                                                                configuration:serializerConfig
                                                                                       objectIdentityProvider:objectIdentityProvider];
 
+        MPABTestDesignerSnapshotResponseMessage *snapshotMessage = [MPABTestDesignerSnapshotResponseMessage message];
         __block UIImage *screenshot = nil;
         __block NSDictionary *serializedObjects = nil;
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
-
-            // TODO: we should probably be serializing an object graph from the UIApplication instance down and thus capturing all windows,
-            // the keyWindow and all the relevant view controllers from the rootViewController of each window down.  Some applications
-            // exist on multiple screens (apps that support HDMI output or AirPlay) and a screen can have multiple windows.  Eg, I think
-            // UIAlertView exists in a separate window.  I think the status bar is also in a separate window.
-            // For applications with multiple screens/windows this would mean capturing multiple screen shots too.
-
             screenshot = [serializer screenshotImageForWindowAtIndex:0];
-            serializedObjects = [serializer objectHierarchyForWindowAtIndex:0];
-
         });
-
-        MPABTestDesignerSnapshotResponseMessage *snapshotMessage = [MPABTestDesignerSnapshotResponseMessage message];
         snapshotMessage.screenshot = screenshot;
+        
+        if (imageHash && [imageHash isEqualToString:snapshotMessage.imageHash]) {
+            NSLog(@"%@ hit snapshot cache", self);
+            serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                // TODO: we should probably be serializing an object graph from the UIApplication instance down and thus capturing all windows,
+                // the keyWindow and all the relevant view controllers from the rootViewController of each window down.  Some applications
+                // exist on multiple screens (apps that support HDMI output or AirPlay) and a screen can have multiple windows.  Eg, I think
+                // UIAlertView exists in a separate window.  I think the status bar is also in a separate window.
+                // For applications with multiple screens/windows this would mean capturing multiple screen shots too.
+                serializedObjects = [serializer objectHierarchyForWindowAtIndex:0];
+            });
+            [connection setSessionObject:serializedObjects forKey:@"snapshot_hierarchy"];
+        }
+
         snapshotMessage.serializedObjects = serializedObjects;
         [conn sendMessage:snapshotMessage];
     }];
