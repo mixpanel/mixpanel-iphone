@@ -26,7 +26,7 @@
     if (self)
     {
         _configuration = configuration;
-        _objectIdentityProvider = objectIdentityProvider; 
+        _objectIdentityProvider = objectIdentityProvider;
     }
 
     return self;
@@ -55,7 +55,7 @@
     NSParameterAssert(context != nil);
 
     [context addVisitedObject:object];
-    
+
     NSMutableDictionary *propertyValues = [[NSMutableDictionary alloc] init];
 
     MPClassDescription *classDescription = [self classDescriptionForObject:object];

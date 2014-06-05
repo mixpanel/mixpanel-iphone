@@ -61,7 +61,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         }
 
         MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[UIApplication sharedApplication]
-                                                                                               configuration:serializerConfig 
+                                                                                               configuration:serializerConfig
                                                                                       objectIdentityProvider:objectIdentityProvider];
 
         __block UIImage *screenshot = nil;

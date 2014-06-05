@@ -1,7 +1,7 @@
 /**
  Copyright (c) 2014-present, Facebook, Inc.
  All rights reserved.
- 
+
  This source code is licensed under the BSD-style license found in the
  LICENSE file in the root directory of this source tree. An additional grant
  of patent rights can be found in the PATENTS file in the same directory.
@@ -20,12 +20,12 @@
 + (instancetype)sharedInstance
 {
   static MPTweakStore *sharedInstance = nil;
-  
+
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     sharedInstance = [[self alloc] init];
   });
-  
+
   return sharedInstance;
 }
 
@@ -35,7 +35,7 @@
     _orderedCategories = [[NSMutableArray alloc] initWithCapacity:16];
     _namedCategories = [[NSMutableDictionary alloc] initWithCapacity:16];
   }
-  
+
   return self;
 }
 

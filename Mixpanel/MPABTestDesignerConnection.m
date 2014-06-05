@@ -44,7 +44,7 @@
         NSLog(@"Attempting to open WebSocket to: %@", url);
         [_webSocket open];
     }
-    
+
     return self;
 }
 
