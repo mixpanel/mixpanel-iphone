@@ -9,11 +9,14 @@
 #import <objc/runtime.h>
 #import "MPSwizzler.h"
 
+
+
 @interface MPSwizzle : NSObject
 @property (nonatomic, assign) Class class;
 @property (nonatomic, assign) SEL selector;
 @property (nonatomic, assign) IMP originalMethod;
-@property (nonatomic, copy) void (^block)(id);
+@property (nonatomic, assign) uint numArgs;
+@property (nonatomic, copy) swizzleBlock block;
 @end
 
 @implementation MPSwizzle
@@ -21,12 +24,21 @@
 
 static NSMapTable *swizzles;
 
-static void mp_swizzledMethod(id self, SEL _cmd, id arg)
+static void mp_swizzledMethod_2(id self, SEL _cmd)
+{
+    MPSwizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
+    if (swizzle) {
+        ((void(*)(id, SEL))swizzle.originalMethod)(self, _cmd);
+        swizzle.block(self, _cmd);
+    }
+}
+
+static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
 {
     MPSwizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
     if (swizzle) {
         ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
-        swizzle.block(arg);
+        swizzle.block(self, _cmd, arg);
     }
 }
 
@@ -69,26 +81,36 @@ static void mp_swizzledMethod(id self, SEL _cmd, id arg)
     [selectors setObject:swizzle forKey:(__bridge id)((void *)aSelector)];
 }
 
-+ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(void (^)(id))block
++ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)aBlock
 {
     MPSwizzle *swizzle = [self swizzleForClass:aClass andSelector:aSelector];
     if (!swizzle) {
         Method m = class_getInstanceMethod(aClass, aSelector);
+        uint numArgs = method_getNumberOfArguments(m);
         IMP originalMethod = method_getImplementation(m);
-
-        // In the case where we got the Method from the superclass, make sure we actually replace it
-        // on this class rather than the superclass.
-        if(!class_addMethod(aClass, aSelector, (IMP)mp_swizzledMethod, method_getTypeEncoding(m))) {
-            method_setImplementation(m,(IMP)mp_swizzledMethod);
+        IMP swizzledMethod = nil;
+        if (numArgs == 2) {
+            swizzledMethod = (IMP)mp_swizzledMethod_2;
+        } else if (numArgs == 3) {
+            swizzledMethod = (IMP)mp_swizzledMethod_3;
         }
 
-        swizzle = [[MPSwizzle alloc] init];
-        swizzle.class = aClass;
-        swizzle.selector = aSelector;
-        swizzle.block = block;
-        swizzle.originalMethod = originalMethod;
+        if (swizzledMethod) {
+            // In the case where we got the Method from the superclass, make sure we actually replace it
+            // on this class rather than the superclass.
+            if(!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(m))) {
+                method_setImplementation(m,swizzledMethod);
+            }
 
-        [self setSwizzle:swizzle forClass:aClass andSelector:aSelector];
+            swizzle = [[MPSwizzle alloc] init];
+            swizzle.class = aClass;
+            swizzle.selector = aSelector;
+            swizzle.block = aBlock;
+            swizzle.numArgs = numArgs;
+            swizzle.originalMethod = originalMethod;
+
+            [self setSwizzle:swizzle forClass:aClass andSelector:aSelector];
+        }
     }
 }
 
