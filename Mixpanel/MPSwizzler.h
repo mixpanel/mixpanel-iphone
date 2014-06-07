@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^swizzleBlock)();
+
 @interface MPSwizzler : NSObject
 
-+ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(void (^)(id))block;
++ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)block;
 + (void)unswizzleSelector:(SEL)aSelector onClass:(Class)aClass;
 
 @end

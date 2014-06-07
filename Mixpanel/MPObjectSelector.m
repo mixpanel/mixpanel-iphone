@@ -87,7 +87,7 @@
 {
     BOOL isSelected = YES;
     NSArray *views = @[leaf];
-    uint i = [_filters count];
+    NSUInteger i = [_filters count];
     while(i--) {
         MPObjectFilter *filter = _filters[i];
         if (![filter appliesToAny:views]) {
@@ -121,6 +121,14 @@
         }
     }
     return filter;
+}
+
+- (Class)selectedClass
+{
+    if ([_filters count] > 0) {
+        return NSClassFromString(((MPObjectFilter *)_filters[[_filters count] - 1]).name);
+    }
+    return nil;
 }
 
 @end

@@ -13,5 +13,6 @@
 -(id) initWithString:(NSString *)string;
 -(NSArray *)selectFromRoot:(id)root;
 -(BOOL)isLeafSelected:(id)leaf;
+-(Class)selectedClass;
 
 @end

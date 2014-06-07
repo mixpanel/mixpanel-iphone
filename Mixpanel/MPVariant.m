@@ -30,22 +30,16 @@
     return [[MPVariant alloc] initWithActions:actions];
 }
 
-+ (NSArray *)getViewsOnPath:(NSString *)path fromRoot:(NSObject *)root
-{
-    MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:path];
-    return [selector selectFromRoot:root];
-}
-
 + (void)setValue:(id)value forKey:(NSString *)key onPath:(NSString *)path fromRoot:(UIView *)root
 {
-    NSArray *views = [self getViewsOnPath:path fromRoot:root];
+    /*NSArray *views = [self getViewsOnPath:path fromRoot:root];
     if ([views count] > 0) {
         for (NSObject *o in views) {
             [o setValue:value forKey:key];
         }
     } else {
         NSLog(@"No objects matching pattern");
-    }
+    }*/
 }
 
 + (id)convertArg:(id)arg toType:(NSString *)toType
@@ -90,12 +84,20 @@
     return fromType;
 }
 
-+ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(NSString *)path fromRoot:(NSObject *)root
++ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
+{
+    if (leaf && ![path isLeafSelected:leaf]){
+        return NO;
+    }
+    return [self executeSelector:selector withArgs:args onObjects:[path selectFromRoot:root]];
+}
+
++ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects
 {
     BOOL executed = NO;
-    NSArray *views = [[self class] getViewsOnPath:path fromRoot:root];
-    if ([views count] > 0) {
-        for (NSObject *o in views) {
+    if (objects && [objects count] > 0) {
+         NSLog(@"Invoking on %lu objects", [objects count]);
+        for (NSObject *o in objects) {
             NSMethodSignature *signature = [o methodSignatureForSelector:selector];
             if (signature != nil) {
                 NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
@@ -121,6 +123,7 @@
                         }
                     }
                     @try {
+                        NSLog(@"Invoking");
                         [invocation invokeWithTarget:o];
                     }
                     @catch (NSException *exception) {
@@ -152,14 +155,37 @@
 - (void)execute {
     for (NSDictionary *action in self.actions) {
 
-        void (^executeBlock)(id) = ^(id window){
-            [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+        MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:[action objectForKey:@"path"]];
+        void (^executeBlock)(id, SEL, id) = ^(id view, SEL command, id window){
+
+            if ([view isKindOfClass:[UIView class]]){
+                CGRect frame = [(UIView *)view frame];
+                NSLog(@"%@ %p (%f, %f, %f, %f) with %lu subviews dispatched %@", NSStringFromClass([view class]), view, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, [[(UIView *)view subviews] count], NSStringFromSelector(command));
+            }
+
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+                NSLog(@"looking for %@", [action objectForKey:@"path"]);
+                NSDate *start = [NSDate date];
+
+                [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                      withArgs:[action objectForKey:@"args"]
-                                       onPath:[action objectForKey:@"path"]
-                                 fromRoot:[window rootViewController]];
+                                       onPath:selector
+                                     fromRoot:[window rootViewController]
+                                       toLeaf:view];
+
+                NSDate *finish = [NSDate date];
+                NSTimeInterval executionTime = [finish timeIntervalSinceDate:start];
+                NSLog(@"selector time = %f", executionTime);
+            });
         };
-        executeBlock([[UIApplication sharedApplication] keyWindow]);
-        //[MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class] withBlock:executeBlock];
+
+        Class toSwizzle = [selector selectedClass];
+        if (!toSwizzle) {
+            toSwizzle = [UIView class];
+        }
+        executeBlock(nil, _cmd, [[UIApplication sharedApplication] keyWindow]);
+        [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:toSwizzle withBlock:executeBlock];
         //[MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
     }
 }
