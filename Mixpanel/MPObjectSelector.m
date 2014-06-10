@@ -27,9 +27,9 @@
     NSCharacterSet *_separatorChars;
     NSCharacterSet *_predicateStartChar;
     NSCharacterSet *_predicateEndChar;
-
 }
 
+@property (nonatomic, strong) NSString *string;
 @property (nonatomic, strong) NSScanner *scanner;
 @property (nonatomic, strong) NSArray *filters;
 
@@ -41,6 +41,7 @@
 -(id) initWithString:(NSString *)string
 {
     if (self = [super init]) {
+        self.string = string;
         self.scanner = [[NSScanner alloc] initWithString:string];
         [_scanner setCharactersToBeSkipped:nil];
         _separatorChars = [NSCharacterSet characterSetWithCharactersInString:@"/"];
@@ -149,25 +150,11 @@
             [result addObjectsFromArray:[self getChildrenOfObject:view ofType:nil]];
         }
     } else {
-        if ([_name hasPrefix:@"."]) {
-            // Select children by property name on parent
-            NSString *key = [_name substringFromIndex:1];
-            @try {
-                for (NSObject *view in views) {
-                    NSObject *value = [view valueForKey:key];
-                    if (value) {
-                        [result addObject:value];
-                    }
-                }
-            }
-            @catch (NSException *exception) {}
-        } else {
-            // Select all children of a given class
-            Class class = NSClassFromString(_name);
-            if (class) {
-                for (NSObject *view in views) {
-                    [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
-                }
+        // Select all children of a given class
+        Class class = NSClassFromString(_name);
+        if (class) {
+            for (NSObject *view in views) {
+                [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
             }
         }
     }
@@ -184,10 +171,6 @@
  Apply this filter to the views. For any view that
  matches this filter's class / predicate pattern, return
  its parents.
-
- Note this returns a list of views that have the necessary
- but not sufficient conditions to be a match for this selector.
- This is because we can't look up property references in reverse.
  */
 - (NSArray *)applyReverse:(NSArray *)views
 {
@@ -201,15 +184,11 @@
 }
 
 /*
- Returns whether the given view would pass this filter as
- the correct class and matching the filter predicate.
-
- This is necessary but not sufficient to tell if the
- view would actually be selected from its parent in apply:.
+ Returns whether the given view would pass this filter.
 */
 - (BOOL)appliesTo:(NSObject *)view
 {
-    return([_name isEqualToString:@"*"] || [_name hasPrefix:@"."] || [view isKindOfClass:NSClassFromString(_name)]) && (!_predicate || [_predicate evaluateWithObject:view]);
+    return([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)]) && (!_predicate || [_predicate evaluateWithObject:view]);
 }
 
 - (BOOL)appliesToAny:(NSArray *)views
@@ -227,7 +206,13 @@
 {
     NSMutableArray *result = [NSMutableArray array];
     if ([obj isKindOfClass:[UIView class]] && [(UIView *)obj superview]) {
-        [result addObject:[(UIView *)obj superview]];
+        if ([(UIView *)obj superview]) {
+            [result addObject:[(UIView *)obj superview]];
+        }
+        // For UIView, nextResponder should be its controller or its superview.
+        if ([(UIView *)obj nextResponder] && [(UIView *)obj nextResponder] != [(UIView *)obj superview]) {
+            [result addObject:[(UIView *)obj nextResponder]];
+        }
     } else if ([obj isKindOfClass:[UIViewController class]] && [(UIViewController *)obj parentViewController]) {
         [result addObject:[(UIViewController *)obj parentViewController]];
     }
