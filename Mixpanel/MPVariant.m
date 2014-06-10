@@ -86,10 +86,15 @@
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
 {
-    if (leaf && ![path isLeafSelected:leaf]){
-        return NO;
+    if (leaf){
+        if ([path isLeafSelected:leaf]) {
+            return [self executeSelector:selector withArgs:args onObjects:@[leaf]];
+        } else {
+            return NO;
+        }
+    } else {
+        return [self executeSelector:selector withArgs:args onObjects:[path selectFromRoot:root]];
     }
-    return [self executeSelector:selector withArgs:args onObjects:[path selectFromRoot:root]];
 }
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects
