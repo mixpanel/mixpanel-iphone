@@ -168,21 +168,18 @@
                 NSLog(@"%@ %p (%f, %f, %f, %f) with %lu subviews dispatched %@", NSStringFromClass([view class]), view, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, [[(UIView *)view subviews] count], NSStringFromSelector(command));
             }
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSLog(@"looking for %@", [action objectForKey:@"path"]);
+            NSDate *start = [NSDate date];
 
-                NSLog(@"looking for %@", [action objectForKey:@"path"]);
-                NSDate *start = [NSDate date];
+            [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                                 withArgs:[action objectForKey:@"args"]
+                                   onPath:selector
+                                 fromRoot:[window rootViewController]
+                                   toLeaf:view];
 
-                [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
-                                     withArgs:[action objectForKey:@"args"]
-                                       onPath:selector
-                                     fromRoot:[window rootViewController]
-                                       toLeaf:view];
-
-                NSDate *finish = [NSDate date];
-                NSTimeInterval executionTime = [finish timeIntervalSinceDate:start];
-                NSLog(@"selector time = %f", executionTime);
-            });
+            NSDate *finish = [NSDate date];
+            NSTimeInterval executionTime = [finish timeIntervalSinceDate:start];
+            NSLog(@"selector time = %f", executionTime);
         };
 
         Class toSwizzle = [selector selectedClass];
@@ -190,7 +187,7 @@
             toSwizzle = [UIView class];
         }
         executeBlock(nil, _cmd, [[UIApplication sharedApplication] keyWindow]);
-        [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:toSwizzle withBlock:executeBlock];
+        [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:toSwizzle withBlock:executeBlock named:[[NSUUID UUID] UUIDString]];
         //[MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
     }
 }
