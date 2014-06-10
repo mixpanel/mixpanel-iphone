@@ -16,10 +16,20 @@
 @property (nonatomic, assign) SEL selector;
 @property (nonatomic, assign) IMP originalMethod;
 @property (nonatomic, assign) uint numArgs;
-@property (nonatomic, copy) swizzleBlock block;
+@property (nonatomic, copy) NSMapTable *blocks;
 @end
 
 @implementation MPSwizzle
+
+- (id)init
+{
+    if ((self = [super init])) {
+        self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsObjectPersonality)
+                              valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
+    }
+    return self;
+}
+
 @end
 
 static NSMapTable *swizzles;
@@ -29,7 +39,12 @@ static void mp_swizzledMethod_2(id self, SEL _cmd)
     MPSwizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
     if (swizzle) {
         ((void(*)(id, SEL))swizzle.originalMethod)(self, _cmd);
-        swizzle.block(self, _cmd);
+
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while((block = [blocks nextObject])) {
+            block(self, _cmd);
+        }
     }
 }
 
@@ -38,7 +53,12 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
     MPSwizzle *swizzle = [(NSMapTable *)[swizzles objectForKey:[self class]] objectForKey:(__bridge id)((void *)_cmd)];
     if (swizzle) {
         ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
-        swizzle.block(self, _cmd, arg);
+
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while((block = [blocks nextObject])) {
+            block(self, _cmd, arg);
+        }
     }
 }
 
@@ -81,7 +101,7 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
     [selectors setObject:swizzle forKey:(__bridge id)((void *)aSelector)];
 }
 
-+ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)aBlock
++ (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)aBlock named:(NSString *)aName
 {
     MPSwizzle *swizzle = [self swizzleForClass:aClass andSelector:aSelector];
     if (!swizzle) {
@@ -105,12 +125,14 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
             swizzle = [[MPSwizzle alloc] init];
             swizzle.class = aClass;
             swizzle.selector = aSelector;
-            swizzle.block = aBlock;
+            [swizzle.blocks setObject:aBlock forKey:aName];
             swizzle.numArgs = numArgs;
             swizzle.originalMethod = originalMethod;
 
             [self setSwizzle:swizzle forClass:aClass andSelector:aSelector];
         }
+    } else {
+        [swizzle.blocks setObject:aBlock forKey:aName];
     }
 }
 
