@@ -1,7 +1,7 @@
 /**
  Copyright (c) 2014-present, Facebook, Inc.
  All rights reserved.
- 
+
  This source code is licensed under the BSD-style license found in the
  LICENSE file in the root directory of this source tree. An additional grant
  of patent rights can be found in the PATENTS file in the same directory.
@@ -31,7 +31,7 @@ extern "C" {
 #define MPTweakSectionName "MPTweak"
 
 typedef __unsafe_unretained NSString *MPTweakLiteralString;
-  
+
 typedef struct {
   MPTweakLiteralString *category;
   MPTweakLiteralString *collection;
@@ -43,24 +43,24 @@ typedef struct {
 } fb_tweak_entry;
 
 extern NSString *_MPTweakIdentifier(fb_tweak_entry *entry);
-  
+
 #if __has_feature(objc_arc)
 #define _MPTweakRelease(x)
 #else
 #define _MPTweakRelease(x) [x release]
 #endif
-  
+
 #define __MPTweakConcat_(X, Y) X ## Y
 #define __MPTweakConcat(X, Y) __MPTweakConcat_(X, Y)
 
 #define __MPTweakIndex(_1, _2, _3, value, ...) value
 #define __MPTweakIndexCount(...) __MPTweakIndex(__VA_ARGS__, 3, 2, 1)
-  
+
 #define __MPTweakHasRange1(__withoutRange, __withRange, ...) __withoutRange
 #define __MPTweakHasRange2(__withoutRange, __withRange, ...) __MPTweakInvalidNumberOfArgumentsPassed
 #define __MPTweakHasRange3(__withoutRange, __withRange, ...) __withRange
 #define _MPTweakHasRange(__withoutRange, __withRange, ...) __MPTweakConcat(__MPTweakHasRange, __MPTweakIndexCount(__VA_ARGS__))(__withoutRange, __withRange)
-  
+
 #define _MPTweakInlineWithoutRange(category_, collection_, name_, default_) \
   _MPTweakInlineWithRangeInternal(category_, collection_, name_, default_, NO, NULL, NO, NULL)
 #define _MPTweakInlineWithRange(category_, collection_, name_, default_, min_, max_) \
@@ -89,7 +89,7 @@ extern NSString *_MPTweakIdentifier(fb_tweak_entry *entry);
   return tweak; \
 })())
 #define _MPTweakInline(category_, collection_, name_, ...) _MPTweakHasRange(_MPTweakInlineWithoutRange, _MPTweakInlineWithRange, __VA_ARGS__)(category_, collection_, name_, __VA_ARGS__)
-  
+
 #define _MPTweakValueInternal(tweak_, category_, collection_, name_, default_, hasmin_, min_, hasmax_, max_) \
 ((^{ \
   /* returns a correctly typed version of the current tweak value */ \
@@ -134,7 +134,7 @@ extern NSString *_MPTweakIdentifier(fb_tweak_entry *entry);
   [observer__ attachToObject:object_]; \
 })())
 #define _MPTweakBind(object_, property_, category_, collection_, name_, ...) _MPTweakHasRange(_MPTweakBindWithoutRange, _MPTweakBindWithRange, __VA_ARGS__)(object_, property_, category_, collection_, name_, __VA_ARGS__)
-  
+
 #ifdef __cplusplus
 }
 #endif
