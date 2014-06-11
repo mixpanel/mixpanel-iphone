@@ -101,7 +101,7 @@
 {
     BOOL executed = NO;
     if (objects && [objects count] > 0) {
-         NSLog(@"Invoking on %lu objects", [objects count]);
+         NSLog(@"Invoking on %d objects", [objects count]);
         for (NSObject *o in objects) {
             NSMethodSignature *signature = [o methodSignatureForSelector:selector];
             if (signature != nil) {
@@ -148,7 +148,6 @@
     return executed;
 }
 
-
 - (id) initWithActions:(NSArray *)actions
 {
     if(self = [super init]) {
@@ -161,34 +160,49 @@
     for (NSDictionary *action in self.actions) {
 
         MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:[action objectForKey:@"path"]];
+
         void (^executeBlock)(id, SEL, id) = ^(id view, SEL command, id window){
-
-            if ([view isKindOfClass:[UIView class]]){
-                CGRect frame = [(UIView *)view frame];
-                NSLog(@"%@ %p (%f, %f, %f, %f) with %lu subviews dispatched %@", NSStringFromClass([view class]), view, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, [[(UIView *)view subviews] count], NSStringFromSelector(command));
-            }
-
-            NSLog(@"looking for %@", [action objectForKey:@"path"]);
-            NSDate *start = [NSDate date];
 
             [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                  withArgs:[action objectForKey:@"args"]
                                    onPath:selector
                                  fromRoot:[window rootViewController]
                                    toLeaf:view];
-
-            NSDate *finish = [NSDate date];
-            NSTimeInterval executionTime = [finish timeIntervalSinceDate:start];
-            NSLog(@"selector time = %f", executionTime);
         };
 
-        Class toSwizzle = [selector selectedClass];
-        if (!toSwizzle) {
-            toSwizzle = [UIView class];
-        }
+        // Execute once in case the view to be changed is already on screen.
         executeBlock(nil, _cmd, [[UIApplication sharedApplication] keyWindow]);
-        [MPSwizzler swizzleSelector:@selector(willMoveToWindow:) onClass:toSwizzle withBlock:executeBlock named:[[NSUUID UUID] UUIDString]];
-        //[MPSwizzler unswizzleSelector:@selector(willMoveToWindow:) onClass:[UIView class]];
+
+        if (![action objectForKey:@"swizzle"] || [[action objectForKey:@"swizzle"] boolValue]) {
+            Class swizzleClass;
+            if ([action objectForKey:@"swizzleClass"]) {
+                swizzleClass = NSClassFromString([action objectForKey:@"swizzleClass"]);
+            }
+            if (!swizzleClass) {
+                swizzleClass = [selector selectedClass];
+            }
+            if (!swizzleClass) {
+                swizzleClass = [UIView class];
+            }
+
+            SEL swizzleSelector = nil;
+            if ([action objectForKey:@"swizzleSelector"]) {
+                swizzleSelector = NSSelectorFromString([action objectForKey:@"swizzleSelector"]);
+            }
+            if (!swizzleSelector) {
+                swizzleSelector = @selector(willMoveToWindow:);
+            }
+
+            NSString *name;
+            if ([action objectForKey:@"name"]) {
+                name = [action objectForKey:@"name"];
+            } else {
+                name = [[NSUUID UUID] UUIDString];
+            }
+
+            // Swizzle the method needed to check for this object coming onscreen
+            [MPSwizzler swizzleSelector:swizzleSelector onClass:swizzleClass withBlock:executeBlock named:name];
+        }
     }
 }
 
