@@ -1,5 +1,5 @@
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface HelloMixpanelTests : SenTestCase
+@interface HelloMixpanelTests : XCTestCase
 
 @end
