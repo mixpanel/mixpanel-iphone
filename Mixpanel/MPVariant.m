@@ -30,18 +30,6 @@
     return [[MPVariant alloc] initWithActions:actions];
 }
 
-+ (void)setValue:(id)value forKey:(NSString *)key onPath:(NSString *)path fromRoot:(UIView *)root
-{
-    /*NSArray *views = [self getViewsOnPath:path fromRoot:root];
-    if ([views count] > 0) {
-        for (NSObject *o in views) {
-            [o setValue:value forKey:key];
-        }
-    } else {
-        NSLog(@"No objects matching pattern");
-    }*/
-}
-
 + (id)convertArg:(id)arg toType:(NSString *)toType
 {
     NSString *fromType = [self fromTypeForArg:arg];
@@ -82,6 +70,32 @@
     }
     NSAssert(fromType != nil, @"Expected non-nil fromType!");
     return fromType;
+}
+
++ (BOOL)setValue:(id)value forKey:(NSString *)key onPath:(MPObjectSelector *)path fromRoot:(UIView *)root toLeaf:(NSObject *)leaf
+{
+    if (leaf){
+        if ([path isLeafSelected:leaf]) {
+            return [self setValue:value forKey:key onObjects:@[leaf]];
+        } else {
+            return NO;
+        }
+    } else {
+        return [self setValue:value forKey:key onObjects:[path selectFromRoot:root]];
+    }
+}
+
++ (BOOL)setValue:(id)value forKey:(NSString *)key onObjects:(NSArray *)objects
+{
+    if ([objects count] > 0) {
+        for (NSObject *o in objects) {
+            [o setValue:value forKey:key];
+        }
+        return YES;
+    } else {
+        NSLog(@"No objects matching pattern");
+        return NO;
+    }
 }
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
@@ -159,13 +173,13 @@
 - (void)execute {
     for (NSDictionary *action in self.actions) {
 
-        MPObjectSelector *selector = [[MPObjectSelector alloc] initWithString:[action objectForKey:@"path"]];
+        MPObjectSelector *path = [[MPObjectSelector alloc] initWithString:[action objectForKey:@"path"]];
 
         void (^executeBlock)(id, SEL, id) = ^(id view, SEL command, id window){
 
             [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                  withArgs:[action objectForKey:@"args"]
-                                   onPath:selector
+                                   onPath:path
                                  fromRoot:[window rootViewController]
                                    toLeaf:view];
         };
@@ -179,7 +193,7 @@
                 swizzleClass = NSClassFromString([action objectForKey:@"swizzleClass"]);
             }
             if (!swizzleClass) {
-                swizzleClass = [selector selectedClass];
+                swizzleClass = [path selectedClass];
             }
             if (!swizzleClass) {
                 swizzleClass = [UIView class];
