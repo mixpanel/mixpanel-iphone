@@ -12,12 +12,16 @@
 #define TEST_TOKEN @"abc123"
 
 @interface Mixpanel (Test)
-
 // get access to private members
+
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
 @property (nonatomic, retain) NSMutableArray *peopleQueue;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, assign) dispatch_queue_t serialQueue;
+
+@property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
+@property (nonatomic, strong) MPNotification *currentlyShowingNotification;
+@property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 
 - (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)defaultDistinctId;
@@ -25,12 +29,14 @@
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
+- (void)showNotificationWithObject:(MPNotification *)notification;
 
 @end
 
 @interface MixpanelPeople (Test)
-
 // get access to private members
+
 @property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
 @property (nonatomic, copy) NSMutableArray *distinctId;
 
@@ -984,8 +990,8 @@
                         @"cta_url": @"maps://",
                         @"image_url": @"http://mixpanel.com"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
-    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
-    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+    [self.mixpanel showNotificationWithObject:notif];
+    [self.mixpanel showNotificationWithObject:notif];
 
     //wait for notifs to be shown from main queue
     [self waitForAsyncQueue];
@@ -998,8 +1004,8 @@
     // Clean up
     XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self.mixpanel performSelector:@selector(setCurrentlyShowingNotification:) withObject:nil];
-        [self.mixpanel performSelector:@selector(setNotificationViewController:) withObject:nil];
+        self.mixpanel.currentlyShowingNotification = nil;
+        self.mixpanel.notificationViewController = nil;
         [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^{
             [expectation fulfill];
         }];
@@ -1027,7 +1033,7 @@
     [topViewController presentViewController:[[UIViewController alloc]init] animated:YES completion:^{ waitForBlock = NO; }];
 
     //Survey should not show as it cannot present on top of a currently presenting view controller
-    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    [self.mixpanel presentSurveyWithRootViewController:survey];
 
     XCTAssertFalse([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was presented when it shouldn't have been");
 
@@ -1050,14 +1056,14 @@
 
     MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
 
-    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    [self.mixpanel presentSurveyWithRootViewController:survey];
     UIViewController *topVC = [self topViewController];
     XCTAssertTrue([topVC isKindOfClass:[MPSurveyNavigationController class]], @"Survey was not presented");
 
     // Clean up
     XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self.mixpanel performSelector:@selector(setCurrentlyShowingSurvey:) withObject:nil];
+        self.mixpanel.currentlyShowingSurvey = nil;
         [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
             [expectation fulfill];
         }];
