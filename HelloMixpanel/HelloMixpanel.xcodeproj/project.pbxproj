@@ -20,6 +20,7 @@
 		05439024192279530076094E /* MPTweakInline.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901C192279530076094E /* MPTweakInline.m */; };
 		05439025192279530076094E /* MPTweakStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901F192279530076094E /* MPTweakStore.m */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
+		055FA715194A6B020080A709 /* ABTestingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 055FA714194A6B020080A709 /* ABTestingTests.m */; };
 		0563B603194A186300B40489 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0563B604194A186900B40489 /* libPods-HelloMixpanelTests.a */; };
 		0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
@@ -105,6 +106,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		055FA716194A6B020080A709 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
+			remoteInfo = HelloMixpanel;
+		};
 		057264C5194913C500738CDC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
@@ -166,6 +174,9 @@
 		0543901E192279530076094E /* MPTweakStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakStore.h; sourceTree = "<group>"; };
 		0543901F192279530076094E /* MPTweakStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakStore.m; sourceTree = "<group>"; };
 		0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HelloMixpanel.storyboard; sourceTree = "<group>"; };
+		055FA710194A6B010080A709 /* ABTestingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ABTestingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		055FA713194A6B020080A709 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		055FA714194A6B020080A709 /* ABTestingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTestingTests.m; sourceTree = "<group>"; };
 		0563B604194A186900B40489 /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-HelloMixpanelTests.a"; path = "Pods/build/Debug-iphoneos/libPods-HelloMixpanelTests.a"; sourceTree = "<group>"; };
 		057264CB194913D800738CDC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		057264D11949164900738CDC /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-HelloMixpanelTests.a"; path = "Pods/build/Debug-iphoneos/libPods-HelloMixpanelTests.a"; sourceTree = "<group>"; };
@@ -317,6 +328,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		055FA70D194A6B010080A709 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2808F98A1610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -390,12 +408,30 @@
 			name = Tweak;
 			sourceTree = "<group>";
 		};
+		055FA711194A6B020080A709 /* ABTestingTests */ = {
+			isa = PBXGroup;
+			children = (
+				055FA714194A6B020080A709 /* ABTestingTests.m */,
+				055FA712194A6B020080A709 /* Supporting Files */,
+			);
+			path = ABTestingTests;
+			sourceTree = "<group>";
+		};
+		055FA712194A6B020080A709 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				055FA713194A6B020080A709 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
 				2808F9981610EFE3005772B7 /* Supporting Files */,
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
+				055FA711194A6B020080A709 /* ABTestingTests */,
 				2808F9901610EFE3005772B7 /* Frameworks */,
 				2808F98E1610EFE3005772B7 /* Products */,
 				286760AD1611982600B1BEC8 /* Mixpanel */,
@@ -409,6 +445,7 @@
 			children = (
 				2808F98D1610EFE3005772B7 /* HelloMixpanel.app */,
 				2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */,
+				055FA710194A6B010080A709 /* ABTestingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -573,6 +610,8 @@
 		A7B462DF191075E700774977 /* ValueTransformers */ = {
 			isa = PBXGroup;
 			children = (
+				C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */,
+				C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */,
 				A7B462B6191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.h */,
 				A7B462B7191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m */,
 				A7B462B8191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.h */,
@@ -585,22 +624,20 @@
 				A7B462BF191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.m */,
 				A7B462C0191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.h */,
 				A7B462C1191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m */,
+				C38D5316E9A94A6157D16B55 /* MPNSAttributedStringToNSDictionaryValueTransformer.h */,
+				C38D5D771D15098CC3956284 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
+				C38D5D23680F8A0E2EE6DE83 /* MPNSDictionaryToUIFontValueTransformer.h */,
+				C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */,
 				A7B462C9191075DE00774977 /* MPPassThroughValueTransformer.h */,
 				A7B462CA191075DE00774977 /* MPPassThroughValueTransformer.m */,
 				A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */,
 				A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */,
-				C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */,
-				C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */,
-				C38D565A188445F6488340E6 /* MPUIImageToNSDictionaryValueTransformer.m */,
-				C38D5FFAFD3DD888FC143D92 /* MPUIImageToNSDictionaryValueTransformer.h */,
-				C38D56F0A718EC78712F7DD7 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
 				C38D53C0AC75577CCC271410 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.h */,
-				C38D5CC5468B2E48879A4540 /* MPNSDictionaryToUIFontValueTransformer.m */,
-				C38D5D23680F8A0E2EE6DE83 /* MPNSDictionaryToUIFontValueTransformer.h */,
-				C38D5D771D15098CC3956284 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
-				C38D5316E9A94A6157D16B55 /* MPNSAttributedStringToNSDictionaryValueTransformer.h */,
-				C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */,
+				C38D56F0A718EC78712F7DD7 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
 				C38D5B8C3C7D67F43EF120E7 /* MPUIFontToNSDictionaryValueTransformer.h */,
+				C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */,
+				C38D5FFAFD3DD888FC143D92 /* MPUIImageToNSDictionaryValueTransformer.h */,
+				C38D565A188445F6488340E6 /* MPUIImageToNSDictionaryValueTransformer.m */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -643,6 +680,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		055FA70F194A6B010080A709 /* ABTestingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 055FA71B194A6B020080A709 /* Build configuration list for PBXNativeTarget "ABTestingTests" */;
+			buildPhases = (
+				055FA70C194A6B010080A709 /* Sources */,
+				055FA70D194A6B010080A709 /* Frameworks */,
+				055FA70E194A6B010080A709 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				055FA717194A6B020080A709 /* PBXTargetDependency */,
+			);
+			name = ABTestingTests;
+			productName = ABTestingTests;
+			productReference = 055FA710194A6B010080A709 /* ABTestingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		2808F98C1610EFE3005772B7 /* HelloMixpanel */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C31610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanel" */;
@@ -697,6 +752,10 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
+					055FA70F194A6B010080A709 = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 2808F98C1610EFE3005772B7;
+					};
 					2808F98C1610EFE3005772B7 = {
 						DevelopmentTeam = E8FVX7QLET;
 					};
@@ -720,11 +779,19 @@
 			targets = (
 				2808F98C1610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B01610EFE4005772B7 /* HelloMixpanelTests */,
+				055FA70F194A6B010080A709 /* ABTestingTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		055FA70E194A6B010080A709 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2808F98B1610EFE3005772B7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -832,6 +899,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		055FA70C194A6B010080A709 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				055FA715194A6B020080A709 /* ABTestingTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2808F9891610EFE3005772B7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -915,6 +990,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		055FA717194A6B020080A709 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
+			targetProxy = 055FA716194A6B020080A709 /* PBXContainerItemProxy */;
+		};
 		057264C6194913C500738CDC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
@@ -962,6 +1042,95 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		055FA718194A6B020080A709 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = ABTestingTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				METAL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+			};
+			name = Debug;
+		};
+		055FA719194A6B020080A709 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = ABTestingTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		055FA71A194A6B020080A709 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = ABTestingTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
 		2808F9C11610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1364,6 +1533,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		055FA71B194A6B020080A709 /* Build configuration list for PBXNativeTarget "ABTestingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				055FA718194A6B020080A709 /* Debug */,
+				055FA719194A6B020080A709 /* Release */,
+				055FA71A194A6B020080A709 /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
