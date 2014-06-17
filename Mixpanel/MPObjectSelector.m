@@ -84,8 +84,9 @@
  by this selector starting from the root
 */
 
--(BOOL)isLeafSelected:(id)leaf
+-(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root
 {
+    NSLog(@"Bottom up search from %@ to %@", leaf, root);
     BOOL isSelected = YES;
     NSArray *views = @[leaf];
     NSUInteger i = [_filters count];
@@ -100,7 +101,10 @@
             break;
         }
     }
-    return isSelected;
+    if (isSelected) {
+        NSLog(@"Bottom up selection yielded %@, root is %@", views, root);
+    }
+    return isSelected && [views indexOfObject:root] != NSNotFound;
 }
 
 - (MPObjectFilter *)nextFilter
@@ -130,6 +134,11 @@
         return NSClassFromString(((MPObjectFilter *)_filters[[_filters count] - 1]).name);
     }
     return nil;
+}
+
+- (NSString *)description
+{
+    return self.string;
 }
 
 @end
@@ -201,11 +210,11 @@
     return NO;
 }
 
-
 -(NSArray *)getParentsOfObject:(NSObject *)obj
 {
     NSMutableArray *result = [NSMutableArray array];
-    if ([obj isKindOfClass:[UIView class]] && [(UIView *)obj superview]) {
+    if ([obj isKindOfClass:[UIView class]]) {
+        NSLog(@"superview of %@ = %@", obj, [(UIView *)obj superview]);
         if ([(UIView *)obj superview]) {
             [result addObject:[(UIView *)obj superview]];
         }
@@ -213,16 +222,29 @@
         if ([(UIView *)obj nextResponder] && [(UIView *)obj nextResponder] != [(UIView *)obj superview]) {
             [result addObject:[(UIView *)obj nextResponder]];
         }
-    } else if ([obj isKindOfClass:[UIViewController class]] && [(UIViewController *)obj parentViewController]) {
-        [result addObject:[(UIViewController *)obj parentViewController]];
+    } else if ([obj isKindOfClass:[UIViewController class]]) {
+        if ([(UIViewController *)obj parentViewController]) {
+            [result addObject:[(UIViewController *)obj parentViewController]];
+        }
+        if ([(UIViewController *)obj presentingViewController]) {
+            [result addObject:[(UIViewController *)obj presentingViewController]];
+        }
+        if ([UIApplication sharedApplication].keyWindow.rootViewController == obj) {
+            [result addObject:[UIApplication sharedApplication].keyWindow];
+        }
     }
+    NSLog(@"Found parents %@ of %@", result, obj);
     return [result copy];
 }
 
 -(NSArray *)getChildrenOfObject:(NSObject *)obj ofType:(Class)class
 {
     NSMutableArray *result = [NSMutableArray array];
-    if ([obj isKindOfClass:[UIView class]]) {
+    // A UIWindow is also a UIView, so we could in theory follow the subviews chain from UIWindow, but
+    // for now we only follow rootViewController from UIView.
+    if ([obj isKindOfClass:[UIWindow class]] && [((UIWindow *)obj).rootViewController isKindOfClass:class]) {
+        [result addObject:((UIWindow *)obj).rootViewController];
+    } else if ([obj isKindOfClass:[UIView class]]) {
         for (NSObject *child in [(UIView *)obj subviews]) {
             if (!class || [child isKindOfClass:class]) {
                 [result addObject:child];

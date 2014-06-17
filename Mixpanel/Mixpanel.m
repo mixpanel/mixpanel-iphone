@@ -1054,7 +1054,7 @@ static Mixpanel *sharedInstance = nil;
                     }
                 }
             }*/
-            NSArray *parsedVariants = @[[MPVariant variantWithDummyJSONObject]];
+            NSArray *parsedVariants = @[];
 
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];

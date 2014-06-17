@@ -68,12 +68,12 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         MPABTestDesignerSnapshotResponseMessage *snapshotMessage = [MPABTestDesignerSnapshotResponseMessage message];
         __block UIImage *screenshot = nil;
         __block NSDictionary *serializedObjects = nil;
-        
+
         dispatch_sync(dispatch_get_main_queue(), ^{
             screenshot = [serializer screenshotImageForWindowAtIndex:0];
         });
         snapshotMessage.screenshot = screenshot;
-        
+
         if (imageHash && [imageHash isEqualToString:snapshotMessage.imageHash]) {
             NSLog(@"%@ hit snapshot cache", self);
             serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
