@@ -26,7 +26,7 @@
             imageHash = [self getImageHash:jpegSnapshotImageData];
         }
     }
-    
+
     _imageHash = imageHash;
     [self setPayloadObject:(payloadObject ?: [NSNull null]) forKey:@"screenshot"];
     [self setPayloadObject:(imageHash ?: [NSNull null]) forKey:@"image_hash"];

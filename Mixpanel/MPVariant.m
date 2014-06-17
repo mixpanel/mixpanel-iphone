@@ -13,12 +13,6 @@
 
 @implementation MPVariant
 
-+ (MPVariant *)variantWithDummyJSONObject {
-    NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_variant" withExtension:@"json"]]
-                                    options:0 error:nil];
-    return [MPVariant variantWithJSONObject:object];
-}
-
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object {
 
     NSArray *actions = [object objectForKey:@"actions"];
@@ -75,7 +69,7 @@
 + (BOOL)setValue:(id)value forKey:(NSString *)key onPath:(MPObjectSelector *)path fromRoot:(UIView *)root toLeaf:(NSObject *)leaf
 {
     if (leaf){
-        if ([path isLeafSelected:leaf]) {
+        if ([path isLeafSelected:leaf fromRoot:root]) {
             return [self setValue:value forKey:key onObjects:@[leaf]];
         } else {
             return NO;
@@ -101,7 +95,7 @@
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
 {
     if (leaf){
-        if ([path isLeafSelected:leaf]) {
+        if ([path isLeafSelected:leaf fromRoot:root]) {
             return [self executeSelector:selector withArgs:args onObjects:@[leaf]];
         } else {
             return NO;
@@ -175,17 +169,17 @@
 
         MPObjectSelector *path = [[MPObjectSelector alloc] initWithString:[action objectForKey:@"path"]];
 
-        void (^executeBlock)(id, SEL, id) = ^(id view, SEL command, id window){
+        void (^executeBlock)(id, SEL) = ^(id view, SEL command){
 
             [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
                                  withArgs:[action objectForKey:@"args"]
                                    onPath:path
-                                 fromRoot:[window rootViewController]
+                                 fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
                                    toLeaf:view];
         };
 
         // Execute once in case the view to be changed is already on screen.
-        executeBlock(nil, _cmd, [[UIApplication sharedApplication] keyWindow]);
+        executeBlock(nil, _cmd);
 
         if (![action objectForKey:@"swizzle"] || [[action objectForKey:@"swizzle"] boolValue]) {
             Class swizzleClass;
@@ -216,8 +210,8 @@
 
             // Swizzle the method needed to check for this object coming onscreen
             [MPSwizzler swizzleSelector:swizzleSelector onClass:swizzleClass withBlock:executeBlock named:name];
+            [MPSwizzler printSwizzles];
         }
     }
 }
-
 @end

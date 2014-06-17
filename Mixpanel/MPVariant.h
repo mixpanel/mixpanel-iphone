@@ -12,7 +12,6 @@
 
 @property (nonatomic, strong) NSArray *actions;
 
-+ (MPVariant *)variantWithDummyJSONObject;
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
 
 - (void)execute;

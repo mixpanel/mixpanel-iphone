@@ -193,7 +193,7 @@
 		05E98DE51918472100AFF3E1 /* MPObjectSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSelector.h; sourceTree = "<group>"; };
 		05E98DE61918472100AFF3E1 /* MPObjectSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSelector.m; sourceTree = "<group>"; };
 		05E98DF0191AE10000AFF3E1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		05E98DF2191AE27200AFF3E1 /* test_variant.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_variant.json; sourceTree = "<group>"; };
+		05E98DF2191AE27200AFF3E1 /* test_variant.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = test_variant.json; path = ../../Mixpanel/test_variant.json; sourceTree = "<group>"; };
 		05E98DF4191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerTweakRequestMessage.h; sourceTree = "<group>"; };
 		05E98DF5191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerTweakRequestMessage.m; sourceTree = "<group>"; };
 		05E98DF7191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerTweakResponseMessage.h; sourceTree = "<group>"; };
@@ -420,6 +420,7 @@
 		055FA712194A6B020080A709 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
 				055FA713194A6B020080A709 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -553,7 +554,6 @@
 				05E98D84190F4B2D00AFF3E1 /* MPVariant.m */,
 				289B497817D913D40035439B /* NSData+MPBase64.h */,
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
-				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
 				053B4C661840191000E825FE /* UIColor+MPColor.h */,
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,

@@ -74,7 +74,20 @@
     [super tearDown];
 }
 
-- (void)testVariantInvocation
+-(UIViewController *)topViewController {
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    return rootViewController;
+}
+
+/*
+ Test that invocations for various objects work. This includes the parsing and
+ deserializing of the selectors and arguments from JSON, apllying to the objects
+ and checking that the change was successfully applied.
+*/
+- (void)testInvocation
 {
     UIImageView *imageView = [[UIImageView alloc] init];
     XCTAssert(imageView.image == nil, @"Image should not be set");
@@ -100,6 +113,32 @@
                       withArgs:@[@[@{@"X":@10,@"Y":@10,@"Width":@10,@"Height":@10}, @"CGRect"]]
                      onObjects:@[button]];
     XCTAssert(button.frame.size.width == 10.0f, @"Button width should be set");
+}
+
+/*
+ Test that a variant applied application-wide works correctly on existing view objects
+ as well as applying the change to new objects as they are added to the view.
+*/
+- (void)testVariant
+{
+    // This label added before the Variant is created.
+    UILabel *label = [[UILabel alloc] init];
+    [label setText:@"Original Text"];
+    [[self topViewController].view addSubview:label];
+
+    NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_variant" withExtension:@"json"]]
+                                                           options:0 error:nil];
+
+    MPVariant *variant = [MPVariant variantWithJSONObject:object];
+    [variant execute];
+
+    // This label added after the Variant was created.
+    UILabel *label2 = [[UILabel alloc] init];
+    [label2 setText:@"Original Text 2"];
+    [[self topViewController].view addSubview:label2];
+
+    XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
+    XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
 }
 
 - (void)testSwizzle
