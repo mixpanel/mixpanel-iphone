@@ -24,7 +24,7 @@
 
 @end
 
-@interface GradientMaskLayer : CALayer {}
+@interface GradientMaskLayer : CAGradientLayer {}
 
 @end
 
