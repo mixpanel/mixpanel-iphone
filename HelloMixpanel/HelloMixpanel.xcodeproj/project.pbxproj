@@ -1541,6 +1541,7 @@
 				055FA71A194A6B020080A709 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */ = {
 			isa = XCConfigurationList;

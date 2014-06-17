@@ -164,8 +164,8 @@
     // Test that subclasses without a local definition inherit the swizzled method from the superclass
     blockCount = 0;
     [b incrementCount];
-    //XCTAssertEqual(b.count, 1, @"Original A.incrementCount should have executed");
-    //XCTAssertEqual(blockCount, 1, @"Swizzle A.incrementCount should have executed");
+    XCTAssertEqual(b.count, 1, @"Original A.incrementCount should have executed");
+    XCTAssertEqual(blockCount, 1, @"Swizzle A.incrementCount should have executed");
 
     // Test that a subclasses with with its own method redefinition should not inherit
     // The swizzled method from the superclass.
@@ -176,6 +176,7 @@
 
     // Test swizzle on class where superclass has already been swizzled.
     blockCount = 0;
+    b.count = 0;
     [MPSwizzler swizzleSelector:@selector(incrementCount) onClass:[B class] withBlock:^(id obj, SEL sel){blockCount += 3;} named:@"Swizzle B.incrementProperty"];
     [b incrementCount];
     XCTAssertEqual(b.count, 1, @"Original B.incrementCount should have executed (inherited function from A)");
