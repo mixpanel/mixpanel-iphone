@@ -207,6 +207,7 @@ static Mixpanel *sharedInstance = nil;
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
         [self unarchive];
+        [self startFlushTimer];
     }
 
     return self;
