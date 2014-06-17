@@ -252,9 +252,10 @@
  project, consider using <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
+ @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  @property
