@@ -430,13 +430,13 @@
     NSLog(@"starting wait for serial queue...");
     dispatch_sync(mixpanel.serialQueue, ^{ return; });
     NSLog(@"finished wait for serial queue");
-    STAssertTrue(mixpanel.eventsQueue.count == 1, @"event not queued");
+    XCTAssertTrue(mixpanel.eventsQueue.count == 1, @"event not queued");
     NSDictionary *e = mixpanel.eventsQueue.lastObject;
-    STAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
+    XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
     NSDictionary *p = e[@"properties"];
-    STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
-    STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
-    STAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
+    XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
+    XCTAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
     NSLog(@"finished testTrackLaunchOptions");
 }
 
@@ -447,13 +447,13 @@
        @"c": @"the_campaign_id"
     }}];
     [self waitForSerialQueue];
-    STAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
-    STAssertEqualObjects(e[@"event"], @"$campaign_received", @"incorrect event name");
+    XCTAssertEqualObjects(e[@"event"], @"$campaign_received", @"incorrect event name");
     NSDictionary *p = e[@"properties"];
-    STAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
-    STAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
-    STAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
+    XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
+    XCTAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
     NSLog(@"finished testTrackPushNotification");
 }
 
@@ -464,10 +464,26 @@
                                                    @"cid": @"the_campaign_id"
                                                    }}];
     [self waitForSerialQueue];
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
     [self.mixpanel trackPushNotification:@{@"mp": @1}];
     [self waitForSerialQueue];
-    STAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:nil];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:@{}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:@{@"mp": @"bad value"}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    NSDictionary *badUserInfo = @{@"mp": @{
+                                         @"m": [NSData data],
+                                         @"c": [NSData data]
+                                         }};
+    XCTAssertThrows([self.mixpanel trackPushNotification:badUserInfo], @"property types should not be allowed");
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
     NSLog(@"finished testTrackPushNotificationMalformed");
 }
 
