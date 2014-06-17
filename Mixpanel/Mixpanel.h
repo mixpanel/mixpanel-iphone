@@ -258,6 +258,21 @@
 - (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
+ @method
+ 
+ @abstract
+ Initializes an instance of the API with the given project token.
+ 
+ @discussion
+ Supports for the old initWithToken method format but really just passes
+ launchOptions to the above method as nil.
+ 
+ @param apiToken        your project token
+ @param flushInterval   interval to run background flushing
+ */
+- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
+
+/*!
  @property
 
  @abstract
