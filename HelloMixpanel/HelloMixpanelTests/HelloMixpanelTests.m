@@ -50,7 +50,7 @@
 {
     NSLog(@"starting test setup...");
     [super setUp];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     [self.mixpanel reset];
     self.mixpanelWillFlush = NO;
     [self waitForSerialQueue];
@@ -423,10 +423,11 @@
 
 - (void)testTrackLaunchOptions
 {
-    Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:TEST_TOKEN launchOptions:@{UIApplicationLaunchOptionsRemoteNotificationKey: @{@"mp": @{
-                                                                                                                     @"m": @"the_message_id",
-                                                                                                                     @"c": @"the_campaign_id"
-                                                                                                                     }}}];
+    Mixpanel *mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN
+                                           launchOptions:@{UIApplicationLaunchOptionsRemoteNotificationKey: @{@"mp": @{
+                                                                                                              @"m": @"the_message_id",
+                                                                                                              @"c": @"the_campaign_id"
+                                                                                                              }}} andFlushInterval:0];
     NSLog(@"starting wait for serial queue...");
     dispatch_sync(mixpanel.serialQueue, ^{ return; });
     NSLog(@"finished wait for serial queue");
@@ -504,7 +505,7 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset");
     XCTAssertNil(self.mixpanel.people.distinctId, @"people distinct id failed to reset");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people queue failed to reset");
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"distinct id failed to reset after archive");
     XCTAssertNil(self.mixpanel.nameTag, @"name tag failed to reset after archive");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"super properties failed to reset after archive");
@@ -516,7 +517,7 @@
 - (void)testArchive
 {
     [self.mixpanel archive];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id archive failed");
     XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties archive failed");
@@ -531,7 +532,7 @@
     [self.mixpanel.people set:p];
     [self waitForSerialQueue];
     [self.mixpanel archive];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"custom name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
@@ -542,7 +543,7 @@
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from no file failed");
     XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive from no file failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from no file failed");
@@ -559,7 +560,7 @@
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"garbage events archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"garbage people archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"garbage properties archive file not found");
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from garbage failed");
     XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive from garbage failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from garbage failed");
