@@ -14,5 +14,6 @@ typedef void (^swizzleBlock)();
 
 + (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)block named:(NSString *)aName;
 + (void)unswizzleSelector:(SEL)aSelector onClass:(Class)aClass;
++ (void)printSwizzles;
 
 @end

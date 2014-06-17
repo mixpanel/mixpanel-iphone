@@ -73,6 +73,21 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                                      valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
 }
 
++ (void)printSwizzles
+{
+    NSEnumerator *classEnum = [swizzles keyEnumerator];
+    Class class;
+    while((class = (Class)[classEnum nextObject])) {
+        NSMapTable *selectors = (NSMapTable *)[swizzles objectForKey:class];
+        NSEnumerator *selectorEnum = [selectors keyEnumerator];
+        SEL selector;
+        while((selector = (SEL)((__bridge void *)[selectorEnum nextObject]))) {
+            MPSwizzle *swizzle = [self swizzleForClass:class andSelector:selector];
+            NSLog(@"%@ %@ %d swizzles", NSStringFromClass(class), NSStringFromSelector(selector), [swizzle.blocks count]);
+        }
+    }
+}
+
 + (MPSwizzle *)swizzleForClass:(Class)aClass andSelector:(SEL)aSelector
 {
     return [[self swizzledSelectorsForClass:aClass] objectForKey:(__bridge id)((void *)aSelector)];
