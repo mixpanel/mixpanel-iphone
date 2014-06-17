@@ -972,13 +972,12 @@ static Mixpanel *sharedInstance = nil;
     if (userInfo && userInfo[@"mp"]) {
         NSDictionary *mpPayload = userInfo[@"mp"];
         
-        if (![mpPayload isKindOfClass:[NSDictionary class]]) {
-            NSLog(@"%@ malformed mixpanel push payload %@", self, mpPayload);
-            
-        } else if (mpPayload[@"m"] && mpPayload[@"c"]) {
+        if ([mpPayload isKindOfClass:[NSDictionary class]] && mpPayload[@"m"] && mpPayload[@"c"]) {
             [self track:event properties:@{@"campaign_id": mpPayload[@"c"],
                                            @"message_id": mpPayload[@"m"],
                                            @"message_type": @"push"}];
+        } else {
+            NSLog(@"%@ malformed mixpanel push payload %@", self, mpPayload);
         }
     }
 }
