@@ -137,8 +137,13 @@
     [label2 setText:@"Original Text 2"];
     [[self topViewController].view addSubview:label2];
 
-    XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
-    XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
+    XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
+        XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:0.1 handler:nil];
 }
 
 - (void)testSwizzle
