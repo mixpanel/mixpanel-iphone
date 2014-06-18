@@ -27,7 +27,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSLog(@"invalid notif id: %@", ID);
         return nil;
     }
-    
+
     NSNumber *messageID = object[@"message_id"];
     if (!([messageID isKindOfClass:[NSNumber class]] && [messageID integerValue] > 0)) {
         NSLog(@"invalid notif message id: %@", messageID);
@@ -81,7 +81,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
 
-        if ([type isEqualToString:MPNotificationTypeTakeover]) {
+        if ([type isEqualToString:MPNotificationTypeTakeover] && [imageURLString rangeOfString:@"@2x"].location == NSNotFound) {
             NSString *imageName = [imageURLString stringByDeletingPathExtension];
             NSString *extension = [imageURLString pathExtension];
             imageURLString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
