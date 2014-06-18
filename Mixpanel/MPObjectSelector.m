@@ -19,7 +19,6 @@
 - (BOOL)appliesTo:(NSObject *)view;
 - (BOOL)appliesToAny:(NSArray *)views;
 
-
 @end
 
 @interface MPObjectSelector () {
@@ -86,7 +85,6 @@
 
 -(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root
 {
-    NSLog(@"Bottom up search from %@ to %@", leaf, root);
     BOOL isSelected = YES;
     NSArray *views = @[leaf];
     NSUInteger i = [_filters count];
@@ -100,9 +98,6 @@
         if ([views count] == 0) {
             break;
         }
-    }
-    if (isSelected) {
-        NSLog(@"Bottom up selection yielded %@, root is %@", views, root);
     }
     return isSelected && [views indexOfObject:root] != NSNotFound;
 }
@@ -214,7 +209,6 @@
 {
     NSMutableArray *result = [NSMutableArray array];
     if ([obj isKindOfClass:[UIView class]]) {
-        NSLog(@"superview of %@ = %@", obj, [(UIView *)obj superview]);
         if ([(UIView *)obj superview]) {
             [result addObject:[(UIView *)obj superview]];
         }
@@ -233,7 +227,6 @@
             [result addObject:[UIApplication sharedApplication].keyWindow];
         }
     }
-    NSLog(@"Found parents %@ of %@", result, obj);
     return [result copy];
 }
 
