@@ -75,7 +75,6 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         snapshotMessage.screenshot = screenshot;
 
         if (imageHash && [imageHash isEqualToString:snapshotMessage.imageHash]) {
-            NSLog(@"%@ hit snapshot cache", self);
             serializedObjects = [connection sessionObjectForKey:@"snapshot_hierarchy"];
         } else {
             dispatch_sync(dispatch_get_main_queue(), ^{
