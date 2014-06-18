@@ -169,13 +169,15 @@
 
         MPObjectSelector *path = [[MPObjectSelector alloc] initWithString:[action objectForKey:@"path"]];
 
+        // Block to execute on swizzle
         void (^executeBlock)(id, SEL) = ^(id view, SEL command){
-
-            [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
-                                 withArgs:[action objectForKey:@"args"]
-                                   onPath:path
-                                 fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
-                                   toLeaf:view];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                                     withArgs:[action objectForKey:@"args"]
+                                       onPath:path
+                                     fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
+                                       toLeaf:view];
+            });
         };
 
         // Execute once in case the view to be changed is already on screen.
@@ -198,7 +200,7 @@
                 swizzleSelector = NSSelectorFromString([action objectForKey:@"swizzleSelector"]);
             }
             if (!swizzleSelector) {
-                swizzleSelector = @selector(willMoveToWindow:);
+                swizzleSelector = @selector(didMoveToWindow);
             }
 
             NSString *name;
