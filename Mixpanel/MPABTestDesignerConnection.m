@@ -9,6 +9,11 @@
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerTweakRequestMessage.h"
 
+#ifdef MESSAGING_DEBUG
+#define MessagingDebug(...) NSLog(__VA_ARGS__)
+#else
+#define MessagingDebug(...)
+#endif
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
 @end
@@ -41,7 +46,7 @@
         _commandQueue.maxConcurrentOperationCount = 1;
         _commandQueue.suspended = YES;
 
-        NSLog(@"Attempting to open WebSocket to: %@", url);
+        MessagingDebug(@"Attempting to open WebSocket to: %@", url);
         [_webSocket open];
     }
 
@@ -77,14 +82,14 @@
 
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message
 {
-    NSLog(@"Sending message: %@", [message debugDescription]);
+    MessagingDebug(@"Sending message: %@", [message debugDescription]);
     NSString *jsonString = [[NSString alloc] initWithData:[message JSONData] encoding:NSUTF8StringEncoding];
     [_webSocket send:jsonString];
 }
 
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message
 {
-    NSLog(@"raw message: %@", message);
+    MessagingDebug(@"raw message: %@", message);
 
     NSParameterAssert([message isKindOfClass:[NSString class]] || [message isKindOfClass:[NSData class]]);
 
@@ -104,7 +109,7 @@
     }
     else
     {
-        NSLog(@"Badly formed socket message expected JSON dictionary: %@", error);
+        MessagingDebug(@"Badly formed socket message expected JSON dictionary: %@", error);
     }
 
     return designerMessage;
@@ -115,7 +120,7 @@
 - (void)webSocket:(MPWebSocket *)webSocket didReceiveMessage:(id)message
 {
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
-    NSLog(@"WebSocket received message: %@", [designerMessage debugDescription]);
+    MessagingDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
 
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
@@ -127,14 +132,14 @@
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
-    NSLog(@"WebSocket did open.");
+    MessagingDebug(@"WebSocket did open.");
     self.connected = YES;
     _commandQueue.suspended = NO;
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
 {
-    NSLog(@"WebSocket did fail with error: %@", error);
+    MessagingDebug(@"WebSocket did fail with error: %@", error);
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
 
@@ -143,7 +148,7 @@
 
 - (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    NSLog(@"WebSocket did close with code '%d' reason '%@'.", (int)code, reason);
+    MessagingDebug(@"WebSocket did close with code '%d' reason '%@'.", (int)code, reason);
 
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
