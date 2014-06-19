@@ -156,6 +156,43 @@
     return executed;
 }
 
++ (Class)getSwizzleClassFromAction:(NSDictionary *)action
+{
+    Class swizzleClass;
+    if ([action objectForKey:@"swizzleClass"]) {
+        swizzleClass = NSClassFromString([action objectForKey:@"swizzleClass"]);
+    }
+    if (!swizzleClass) {
+        swizzleClass = [path selectedClass];
+    }
+    if (!swizzleClass) {
+        swizzleClass = [UIView class];
+    }
+    return swizzleClass;
+}
+
++ (SEL)getSwizzleSelectorFromAction:(NSDictionary *)action
+{
+    SEL swizzleSelector = nil;
+    if ([action objectForKey:@"swizzleSelector"]) {
+        swizzleSelector = NSSelectorFromString([action objectForKey:@"swizzleSelector"]);
+    }
+    if (!swizzleSelector) {
+        swizzleSelector = @selector(didMoveToWindow);
+    }
+    return swizzleSelector;
+}
+
++ (NSString *)getSwizzleNameFromAction:(NSDictionary *)action
+{
+    NSString *name;
+    if ([action objectForKey:@"name"]) {
+        name = [action objectForKey:@"name"];
+    } else {
+        name = [[NSUUID UUID] UUIDString];
+    }
+}
+
 - (id) initWithActions:(NSArray *)actions
 {
     if(self = [super init]) {
@@ -184,36 +221,22 @@
         executeBlock(nil, _cmd);
 
         if (![action objectForKey:@"swizzle"] || [[action objectForKey:@"swizzle"] boolValue]) {
-            Class swizzleClass;
-            if ([action objectForKey:@"swizzleClass"]) {
-                swizzleClass = NSClassFromString([action objectForKey:@"swizzleClass"]);
-            }
-            if (!swizzleClass) {
-                swizzleClass = [path selectedClass];
-            }
-            if (!swizzleClass) {
-                swizzleClass = [UIView class];
-            }
-
-            SEL swizzleSelector = nil;
-            if ([action objectForKey:@"swizzleSelector"]) {
-                swizzleSelector = NSSelectorFromString([action objectForKey:@"swizzleSelector"]);
-            }
-            if (!swizzleSelector) {
-                swizzleSelector = @selector(didMoveToWindow);
-            }
-
-            NSString *name;
-            if ([action objectForKey:@"name"]) {
-                name = [action objectForKey:@"name"];
-            } else {
-                name = [[NSUUID UUID] UUIDString];
-            }
-
             // Swizzle the method needed to check for this object coming onscreen
-            [MPSwizzler swizzleSelector:swizzleSelector onClass:swizzleClass withBlock:executeBlock named:name];
+            [MPSwizzler swizzleSelector:[MPVariant getSwizzleSelectorFromAction:action]
+                                onClass:[MPVariant getSwizzleClassFromAction:action]
+                              withBlock:executeBlock
+                                  named:[MPVariant getSwizzleNameFromAction:action]];
             [MPSwizzler printSwizzles];
         }
     }
 }
+
+- (void)stop {
+    for (NSDictionary *action in self.actions) {
+        [MPSwizzler unswizzleSelector:[MPVariant getSwizzleSelectorFromAction:action]
+                              onClass:[MPVariant getSwizzleClassFromAction:action]
+                                named:[MPVariant getSwizzleNameFromAction:action]];
+    }
+}
+
 @end

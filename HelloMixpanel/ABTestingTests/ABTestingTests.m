@@ -188,6 +188,29 @@
     XCTAssertEqual(blockCount, 3, @"Swizzle on B.incrementCount should have executed (but not the swizzle on A.incrementCount");
 }
 
+- (void)testUnswizzle
+{
+    A *a = [[A alloc] init];
+    B *b = [[B alloc] init];
+
+    __block int blockCount = 0;
+    [MPSwizzler swizzleSelector:@selector(incrementCount) onClass:[A class] withBlock:^(id obj, SEL sel){blockCount += 1;} named:@"Swizzle To Remove"];
+    [a incrementCount];
+    XCTAssertEqual(a.count, 1, @"Original A.incrementCount should have executed");
+    XCTAssertEqual(blockCount, 1, @"Swizzle on A.incrementCount should have executed");
+
+    blockCount = 0;
+    [MPSwizzler unswizzleSelector:@selector(incrementCount) onClass:[A class] named:@"Swizzle To Remove"];
+    [a incrementCount];
+    XCTAssertEqual(a.count, 2, @"Original A.incrementCount should have executed");
+    XCTAssertEqual(blockCount, 0, @"Swizzle on A.incrementCount should be removed");
+
+    blockCount = 0;
+    [b incrementCount];
+    XCTAssertEqual(b.count, 1, @"Original A.incrementCount should have executed");
+    XCTAssertEqual(blockCount, 0, @"Swizzle on A.incrementCount should be removed");
+}
+
 - (void)testSwizzleUI
 {
     __block int count = 0;
