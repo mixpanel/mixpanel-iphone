@@ -505,7 +505,7 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset");
     XCTAssertNil(self.mixpanel.people.distinctId, @"people distinct id failed to reset");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people queue failed to reset");
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"distinct id failed to reset after archive");
     XCTAssertNil(self.mixpanel.nameTag, @"name tag failed to reset after archive");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"super properties failed to reset after archive");
