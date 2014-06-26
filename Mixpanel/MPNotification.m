@@ -94,6 +94,12 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         }
     }
 
+    NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+    if (![supportedOrientations containsObject:@"UIInterfaceOrientationPortrait"] && [type isEqualToString:@"takeover"]) {
+        NSLog(@"takeover notifications are not supported in landscape-only apps.");
+        return nil;
+    }
+
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                     messageID:[messageID unsignedIntegerValue]
                                           type:type
