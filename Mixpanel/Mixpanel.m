@@ -907,11 +907,16 @@ static Mixpanel *sharedInstance = nil;
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive) {
         NSDate *start = [NSDate date];
 
-        [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
+        [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSArray *variants) {
             if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
                 [self showNotificationWithObject:notifications[0]];
             } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
+            }
+
+            // TODO we need to avoid double-running these.
+            for (MPVariant *variant in variants) {
+                [variant execute];
             }
         }];
     }
@@ -983,7 +988,7 @@ static Mixpanel *sharedInstance = nil;
     return controller;
 }
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications))completion
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSArray *variants))completion
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ decide check started", self);
@@ -992,7 +997,7 @@ static Mixpanel *sharedInstance = nil;
             return;
         }
 
-        if (!_surveys || !_notifications) {
+        if (!self.surveys || !self.notifications || !self.variants) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.people.distinctId)];
@@ -1043,7 +1048,7 @@ static Mixpanel *sharedInstance = nil;
                 MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
             }
 
-            /*NSArray *rawVariants = object[@"variants"];
+            NSArray *rawVariants = object[@"variants"];
             NSMutableArray *parsedVariants = [NSMutableArray array];
 
             if (rawVariants && [rawVariants isKindOfClass:[NSArray class]]) {
@@ -1053,8 +1058,9 @@ static Mixpanel *sharedInstance = nil;
                         [parsedVariants addObject:variant];
                     }
                 }
-            }*/
-            NSArray *parsedVariants = @[];
+            } else {
+                MixpanelDebug(@"%@ variants check response format error: %@", self, object);
+            }
 
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];
@@ -1063,38 +1069,29 @@ static Mixpanel *sharedInstance = nil;
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
 
-        NSMutableArray *unseenSurveys = [NSMutableArray array];
-        for (MPSurvey *survey in _surveys) {
-            if ([_shownSurveyCollections member:@(survey.collectionID)] == nil) {
-                [unseenSurveys addObject:survey];
-            }
-        }
+        NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop){
+            return [self.shownSurveyCollections member:@(((MPSurvey *)obj).collectionID)] == nil;
+        }]];
 
-        NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
-        BOOL portraitIsNotSupported = ![supportedOrientations containsObject:@"UIInterfaceOrientationPortrait"];
+        NSArray *unseenNotifications = [self.notifications objectsAtIndexes:[self.notifications indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            return [self.shownNotifications member:@(((MPNotification *)obj).ID)] == nil;
+        }]];
 
-        NSMutableArray *unseenNotifications = [NSMutableArray array];
-        for (MPNotification *notification in _notifications) {
-            if (portraitIsNotSupported && [notification.type isEqualToString:@"takeover"]) {
-                MixpanelLog(@"%@ takeover notifications are not supported in landscape-only apps: %@", self, notification);
-            } else if ([_shownNotifications member:@(notification.ID)] == nil) {
-                [unseenNotifications addObject:notification];
-            }
-        }
 
-        MixpanelDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[_surveys count], unseenSurveys);
+        MixpanelDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[self.surveys count], unseenSurveys);
         MixpanelDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)[unseenNotifications count],
-                      (unsigned long)[_notifications count], unseenNotifications);
+                      (unsigned long)[self.notifications count], unseenNotifications);
+        MixpanelDebug(@"%@ decide check found %lu variants: %@", self, (unsigned long)[self.variants count], self.variants);
 
         if (completion) {
-            completion([NSArray arrayWithArray:unseenSurveys], [NSArray arrayWithArray:unseenNotifications]);
+            completion(unseenSurveys, unseenNotifications, self.variants);
         }
     });
 }
 
 - (void)checkForSurveysWithCompletion:(void (^)(NSArray *surveys))completion
 {
-    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSArray *variants) {
         if (completion) {
             completion(surveys);
         }
@@ -1103,7 +1100,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)checkForNotificationsWithCompletion:(void (^)(NSArray *notifications))completion
 {
-    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications) {
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSArray *variants) {
         if (completion) {
             completion(notifications);
         }
