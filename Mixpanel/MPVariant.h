@@ -10,10 +10,12 @@
 
 @interface MPVariant : NSObject
 
-@property (nonatomic, strong) NSArray *actions;
+@property (nonatomic, strong) NSMutableArray *actions;
 
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
 
+- (void) addActions:(NSArray *)actions andExecute:(BOOL)exec;
+- (void) addAction:(NSDictionary *)action andExecute:(BOOL)exec;
 - (void)execute;
 
 @end

@@ -9,6 +9,8 @@
 
 NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
+static NSString * const kSessionVariantKey = @"session_variant";
+
 @implementation MPABTestDesignerChangeRequestMessage
 
 + (instancetype)message
@@ -22,9 +24,14 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
         MPABTestDesignerConnection *conn = weak_connection;
 
+        MPVariant *variant = [connection sessionObjectForKey:kSessionVariantKey];
+        if (!variant) {
+            variant = [[MPVariant alloc] init];
+            [connection setSessionObject:variant forKey:kSessionVariantKey];
+        }
+
         dispatch_sync(dispatch_get_main_queue(), ^{
-            MPVariant *variant = [MPVariant variantWithJSONObject:[self payload]];
-            [variant execute];
+            [variant addActions:[[self payload] objectForKey:@"actions"] andExecute:YES];
         });
 
         MPABTestDesignerChangeResponseMessage *changeResponseMessage = [MPABTestDesignerChangeResponseMessage message];

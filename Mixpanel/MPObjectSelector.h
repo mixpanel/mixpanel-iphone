@@ -10,6 +10,8 @@
 
 @interface MPObjectSelector : NSObject
 
++ (MPObjectSelector *)objectSelectorWithString:(NSString *)string;
+
 -(id) initWithString:(NSString *)string;
 -(NSArray *)selectFromRoot:(id)root;
 -(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root;
