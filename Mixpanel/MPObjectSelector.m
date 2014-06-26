@@ -37,6 +37,11 @@
 
 @implementation MPObjectSelector
 
++ (MPObjectSelector *)objectSelectorWithString:(NSString *)string
+{
+    return [[MPObjectSelector alloc] initWithString:string];
+}
+
 -(id) initWithString:(NSString *)string
 {
     if (self = [super init]) {
