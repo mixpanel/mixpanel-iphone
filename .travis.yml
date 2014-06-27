@@ -1,0 +1,14 @@
+language: objective-c
+script: xctool -project HelloMixpanel/HelloMixpanel.xcodeproj -scheme HelloMixpanel
+  test
+env:
+  global:
+  - APP_NAME="HelloMixpanel"
+  - 'DEVELOPER_NAME="iPhone Distribution: Mixpanel, Inc."'
+  - PROFILE_NAME="HelloMixpanel_Ad_Hoc"
+  - secure: ANNhgr0AbGTTOzEKHx3bxgkIJ7ujRFuhQ/OSFcAK1e0bvK9Cak5MbPZ7ZdVIzDnKEVs+g47lxrrBAGin7o1wav8Adcz+pBA1GUXV1FBLqiObj9NCnVgeO7hlcj/Arvi92l4ariZSOay3ipS0x9FEZtkNKNHL32W468vcmf1LKqM=
+  - secure: Osu8SnYGvtaI/UgOAl9YEd2BI+zB0dSSP0WwXEa2lAxNaOzES9UVCS6KaSk4djm8/GTlBeg6jo3O4Wp5OJ8wYxftVvRapcTNUX/IQf8vmJ30St8w7SpFAD7RSKCMkiTW45Cmrzx/QJQZnJ8PIYqQHdFohofzoMHkLCSnheuI310=
+before_script:
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision.enc -d -a -out scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.cer.enc -d -a -out scripts/certs/dist.cer
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.p12.enc -d -a -out scripts/certs/dist.p12
