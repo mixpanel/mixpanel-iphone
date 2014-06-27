@@ -17,18 +17,34 @@
 
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object {
 
-    NSArray *actions = [object objectForKey:@"actions"];
-    if (![actions isKindOfClass:[NSArray class]]) {
-        NSLog(@"Variant requires an array of actions");
+    NSNumber *ID = object[@"id"];
+    if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
+        NSLog(@"invalid variant id: %@", ID);
         return nil;
     }
 
-    return [[MPVariant alloc] initWithActions:actions];
+    NSNumber *experimentID = object[@"experiment_id"];
+    if (!([experimentID isKindOfClass:[NSNumber class]] && [experimentID integerValue] > 0)) {
+        NSLog(@"invalid experiment id: %@", experimentID);
+        return nil;
+    }
+
+    NSArray *actions = [object objectForKey:@"actions"];
+    if (![actions isKindOfClass:[NSArray class]]) {
+        NSLog(@"variant requires an array of actions");
+        return nil;
+    }
+
+    return [[MPVariant alloc] initWithID:[ID unsignedIntegerValue]
+                            experimentID:[experimentID unsignedIntegerValue]
+                              andActions:actions];
 }
 
-- (id) initWithActions:(NSArray *)actions
+- (id) initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID andActions:(NSArray *)actions
 {
     if(self = [super init]) {
+        self.ID = ID;
+        self.experimentID = experimentID;
         self.actions = [NSMutableArray array];
         [self addActions:actions andExecute:NO];
     }
