@@ -10,6 +10,8 @@
 
 @interface MPVariant : NSObject
 
+@property (nonatomic) NSUInteger ID;
+@property (nonatomic) NSUInteger experimentID;
 @property (nonatomic, strong) NSMutableArray *actions;
 
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
