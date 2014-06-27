@@ -216,11 +216,6 @@ static Mixpanel *sharedInstance = nil;
         [self unarchive];
     }
 
-    UILongPressGestureRecognizer *fiveFingerPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(fiveFingerPressDetected:)];
-    fiveFingerPressRecognizer.minimumPressDuration = 3;
-    fiveFingerPressRecognizer.numberOfTouchesRequired = 5;
-    [[[UIApplication sharedApplication].delegate window] addGestureRecognizer:fiveFingerPressRecognizer];
-    NSLog(@"set up designer connect gesture recognizer");
 
     return self;
 }
@@ -1394,20 +1389,6 @@ static Mixpanel *sharedInstance = nil;
 }
 
 #pragma mark - A/B Testing
-
-- (void)executeVariant {
-    for (MPVariant *variant in _variants) {
-        [variant execute];
-        break; // only execute one variant
-    }
-}
-
-- (void)fiveFingerPressDetected:(UILongPressGestureRecognizer *)sender
-{
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        [self connectToABTestDesigner];
-    }
-}
 
 - (void)connectToABTestDesigner
 {
