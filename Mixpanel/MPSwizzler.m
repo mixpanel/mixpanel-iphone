@@ -25,7 +25,7 @@
 - (id)init
 {
     if ((self = [super init])) {
-        self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsObjectPersonality)
+        self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality)
                               valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
     }
     return self;
@@ -46,6 +46,17 @@
         [self.blocks setObject:aBlock forKey:aName];
     }
     return self;
+}
+
+- (NSString *)description
+{
+    NSString *descriptors = @"";
+    NSString *key;
+    NSEnumerator *keys = [self.blocks keyEnumerator];
+    while ((key = [keys nextObject])) {
+        descriptors = [descriptors stringByAppendingFormat:@"\t%@ : %@\n", key , [self.blocks objectForKey:key]];
+    }
+    return [NSString stringWithFormat:@"Swizzle on %@::%@ [\n%@]", NSStringFromClass(self.class), NSStringFromSelector(self.selector), descriptors];
 }
 
 @end
@@ -97,7 +108,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
     NSEnumerator *en = [swizzles objectEnumerator];
     MPSwizzle *swizzle;
     while((swizzle = (MPSwizzle *)[en nextObject])) {
-        NSLog(@"%@ %@ %d swizzles", NSStringFromClass(swizzle.class), NSStringFromSelector(swizzle.selector), [swizzle.blocks count]);
+        NSLog(@"%@", swizzle);
     }
 }
 
