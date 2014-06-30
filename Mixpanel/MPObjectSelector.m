@@ -264,4 +264,9 @@
     return [result copy];
 }
 
+- (NSString *)description;
+{
+    return [NSString stringWithFormat:@"%@[%@]", self.name, self.predicate];
+}
+
 @end

@@ -71,6 +71,9 @@
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSArray *variants;
 
+@property (atomic, copy) NSString *serverHost;
+@property (atomic, copy) NSString *serverProtocol;
+
 @end
 
 @interface MixpanelPeople ()
@@ -136,7 +139,9 @@ static Mixpanel *sharedInstance = nil;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
-        self.serverURL = @"https://api.mixpanel.com";
+        self.serverHost = @"api.mixpanel.com";
+        self.serverProtocol = @"https";
+        self.serverURL = [NSString stringWithFormat:@"%@://%@", self.serverProtocol, self.serverHost];
 
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
@@ -1395,7 +1400,7 @@ static Mixpanel *sharedInstance = nil;
     if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
         NSLog(@"A/B test designer connection already exists");
     } else {
-        NSString *designerURLString = [NSString stringWithFormat:@"ws://neil.dev.mixpanel.org/websocket_proxy/%@", self.apiToken];
+        NSString *designerURLString = [NSString stringWithFormat:@"ws://%@/websocket_proxy/%@", self.serverHost, self.apiToken];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
     }

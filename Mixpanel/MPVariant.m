@@ -281,7 +281,6 @@
                             onClass:[MPVariant getSwizzleClassFromAction:action andPath:path]
                           withBlock:executeBlock
                               named:[MPVariant getSwizzleNameFromAction:action]];
-        [MPSwizzler printSwizzles];
     }
 }
 
