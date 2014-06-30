@@ -16,5 +16,8 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+*.cer
+*.p12
+*.mobileprovision
 
 HelloMixpanel/build/
