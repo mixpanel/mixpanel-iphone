@@ -1158,4 +1158,9 @@
     [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
+- (void)testTelephonyInfoInitialized
+{
+    XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
+}
+
 @end
