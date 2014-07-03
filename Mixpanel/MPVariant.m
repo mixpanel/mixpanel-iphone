@@ -209,6 +209,7 @@
             NSMethodSignature *signature = [o methodSignatureForSelector:selector];
             if (signature != nil) {
                 NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                [invocation retainArguments];
                 NSUInteger requiredArgs = [signature numberOfArguments] - 2;
                 if ([args count] >= requiredArgs) {
                     [invocation setSelector:selector];
