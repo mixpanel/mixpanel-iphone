@@ -18,47 +18,13 @@
 @property (nonatomic, assign) IMP originalMethod;
 @property (nonatomic, assign) uint numArgs;
 @property (nonatomic, copy) NSMapTable *blocks;
-@end
-
-@implementation MPSwizzle
-
-- (id)init
-{
-    if ((self = [super init])) {
-        self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality)
-                              valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
-    }
-    return self;
-}
 
 - (id)initWithBlock:(swizzleBlock)aBlock
               named:(NSString *)aName
            forClass:(Class)aClass
            selector:(SEL)aSelector
      originalMethod:(IMP)aMethod
-        withNumArgs:(uint)numArgs
-{
-    if ((self = [self init])) {
-        self.class = aClass;
-        self.selector = aSelector;
-        self.numArgs = numArgs;
-        self.originalMethod = aMethod;
-        [self.blocks setObject:aBlock forKey:aName];
-    }
-    return self;
-}
-
-- (NSString *)description
-{
-    NSString *descriptors = @"";
-    NSString *key;
-    NSEnumerator *keys = [self.blocks keyEnumerator];
-    while ((key = [keys nextObject])) {
-        descriptors = [descriptors stringByAppendingFormat:@"\t%@ : %@\n", key , [self.blocks objectForKey:key]];
-    }
-    return [NSString stringWithFormat:@"Swizzle on %@::%@ [\n%@]", NSStringFromClass(self.class), NSStringFromSelector(self.selector), descriptors];
-}
-
+        withNumArgs:(uint)numArgs;
 @end
 
 static NSMapTable *swizzles;
@@ -218,6 +184,47 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
             [self removeSwizzleForMethod:aMethod];
         }
     }
+}
+
+@end
+
+
+@implementation MPSwizzle
+- (id)init
+{
+    if ((self = [super init])) {
+        self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality)
+                                            valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
+    }
+    return self;
+}
+
+- (id)initWithBlock:(swizzleBlock)aBlock
+              named:(NSString *)aName
+           forClass:(Class)aClass
+           selector:(SEL)aSelector
+     originalMethod:(IMP)aMethod
+        withNumArgs:(uint)numArgs
+{
+    if ((self = [self init])) {
+        self.class = aClass;
+        self.selector = aSelector;
+        self.numArgs = numArgs;
+        self.originalMethod = aMethod;
+        [self.blocks setObject:aBlock forKey:aName];
+    }
+    return self;
+}
+
+- (NSString *)description
+{
+    NSString *descriptors = @"";
+    NSString *key;
+    NSEnumerator *keys = [self.blocks keyEnumerator];
+    while ((key = [keys nextObject])) {
+        descriptors = [descriptors stringByAppendingFormat:@"\t%@ : %@\n", key, [self.blocks objectForKey:key]];
+    }
+    return [NSString stringWithFormat:@"Swizzle on %@::%@ [\n%@]", NSStringFromClass(self.class), NSStringFromSelector(self.selector), descriptors];
 }
 
 @end

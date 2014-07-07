@@ -15,7 +15,7 @@
 
 #define TEST_TOKEN @"abc123"
 
-@interface MPVariant (Test)
+@interface MPVariantAction (Test)
 // get access to private members
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects;
@@ -94,25 +94,25 @@
 {
     UIImageView *imageView = [[UIImageView alloc] init];
     XCTAssert(imageView.image == nil, @"Image should not be set");
-    [MPVariant executeSelector:@selector(setImage:)
+    [MPVariantAction executeSelector:@selector(setImage:)
                       withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png", @"data":@"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII="}]}, @"UIImage"]]
                      onObjects:@[imageView]];
     XCTAssert(imageView.image != nil, @"Image should be set");
     XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
 
     UILabel *label = [[UILabel alloc] init];
-    [MPVariant executeSelector:@selector(setText:)
+    [MPVariantAction executeSelector:@selector(setText:)
                       withArgs:@[@[@"TEST", @"NSString"]]
                      onObjects:@[label]];
     XCTAssertEqualObjects(label.text, @"TEST", @"Label text should be set");
 
-    [MPVariant executeSelector:@selector(setTextColor:)
+    [MPVariantAction executeSelector:@selector(setTextColor:)
                       withArgs:@[@[@"rgba(108,200,100,0.5)", @"UIColor"]]
                      onObjects:@[label]];
     XCTAssertEqual((int)(CGColorGetComponents(label.textColor.CGColor)[0] * 255), 108, @"Label text color should be set");
 
     UIButton *button = [[UIButton alloc] init];
-    [MPVariant executeSelector:@selector(setFrame:)
+    [MPVariantAction executeSelector:@selector(setFrame:)
                       withArgs:@[@[@{@"X":@10,@"Y":@10,@"Width":@10,@"Height":@10}, @"CGRect"]]
                      onObjects:@[button]];
     XCTAssert(button.frame.size.width == 10.0f, @"Button width should be set");
