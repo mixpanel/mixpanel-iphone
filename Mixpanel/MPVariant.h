@@ -19,5 +19,6 @@
 - (void) addActions:(NSArray *)actions andExecute:(BOOL)exec;
 - (void) addAction:(NSDictionary *)action andExecute:(BOOL)exec;
 - (void)execute;
+- (void)stop;
 
 @end

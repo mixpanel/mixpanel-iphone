@@ -9,13 +9,11 @@
 
 NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
-static NSString * const kSessionVariantKey = @"session_variant";
-
 @implementation MPABTestDesignerChangeRequestMessage
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"change_request"];
+    return [[self alloc] initWithType:MPABTestDesignerChangeRequestMessageType];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection

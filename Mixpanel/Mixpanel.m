@@ -1393,7 +1393,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-#pragma mark - A/B Testing
+#pragma mark - A/B Testing (Designer)
 
 - (void)connectToABTestDesigner
 {

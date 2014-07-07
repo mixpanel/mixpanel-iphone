@@ -6,6 +6,8 @@
 
 @protocol MPABTestDesignerMessage;
 
+extern NSString *const kSessionVariantKey;
+
 @interface MPABTestDesignerConnection : NSObject
 
 - (id)initWithURL:(NSURL *)url;

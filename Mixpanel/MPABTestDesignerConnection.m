@@ -8,12 +8,15 @@
 #import "MPABTestDesignerChangeRequestMessage.h"
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerTweakRequestMessage.h"
+#import "MPABTestDesignerClearRequestMessage.h"
 
 #ifdef MESSAGING_DEBUG
 #define MessagingDebug(...) NSLog(__VA_ARGS__)
 #else
 #define MessagingDebug(...)
 #endif
+
+NSString * const kSessionVariantKey = @"session_variant";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
 @end
@@ -36,6 +39,7 @@
             MPABTestDesignerChangeRequestMessageType     : [MPABTestDesignerChangeRequestMessage class],
             MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
             MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
+            MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
         };
 
         _session = [[NSMutableDictionary alloc] init];
