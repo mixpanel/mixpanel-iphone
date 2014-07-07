@@ -145,45 +145,49 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 + (void)swizzleSelector:(SEL)aSelector onClass:(Class)aClass withBlock:(swizzleBlock)aBlock named:(NSString *)aName
 {
     Method aMethod = class_getInstanceMethod(aClass, aSelector);
-    uint numArgs = method_getNumberOfArguments(aMethod);
-    if (numArgs >= MIN_ARGS && numArgs <= MAX_ARGS) {
+    if (aMethod) {
+        uint numArgs = method_getNumberOfArguments(aMethod);
+        if (numArgs >= MIN_ARGS && numArgs <= MAX_ARGS) {
 
-        BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
-        IMP swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
-        MPSwizzle *swizzle = [self swizzleForMethod:aMethod];
+            BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
+            IMP swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
+            MPSwizzle *swizzle = [self swizzleForMethod:aMethod];
 
-        if (isLocal) {
-            if (!swizzle) {
-                IMP originalMethod = method_getImplementation(aMethod);
+            if (isLocal) {
+                if (!swizzle) {
+                    IMP originalMethod = method_getImplementation(aMethod);
 
-                // Replace the local implementation of this method with the swizzled one
-                method_setImplementation(aMethod,swizzledMethod);
+                    // Replace the local implementation of this method with the swizzled one
+                    method_setImplementation(aMethod,swizzledMethod);
 
-                // Create and add the swizzle
-                swizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
-                [self setSwizzle:swizzle forMethod:aMethod];
+                    // Create and add the swizzle
+                    swizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
+                    [self setSwizzle:swizzle forMethod:aMethod];
 
+                } else {
+                    [swizzle.blocks setObject:aBlock forKey:aName];
+                }
             } else {
-                [swizzle.blocks setObject:aBlock forKey:aName];
+                IMP originalMethod = swizzle ? swizzle.originalMethod : method_getImplementation(aMethod);
+
+                // Add the swizzle as a new local method on the class.
+                if (!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(aMethod))) {
+                    [NSException raise:@"SwizzleException" format:@"Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector)];
+                }
+                // Now re-get the Method, it should be the one we just added.
+                Method newMethod = class_getInstanceMethod(aClass, aSelector);
+                if (aMethod == newMethod) {
+                    [NSException raise:@"SwizzleException" format:@"Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector)];
+                }
+
+                MPSwizzle *newSwizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
+                [self setSwizzle:newSwizzle forMethod:newMethod];
             }
         } else {
-            IMP originalMethod = swizzle ? swizzle.originalMethod : method_getImplementation(aMethod);
-
-            // Add the swizzle as a new local method on the class.
-            if (!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(aMethod))) {
-                [NSException raise:@"SwizzleException" format:@"Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector)];
-            }
-            // Now re-get the Method, it should be the one we just added.
-            Method newMethod = class_getInstanceMethod(aClass, aSelector);
-            if (aMethod == newMethod) {
-                [NSException raise:@"SwizzleException" format:@"Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector)];
-            }
-
-            MPSwizzle *newSwizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
-            [self setSwizzle:newSwizzle forMethod:newMethod];
+            [NSException raise:@"SwizzleException" format:@"Cannot swizzle method with %d args", numArgs];
         }
     } else {
-        [NSException raise:@"SwizzleException" format:@"Cannot swizzle method with %d args", numArgs];
+        [NSException raise:@"SwizzleException" format:@"Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass)];
     }
 }
 
