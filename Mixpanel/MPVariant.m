@@ -262,25 +262,30 @@
 {
     MPObjectSelector *path = [MPObjectSelector objectSelectorWithString:[action objectForKey:@"path"]];
 
+
     // Block to execute on swizzle
     void (^executeBlock)(id, SEL) = ^(id view, SEL command){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
-                                 withArgs:[action objectForKey:@"args"]
-                                   onPath:path
-                                 fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
-                                   toLeaf:view];
-        });
+        [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                             withArgs:[action objectForKey:@"args"]
+                               onPath:path
+                             fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
+                               toLeaf:view];
     };
 
     // Execute once in case the view to be changed is already on screen.
     executeBlock(nil, _cmd);
 
+    // The block that is called on swizzle executes the executeBlock on the main queue to minimize time
+    // spent in the swizzle, and allow the newly added UI elements time to be initialized on screen.
+    void (^swizzleBlock)(id, SEL) = ^(id view, SEL command){
+        dispatch_async(dispatch_get_main_queue(), ^{ executeBlock(view, command);});
+    };
+
     if (![action objectForKey:@"swizzle"] || [[action objectForKey:@"swizzle"] boolValue]) {
         // Swizzle the method needed to check for this object coming onscreen
         [MPSwizzler swizzleSelector:[MPVariant getSwizzleSelectorFromAction:action]
                             onClass:[MPVariant getSwizzleClassFromAction:action andPath:path]
-                          withBlock:executeBlock
+                          withBlock:swizzleBlock
                               named:[MPVariant getSwizzleNameFromAction:action]];
     }
 }

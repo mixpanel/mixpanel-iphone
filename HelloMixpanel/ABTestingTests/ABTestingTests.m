@@ -65,6 +65,8 @@
 
 @implementation ABTestingTests
 
+#pragma mark - Helper Methods
+
 - (void)setUp {
     [super setUp];
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
@@ -82,6 +84,7 @@
     return rootViewController;
 }
 
+#pragma mark - Invocation and Swizzling
 /*
  Test that invocations for various objects work. This includes the parsing and
  deserializing of the selectors and arguments from JSON, apllying to the objects
@@ -104,9 +107,9 @@
     XCTAssertEqualObjects(label.text, @"TEST", @"Label text should be set");
 
     [MPVariant executeSelector:@selector(setTextColor:)
-                      withArgs:@[@[@"rgba(101,200,100,0.5)", @"UIColor"]]
+                      withArgs:@[@[@"rgba(108,200,100,0.5)", @"UIColor"]]
                      onObjects:@[label]];
-    XCTAssert(CGColorGetComponents(label.textColor.CGColor)[0] * 255 == 101.0f, @"Label text color should be set");
+    XCTAssertEqual((int)(CGColorGetComponents(label.textColor.CGColor)[0] * 255), 108, @"Label text color should be set");
 
     UIButton *button = [[UIButton alloc] init];
     [MPVariant executeSelector:@selector(setFrame:)
@@ -123,7 +126,7 @@
 {
     // This label added before the Variant is created.
     UILabel *label = [[UILabel alloc] init];
-    [label setText:@"Original Text"];
+    [label setText:@"Old Text"];
     [[self topViewController].view addSubview:label];
 
     NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_variant" withExtension:@"json"]]
@@ -134,13 +137,41 @@
 
     // This label added after the Variant was created.
     UILabel *label2 = [[UILabel alloc] init];
-    [label2 setText:@"Original Text 2"];
+    [label2 setText:@"Old Text 2"];
     [[self topViewController].view addSubview:label2];
 
     XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
     dispatch_async(dispatch_get_main_queue(), ^{
         XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
         XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+}
+
+- (void)testStopVariant
+{
+    // This label added before the Variant is created.
+    UILabel *label = [[UILabel alloc] init];
+    [label setText:@"Old Text"];
+    [[self topViewController].view addSubview:label];
+
+    NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_variant" withExtension:@"json"]]
+                                                           options:0 error:nil];
+
+    MPVariant *variant = [MPVariant variantWithJSONObject:object];
+    [variant execute];
+    [variant stop];
+
+    // This label added after the Variant was stopped.
+    UILabel *label2 = [[UILabel alloc] init];
+    [label2 setText:@"Old Text 2"];
+    [[self topViewController].view addSubview:label2];
+
+    XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssertEqualObjects(label.text, @"Old Text", @"Label text should be reverted");
+        XCTAssertEqualObjects(label2.text, @"Old Text 2", @"Label2 text should never have changed, as it was added after the variant was stopped");
         [expect fulfill];
     });
     [self waitForExpectationsWithTimeout:0.1 handler:nil];
