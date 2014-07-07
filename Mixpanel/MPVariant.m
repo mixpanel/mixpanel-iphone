@@ -11,6 +11,36 @@
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 
+@interface MPVariantAction ()
+
+@property (nonatomic, strong)NSString *name;
+
+@property (nonatomic, strong)MPObjectSelector *path;
+@property (nonatomic, assign)SEL selector;
+@property (nonatomic, strong)NSArray *args;
+@property (nonatomic, strong)NSArray *original;
+
+@property (nonatomic, assign)BOOL swizzle;
+@property (nonatomic, assign)Class swizzleClass;
+@property (nonatomic, assign)SEL swizzleSelector;
+
+@property (nonatomic, copy) NSHashTable *appliedTo;
+
++ (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object;
+- (id) initWithName:(NSString *)name
+               path:(MPObjectSelector *)path
+           selector:(SEL)selector
+               args:(NSArray *)args
+           original:(NSArray *)original
+            swizzle:(BOOL)swizzle
+       swizzleClass:(Class)swizzleClass
+    swizzleSelector:(SEL)swizzleSelector;
+
+- (void)execute;
+- (void)stop;
+
+@end
+
 @implementation MPVariant
 
 #pragma mark -- Constructing Variants
@@ -46,74 +76,193 @@
         self.ID = ID;
         self.experimentID = experimentID;
         self.actions = [NSMutableArray array];
-        [self addActions:actions andExecute:NO];
+        [self addActionsFromJSONObject:actions andExecute:NO];
     }
     return self;
 }
 
-- (void) addActions:(NSArray *)actions andExecute:(BOOL)exec
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
+        self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
+        self.actions = [aDecoder decodeObjectForKey:@"actions"];
+    }
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_ID] forKey:@"ID"];
+    [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_experimentID] forKey:@"experimentID"];
+    [aCoder encodeObject:_actions forKey:@"actions"];
+}
+
+#pragma mark - Actions
+
+- (void) addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec
 {
     for (NSDictionary *action in actions) {
-        [self addAction:action andExecute:exec];
+        [self addActionFromJSONObject:action andExecute:exec];
     }
 }
 
-- (void) addAction:(NSDictionary *)action andExecute:(BOOL)exec
+- (void) addActionFromJSONObject:(NSDictionary *)action andExecute:(BOOL)exec
 {
-    [self.actions addObject:action];
-    if (exec) {
-        [self executeAction:action];
-    }
-}
-
-- (void)removeAction:(NSDictionary *)action
-{
-    if([action valueForKey:@"name"]) {
-        for (NSDictionary *a in self.actions) {
-            if([[action objectForKey:@"name"] isEqualToString:[a objectForKey:@"name"]]) {
-                [self.actions removeObjectIdenticalTo:a];
-                break;
-            }
+    MPVariantAction *mpAction = [MPVariantAction actionWithJSONObject:action];
+    if(action) {
+        [self.actions addObject:mpAction];
+        if (exec) {
+            [mpAction execute];
         }
     }
 }
 
-+ (Class)getSwizzleClassFromAction:(NSDictionary *)action andPath:(MPObjectSelector *)path
+- (void)removeActionWithName:(NSString *)name
 {
-    Class swizzleClass;
-    if ([action objectForKey:@"swizzleClass"]) {
-        swizzleClass = NSClassFromString([action objectForKey:@"swizzleClass"]);
+    for (MPVariantAction *a in self.actions) {
+        if([a.name isEqualToString:name]) {
+            [self.actions removeObjectIdenticalTo:a];
+            break;
+        }
     }
-    if (!swizzleClass) {
-        swizzleClass = [path selectedClass];
-    }
-    if (!swizzleClass) {
-        swizzleClass = [UIView class];
-    }
-    return swizzleClass;
 }
 
-+ (SEL)getSwizzleSelectorFromAction:(NSDictionary *)action
-{
-    SEL swizzleSelector = nil;
-    if ([action objectForKey:@"swizzleSelector"]) {
-        swizzleSelector = NSSelectorFromString([action objectForKey:@"swizzleSelector"]);
+- (void)execute {
+    for (MPVariantAction *action in self.actions) {
+        [action execute];
     }
-    if (!swizzleSelector) {
-        swizzleSelector = @selector(didMoveToWindow);
-    }
-    return swizzleSelector;
 }
 
-+ (NSString *)getSwizzleNameFromAction:(NSDictionary *)action
-{
-    NSString *name;
-    if ([action objectForKey:@"name"]) {
-        name = [action objectForKey:@"name"];
-    } else {
-        name = [[NSUUID UUID] UUIDString];
+- (void)stop {
+    for (MPVariantAction *action in self.actions) {
+        [action stop];
     }
-    return name;
+}
+
+@end
+
+@implementation MPVariantAction
+
++ (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object
+{
+    // Required parameters
+    MPObjectSelector *path = [MPObjectSelector objectSelectorWithString:object[@"path"]];
+    if (!path) {
+        NSLog(@"invalid action path: %@", object[@"path"]);
+        return nil;
+    }
+
+    SEL selector = NSSelectorFromString(object[@"selector"]);
+    if (selector == (SEL)0) {
+        NSLog(@"invalid action selector: %@", object[@"selector"]);
+        return nil;
+    }
+
+    NSArray *args = object[@"args"];
+    if (![args isKindOfClass:[NSArray class]]) {
+        NSLog(@"invalid action arguments: %@", args);
+        return nil;
+    }
+
+    NSArray *original = object[@"original"];
+    if (![original isKindOfClass:[NSArray class]]) {
+        NSLog(@"invalid action original arguments: %@", original);
+        return nil;
+    }
+
+    // Optional parameters
+    NSString *name = object[@"name"];
+    BOOL swizzle = !object[@"swizzle"] || [object[@"swizzle"] boolValue];
+    Class swizzleClass = NSClassFromString(object[@"swizzleClass"]);
+    SEL swizzleSelector = NSSelectorFromString(object[@"swizzleSelector"]);
+
+    return [[MPVariantAction alloc] initWithName:name path:path selector:selector args:args original:original swizzle:swizzle swizzleClass:swizzleClass swizzleSelector:swizzleSelector];
+}
+
+- (id) initWithName:(NSString *)name
+               path:(MPObjectSelector *)path
+           selector:(SEL)selector
+               args:(NSArray *)args
+           original:(NSArray *)original
+            swizzle:(BOOL)swizzle
+       swizzleClass:(Class)swizzleClass
+    swizzleSelector:(SEL)swizzleSelector
+{
+    if ((self = [self init])) {
+        self.path = path;
+        self.selector = selector;
+        self.args = args;
+        self.original = original;
+        self.swizzle = swizzle;
+
+        if (!name) {
+            name = [[NSUUID UUID] UUIDString];
+        }
+        self.name = name;
+
+        if (!swizzleClass) {
+            swizzleClass = [path selectedClass];
+        }
+        if (!swizzleClass) {
+            swizzleClass = [UIView class];
+        }
+        self.swizzleClass = swizzleClass;
+
+        if (!swizzleSelector) {
+            swizzleSelector = @selector(didMoveToWindow);
+        }
+        self.swizzleSelector = swizzleSelector;
+
+        self.appliedTo = [NSHashTable hashTableWithOptions:(NSHashTableWeakMemory|NSHashTableObjectPointerPersonality)];
+    }
+    return self;
+}
+
+- (void)execute
+{
+    // Block to execute on swizzle
+    void (^executeBlock)(id, SEL) = ^(id view, SEL command){
+        NSArray *objects = [[self class] executeSelector:self.selector
+                                                  withArgs:self.args
+                                                    onPath:self.path
+                                                  fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
+                                                    toLeaf:view];
+
+        for (id o in objects) {
+            [self.appliedTo addObject:o];
+        }
+    };
+
+    // Execute once in case the view to be changed is already on screen.
+    executeBlock(nil, _cmd);
+
+    // The block that is called on swizzle executes the executeBlock on the main queue to minimize time
+    // spent in the swizzle, and allow the newly added UI elements time to be initialized on screen.
+    void (^swizzleBlock)(id, SEL) = ^(id view, SEL command){
+        dispatch_async(dispatch_get_main_queue(), ^{ executeBlock(view, command);});
+    };
+
+    if (self.swizzle) {
+        // Swizzle the method needed to check for this object coming onscreen
+        [MPSwizzler swizzleSelector:self.swizzleSelector
+                            onClass:self.swizzleClass
+                          withBlock:swizzleBlock
+                              named:self.name];
+    }
+}
+
+- (void)stop
+{
+    // Stop this change from applying in future
+    [MPSwizzler unswizzleSelector:self.swizzleSelector
+                          onClass:self.swizzleClass
+                            named:self.name];
+
+    // Undo the present changes
+    [[self class] executeSelector:self.selector withArgs:self.original onObjects:[self.appliedTo allObjects]];
 }
 
 #pragma mark -- Executing Variant actions
@@ -160,7 +309,7 @@
     return fromType;
 }
 
-+ (BOOL)setValue:(id)value forKey:(NSString *)key onPath:(MPObjectSelector *)path fromRoot:(UIView *)root toLeaf:(NSObject *)leaf
+/*+ (BOOL)setValue:(id)value forKey:(NSString *)key onPath:(MPObjectSelector *)path fromRoot:(UIView *)root toLeaf:(NSObject *)leaf
 {
     if (leaf){
         if ([path isLeafSelected:leaf fromRoot:root]) {
@@ -184,27 +333,27 @@
         NSLog(@"No objects matching pattern");
         return NO;
     }
-}
+}*/
 
-+ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
++ (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
 {
     NSLog(@"Looking for objects matching %@ on path from %@ to %@", path, [root class], [leaf class]);
     if (leaf){
         if ([path isLeafSelected:leaf fromRoot:root]) {
             return [self executeSelector:selector withArgs:args onObjects:@[leaf]];
         } else {
-            return NO;
+            return @[];
         }
     } else {
         return [self executeSelector:selector withArgs:args onObjects:[path selectFromRoot:root]];
     }
 }
 
-+ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects
++ (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects
 {
-    BOOL executed = NO;
+    NSMutableArray *executedOn = [NSMutableArray array];
     if (objects && [objects count] > 0) {
-         NSLog(@"Invoking on %d objects", [objects count]);
+        NSLog(@"Invoking on %lu objects", (unsigned long)[objects count]);
         for (NSObject *o in objects) {
             NSMethodSignature *signature = [o methodSignatureForSelector:selector];
             if (signature != nil) {
@@ -238,7 +387,7 @@
                     @catch (NSException *exception) {
                         NSLog(@"%@", exception);
                     }
-                    executed = YES;
+                    [executedOn addObject:o];
                 } else {
                     NSLog(@"Not enough args");
                 }
@@ -249,69 +398,9 @@
     } else {
         NSLog(@"No objects matching pattern");
     }
-    return executed;
-}
-
-- (void)execute {
-    for (NSDictionary *action in self.actions) {
-        [self executeAction:action];
-    }
-}
-
-- (void)executeAction:(NSDictionary *)action
-{
-    MPObjectSelector *path = [MPObjectSelector objectSelectorWithString:[action objectForKey:@"path"]];
-
-
-    // Block to execute on swizzle
-    void (^executeBlock)(id, SEL) = ^(id view, SEL command){
-        [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
-                             withArgs:[action objectForKey:@"args"]
-                               onPath:path
-                             fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
-                               toLeaf:view];
-    };
-
-    // Execute once in case the view to be changed is already on screen.
-    executeBlock(nil, _cmd);
-
-    // The block that is called on swizzle executes the executeBlock on the main queue to minimize time
-    // spent in the swizzle, and allow the newly added UI elements time to be initialized on screen.
-    void (^swizzleBlock)(id, SEL) = ^(id view, SEL command){
-        dispatch_async(dispatch_get_main_queue(), ^{ executeBlock(view, command);});
-    };
-
-    if (![action objectForKey:@"swizzle"] || [[action objectForKey:@"swizzle"] boolValue]) {
-        // Swizzle the method needed to check for this object coming onscreen
-        [MPSwizzler swizzleSelector:[MPVariant getSwizzleSelectorFromAction:action]
-                            onClass:[MPVariant getSwizzleClassFromAction:action andPath:path]
-                          withBlock:swizzleBlock
-                              named:[MPVariant getSwizzleNameFromAction:action]];
-    }
-}
-
-- (void)stop {
-    for (NSDictionary *action in self.actions) {
-        [self stopAction:action];
-    }
-}
-
-- (void)stopAction:(NSDictionary *)action
-{
-    MPObjectSelector *path = [MPObjectSelector objectSelectorWithString:[action objectForKey:@"path"]];
-
-    // Stop this change from applying in future
-    [MPSwizzler unswizzleSelector:[MPVariant getSwizzleSelectorFromAction:action]
-                          onClass:[MPVariant getSwizzleClassFromAction:action andPath:path]
-                            named:[MPVariant getSwizzleNameFromAction:action]];
-
-    // Undo the present changes
-    [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
-                         withArgs:[action objectForKey:@"original"]
-                           onPath:path
-                         fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
-                           toLeaf:nil];
-
+    return [executedOn copy];
 }
 
 @end
+
+

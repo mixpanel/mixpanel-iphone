@@ -175,12 +175,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)runDummyABTest:(id)sender
-{
-    [[Mixpanel sharedInstance] executeVariant];
-}
-
-
 - (IBAction)testBarButtonItemWasPressed:(id)sender
 {
     NSLog(@"You pressed a bar button item.");
