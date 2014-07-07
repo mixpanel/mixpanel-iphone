@@ -22,7 +22,7 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"tweak_request"];
+    return [[self alloc] initWithType:MPABTestDesignerTweakRequestMessageType];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection

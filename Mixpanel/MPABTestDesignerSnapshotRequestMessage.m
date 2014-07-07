@@ -17,7 +17,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"snapshot_request"];
+    return [[self alloc] initWithType:MPABTestDesignerSnapshotRequestMessageType];
 }
 
 - (MPObjectSerializerConfig *)configuration

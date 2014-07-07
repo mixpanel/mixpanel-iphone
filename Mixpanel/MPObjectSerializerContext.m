@@ -45,6 +45,8 @@
 
 - (void)addVisitedObject:(NSObject *)object
 {
+    NSParameterAssert(object != nil);
+
     [_visitedObjects addObject:object];
 }
 

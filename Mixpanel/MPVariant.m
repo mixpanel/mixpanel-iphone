@@ -294,9 +294,19 @@
 - (void)stopAction:(NSDictionary *)action
 {
     MPObjectSelector *path = [MPObjectSelector objectSelectorWithString:[action objectForKey:@"path"]];
+
+    // Stop this change from applying in future
     [MPSwizzler unswizzleSelector:[MPVariant getSwizzleSelectorFromAction:action]
                           onClass:[MPVariant getSwizzleClassFromAction:action andPath:path]
                             named:[MPVariant getSwizzleNameFromAction:action]];
+
+    // Undo the present changes
+    [[self class] executeSelector:NSSelectorFromString([action objectForKey:@"selector"])
+                         withArgs:[action objectForKey:@"original"]
+                           onPath:path
+                         fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
+                           toLeaf:nil];
+
 }
 
 @end

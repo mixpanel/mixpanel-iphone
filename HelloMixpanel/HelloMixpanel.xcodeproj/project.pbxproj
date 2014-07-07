@@ -35,6 +35,8 @@
 		05E98DF6191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DF5191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.m */; };
 		05E98DF9191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05E98DF8191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.m */; };
 		05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F02D6218528F8C00527D93 /* MPNotificationViewController.m */; };
+		05F5F9641965CE300070280C /* MPABTestDesignerClearRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F5F9631965CE300070280C /* MPABTestDesignerClearRequestMessage.m */; };
+		05F5F9671965F5680070280C /* MPABTestDesignerClearResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F5F9661965F5680070280C /* MPABTestDesignerClearResponseMessage.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
 		2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2805EDE517C6B815003A0D72 /* Accelerate.framework */; };
@@ -200,6 +202,10 @@
 		05E98DF8191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerTweakResponseMessage.m; sourceTree = "<group>"; };
 		05F02D6118528F8C00527D93 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
 		05F02D6218528F8C00527D93 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
+		05F5F9621965CE300070280C /* MPABTestDesignerClearRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerClearRequestMessage.h; sourceTree = "<group>"; };
+		05F5F9631965CE300070280C /* MPABTestDesignerClearRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerClearRequestMessage.m; sourceTree = "<group>"; };
+		05F5F9651965F5680070280C /* MPABTestDesignerClearResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerClearResponseMessage.h; sourceTree = "<group>"; };
+		05F5F9661965F5680070280C /* MPABTestDesignerClearResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerClearResponseMessage.m; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		05FF819D18452EA20073FBAC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		2802053F17DEC234000D71F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -673,6 +679,10 @@
 				05E98DF5191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.m */,
 				05E98DF7191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.h */,
 				05E98DF8191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.m */,
+				05F5F9621965CE300070280C /* MPABTestDesignerClearRequestMessage.h */,
+				05F5F9631965CE300070280C /* MPABTestDesignerClearRequestMessage.m */,
+				05F5F9651965F5680070280C /* MPABTestDesignerClearResponseMessage.h */,
+				05F5F9661965F5680070280C /* MPABTestDesignerClearResponseMessage.m */,
 			);
 			name = Messages;
 			sourceTree = "<group>";
@@ -917,6 +927,7 @@
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				A7B462DB191075DE00774977 /* MPPassThroughValueTransformer.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
+				05F5F9641965CE300070280C /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				A7B462D6191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				05E98DE41912F73A00AFF3E1 /* MPSwizzler.m in Sources */,
 				286760BF1611982600B1BEC8 /* Mixpanel.m in Sources */,
@@ -962,6 +973,7 @@
 				C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				C38D5A25F71A31E130B264B4 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
+				05F5F9671965F5680070280C /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				C38D5441C78F3F33FD640279 /* MPEnumDescription.m in Sources */,
 				C38D5AE963B48C6752645A38 /* MPTypeDescription.m in Sources */,
 				05439024192279530076094E /* MPTweakInline.m in Sources */,
