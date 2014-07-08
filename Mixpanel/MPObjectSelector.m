@@ -28,7 +28,6 @@
     NSCharacterSet *_predicateEndChar;
 }
 
-@property (nonatomic, strong) NSString *string;
 @property (nonatomic, strong) NSScanner *scanner;
 @property (nonatomic, strong) NSArray *filters;
 
@@ -45,7 +44,7 @@
 -(id) initWithString:(NSString *)string
 {
     if (self = [super init]) {
-        self.string = string;
+        _string = string;
         self.scanner = [[NSScanner alloc] initWithString:string];
         [_scanner setCharactersToBeSkipped:nil];
         _separatorChars = [NSCharacterSet characterSetWithCharactersInString:@"/"];

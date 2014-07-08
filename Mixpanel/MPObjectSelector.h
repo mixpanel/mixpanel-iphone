@@ -10,6 +10,8 @@
 
 @interface MPObjectSelector : NSObject
 
+@property (nonatomic, strong, readonly) NSString *string;
+
 + (MPObjectSelector *)objectSelectorWithString:(NSString *)string;
 
 -(id) initWithString:(NSString *)string;
@@ -17,4 +19,5 @@
 -(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root;
 -(Class)selectedClass;
 - (NSString *)description;
+
 @end
