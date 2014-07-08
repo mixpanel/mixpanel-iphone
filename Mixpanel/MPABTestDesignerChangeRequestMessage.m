@@ -28,7 +28,7 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
             [connection setSessionObject:variant forKey:kSessionVariantKey];
         }
 
-        if ([[self payload] isKindOfClass:[NSArray class]]) {
+        if ([[[self payload] objectForKey:@"actions"] isKindOfClass:[NSArray class]]) {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [variant addActionsFromJSONObject:[[self payload] objectForKey:@"actions"] andExecute:YES];
             });
