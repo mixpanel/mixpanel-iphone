@@ -29,7 +29,7 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
         }
 
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [variant addActionFromJSONObject:[[self payload] objectForKey:@"actions"] andExecute:YES];
+            [variant addActionsFromJSONObject:[[self payload] objectForKey:@"actions"] andExecute:YES];
         });
 
         MPABTestDesignerChangeResponseMessage *changeResponseMessage = [MPABTestDesignerChangeResponseMessage message];
