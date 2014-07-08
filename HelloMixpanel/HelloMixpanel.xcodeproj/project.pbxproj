@@ -152,6 +152,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		050B1B8C196C944100F72974 /* MPValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPValueTransformers.h; sourceTree = "<group>"; };
 		053B4C62183E963100E825FE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		053B4C661840191000E825FE /* UIColor+MPColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MPColor.h"; sourceTree = "<group>"; };
 		053B4C671840191000E825FE /* UIColor+MPColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MPColor.m"; sourceTree = "<group>"; };
@@ -259,17 +260,11 @@
 		A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanel.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B462B4191075DE00774977 /* MPApplicationStateSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPApplicationStateSerializer.h; sourceTree = "<group>"; };
 		A7B462B5191075DE00774977 /* MPApplicationStateSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPApplicationStateSerializer.m; sourceTree = "<group>"; };
-		A7B462B6191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCATransform3DToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		A7B462B7191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCATransform3DToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		A7B462B8191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCGAffineTransformToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		A7B462B9191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGAffineTransformToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		A7B462BA191075DE00774977 /* MPCGColorRefToNSStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCGColorRefToNSStringValueTransformer.h; sourceTree = "<group>"; };
 		A7B462BB191075DE00774977 /* MPCGColorRefToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGColorRefToNSStringValueTransformer.m; sourceTree = "<group>"; };
-		A7B462BC191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCGPointToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		A7B462BD191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGPointToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		A7B462BE191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCGRectToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		A7B462BF191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGRectToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
-		A7B462C0191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCGSizeToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		A7B462C1191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCGSizeToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		A7B462C2191075DE00774977 /* MPClassDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPClassDescription.h; sourceTree = "<group>"; };
 		A7B462C3191075DE00774977 /* MPClassDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPClassDescription.m; sourceTree = "<group>"; };
@@ -277,13 +272,11 @@
 		A7B462C6191075DE00774977 /* MPObjectSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializer.m; sourceTree = "<group>"; };
 		A7B462C7191075DE00774977 /* MPObjectSerializerContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerContext.h; sourceTree = "<group>"; };
 		A7B462C8191075DE00774977 /* MPObjectSerializerContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectSerializerContext.m; sourceTree = "<group>"; };
-		A7B462C9191075DE00774977 /* MPPassThroughValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPassThroughValueTransformer.h; sourceTree = "<group>"; };
 		A7B462CA191075DE00774977 /* MPPassThroughValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPassThroughValueTransformer.m; sourceTree = "<group>"; };
 		A7B462CB191075DE00774977 /* MPPropertyDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPropertyDescription.h; sourceTree = "<group>"; };
 		A7B462CC191075DE00774977 /* MPPropertyDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPropertyDescription.m; sourceTree = "<group>"; };
 		A7B462CD191075DE00774977 /* MPSequenceGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSequenceGenerator.h; sourceTree = "<group>"; };
 		A7B462CE191075DE00774977 /* MPSequenceGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSequenceGenerator.m; sourceTree = "<group>"; };
-		A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIColorToNSStringValueTransformer.h; sourceTree = "<group>"; };
 		A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIColorToNSStringValueTransformer.m; sourceTree = "<group>"; };
 		A7B462E91910899C00774977 /* MPWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebSocket.h; sourceTree = "<group>"; };
 		A7B462EA1910899C00774977 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
@@ -292,8 +285,6 @@
 		C38D504BD075F755A6649E33 /* MPObjectIdentityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPObjectIdentityProvider.m; sourceTree = "<group>"; };
 		C38D516C062CC4EC5DA58D44 /* MPABTestDesignerChangeRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeRequestMessage.h; sourceTree = "<group>"; };
 		C38D51A8381CEADEC59F3C06 /* MPEnumDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEnumDescription.m; sourceTree = "<group>"; };
-		C38D5316E9A94A6157D16B55 /* MPNSAttributedStringToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNSAttributedStringToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
-		C38D53C0AC75577CCC271410 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIEdgeInsetsToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		C38D540FDC5CC806900215AE /* MPABTestDesignerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerConnection.h; sourceTree = "<group>"; };
 		C38D54555A0AA4F5BD489F1D /* MPABTestDesignerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerConnection.m; sourceTree = "<group>"; };
 		C38D54648ACD9502F3981E4F /* MPObjectSerializerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectSerializerConfig.h; sourceTree = "<group>"; };
@@ -315,9 +306,7 @@
 		C38D59F22E72DE96A370172E /* snapshot_config.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = snapshot_config.json; sourceTree = "<group>"; };
 		C38D5A46C299056A07676D14 /* MPABTestDesignerDeviceInfoRequestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDeviceInfoRequestMessage.h; sourceTree = "<group>"; };
 		C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPAbstractABTestDesignerMessage.m; sourceTree = "<group>"; };
-		C38D5B8C3C7D67F43EF120E7 /* MPUIFontToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIFontToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerDeviceInfoRequestMessage.m; sourceTree = "<group>"; };
-		C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPBOOLToNSNumberValueTransformer.h; sourceTree = "<group>"; };
 		C38D5D20034D0E52454F0552 /* MPABTestDesignerSnapshotResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerSnapshotResponseMessage.h; sourceTree = "<group>"; };
 		C38D5D771D15098CC3956284 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSAttributedStringToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		C38D5DF058742F8D8B919676 /* MPABTestDesignerSnapshotResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPABTestDesignerSnapshotResponseMessage.m; sourceTree = "<group>"; };
@@ -326,7 +315,6 @@
 		C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPBOOLToNSNumberValueTransformer.m; sourceTree = "<group>"; };
 		C38D5F4F61761A35C80A668D /* NSInvocation+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+MPHelpers.h"; sourceTree = "<group>"; };
 		C38D5F58D1809C6432B8B45B /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; };
-		C38D5FFAFD3DD888FC143D92 /* MPUIImageToNSDictionaryValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIImageToNSDictionaryValueTransformer.h; sourceTree = "<group>"; };
 		DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.xcconfig"; path = "Pods/Pods-HelloMixpanel.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -613,32 +601,20 @@
 		A7B462DF191075E700774977 /* ValueTransformers */ = {
 			isa = PBXGroup;
 			children = (
-				C38D5D1978B2155B2ECDD3F5 /* MPBOOLToNSNumberValueTransformer.h */,
 				C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */,
-				A7B462B6191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.h */,
 				A7B462B7191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m */,
-				A7B462B8191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.h */,
 				A7B462B9191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */,
-				A7B462BA191075DE00774977 /* MPCGColorRefToNSStringValueTransformer.h */,
 				A7B462BB191075DE00774977 /* MPCGColorRefToNSStringValueTransformer.m */,
-				A7B462BC191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.h */,
 				A7B462BD191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.m */,
-				A7B462BE191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.h */,
 				A7B462BF191075DE00774977 /* MPCGRectToNSDictionaryValueTransformer.m */,
-				A7B462C0191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.h */,
 				A7B462C1191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m */,
-				C38D5316E9A94A6157D16B55 /* MPNSAttributedStringToNSDictionaryValueTransformer.h */,
 				C38D5D771D15098CC3956284 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
-				A7B462C9191075DE00774977 /* MPPassThroughValueTransformer.h */,
 				A7B462CA191075DE00774977 /* MPPassThroughValueTransformer.m */,
-				A7B462CF191075DE00774977 /* MPUIColorToNSStringValueTransformer.h */,
 				A7B462D0191075DE00774977 /* MPUIColorToNSStringValueTransformer.m */,
-				C38D53C0AC75577CCC271410 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.h */,
 				C38D56F0A718EC78712F7DD7 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m */,
-				C38D5B8C3C7D67F43EF120E7 /* MPUIFontToNSDictionaryValueTransformer.h */,
 				C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */,
-				C38D5FFAFD3DD888FC143D92 /* MPUIImageToNSDictionaryValueTransformer.h */,
 				C38D565A188445F6488340E6 /* MPUIImageToNSDictionaryValueTransformer.m */,
+				050B1B8C196C944100F72974 /* MPValueTransformers.h */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";

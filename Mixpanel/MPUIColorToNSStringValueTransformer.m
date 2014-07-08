@@ -1,8 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPUIColorToNSStringValueTransformer.h"
-
+#import "MPValueTransformers.h"
 
 @implementation MPUIColorToNSStringValueTransformer
 

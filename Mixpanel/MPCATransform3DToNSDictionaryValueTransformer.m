@@ -1,9 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPCATransform3DToNSDictionaryValueTransformer.h"
-
-
+#import "MPValueTransformers.h"
 
 static NSDictionary *MPCATransform3DCreateDictionaryRepresentation(CATransform3D transform)
 {

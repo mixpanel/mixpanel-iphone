@@ -1,10 +1,8 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPUIImageToNSDictionaryValueTransformer.h"
+#import "MPValueTransformers.h"
 #import "NSData+MPBase64.h"
-#import "MPCGSizeToNSDictionaryValueTransformer.h"
-#import "MPUIEdgeInsetsToNSDictionaryValueTransformer.h"
 #import <ImageIO/ImageIO.h>
 
 @implementation MPUIImageToNSDictionaryValueTransformer

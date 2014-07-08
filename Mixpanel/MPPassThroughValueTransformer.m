@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPPassThroughValueTransformer.h"
+#import "MPValueTransformers.h"
 
 @implementation MPPassThroughValueTransformer
 
