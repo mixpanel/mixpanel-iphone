@@ -70,6 +70,11 @@
                               andActions:actions];
 }
 
+- (id)init
+{
+    return [self initWithID:0 experimentID:0 andActions:nil];
+}
+
 - (id) initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID andActions:(NSArray *)actions
 {
     if(self = [super init]) {
@@ -104,18 +109,18 @@
 
 - (void) addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec
 {
-    for (NSDictionary *action in actions) {
-        [self addActionFromJSONObject:action andExecute:exec];
+    for (NSDictionary *object in actions) {
+        [self addActionFromJSONObject:object andExecute:exec];
     }
 }
 
-- (void) addActionFromJSONObject:(NSDictionary *)action andExecute:(BOOL)exec
+- (void) addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec
 {
-    MPVariantAction *mpAction = [MPVariantAction actionWithJSONObject:action];
+    MPVariantAction *action = [MPVariantAction actionWithJSONObject:object];
     if(action) {
-        [self.actions addObject:mpAction];
+        [self.actions addObject:action];
         if (exec) {
-            [mpAction execute];
+            [action execute];
         }
     }
 }
@@ -182,6 +187,12 @@
     return [[MPVariantAction alloc] initWithName:name path:path selector:selector args:args original:original swizzle:swizzle swizzleClass:swizzleClass swizzleSelector:swizzleSelector];
 }
 
+- (id)init
+{
+    [NSException raise:@"NotSupported" format:@"Please call initWithName: path: selector: args: original: swizzle: swizzleClass: swizzleSelector:"];
+    return nil;
+}
+
 - (id) initWithName:(NSString *)name
                path:(MPObjectSelector *)path
            selector:(SEL)selector
@@ -191,7 +202,7 @@
        swizzleClass:(Class)swizzleClass
     swizzleSelector:(SEL)swizzleSelector
 {
-    if ((self = [self init])) {
+    if ((self = [super init])) {
         self.path = path;
         self.selector = selector;
         self.args = args;
