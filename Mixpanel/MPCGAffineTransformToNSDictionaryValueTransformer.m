@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPCGAffineTransformToNSDictionaryValueTransformer.h"
+#import "MPValueTransformers.h"
 
 static NSDictionary *MPCGAffineTransformCreateDictionaryRepresentation(CGAffineTransform transform)
 {

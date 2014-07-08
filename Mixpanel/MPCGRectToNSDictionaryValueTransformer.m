@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPCGRectToNSDictionaryValueTransformer.h"
+#import "MPValueTransformers.h"
 
 
 @implementation MPCGRectToNSDictionaryValueTransformer

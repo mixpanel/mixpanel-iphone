@@ -1,8 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPUIFontToNSDictionaryValueTransformer.h"
-
+#import "MPValueTransformers.h"
 
 @implementation MPUIFontToNSDictionaryValueTransformer
 {
