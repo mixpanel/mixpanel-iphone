@@ -1005,7 +1005,13 @@ static Mixpanel *sharedInstance = nil;
         if (!self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
-            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.people.distinctId)];
+            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@&lib_version=%@&app_version=%@&app_release=%@",
+                                self.apiToken,
+                                MPURLEncode(self.people.distinctId),
+                                MPURLEncode(VERSION),
+                                MPURLEncode([[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]),
+                                MPURLEncode([[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"])
+                                ];
             NSURL *URL = [NSURL URLWithString:[self.serverURL stringByAppendingString:[NSString stringWithFormat:@"/decide?%@", params]]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
             [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
