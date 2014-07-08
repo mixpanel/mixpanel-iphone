@@ -23,6 +23,6 @@
 
 @end
 
-@interface MPVariantAction : NSObject
+@interface MPVariantAction : NSObject <NSCoding>
 
 @end

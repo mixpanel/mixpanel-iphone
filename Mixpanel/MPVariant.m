@@ -224,6 +224,41 @@
     return self;
 }
 
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+
+        self.path = [MPObjectSelector objectSelectorWithString:[aDecoder decodeObjectForKey:@"path"]];
+        self.selector = NSSelectorFromString([aDecoder decodeObjectForKey:@"selector"]);
+        self.args = [aDecoder decodeObjectForKey:@"args"];
+        self.original = [aDecoder decodeObjectForKey:@"original"];
+
+        self.swizzle = [(NSNumber *)[aDecoder decodeObjectForKey:@"swizzle"] boolValue];
+        self.swizzleClass = NSClassFromString([aDecoder decodeObjectForKey:@"swizzleClass"]);
+        self.swizzleSelector = NSSelectorFromString([aDecoder decodeObjectForKey:@"swizzleSelector"]);
+    }
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_name forKey:@"name"];
+
+    [aCoder encodeObject:_path.string forKey:@"path"];
+    [aCoder encodeObject:NSStringFromSelector(_selector) forKey:@"selector"];
+    [aCoder encodeObject:_args forKey:@"args"];
+    [aCoder encodeObject:_original forKey:@"original"];
+
+    [aCoder encodeObject:[NSNumber numberWithBool:_swizzle] forKey:@"swizzle"];
+    [aCoder encodeObject:NSStringFromClass(_swizzleClass) forKey:@"swizzleClass"];
+    [aCoder encodeObject:NSStringFromSelector(_swizzleSelector) forKey:@"swizzleSelector"];
+}
+
+#pragma mark -- Executing Actions
+
 - (void)execute
 {
     // Block to execute on swizzle
@@ -266,9 +301,8 @@
 
     // Undo the present changes
     [[self class] executeSelector:self.selector withArgs:self.original onObjects:[self.appliedTo allObjects]];
+    [self.appliedTo removeAllObjects];
 }
-
-#pragma mark -- Executing Variant actions
 
 + (id)convertArg:(id)arg toType:(NSString *)toType
 {
