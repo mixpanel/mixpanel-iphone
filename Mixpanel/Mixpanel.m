@@ -59,6 +59,8 @@
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
+@property (nonatomic) BOOL decideResponseCached;
+
 @property (nonatomic, strong) NSArray *surveys;
 @property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
 @property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
@@ -158,6 +160,7 @@ static Mixpanel *sharedInstance = nil;
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
 
+        self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.surveys = nil;
@@ -221,8 +224,8 @@ static Mixpanel *sharedInstance = nil;
         [self unarchive];
     }
 
-
     return self;
+
 }
 
 - (void)dealloc
@@ -955,7 +958,7 @@ static Mixpanel *sharedInstance = nil;
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
-        self.surveys = nil;
+        self.decideResponseCached = NO;
     });
 }
 
@@ -999,7 +1002,7 @@ static Mixpanel *sharedInstance = nil;
             return;
         }
 
-        if (!self.surveys || !self.notifications || !self.variants) {
+        if (!self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@", self.apiToken, MPURLEncode(self.people.distinctId)];
@@ -1205,11 +1208,11 @@ static Mixpanel *sharedInstance = nil;
     } else {
         [self markSurvey:controller.survey shown:YES withAnswerCount:[answers count]];
         for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
-            NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithObjectsAndKeys:answers[i], @"$answers", nil];
             if (i == 0) {
-                properties[@"$responses"] = @(controller.survey.collectionID);
+                [self.people append:@{@"$answers": answers[i], @"$responses": @(controller.survey.collectionID)}];
+            } else {
+                [self.people append:@{@"$answers": answers[i]}];
             }
-            [self.people append:properties];
         }
     }
 }
