@@ -212,7 +212,10 @@
         self.swizzleClass = swizzleClass;
 
         if (!swizzleSelector) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wselector"
             swizzleSelector = @selector(didMoveToWindow);
+#pragma clang diagnostic pop
         }
         self.swizzleSelector = swizzleSelector;
 
