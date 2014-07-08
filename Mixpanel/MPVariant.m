@@ -309,32 +309,6 @@
     return fromType;
 }
 
-/*+ (BOOL)setValue:(id)value forKey:(NSString *)key onPath:(MPObjectSelector *)path fromRoot:(UIView *)root toLeaf:(NSObject *)leaf
-{
-    if (leaf){
-        if ([path isLeafSelected:leaf fromRoot:root]) {
-            return [self setValue:value forKey:key onObjects:@[leaf]];
-        } else {
-            return NO;
-        }
-    } else {
-        return [self setValue:value forKey:key onObjects:[path selectFromRoot:root]];
-    }
-}
-
-+ (BOOL)setValue:(id)value forKey:(NSString *)key onObjects:(NSArray *)objects
-{
-    if ([objects count] > 0) {
-        for (NSObject *o in objects) {
-            [o setValue:value forKey:key];
-        }
-        return YES;
-    } else {
-        NSLog(@"No objects matching pattern");
-        return NO;
-    }
-}*/
-
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
 {
     NSLog(@"Looking for objects matching %@ on path from %@ to %@", path, [root class], [leaf class]);
