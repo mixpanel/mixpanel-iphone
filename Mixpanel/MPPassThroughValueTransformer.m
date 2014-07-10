@@ -12,11 +12,15 @@
 
 + (BOOL)allowsReverseTransformation
 {
-    return YES;
+    return NO;
 }
 
 - (id)transformedValue:(id)value
 {
+    if ([[NSNull null] isEqual:value]) {
+        return nil;
+    }
+
     if (value == nil)
     {
         return [NSNull null];
@@ -24,16 +28,5 @@
 
     return value;
 }
-
-- (id)reverseTransformedValue:(id)value
-{
-    if ([[NSNull null] isEqual:value])
-    {
-        return nil;
-    }
-
-    return value;
-}
-
 
 @end
