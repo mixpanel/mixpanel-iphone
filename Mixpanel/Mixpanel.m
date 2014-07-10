@@ -225,7 +225,9 @@ static Mixpanel *sharedInstance = nil;
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
         [self unarchive];
+#ifndef MIXPANEL_DEBUG
         [self executeCachedVariants];
+#endif
     }
 
     return self;
@@ -908,13 +910,15 @@ static Mixpanel *sharedInstance = nil;
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
 
+#ifndef MIXPANEL_DEBUG
             for (MPVariant *variant in variants) {
                 [variant execute];
                 [self markVariantRun:variant];
             }
+#endif
         }];
     }
-#if TARGET_IPHONE_SIMULATOR
+#ifdef MIXPANEL_DEBUG
     [self connectToABTestDesigner];
 #endif
 }
