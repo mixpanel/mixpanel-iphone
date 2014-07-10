@@ -10,6 +10,7 @@
 
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
+#import "MPValueTransformers.h"
 
 @interface MPVariantAction ()
 
@@ -353,46 +354,8 @@
     [self.appliedTo removeAllObjects];
 }
 
-+ (id)convertArg:(id)arg toType:(NSString *)toType
-{
-    NSString *fromType = [self fromTypeForArg:arg];
-
-    NSString *forwardTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", fromType, toType];
-    NSValueTransformer *forwardTransformer = [NSValueTransformer valueTransformerForName:forwardTransformerName];
-    if (forwardTransformer)
-    {
-        return [forwardTransformer transformedValue:arg];
-    }
-
-    NSString *reverseTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", toType, fromType];
-    NSValueTransformer *reverseTransformer = [NSValueTransformer valueTransformerForName:reverseTransformerName];
-    if (reverseTransformer && [[reverseTransformer class] allowsReverseTransformation])
-    {
-        return [reverseTransformer reverseTransformedValue:arg];
-    }
-
-    NSValueTransformer *defaultTransformer = [NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"];
-    return [defaultTransformer reverseTransformedValue:arg];
-}
-
-+ (NSString *)fromTypeForArg:(id)arg
-{
-    NSDictionary *classNameMap = @{@"NSString": [NSString class],
-                                   @"NSNumber": [NSNumber class],
-                                   @"NSDictionary": [NSDictionary class],
-                                   @"NSArray": [NSArray class]};
-
-    NSString *fromType = nil;
-    for (NSString *key in classNameMap)
-    {
-        if ([arg isKindOfClass:classNameMap[key]])
-        {
-            fromType = key;
-            break;
-        }
-    }
-    NSAssert(fromType != nil, @"Expected non-nil fromType!");
-    return fromType;
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Action: Change %@ on %@ matching %@ from %@ to %@", NSStringFromSelector(self.selector), NSStringFromClass(self.class), self.path.string, self.original, self.args];
 }
 
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
@@ -425,7 +388,7 @@
                     for (uint i = 0; i < requiredArgs; i++) {
 
                         NSArray *argTuple = [args objectAtIndex:i];
-                        id arg = [[self class] convertArg:argTuple[0] toType:argTuple[1]];
+                        id arg = transformValue(argTuple[0], argTuple[1]);
 
                         // Unpack NSValues to their base types.
                         if( [arg isKindOfClass:[NSValue class]] ) {
@@ -441,7 +404,7 @@
                         }
                     }
                     @try {
-                        NSLog(@"Invoking");
+                        NSLog(@"Invoking on %p", o);
                         [invocation invokeWithTarget:o];
                     }
                     @catch (NSException *exception) {
