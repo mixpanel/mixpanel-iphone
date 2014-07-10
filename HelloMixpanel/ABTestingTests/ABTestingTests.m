@@ -12,15 +12,29 @@
 #import "MPSwizzler.h"
 #import "MPVariant.h"
 #import "HomeViewController.h"
+#import "HTTPServer.h"
+#import "MixpanelDummyDecideConnection.h"
 
 #define TEST_TOKEN @"abc123"
 
+#pragma mark - Interface Redefinitions
+
+@interface Mixpanel (Test)
+
+@property (atomic, copy) NSString *decideURL;
+@property (nonatomic, strong) NSSet *variants;
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
+
+@end
+
 @interface MPVariantAction (Test)
-// get access to private members
 
 + (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects;
 
 @end
+
+#pragma mark - Test Classes for swizzling
 
 @interface A : NSObject
 @property (nonatomic) int count;
@@ -60,20 +74,44 @@
 @interface ABTestingTests : XCTestCase
 
 @property (nonatomic, strong) Mixpanel *mixpanel;
+@property (nonatomic, strong) HTTPServer *httpServer;
 
 @end
 
+#pragma mark - Tests
+
 @implementation ABTestingTests
 
-#pragma mark - Helper Methods
+#pragma mark Helper Methods
 
 - (void)setUp {
     [super setUp];
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel.decideURL = @"http://localhost:31338";
 }
 
 - (void)tearDown {
     [super tearDown];
+}
+
+- (void)setupHTTPServer
+{
+    if (!self.httpServer) {
+        self.httpServer = [[HTTPServer alloc] init];
+        [self.httpServer setConnectionClass:[MixpanelDummyDecideConnection class]];
+        [self.httpServer setType:@"_http._tcp."];
+        [self.httpServer setPort:31338];
+
+        NSString *webPath = [[NSBundle mainBundle] resourcePath];
+        [self.httpServer setDocumentRoot:webPath];
+
+        NSError *error;
+        if ([self.httpServer start:&error]) {
+            NSLog(@"Started HTTP Server on port %hu", [self.httpServer listeningPort]);
+        } else {
+            NSLog(@"Error starting HTTP Server: %@", error);
+        }
+    }
 }
 
 -(UIViewController *)topViewController {
@@ -147,6 +185,7 @@
         [expect fulfill];
     });
     [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    [variant stop];
 }
 
 - (void)testStopVariant
@@ -278,6 +317,22 @@
     count = 0;
     [[[UILabel alloc] init] performSelector:@selector(didMoveToSuperview)];
     XCTAssertEqual(count, 2, @"Only the UILabel swizzle should have fired");
+}
+
+#pragma mark - Decide
+
+- (void)testDecideVariants
+{
+    [self setupHTTPServer];
+
+    [self.mixpanel identify:@"ABC"];
+    XCTestExpectation *expect = [self expectationWithDescription:@"decide requested"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], 1, @"Decide not queried");
+        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
 @end

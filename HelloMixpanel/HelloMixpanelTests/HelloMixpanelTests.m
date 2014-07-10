@@ -11,6 +11,8 @@
 
 #define TEST_TOKEN @"abc123"
 
+#pragma mark - Interface Redefinitions
+
 @interface Mixpanel (Test)
 // get access to private members
 
@@ -49,6 +51,8 @@
 @property (atomic) BOOL mixpanelWillFlush;
 
 @end
+
+#pragma mark - Tests
 
 @implementation HelloMixpanelTests
 
