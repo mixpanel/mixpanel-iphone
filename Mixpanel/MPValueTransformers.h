@@ -39,3 +39,33 @@
 
 @interface MPUIImageToNSDictionaryValueTransformer : NSValueTransformer
 @end
+
+static id transformValue(id value, NSString *toType) {
+
+    assert(value != nil);
+    NSString *fromType = nil;
+    NSArray *validTypes = @[[NSString class], [NSNumber class], [NSDictionary class], [NSArray class], [NSNull class]];
+    for (Class c in validTypes) {
+        if ([value isKindOfClass:c]) {
+            fromType = NSStringFromClass(c);
+            break;
+        }
+    }
+
+    assert(fromType != nil);
+    NSValueTransformer *transformer = nil;
+    NSString *forwardTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", fromType, toType];
+    transformer = [NSValueTransformer valueTransformerForName:forwardTransformerName];
+    if (transformer) {
+        return [transformer transformedValue:value];
+    }
+
+    NSString *reverseTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", toType, fromType];
+    transformer = [NSValueTransformer valueTransformerForName:reverseTransformerName];
+    if (transformer && [[transformer class] allowsReverseTransformation])
+    {
+        return [transformer reverseTransformedValue:value];
+    }
+
+    return [[NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"] transformedValue:value];
+}
