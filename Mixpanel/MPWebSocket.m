@@ -125,7 +125,7 @@ static inline void MPLog(NSString *format, ...);
 static NSData *newSHA1(const char *bytes, size_t length) {
     uint8_t md[CC_SHA1_DIGEST_LENGTH];
 
-    CC_SHA1(bytes, length, md);
+    CC_SHA1(bytes, (uint)length, md);
 
     return [NSData dataWithBytes:md length:CC_SHA1_DIGEST_LENGTH];
 }
@@ -452,7 +452,7 @@ static __strong NSData *CRLFCRLF;
 
     if (responseCode >= 400) {
         MPLog(@"Request failed with response code %d", responseCode);
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %d", responseCode] forKey:NSLocalizedDescriptionKey]]];
+        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %ld", responseCode] forKey:NSLocalizedDescriptionKey]]];
         return;
 
     }
@@ -521,7 +521,7 @@ static __strong NSData *CRLFCRLF;
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Upgrade"), CFSTR("websocket"));
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Connection"), CFSTR("Upgrade"));
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Sec-WebSocket-Key"), (__bridge CFStringRef)_secKey);
-    CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Sec-WebSocket-Version"), (__bridge CFStringRef)[NSString stringWithFormat:@"%d", _webSocketVersion]);
+    CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Sec-WebSocket-Version"), (__bridge CFStringRef)[NSString stringWithFormat:@"%ld", _webSocketVersion]);
 
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Origin"), (__bridge CFStringRef)_url.mp_origin);
 
@@ -867,7 +867,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
             [self handlePong];
             break;
         default:
-            [self _closeWithProtocolError:[NSString stringWithFormat:@"Unknown opcode %d", opcode]];
+            [self _closeWithProtocolError:[NSString stringWithFormat:@"Unknown opcode %ld", opcode]];
             // TODO: Handle invalid opcode
             break;
     }
@@ -1651,7 +1651,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
         size = -1;
     }
 
-    return size;
+    return (int32_t)size;
 }
 
 #else

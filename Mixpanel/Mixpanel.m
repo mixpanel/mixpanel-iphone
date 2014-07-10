@@ -1066,7 +1066,7 @@ static Mixpanel *sharedInstance = nil;
             // Finished variants are those which should no longer be run.
             NSMutableSet *finishedVariants = [NSMutableSet setWithSet:self.variants];
             [finishedVariants minusSet:parsedVariants];
-            [finishedVariants makeObjectsPerformSelector:@selector(finish)];
+            [finishedVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
 
             // New variants are those we are running for the first time.
             [newVariants unionSet:parsedVariants];
@@ -1432,7 +1432,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)markVariantRun:(MPVariant *)variant {
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     [self registerSuperProperties:@{}];
-    [self.people merge:@{@"$experiments": @{[NSString stringWithFormat:@"%d", variant.experimentID]: @(variant.ID)}}];
+    [self.people merge:@{@"$experiments": @{[NSString stringWithFormat:@"%lu", variant.experimentID]: @(variant.ID)}}];
 }
 
 @end

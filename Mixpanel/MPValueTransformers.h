@@ -40,7 +40,7 @@
 @interface MPUIImageToNSDictionaryValueTransformer : NSValueTransformer
 @end
 
-static id transformValue(id value, NSString *toType) {
+__unused static id transformValue(id value, NSString *toType) {
 
     assert(value != nil);
     NSString *fromType = nil;
