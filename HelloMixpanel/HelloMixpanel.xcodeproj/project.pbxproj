@@ -19,6 +19,7 @@
 		05439023192279530076094E /* MPTweakCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439019192279530076094E /* MPTweakCollection.m */; };
 		05439024192279530076094E /* MPTweakInline.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901C192279530076094E /* MPTweakInline.m */; };
 		05439025192279530076094E /* MPTweakStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901F192279530076094E /* MPTweakStore.m */; };
+		0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0545AE29196F5382003DCE7F /* Settings.bundle */; };
 		05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */; };
 		05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
@@ -186,6 +187,7 @@
 		0543901D192279530076094E /* MPTweakInlineInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakInlineInternal.h; sourceTree = "<group>"; };
 		0543901E192279530076094E /* MPTweakStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakStore.h; sourceTree = "<group>"; };
 		0543901F192279530076094E /* MPTweakStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakStore.m; sourceTree = "<group>"; };
+		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		05509E4D196E4697007E5C06 /* MixpanelDummyDecideConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelDummyDecideConnection.h; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.h; sourceTree = "<group>"; };
 		05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelDummyDecideConnection.m; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.m; sourceTree = "<group>"; };
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
+				0545AE29196F5382003DCE7F /* Settings.bundle */,
 				2808F9981610EFE3005772B7 /* Supporting Files */,
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
@@ -805,6 +808,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2808F99C1610EFE3005772B7 /* InfoPlist.strings in Resources */,
+				0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */,
 				05E98DF3191AE27200AFF3E1 /* test_variant.json in Resources */,
 				28C7E667161530BF00F78E49 /* Icon@2x.png in Resources */,
 				28C7E6691615311100F78E49 /* Icon.png in Resources */,
