@@ -82,6 +82,8 @@
         self.experimentID = experimentID;
         self.actions = [NSMutableArray array];
         [self addActionsFromJSONObject:actions andExecute:NO];
+        _finished = NO;
+        _running = NO;
     }
     return self;
 }
@@ -94,6 +96,7 @@
         self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
         self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
         self.actions = [aDecoder decodeObjectForKey:@"actions"];
+        _finished = [(NSNumber *)[aDecoder decodeObjectForKey:@"finished"] boolValue];
     }
     return self;
 }
@@ -103,6 +106,7 @@
     [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_ID] forKey:@"ID"];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_experimentID] forKey:@"experimentID"];
     [aCoder encodeObject:_actions forKey:@"actions"];
+    [aCoder encodeObject:[NSNumber numberWithBool:_finished] forKey:@"finished"];
 }
 
 #pragma mark - Actions
@@ -136,15 +140,49 @@
 }
 
 - (void)execute {
-    for (MPVariantAction *action in self.actions) {
-        [action execute];
+    if (!self.running) {
+        for (MPVariantAction *action in self.actions) {
+            [action execute];
+        }
+        _running = YES;
     }
 }
 
 - (void)stop {
-    for (MPVariantAction *action in self.actions) {
-        [action stop];
+    if (_running) {
+        for (MPVariantAction *action in self.actions) {
+            [action stop];
+        }
     }
+}
+
+- (void)finish {
+    _finished = YES;
+}
+
+#pragma mark - Equality
+
+- (BOOL)isEqualToVariant:(MPVariant *)variant
+{
+    return self.ID == variant.ID;
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (self == object) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[MPVariant class]]) {
+        return NO;
+    }
+
+    return [self isEqualToVariant:(MPVariant *)object];
+}
+
+- (NSUInteger)hash
+{
+    return self.ID;
 }
 
 @end
@@ -424,5 +462,3 @@
 }
 
 @end
-
-
