@@ -14,12 +14,37 @@
 @property (nonatomic) NSUInteger experimentID;
 @property (nonatomic, strong) NSMutableArray *actions;
 
+/*!
+ @property
+
+ @abstract
+ Whether this specific variant is currently running on the device.
+
+ @discussion
+ This property will not be restored on unarchive, as the variant will need
+ to be run again once the app is restarted.
+ */
+@property (nonatomic, readonly)BOOL running;
+
+/*!
+ @property
+
+ @abstract
+ Whether the variant should not run anymore.
+
+ @discussion
+ Variants are set to finished when we no longer see them in a decide response.
+ If set, the test will not be run anymore the next time the app starts.
+*/
+@property (nonatomic, readonly) BOOL finished;
+
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
 
 - (void) addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec;
 - (void) addActionFromJSONObject:(NSDictionary *)action andExecute:(BOOL)exec;
 - (void)execute;
 - (void)stop;
+- (void)finish;
 
 @end
 
