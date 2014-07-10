@@ -211,13 +211,8 @@
         return nil;
     }
 
-    NSArray *original = object[@"original"];
-    if (![original isKindOfClass:[NSArray class]]) {
-        NSLog(@"invalid action original arguments: %@", original);
-        return nil;
-    }
-
     // Optional parameters
+    NSArray *original = object[@"original"];
     NSString *name = object[@"name"];
     BOOL swizzle = !object[@"swizzle"] || [object[@"swizzle"] boolValue];
     Class swizzleClass = NSClassFromString(object[@"swizzleClass"]);
@@ -344,14 +339,17 @@
 
 - (void)stop
 {
+    NSLog(@"Stopping %@ (%lu to be reverted)", self, [self.appliedTo count]);
     // Stop this change from applying in future
     [MPSwizzler unswizzleSelector:self.swizzleSelector
                           onClass:self.swizzleClass
                             named:self.name];
 
-    // Undo the present changes
-    [[self class] executeSelector:self.selector withArgs:self.original onObjects:[self.appliedTo allObjects]];
-    [self.appliedTo removeAllObjects];
+    // Undo the current changes (if we know how to undo them)
+    if (self.original) {
+        [[self class] executeSelector:self.selector withArgs:self.original onObjects:[self.appliedTo allObjects]];
+        [self.appliedTo removeAllObjects];
+    }
 }
 
 - (NSString *)description {
