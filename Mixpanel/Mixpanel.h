@@ -162,6 +162,20 @@
  @property
 
  @abstract
+ Controls whether to automatically check for A/B test variants for the
+ currently identified user when the application becomes active.
+
+ @discussion
+ Defaults to YES. Will fire a network request on
+ <code>applicationDidBecomeActive</code> to retrieve a list of valid variants
+ for the currently identified user.
+ */
+@property (atomic) BOOL checkForVariantsOnActive;
+
+/*!
+ @property
+
+ @abstract
  Controls whether to automatically check for and show in-app notifications
  for the currently identified user when the application becomes active.
 
