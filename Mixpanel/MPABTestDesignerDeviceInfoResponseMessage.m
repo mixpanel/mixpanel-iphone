@@ -31,6 +31,26 @@
     [self setPayloadObject:systemVersion forKey:@"system_version"];
 }
 
+- (NSString *)appVersion
+{
+    return [self payloadObjectForKey:@"app_version"];
+}
+
+- (void)setAppVersion:(NSString *)appVersion
+{
+    [self setPayloadObject:appVersion forKey:@"app_version"];
+}
+
+- (NSString *)appRelease
+{
+    return [self payloadObjectForKey:@"app_release"];
+}
+
+- (void)setAppRelease:(NSString *)appRelease
+{
+    [self setPayloadObject:appRelease forKey:@"app_release"];
+}
+
 - (NSString *)deviceName
 {
     return [self payloadObjectForKey:@"device_name"];

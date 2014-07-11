@@ -389,7 +389,7 @@
                         id arg = transformValue(argTuple[0], argTuple[1]);
 
                         // Unpack NSValues to their base types.
-                        if( [arg isKindOfClass:[NSValue class]] ) {
+                        if ([arg isKindOfClass:[NSValue class]]) {
                             const char *ctype = [(NSValue *)arg objCType];
                             NSUInteger size;
                             NSGetSizeAndAlignment(ctype, &size, nil);
