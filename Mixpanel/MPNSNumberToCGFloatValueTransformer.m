@@ -27,6 +27,8 @@
                 number = [NSNumber numberWithDouble:(CGFloat) [number floatValue]];
             } else if (strcmp([number objCType], (char *) @encode(double)) == 0) {
                 number = [NSNumber numberWithFloat:(CGFloat) [number doubleValue]];
+            } else if (strcmp([number objCType], (char *) @encode(int)) == 0) {
+                number = [NSNumber numberWithFloat:(CGFloat) [number integerValue]];
             }
             value = number;
         }
