@@ -8,6 +8,7 @@
 #import "MixpanelDummyHTTPConnection.h"
 #import "MPSurveyNavigationController.h"
 #import "MPNotificationViewController.h"
+#import <objc/runtime.h>
 
 #define TEST_TOKEN @"abc123"
 
@@ -19,12 +20,14 @@
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, assign) dispatch_queue_t serialQueue;
 
-- (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+
+- (NSData *)JSONSerializeObject:(id)obj;
+- (NSString *)encodeAPIData:(NSArray *)array;
 
 @end
 
@@ -41,6 +44,20 @@
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) HTTPServer *httpServer;
 @property (atomic) BOOL mixpanelWillFlush;
+
+@end
+
+@implementation NSLocale (OverrideLocale)
+
++ (void)load
+{
+    method_exchangeImplementations(class_getClassMethod(self, @selector(currentLocale)), class_getClassMethod(self, @selector(swz_currentLocale)));
+}
+
++ (id)swz_currentLocale
+{
+    return [NSLocale localeWithLocaleIdentifier:@"en_US@calendar=hebrew"];
+}
 
 @end
 
@@ -351,6 +368,15 @@
     XCTAssertEqual(e[@"event"], @"Something Happened", @"incorrect event name");
     p = e[@"properties"];
     XCTAssertEqualObjects(p[@"$app_version"], @"override", @"reserved property override failed");
+}
+
+- (void)testDateEncoding
+{
+    NSDate *fixedDate = [NSDate dateWithTimeIntervalSince1970:1400000000];
+    NSArray *a = @[@{@"event": @"an event",
+                     @"properties": @{@"eventdate": fixedDate}}];
+    NSString *json = [[NSString alloc] initWithData:[self.mixpanel JSONSerializeObject:a] encoding:NSUTF8StringEncoding];
+    XCTAssert([json containsString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""]);
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken
