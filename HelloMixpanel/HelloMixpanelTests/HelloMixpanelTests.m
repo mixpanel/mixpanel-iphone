@@ -1,4 +1,4 @@
-#import "HelloMixpanelTests.h"
+#import <XCTest/XCTest.h>
 
 #import "Mixpanel.h"
 #import "MPNotification.h"
@@ -44,7 +44,7 @@
 
 @end
 
-@interface HelloMixpanelTests ()  <MixpanelDelegate>
+@interface HelloMixpanelTests : XCTestCase  <MixpanelDelegate>
 
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) HTTPServer *httpServer;

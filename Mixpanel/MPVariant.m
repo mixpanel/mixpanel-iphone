@@ -150,10 +150,8 @@
 }
 
 - (void)stop {
-    if (_running) {
-        for (MPVariantAction *action in self.actions) {
-            [action stop];
-        }
+    for (MPVariantAction *action in self.actions) {
+        [action stop];
     }
 }
 
@@ -306,6 +304,7 @@
 
 - (void)execute
 {
+    NSLog(@"Executing %@", self);
     // Block to execute on swizzle
     void (^executeBlock)(id, SEL) = ^(id view, SEL command){
         NSArray *objects = [[self class] executeSelector:self.selector
