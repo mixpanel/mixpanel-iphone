@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSPredicate *predicate;
+@property (nonatomic, strong) NSNumber *index;
 
 - (NSArray *)apply:(NSArray *)views;
 - (NSArray *)applyReverse:(NSArray *)views;
@@ -119,6 +120,10 @@
         }
         if ([_scanner scanCharactersFromSet:_predicateStartChar intoString:nil]) {
             NSString *predicateFormat;
+            NSInteger index = 0;
+            if ([_scanner scanInteger:&index]) {
+                filter.index = [NSNumber numberWithInteger:index];
+            }
             [_scanner scanUpToCharactersFromSet:_predicateEndChar intoString:&predicateFormat];
             filter.predicate = [NSPredicate predicateWithFormat:predicateFormat];
             [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil];
@@ -168,7 +173,9 @@
     }
 
     // Filter any resulting views by predicate
-    if (_predicate) {
+    if (_index) {
+        return [result subarrayWithRange:NSMakeRange([_index unsignedIntegerValue], 1)];
+    } else if (_predicate) {
         return [result filteredArrayUsingPredicate:_predicate];
     } else {
         return [result copy];
