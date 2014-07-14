@@ -40,6 +40,9 @@
 @interface MPUIImageToNSDictionaryValueTransformer : NSValueTransformer
 @end
 
+@interface MPNSNumberToCGFloatValueTransformer : NSValueTransformer
+@end
+
 __unused static id transformValue(id value, NSString *toType) {
 
     assert(value != nil);
