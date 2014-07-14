@@ -8,9 +8,9 @@
                     "name":"c65",
                     "args":[["rgba(255, 93, 66, 1.00)","UIColor"]],
                     "selector":"setBackgroundColor:",
-                    "path":"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell/UITableViewCellContentView/UILabel",
+                    "path":"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell/UITableViewCellContentView/UILabel[]",
                     "prop":"backgroundColor",
-                    "original":"rgba(255, 255, 255, 1.00)"
+                    "original":[["rgba(255, 255, 255, 1.00)","UIColor"]]
                 }
             ],
             "id":1,
@@ -24,7 +24,7 @@
                     "selector":"setBackgroundColor:",
                     "path":"/ViewController/UIView/UIButton",
                     "prop":"backgroundColor",
-                    "original":null
+                    "original":[[null,"UIColor"]]
                 }
             ],
             "id":2,
