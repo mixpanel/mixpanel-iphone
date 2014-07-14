@@ -21,7 +21,7 @@
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
 
-#define VERSION @"2.4.0"
+#define VERSION @"2.4.1"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
