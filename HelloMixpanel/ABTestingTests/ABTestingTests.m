@@ -383,7 +383,7 @@
     XCTAssertEqual([selector selectFromRoot:vc][0], l2, @"l2 should be selected by index");
     XCTAssertEqual([selector selectFromRoot:vc][1], l4, @"l4 should be selected by index");
     XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected by index");
-    XCTAssert([selector isLeafSelected:l4 fromRoot:vc], @"l4 should be selected by index");
+    XCTAssert([selector isLeafSelected:l4 fromRoot:vc], @"l4 should be selected by indezx");
     XCTAssertFalse([selector isLeafSelected:l1 fromRoot:vc], @"l1 should not be selected by index");
 
     // Selection by multiple indexes
@@ -393,6 +393,10 @@
     XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected by index");
     XCTAssertFalse([selector isLeafSelected:l4 fromRoot:vc], @"l4 should be selected by index");
     XCTAssertFalse([selector isLeafSelected:l1 fromRoot:vc], @"l1 should not be selected by index");
+
+    // Invalid index selection (Parent of objects selected by index must be UIViews)
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView[0]/UIView/UILabel"];
+    XCTAssertEqual([[selector selectFromRoot:vc] count], (uint)0, @"l2 should be selected by index");
 
     // Select view by predicate
     selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[SELF.text == \"Label 1\"]"];

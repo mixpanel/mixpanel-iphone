@@ -235,7 +235,7 @@ static Mixpanel *sharedInstance = nil;
 #ifndef MIXPANEL_DEBUG
         [self executeCachedVariants];
 #endif
-        
+
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
         }
@@ -994,10 +994,10 @@ static Mixpanel *sharedInstance = nil;
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
     MixpanelDebug(@"%@ tracking push payload %@", self, userInfo);
-    
+
     if (userInfo && userInfo[@"mp"]) {
         NSDictionary *mpPayload = userInfo[@"mp"];
-        
+
         if ([mpPayload isKindOfClass:[NSDictionary class]] && mpPayload[@"m"] && mpPayload[@"c"]) {
             [self track:event properties:@{@"campaign_id": mpPayload[@"c"],
                                            @"message_id": mpPayload[@"m"],

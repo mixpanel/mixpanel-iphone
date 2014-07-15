@@ -162,8 +162,13 @@
         // Select all children
         for (NSObject *view in views) {
             NSArray *children = [self getChildrenOfObject:view ofType:class];
-            if (_index && [_index unsignedIntegerValue] < [children count] && [view isKindOfClass:[UIView class]]) {
-                children = @[children[[_index unsignedIntegerValue]]];
+            if (_index && [_index unsignedIntegerValue] < [children count]) {
+                // Indexing can only be used for subviews of UIView
+                if ([view isKindOfClass:[UIView class]]) {
+                    children = @[children[[_index unsignedIntegerValue]]];
+                } else {
+                    children = @[];
+                }
             }
             [result addObjectsFromArray:children];
         }

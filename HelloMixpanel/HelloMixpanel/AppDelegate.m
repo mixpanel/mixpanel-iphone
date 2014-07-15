@@ -80,7 +80,7 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    
+
     [self.mixpanel trackPushNotification:userInfo];
 }
 
