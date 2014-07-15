@@ -345,8 +345,10 @@
     UIView *v1 = [[UIView alloc] init];
     UIView *v2 = [[UIView alloc] init];
     UILabel *l1 = [[UILabel alloc] init];
+    l1.text = @"Label 1";
     UILabel *l2 = [[UILabel alloc] init];
-    
+    l2.text = @"Label 2";
+
     [v2 addSubview:l1];
     [v2 addSubview:l2];
     [v1 addSubview:v2];
@@ -354,18 +356,21 @@
     w.rootViewController = vc;
 
     MPObjectSelector *selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel"];
-    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 not selected from vc");
-    
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected from viewcontroller");
+
     selector = [MPObjectSelector objectSelectorWithString:@"/UIViewController/UIView/UIView/UILabel"];
-    XCTAssertEqual([selector selectFromRoot:w][0], l1, @"l1 not selected from w");
-    
+    XCTAssertEqual([selector selectFromRoot:w][0], l1, @"l1 should be selected from window");
+
     selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[1]"];
-    XCTAssertEqual([selector selectFromRoot:vc][0], l2, @"l2 not selected from vc");
-    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 not selected from vc");
-    XCTAssert(![selector isLeafSelected:l1 fromRoot:vc], @"l2 not selected from vc");
+    XCTAssertEqual([selector selectFromRoot:vc][0], l2, @"l2 should be selected by index");
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected by index");
+    XCTAssert(![selector isLeafSelected:l1 fromRoot:vc], @"l1 should not be selected by index");
+
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[SELF.text == \"Label 1\"]"];
+    XCTAssertEqual([selector selectFromRoot:vc][0], l1, @"l1 should be selected by predicate");
+    XCTAssert([selector isLeafSelected:l1 fromRoot:vc], @"l1 should be selected by predicate");
+    XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 
 }
-
-
 
 @end
