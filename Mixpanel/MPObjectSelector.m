@@ -161,15 +161,16 @@
     if (class || [_name isEqualToString:@"*"]) {
         // Select all children
         for (NSObject *view in views) {
-            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
+            NSArray *children = [self getChildrenOfObject:view ofType:class];
+            if (_index && [_index unsignedIntegerValue] < [children count] && [view isKindOfClass:[UIView class]]) {
+                children = @[children[[_index unsignedIntegerValue]]];
+            }
+            [result addObjectsFromArray:children];
         }
     }
 
     // Filter any resulting views by predicate
-    if (_index) {
-        //TODO handle NSRangeExcaption
-        return [result subarrayWithRange:NSMakeRange([_index unsignedIntegerValue], 1)];
-    } else if (_predicate) {
+    if (_predicate) {
         return [result filteredArrayUsingPredicate:_predicate];
     } else {
         return [result copy];
