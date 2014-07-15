@@ -149,8 +149,8 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
-        self.decideURL = @"http://alex.dev.mixpanel.org"; //TODO this is temporary
-        self.switchboardURL = @"ws://switchboard.mixpanel.com"; //TODO this is temporary
+        self.decideURL = @"https://decide.mixpanel.com";
+        self.switchboardURL = @"ws://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
