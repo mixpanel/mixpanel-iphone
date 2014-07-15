@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
+
 **Quick start**
 
 1. Install [CocoaPods](http://cocoapods.org/) with `gem install cocoapods`.

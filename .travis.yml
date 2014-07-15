@@ -1,0 +1,16 @@
+language: objective-c
+script: xctool -workspace HelloMixpanel/HelloMixpanel.xcworkspace -scheme HelloMixpanel -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+env:
+  global:
+  - APP_NAME="HelloMixpanel"
+  - 'DEVELOPER_NAME="iPhone Distribution: Mixpanel, Inc."'
+  - PROFILE_NAME="HelloMixpanel_Ad_Hoc"
+  - secure: hYFo+h9Txhp2x9sTIDHrbhiVJk1Y5rvbJkkhyaH0Rhco2v5BZNzq5Uoegl4DJ8YmM7Qm8Xl1SBDNK9WvfxowCO0Bc8DzFPWqh2p9bN2HyM/dwjLC1K9Imlssa4oxN4sHFG7x6Ck24UWpErR3wG8umY7Eyrlh3TzNtAEoaSRpMpc=
+install: (gem update cocoapods && cd HelloMixpanel/ ; pod install)
+before_script:
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision.enc
+  -d -a -out scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.cer.enc -d -a
+  -out scripts/certs/dist.cer
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.p12.enc -d -a
+  -out scripts/certs/dist.p12

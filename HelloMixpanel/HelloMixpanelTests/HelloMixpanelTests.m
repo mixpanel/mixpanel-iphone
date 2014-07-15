@@ -8,6 +8,7 @@
 #import "MixpanelDummyHTTPConnection.h"
 #import "MPSurveyNavigationController.h"
 #import "MPNotificationViewController.h"
+#import <objc/runtime.h>
 
 #define TEST_TOKEN @"abc123"
 
@@ -25,7 +26,6 @@
 @property (nonatomic, strong) MPNotification *currentlyShowingNotification;
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 
-- (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;
@@ -33,6 +33,9 @@
 - (NSString *)propertiesFilePath;
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
 - (void)showNotificationWithObject:(MPNotification *)notification;
+
+- (NSData *)JSONSerializeObject:(id)obj;
+- (NSString *)encodeAPIData:(NSArray *)array;
 
 @end
 
@@ -52,6 +55,20 @@
 
 @end
 
+@implementation NSLocale (OverrideLocale)
+
++ (void)load
+{
+    method_exchangeImplementations(class_getClassMethod(self, @selector(currentLocale)), class_getClassMethod(self, @selector(swz_currentLocale)));
+}
+
++ (id)swz_currentLocale
+{
+    return [NSLocale localeWithLocaleIdentifier:@"en_US@calendar=hebrew"];
+}
+
+@end
+
 #pragma mark - Tests
 
 @implementation HelloMixpanelTests
@@ -60,7 +77,7 @@
 {
     NSLog(@"starting test setup...");
     [super setUp];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     [self.mixpanel reset];
     self.mixpanelWillFlush = NO;
     [self waitForSerialQueue];
@@ -363,6 +380,15 @@
     XCTAssertEqualObjects(p[@"$app_version"], @"override", @"reserved property override failed");
 }
 
+- (void)testDateEncoding
+{
+    NSDate *fixedDate = [NSDate dateWithTimeIntervalSince1970:1400000000];
+    NSArray *a = @[@{@"event": @"an event",
+                     @"properties": @{@"eventdate": fixedDate}}];
+    NSString *json = [[NSString alloc] initWithData:[self.mixpanel JSONSerializeObject:a] encoding:NSUTF8StringEncoding];
+    XCTAssert([json containsString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""]);
+}
+
 - (void)testTrackWithCustomDistinctIdAndToken
 {
     NSDictionary *p = @{@"token": @"t1",
@@ -431,6 +457,73 @@
     XCTAssertNoThrow([self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"v"],  @"property type should be allowed");
 }
 
+- (void)testTrackLaunchOptions
+{
+    Mixpanel *mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN
+                                           launchOptions:@{UIApplicationLaunchOptionsRemoteNotificationKey: @{@"mp": @{
+                                                                                                              @"m": @"the_message_id",
+                                                                                                              @"c": @"the_campaign_id"
+                                                                                                              }}} andFlushInterval:0];
+    NSLog(@"starting wait for serial queue...");
+    dispatch_sync(mixpanel.serialQueue, ^{ return; });
+    NSLog(@"finished wait for serial queue");
+    XCTAssertTrue(mixpanel.eventsQueue.count == 1, @"event not queued");
+    NSDictionary *e = mixpanel.eventsQueue.lastObject;
+    XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
+    NSDictionary *p = e[@"properties"];
+    XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
+    XCTAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
+    NSLog(@"finished testTrackLaunchOptions");
+}
+
+- (void)testTrackPushNotification
+{
+    [self.mixpanel trackPushNotification:@{@"mp": @{
+       @"m": @"the_message_id",
+       @"c": @"the_campaign_id"
+    }}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"event not queued");
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    XCTAssertEqualObjects(e[@"event"], @"$campaign_received", @"incorrect event name");
+    NSDictionary *p = e[@"properties"];
+    XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
+    XCTAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
+    NSLog(@"finished testTrackPushNotification");
+}
+
+- (void)testTrackPushNotificationMalformed
+{
+    [self.mixpanel trackPushNotification:@{@"mp": @{
+                                                   @"m": @"the_message_id",
+                                                   @"cid": @"the_campaign_id"
+                                                   }}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:@{@"mp": @1}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:nil];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:@{}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    [self.mixpanel trackPushNotification:@{@"mp": @"bad value"}];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    NSDictionary *badUserInfo = @{@"mp": @{
+                                         @"m": [NSData data],
+                                         @"c": [NSData data]
+                                         }};
+    XCTAssertThrows([self.mixpanel trackPushNotification:badUserInfo], @"property types should not be allowed");
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"event was queued");
+    NSLog(@"finished testTrackPushNotificationMalformed");
+}
+
 - (void)testReset
 {
     NSDictionary *p = @{@"p1": @"a"};
@@ -460,7 +553,7 @@
 - (void)testArchive
 {
     [self.mixpanel archive];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id archive failed");
     XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties archive failed");
@@ -475,7 +568,7 @@
     [self.mixpanel.people set:p];
     [self waitForSerialQueue];
     [self.mixpanel archive];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"custom name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
@@ -486,7 +579,7 @@
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from no file failed");
     XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive from no file failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from no file failed");
@@ -503,7 +596,7 @@
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"garbage events archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"garbage people archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"garbage properties archive file not found");
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from garbage failed");
     XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive from garbage failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from garbage failed");
