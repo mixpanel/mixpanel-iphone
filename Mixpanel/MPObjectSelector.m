@@ -122,7 +122,7 @@
             NSString *predicateFormat;
             NSInteger index = 0;
             if ([_scanner scanInteger:&index]) {
-                filter.index = [NSNumber numberWithInteger:index];
+                filter.index = [NSNumber numberWithUnsignedInteger:(NSUInteger)index];
             }
             [_scanner scanUpToCharactersFromSet:_predicateEndChar intoString:&predicateFormat];
             filter.predicate = [NSPredicate predicateWithFormat:predicateFormat];
@@ -157,23 +157,17 @@
 {
     NSMutableArray *result = [NSMutableArray array];
 
-    if ([_name isEqualToString:@"*"]) {
+    Class class = NSClassFromString(_name);
+    if (class || [_name isEqualToString:@"*"]) {
         // Select all children
         for (NSObject *view in views) {
-            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:nil]];
-        }
-    } else {
-        // Select all children of a given class
-        Class class = NSClassFromString(_name);
-        if (class) {
-            for (NSObject *view in views) {
-                [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
-            }
+            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
         }
     }
 
     // Filter any resulting views by predicate
     if (_index) {
+        //TODO handle NSRangeExcaption
         return [result subarrayWithRange:NSMakeRange([_index unsignedIntegerValue], 1)];
     } else if (_predicate) {
         return [result filteredArrayUsingPredicate:_predicate];
@@ -203,7 +197,9 @@
 */
 - (BOOL)appliesTo:(NSObject *)view
 {
-    return([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)]) && (!_predicate || [_predicate evaluateWithObject:view]);
+    return ([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)])
+            && (!_predicate || [_predicate evaluateWithObject:view])
+            && (!_index || [self isView:view siblingNumber:[_index unsignedIntegerValue]]);
 }
 
 - (BOOL)appliesToAny:(NSArray *)views
@@ -211,6 +207,20 @@
     for (NSObject *view in views) {
         if ([self appliesTo:view]) {
             return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isView:(NSObject *)view siblingNumber:(uint)number
+{
+    NSArray *parents = [self getParentsOfObject:view];
+    for (NSObject *parent in parents) {
+        if ([parent isKindOfClass:[UIView class]]) {
+            NSArray *siblings = [self getChildrenOfObject:parent ofType:NSClassFromString(_name)];
+            if (number < [siblings count] && siblings[number] == view) {
+                return YES;
+            }
         }
     }
     return NO;
@@ -235,6 +245,7 @@
             [result addObject:[(UIViewController *)obj presentingViewController]];
         }
         if ([UIApplication sharedApplication].keyWindow.rootViewController == obj) {
+            //TODO is there a better way to get the actual window that has this VC
             [result addObject:[UIApplication sharedApplication].keyWindow];
         }
     }
@@ -249,6 +260,9 @@
     if ([obj isKindOfClass:[UIWindow class]] && [((UIWindow *)obj).rootViewController isKindOfClass:class]) {
         [result addObject:((UIWindow *)obj).rootViewController];
     } else if ([obj isKindOfClass:[UIView class]]) {
+        // NB. For UIViews, only add subviews, nothing else.
+        // The ordering of this result is critical to being able to
+        // apply the index filter.
         for (NSObject *child in [(UIView *)obj subviews]) {
             if (!class || [child isKindOfClass:class]) {
                 [result addObject:child];
@@ -272,7 +286,7 @@
 
 - (NSString *)description;
 {
-    return [NSString stringWithFormat:@"%@[%@]", self.name, self.predicate];
+    return [NSString stringWithFormat:@"%@[%@]", self.name, self.index ?: self.predicate];
 }
 
 @end
