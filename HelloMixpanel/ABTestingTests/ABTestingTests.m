@@ -11,6 +11,7 @@
 #import "Mixpanel.h"
 #import "MPSwizzler.h"
 #import "MPVariant.h"
+#import "MPObjectSelector.h"
 #import "HomeViewController.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyDecideConnection.h"
@@ -334,5 +335,37 @@
     });
     [self waitForExpectationsWithTimeout:2 handler:nil];
 }
+
+#pragma mark - Object selection
+
+-(void)testObjectSelection
+{
+    UIWindow *w = [[UIWindow alloc] init];
+    UIViewController *vc = [[UIViewController alloc] init];
+    UIView *v1 = [[UIView alloc] init];
+    UIView *v2 = [[UIView alloc] init];
+    UILabel *l1 = [[UILabel alloc] init];
+    UILabel *l2 = [[UILabel alloc] init];
+    
+    [v2 addSubview:l1];
+    [v2 addSubview:l2];
+    [v1 addSubview:v2];
+    vc.view = v1;
+    w.rootViewController = vc;
+
+    MPObjectSelector *selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel"];
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 not selected from vc");
+    
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIViewController/UIView/UIView/UILabel"];
+    XCTAssertEqual([selector selectFromRoot:w][0], l1, @"l1 not selected from w");
+    
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[1]"];
+    XCTAssertEqual([selector selectFromRoot:vc][0], l2, @"l2 not selected from vc");
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 not selected from vc");
+    XCTAssert(![selector isLeafSelected:l1 fromRoot:vc], @"l2 not selected from vc");
+
+}
+
+
 
 @end
