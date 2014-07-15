@@ -65,7 +65,7 @@
 
 /*
  Starting at the root object, try and find an object
- in the view/controller tree that matches this selector
+ in the view/controller tree that matches this selector.
 */
 -(NSArray *)selectFromRoot:(id)root
 {
@@ -85,7 +85,7 @@
 
 /*
  Starting at a leaf node, determine if it would be selected
- by this selector starting from the root
+ by this selector starting from the root object given.
 */
 
 -(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root
@@ -200,7 +200,7 @@
 
 /*
  Returns whether the given view would pass this filter.
-*/
+ */
 - (BOOL)appliesTo:(NSObject *)view
 {
     return ([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)])
@@ -208,6 +208,9 @@
             && (!_index || [self isView:view siblingNumber:[_index unsignedIntegerValue]]);
 }
 
+/*
+ Returns whether any of the given views would pass this filter
+ */
 - (BOOL)appliesToAny:(NSArray *)views
 {
     for (NSObject *view in views) {
@@ -218,6 +221,10 @@
     return NO;
 }
 
+/*
+ Returns true if the given view is at the index given by number in
+ its parent's subviews. The view's parent must be of type UIView
+ */
 - (BOOL)isView:(NSObject *)view siblingNumber:(uint)number
 {
     NSArray *parents = [self getParentsOfObject:view];
