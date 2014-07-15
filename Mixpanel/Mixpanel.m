@@ -178,6 +178,7 @@ static Mixpanel *sharedInstance = nil;
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
+        self.variants = nil;
 
         // wifi reachability
         BOOL reachabilityOk = NO;
@@ -1472,9 +1473,22 @@ static Mixpanel *sharedInstance = nil;
 }
 
 - (void)markVariantRun:(MPVariant *)variant {
+
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
-    [self registerSuperProperties:@{}];
-    [self.people merge:@{@"$experiments": @{[NSString stringWithFormat:@"%lu", variant.experimentID]: @(variant.ID)}}];
+    NSDictionary *shownVariant = @{[NSString stringWithFormat:@"%lu", (unsigned long)variant.experimentID]: @(variant.ID)};
+    [self.people merge:@{@"$experiments": shownVariant}];
+
+    dispatch_async(self.serialQueue, ^{
+        NSMutableDictionary *superProperties = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
+        NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary: superProperties[@"$experiments"]];
+        [shownVariants addEntriesFromDictionary:shownVariant];
+        [superProperties addEntriesFromDictionary:@{@"$experiments": [shownVariants copy]}];
+        self.superProperties = [superProperties copy];
+        NSLog(@"Super properties are now %@", self.superProperties);
+        if ([Mixpanel inBackground]) {
+            [self archiveProperties];
+        }
+    });
 }
 
 @end

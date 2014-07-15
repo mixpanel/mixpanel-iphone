@@ -22,8 +22,11 @@
 
 @interface Mixpanel (Test)
 
+@property (nonatomic, assign) dispatch_queue_t serialQueue;
+
 @property (atomic, copy) NSString *decideURL;
 @property (nonatomic, strong) NSSet *variants;
+@property (atomic, strong) NSDictionary *superProperties;
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
 
@@ -121,6 +124,13 @@
         rootViewController = rootViewController.presentedViewController;
     }
     return rootViewController;
+}
+
+- (void)waitForSerialQueue
+{
+    NSLog(@"starting wait for serial queue...");
+    dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
+    NSLog(@"finished wait for serial queue");
 }
 
 #pragma mark - Invocation and Swizzling
@@ -336,6 +346,23 @@
     [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
+- (void)testVariantsTracked
+{
+    [self setupHTTPServer];
+
+    [self.mixpanel identify:@"ABC"];
+    [self waitForSerialQueue];
+    XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], 1, @"Decide not queried");
+        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+        XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
+        XCTAssertEqual(self.mixpanel.superProperties[@"$experiments"][@"1"], @1, @"super properties should have { 1: 1 }");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+}
+
 #pragma mark - Object selection
 
 -(void)testObjectSelection
@@ -403,7 +430,6 @@
     XCTAssertEqual([selector selectFromRoot:vc][0], l1, @"l1 should be selected by predicate");
     XCTAssert([selector isLeafSelected:l1 fromRoot:vc], @"l1 should be selected by predicate");
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
-
 }
 
 @end
