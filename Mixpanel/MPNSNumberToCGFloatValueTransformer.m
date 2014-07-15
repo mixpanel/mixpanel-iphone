@@ -32,10 +32,10 @@
             }
             value = number;
         }
-        
+
         return value;
     }
-    
+
     return nil;
 }
 
