@@ -1472,7 +1472,8 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)markVariantRun:(MPVariant *)variant {
+- (void)markVariantRun:(MPVariant *)variant
+{
 
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     NSDictionary *shownVariant = @{[NSString stringWithFormat:@"%lu", (unsigned long)variant.experimentID]: @(variant.ID)};
