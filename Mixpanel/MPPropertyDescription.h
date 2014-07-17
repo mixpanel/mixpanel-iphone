@@ -25,6 +25,7 @@
 
 @property (nonatomic, readonly) NSString *type;
 @property (nonatomic, readonly) BOOL readonly;
+@property (nonatomic, readonly) BOOL nofollow;
 @property (nonatomic, readonly) BOOL useKeyValueCoding;
 @property (nonatomic, readonly) BOOL useInstanceVariableAccess;
 @property (nonatomic, readonly) NSString *name;
