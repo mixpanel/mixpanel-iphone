@@ -151,19 +151,19 @@
 - (void)testInvocation
 {
     UIImageView *imageView = [[UIImageView alloc] init];
-    XCTAssert(imageView.image == nil, @"Image should not be set");
+    XCTAssertNil(imageView.image, @"Image should not be set");
     [MPVariantAction executeSelector:@selector(setImage:)
                       withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png", @"data":@"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII="}]}, @"UIImage"]]
                      onObjects:@[imageView]];
-    XCTAssert(imageView.image != nil, @"Image should be set");
+    XCTAssertNotNil(imageView.image, @"Image should be set");
     XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
 
     UIImageView *urlImageView = [[UIImageView alloc] init];
-    XCTAssert(urlImageView.image == nil, @"Image should not be set");
+    XCTAssertNil(urlImageView.image, @"Image should not be set");
     [MPVariantAction executeSelector:@selector(setImage:)
                             withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":@"http://dev.images.mxpnl.com/u%27306087%27/2712f913885455bfa2d8e439fda29438"}]}, @"UIImage"]]
                            onObjects:@[urlImageView]];
-    XCTAssert(urlImageView.image != nil, @"Image should be set");
+    XCTAssertNotNil(urlImageView.image, @"Image should be set");
     XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
 
     UILabel *label = [[UILabel alloc] init];
