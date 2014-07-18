@@ -76,7 +76,24 @@
         for (NSDictionary *imageDictionary in imagesDictionary)
         {
             NSNumber *scale = imageDictionary[@"scale"];
-            UIImage *image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
+            UIImage *image;
+            if ([imageDictionary objectForKey: @"url"])
+            {
+                NSURL *image_url = [NSURL URLWithString: imageDictionary[@"url"]];
+                image = [UIImage imageWithData:[NSData dataWithContentsOfURL: image_url] scale:fminf(1.0, [scale floatValue])];
+
+                NSDictionary *dimensions = imageDictionary[@"dimensions"];
+                CGSize size = CGSizeMake([dimensions[@"Width"] floatValue], [dimensions[@"Height"] floatValue]);
+                UIGraphicsBeginImageContext(size);
+                [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+            }
+            else
+            {
+                image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
+            }
+
             if (image)
             {
                 [images addObject:image];
