@@ -225,7 +225,7 @@
  Returns true if the given view is at the index given by number in
  its parent's subviews. The view's parent must be of type UIView
  */
-- (BOOL)isView:(NSObject *)view siblingNumber:(uint)number
+- (BOOL)isView:(NSObject *)view siblingNumber:(NSUInteger)number
 {
     NSArray *parents = [self getParentsOfObject:view];
     for (NSObject *parent in parents) {
