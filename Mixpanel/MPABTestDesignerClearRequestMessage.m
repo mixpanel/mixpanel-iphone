@@ -28,7 +28,9 @@ NSString *const MPABTestDesignerClearRequestMessageType = @"clear_request";
 
         MPVariant *variant = [conn sessionObjectForKey:kSessionVariantKey];
         if (variant) {
-            [variant stop];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [variant stop];
+            });
         }
 
         MPABTestDesignerClearResponseMessage *clearResponseMessage = [MPABTestDesignerClearResponseMessage message];

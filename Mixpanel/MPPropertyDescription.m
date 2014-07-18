@@ -82,6 +82,7 @@
         _name = [dictionary[@"name"] copy]; // required
         _useInstanceVariableAccess = [dictionary[@"use_ivar"] boolValue]; // Optional
         _readonly = [dictionary[@"readonly"] boolValue]; // Optional
+        _nofollow = [dictionary[@"nofollow"] boolValue]; // Optional
 
         NSString *predicateFormat = dictionary[@"predicate"]; // Optional
         if (predicateFormat)
@@ -154,6 +155,9 @@
 
 - (BOOL)shouldReadPropertyValueForObject:(NSObject *)object
 {
+    if (_nofollow) {
+        return NO;
+    }
     if (_predicate)
     {
         return [_predicate evaluateWithObject:object];
