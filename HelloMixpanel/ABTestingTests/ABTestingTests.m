@@ -75,6 +75,21 @@
 }
 @end
 
+/*
+ This is to let the tests run in XCode 5, as the XCode 5
+ version of XCTest does not support asynchonous tests and
+ will not compile unless we define these symbols
+ */
+#if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
+@interface XCTestExpectation
+- (void)fulfill;
+@end
+
+@interface XCTestCase (Test)
+- (void)waitForExpectationsWithTimeout:(NSTimeInterval)timeout handler:(id)handlerOrNil;
+- (XCTestExpectation *)expectationWithDescription:(NSString *)description;
+@end
+#endif
 
 @interface ABTestingTests : XCTestCase
 
@@ -198,14 +213,16 @@
     [label2 setText:@"Old Text 2"];
     [[self topViewController].view addSubview:label2];
 
-    XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
-        XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
-        [expect fulfill];
-    });
-    [self waitForExpectationsWithTimeout:0.1 handler:nil];
-    [variant stop];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
+            XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
+            [expect fulfill];
+        });
+        [self waitForExpectationsWithTimeout:0.1 handler:nil];
+        [variant stop];
+    }
 }
 
 - (void)testStopVariant
@@ -227,13 +244,15 @@
     [label2 setText:@"Old Text 2"];
     [[self topViewController].view addSubview:label2];
 
-    XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        XCTAssertEqualObjects(label.text, @"Old Text", @"Label text should be reverted");
-        XCTAssertEqualObjects(label2.text, @"Old Text 2", @"Label2 text should never have changed, as it was added after the variant was stopped");
-        [expect fulfill];
-    });
-    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            XCTAssertEqualObjects(label.text, @"Old Text", @"Label text should be reverted");
+            XCTAssertEqualObjects(label2.text, @"Old Text 2", @"Label2 text should never have changed, as it was added after the variant was stopped");
+            [expect fulfill];
+        });
+        [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    }
 }
 
 - (void)testSwizzle
@@ -348,13 +367,15 @@
     [self.mixpanel identify:@"ABC"];
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {}];
     [self waitForSerialQueue];
-    XCTestExpectation *expect = [self expectationWithDescription:@"decide requested"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
-        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
-        [expect fulfill];
-    });
-    [self waitForExpectationsWithTimeout:2 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expect = [self expectationWithDescription:@"decide requested"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
+            XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+            [expect fulfill];
+        });
+        [self waitForExpectationsWithTimeout:2 handler:nil];
+    }
 }
 
 - (void)testVariantsTracked
@@ -369,15 +390,17 @@
         }
     }];
     [self waitForSerialQueue];
-    XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
-        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
-        XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
-        XCTAssertEqual(self.mixpanel.superProperties[@"$experiments"][@"1"], @1, @"super properties should have { 1: 1 }");
-        [expect fulfill];
-    });
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
+            XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+            XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
+            XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
+            [expect fulfill];
+        });
+        [self waitForExpectationsWithTimeout:2 handler:nil];
+    }
 }
 
 #pragma mark - Object selection
