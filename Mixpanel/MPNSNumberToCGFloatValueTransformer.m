@@ -20,7 +20,7 @@
 {
     if ([value isKindOfClass:[NSNumber class]]) {
         NSNumber *number = (NSNumber *) value;
-        
+
         // if the number is not a cgfloat, cast it to a cgfloat
         if (strcmp([number objCType], (char *) @encode(CGFloat)) != 0) {
             if (strcmp([number objCType], (char *) @encode(float)) == 0) {
@@ -32,10 +32,10 @@
             }
             value = number;
         }
-        
+
         return value;
     }
-    
+
     return nil;
 }
 

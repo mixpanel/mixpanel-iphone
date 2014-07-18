@@ -37,7 +37,9 @@
     {
         for (MPPropertyDescription *propertyDescription in description->_propertyDescriptions)
         {
-            allPropertyDescriptions[propertyDescription.name] = propertyDescription;
+            if (!allPropertyDescriptions[propertyDescription.name]) {
+                allPropertyDescriptions[propertyDescription.name] = propertyDescription;
+            }
         }
         description = description.superclassDescription;
     }

@@ -11,6 +11,7 @@
 #import "Mixpanel.h"
 #import "MPSwizzler.h"
 #import "MPVariant.h"
+#import "MPObjectSelector.h"
 #import "HomeViewController.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyDecideConnection.h"
@@ -21,10 +22,14 @@
 
 @interface Mixpanel (Test)
 
+@property (nonatomic, assign) dispatch_queue_t serialQueue;
+
 @property (atomic, copy) NSString *decideURL;
 @property (nonatomic, strong) NSSet *variants;
+@property (atomic, strong) NSDictionary *superProperties;
 
-- (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion;
+- (void)markVariantRun:(MPVariant *)variant;
 
 @end
 
@@ -87,11 +92,19 @@
 - (void)setUp {
     [super setUp];
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    self.mixpanel.checkForNotificationsOnActive = NO;
+    self.mixpanel.checkForSurveysOnActive = NO;
+    self.mixpanel.checkForVariantsOnActive = NO;
     self.mixpanel.decideURL = @"http://localhost:31338";
 }
 
 - (void)tearDown {
     [super tearDown];
+    if(self.httpServer) {
+        [self.httpServer stop:NO];
+        self.httpServer = nil;
+    }
+    self.mixpanel = nil;
 }
 
 - (void)setupHTTPServer
@@ -120,6 +133,13 @@
         rootViewController = rootViewController.presentedViewController;
     }
     return rootViewController;
+}
+
+- (void)waitForSerialQueue
+{
+    NSLog(@"starting wait for serial queue...");
+    dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
+    NSLog(@"finished wait for serial queue");
 }
 
 #pragma mark - Invocation and Swizzling
@@ -324,15 +344,109 @@
 - (void)testDecideVariants
 {
     [self setupHTTPServer];
-
+    int requestCount = [MixpanelDummyDecideConnection getRequestCount];
     [self.mixpanel identify:@"ABC"];
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {}];
+    [self waitForSerialQueue];
     XCTestExpectation *expect = [self expectationWithDescription:@"decide requested"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], 1, @"Decide not queried");
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
         XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
         [expect fulfill];
     });
     [self waitForExpectationsWithTimeout:2 handler:nil];
+}
+
+- (void)testVariantsTracked
+{
+    [self setupHTTPServer];
+    int requestCount = [MixpanelDummyDecideConnection getRequestCount];
+    [self.mixpanel identify:@"DEF"];
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        for (MPVariant *variant in variants) {
+            [variant execute];
+            [self.mixpanel markVariantRun:variant];
+        }
+    }];
+    [self waitForSerialQueue];
+    XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
+        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+        XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
+        XCTAssertEqual(self.mixpanel.superProperties[@"$experiments"][@"1"], @1, @"super properties should have { 1: 1 }");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+}
+
+#pragma mark - Object selection
+
+-(void)testObjectSelection
+{
+    /*
+        w___vc___v1___v2___l1
+                   \    \__l2
+                    \_v3___l3
+                        \__l4
+     */
+
+    UIWindow *w = [[UIWindow alloc] init];
+    UIViewController *vc = [[UIViewController alloc] init];
+    UIView *v1 = [[UIView alloc] init];
+    UIView *v2 = [[UIView alloc] init];
+    UIView *v3 = [[UIView alloc] init];
+    UILabel *l1 = [[UILabel alloc] init];
+    l1.text = @"Label 1";
+    UILabel *l2 = [[UILabel alloc] init];
+    l2.text = @"Label 2";
+    UILabel *l3 = [[UILabel alloc] init];
+    l3.text = @"Label 3";
+    UILabel *l4 = [[UILabel alloc] init];
+    l4.text = @"Label 4";
+
+    [v2 addSubview:l1];
+    [v2 addSubview:l2];
+    [v3 addSubview:l3];
+    [v3 addSubview:l4];
+    [v1 addSubview:v2];
+    [v1 addSubview:v3];
+    vc.view = v1;
+    w.rootViewController = vc;
+
+    // Basic selection
+    MPObjectSelector *selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel"];
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected from viewcontroller");
+
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIViewController/UIView/UIView/UILabel"];
+    XCTAssertEqual([selector selectFromRoot:w][0], l1, @"l1 should be selected from window");
+
+    // Selection by index
+    // This selector will get both l2 and l4 as they are the [1]th UILabel in their respective views
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[1]"];
+    XCTAssertEqual([selector selectFromRoot:vc][0], l2, @"l2 should be selected by index");
+    XCTAssertEqual([selector selectFromRoot:vc][1], l4, @"l4 should be selected by index");
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected by index");
+    XCTAssert([selector isLeafSelected:l4 fromRoot:vc], @"l4 should be selected by indezx");
+    XCTAssertFalse([selector isLeafSelected:l1 fromRoot:vc], @"l1 should not be selected by index");
+
+    // Selection by multiple indexes
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView[0]/UILabel[1]"];
+    XCTAssert([[selector selectFromRoot:vc]containsObject:l2], @"l2 should be selected by index");
+    XCTAssertFalse([[selector selectFromRoot:vc] containsObject:l4], @"l4 should not be selected by index");
+    XCTAssert([selector isLeafSelected:l2 fromRoot:vc], @"l2 should be selected by index");
+    XCTAssertFalse([selector isLeafSelected:l4 fromRoot:vc], @"l4 should be selected by index");
+    XCTAssertFalse([selector isLeafSelected:l1 fromRoot:vc], @"l1 should not be selected by index");
+
+    // Invalid index selection (Parent of objects selected by index must be UIViews)
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView[0]/UIView/UILabel"];
+    XCTAssertEqual([[selector selectFromRoot:vc] count], (uint)0, @"l2 should be selected by index");
+
+    // Select view by predicate
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[SELF.text == \"Label 1\"]"];
+    XCTAssertEqual([selector selectFromRoot:vc][0], l1, @"l1 should be selected by predicate");
+    XCTAssert([selector isLeafSelected:l1 fromRoot:vc], @"l1 should be selected by predicate");
+    XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 }
 
 @end

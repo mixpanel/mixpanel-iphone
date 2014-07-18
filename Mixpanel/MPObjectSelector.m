@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSPredicate *predicate;
+@property (nonatomic, strong) NSNumber *index;
 
 - (NSArray *)apply:(NSArray *)views;
 - (NSArray *)applyReverse:(NSArray *)views;
@@ -64,7 +65,7 @@
 
 /*
  Starting at the root object, try and find an object
- in the view/controller tree that matches this selector
+ in the view/controller tree that matches this selector.
 */
 -(NSArray *)selectFromRoot:(id)root
 {
@@ -84,7 +85,7 @@
 
 /*
  Starting at a leaf node, determine if it would be selected
- by this selector starting from the root
+ by this selector starting from the root object given.
 */
 
 -(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root
@@ -119,6 +120,10 @@
         }
         if ([_scanner scanCharactersFromSet:_predicateStartChar intoString:nil]) {
             NSString *predicateFormat;
+            NSInteger index = 0;
+            if ([_scanner scanInteger:&index]) {
+                filter.index = [NSNumber numberWithUnsignedInteger:(NSUInteger)index];
+            }
             [_scanner scanUpToCharactersFromSet:_predicateEndChar intoString:&predicateFormat];
             filter.predicate = [NSPredicate predicateWithFormat:predicateFormat];
             [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil];
@@ -152,18 +157,20 @@
 {
     NSMutableArray *result = [NSMutableArray array];
 
-    if ([_name isEqualToString:@"*"]) {
+    Class class = NSClassFromString(_name);
+    if (class || [_name isEqualToString:@"*"]) {
         // Select all children
         for (NSObject *view in views) {
-            [result addObjectsFromArray:[self getChildrenOfObject:view ofType:nil]];
-        }
-    } else {
-        // Select all children of a given class
-        Class class = NSClassFromString(_name);
-        if (class) {
-            for (NSObject *view in views) {
-                [result addObjectsFromArray:[self getChildrenOfObject:view ofType:class]];
+            NSArray *children = [self getChildrenOfObject:view ofType:class];
+            if (_index && [_index unsignedIntegerValue] < [children count]) {
+                // Indexing can only be used for subviews of UIView
+                if ([view isKindOfClass:[UIView class]]) {
+                    children = @[children[[_index unsignedIntegerValue]]];
+                } else {
+                    children = @[];
+                }
             }
+            [result addObjectsFromArray:children];
         }
     }
 
@@ -193,17 +200,40 @@
 
 /*
  Returns whether the given view would pass this filter.
-*/
+ */
 - (BOOL)appliesTo:(NSObject *)view
 {
-    return([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)]) && (!_predicate || [_predicate evaluateWithObject:view]);
+    return ([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)])
+            && (!_predicate || [_predicate evaluateWithObject:view])
+            && (!_index || [self isView:view siblingNumber:[_index unsignedIntegerValue]]);
 }
 
+/*
+ Returns whether any of the given views would pass this filter
+ */
 - (BOOL)appliesToAny:(NSArray *)views
 {
     for (NSObject *view in views) {
         if ([self appliesTo:view]) {
             return YES;
+        }
+    }
+    return NO;
+}
+
+/*
+ Returns true if the given view is at the index given by number in
+ its parent's subviews. The view's parent must be of type UIView
+ */
+- (BOOL)isView:(NSObject *)view siblingNumber:(NSUInteger)number
+{
+    NSArray *parents = [self getParentsOfObject:view];
+    for (NSObject *parent in parents) {
+        if ([parent isKindOfClass:[UIView class]]) {
+            NSArray *siblings = [self getChildrenOfObject:parent ofType:NSClassFromString(_name)];
+            if (number < [siblings count] && siblings[number] == view) {
+                return YES;
+            }
         }
     }
     return NO;
@@ -228,6 +258,7 @@
             [result addObject:[(UIViewController *)obj presentingViewController]];
         }
         if ([UIApplication sharedApplication].keyWindow.rootViewController == obj) {
+            //TODO is there a better way to get the actual window that has this VC
             [result addObject:[UIApplication sharedApplication].keyWindow];
         }
     }
@@ -242,6 +273,9 @@
     if ([obj isKindOfClass:[UIWindow class]] && [((UIWindow *)obj).rootViewController isKindOfClass:class]) {
         [result addObject:((UIWindow *)obj).rootViewController];
     } else if ([obj isKindOfClass:[UIView class]]) {
+        // NB. For UIViews, only add subviews, nothing else.
+        // The ordering of this result is critical to being able to
+        // apply the index filter.
         for (NSObject *child in [(UIView *)obj subviews]) {
             if (!class || [child isKindOfClass:class]) {
                 [result addObject:child];
@@ -265,7 +299,7 @@
 
 - (NSString *)description;
 {
-    return [NSString stringWithFormat:@"%@[%@]", self.name, self.predicate];
+    return [NSString stringWithFormat:@"%@[%@]", self.name, self.index ?: self.predicate];
 }
 
 @end
