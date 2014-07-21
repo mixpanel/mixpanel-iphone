@@ -27,6 +27,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     NSDictionary *_typeToMessageClassMap;
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
+    UIView *_recordingView;
 }
 
 - (id)initWithURL:(NSURL *)url
@@ -139,6 +140,12 @@ NSString * const kSessionVariantKey = @"session_variant";
     MessagingDebug(@"WebSocket did open.");
     self.connected = YES;
     _commandQueue.suspended = NO;
+
+    UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
+    _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
+    _recordingView.backgroundColor = [UIColor redColor];
+    [mainWindow addSubview:_recordingView];
+    [mainWindow bringSubviewToFront:_recordingView];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -156,6 +163,10 @@ NSString * const kSessionVariantKey = @"session_variant";
 
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
+
+    if (_recordingView) {
+        [_recordingView removeFromSuperview];
+    }
 
     self.connected = NO;
 }
