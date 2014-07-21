@@ -43,5 +43,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mixpanel</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.mixpanel</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -300,7 +300,7 @@
     [aCoder encodeObject:NSStringFromSelector(_swizzleSelector) forKey:@"swizzleSelector"];
 }
 
-#pragma mark -- Executing Actions
+#pragma mark - Executing Actions
 
 - (void)execute
 {
@@ -338,7 +338,7 @@
 
 - (void)stop
 {
-    NSLog(@"Stopping %@ (%lu to be reverted)", self, [self.appliedTo count]);
+    NSLog(@"Stopping %@ (%lu to be reverted)", self, (unsigned long)[self.appliedTo count]);
     // Stop this change from applying in future
     [MPSwizzler unswizzleSelector:self.swizzleSelector
                           onClass:self.swizzleClass
