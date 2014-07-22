@@ -233,17 +233,20 @@ static Mixpanel *sharedInstance = nil;
                                  object:nil];
         [self unarchive];
 
-#ifndef MIXPANEL_DEBUG
-        [self executeCachedVariants];
-#endif
+        if (launchOptions) {
+            if (launchOptions[UIApplicationLaunchOptionsURLKey]) {
+                [self urlOpened:launchOptions[UIApplicationLaunchOptionsURLKey]];
+            }
+            if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+                [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
+            }
+        }
 
-        if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-            [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
+        if (!self.abtestDesignerConnection) {
+            [self executeCachedVariants];
         }
     }
-
     return self;
-
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
@@ -927,17 +930,12 @@ static Mixpanel *sharedInstance = nil;
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
 
-#ifndef MIXPANEL_DEBUG
             for (MPVariant *variant in variants) {
                 [variant execute];
                 [self markVariantRun:variant];
             }
-#endif
         }];
     }
-#ifdef MIXPANEL_DEBUG
-    [self connectToABTestDesigner];
-#endif
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1012,6 +1010,13 @@ static Mixpanel *sharedInstance = nil;
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
     [self trackPushNotification:userInfo event:@"$campaign_received"];
+}
+
+- (void)urlOpened:(NSURL *)url
+{
+    if ([url.host isEqualToString:@"connectToABTestDesigner"]) {
+        [self connectToABTestDesigner];
+    }
 }
 
 #pragma mark - Decide
