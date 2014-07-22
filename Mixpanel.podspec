@@ -11,5 +11,6 @@ Pod::Spec.new do |s|
   s.private_header_files =  'Mixpanel/Library/**/*.h'
   s.resources 	 = ["Mixpanel/**/*.{png,storyboard}"]
   s.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
+  s.libraries = "icucore"
   s.requires_arc = true
 end
