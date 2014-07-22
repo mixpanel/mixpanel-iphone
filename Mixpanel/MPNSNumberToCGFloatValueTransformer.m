@@ -23,14 +23,11 @@
 
         // if the number is not a cgfloat, cast it to a cgfloat
         if (strcmp([number objCType], (char *) @encode(CGFloat)) != 0) {
-            if (strcmp([number objCType], (char *) @encode(float)) == 0) {
-                number = [NSNumber numberWithDouble:(CGFloat) [number floatValue]];
-            } else if (strcmp([number objCType], (char *) @encode(double)) == 0) {
-                number = [NSNumber numberWithFloat:(CGFloat) [number doubleValue]];
-            } else if (strcmp([number objCType], (char *) @encode(int)) == 0) {
-                number = [NSNumber numberWithFloat:(CGFloat) [number integerValue]];
+            if (strcmp((char *) @encode(CGFloat), (char *) @encode(double)) == 0) {
+                value = [NSNumber numberWithDouble:[number doubleValue]];
+            } else {
+                value = [NSNumber numberWithFloat:[number floatValue]];
             }
-            value = number;
         }
 
         return value;
