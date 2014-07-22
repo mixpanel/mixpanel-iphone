@@ -1044,7 +1044,7 @@ static Mixpanel *sharedInstance = nil;
         if (!self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
-            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@&lib_version=%@&app_version=%@&app_release=%@",
+            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@&ios_lib_version=%@&ios_app_version=%@&ios_app_release=%@",
                                 self.apiToken,
                                 MPURLEncode(self.people.distinctId),
                                 MPURLEncode(VERSION),
