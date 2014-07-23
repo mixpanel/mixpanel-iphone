@@ -276,7 +276,7 @@ static Mixpanel *sharedInstance = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
         recognizer.minimumPressDuration = 3;
-        recognizer.numberOfTouchesRequired = 5;
+        recognizer.numberOfTouchesRequired = 4;
         recognizer.cancelsTouchesInView = NO;
         [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
     });
