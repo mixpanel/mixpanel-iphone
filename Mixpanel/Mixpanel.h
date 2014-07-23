@@ -84,6 +84,18 @@
 
 /*!
  @property
+ 
+ @abstract
+ Control whether MixPanel will record the user's approximate
+ location based on their IP address
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property (atomic) BOOL trackLocation;
+
+/*!
+ @property
 
  @abstract
  Flush timer's interval.
