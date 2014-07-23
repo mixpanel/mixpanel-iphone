@@ -19,8 +19,6 @@
 #import <mach-o/dyld.h>
 #import <dlfcn.h>
 
-#if MP_TWEAK_ENABLED
-
 extern NSString *_MPTweakIdentifier(fb_tweak_entry *entry)
 {
   return [NSString stringWithFormat:@"MPTweak:%@-%@-%@", *entry->category, *entry->collection, *entry->name];
@@ -132,4 +130,3 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *identifier, fb_tweak_entry *en
 
 @end
 
-#endif
