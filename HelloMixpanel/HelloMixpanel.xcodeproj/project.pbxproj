@@ -112,6 +112,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		05513E691979B10200508405 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
+			remoteInfo = HelloMixpanel;
+		};
+		05513E6B1979B10200508405 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
+			remoteInfo = HelloMixpanel;
+		};
 		055FA716194A6B020080A709 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
@@ -484,17 +498,17 @@
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
-				0545AE29196F5382003DCE7F /* Settings.bundle */,
-				2808F9981610EFE3005772B7 /* Supporting Files */,
-				2808F9971610EFE3005772B7 /* HelloMixpanel */,
-				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
 				055FA711194A6B020080A709 /* ABTestingTests */,
 				2808F9901610EFE3005772B7 /* Frameworks */,
-				2808F98E1610EFE3005772B7 /* Products */,
+				2808F9971610EFE3005772B7 /* HelloMixpanel */,
+				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
 				286760AD1611982600B1BEC8 /* Mixpanel */,
-				A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */,
-				DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */,
 				6A379B46B2084F398FB92232 /* Pods-ABTestingTests.xcconfig */,
+				DB15B6830EC04BD086D340CE /* Pods-HelloMixpanel.xcconfig */,
+				A9DE049AEA934617A6E21B70 /* Pods-HelloMixpanelTests.xcconfig */,
+				2808F98E1610EFE3005772B7 /* Products */,
+				0545AE29196F5382003DCE7F /* Settings.bundle */,
+				2808F9981610EFE3005772B7 /* Supporting Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -570,9 +584,9 @@
 			isa = PBXGroup;
 			children = (
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
-				2808F9B91610EFE4005772B7 /* Supporting Files */,
 				05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */,
 				05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */,
+				2808F9B91610EFE4005772B7 /* Supporting Files */,
 			);
 			path = HelloMixpanelTests;
 			sourceTree = "<group>";
@@ -793,6 +807,8 @@
 				05AD79CC1970820F00D8CBB5 /* PBXTargetDependency */,
 				05AD79D01970B8A600D8CBB5 /* PBXTargetDependency */,
 				05AD79D61970D05700D8CBB5 /* PBXTargetDependency */,
+				05513E6A1979B10200508405 /* PBXTargetDependency */,
+				05513E6C1979B10200508405 /* PBXTargetDependency */,
 			);
 			name = HelloMixpanelTests;
 			productName = HelloMixpanelTests;
@@ -1083,6 +1099,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		05513E6A1979B10200508405 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
+			targetProxy = 05513E691979B10200508405 /* PBXContainerItemProxy */;
+		};
+		05513E6C1979B10200508405 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
+			targetProxy = 05513E6B1979B10200508405 /* PBXContainerItemProxy */;
+		};
 		055FA717194A6B020080A709 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
@@ -1342,6 +1368,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MIXPANEL_LOG=1",
 					"MIXPANEL_DEBUG=1",
+					"DEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -1450,7 +1477,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alex Hofsteede (5CJ32PT332)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1475,8 +1502,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D2DA8C1B-F6D5-4065-9859-1D51FBF84781";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D2DA8C1B-F6D5-4065-9859-1D51FBF84781";
+				PROVISIONING_PROFILE = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1490,8 +1517,8 @@
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Alex Hofsteede (5CJ32PT332)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alex Hofsteede (5CJ32PT332)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1507,8 +1534,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D2DA8C1B-F6D5-4065-9859-1D51FBF84781";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D2DA8C1B-F6D5-4065-9859-1D51FBF84781";
+				PROVISIONING_PROFILE = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1675,7 +1702,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D2DA8C1B-F6D5-4065-9859-1D51FBF84781";
+				PROVISIONING_PROFILE = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
 				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
