@@ -180,70 +180,14 @@ static Mixpanel *sharedInstance = nil;
         self.notifications = nil;
         self.variants = nil;
 
-        // wifi reachability
-        BOOL reachabilityOk = NO;
-        if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
-            SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
-            if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
-                if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
-                    reachabilityOk = YES;
-                    MixpanelDebug(@"%@ successfully set up reachability callback", self);
-                } else {
-                    // cleanup callback if setting dispatch queue failed
-                    SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
-                }
-            }
-        }
-        if (!reachabilityOk) {
-            NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
-        }
-
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-        // cellular info
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-            [self setCurrentRadio];
-            [notificationCenter addObserver:self
-                                   selector:@selector(setCurrentRadio)
-                                       name:CTRadioAccessTechnologyDidChangeNotification
-                                     object:nil];
-        }
-#endif
-
-        [notificationCenter addObserver:self
-                               selector:@selector(applicationWillTerminate:)
-                                   name:UIApplicationWillTerminateNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(applicationWillResignActive:)
-                                   name:UIApplicationWillResignActiveNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(applicationDidBecomeActive:)
-                                   name:UIApplicationDidBecomeActiveNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(applicationDidEnterBackground:)
-                                   name:UIApplicationDidEnterBackgroundNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(applicationWillEnterForeground:)
-                                   name:UIApplicationWillEnterForegroundNotification
-                                 object:nil];
+        [self setupListeners];
         [self unarchive];
+        [self executeCachedVariants];
 
         if (launchOptions) {
-            if (launchOptions[UIApplicationLaunchOptionsURLKey]) {
-                [self urlOpened:launchOptions[UIApplicationLaunchOptionsURLKey]];
-            }
             if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
                 [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
             }
-        }
-
-        if (!self.abtestDesignerConnection) {
-            [self executeCachedVariants];
         }
     }
     return self;
@@ -268,6 +212,76 @@ static Mixpanel *sharedInstance = nil;
         _reachability = NULL;
         MixpanelDebug(@"realeased reachability");
     }
+}
+
+- (void)setupListeners
+{
+    // wifi reachability
+    BOOL reachabilityOk = NO;
+    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
+        SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
+        if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
+            if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
+                reachabilityOk = YES;
+                MixpanelDebug(@"%@ successfully set up reachability callback", self);
+            } else {
+                // cleanup callback if setting dispatch queue failed
+                SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
+            }
+        }
+    }
+    if (!reachabilityOk) {
+        NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
+    }
+
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+    // cellular info
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        [self setCurrentRadio];
+        [notificationCenter addObserver:self
+                               selector:@selector(setCurrentRadio)
+                                   name:CTRadioAccessTechnologyDidChangeNotification
+                                 object:nil];
+    }
+#endif
+
+    // Application lifecycle events
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillTerminate:)
+                               name:UIApplicationWillTerminateNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillResignActive:)
+                               name:UIApplicationWillResignActiveNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationDidBecomeActive:)
+                               name:UIApplicationDidBecomeActiveNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationDidEnterBackground:)
+                               name:UIApplicationDidEnterBackgroundNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillEnterForeground:)
+                               name:UIApplicationWillEnterForegroundNotification
+                             object:nil];
+
+    // AB Testing designer
+#if TARGET_IPHONE_SIMULATOR
+    [self requestDesignerConnection:nil];
+#else
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
+        recognizer.minimumPressDuration = 3;
+        recognizer.numberOfTouchesRequired = 5;
+        recognizer.cancelsTouchesInView = NO;
+        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
+    });
+#endif
+
 }
 
 - (NSString *)description
@@ -1012,13 +1026,6 @@ static Mixpanel *sharedInstance = nil;
     [self trackPushNotification:userInfo event:@"$campaign_received"];
 }
 
-- (void)urlOpened:(NSURL *)url
-{
-    if ([url.host isEqualToString:@"connectToABTestDesigner"]) {
-        [self connectToABTestDesigner];
-    }
-}
-
 #pragma mark - Decide
 
 + (UIViewController *)topPresentedViewController
@@ -1454,6 +1461,16 @@ static Mixpanel *sharedInstance = nil;
 }
 
 #pragma mark - A/B Testing (Designer)
+
+- (void)requestDesignerConnection:(id)sender
+{
+    if(!(self.abtestDesignerConnection && self.abtestDesignerConnection.connected)) {
+        if(!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan )) {
+            [self connectToABTestDesigner];
+        }
+    }
+
+}
 
 - (void)connectToABTestDesigner
 {
