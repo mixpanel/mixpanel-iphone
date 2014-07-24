@@ -50,7 +50,7 @@
 /*
  This is to let the tests run in XCode 5, as the XCode 5
  version of XCTest does not support asynchonous tests and
- will not compile unless we define these symbols 
+ will not compile unless we define these symbols.
  */
 #if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
 @interface XCTestExpectation
