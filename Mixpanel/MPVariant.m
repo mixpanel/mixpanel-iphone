@@ -12,6 +12,12 @@
 #import "MPSwizzler.h"
 #import "MPValueTransformers.h"
 
+// Facebook Tweaks
+#import "MPTweakStore.h"
+#import "MPTweakCollection.h"
+#import "MPTweakCategory.h"
+#import "MPTweak.h"
+
 @interface MPVariantAction ()
 
 @property (nonatomic, strong)NSString *name;
@@ -42,6 +48,31 @@
 
 @end
 
+@interface MPVariantTweak ()
+
+@property (nonatomic, strong) NSString *category;
+@property (nonatomic, strong) NSString *collection;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *identifier;
+@property (nonatomic, strong) MPTweakValue defaultValue;
+@property (nonatomic, strong) MPTweakValue value;
+@property (nonatomic, strong) MPTweakValue min;
+@property (nonatomic, strong) MPTweakValue max;
+
++ (MPVariantTweak *)actionWithJSONObject:(NSDictionary *)object;
+- (id) initWithCategory:(NSString *)category
+             collection:(NSString *)collection
+                   name:(NSString *)name
+             identifier:(NSString *)identifier
+           defaultValue:(MPTweakValue)defaultValue
+                  value:(MPTweakValue)value
+                    min:(MPTweakValue)min
+                    max:(MPTweakValue)max;
+- (void)execute;
+- (void)stop;
+
+@end
+
 @implementation MPVariant
 
 #pragma mark -- Constructing Variants
@@ -65,23 +96,31 @@
         NSLog(@"variant requires an array of actions");
         return nil;
     }
+    
+    NSArray *tweaks = [object objectForKey:@"tweaks"];
+    if (![tweaks isKindOfClass:[NSArray class]]) {
+        NSLog(@"variant requires an array of tweaks");
+        return nil;
+    }
 
     return [[MPVariant alloc] initWithID:[ID unsignedIntegerValue]
                             experimentID:[experimentID unsignedIntegerValue]
-                              andActions:actions];
+                                 actions:actions
+                                  tweaks:tweaks];
 }
 
 - (id)init
 {
-    return [self initWithID:0 experimentID:0 andActions:nil];
+    return [self initWithID:0 experimentID:0 actions:nil tweaks:nil];
 }
 
-- (id) initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID andActions:(NSArray *)actions
+- (id)initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID actions:(NSArray *)actions tweaks:(NSArray *)tweaks
 {
     if(self = [super init]) {
         self.ID = ID;
         self.experimentID = experimentID;
         self.actions = [NSMutableArray array];
+        self.tweaks = [NSMutableArray arrayWithArray:tweaks];
         [self addActionsFromJSONObject:actions andExecute:NO];
         _finished = NO;
         _running = NO;
@@ -97,29 +136,31 @@
         self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
         self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
         self.actions = [aDecoder decodeObjectForKey:@"actions"];
+        self.tweaks = [aDecoder decodeObjectForKey:@"actions"];
         _finished = [(NSNumber *)[aDecoder decodeObjectForKey:@"finished"] boolValue];
     }
     return self;
 }
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_ID] forKey:@"ID"];
     [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_experimentID] forKey:@"experimentID"];
     [aCoder encodeObject:_actions forKey:@"actions"];
+    [aCoder encodeObject:_tweaks forKey:@"tweaks"];
     [aCoder encodeObject:[NSNumber numberWithBool:_finished] forKey:@"finished"];
 }
 
 #pragma mark - Actions
 
-- (void) addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec
+- (void)addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec
 {
     for (NSDictionary *object in actions) {
         [self addActionFromJSONObject:object andExecute:exec];
     }
 }
 
-- (void) addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec
+- (void)addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec
 {
     MPVariantAction *action = [MPVariantAction actionWithJSONObject:object];
     if(action) {
@@ -142,9 +183,26 @@
 
 - (void)execute {
     if (!self.running) {
+        
+        // we should whittle this down and get rid of categories and collections eventually
+        MPTweakStore *store = [MPTweakStore sharedInstance];
+        MPTweakCategory *category = nil;
+        MPTweakCollection *collection = nil;
+        MPTweak *mpTweak = nil;
+        
+        NSLog(@"setting %d tweaks", self.tweaks.count);
+        for (NSDictionary *tweak in self.tweaks) {
+            category = [store tweakCategoryWithName:tweak[@"category"]];
+            collection = [category tweakCollectionWithName:tweak[@"collection"]];
+            mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
+            
+            mpTweak.currentValue = tweak[@"value"];
+        }
+        
         for (MPVariantAction *action in self.actions) {
             [action execute];
         }
+        
         _running = YES;
     }
 }
@@ -153,10 +211,27 @@
     for (MPVariantAction *action in self.actions) {
         [action stop];
     }
+    [self untweak];
 }
 
 - (void)finish {
+    [self untweak];
     _finished = YES;
+}
+
+- (void)untweak
+{
+    MPTweakStore *store = [MPTweakStore sharedInstance];
+    MPTweakCategory *category = nil;
+    MPTweakCollection *collection = nil;
+    MPTweak *mpTweak = nil;
+    for (NSDictionary *tweak in self.tweaks) {
+        category = [store tweakCategoryWithName:tweak[@"category"]];
+        collection = [category tweakCollectionWithName:tweak[@"collection"]];
+        mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
+        mpTweak.currentValue = mpTweak.defaultValue;
+    }
+    self.tweaks = [NSMutableArray array];
 }
 
 #pragma mark - Equality
@@ -419,6 +494,107 @@
         NSLog(@"No objects matching pattern");
     }
     return [executedOn copy];
+}
+
+@end
+
+@implementation MPVariantTweak
+
++ (MPVariantTweak *)actionWithJSONObject:(NSDictionary *)object
+{
+    // Required parameters
+    NSString *category = object[@"category"];
+    if (![category isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid category: %@", category);
+        return nil;
+    }
+    NSString *collection = object[@"collection"];
+    if (![collection isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid collection: %@", collection);
+        return nil;
+    }
+    NSString *name = object[@"tweak"];
+    if (![name isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid name: %@", name);
+        return nil;
+    }
+    MPTweakValue value = object[@"value"];
+    if (value == nil) {
+        NSLog(@"invalid value: %@", value);
+        return nil;
+    }
+    MPTweakValue defaultValue = object[@"default"];
+    if (defaultValue == nil) {
+        NSLog(@"invalid defaultValue: %@", defaultValue);
+        return nil;
+    }
+    
+    // Optional parameters
+    MPTweakValue min = object[@"minimum"];
+    MPTweakValue max = object[@"maximum"];
+    NSString *identifier = object[@"identifier"];
+
+    return [[MPVariantTweak alloc] initWithCategory:category collection:collection name:name identifier:identifier defaultValue:defaultValue value:value min:min max:max];
+}
+
+- (id)init
+{
+    [NSException raise:@"NotSupported" format:@"Please call initWithCategory:"];
+    return nil;
+}
+
+- (id)initWithCategory:(NSString *)category collection:(NSString *)collection name:(NSString *)name identifier:(NSString *)identifier defaultValue:(MPTweakValue)defaultValue value:(MPTweakValue)value min:(MPTweakValue)min max:(MPTweakValue)max
+{
+    if ((self = [super init])) {
+        self.category = category;
+        self.collection = collection;
+        self.name = name;
+        self.identifier = identifier;
+        self.defaultValue = defaultValue;
+        self.value = value;
+        self.min = min;
+        self.max = max;
+    }
+    return self;
+}
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.category = [aDecoder decodeObjectForKey:@"category"];
+        self.collection = [aDecoder decodeObjectForKey:@"collection"];
+        self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
+        self.value = [aDecoder decodeObjectForKey:@"value"];
+        self.defaultValue = [aDecoder decodeObjectForKey:@"defaultValue"];
+        self.min = [aDecoder decodeObjectForKey:@"min"];
+        self.max = [aDecoder decodeObjectForKey:@"max"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.category forKey:@"category"];
+    [aCoder encodeObject:self.collection forKey:@"collection"];
+    [aCoder encodeObject:self.identifier forKey:@"identifier"];
+    [aCoder encodeObject:self.value forKey:@"value"];
+    [aCoder encodeObject:self.defaultValue forKey:@"defaultValue"];
+    [aCoder encodeObject:self.min forKey:@"min"];
+    [aCoder encodeObject:self.max forKey:@"max"];
+}
+
+- (void)execute
+{
+    
+}
+
+- (void)stop
+{
+    
 }
 
 @end
