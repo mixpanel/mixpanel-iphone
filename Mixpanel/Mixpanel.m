@@ -150,6 +150,7 @@ static Mixpanel *sharedInstance = nil;
 
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
+        self.decideURL = @"http://kyle.dev.mixpanel.org";
         self.switchboardURL = @"ws://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;
@@ -190,6 +191,7 @@ static Mixpanel *sharedInstance = nil;
             }
         }
     }
+    
     return self;
 }
 
