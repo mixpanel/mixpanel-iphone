@@ -28,7 +28,6 @@ static int requestCount;
 {
     requestCount += 1;
     NSData * decideResponse = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
-    //decideResponse = [@"{}" dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"serving response: %@", [[NSString alloc] initWithData:decideResponse encoding:NSUTF8StringEncoding]);
     return [[HTTPDataResponse alloc] initWithData:decideResponse];
 }

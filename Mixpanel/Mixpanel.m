@@ -1051,12 +1051,11 @@ static Mixpanel *sharedInstance = nil;
         if (!self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
-            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@&lib_version=%@&app_version=%@&app_release=%@",
+            NSData *peoplePropertiesJSON = [NSJSONSerialization dataWithJSONObject:self.people.automaticPeopleProperties options:0 error:nil];
+            NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&distinct_id=%@&properties=%@",
                                 self.apiToken,
                                 MPURLEncode(self.people.distinctId),
-                                MPURLEncode(VERSION),
-                                MPURLEncode([[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]),
-                                MPURLEncode([[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"])
+                                MPURLEncode([[NSString alloc] initWithData:peoplePropertiesJSON encoding:NSUTF8StringEncoding])
                                 ];
             NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/decide?%@", self.decideURL, params]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
@@ -1538,18 +1537,18 @@ static Mixpanel *sharedInstance = nil;
 
 - (NSDictionary *)collectAutomaticPeopleProperties
 {
-    UIDevice *device = [UIDevice currentDevice];
-    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    NSMutableDictionary *p = nil;
     __strong Mixpanel *strongMixpanel = _mixpanel;
     if (strongMixpanel) {
-        [p setValue:[strongMixpanel deviceModel] forKey:@"$ios_device_model"];
+        p = [@{@"$ios_device_model": [strongMixpanel deviceModel],
+               @"$ios_version": [[UIDevice currentDevice] systemVersion],
+               @"$ios_lib_version": VERSION,
+               @"$ios_app_version": [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"],
+               @"$ios_app_release": [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"]
+               } mutableCopy];
         [p setValue:[strongMixpanel IFA] forKey:@"$ios_ifa"];
     }
-    [p setValue:[device systemVersion] forKey:@"$ios_version"];
-    [p setValue:VERSION forKey:@"$ios_lib_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$ios_app_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
-    return [NSDictionary dictionaryWithDictionary:p];
+    return p ? [p copy] : @{};
 }
 
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
