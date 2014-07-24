@@ -105,6 +105,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
                                     @"collection": tcol.name,
                                     @"tweak": t.name,
                                     @"identifier": t.identifier,
+                                    @"value": t.currentValue ?: [NSNull null],
                                     @"default": t.defaultValue ?: [NSNull null],
                                     @"minimum": t.minimumValue ?: [NSNull null],
                                     @"maximum": t.maximumValue ?: [NSNull null],
