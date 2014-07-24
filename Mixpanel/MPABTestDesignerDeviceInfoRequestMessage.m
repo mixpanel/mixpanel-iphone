@@ -39,7 +39,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             deviceInfoResponseMessage.appRelease = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
             deviceInfoResponseMessage.mainBundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
             deviceInfoResponseMessage.availableFontFamilies = [self availableFontFamilies];
-            deviceInfoResponseMessage.tweaks = [self getFacebookTweaks];
+            deviceInfoResponseMessage.tweaks = [self getTweaks];
         });
 
         [conn sendMessage:deviceInfoResponseMessage];
@@ -94,7 +94,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
     } mutableCopy];
 }
 
-- (NSArray *) getFacebookTweaks
+- (NSArray *)getTweaks
 {
     NSMutableArray *tweaks = [NSMutableArray array];
     NSArray *categories = [MPTweakStore sharedInstance].tweakCategories;
@@ -105,6 +105,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
                                     @"collection": tcol.name,
                                     @"tweak": t.name,
                                     @"identifier": t.identifier,
+                                    @"value": t.currentValue ?: [NSNull null],
                                     @"default": t.defaultValue ?: [NSNull null],
                                     @"minimum": t.minimumValue ?: [NSNull null],
                                     @"maximum": t.maximumValue ?: [NSNull null],

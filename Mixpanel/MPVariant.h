@@ -13,6 +13,7 @@
 @property (nonatomic) NSUInteger ID;
 @property (nonatomic) NSUInteger experimentID;
 @property (nonatomic, strong) NSMutableArray *actions;
+@property (nonatomic, strong) NSMutableArray *tweaks;
 
 /*!
  @property
@@ -49,5 +50,9 @@
 @end
 
 @interface MPVariantAction : NSObject <NSCoding>
+
+@end
+
+@interface MPVariantTweak : NSObject <NSCoding>
 
 @end
