@@ -143,7 +143,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
     UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
     _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
-    _recordingView.backgroundColor = [UIColor redColor];
+    _recordingView.backgroundColor = [UIColor colorWithRed:4/255.0f green:180/255.0f blue:4/255.0f alpha:1.0];
     [mainWindow addSubview:_recordingView];
     [mainWindow bringSubviewToFront:_recordingView];
 }
