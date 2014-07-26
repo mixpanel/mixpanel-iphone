@@ -16,6 +16,7 @@ extern NSString *const kSessionVariantKey;
 - (id)sessionObjectForKey:(NSString *)key;
 
 @property (nonatomic, assign) BOOL connected;
+@property (nonatomic, assign) BOOL sessionEnded;
 
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message;
 
