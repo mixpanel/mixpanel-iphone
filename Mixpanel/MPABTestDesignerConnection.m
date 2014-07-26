@@ -23,6 +23,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 @implementation MPABTestDesignerConnection
 {
+    NSURL *_url;
     NSMutableDictionary *_session;
     NSDictionary *_typeToMessageClassMap;
     MPWebSocket *_webSocket;
@@ -44,24 +45,35 @@ NSString * const kSessionVariantKey = @"session_variant";
         };
 
         _session = [[NSMutableDictionary alloc] init];
-        _webSocket = [[MPWebSocket alloc] initWithURL:url];
-        _webSocket.delegate = self;
+        _url = url;
 
         _commandQueue = [[NSOperationQueue alloc] init];
         _commandQueue.maxConcurrentOperationCount = 1;
         _commandQueue.suspended = YES;
 
-        MessagingDebug(@"Attempting to open WebSocket to: %@", url);
-        [_webSocket open];
+        [self open];
     }
 
     return self;
 }
 
+- (void)open
+{
+    MessagingDebug(@"Attempting to open WebSocket to: %@", _url);
+    _webSocket = [[MPWebSocket alloc] initWithURL:_url];
+    _webSocket.delegate = self;
+    [_webSocket open];
+}
+
+- (void)close
+{
+    [_webSocket close];
+}
+
 - (void)dealloc
 {
     _webSocket.delegate = nil;
-    [_webSocket close];
+    [self close];
 }
 
 - (void)setSessionObject:(id)object forKey:(NSString *)key
@@ -140,12 +152,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     MessagingDebug(@"WebSocket did open.");
     self.connected = YES;
     _commandQueue.suspended = NO;
-
-    UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
-    _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
-    _recordingView.backgroundColor = [UIColor colorWithRed:4/255.0f green:180/255.0f blue:4/255.0f alpha:1.0];
-    [mainWindow addSubview:_recordingView];
-    [mainWindow bringSubviewToFront:_recordingView];
+    [self showConnectedView];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -153,8 +160,11 @@ NSString * const kSessionVariantKey = @"session_variant";
     MessagingDebug(@"WebSocket did fail with error: %@", error);
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
-
-    self.connected = NO;
+    [self hideConnectedView];
+    if (self.connected) {
+        self.connected = NO;
+        [self reconnect];
+    }
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
@@ -163,12 +173,46 @@ NSString * const kSessionVariantKey = @"session_variant";
 
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
+    [self hideConnectedView];
+    if (self.connected) {
+        self.connected = NO;
+        [self reconnect];
+    }
+}
 
+- (void)reconnect
+{
+    static int retries = 0;
+    if (self.connected) {
+        retries = 0;
+    } else if (!self.connected && !self.sessionEnded && retries < 10) {
+        MessagingDebug(@"Attempting to reconnect, attempt %d", retries);
+        _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@a", [_url absoluteString]]];
+        [self open];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(2, retries),30) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self reconnect];
+        });
+        retries++;
+    }
+}
+
+- (void)showConnectedView
+{
+    if(!_recordingView) {
+        UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
+        _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
+        _recordingView.backgroundColor = [UIColor colorWithRed:4/255.0f green:180/255.0f blue:4/255.0f alpha:1.0];
+        [mainWindow addSubview:_recordingView];
+        [mainWindow bringSubviewToFront:_recordingView];
+    }
+}
+
+- (void)hideConnectedView
+{
     if (_recordingView) {
         [_recordingView removeFromSuperview];
     }
-
-    self.connected = NO;
+    _recordingView = nil;
 }
 
 @end
