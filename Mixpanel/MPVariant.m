@@ -96,7 +96,7 @@
         NSLog(@"variant requires an array of actions");
         return nil;
     }
-    
+
     NSArray *tweaks = [object objectForKey:@"tweaks"];
     if (![tweaks isKindOfClass:[NSArray class]]) {
         NSLog(@"variant requires an array of tweaks");
@@ -183,26 +183,26 @@
 
 - (void)execute {
     if (!self.running) {
-        
+
         // we should whittle this down and get rid of categories and collections eventually
         MPTweakStore *store = [MPTweakStore sharedInstance];
         MPTweakCategory *category = nil;
         MPTweakCollection *collection = nil;
         MPTweak *mpTweak = nil;
-        
+
         NSLog(@"setting %d tweaks", self.tweaks.count);
         for (NSDictionary *tweak in self.tweaks) {
             category = [store tweakCategoryWithName:tweak[@"category"]];
             collection = [category tweakCollectionWithName:tweak[@"collection"]];
             mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
-            
+
             mpTweak.currentValue = tweak[@"value"];
         }
-        
+
         for (MPVariantAction *action in self.actions) {
             [action execute];
         }
-        
+
         _running = YES;
     }
 }
@@ -528,7 +528,7 @@
         NSLog(@"invalid defaultValue: %@", defaultValue);
         return nil;
     }
-    
+
     // Optional parameters
     MPTweakValue min = object[@"minimum"];
     MPTweakValue max = object[@"maximum"];
@@ -589,12 +589,12 @@
 
 - (void)execute
 {
-    
+
 }
 
 - (void)stop
 {
-    
+
 }
 
 @end

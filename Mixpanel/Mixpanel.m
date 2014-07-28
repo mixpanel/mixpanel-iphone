@@ -191,7 +191,7 @@ static Mixpanel *sharedInstance = nil;
             }
         }
     }
-    
+
     return self;
 }
 
