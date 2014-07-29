@@ -1,7 +1,6 @@
 #import "Mixpanel.h"
 
 #import "AppDelegate.h"
-
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
@@ -12,12 +11,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"mixpanelToken": MIXPANEL_TOKEN}];
+    NSString *mixpanelToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"mixpanelToken"];
+
+    if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
+        [[[UIAlertView alloc] initWithTitle:@"Mixpanel Token Required"
+                                   message:@"Go to Settings > Mixpanel and add your project's token"
+                                  delegate:nil
+                         cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+    } else {
+        // Initialize the MixpanelAPI object
+        self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken launchOptions:launchOptions];
+    }
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     // Override point for customization after application launch.
-
-    // Initialize the MixpanelAPI object
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:launchOptions];
 
     self.mixpanel.checkForSurveysOnActive = YES;
     self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
@@ -67,7 +77,7 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    
+
     [self.mixpanel trackPushNotification:userInfo];
 }
 

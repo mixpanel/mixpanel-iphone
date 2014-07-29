@@ -2,8 +2,11 @@
 #import "MPSurvey.h"
 #import "MPNotification.h"
 #import "UIColor+MPColor.h"
-
 #import "ViewController.h"
+#import "MPApplicationStateSerializer.h"
+#import "MPABTestDesignerSnapshotRequestMessage.h"
+#import "MPABTestDesignerConnection.h"
+#import "MPTweakInline.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -13,8 +16,9 @@
 @property (nonatomic, weak) IBOutlet UITextField *surveyIDField;
 @property (nonatomic, weak) IBOutlet UITextField *notificationIDField;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-
 @property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
+@property (nonatomic, strong) IBOutlet UILabel *pointsLabel;
+
 
 @property (nonatomic, copy) NSString *showNotificationType;
 
@@ -35,6 +39,10 @@
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
+
+    if(self.pointsLabel) {
+        self.pointsLabel.text = [NSString stringWithFormat:@"%d points", MPTweakValue(@"points", 5)];
+    }
 }
 
 - (IBAction)trackEvent:(id)sender
@@ -170,6 +178,22 @@
 
 - (void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)testBarButtonItemWasPressed:(id)sender
+{
+    NSLog(@"You pressed a bar button item.");
+}
+
+- (IBAction)popToViewController:(UIStoryboardSegue *)sender
+{
+    [self.navigationController popToViewController:self animated:YES];
+}
+
+- (IBAction)dismissModal:(UIStoryboardSegue *)sender
+{
+    UIViewController *sourceViewController = sender.sourceViewController;
+    [sourceViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

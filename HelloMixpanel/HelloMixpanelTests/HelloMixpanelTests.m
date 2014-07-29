@@ -1,4 +1,4 @@
-#import "HelloMixpanelTests.h"
+#import <XCTest/XCTest.h>
 
 #import "Mixpanel.h"
 #import "MPNotification.h"
@@ -12,19 +12,27 @@
 
 #define TEST_TOKEN @"abc123"
 
-@interface Mixpanel (Test)
+#pragma mark - Interface Redefinitions
 
+@interface Mixpanel (Test)
 // get access to private members
+
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
 @property (nonatomic, retain) NSMutableArray *peopleQueue;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, assign) dispatch_queue_t serialQueue;
+
+@property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
+@property (nonatomic, strong) MPNotification *currentlyShowingNotification;
+@property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
+- (void)showNotificationWithObject:(MPNotification *)notification;
 
 - (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)encodeAPIData:(NSArray *)array;
@@ -32,14 +40,30 @@
 @end
 
 @interface MixpanelPeople (Test)
-
 // get access to private members
+
 @property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
 @property (nonatomic, copy) NSMutableArray *distinctId;
 
 @end
 
-@interface HelloMixpanelTests ()  <MixpanelDelegate>
+/*
+ This is to let the tests run in XCode 5, as the XCode 5
+ version of XCTest does not support asynchonous tests and
+ will not compile unless we define these symbols.
+ */
+#if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
+@interface XCTestExpectation
+- (void)fulfill;
+@end
+
+@interface XCTestCase (Test)
+- (void)waitForExpectationsWithTimeout:(NSTimeInterval)timeout handler:(id)handlerOrNil;
+- (XCTestExpectation *)expectationWithDescription:(NSString *)description;
+@end
+#endif
+
+@interface HelloMixpanelTests : XCTestCase  <MixpanelDelegate>
 
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) HTTPServer *httpServer;
@@ -60,6 +84,8 @@
 }
 
 @end
+
+#pragma mark - Tests
 
 @implementation HelloMixpanelTests
 
@@ -376,7 +402,7 @@
     NSArray *a = @[@{@"event": @"an event",
                      @"properties": @{@"eventdate": fixedDate}}];
     NSString *json = [[NSString alloc] initWithData:[self.mixpanel JSONSerializeObject:a] encoding:NSUTF8StringEncoding];
-    XCTAssert([json containsString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""]);
+    XCTAssert([json rangeOfString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""].location != NSNotFound);
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken
@@ -1077,8 +1103,8 @@
                         @"cta_url": @"maps://",
                         @"image_url": @"http://mixpanel.com"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
-    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
-    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+    [self.mixpanel showNotificationWithObject:notif];
+    [self.mixpanel showNotificationWithObject:notif];
 
     //wait for notifs to be shown from main queue
     [self waitForAsyncQueue];
@@ -1089,15 +1115,17 @@
     XCTAssertTrue([self.mixpanel.eventsQueue.lastObject[@"event"] isEqualToString:@"$campaign_delivery"], @"last event should be campaign delivery");
 
     // Clean up
-    XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self.mixpanel performSelector:@selector(setCurrentlyShowingNotification:) withObject:nil];
-        [self.mixpanel performSelector:@selector(setNotificationViewController:) withObject:nil];
-        [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^{
-            [expectation fulfill];
-        }];
-    });
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            self.mixpanel.currentlyShowingNotification = nil;
+            self.mixpanel.notificationViewController = nil;
+            [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^{
+                [expectation fulfill];
+            }];
+        });
+        [self waitForExpectationsWithTimeout:10 handler:nil];
+    }
 }
 
 - (void)testNoShowSurveyOnPresentingVC
@@ -1120,7 +1148,7 @@
     [topViewController presentViewController:[[UIViewController alloc]init] animated:YES completion:^{ waitForBlock = NO; }];
 
     //Survey should not show as it cannot present on top of a currently presenting view controller
-    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    [self.mixpanel presentSurveyWithRootViewController:survey];
 
     XCTAssertFalse([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was presented when it shouldn't have been");
 
@@ -1143,19 +1171,21 @@
 
     MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
 
-    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    [self.mixpanel presentSurveyWithRootViewController:survey];
     UIViewController *topVC = [self topViewController];
     XCTAssertTrue([topVC isKindOfClass:[MPSurveyNavigationController class]], @"Survey was not presented");
 
     // Clean up
-    XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self.mixpanel performSelector:@selector(setCurrentlyShowingSurvey:) withObject:nil];
-        [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
-            [expectation fulfill];
-        }];
-    });
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            self.mixpanel.currentlyShowingSurvey = nil;
+            [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
+                [expectation fulfill];
+            }];
+        });
+        [self waitForExpectationsWithTimeout:10 handler:nil];
+    }
 }
 
 @end
