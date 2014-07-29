@@ -8,8 +8,9 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "MPTweak.h"
 
-@class MPTweakCategory;
+@class MPTweak;
 
 /**
   @abstract The global store for tweaks.
@@ -24,26 +25,26 @@
 /**
   @abstract The tweak categories in the store.
  */
-@property (nonatomic, copy, readonly) NSArray *tweakCategories;
+@property (nonatomic, copy, readonly) NSArray *tweaks;
 
 /**
-  @abstract Finds a tweak category by name.
-  @param name The name of the category to find.
-  @return The category if found, nil otherwise.
+  @abstract Finds a tweak by name.
+  @param name The name of the tweak to find.
+  @return The tweak if found, nil otherwise.
  */
-- (MPTweakCategory *)tweakCategoryWithName:(NSString *)name;
+- (MPTweak *)tweakWithName:(NSString *)name;
 
 /**
-  @abstract Registers a tweak category with the store.
-  @param category The tweak category to register.
+  @abstract Registers a tweak with the store.
+  @param tweak The tweak to register.
  */
-- (void)addTweakCategory:(MPTweakCategory *)category;
+- (void)addTweak:(MPTweak *)tweak;
 
 /**
-  @abstract Removes a tweak category from the store.
-  @param category The tweak category to remove.
+  @abstract Removes a tweak from the store.
+  @param tweak The tweak to remove.
  */
-- (void)removeTweakCategory:(MPTweakCategory *)category;
+- (void)removeTweak:(MPTweak *)tweak;
 
 /**
   @abstract Resets all tweaks in the store.

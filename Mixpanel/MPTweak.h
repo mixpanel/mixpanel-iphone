@@ -19,7 +19,7 @@
 typedef id MPTweakValue;
 
 /**
-  @abstract Represents a unqie, named tweak.
+  @abstract Represents a tweak
   @discussion A tweak contains a persistent, editable value.
  */
 @interface MPTweak : NSObject
@@ -28,19 +28,13 @@ typedef id MPTweakValue;
   @abstract Creates a new tweak model.
   @discussion This is the designated initializer.
  */
-- (instancetype)initWithIdentifier:(NSString *)identifier;
+- (instancetype)initWithName:(NSString *)name;
 
 /**
-  @abstract This tweak's unique identifier.
+  @abstract This tweak's unique name.
   @discussion Used when reading and writing the tweak's value.
  */
-@property (nonatomic, copy, readonly) NSString *identifier;
-
-/**
-  @abstract The human-readable name of the tweak.
-  @discussion Show the name when displaying the tweak.
- */
-@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 /**
  @abstract The default value of the tweak.

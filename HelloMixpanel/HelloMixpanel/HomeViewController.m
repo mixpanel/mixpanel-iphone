@@ -13,7 +13,7 @@
 
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"MPLogo.png"]];
 
-    MPTweakBind(self.view, alpha, @"Main Window", @"View", @"Alpha", 1.0f);
+    MPTweakBind(self.view, alpha, @"Alpha", 1.0f);
 }
 
 @end

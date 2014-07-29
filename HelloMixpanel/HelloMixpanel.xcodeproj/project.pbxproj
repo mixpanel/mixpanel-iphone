@@ -15,8 +15,6 @@
 		05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05438FFA192175940076094E /* HelloMixpanel.xcassets */; };
 		05439020192279530076094E /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439013192279530076094E /* _MPTweakBindObserver.m */; };
 		05439021192279530076094E /* MPTweak.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439015192279530076094E /* MPTweak.m */; };
-		05439022192279530076094E /* MPTweakCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439017192279530076094E /* MPTweakCategory.m */; };
-		05439023192279530076094E /* MPTweakCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05439019192279530076094E /* MPTweakCollection.m */; };
 		05439024192279530076094E /* MPTweakInline.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901C192279530076094E /* MPTweakInline.m */; };
 		05439025192279530076094E /* MPTweakStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901F192279530076094E /* MPTweakStore.m */; };
 		0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0545AE29196F5382003DCE7F /* Settings.bundle */; };
@@ -233,10 +231,6 @@
 		05439013192279530076094E /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
 		05439014192279530076094E /* MPTweak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweak.h; sourceTree = "<group>"; };
 		05439015192279530076094E /* MPTweak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweak.m; sourceTree = "<group>"; };
-		05439016192279530076094E /* MPTweakCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakCategory.h; sourceTree = "<group>"; };
-		05439017192279530076094E /* MPTweakCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakCategory.m; sourceTree = "<group>"; };
-		05439018192279530076094E /* MPTweakCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakCollection.h; sourceTree = "<group>"; };
-		05439019192279530076094E /* MPTweakCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakCollection.m; sourceTree = "<group>"; };
 		0543901A192279530076094E /* MPTweakEnabled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakEnabled.h; sourceTree = "<group>"; };
 		0543901B192279530076094E /* MPTweakInline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakInline.h; sourceTree = "<group>"; };
 		0543901C192279530076094E /* MPTweakInline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakInline.m; sourceTree = "<group>"; };
@@ -460,10 +454,6 @@
 				05439013192279530076094E /* _MPTweakBindObserver.m */,
 				05439014192279530076094E /* MPTweak.h */,
 				05439015192279530076094E /* MPTweak.m */,
-				05439016192279530076094E /* MPTweakCategory.h */,
-				05439017192279530076094E /* MPTweakCategory.m */,
-				05439018192279530076094E /* MPTweakCollection.h */,
-				05439019192279530076094E /* MPTweakCollection.m */,
 				0543901A192279530076094E /* MPTweakEnabled.h */,
 				0543901B192279530076094E /* MPTweakInline.h */,
 				0543901C192279530076094E /* MPTweakInline.m */,
@@ -1034,7 +1024,6 @@
 				A7B462DD191075DE00774977 /* MPSequenceGenerator.m in Sources */,
 				28526F0817C4107400A0F32F /* MPSurveyQuestionViewController.m in Sources */,
 				28526F0B17C417E000A0F32F /* MPSurvey.m in Sources */,
-				05439023192279530076094E /* MPTweakCollection.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				28526F0E17C417F300A0F32F /* MPSurveyQuestion.m in Sources */,
 				A7B462DA191075DE00774977 /* MPObjectSerializerContext.m in Sources */,
@@ -1082,7 +1071,6 @@
 				C38D59C799F68E7CC925EB25 /* MPObjectIdentityProvider.m in Sources */,
 				C38D5F1EC13BC9516244A3D1 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				C38D5BD4D198AA15E694D2B2 /* NSInvocation+MPHelpers.m in Sources */,
-				05439022192279530076094E /* MPTweakCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

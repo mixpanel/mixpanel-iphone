@@ -10,10 +10,8 @@
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerTweakResponseMessage.h"
 
-// Facebook Tweaks
+// Mixpanel Tweaks
 #import "MPTweakStore.h"
-#import "MPTweakCollection.h"
-#import "MPTweakCategory.h"
 #import "MPTweak.h"
 
 NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
@@ -35,13 +33,10 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
             NSArray *tweaks = [self payload][@"tweaks"];
             for (NSDictionary *tweak in tweaks) {
                 MPTweakStore *store = [MPTweakStore sharedInstance];
-                MPTweakCategory *category = [store tweakCategoryWithName:tweak[@"category"]];
-                MPTweakCollection *collection = [category tweakCollectionWithName:tweak[@"collection"]];
-                MPTweak *mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
+                MPTweak *mpTweak = [store tweakWithName:tweak[@"tweak"]];
 
                 mpTweak.currentValue = tweak[@"value"];
             }
-
         });
 
         MPABTestDesignerTweakResponseMessage *changeResponseMessage = [MPABTestDesignerTweakResponseMessage message];

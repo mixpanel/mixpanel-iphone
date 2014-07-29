@@ -14,8 +14,6 @@
 
 // Facebook Tweaks
 #import "MPTweakStore.h"
-#import "MPTweakCollection.h"
-#import "MPTweakCategory.h"
 #import "MPTweak.h"
 
 @interface MPVariantAction ()
@@ -183,18 +181,10 @@
 
 - (void)execute {
     if (!self.running) {
-
-        // we should whittle this down and get rid of categories and collections eventually
-        MPTweakStore *store = [MPTweakStore sharedInstance];
-        MPTweakCategory *category = nil;
-        MPTweakCollection *collection = nil;
         MPTweak *mpTweak = nil;
-
         NSLog(@"setting %d tweaks", self.tweaks.count);
         for (NSDictionary *tweak in self.tweaks) {
-            category = [store tweakCategoryWithName:tweak[@"category"]];
-            collection = [category tweakCollectionWithName:tweak[@"collection"]];
-            mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
+            mpTweak = [[MPTweakStore sharedInstance] tweakWithName:tweak[@"name"]];
 
             mpTweak.currentValue = tweak[@"value"];
         }
@@ -221,14 +211,9 @@
 
 - (void)untweak
 {
-    MPTweakStore *store = [MPTweakStore sharedInstance];
-    MPTweakCategory *category = nil;
-    MPTweakCollection *collection = nil;
     MPTweak *mpTweak = nil;
     for (NSDictionary *tweak in self.tweaks) {
-        category = [store tweakCategoryWithName:tweak[@"category"]];
-        collection = [category tweakCollectionWithName:tweak[@"collection"]];
-        mpTweak = [collection tweakWithIdentifier:tweak[@"identifier"]];
+        mpTweak = [[MPTweakStore sharedInstance] tweakWithName:tweak[@"name"]];
         mpTweak.currentValue = mpTweak.defaultValue;
     }
     self.tweaks = [NSMutableArray array];

@@ -7,8 +7,6 @@
 
 // Facebook Tweaks
 #import "MPTweakStore.h"
-#import "MPTweakCollection.h"
-#import "MPTweakCategory.h"
 #import "MPTweak.h"
 
 NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_request";
@@ -97,21 +95,13 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
 - (NSArray *)getTweaks
 {
     NSMutableArray *tweaks = [NSMutableArray array];
-    NSArray *categories = [MPTweakStore sharedInstance].tweakCategories;
-    for (MPTweakCategory *tcat in categories) {
-        for (MPTweakCollection *tcol in tcat.tweakCollections) {
-            for (MPTweak *t in tcol.tweaks) {
-                [tweaks addObject:@{@"category": tcat.name,
-                                    @"collection": tcol.name,
-                                    @"tweak": t.name,
-                                    @"identifier": t.identifier,
-                                    @"value": t.currentValue ?: [NSNull null],
-                                    @"default": t.defaultValue ?: [NSNull null],
-                                    @"minimum": t.minimumValue ?: [NSNull null],
-                                    @"maximum": t.maximumValue ?: [NSNull null],
-                                    }];
-            }
-        }
+    for (MPTweak *t in [MPTweakStore sharedInstance].tweaks) {
+        [tweaks addObject:@{@"tweak": t.name,
+                            @"value": t.currentValue ?: [NSNull null],
+                            @"default": t.defaultValue ?: [NSNull null],
+                            @"minimum": t.minimumValue ?: [NSNull null],
+                            @"maximum": t.maximumValue ?: [NSNull null],
+                            }];
     }
     return [tweaks copy];
 }

@@ -225,19 +225,19 @@
 
 /*!
  @method
- 
+
  @abstract
  Initializes a singleton instance of the API, uses it to track launchOptions information,
  and then returns it.
- 
+
  @discussion
  This is the preferred method for creating a sharedInstance with a mixpanel
  like above. With the launchOptions parameter, Mixpanel can track referral
  information created by push notifications.
- 
+
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
- 
+
  */
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
 
@@ -273,14 +273,14 @@
 
 /*!
  @method
- 
+
  @abstract
  Initializes an instance of the API with the given project token.
- 
+
  @discussion
  Supports for the old initWithToken method format but really just passes
  launchOptions to the above method as nil.
- 
+
  @param apiToken        your project token
  @param flushInterval   interval to run background flushing
  */
@@ -358,16 +358,16 @@
 
 /*!
  @method
- 
+
  @abstract
  Track a push notification using its payload sent from Mixpanel.
- 
+
  @discussion
  To simplify user interaction tracking and a/b testing, Mixpanel
  automatically sends IDs for the relevant notification and a/b variants
  of each push. This method parses the standard payload and queues a
  track call using this information.
- 
+
  @param userInfo         remote notification payload dictionary
  */
 - (void)trackPushNotification:(NSDictionary *)userInfo;
