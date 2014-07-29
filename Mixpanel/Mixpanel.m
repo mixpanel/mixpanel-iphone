@@ -270,25 +270,19 @@ static Mixpanel *sharedInstance = nil;
                                name:UIApplicationWillEnterForegroundNotification
                              object:nil];
 
-    // AB Testing designer
-#if TARGET_IPHONE_SIMULATOR
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
-        recognizer.minimumPressDuration = 3;
-        recognizer.numberOfTouchesRequired = 2;
-        recognizer.cancelsTouchesInView = NO;
-        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
-    });
-#else
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
-        recognizer.minimumPressDuration = 3;
-        recognizer.numberOfTouchesRequired = 4;
-        recognizer.cancelsTouchesInView = NO;
-        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
-    });
-#endif
 
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
+        recognizer.minimumPressDuration = 3;
+        recognizer.cancelsTouchesInView = NO;
+        #if TARGET_IPHONE_SIMULATOR
+            recognizer.numberOfTouchesRequired = 2;
+        #else
+            recognizer.numberOfTouchesRequired = 4;
+        #endif
+
+        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
+    });
 }
 
 - (NSString *)description
