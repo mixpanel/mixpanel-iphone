@@ -13,13 +13,11 @@
   NSHashTable *_observers;
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier
+- (instancetype)initWithName:(NSString *)name
 {
   if ((self = [super init])) {
-    _identifier = identifier;
-    _currentValue = [[NSUserDefaults standardUserDefaults] objectForKey:_identifier];
+    _name = name;
   }
-
   return self;
 }
 
@@ -35,8 +33,6 @@
 
   if (_currentValue != currentValue) {
     _currentValue = currentValue;
-    [[NSUserDefaults standardUserDefaults] setObject:_currentValue forKey:_identifier];
-
     for (id<MPTweakObserver> observer in [_observers setRepresentation]) {
       [observer tweakDidChange:self];
     }

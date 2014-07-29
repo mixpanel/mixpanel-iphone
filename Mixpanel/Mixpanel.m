@@ -1470,7 +1470,6 @@ static Mixpanel *sharedInstance = nil;
             [self connectToABTestDesigner];
         }
     }
-
 }
 
 - (void)connectToABTestDesigner

@@ -11,8 +11,6 @@
 
 /**
   @abstract Common parameters in these macros.
-  @param category_ The category the tweak's collection is in. Must be a constant NSString.
-  @param collection_ The collection the tweak goes in. Must be a constant NSString.
   @param name_ The name of the tweak. Must be a constant NSString.
   @param default_ The default value of the tweak. If the user doesn't configure
     a custom value or the build is a release build, then the default value is used.
@@ -27,7 +25,7 @@
   @warning If tweaks are disabled, this macro will return nil.
   @return A {@ref MPTweak} for the tweak that was registered at startup.
 */
-#define MPTweakInline(category_, collection_, name_, ...) _MPTweakInline(category_, collection_, name_, __VA_ARGS__)
+#define MPTweakInline(name_, ...) _MPTweakInline(name_, __VA_ARGS__)
 
 /**
   @abstract Loads the value of a tweak inline.
@@ -35,7 +33,7 @@
     To use the same tweak in two places, define a C function that returns MPTweakValue.
   @return The current value of the tweak, or the default value if none is set.
  */
-#define MPTweakValue(category_, collection_, name_, ...) _MPTweakValue(category_, collection_, name_, __VA_ARGS__)
+#define MPTweakValue(name_, ...) _MPTweakValue(name_, __VA_ARGS__)
 
 /**
   @abstract Binds an object property to a tweak.
@@ -43,6 +41,6 @@
   @param property_ The property to bind.
   @discussion As long as the object is alive, the property will be updated to match the tweak.
  */
-#define MPTweakBind(object_, property_, category_, collection_, name_, ...) _MPTweakBind(object_, property_, category_, collection_, name_, __VA_ARGS__)
+#define MPTweakBind(object_, property_, name_, ...) _MPTweakBind(object_, property_, name_, __VA_ARGS__)
 
 

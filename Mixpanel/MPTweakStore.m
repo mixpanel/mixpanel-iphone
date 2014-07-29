@@ -9,12 +9,10 @@
 
 #import "MPTweakStore.h"
 #import "MPTweak.h"
-#import "MPTweakCategory.h"
-#import "MPTweakCollection.h"
 
 @implementation MPTweakStore {
-  NSMutableArray *_orderedCategories;
-  NSMutableDictionary *_namedCategories;
+  NSMutableArray *_orderedTweaks;
+  NSMutableDictionary *_namedTweaks;
 }
 
 + (instancetype)sharedInstance
@@ -32,43 +30,39 @@
 - (instancetype)init
 {
   if ((self = [super init])) {
-    _orderedCategories = [[NSMutableArray alloc] initWithCapacity:16];
-    _namedCategories = [[NSMutableDictionary alloc] initWithCapacity:16];
+    _orderedTweaks = [[NSMutableArray alloc] initWithCapacity:16];
+    _namedTweaks = [[NSMutableDictionary alloc] initWithCapacity:16];
   }
 
   return self;
 }
 
-- (NSArray *)tweakCategories
+- (NSArray *)tweaks
 {
-  return [_orderedCategories copy];
+  return [_orderedTweaks copy];
 }
 
-- (MPTweakCategory *)tweakCategoryWithName:(NSString *)name
+- (MPTweak *)tweakWithName:(NSString *)name
 {
-  return _namedCategories[name];
+  return _namedTweaks[name];
 }
 
-- (void)addTweakCategory:(MPTweakCategory *)category
+- (void)addTweak:(MPTweak *)tweak
 {
-  [_namedCategories setObject:category forKey:category.name];
-  [_orderedCategories addObject:category];
+  [_namedTweaks setObject:tweak forKey:tweak.name];
+  [_orderedTweaks addObject:tweak];
 }
 
-- (void)removeTweakCategory:(MPTweakCategory *)category
+- (void)removeTweak:(MPTweak *)tweak
 {
-  [_namedCategories removeObjectForKey:category.name];
-  [_orderedCategories removeObject:category];
+  [_namedTweaks removeObjectForKey:tweak.name];
+  [_orderedTweaks removeObject:tweak];
 }
 
 - (void)reset
 {
-  for (MPTweakCategory *category in self.tweakCategories) {
-    for (MPTweakCollection *collection in category.tweakCollections) {
-      for (MPTweak *tweak in collection.tweaks) {
-        tweak.currentValue = nil;
-      }
-    }
+  for (MPTweak *tweak in self.tweaks) {
+      tweak.currentValue = nil;
   }
 }
 
