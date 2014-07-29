@@ -150,7 +150,6 @@ static Mixpanel *sharedInstance = nil;
 
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
-        self.decideURL = @"http://kyle.dev.mixpanel.org";
         self.switchboardURL = @"ws://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;
@@ -273,7 +272,13 @@ static Mixpanel *sharedInstance = nil;
 
     // AB Testing designer
 #if TARGET_IPHONE_SIMULATOR
-    [self requestDesignerConnection:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
+        recognizer.minimumPressDuration = 3;
+        recognizer.numberOfTouchesRequired = 2;
+        recognizer.cancelsTouchesInView = NO;
+        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
+    });
 #else
     dispatch_async(dispatch_get_main_queue(), ^{
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
