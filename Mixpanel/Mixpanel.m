@@ -275,11 +275,11 @@ static Mixpanel *sharedInstance = nil;
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
         recognizer.minimumPressDuration = 3;
         recognizer.cancelsTouchesInView = NO;
-        #if TARGET_IPHONE_SIMULATOR
-            recognizer.numberOfTouchesRequired = 2;
-        #else
-            recognizer.numberOfTouchesRequired = 4;
-        #endif
+#if TARGET_IPHONE_SIMULATOR
+        recognizer.numberOfTouchesRequired = 2;
+#else
+        recognizer.numberOfTouchesRequired = 4;
+#endif
 
         [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
     });
