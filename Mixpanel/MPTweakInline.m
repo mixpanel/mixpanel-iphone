@@ -9,18 +9,12 @@
 
 #import "MPTweakInline.h"
 #import "MPTweak.h"
-#import "MPTweakInlineInternal.h"
 #import "MPTweakStore.h"
 
 #import <libkern/OSAtomic.h>
 #import <mach-o/getsect.h>
 #import <mach-o/dyld.h>
 #import <dlfcn.h>
-
-/*extern NSString *_MPTweakIdentifier(mp_tweak_entry *entry)
-{
-  return [NSString stringWithFormat:@"MPTweak:%@", *entry->name];
-}*/
 
 static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
 {

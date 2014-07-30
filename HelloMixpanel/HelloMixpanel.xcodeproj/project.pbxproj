@@ -234,7 +234,6 @@
 		05439013192279530076094E /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
 		05439014192279530076094E /* MPTweak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweak.h; sourceTree = "<group>"; };
 		05439015192279530076094E /* MPTweak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweak.m; sourceTree = "<group>"; };
-		0543901A192279530076094E /* MPTweakEnabled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakEnabled.h; sourceTree = "<group>"; };
 		0543901B192279530076094E /* MPTweakInline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakInline.h; sourceTree = "<group>"; };
 		0543901C192279530076094E /* MPTweakInline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakInline.m; sourceTree = "<group>"; };
 		0543901D192279530076094E /* MPTweakInlineInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakInlineInternal.h; sourceTree = "<group>"; };
@@ -457,7 +456,6 @@
 				05439013192279530076094E /* _MPTweakBindObserver.m */,
 				05439014192279530076094E /* MPTweak.h */,
 				05439015192279530076094E /* MPTweak.m */,
-				0543901A192279530076094E /* MPTweakEnabled.h */,
 				0543901B192279530076094E /* MPTweakInline.h */,
 				0543901C192279530076094E /* MPTweakInline.m */,
 				0543901D192279530076094E /* MPTweakInlineInternal.h */,
