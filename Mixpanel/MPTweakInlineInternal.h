@@ -7,19 +7,9 @@
  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import "MPTweakEnabled.h"
 #import "MPTweak.h"
 #import "MPTweakStore.h"
 #import "_MPTweakBindObserver.h"
-
-#if !MP_TWEAK_ENABLED
-
-#define __MPTweakDefault(default, ...) default
-#define _MPTweakInline(name_, ...) nil
-#define _MPTweakValue(name_, ...) (__MPTweakDefault(__VA_ARGS__, _))
-#define _MPTweakBind(object_, property_, name_, ...) (object_.property_ = __MPTweakDefault(__VA_ARGS__, _))
-
-#else
 
 #ifdef __cplusplus
 extern "C" {
@@ -122,7 +112,5 @@ typedef struct {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
 

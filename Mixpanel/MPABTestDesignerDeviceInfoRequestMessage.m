@@ -4,8 +4,6 @@
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerDeviceInfoResponseMessage.h"
 #import "MPABTestDesignerConnection.h"
-
-// Facebook Tweaks
 #import "MPTweakStore.h"
 #import "MPTweak.h"
 

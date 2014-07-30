@@ -12,7 +12,6 @@
 #import "MPSwizzler.h"
 #import "MPValueTransformers.h"
 
-// Facebook Tweaks
 #import "MPTweakStore.h"
 #import "MPTweak.h"
 
