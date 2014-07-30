@@ -33,7 +33,7 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
             NSArray *tweaks = [self payload][@"tweaks"];
             for (NSDictionary *tweak in tweaks) {
                 MPTweakStore *store = [MPTweakStore sharedInstance];
-                MPTweak *mpTweak = [store tweakWithName:tweak[@"tweak"]];
+                MPTweak *mpTweak = [store tweakWithName:tweak[@"name"]];
 
                 mpTweak.currentValue = tweak[@"value"];
             }
