@@ -9,10 +9,7 @@
 #import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerTweakResponseMessage.h"
-
-// Mixpanel Tweaks
-#import "MPTweakStore.h"
-#import "MPTweak.h"
+#import "MPVariant.h"
 
 NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 
@@ -27,21 +24,24 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 {
     __weak MPABTestDesignerConnection *weak_connection = connection;
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-        MPABTestDesignerConnection *conn = weak_connection;
+        MPABTestDesignerConnection *connection = weak_connection;
 
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSArray *tweaks = [self payload][@"tweaks"];
-            for (NSDictionary *tweak in tweaks) {
-                MPTweakStore *store = [MPTweakStore sharedInstance];
-                MPTweak *mpTweak = [store tweakWithName:tweak[@"name"]];
+        MPVariant *variant = [connection sessionObjectForKey:kSessionVariantKey];
+        if (!variant) {
+            variant = [[MPVariant alloc] init];
+            [connection setSessionObject:variant forKey:kSessionVariantKey];
+        }
 
-                mpTweak.currentValue = tweak[@"value"];
-            }
-        });
+        if ([[[self payload] objectForKey:@"tweaks"] isKindOfClass:[NSArray class]]) {
+            NSLog(@"%@", [[self payload] objectForKey:@"tweaks"]);
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [variant addTweaksFromJSONObject:[[self payload] objectForKey:@"tweaks"] andExecute:YES];
+            });
+        }
 
         MPABTestDesignerTweakResponseMessage *changeResponseMessage = [MPABTestDesignerTweakResponseMessage message];
         changeResponseMessage.status = @"OK";
-        [conn sendMessage:changeResponseMessage];
+        [connection sendMessage:changeResponseMessage];
     }];
 
     return operation;

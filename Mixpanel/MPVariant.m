@@ -46,34 +46,28 @@
 
 @end
 
+#pragma mark -
+
 @interface MPVariantTweak ()
 
-@property (nonatomic, strong) NSString *category;
-@property (nonatomic, strong) NSString *collection;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *identifier;
-@property (nonatomic, strong) MPTweakValue defaultValue;
+@property (nonatomic, strong) NSString *encoding;
 @property (nonatomic, strong) MPTweakValue value;
-@property (nonatomic, strong) MPTweakValue min;
-@property (nonatomic, strong) MPTweakValue max;
 
-+ (MPVariantTweak *)actionWithJSONObject:(NSDictionary *)object;
-- (id) initWithCategory:(NSString *)category
-             collection:(NSString *)collection
-                   name:(NSString *)name
-             identifier:(NSString *)identifier
-           defaultValue:(MPTweakValue)defaultValue
-                  value:(MPTweakValue)value
-                    min:(MPTweakValue)min
-                    max:(MPTweakValue)max;
++ (MPVariantTweak *)tweakWithJSONObject:(NSDictionary *)object;
+- (id)initWithName:(NSString *)name
+          encoding:(NSString *)encoding
+             value:(MPTweakValue)value;
 - (void)execute;
 - (void)stop;
 
 @end
 
+#pragma mark -
+
 @implementation MPVariant
 
-#pragma mark -- Constructing Variants
+#pragma mark Constructing Variants
 
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object {
 
@@ -118,7 +112,8 @@
         self.ID = ID;
         self.experimentID = experimentID;
         self.actions = [NSMutableArray array];
-        self.tweaks = [NSMutableArray arrayWithArray:tweaks];
+        self.tweaks = [NSMutableArray array];
+        [self addTweaksFromJSONObject:tweaks andExecute:NO];
         [self addActionsFromJSONObject:actions andExecute:NO];
         _finished = NO;
         _running = NO;
@@ -126,7 +121,7 @@
     return self;
 }
 
-#pragma mark - NSCoding
+#pragma mark NSCoding
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -149,7 +144,7 @@
     [aCoder encodeObject:[NSNumber numberWithBool:_finished] forKey:@"finished"];
 }
 
-#pragma mark - Actions
+#pragma mark Actions
 
 - (void)addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec
 {
@@ -179,20 +174,36 @@
     }
 }
 
+#pragma mark Tweaks
+
+- (void)addTweaksFromJSONObject:(NSArray *)tweaks andExecute:(BOOL)exec
+{
+    for (NSDictionary *object in tweaks) {
+        [self addTweakFromJSONObject:object andExecute:exec];
+    }
+}
+
+- (void)addTweakFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec
+{
+    MPVariantTweak *tweak = [MPVariantTweak tweakWithJSONObject:object];
+    if(tweak) {
+        [self.tweaks addObject:tweak];
+        if (exec) {
+            [tweak execute];
+        }
+    }
+}
+
+#pragma mark Execution
+
 - (void)execute {
     if (!self.running) {
-        MPTweak *mpTweak = nil;
-        NSLog(@"setting %d tweaks", self.tweaks.count);
-        for (NSDictionary *tweak in self.tweaks) {
-            mpTweak = [[MPTweakStore sharedInstance] tweakWithName:tweak[@"name"]];
-
-            mpTweak.currentValue = tweak[@"value"];
+        for (MPVariantTweak *tweak in self.tweaks) {
+            [tweak execute];
         }
-
         for (MPVariantAction *action in self.actions) {
             [action execute];
         }
-
         _running = YES;
     }
 }
@@ -201,25 +212,19 @@
     for (MPVariantAction *action in self.actions) {
         [action stop];
     }
-    [self untweak];
+    for (MPVariantTweak *tweak in self.tweaks) {
+        [tweak stop];
+    }
 }
 
 - (void)finish {
-    [self untweak];
+    for (MPVariantTweak *tweak in self.tweaks) {
+        [tweak stop];
+    }
     _finished = YES;
 }
 
-- (void)untweak
-{
-    MPTweak *mpTweak = nil;
-    for (NSDictionary *tweak in self.tweaks) {
-        mpTweak = [[MPTweakStore sharedInstance] tweakWithName:tweak[@"name"]];
-        mpTweak.currentValue = mpTweak.defaultValue;
-    }
-    self.tweaks = [NSMutableArray array];
-}
-
-#pragma mark - Equality
+#pragma mark Equality
 
 - (BOOL)isEqualToVariant:(MPVariant *)variant
 {
@@ -245,6 +250,8 @@
 }
 
 @end
+
+#pragma mark -
 
 @implementation MPVariantAction
 
@@ -276,7 +283,14 @@
     Class swizzleClass = NSClassFromString(object[@"swizzleClass"]);
     SEL swizzleSelector = NSSelectorFromString(object[@"swizzleSelector"]);
 
-    return [[MPVariantAction alloc] initWithName:name path:path selector:selector args:args original:original swizzle:swizzle swizzleClass:swizzleClass swizzleSelector:swizzleSelector];
+    return [[MPVariantAction alloc] initWithName:name
+                                            path:path
+                                        selector:selector
+                                            args:args
+                                        original:original
+                                         swizzle:swizzle
+                                    swizzleClass:swizzleClass
+                                 swizzleSelector:swizzleSelector];
 }
 
 - (id)init
@@ -327,7 +341,7 @@
     return self;
 }
 
-#pragma mark - NSCoding
+#pragma mark NSCoding
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -360,7 +374,7 @@
     [aCoder encodeObject:NSStringFromSelector(_swizzleSelector) forKey:@"swizzleSelector"];
 }
 
-#pragma mark - Executing Actions
+#pragma mark Executing Actions
 
 - (void)execute
 {
@@ -483,79 +497,63 @@
 
 @end
 
+#pragma mark -
+
 @implementation MPVariantTweak
 
-+ (MPVariantTweak *)actionWithJSONObject:(NSDictionary *)object
++ (MPVariantTweak *)tweakWithJSONObject:(NSDictionary *)object
 {
     // Required parameters
-    NSString *category = object[@"category"];
-    if (![category isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid category: %@", category);
-        return nil;
-    }
-    NSString *collection = object[@"collection"];
-    if (![collection isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid collection: %@", collection);
-        return nil;
-    }
-    NSString *name = object[@"tweak"];
+    NSString *name = object[@"name"];
     if (![name isKindOfClass:[NSString class]]) {
         NSLog(@"invalid name: %@", name);
         return nil;
     }
+
+    NSString *encoding = object[@"encoding"];
+    if (![encoding isKindOfClass:[NSString class]]) {
+        NSLog(@"invalid encoding: %@", encoding);
+        return nil;
+    }
+
     MPTweakValue value = object[@"value"];
     if (value == nil) {
         NSLog(@"invalid value: %@", value);
         return nil;
     }
-    MPTweakValue defaultValue = object[@"default"];
-    if (defaultValue == nil) {
-        NSLog(@"invalid defaultValue: %@", defaultValue);
-        return nil;
-    }
 
-    // Optional parameters
-    MPTweakValue min = object[@"minimum"];
-    MPTweakValue max = object[@"maximum"];
-    NSString *identifier = object[@"identifier"];
-
-    return [[MPVariantTweak alloc] initWithCategory:category collection:collection name:name identifier:identifier defaultValue:defaultValue value:value min:min max:max];
+    return [[MPVariantTweak alloc] initWithName:name
+                                       encoding:encoding
+                                          value:value];
 }
 
 - (id)init
 {
-    [NSException raise:@"NotSupported" format:@"Please call initWithCategory:"];
+    [NSException raise:@"NotSupported" format:@"Please call initWithName:name encoding:encoding value:value"];
     return nil;
+
 }
 
-- (id)initWithCategory:(NSString *)category collection:(NSString *)collection name:(NSString *)name identifier:(NSString *)identifier defaultValue:(MPTweakValue)defaultValue value:(MPTweakValue)value min:(MPTweakValue)min max:(MPTweakValue)max
+- (id)initWithName:(NSString *)name
+          encoding:(NSString *)encoding
+             value:(MPTweakValue)value
 {
     if ((self = [super init])) {
-        self.category = category;
-        self.collection = collection;
         self.name = name;
-        self.identifier = identifier;
-        self.defaultValue = defaultValue;
+        self.encoding = encoding;
         self.value = value;
-        self.min = min;
-        self.max = max;
     }
     return self;
 }
 
-#pragma mark - NSCoding
+#pragma mark NSCoding
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init]) {
         self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.category = [aDecoder decodeObjectForKey:@"category"];
-        self.collection = [aDecoder decodeObjectForKey:@"collection"];
-        self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
+        self.encoding = [aDecoder decodeObjectForKey:@"encoding"];
         self.value = [aDecoder decodeObjectForKey:@"value"];
-        self.defaultValue = [aDecoder decodeObjectForKey:@"defaultValue"];
-        self.min = [aDecoder decodeObjectForKey:@"min"];
-        self.max = [aDecoder decodeObjectForKey:@"max"];
     }
     return self;
 }
@@ -563,23 +561,35 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.name forKey:@"name"];
-    [aCoder encodeObject:self.category forKey:@"category"];
-    [aCoder encodeObject:self.collection forKey:@"collection"];
-    [aCoder encodeObject:self.identifier forKey:@"identifier"];
+    [aCoder encodeObject:self.encoding forKey:@"encoding"];
     [aCoder encodeObject:self.value forKey:@"value"];
-    [aCoder encodeObject:self.defaultValue forKey:@"defaultValue"];
-    [aCoder encodeObject:self.min forKey:@"min"];
-    [aCoder encodeObject:self.max forKey:@"max"];
 }
+
+#pragma mark Executing Actions
 
 - (void)execute
 {
-
+    MPTweak *mpTweak = [[MPTweakStore sharedInstance] tweakWithName:self.name];;
+    if (mpTweak) {
+        //TODO, this may change, but for now sending an NSNull will revert the MPTweak back to its default.
+        if ([self.value isKindOfClass:[NSNull class]]) {
+            mpTweak.currentValue = mpTweak.defaultValue;
+        } else {
+            mpTweak.currentValue = self.value;
+        }
+    }
 }
 
 - (void)stop
 {
+    MPTweak *mpTweak = [[MPTweakStore sharedInstance] tweakWithName:self.name];
+    if (mpTweak) {
+        mpTweak.currentValue = mpTweak.defaultValue;
+    }
+}
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Tweak: %@ = %@", self.name, self.value];
 }
 
 @end

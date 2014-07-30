@@ -42,7 +42,9 @@
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
 
 - (void) addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec;
-- (void) addActionFromJSONObject:(NSDictionary *)action andExecute:(BOOL)exec;
+- (void) addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
+- (void) addTweaksFromJSONObject:(NSArray *)tweaks andExecute:(BOOL)exec;
+- (void) addTweakFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
 - (void)execute;
 - (void)stop;
 - (void)finish;
