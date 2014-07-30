@@ -97,6 +97,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
     NSMutableArray *tweaks = [NSMutableArray array];
     for (MPTweak *t in [MPTweakStore sharedInstance].tweaks) {
         [tweaks addObject:@{@"tweak": t.name,
+                            @"encoding": t.encoding,
                             @"value": t.currentValue ?: [NSNull null],
                             @"default": t.defaultValue ?: [NSNull null],
                             @"minimum": t.minimumValue ?: [NSNull null],

@@ -24,7 +24,8 @@
 
 static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
 {
-  MPTweak *tweak = [[MPTweak alloc] initWithName:name];
+    NSString *encoding = [NSString stringWithFormat:@"%s", *entry->encoding];
+    MPTweak *tweak = [[MPTweak alloc] initWithName:name andEncoding:encoding];
 
   if (strcmp(*entry->encoding, @encode(BOOL)) == 0) {
     tweak.defaultValue = @(*(BOOL *)entry->value);

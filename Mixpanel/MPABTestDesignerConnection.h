@@ -10,14 +10,14 @@ extern NSString *const kSessionVariantKey;
 
 @interface MPABTestDesignerConnection : NSObject
 
+@property (nonatomic, assign) BOOL connected;
+@property (nonatomic, assign) BOOL sessionEnded;
+
 - (id)initWithURL:(NSURL *)url;
 
 - (void)setSessionObject:(id)object forKey:(NSString *)key;
 - (id)sessionObjectForKey:(NSString *)key;
-
-@property (nonatomic, assign) BOOL connected;
-@property (nonatomic, assign) BOOL sessionEnded;
-
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message;
+- (void)close;
 
 @end

@@ -9,6 +9,7 @@
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerClearRequestMessage.h"
+#import "MPABTestDesignerDisconnectMessage.h"
 
 #ifdef MESSAGING_DEBUG
 #define MessagingDebug(...) NSLog(__VA_ARGS__)
@@ -42,8 +43,10 @@ NSString * const kSessionVariantKey = @"session_variant";
             MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
             MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
             MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
+            MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
         };
 
+        _sessionEnded = NO;
         _session = [[NSMutableDictionary alloc] init];
         _url = url;
 
