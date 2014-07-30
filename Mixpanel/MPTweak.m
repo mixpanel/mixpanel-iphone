@@ -13,10 +13,11 @@
   NSHashTable *_observers;
 }
 
-- (instancetype)initWithName:(NSString *)name
+- (instancetype)initWithName:(NSString *)name andEncoding:(NSString *)encoding
 {
   if ((self = [super init])) {
     _name = name;
+      _encoding = encoding;
   }
   return self;
 }

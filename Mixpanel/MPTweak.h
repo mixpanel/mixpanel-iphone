@@ -28,13 +28,18 @@ typedef id MPTweakValue;
   @abstract Creates a new tweak model.
   @discussion This is the designated initializer.
  */
-- (instancetype)initWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name andEncoding:(NSString *)encoding;
 
 /**
   @abstract This tweak's unique name.
   @discussion Used when reading and writing the tweak's value.
  */
 @property (nonatomic, copy, readonly) NSString *name;
+
+/**
+ @abstract This tweak's value encoding, as returned by @encoding
+ */
+@property (nonatomic, copy, readonly) NSString *encoding;
 
 /**
  @abstract The default value of the tweak.
