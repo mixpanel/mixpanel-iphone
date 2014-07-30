@@ -129,7 +129,7 @@
         self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
         self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
         self.actions = [aDecoder decodeObjectForKey:@"actions"];
-        self.tweaks = [aDecoder decodeObjectForKey:@"actions"];
+        self.tweaks = [aDecoder decodeObjectForKey:@"tweaks"];
         _finished = [(NSNumber *)[aDecoder decodeObjectForKey:@"finished"] boolValue];
     }
     return self;
