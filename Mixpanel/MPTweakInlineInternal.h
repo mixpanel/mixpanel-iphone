@@ -71,11 +71,25 @@ typedef struct {
   MPTweakValue currentValue = tweak_.currentValue ?: tweak_.defaultValue; \
   return _Generic(default_, \
     float: [currentValue floatValue], \
+    const float: [currentValue floatValue], \
     double: [currentValue doubleValue], \
-    NSInteger: [currentValue integerValue], \
-    NSUInteger: [currentValue unsignedIntegerValue], \
+    const double: [currentValue doubleValue], \
+    short: [currentValue shortValue], \
+    const short: [currentValue shortValue], \
+    unsigned short: [currentValue unsignedShortValue], \
+    const unsigned short: [currentValue unsignedShortValue], \
+    int: [currentValue intValue], \
+    const int: [currentValue intValue], \
+    unsigned int: [currentValue unsignedIntValue], \
+    const unsigned int: [currentValue unsignedIntValue], \
+    long long: [currentValue longLongValue], \
+    const long long: [currentValue longLongValue], \
+    unsigned long long: [currentValue unsignedLongLongValue], \
+    const unsigned long long: [currentValue unsignedLongLongValue], \
     BOOL: [currentValue boolValue], \
+    const BOOL: [currentValue boolValue], \
     id: currentValue, \
+    const id: currentValue, \
     /* assume char * as the default. */ \
     /* constant strings are typed as char[N] */ \
     /* and we can't enumerate all of those. */ \
