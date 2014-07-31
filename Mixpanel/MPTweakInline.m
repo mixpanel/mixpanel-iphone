@@ -35,18 +35,54 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
       tweak.minimumValue = [NSNumber numberWithDouble:*(double *)entry->min];
       tweak.maximumValue = [NSNumber numberWithDouble:*(double *)entry->max];
     }
-  } else if (strcmp(*entry->encoding, @encode(NSInteger)) == 0) {
-    tweak.defaultValue = [NSNumber numberWithLongLong:*(long long *)entry->value];
+  } else if (strcmp(*entry->encoding, @encode(short)) == 0) {
+      tweak.defaultValue = [NSNumber numberWithShort:*(short *)entry->value];
+      if (entry->min != NULL && entry->max != NULL) {
+          tweak.minimumValue = [NSNumber numberWithShort:*(short *)entry->min];
+          tweak.maximumValue = [NSNumber numberWithShort:*(short *)entry->max];
+      }
+  } else if (strcmp(*entry->encoding, @encode(unsigned short)) == 0) {
+      tweak.defaultValue = [NSNumber numberWithUnsignedShort:*(unsigned short int *)entry->value];
+      if (entry->min != NULL && entry->max != NULL) {
+          tweak.minimumValue = [NSNumber numberWithUnsignedShort:*(unsigned short *)entry->min];
+          tweak.maximumValue = [NSNumber numberWithUnsignedShort:*(unsigned short *)entry->max];
+      }
+  } else if (strcmp(*entry->encoding, @encode(int)) == 0) {
+    tweak.defaultValue = [NSNumber numberWithInt:*(int *)entry->value];
     if (entry->min != NULL && entry->max != NULL) {
-      tweak.minimumValue = [NSNumber numberWithLongLong:*(long long *)entry->min];
-      tweak.maximumValue = [NSNumber numberWithLongLong:*(long long *)entry->max];
+      tweak.minimumValue = [NSNumber numberWithInt:*(int *)entry->min];
+      tweak.maximumValue = [NSNumber numberWithInt:*(int *)entry->max];
     }
-  } else if (strcmp(*entry->encoding, @encode(NSUInteger)) == 0) {
-    tweak.defaultValue = [NSNumber numberWithUnsignedInteger:*(NSUInteger *)entry->value];
+  } else if (strcmp(*entry->encoding, @encode(uint)) == 0) {
+    tweak.defaultValue = [NSNumber numberWithUnsignedInt:*(uint *)entry->value];
     if (entry->min != NULL && entry->max != NULL) {
-      tweak.minimumValue = [NSNumber numberWithUnsignedInteger:*(NSUInteger *)entry->min];
-      tweak.maximumValue = [NSNumber numberWithUnsignedInteger:*(NSUInteger *)entry->max];
+      tweak.minimumValue = [NSNumber numberWithUnsignedInt:*(uint *)entry->min];
+      tweak.maximumValue = [NSNumber numberWithUnsignedInt:*(uint *)entry->max];
     }
+  } else if (strcmp(*entry->encoding, @encode(long)) == 0) {
+      tweak.defaultValue = [NSNumber numberWithLong:*(long *)entry->value];
+      if (entry->min != NULL && entry->max != NULL) {
+          tweak.minimumValue = [NSNumber numberWithLong:*(long *)entry->min];
+          tweak.maximumValue = [NSNumber numberWithLong:*(long *)entry->max];
+      }
+  } else if (strcmp(*entry->encoding, @encode(unsigned long)) == 0) {
+      tweak.defaultValue = [NSNumber numberWithUnsignedLong:*(unsigned long *)entry->value];
+      if (entry->min != NULL && entry->max != NULL) {
+          tweak.minimumValue = [NSNumber numberWithUnsignedLong:*(unsigned long *)entry->min];
+          tweak.maximumValue = [NSNumber numberWithUnsignedLong:*(unsigned long *)entry->max];
+      }
+  } else if (strcmp(*entry->encoding, @encode(long long)) == 0) {
+      tweak.defaultValue = [NSNumber numberWithLongLong:*(long long *)entry->value];
+      if (entry->min != NULL && entry->max != NULL) {
+          tweak.minimumValue = [NSNumber numberWithLongLong:*(long long *)entry->min];
+          tweak.maximumValue = [NSNumber numberWithLongLong:*(long long *)entry->max];
+      }
+  } else if (strcmp(*entry->encoding, @encode(unsigned long long)) == 0) {
+      tweak.defaultValue = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)entry->value];
+      if (entry->min != NULL && entry->max != NULL) {
+          tweak.minimumValue = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)entry->min];
+          tweak.maximumValue = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)entry->max];
+      }
   } else if (*entry->encoding[0] == '[') {
     // Assume it's a C string.
     tweak.defaultValue = [NSString stringWithUTF8String:entry->value];
