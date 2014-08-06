@@ -45,6 +45,7 @@
 - (void) addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
 - (void) addTweaksFromJSONObject:(NSArray *)tweaks andExecute:(BOOL)exec;
 - (void) addTweakFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
+- (void)removeActionWithName:(NSString *)name;
 - (void)execute;
 - (void)stop;
 - (void)finish;

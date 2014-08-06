@@ -165,9 +165,10 @@
 
 - (void)removeActionWithName:(NSString *)name
 {
-    for (MPVariantAction *a in self.actions) {
-        if([a.name isEqualToString:name]) {
-            [self.actions removeObjectIdenticalTo:a];
+    for (MPVariantAction *action in self.actions) {
+        if([action.name isEqualToString:name]) {
+            [action stop];
+            [self.actions removeObjectIdenticalTo:action];
             break;
         }
     }
