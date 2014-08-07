@@ -184,10 +184,10 @@ static Mixpanel *sharedInstance = nil;
         [self unarchive];
         [self executeCachedVariants];
 
-        if (launchOptions) {
-            if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-                [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
-            }
+        if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+            [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
+        } else {
+            [self track:@"$app_open"];
         }
     }
 
@@ -1495,9 +1495,9 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)markVariantRun:(MPVariant *)variant
 {
-
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
-    NSDictionary *shownVariant = @{[NSString stringWithFormat:@"%lu", (unsigned long)variant.experimentID]: @(variant.ID)};
+    NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
+    [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
     [self.people merge:@{@"$experiments": shownVariant}];
 
     dispatch_async(self.serialQueue, ^{
