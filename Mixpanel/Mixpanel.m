@@ -1476,7 +1476,7 @@ static Mixpanel *sharedInstance = nil;
     if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
         NSLog(@"A/B test designer connection already exists");
     } else {
-        NSString *designerURLString = [NSString stringWithFormat:@"%@/connect/%@", self.switchboardURL, self.apiToken];
+        NSString *designerURLString = [NSString stringWithFormat:@"%@/websocket_proxy/connect?key=%@&type=client", self.switchboardURL, self.apiToken];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
     }
