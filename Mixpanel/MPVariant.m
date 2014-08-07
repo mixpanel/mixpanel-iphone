@@ -13,7 +13,7 @@
 #import "MPTweakStore.h"
 #import "MPTweak.h"
 
-@interface MPVariantAction : NSObject <NSCoding>
+@interface MPVariantAction ()
 
 @property (nonatomic, strong)NSString *name;
 
@@ -45,7 +45,7 @@
 
 #pragma mark -
 
-@interface MPVariantTweak : NSObject <NSCoding>
+@interface MPVariantTweak ()
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *encoding;

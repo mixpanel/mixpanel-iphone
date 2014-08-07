@@ -51,3 +51,11 @@
 - (void)finish;
 
 @end
+
+@interface MPVariantAction : NSObject <NSCoding>
+
+@end
+
+@interface MPVariantTweak : NSObject <NSCoding>
+
+@end
