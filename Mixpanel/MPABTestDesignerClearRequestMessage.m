@@ -28,12 +28,11 @@ NSString *const MPABTestDesignerClearRequestMessageType = @"clear_request";
 
         MPVariant *variant = [conn sessionObjectForKey:kSessionVariantKey];
         if (variant) {
-            NSString *name = [self.payload objectForKey:@"name"];
+            NSArray *actions = [self.payload objectForKey:@"actions"];
             dispatch_sync(dispatch_get_main_queue(), ^{
-                if (name) {
+                for (NSDictionary *action in actions) {
+                    NSString *name = [action objectForKey:@"name"];
                     [variant removeActionWithName:name];
-                } else {
-                    [variant stop];
                 }
             });
         }
