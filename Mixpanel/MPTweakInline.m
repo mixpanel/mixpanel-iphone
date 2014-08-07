@@ -121,7 +121,7 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
   MPTweakStore *store = [MPTweakStore sharedInstance];
 
   Dl_info info;
-  dladdr(&_MPTweakCreateWithEntry, &info);
+  dladdr((void *)&_MPTweakCreateWithEntry, &info);
 
   const mp_tweak_value mach_header = (mp_tweak_value)info.dli_fbase;
   const mp_tweak_section *section = mp_tweak_getsectbynamefromheader((void *)mach_header, MPTweakSegmentName, MPTweakSectionName);
