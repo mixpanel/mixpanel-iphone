@@ -30,8 +30,7 @@ NSString *const MPABTestDesignerClearRequestMessageType = @"clear_request";
         if (variant) {
             NSArray *actions = [self.payload objectForKey:@"actions"];
             dispatch_sync(dispatch_get_main_queue(), ^{
-                for (NSDictionary *action in actions) {
-                    NSString *name = [action objectForKey:@"name"];
+                for (NSString *name in actions) {
                     [variant removeActionWithName:name];
                 }
             });
