@@ -588,7 +588,7 @@
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"custom name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
-    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"pending events queue archive failed");
+    XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"e1", @"event was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -1112,7 +1112,7 @@
     UIViewController *topVC = [self topViewController];
     XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Survey was not presented");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
-    XCTAssertTrue([self.mixpanel.eventsQueue.lastObject[@"event"] isEqualToString:@"$campaign_delivery"], @"last event should be campaign delivery");
+    XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"$campaign_delivery", @"last event should be campaign delivery");
 
     // Clean up
     if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
