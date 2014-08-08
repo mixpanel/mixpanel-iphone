@@ -47,6 +47,7 @@ NSString * const kSessionVariantKey = @"session_variant";
         };
 
         _sessionEnded = NO;
+        _connected = NO;
         _session = [[NSMutableDictionary alloc] init];
         _url = url;
 
@@ -164,10 +165,8 @@ NSString * const kSessionVariantKey = @"session_variant";
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
-    if (self.connected) {
-        self.connected = NO;
-        [self reconnect];
-    }
+    self.connected = NO;
+    [self reconnect:YES];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
@@ -177,22 +176,24 @@ NSString * const kSessionVariantKey = @"session_variant";
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
-    if (self.connected) {
-        self.connected = NO;
-        [self reconnect];
-    }
+    self.connected = NO;
+    [self reconnect:YES];
 }
 
-- (void)reconnect
+- (void)reconnect:(BOOL)first
 {
     static int retries = 0;
-    if (self.connected) {
+    if (self.sessionEnded || self.connected || retries >= 10) {
+        // If we deliberately closed the connection, or are already connected
+        // or we tried too many times, then reset the retry count and stop.
         retries = 0;
-    } else if (!self.connected && !self.sessionEnded && retries < 10) {
+    } else if(first ^ (retries > 0)) {
+        // If either this is the first try at reconnecting, or we are already in a
+        // reconnect cycle (but not both). Then continue trying.
         MessagingDebug(@"Attempting to reconnect, attempt %d", retries);
         [self open];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(2, retries),30) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self reconnect];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(2, retries),10) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self reconnect:NO];
         });
         retries++;
     }
