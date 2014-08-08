@@ -1279,6 +1279,20 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+#pragma mark - Surveys (UIAlertViewDelegate)
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (_currentlyShowingSurvey) {
+        if (buttonIndex == 1) {
+            [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
+        } else {
+            [self markSurvey:_currentlyShowingSurvey shown:NO withAnswerCount:0];
+            self.currentlyShowingSurvey = nil;
+        }
+    }
+}
+
 #pragma mark - Notifications
 
 - (void)showNotification
@@ -1444,20 +1458,6 @@ static Mixpanel *sharedInstance = nil;
     [self.people append:properties];
 
     [self trackNotification:notification event:@"$campaign_delivery"];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (_currentlyShowingSurvey) {
-        if (buttonIndex == 1) {
-            [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
-        } else {
-            [self markSurvey:_currentlyShowingSurvey shown:NO withAnswerCount:0];
-            self.currentlyShowingSurvey = nil;
-        }
-    }
 }
 
 #pragma mark - A/B Testing (Designer)
