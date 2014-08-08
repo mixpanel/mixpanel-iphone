@@ -190,7 +190,6 @@ NSString * const kSessionVariantKey = @"session_variant";
         retries = 0;
     } else if (!self.connected && !self.sessionEnded && retries < 10) {
         MessagingDebug(@"Attempting to reconnect, attempt %d", retries);
-        _url = [NSURL URLWithString:[NSString stringWithFormat:@"%@a", [_url absoluteString]]];
         [self open];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(2, retries),30) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self reconnect];
