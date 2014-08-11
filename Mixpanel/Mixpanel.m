@@ -1133,6 +1133,8 @@ static Mixpanel *sharedInstance = nil;
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];
             self.variants = [allVariants copy];
+
+            self.decideResponseCached = YES;
         } else {
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
@@ -1170,6 +1172,15 @@ static Mixpanel *sharedInstance = nil;
     [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
         if (completion) {
             completion(notifications);
+        }
+    }];
+}
+
+- (void)checkForVariantsWithCompletion:(void (^)(NSSet *variants))completion
+{
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        if (completion) {
+            completion(variants);
         }
     }];
 }
@@ -1279,7 +1290,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-#pragma mark - Surveys (UIAlertViewDelegate)
+#pragma mark Surveys (UIAlertViewDelegate)
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -1483,7 +1494,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-#pragma mark - A/B Testing (Experiment)
+#pragma mark A/B Testing (Experiment)
 
 - (void)executeCachedVariants {
     for (MPVariant *variant in self.variants) {
@@ -1512,6 +1523,16 @@ static Mixpanel *sharedInstance = nil;
             [self archiveProperties];
         }
     });
+}
+
+- (void)joinExperiments
+{
+    [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
+        for (MPVariant *variant in newVariants) {
+            [variant execute];
+            [self markVariantRun:variant];
+        }
+    }];
 }
 
 @end
