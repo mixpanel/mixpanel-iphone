@@ -196,4 +196,9 @@
     [sourceViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)joinExperiments:(id)sender
+{
+    [[Mixpanel sharedInstance] joinExperiments];
+}
+
 @end

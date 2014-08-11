@@ -34,6 +34,8 @@
  */
 @interface Mixpanel : NSObject
 
+#pragma mark Properties
+
 /*!
  @property
 
@@ -196,6 +198,8 @@
  below for more information.
  */
 @property (atomic, weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
+
+#pragma mark Methods
 
 /*!
  @method
@@ -562,6 +566,21 @@
  You do not need to call this method on the main thread.
  */
 - (void)showNotification;
+
+/*!
+ @method
+
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+
+ @discussion
+ Mixpanel will check for A/B tests automatically when your app enters
+ the foreground. Call this method if you would like to to check for,
+ and join, any experiments are newly available for the current user.
+
+ You do not need to call this method on the main thread.
+ */
+- (void)joinExperiments;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
