@@ -272,7 +272,7 @@ static Mixpanel *sharedInstance = nil;
 
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(requestDesignerConnection:)];
+        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
         recognizer.minimumPressDuration = 3;
         recognizer.cancelsTouchesInView = NO;
 #if TARGET_IPHONE_SIMULATOR
@@ -1462,12 +1462,10 @@ static Mixpanel *sharedInstance = nil;
 
 #pragma mark - A/B Testing (Designer)
 
-- (void)requestDesignerConnection:(id)sender
+- (void)connectGestureRecognized:(id)sender
 {
-    if(!(self.abtestDesignerConnection && self.abtestDesignerConnection.connected)) {
-        if(!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan )) {
-            [self connectToABTestDesigner];
-        }
+    if(!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan )) {
+        [self connectToABTestDesigner];
     }
 }
 
