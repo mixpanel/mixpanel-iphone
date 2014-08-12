@@ -1040,6 +1040,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion
 {
+    [self checkForDecideResponseWithCompletion:completion useCache:YES];
+}
+
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion useCache:(BOOL)useCache
+{
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ decide check started", self);
         if (!self.people.distinctId) {
@@ -1049,7 +1054,7 @@ static Mixpanel *sharedInstance = nil;
 
         NSMutableSet *newVariants = [NSMutableSet set];
 
-        if (!self.decideResponseCached) {
+        if (!useCache || !self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
 
             NSData *peoplePropertiesJSON = [NSJSONSerialization dataWithJSONObject:self.people.automaticPeopleProperties options:0 error:nil];
@@ -1182,7 +1187,7 @@ static Mixpanel *sharedInstance = nil;
         if (completion) {
             completion(variants);
         }
-    }];
+    } useCache:NO];
 }
 
 #pragma mark - Surveys
