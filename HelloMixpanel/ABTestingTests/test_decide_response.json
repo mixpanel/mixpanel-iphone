@@ -13,6 +13,7 @@
                     "original":[["rgba(255, 255, 255, 1.00)","UIColor"]]
                 }
             ],
+            "tweaks":[],
             "id":1,
             "experiment_id":1
         },
@@ -27,6 +28,7 @@
                     "original":[[null,"UIColor"]]
                 }
             ],
+            "tweaks":[],
             "id":2,
             "experiment_id":2
         }

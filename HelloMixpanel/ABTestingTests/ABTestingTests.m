@@ -29,6 +29,7 @@
 @property (atomic, strong) NSDictionary *superProperties;
 
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion useCache:(BOOL)useCache;
 - (void)markVariantRun:(MPVariant *)variant;
 
 @end
@@ -373,17 +374,21 @@
     [self setupHTTPServer];
     int requestCount = [MixpanelDummyDecideConnection getRequestCount];
     [self.mixpanel identify:@"ABC"];
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {}];
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
+    }];
+    [self.mixpanel checkForDecideResponseWithCompletion:nil]; // This should use cache (no extra requests to decide)
     [self waitForSerialQueue];
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expect = [self expectationWithDescription:@"decide requested"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
-            XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
-            [expect fulfill];
-        });
-        [self waitForExpectationsWithTimeout:2 handler:nil];
-    }
+
+    XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide should have been queried once");
+    XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+    
+    // Test that we make another request if useCache is off
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
+    } useCache:NO];
+    [self waitForSerialQueue];
+    XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 2, @"Decide should have been queried again");
 }
 
 - (void)testVariantsTracked
