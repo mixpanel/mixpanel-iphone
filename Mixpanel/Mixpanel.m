@@ -1493,7 +1493,7 @@ static Mixpanel *sharedInstance = nil;
         for (MPVariant *variant in self.variants) {
             [variant stop];
         }
-        NSString *designerURLString = [NSString stringWithFormat:@"%@/connect/%@", self.switchboardURL, self.apiToken];
+        NSString *designerURLString = [NSString stringWithFormat:@"%@/connect?key=%@&type=device", self.switchboardURL, self.apiToken];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
     }
