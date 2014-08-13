@@ -377,18 +377,63 @@
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
         XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
     }];
-    [self.mixpanel checkForDecideResponseWithCompletion:nil]; // This should use cache (no extra requests to decide)
     [self waitForSerialQueue];
 
+    // Test that calling again uses the cache (no extra requests to decide).
+    [self.mixpanel checkForDecideResponseWithCompletion:nil];
+    [self waitForSerialQueue];
     XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide should have been queried once");
     XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
-    
+
     // Test that we make another request if useCache is off
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
         XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
     } useCache:NO];
     [self waitForSerialQueue];
     XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 2, @"Decide should have been queried again");
+
+    [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
+
+    __block BOOL completionCalled = NO;
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        completionCalled = YES;
+        XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
+    } useCache:NO];
+    [self waitForSerialQueue];
+    XCTAssert(completionCalled, @"completion block should have been called");
+    XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 3, @"Decide should have been queried again");
+
+    // Reset to default decide response
+    [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
+}
+
+-(void)testRunExperimentFromDecide
+{
+    // This view should be modified by the variant returned from decide.
+    UIButton *button = [[UIButton alloc] init];
+    button.backgroundColor = [UIColor blackColor];
+    [[self topViewController].view addSubview:button];
+
+    [self setupHTTPServer];
+    [self.mixpanel identify:@"ABC"];
+    [self.mixpanel joinExperiments];
+    [self waitForSerialQueue];
+
+    XCTAssertEqual([self.mixpanel.variants count], 2u, @"Should have 2 variants");
+    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
+    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && variant.running && !variant.finished;}] count], 1u, @"We should be running variant 2");
+    XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[0] * 255), 255, @"Button background should be red");
+
+    // Returning a new variant for the same experiment from decide should override the old one
+    [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
+    [self.mixpanel joinExperiments];
+    [self waitForSerialQueue];
+
+    XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
+    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
+    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && variant.running && variant.finished;}] count], 1u, @"Variant 2 should be running but marked as finished.");
+    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 3 && variant.running;}] count], 1u, @"We should be running variant 3");
+    XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[2] * 255), 255, @"Button background should be blue");
 }
 
 - (void)testVariantsTracked
