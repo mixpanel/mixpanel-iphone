@@ -13,10 +13,12 @@
 @implementation MixpanelDummyDecideConnection
 
 static int requestCount;
+static NSURL *decideResponseURL;
 
 + (void)initialize
 {
     requestCount = 0;
+    decideResponseURL = [[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"];
 }
 
 + (int)getRequestCount
@@ -24,10 +26,15 @@ static int requestCount;
     return requestCount;
 }
 
++(void)setDecideResponseURL:(NSURL *)url
+{
+    decideResponseURL = url;
+}
+
 - (NSObject<HTTPResponse> *)httpResponseForMethod:(NSString *)method URI:(NSString *)path
 {
     requestCount += 1;
-    NSData * decideResponse = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
+    NSData * decideResponse = [NSData dataWithContentsOfURL:decideResponseURL];
     NSLog(@"serving response: %@", [[NSString alloc] initWithData:decideResponse encoding:NSUTF8StringEncoding]);
     return [[HTTPDataResponse alloc] initWithData:decideResponse];
 }
