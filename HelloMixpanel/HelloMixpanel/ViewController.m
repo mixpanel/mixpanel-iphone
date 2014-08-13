@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
 @property (nonatomic, strong) IBOutlet UILabel *pointsLabel;
+@property (nonatomic, strong) IBOutlet UILabel *textLabel;
 
 
 @property (nonatomic, copy) NSString *showNotificationType;
@@ -40,8 +41,12 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 
-    if(self.pointsLabel) {
+    if (self.pointsLabel) {
         self.pointsLabel.text = [NSString stringWithFormat:@"%d points", MPTweakValue(@"points", 5)];
+    }
+    
+    if (self.textLabel) {
+        MPTweakBind(self.textLabel, text, @"Text", @"tweak me");
     }
 }
 
