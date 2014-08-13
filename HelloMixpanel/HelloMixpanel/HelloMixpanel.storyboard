@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
-        <!--Top Nav View Controller - Mixpanel-->
+        <!--Mixpanel-->
         <scene sceneID="U7B-9K-Nss">
             <objects>
                 <navigationController title="Mixpanel" definesPresentationContext="YES" id="Uq2-fg-yt9" customClass="TopNavViewController" sceneMemberID="viewController">
@@ -23,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="149" y="202"/>
         </scene>
-        <!--View Controller - Track-->
+        <!--Track-->
         <scene sceneID="mQi-ex-uaJ">
             <objects>
                 <viewController title="Track" id="ibJ-TT-khi" customClass="ViewController" sceneMemberID="viewController">
@@ -93,7 +94,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="em1-Jj-kpt"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
+                        <size key="portraitSize" width="320" height="568"/>
+                        <size key="landscapeSize" width="568" height="320"/>
+                    </simulatedScreenMetrics>
                     <connections>
                         <outlet property="fakeBackground" destination="Fgb-VT-EoI" id="bRE-qU-Ge4"/>
                         <outlet property="genderControl" destination="7Tp-Ub-ebv" id="lMk-1d-hWz"/>
@@ -104,7 +108,7 @@
             </objects>
             <point key="canvasLocation" x="1779" y="-38"/>
         </scene>
-        <!--Home View Controller - Mixpanel-->
+        <!--Mixpanel-->
         <scene sceneID="4C5-NK-bru">
             <objects>
                 <viewController title="Mixpanel" id="44e-Yt-MIg" customClass="HomeViewController" sceneMemberID="viewController">
@@ -277,7 +281,7 @@
             </objects>
             <point key="canvasLocation" x="987" y="425"/>
         </scene>
-        <!--Secret Whisper View Controller - Secret Whisper-->
+        <!--Secret Whisper-->
         <scene sceneID="z3A-Of-1gx">
             <objects>
                 <viewController title="Secret Whisper" id="atC-5D-Ob1" customClass="SecretWhisperViewController" sceneMemberID="viewController">
@@ -371,13 +375,16 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="76t-Ix-epp"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
+                        <size key="portraitSize" width="320" height="568"/>
+                        <size key="landscapeSize" width="568" height="320"/>
+                    </simulatedScreenMetrics>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="II3-Nc-53P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="986" y="922"/>
         </scene>
-        <!--View Controller - Notifications-->
+        <!--Notifications-->
         <scene sceneID="bIK-8d-7hJ">
             <objects>
                 <viewController title="Notifications" id="PAi-oO-Noz" customClass="ViewController" sceneMemberID="viewController">
@@ -478,7 +485,10 @@
                             <constraint firstItem="auC-4E-3iO" firstAttribute="top" secondItem="Ews-8i-K8A" secondAttribute="bottom" constant="18" id="ytt-Jb-Htd"/>
                         </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
+                        <size key="portraitSize" width="320" height="568"/>
+                        <size key="landscapeSize" width="568" height="320"/>
+                    </simulatedScreenMetrics>
                     <connections>
                         <outlet property="fakeBackground" destination="jGo-oH-Gk5" id="TPJ-z0-9sa"/>
                         <outlet property="notificationIDField" destination="auC-4E-3iO" id="BfD-i5-Btq"/>
@@ -489,7 +499,7 @@
             </objects>
             <point key="canvasLocation" x="1779" y="1500"/>
         </scene>
-        <!--View Controller - Surveys-->
+        <!--Surveys-->
         <scene sceneID="p1O-EO-wqa">
             <objects>
                 <viewController title="Surveys" id="lkb-Ai-epM" customClass="ViewController" sceneMemberID="viewController">
@@ -556,7 +566,10 @@
                             <constraint firstAttribute="trailing" secondItem="Fgb-VT-EoI" secondAttribute="trailing" id="kj0-UO-SU7"/>
                         </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
+                        <size key="portraitSize" width="320" height="568"/>
+                        <size key="landscapeSize" width="568" height="320"/>
+                    </simulatedScreenMetrics>
                     <connections>
                         <outlet property="fakeBackground" destination="Fgb-VT-EoI" id="ZXN-xz-T6e"/>
                         <outlet property="surveyIDField" destination="KGy-u2-8IA" id="cRW-HG-TQJ"/>
@@ -617,7 +630,7 @@
             </objects>
             <point key="canvasLocation" x="2274" y="1811"/>
         </scene>
-        <!--View Controller - Item 1-->
+        <!--Item 1-->
         <scene sceneID="uLx-b1-WMe">
             <objects>
                 <viewController id="zof-Y0-cqK" sceneMemberID="viewController">
@@ -818,13 +831,16 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2778" y="2118"/>
         </scene>
-        <!--Tab Bar Controller - Kitchen Sink-->
+        <!--Kitchen Sink-->
         <scene sceneID="8Yl-g8-Oxb">
             <objects>
                 <tabBarController definesPresentationContext="YES" id="CZL-Lr-gEG" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" title="Kitchen Sink" id="kg3-r1-xaJ"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics">
+                        <size key="portraitSize" width="320" height="480"/>
+                        <size key="landscapeSize" width="480" height="320"/>
+                    </simulatedScreenMetrics>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="2Op-4B-s72">
                         <rect key="frame" x="129" y="330" width="163" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -840,7 +856,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2274" y="2474"/>
         </scene>
-        <!--View Controller - Item-->
+        <!--Item-->
         <scene sceneID="Ejd-Ic-I9O">
             <objects>
                 <viewController id="PYM-Pj-6bq" sceneMemberID="viewController">
@@ -886,7 +902,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2784" y="3368"/>
         </scene>
-        <!--View Controller - Item 2-->
+        <!--Item 2-->
         <scene sceneID="MlI-Hh-ZeY">
             <objects>
                 <viewController id="Z1R-cg-a4N" sceneMemberID="viewController">
@@ -904,7 +920,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                     <constraint firstAttribute="height" constant="162" id="cda-Hz-whA"/>
                                 </constraints>
                                 <date key="date" timeIntervalSinceReferenceDate="421182925.38498503">
-                                    <!--<__NSDate Class=2014-05-07 19:15:25 +0000 timeInterval=421182925.384985 ISO8601=2014-05-07T12:15:25.385-0700>-->
+                                    <!--2014-05-07 19:15:25 +0000-->
                                 </date>
                             </datePicker>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hNP-yy-hAs">
@@ -938,7 +954,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2778" y="2785"/>
         </scene>
-        <!--View Controller - A/B Testing-->
+        <!--A/B Testing-->
         <scene sceneID="cMo-ro-H4D">
             <objects>
                 <viewController title="A/B Testing" id="dag-He-PtO" customClass="ViewController" sceneMemberID="viewController">
@@ -951,7 +967,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is a label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xb-bA-KXH">
-                                <rect key="frame" x="101" y="97" width="118" height="21"/>
+                                <rect key="frame" x="101" y="49" width="118" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -974,8 +990,8 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                     <segue destination="CZL-Lr-gEG" kind="push" identifier="PushToKitchenSink" id="PzU-qC-vVl"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2FA-bp-70L">
-                                <rect key="frame" x="197" y="483" width="115" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2FA-bp-70L">
+                                <rect key="frame" x="103" y="86" width="115" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -989,12 +1005,11 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                     <action selector="joinExperiments:" destination="dag-He-PtO" eventType="touchUpInside" id="SbM-q2-bhQ"/>
                                 </connections>
                             </button>
+                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="yls-NG-mD4">
+                                <rect key="frame" x="104" y="132" width="113" height="114"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="2FA-bp-70L" secondAttribute="trailing" constant="-8" id="4Fh-nG-ogf"/>
-                            <constraint firstItem="f0c-DX-yW2" firstAttribute="top" secondItem="2FA-bp-70L" secondAttribute="bottom" constant="20" id="SGl-t1-ANT"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="A/B Testing" id="1ZX-Pw-qY6">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="nl9-vb-kVe">
@@ -1004,9 +1019,13 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
+                        <size key="portraitSize" width="320" height="568"/>
+                        <size key="landscapeSize" width="568" height="320"/>
+                    </simulatedScreenMetrics>
                     <connections>
                         <outlet property="pointsLabel" destination="2FA-bp-70L" id="THr-jT-QfN"/>
+                        <outlet property="textLabel" destination="4xb-bA-KXH" id="f8o-29-ERE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rfw-Ui-bcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1023,6 +1042,9 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4">
+            <size key="portraitSize" width="320" height="568"/>
+            <size key="landscapeSize" width="568" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
 </document>
