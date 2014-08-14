@@ -21,18 +21,21 @@
 @property (nonatomic, assign)SEL selector;
 @property (nonatomic, strong)NSArray *args;
 @property (nonatomic, strong)NSArray *original;
+@property (nonatomic, assign)BOOL cacheOriginal;
 
 @property (nonatomic, assign)BOOL swizzle;
 @property (nonatomic, assign)Class swizzleClass;
 @property (nonatomic, assign)SEL swizzleSelector;
 
 @property (nonatomic, copy) NSHashTable *appliedTo;
+@property (nonatomic, copy) NSMapTable *originalCache;
 
 + (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object;
 - (id) initWithName:(NSString *)name
                path:(MPObjectSelector *)path
            selector:(SEL)selector
                args:(NSArray *)args
+      cacheOriginal:(BOOL)cacheOriginal
            original:(NSArray *)original
             swizzle:(BOOL)swizzle
        swizzleClass:(Class)swizzleClass
@@ -254,6 +257,19 @@
 
 @implementation MPVariantAction
 
+/*
+ A mapping of setter selectors to getters. If we have an action that attempts
+ to call the setter, we first cache the value returned from the getter
+ */
+static NSMapTable *cacheOriginalsForSelectors;
+
++ (void)load
+{
+    cacheOriginalsForSelectors = [[NSMapTable alloc] initWithKeyOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) valueOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) capacity:2];
+    [cacheOriginalsForSelectors setObject:(__bridge id)((void *)NSSelectorFromString(@"imageForState:")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:forState:"))];
+    [cacheOriginalsForSelectors setObject:(__bridge id)((void *)NSSelectorFromString(@"image")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:"))];
+}
+
 + (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object
 {
     // Required parameters
@@ -276,7 +292,8 @@
     }
 
     // Optional parameters
-    NSArray *original = object[@"original"];
+    BOOL cacheOriginal = !object[@"cacheOriginal"] || [object[@"swizzle"] boolValue];
+    NSArray *original = [object[@"original"] isKindOfClass:[NSArray class]] ? object[@"original"] : nil;
     NSString *name = object[@"name"];
     BOOL swizzle = !object[@"swizzle"] || [object[@"swizzle"] boolValue];
     Class swizzleClass = NSClassFromString(object[@"swizzleClass"]);
@@ -286,6 +303,7 @@
                                             path:path
                                         selector:selector
                                             args:args
+                                   cacheOriginal:cacheOriginal
                                         original:original
                                          swizzle:swizzle
                                     swizzleClass:swizzleClass
@@ -302,6 +320,7 @@
                path:(MPObjectSelector *)path
            selector:(SEL)selector
                args:(NSArray *)args
+      cacheOriginal:(BOOL)cacheOriginal
            original:(NSArray *)original
             swizzle:(BOOL)swizzle
        swizzleClass:(Class)swizzleClass
@@ -313,6 +332,7 @@
         self.args = args;
         self.original = original;
         self.swizzle = swizzle;
+        self.cacheOriginal = cacheOriginal;
 
         if (!name) {
             name = [[NSUUID UUID] UUIDString];
@@ -328,14 +348,13 @@
         self.swizzleClass = swizzleClass;
 
         if (!swizzleSelector) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wselector"
-            swizzleSelector = @selector(didMoveToWindow);
-#pragma clang diagnostic pop
+            swizzleSelector = NSSelectorFromString(@"didMoveToWindow");
         }
         self.swizzleSelector = swizzleSelector;
 
         self.appliedTo = [NSHashTable hashTableWithOptions:(NSHashTableWeakMemory|NSHashTableObjectPointerPersonality)];
+        self.originalCache = [NSMapTable mapTableWithKeyOptions:(NSMapTableWeakMemory|NSMapTableObjectPointerPersonality)
+                                                   valueOptions:(NSMapTableStrongMemory|NSMapTableObjectPointerPersonality)];
     }
     return self;
 }
@@ -380,14 +399,19 @@
     NSLog(@"Executing %@", self);
     // Block to execute on swizzle
     void (^executeBlock)(id, SEL) = ^(id view, SEL command){
-        NSArray *objects = [[self class] executeSelector:self.selector
+
+        if (self.cacheOriginal) {
+            [self cacheOriginalImage:view];
+        }
+        
+        NSArray *invocations = [[self class] executeSelector:self.selector
                                                   withArgs:self.args
                                                     onPath:self.path
                                                   fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
                                                     toLeaf:view];
 
-        for (id o in objects) {
-            [self.appliedTo addObject:o];
+        for (NSInvocation *invocation in invocations) {
+            [self.appliedTo addObject:invocation.target];
         }
     };
 
@@ -417,10 +441,57 @@
                           onClass:self.swizzleClass
                             named:self.name];
 
-    // Undo the current changes (if we know how to undo them)
     if (self.original) {
+        // Undo the changes with the original values specified in the action
         [[self class] executeSelector:self.selector withArgs:self.original onObjects:[self.appliedTo allObjects]];
-        [self.appliedTo removeAllObjects];
+    } else if (self.cacheOriginal) {
+        // Or undo them from the local cache of original images
+        [self restoreCachedImage];
+    }
+
+    [self.appliedTo removeAllObjects];
+    [self.originalCache removeAllObjects];
+}
+
+- (void)cacheOriginalImage:(id)view
+{
+    NSEnumerator *selectorEnum = [cacheOriginalsForSelectors keyEnumerator];
+    SEL selector = nil, cacheSelector = nil;
+    while((selector = (SEL)((__bridge void *)[selectorEnum nextObject]))) {
+        if (selector == self.selector) {
+            cacheSelector = (SEL)(__bridge void *)[cacheOriginalsForSelectors objectForKey:(__bridge id)((void *)selector)];
+            break;
+        }
+    }
+    if (cacheSelector) {
+        NSArray *cacheInvocations = [[self class] executeSelector:cacheSelector
+                                                         withArgs:self.args
+                                                           onPath:self.path
+                                                         fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
+                                                           toLeaf:view];
+        for (NSInvocation *invocation in cacheInvocations) {
+            UIImage *originalImage;
+            [invocation getReturnValue:&originalImage];
+            [self.originalCache setObject:originalImage forKey:invocation.target];
+        }
+    }
+}
+
+- (void)restoreCachedImage
+{
+    for (NSObject *o in [self.appliedTo allObjects]) {
+        UIImage *originalImage = [self.originalCache objectForKey:o];
+        if (originalImage) {
+            NSMutableArray *originalArgs = [self.args mutableCopy];
+            uint n = [originalArgs count];
+            for (uint i = 0; i < n; i++) {
+                if ([originalArgs[i] isKindOfClass:[NSArray class]] && [originalArgs[i][1] isEqual:@"UIImage"]) {
+                    originalArgs[i] = @[originalImage, @"UIImage"];
+                    break;
+                }
+            }
+            [[self class] executeSelector:self.selector withArgs:originalArgs onObjects:@[o]];
+        }
     }
 }
 
@@ -444,7 +515,7 @@
 
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects
 {
-    NSMutableArray *executedOn = [NSMutableArray array];
+    NSMutableArray *invocations = [NSMutableArray array];
     if (objects && [objects count] > 0) {
         NSLog(@"Invoking on %lu objects", (unsigned long)[objects count]);
         for (NSObject *o in objects) {
@@ -467,7 +538,7 @@
                             NSGetSizeAndAlignment(ctype, &size, nil);
                             void *buf = malloc(size);
                             [(NSValue *)arg getValue:buf];
-                            [invocation setArgument:(void *)buf atIndex:(int)(i+2)];
+                            [invocation setArgument:buf atIndex:(int)(i+2)];
                             free(buf);
                         } else {
                             [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
@@ -478,20 +549,20 @@
                         [invocation invokeWithTarget:o];
                     }
                     @catch (NSException *exception) {
-                        NSLog(@"%@", exception);
+                        NSLog(@"Exception during invocation: %@", exception);
                     }
-                    [executedOn addObject:o];
+                    [invocations addObject:invocation];
                 } else {
                     NSLog(@"Not enough args");
                 }
             } else {
-                NSLog(@"No selector");
+                NSLog(@"No method found for %@", NSStringFromSelector(selector));
             }
         }
     } else {
         NSLog(@"No objects matching pattern");
     }
-    return [executedOn copy];
+    return [invocations copy];
 }
 
 @end

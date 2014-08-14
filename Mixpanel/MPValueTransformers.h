@@ -43,9 +43,14 @@
 @interface MPNSNumberToCGFloatValueTransformer : NSValueTransformer
 @end
 
-__unused static id transformValue(id value, NSString *toType) {
-
+__unused static id transformValue(id value, NSString *toType)
+{
     assert(value != nil);
+
+    if ([value isKindOfClass:[NSClassFromString(toType) class]]) {
+        return [[NSValueTransformer valueTransformerForName:@"MPPassThroughValueTransformer"] transformedValue:value];
+    }
+
     NSString *fromType = nil;
     NSArray *validTypes = @[[NSString class], [NSNumber class], [NSDictionary class], [NSArray class], [NSNull class]];
     for (Class c in validTypes) {

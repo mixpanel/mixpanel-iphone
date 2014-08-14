@@ -44,7 +44,7 @@
     if (self.pointsLabel) {
         self.pointsLabel.text = [NSString stringWithFormat:@"%d points", MPTweakValue(@"points", 5)];
     }
-    
+
     if (self.textLabel) {
         MPTweakBind(self.textLabel, text, @"Text", @"tweak me");
     }
