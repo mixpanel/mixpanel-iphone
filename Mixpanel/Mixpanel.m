@@ -1518,9 +1518,7 @@ static Mixpanel *sharedInstance = nil;
 - (void)executeCachedVariants {
     for (MPVariant *variant in self.variants) {
         NSAssert(!variant.running, @"Variant should not be running at this point");
-        if (!variant.finished) {
-            [variant execute];
-        }
+        [variant execute];
     }
 }
 
