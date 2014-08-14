@@ -28,7 +28,6 @@
 @property (nonatomic, assign)SEL swizzleSelector;
 
 @property (nonatomic, copy) NSHashTable *appliedTo;
-@property (nonatomic, copy) NSMapTable *originalCache;
 
 + (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object;
 - (id) initWithName:(NSString *)name
@@ -262,12 +261,16 @@
  to call the setter, we first cache the value returned from the getter
  */
 static NSMapTable *gettersForSetters;
+static NSMapTable *originalCache;
 
 + (void)load
 {
     gettersForSetters = [[NSMapTable alloc] initWithKeyOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) valueOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) capacity:2];
     [gettersForSetters setObject:(__bridge id)((void *)NSSelectorFromString(@"imageForState:")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:forState:"))];
     [gettersForSetters setObject:(__bridge id)((void *)NSSelectorFromString(@"image")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:"))];
+
+    originalCache = [NSMapTable mapTableWithKeyOptions:(NSMapTableWeakMemory|NSMapTableObjectPointerPersonality)
+                                          valueOptions:(NSMapTableStrongMemory|NSMapTableObjectPointerPersonality)];
 }
 
 + (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object
@@ -353,8 +356,6 @@ static NSMapTable *gettersForSetters;
         self.swizzleSelector = swizzleSelector;
 
         self.appliedTo = [NSHashTable hashTableWithOptions:(NSHashTableWeakMemory|NSHashTableObjectPointerPersonality)];
-        self.originalCache = [NSMapTable mapTableWithKeyOptions:(NSMapTableWeakMemory|NSMapTableObjectPointerPersonality)
-                                                   valueOptions:(NSMapTableStrongMemory|NSMapTableObjectPointerPersonality)];
     }
     return self;
 }
@@ -403,7 +404,7 @@ static NSMapTable *gettersForSetters;
         if (self.cacheOriginal) {
             [self cacheOriginalImage:view];
         }
-        
+
         NSArray *invocations = [[self class] executeSelector:self.selector
                                                   withArgs:self.args
                                                     onPath:self.path
@@ -450,7 +451,6 @@ static NSMapTable *gettersForSetters;
     }
 
     [self.appliedTo removeAllObjects];
-    [self.originalCache removeAllObjects];
 }
 
 - (void)cacheOriginalImage:(id)view
@@ -470,9 +470,12 @@ static NSMapTable *gettersForSetters;
                                                          fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
                                                            toLeaf:view];
         for (NSInvocation *invocation in cacheInvocations) {
-            UIImage *originalImage;
-            [invocation getReturnValue:&originalImage];
-            [self.originalCache setObject:originalImage forKey:invocation.target];
+            if (![originalCache objectForKey:invocation.target]) {
+                NSLog(@"caching original image");
+                UIImage *originalImage;
+                [invocation getReturnValue:&originalImage];
+                [originalCache setObject:originalImage forKey:invocation.target];
+            }
         }
     }
 }
@@ -480,7 +483,7 @@ static NSMapTable *gettersForSetters;
 - (void)restoreCachedImage
 {
     for (NSObject *o in [self.appliedTo allObjects]) {
-        UIImage *originalImage = [self.originalCache objectForKey:o];
+        id originalImage = [originalCache objectForKey:o];
         if (originalImage) {
             NSMutableArray *originalArgs = [self.args mutableCopy];
             uint n = [originalArgs count];
@@ -490,13 +493,15 @@ static NSMapTable *gettersForSetters;
                     break;
                 }
             }
+            NSLog(@"restoring original image");
             [[self class] executeSelector:self.selector withArgs:originalArgs onObjects:@[o]];
+            [originalCache removeObjectForKey:o];
         }
     }
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"Action: Change %@ on %@ matching %@ from %@ to %@", NSStringFromSelector(self.selector), NSStringFromClass(self.class), self.path.string, self.original, self.args];
+    return [NSString stringWithFormat:@"Action: Change %@ on %@ matching %@ from %@ to %@", NSStringFromSelector(self.selector), NSStringFromClass(self.class), self.path.string, self.original ?: (self.cacheOriginal ? @"Cached Original" : nil) , self.args];
 }
 
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
