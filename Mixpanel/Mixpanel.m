@@ -1490,12 +1490,26 @@ static Mixpanel *sharedInstance = nil;
     if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
         NSLog(@"A/B test designer connection already exists");
     } else {
-        for (MPVariant *variant in self.variants) {
-            [variant stop];
-        }
         NSString *designerURLString = [NSString stringWithFormat:@"%@/connect?key=%@&type=device", self.switchboardURL, self.apiToken];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
-        self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL];
+        __weak Mixpanel *weakSelf = self;
+        self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
+                                                                        connectCallback:^{
+                                                                            __strong Mixpanel *strongSelf = weakSelf;
+                                                                            if (strongSelf) {
+                                                                                for (MPVariant *variant in self.variants) {
+                                                                                    [variant stop];
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        disconnectCallback:^{
+                                                                            __strong Mixpanel *strongSelf = weakSelf;
+                                                                            if (strongSelf) {
+                                                                                for (MPVariant *variant in self.variants) {
+                                                                                    [variant execute];
+                                                                                }
+                                                                            }
+                                                                        }];
     }
 }
 

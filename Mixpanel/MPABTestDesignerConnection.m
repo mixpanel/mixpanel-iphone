@@ -24,19 +24,29 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 @implementation MPABTestDesignerConnection
 {
+    /* The difference between _open and _connected is that open
+     is set when the socket is open, and _connected is set when
+     we actually have started sending/receiving messages from
+     the server. A connection can become _open/not _open in quick
+     succession if the websocket proxy rejects the request, but
+     we will only try and reconnect if we were actually _connected.
+     */
+    BOOL _open;
+    BOOL _connected;
     NSURL *_url;
     NSMutableDictionary *_session;
     NSDictionary *_typeToMessageClassMap;
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
     UIView *_recordingView;
+    void (^_connectCallback)();
+    void (^_disconnectCallback)();
 }
 
-- (id)initWithURL:(NSURL *)url
+- (id)initWithURL:(NSURL *)url connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _typeToMessageClassMap = @{
             MPABTestDesignerSnapshotRequestMessageType   : [MPABTestDesignerSnapshotRequestMessage class],
             MPABTestDesignerChangeRequestMessageType     : [MPABTestDesignerChangeRequestMessage class],
@@ -46,10 +56,13 @@ NSString * const kSessionVariantKey = @"session_variant";
             MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
         };
 
-        _sessionEnded = NO;
+        _open = NO;
         _connected = NO;
+        _sessionEnded = NO;
         _session = [[NSMutableDictionary alloc] init];
         _url = url;
+        _connectCallback = connectCallback;
+        _disconnectCallback = disconnectCallback;
 
         _commandQueue = [[NSOperationQueue alloc] init];
         _commandQueue.maxConcurrentOperationCount = 1;
@@ -59,6 +72,11 @@ NSString * const kSessionVariantKey = @"session_variant";
     }
 
     return self;
+}
+
+- (id)initWithURL:(NSURL *)url
+{
+    return [self initWithURL:url connectCallback:nil disconnectCallback:nil];
 }
 
 - (void)open
@@ -140,6 +158,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)webSocket:(MPWebSocket *)webSocket didReceiveMessage:(id)message
 {
+    if (!_connected) {
+        _connected = YES;
+        [self showConnectedView];
+        if (_connectCallback) {
+            _connectCallback();
+        }
+    }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
     MessagingDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
 
@@ -153,10 +178,9 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
+    _open = YES;
     MessagingDebug(@"WebSocket did open.");
-    self.connected = YES;
     _commandQueue.suspended = NO;
-    [self showConnectedView];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -165,8 +189,14 @@ NSString * const kSessionVariantKey = @"session_variant";
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
-    self.connected = NO;
-    [self reconnect:YES];
+    _open = NO;
+    if (_connected) {
+        _connected = NO;
+        [self reconnect:YES];
+        if (_disconnectCallback) {
+            _disconnectCallback();
+        }
+    }
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
@@ -176,24 +206,34 @@ NSString * const kSessionVariantKey = @"session_variant";
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
-    self.connected = NO;
-    [self reconnect:YES];
+    _open = NO;
+    if (_connected) {
+        _connected = NO;
+        [self reconnect:YES];
+        if (_disconnectCallback) {
+            _disconnectCallback();
+        }
+    }
 }
 
-- (void)reconnect:(BOOL)first
+- (void)reconnect:(BOOL)initiate
 {
     static int retries = 0;
-    if (self.sessionEnded || self.connected || retries >= 10) {
+    if (self.sessionEnded || _connected || retries >= 10) {
         // If we deliberately closed the connection, or are already connected
-        // or we tried too many times, then reset the retry count and stop.
+        // or we tried too many times, then stop retrying.
         retries = 0;
-    } else if(first ^ (retries > 0)) {
-        // If either this is the first try at reconnecting, or we are already in a
+    } else if(initiate ^ (retries > 0)) {
+        // If we are initiating a reconnect, or we are already in a
         // reconnect cycle (but not both). Then continue trying.
         MessagingDebug(@"Attempting to reconnect, attempt %d", retries);
-        [self open];
+        if (!_open) {
+            [self open];
+        }
+        __weak MPABTestDesignerConnection *weakSelf = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(2, retries),10) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self reconnect:NO];
+            MPABTestDesignerConnection *strongSelf = weakSelf;
+            [strongSelf reconnect:NO];
         });
         retries++;
     }
