@@ -261,13 +261,13 @@
  A mapping of setter selectors to getters. If we have an action that attempts
  to call the setter, we first cache the value returned from the getter
  */
-static NSMapTable *cacheOriginalsForSelectors;
+static NSMapTable *gettersForSetters;
 
 + (void)load
 {
-    cacheOriginalsForSelectors = [[NSMapTable alloc] initWithKeyOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) valueOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) capacity:2];
-    [cacheOriginalsForSelectors setObject:(__bridge id)((void *)NSSelectorFromString(@"imageForState:")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:forState:"))];
-    [cacheOriginalsForSelectors setObject:(__bridge id)((void *)NSSelectorFromString(@"image")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:"))];
+    gettersForSetters = [[NSMapTable alloc] initWithKeyOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) valueOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) capacity:2];
+    [gettersForSetters setObject:(__bridge id)((void *)NSSelectorFromString(@"imageForState:")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:forState:"))];
+    [gettersForSetters setObject:(__bridge id)((void *)NSSelectorFromString(@"image")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:"))];
 }
 
 + (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object
@@ -455,11 +455,11 @@ static NSMapTable *cacheOriginalsForSelectors;
 
 - (void)cacheOriginalImage:(id)view
 {
-    NSEnumerator *selectorEnum = [cacheOriginalsForSelectors keyEnumerator];
+    NSEnumerator *selectorEnum = [gettersForSetters keyEnumerator];
     SEL selector = nil, cacheSelector = nil;
     while((selector = (SEL)((__bridge void *)[selectorEnum nextObject]))) {
         if (selector == self.selector) {
-            cacheSelector = (SEL)(__bridge void *)[cacheOriginalsForSelectors objectForKey:(__bridge id)((void *)selector)];
+            cacheSelector = (SEL)(__bridge void *)[gettersForSetters objectForKey:(__bridge id)((void *)selector)];
             break;
         }
     }
