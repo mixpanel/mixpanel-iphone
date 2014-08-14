@@ -195,7 +195,7 @@
 #pragma mark Execution
 
 - (void)execute {
-    if (!self.running) {
+    if (!self.running && !self.finished) {
         for (MPVariantTweak *tweak in self.tweaks) {
             [tweak execute];
         }
@@ -213,6 +213,7 @@
     for (MPVariantTweak *tweak in self.tweaks) {
         [tweak stop];
     }
+    _running = NO;
 }
 
 - (void)finish {
