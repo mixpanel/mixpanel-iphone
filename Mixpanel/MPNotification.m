@@ -149,7 +149,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSData *imageData = [NSData dataWithContentsOfURL:_imageURL options:NSDataReadingMappedIfSafe error:&error];
         if (error || !imageData) {
             NSLog(@"image failed to load from URL: %@", _imageURL);
-            return NO;
+            return nil;
         }
         _image = imageData;
     }
