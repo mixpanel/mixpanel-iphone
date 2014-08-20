@@ -13,6 +13,11 @@
 #import "MPTweakStore.h"
 #import "MPTweak.h"
 
+@interface MPVariant ()
+    @property (nonatomic, strong) NSMutableOrderedSet *actions;
+    @property (nonatomic, strong) NSMutableArray *tweaks;
+@end
+
 @interface MPVariantAction ()
 
 @property (nonatomic, strong)NSString *name;

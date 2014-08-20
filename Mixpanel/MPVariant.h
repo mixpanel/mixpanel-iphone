@@ -12,8 +12,6 @@
 
 @property (nonatomic) NSUInteger ID;
 @property (nonatomic) NSUInteger experimentID;
-@property (nonatomic, strong) NSMutableArray *actions;
-@property (nonatomic, strong) NSMutableArray *tweaks;
 
 /*!
  @property
