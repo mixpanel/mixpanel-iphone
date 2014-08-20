@@ -115,10 +115,9 @@
     NSMutableArray *variations = [[NSMutableArray alloc] init];
 
     // TODO: write an algorithm that generates all the variations of parameter combinations.
-
-    MPPropertySelectorParameterDescription *parameterDescription = [selectorDescription.parameters firstObject];
-    if (parameterDescription)
+    if ([selectorDescription.parameters count] > 0)
     {
+        MPPropertySelectorParameterDescription *parameterDescription = [selectorDescription.parameters objectAtIndex:0];
         for (id value in [self allValuesForType:parameterDescription.type])
         {
             [variations addObject:@[ value ]];

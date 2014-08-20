@@ -57,7 +57,7 @@
 
         NSScanner *scanner = [NSScanner scannerWithString:stringValue];
         [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"rgba(), "]];
-        [scanner setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+        [scanner setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
 
         int r = 0, g = 0, b = 0;
         float a = 1.0f;

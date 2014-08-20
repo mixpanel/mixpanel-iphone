@@ -6,6 +6,7 @@
 #import "MPClassDescription.h"
 #import "MPObjectSerializerConfig.h"
 #import "MPObjectIdentityProvider.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation MPApplicationStateSerializer
 {
@@ -36,10 +37,17 @@
     if (window)
     {
         UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, window.screen.scale);
-        if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES] == NO)
-        {
-            NSLog(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+            if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES] == NO) {
+                NSLog(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+            }
+        } else {
+            [window.layer renderInContext:UIGraphicsGetCurrentContext()];
         }
+#else
+        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+#endif
         image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
     }
