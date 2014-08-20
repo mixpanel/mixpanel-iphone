@@ -115,7 +115,7 @@
     if(self = [super init]) {
         self.ID = ID;
         self.experimentID = experimentID;
-        self.actions = [NSMutableArray array];
+        self.actions = [NSMutableOrderedSet orderedSet];
         self.tweaks = [NSMutableArray array];
         [self addTweaksFromJSONObject:tweaks andExecute:NO];
         [self addActionsFromJSONObject:actions andExecute:NO];
@@ -161,6 +161,8 @@
 {
     MPVariantAction *action = [MPVariantAction actionWithJSONObject:object];
     if(action) {
+        // Remove any action already in use for this name
+        [self.actions removeObject:action];
         [self.actions addObject:action];
         if (exec) {
             [action execute];
@@ -173,7 +175,7 @@
     for (MPVariantAction *action in self.actions) {
         if([action.name isEqualToString:name]) {
             [action stop];
-            [self.actions removeObjectIdenticalTo:action];
+            [self.actions removeObject:action];
             break;
         }
     }
@@ -441,7 +443,7 @@ static NSMapTable *originalCache;
 
 - (void)stop
 {
-    NSLog(@"Stopping %@ (%lu to be reverted)", self, (unsigned long)[self.appliedTo count]);
+    NSLog(@"Stopping Action %@ (%p) (%lu to be reverted)", self , self, (unsigned long)[self.appliedTo count]);
     // Stop this change from applying in future
     [MPSwizzler unswizzleSelector:self.swizzleSelector
                           onClass:self.swizzleClass
@@ -516,7 +518,6 @@ static NSMapTable *originalCache;
 
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
 {
-    NSLog(@"Looking for objects matching %@ on path from %@ to %@", path, [root class], [leaf class]);
     if (leaf){
         if ([path isLeafSelected:leaf fromRoot:root]) {
             return [self executeSelector:selector withArgs:args onObjects:@[leaf]];
@@ -578,6 +579,30 @@ static NSMapTable *originalCache;
         NSLog(@"No objects matching pattern");
     }
     return [invocations copy];
+}
+
+
+#pragma mark Equality
+
+- (BOOL)isEqualToAction:(MPVariantAction *)action
+{
+    return [self.name isEqualToString:action.name];
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (self == object) {
+        return YES;
+    }
+    if (![object isKindOfClass:[MPVariantAction class]]) {
+        return NO;
+    }
+    return [self isEqualToAction:(MPVariantAction *)object];
+}
+
+- (NSUInteger)hash
+{
+    return [self.name hash];
 }
 
 @end
@@ -675,6 +700,31 @@ static NSMapTable *originalCache;
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"Tweak: %@ = %@", self.name, self.value];
+}
+
+#pragma mark Equality
+
+- (BOOL)isEqualToTweak:(MPVariantTweak *)tweak
+{
+    return [self.name isEqualToString:tweak.name];
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (self == object) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[MPVariantTweak class]]) {
+        return NO;
+    }
+
+    return [self isEqualToTweak:(MPVariantTweak *)object];
+}
+
+- (NSUInteger)hash
+{
+    return [self.name hash];
 }
 
 @end
