@@ -212,6 +212,12 @@ static Mixpanel *sharedInstance = nil;
                                selector:@selector(applicationWillEnterForeground:)
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
+
+        [notificationCenter addObserver:self
+                               selector:@selector(appLinksNotificationRaised:)
+                                   name:@"com.parse.bolts.measurement_event"
+                                 object:nil];
+
         [self unarchive];
         
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
@@ -925,7 +931,7 @@ static Mixpanel *sharedInstance = nil;
     [self stopFlushTimer];
 }
 
-- (void)applicationDidEnterBackground:(NSNotificationCenter *)notification
+- (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ did enter background", self);
 
@@ -991,6 +997,14 @@ static Mixpanel *sharedInstance = nil;
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
     [self trackPushNotification:userInfo event:@"$campaign_received"];
+}
+
+- (void)appLinksNotificationRaised:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    if (userInfo && userInfo[@"event_name"] && userInfo[@"event_args"]) {
+        [self track:userInfo[@"event_name"] properties:userInfo[@"event_args"]];
+    }
 }
 
 #pragma mark - Decide
