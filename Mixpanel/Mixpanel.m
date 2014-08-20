@@ -27,8 +27,21 @@
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
+#import "UIView+MPSnapshotImage.h"
 
 #define VERSION @"2.7.2"
+
+#ifdef MIXPANEL_LOG
+#define MixpanelLog(...) NSLog(__VA_ARGS__)
+#else
+#define MixpanelLog(...)
+#endif
+
+#ifdef MIXPANEL_DEBUG
+#define MixpanelDebug(...) NSLog(__VA_ARGS__)
+#else
+#define MixpanelDebug(...)
+#endif
 
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
@@ -62,16 +75,13 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
-<<<<<<< HEAD
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
-=======
 @property (atomic) BOOL trackIp;
->>>>>>> c0de96a... Added setConfigTrackIp to be HIPAA compliant
 
 @end
 
@@ -172,17 +182,16 @@ static Mixpanel *sharedInstance = nil;
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
+        self.checkForSurveysOnActive = YES;
         self.surveys = nil;
         self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
-<<<<<<< HEAD
         self.variants = nil;
 
         [self setUpListeners];
-=======
         self.trackIp = YES;
         
         // wifi reachability
@@ -236,7 +245,6 @@ static Mixpanel *sharedInstance = nil;
                                selector:@selector(applicationWillEnterForeground:)
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
->>>>>>> c0de96a... Added setConfigTrackIp to be HIPAA compliant
         [self unarchive];
         [self executeCachedVariants];
         
