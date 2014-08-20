@@ -272,6 +272,18 @@
  */
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
 
+
+/*!
+ @method
+ 
+ @abstract
+ Configures if IP location should be sent to Mixpanel server.
+ 
+ @param trackIp         a boolean defining if IP should be sent to Mixpanel server.
+ */
+- (void) setConfigTrackIp: (BOOL) trackIp;
+
+
 /*!
  @property
 

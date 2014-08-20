@@ -64,6 +64,8 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
+@property (atomic) BOOL trackIp;
+
 @end
 
 @interface MixpanelPeople ()
@@ -160,7 +162,8 @@ static Mixpanel *sharedInstance = nil;
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
-
+        self.trackIp = YES;
+        
         // wifi reachability
         BOOL reachabilityOk = NO;
         if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
@@ -225,6 +228,10 @@ static Mixpanel *sharedInstance = nil;
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
 {
     return [self initWithToken:apiToken launchOptions:nil andFlushInterval:flushInterval];
+}
+
+- (void) setConfigTrackIp:(BOOL)trackIp{
+    self.trackIp = trackIp;
 }
 
 - (void)dealloc
@@ -694,7 +701,7 @@ static Mixpanel *sharedInstance = nil;
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
 
         NSString *requestData = [self encodeAPIData:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
+        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.trackIp ? 1 : 0, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
