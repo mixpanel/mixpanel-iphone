@@ -46,10 +46,16 @@
             [imageDictionaries addObject:imageDictionary];
         }
 
+        NSInteger renderingMode = 0;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        if ([image respondsToSelector:@selector(renderingMode)]) {
+            renderingMode = image.renderingMode;
+        }
+#endif
         transformedValue = @{
            @"imageOrientation": @(image.imageOrientation),
-           @"renderingMode": @(image.renderingMode),
            @"size": [sizeTransformer transformedValue:sizeValue],
+           @"renderingMode": @(renderingMode),
            @"resizingMode": @(image.resizingMode),
            @"duration": @(image.duration),
            @"capInsets": [insetsTransformer transformedValue:capInsetsValue],

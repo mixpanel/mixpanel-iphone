@@ -22,9 +22,15 @@
         NSAttributedString *attributedString = value;
 
         NSError *error = nil;
-        NSData *data = [attributedString dataFromRange:NSMakeRange(0, [attributedString length])
-                                    documentAttributes:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
-                                                 error:&error];
+        NSData *data = nil;
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        if ([attributedString respondsToSelector:@selector(dataFromRange:documentAttributes:error:)]) {
+            data = [attributedString dataFromRange:NSMakeRange(0, [attributedString length])
+                                documentAttributes:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
+                                             error:&error];
+        }
+#endif
         if (data)
         {
             return @{
@@ -51,13 +57,15 @@
 
         if ([mimeType isEqualToString:@"text/html"] && dataString)
         {
-            NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
             NSError *error = nil;
-            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithData:data
-                                                                                    options:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
-                                                                         documentAttributes:NULL
-                                                                                      error:&error];
-
+            NSAttributedString *attributedString;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+            NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+            attributedString = [[NSAttributedString alloc] initWithData:data
+                                                                options:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
+                                                     documentAttributes:NULL
+                                                                  error:&error];
+#endif
             if (attributedString == nil)
             {
                 NSLog(@"Failed to convert HTML to NSAttributed string: %@", error);
