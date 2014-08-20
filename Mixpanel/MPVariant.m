@@ -472,8 +472,13 @@ static NSMapTable *originalCache;
         for (NSInvocation *invocation in cacheInvocations) {
             if (![originalCache objectForKey:invocation.target]) {
                 NSLog(@"caching original image");
-                UIImage *originalImage;
-                [invocation getReturnValue:&originalImage];
+                // Retrieve the image through a void* and then
+                // __bridge cast to force a retain. If we populated
+                // originalImage directly from getReturnValue, it would
+                // not be correctly retained.
+                void *result;
+                [invocation getReturnValue:&result];
+                UIImage *originalImage = (__bridge UIImage *)result;
                 [originalCache setObject:originalImage forKey:invocation.target];
             }
         }
@@ -644,7 +649,7 @@ static NSMapTable *originalCache;
 
 - (void)execute
 {
-    MPTweak *mpTweak = [[MPTweakStore sharedInstance] tweakWithName:self.name];;
+    MPTweak *mpTweak = [[MPTweakStore sharedInstance] tweakWithName:self.name];
     if (mpTweak) {
         //TODO, this may change, but for now sending an NSNull will revert the MPTweak back to its default.
         if ([self.value isKindOfClass:[NSNull class]]) {
