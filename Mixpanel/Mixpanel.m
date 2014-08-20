@@ -62,12 +62,16 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
+<<<<<<< HEAD
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
+=======
+@property (atomic) BOOL trackIp;
+>>>>>>> c0de96a... Added setConfigTrackIp to be HIPAA compliant
 
 @end
 
@@ -174,9 +178,65 @@ static Mixpanel *sharedInstance = nil;
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
         self.notifications = nil;
+<<<<<<< HEAD
         self.variants = nil;
 
         [self setUpListeners];
+=======
+        self.trackIp = YES;
+        
+        // wifi reachability
+        BOOL reachabilityOk = NO;
+        if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
+            SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
+            if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
+                if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
+                    reachabilityOk = YES;
+                    MixpanelDebug(@"%@ successfully set up reachability callback", self);
+                } else {
+                    // cleanup callback if setting dispatch queue failed
+                    SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
+                }
+            }
+        }
+        if (!reachabilityOk) {
+            NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
+        }
+
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+        // cellular info
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+            [self setCurrentRadio];
+            [notificationCenter addObserver:self
+                                   selector:@selector(setCurrentRadio)
+                                       name:CTRadioAccessTechnologyDidChangeNotification
+                                     object:nil];
+        }
+#endif
+
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillTerminate:)
+                                   name:UIApplicationWillTerminateNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillResignActive:)
+                                   name:UIApplicationWillResignActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidBecomeActive:)
+                                   name:UIApplicationDidBecomeActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidEnterBackground:)
+                                   name:UIApplicationDidEnterBackgroundNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillEnterForeground:)
+                                   name:UIApplicationWillEnterForegroundNotification
+                                 object:nil];
+>>>>>>> c0de96a... Added setConfigTrackIp to be HIPAA compliant
         [self unarchive];
         [self executeCachedVariants];
         
