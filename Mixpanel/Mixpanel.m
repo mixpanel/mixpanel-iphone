@@ -1001,9 +1001,13 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)appLinksNotificationRaised:(NSNotification *)notification
 {
+    NSDictionary *eventMap = @{@"al_nav_out": @"$al_nav_out",
+                               @"al_nav_in": @"$al_nav_in",
+                               @"al_ref_back_out": @"$al_ref_back_out"
+                               };
     NSDictionary *userInfo = [notification userInfo];
-    if (userInfo && userInfo[@"event_name"] && userInfo[@"event_args"]) {
-        [self track:userInfo[@"event_name"] properties:userInfo[@"event_args"]];
+    if (userInfo && userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
+        [self track:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
     }
 }
 
