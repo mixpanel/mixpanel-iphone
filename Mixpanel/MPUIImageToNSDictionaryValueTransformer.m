@@ -35,12 +35,13 @@
         NSArray *images = image.images ?: @[ image ];
 
         NSMutableArray *imageDictionaries = [[NSMutableArray alloc] init];
-        for (UIImage *animationFrame in images)
+        for (UIImage *frame in images)
         {
+            NSData *imageRep = UIImagePNGRepresentation(frame);
             NSDictionary *imageDictionary = @{
                 @"scale": @(image.scale),
                 @"mime_type" : @"image/png",
-                @"data": [UIImagePNGRepresentation(animationFrame) mp_base64EncodedString]
+                @"data": ((imageRep == nil) ? [imageRep mp_base64EncodedString] : [NSNull null])
             };
 
             [imageDictionaries addObject:imageDictionary];
@@ -83,8 +84,7 @@
         {
             NSNumber *scale = imageDictionary[@"scale"];
             UIImage *image;
-            if ([imageDictionary objectForKey: @"url"])
-            {
+            if (imageDictionary[@"url"]) {
                 NSURL *image_url = [NSURL URLWithString: imageDictionary[@"url"]];
                 image = [UIImage imageWithData:[NSData dataWithContentsOfURL: image_url] scale:fminf(1.0, [scale floatValue])];
 
@@ -95,8 +95,7 @@
                 image = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
             }
-            else
-            {
+            else if (imageDictionary[@"data"] && imageDictionary[@"data"] != [NSNull null]) {
                 image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
             }
 
@@ -118,7 +117,7 @@
             image = [images objectAtIndex:0];
         }
 
-        if (UIEdgeInsetsEqualToEdgeInsets(capInsets, UIEdgeInsetsZero) == NO)
+        if (image && UIEdgeInsetsEqualToEdgeInsets(capInsets, UIEdgeInsetsZero) == NO)
         {
             if (dictionaryValue[@"resizingMode"])
             {
