@@ -5,5 +5,7 @@
 
 
 @interface MPObjectIdentityProvider : NSObject
+
 - (NSString *)identifierForObject:(id)object;
+
 @end

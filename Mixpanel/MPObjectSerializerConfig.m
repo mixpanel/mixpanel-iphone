@@ -8,6 +8,7 @@
 
 
 @implementation MPObjectSerializerConfig
+
 {
     NSDictionary *_classes;
     NSDictionary *_enums;
@@ -19,8 +20,7 @@
     if (self)
     {
         NSMutableDictionary *classDescriptions = [[NSMutableDictionary alloc] init];
-        for (NSDictionary *d in dictionary[@"classes"])
-        {
+        for (NSDictionary *d in dictionary[@"classes"]) {
             NSString *superclassName = d[@"superclass"];
             MPClassDescription *superclassDescription = superclassName ? classDescriptions[superclassName] : nil;
             MPClassDescription *classDescription = [[MPClassDescription alloc] initWithSuperclassDescription:superclassDescription
@@ -30,8 +30,7 @@
         }
 
         NSMutableDictionary *enumDescriptions = [[NSMutableDictionary alloc] init];
-        for (NSDictionary *d in dictionary[@"enums"])
-        {
+        for (NSDictionary *d in dictionary[@"enums"]) {
             MPEnumDescription *enumDescription = [[MPEnumDescription alloc] initWithDictionary:d];
             [enumDescriptions setObject:enumDescription forKey:enumDescription.name];
         }

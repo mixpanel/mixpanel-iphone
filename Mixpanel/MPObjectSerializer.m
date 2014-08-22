@@ -12,9 +12,11 @@
 #import "NSInvocation+MPHelpers.h"
 
 @interface MPObjectSerializer ()
+
 @end
 
 @implementation MPObjectSerializer
+
 {
     MPObjectSerializerConfig *_configuration;
     MPObjectIdentityProvider *_objectIdentityProvider;
@@ -61,8 +63,7 @@
     MPClassDescription *classDescription = [self classDescriptionForObject:object];
     if (classDescription)
     {
-        for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions])
-        {
+        for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions]) {
             if ([propertyDescription shouldReadPropertyValueForObject:object])
             {
                 id propertyValue = [self propertyValueForObject:object withPropertyDescription:propertyDescription context:context];
@@ -118,13 +119,10 @@
     if ([selectorDescription.parameters count] > 0)
     {
         MPPropertySelectorParameterDescription *parameterDescription = [selectorDescription.parameters objectAtIndex:0];
-        for (id value in [self allValuesForType:parameterDescription.type])
-        {
+        for (id value in [self allValuesForType:parameterDescription.type]) {
             [variations addObject:@[ value ]];
         }
-    }
-    else
-    {
+    } else {
         // An empty array of parameters (for methods that have no parameters).
         [variations addObject:@[]];
     }
@@ -204,8 +202,7 @@
         else if ([propertyValue isKindOfClass:[NSArray class]] || [propertyValue isKindOfClass:[NSSet class]])
         {
             NSMutableArray *arrayOfIdentifiers = [[NSMutableArray alloc] init];
-            for (id value in propertyValue)
-            {
+            for (id value in propertyValue) {
                 if ([context isVisitedObject:value] == NO)
                 {
                     [context enqueueUnvisitedObject:value];
@@ -255,15 +252,12 @@
         };
 
         [values addObject:valueDictionary];
-    }
-    else
-    {
+    } else {
         // the "slow" NSInvocation path. Required in order to invoke methods that take parameters.
         NSInvocation *invocation = [self invocationForObject:object withSelectorDescription:selectorDescription];
         NSArray *parameterVariations = [self parameterVariationsForPropertySelector:selectorDescription];
 
-        for (NSArray *parameters in parameterVariations)
-        {
+        for (NSArray *parameters in parameterVariations) {
             [invocation mp_setArgumentsFromArray:parameters];
             [invocation invokeWithTarget:object];
 

@@ -643,7 +643,7 @@
     char *rgba = (char *)malloc(bits);
     srand(124);
 
-    for(NSUInteger i = 0; i < bits; ++i) {
+    for (NSUInteger i = 0; i < bits; ++i) {
         rgba[i] = (rand() % 8);
     }
 

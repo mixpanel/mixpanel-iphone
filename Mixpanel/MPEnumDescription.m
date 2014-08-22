@@ -5,6 +5,7 @@
 
 
 @implementation MPEnumDescription
+
 {
     NSMutableDictionary *_values;
 }
@@ -22,8 +23,7 @@
         _baseType = [dictionary[@"base_type"] copy];
         _values = [[NSMutableDictionary alloc] init];
 
-        for (NSDictionary *value in dictionary[@"values"])
-        {
+        for (NSDictionary *value in dictionary[@"values"]) {
             _values[value[@"value"]] = value[@"display_name"];
         }
     }

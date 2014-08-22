@@ -4,6 +4,7 @@
 #import "MPObjectSerializerContext.h"
 
 @implementation MPObjectSerializerContext
+
 {
     NSMutableSet *_visitedObjects;
     NSMutableSet *_unvisitedObjects;

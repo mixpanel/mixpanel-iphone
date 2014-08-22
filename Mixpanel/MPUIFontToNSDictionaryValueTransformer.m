@@ -4,6 +4,7 @@
 #import "MPValueTransformers.h"
 
 @implementation MPUIFontToNSDictionaryValueTransformer
+
 {
 
 }
@@ -60,9 +61,7 @@
             else if ([italicSystemFont.fontName isEqualToString:fontName])
             {
                 return italicSystemFont;
-            }
-            else
-            {
+            } else {
                 return [UIFont fontWithName:fontName size:fontSize];
             }
         }

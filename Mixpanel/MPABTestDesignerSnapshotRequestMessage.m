@@ -46,9 +46,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         if (serializerConfig)
         {
             [connection setSessionObject:serializerConfig forKey:kSnapshotSerializerConfigKey];
-        }
-        else
-        {
+        } else {
             // Get the class descriptions from the connection session store.
             serializerConfig = [connection sessionObjectForKey:kSnapshotSerializerConfigKey];
         }

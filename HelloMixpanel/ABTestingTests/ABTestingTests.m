@@ -44,10 +44,13 @@
 #pragma mark - Test Classes for swizzling
 
 @interface A : NSObject
+
 @property (nonatomic) int count;
 - (void)incrementCount;
+
 @end
 @implementation A
+
 - (id)init
 {
     if((self = [super init])) {
@@ -60,21 +63,26 @@
 {
     self.count += 1;
 }
+
 @end
 
 @interface B : A
+
 @end
 @implementation B
 
 @end
 
 @interface C : B
+
 @end
 @implementation C
+
 - (void)incrementCount
 {
     self.count += 2;
 }
+
 @end
 
 /*
@@ -84,12 +92,16 @@
  */
 #if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
 @interface XCTestExpectation
+
 - (void)fulfill;
+
 @end
 
 @interface XCTestCase (Test)
+
 - (void)waitForExpectationsWithTimeout:(NSTimeInterval)timeout handler:(id)handlerOrNil;
 - (XCTestExpectation *)expectationWithDescription:(NSString *)description;
+
 @end
 #endif
 
@@ -144,7 +156,7 @@
     }
 }
 
--(UIViewController *)topViewController {
+- (UIViewController *)topViewController {
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
@@ -408,7 +420,7 @@
     [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
 }
 
--(void)testRunExperimentFromDecide
+- (void)testRunExperimentFromDecide
 {
     // This view should be modified by the variant returned from decide.
     UIButton *button = [[UIButton alloc] init];
@@ -464,7 +476,7 @@
 
 #pragma mark - Object selection
 
--(void)testObjectSelection
+- (void)testObjectSelection
 {
     /*
         w___vc___v1___v2___l1
@@ -531,7 +543,7 @@
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 }
 
--(void)testValueTransformers
+- (void)testValueTransformers
 {
     // Bad Rect (inf, -inf, and NaN values) Main test is that we don't crash on converting this to JSON
     NSError *error = nil;

@@ -7,4 +7,5 @@
 extern NSString *const MPABTestDesignerDeviceInfoRequestMessageType;
 
 @interface MPABTestDesignerDeviceInfoRequestMessage : MPAbstractABTestDesignerMessage
+
 @end

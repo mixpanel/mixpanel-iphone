@@ -5,6 +5,7 @@
 #import "MPPropertyDescription.h"
 
 @implementation MPClassDescription
+
 {
     NSArray *_propertyDescriptions;
 }
@@ -17,8 +18,7 @@
         _superclassDescription = superclassDescription;
 
         NSMutableArray *propertyDescriptions = [[NSMutableArray alloc] init];
-        for (NSDictionary *propertyDictionary in dictionary[@"properties"])
-        {
+        for (NSDictionary *propertyDictionary in dictionary[@"properties"]) {
             [propertyDescriptions addObject:[[MPPropertyDescription alloc] initWithDictionary:propertyDictionary]];
         }
 
@@ -35,8 +35,7 @@
     MPClassDescription *description = self;
     while (description)
     {
-        for (MPPropertyDescription *propertyDescription in description->_propertyDescriptions)
-        {
+        for (MPPropertyDescription *propertyDescription in description->_propertyDescriptions) {
             if (!allPropertyDescriptions[propertyDescription.name]) {
                 allPropertyDescriptions[propertyDescription.name] = propertyDescription;
             }

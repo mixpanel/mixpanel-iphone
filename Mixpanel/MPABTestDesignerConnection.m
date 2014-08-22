@@ -20,9 +20,11 @@
 NSString * const kSessionVariantKey = @"session_variant";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
+
 @end
 
 @implementation MPABTestDesignerConnection
+
 {
     /* The difference between _open and _connected is that open
      is set when the socket is open, and _connected is set when
@@ -145,9 +147,7 @@ NSString * const kSessionVariantKey = @"session_variant";
         NSDictionary *payload = messageDictionary[@"payload"];
 
         designerMessage = [_typeToMessageClassMap[type] messageWithType:type payload:payload];
-    }
-    else
-    {
+    } else {
         MessagingDebug(@"Badly formed socket message expected JSON dictionary: %@", error);
     }
 

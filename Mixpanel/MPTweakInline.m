@@ -97,6 +97,7 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
 }
 
 @interface _MPTweakInlineLoader : NSObject
+
 @end
 
 @implementation _MPTweakInlineLoader

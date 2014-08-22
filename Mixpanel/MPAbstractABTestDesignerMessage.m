@@ -4,10 +4,13 @@
 #import "MPAbstractABTestDesignerMessage.h"
 
 @interface MPAbstractABTestDesignerMessage ()
-@property(nonatomic, copy, readwrite) NSString *type;
+
+@property (nonatomic, copy, readwrite) NSString *type;
+
 @end
 
 @implementation MPAbstractABTestDesignerMessage
+
 {
     NSMutableDictionary *_payload;
 }

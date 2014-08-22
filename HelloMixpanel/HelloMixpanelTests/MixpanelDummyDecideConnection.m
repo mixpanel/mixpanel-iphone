@@ -26,7 +26,7 @@ static NSURL *decideResponseURL;
     return requestCount;
 }
 
-+(void)setDecideResponseURL:(NSURL *)url
++ (void)setDecideResponseURL:(NSURL *)url
 {
     decideResponseURL = url;
 }

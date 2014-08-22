@@ -34,8 +34,7 @@
     {
         _selectorName = [dictionary[@"selector"] copy];
         NSMutableArray *parameters = [[NSMutableArray alloc] initWithCapacity:[dictionary[@"parameters"] count]];
-        for (NSDictionary *parameter in dictionary[@"parameters"])
-        {
+        for (NSDictionary *parameter in dictionary[@"parameters"]) {
             [parameters addObject:[[MPPropertySelectorParameterDescription alloc] initWithDictionary:parameter]];
         }
 
@@ -49,7 +48,9 @@
 @end
 
 @interface MPPropertyDescription ()
+
 @property (nonatomic, readonly) NSPredicate *predicate;
+
 @end
 
 @implementation MPPropertyDescription
@@ -58,8 +59,7 @@
 {
     // TODO: lookup transformer by type
 
-    for (NSString *toTypeName in @[@"NSDictionary", @"NSNumber", @"NSString"])
-    {
+    for (NSString *toTypeName in @[@"NSDictionary", @"NSNumber", @"NSString"]) {
         NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", typeName, toTypeName];
         NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
         if (toTransformer)
@@ -123,9 +123,7 @@
         if (set)
         {
             _setSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:set];
-        }
-        else
-        {
+        } else {
             _readonly = YES;
         }
 
