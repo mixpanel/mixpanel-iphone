@@ -19,7 +19,10 @@
 {
     if ([value respondsToSelector:@selector(CGSizeValue)])
     {
-        return CFBridgingRelease(CGSizeCreateDictionaryRepresentation([value CGSizeValue]));
+        CGSize size = [value CGSizeValue];
+        size.width = isnormal(size.width) ? size.width : 0.0f;
+        size.height = isnormal(size.height) ? size.height : 0.0f;
+        return CFBridgingRelease(CGSizeCreateDictionaryRepresentation(size));
     }
 
     return nil;

@@ -15,6 +15,7 @@
 #import "HomeViewController.h"
 #import "HTTPServer.h"
 #import "MixpanelDummyDecideConnection.h"
+#import "MPValueTransformers.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -528,6 +529,19 @@
     XCTAssertEqual([selector selectFromRoot:vc][0], l1, @"l1 should be selected by predicate");
     XCTAssert([selector isLeafSelected:l1 fromRoot:vc], @"l1 should be selected by predicate");
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
+}
+
+-(void)testValueTransformers
+{
+    // Bad Rect (inf, -inf, and NaN values) Main test is that we don't crash on converting this to JSON
+    NSError *error = nil;
+    NSValue *rect = [NSValue valueWithCGRect:CGRectMake(1./0., -1./0., 0./0., 1.)];
+    NSDictionary *rekt = [[[MPCGRectToNSDictionaryValueTransformer alloc] init] transformedValue:rect];
+    [NSJSONSerialization dataWithJSONObject:rekt options:0 error:&error];
+    XCTAssertNil(error, @"Should be no errors");
+    XCTAssert([rekt isKindOfClass:[NSDictionary class]], @"Should be converted to NSDictionary");
+    XCTAssertEqual([rekt[@"X"] floatValue], 0.0f, @"Infinite value should be converted to 0");
+
 }
 
 @end
