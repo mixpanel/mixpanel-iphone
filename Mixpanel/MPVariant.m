@@ -14,28 +14,30 @@
 #import "MPTweak.h"
 
 @interface MPVariant ()
+
     @property (nonatomic, strong) NSMutableOrderedSet *actions;
     @property (nonatomic, strong) NSMutableArray *tweaks;
+
 @end
 
 @interface MPVariantAction ()
 
-@property (nonatomic, strong)NSString *name;
+@property (nonatomic, strong) NSString *name;
 
-@property (nonatomic, strong)MPObjectSelector *path;
-@property (nonatomic, assign)SEL selector;
-@property (nonatomic, strong)NSArray *args;
-@property (nonatomic, strong)NSArray *original;
-@property (nonatomic, assign)BOOL cacheOriginal;
+@property (nonatomic, strong) MPObjectSelector *path;
+@property (nonatomic, assign) SEL selector;
+@property (nonatomic, strong) NSArray *args;
+@property (nonatomic, strong) NSArray *original;
+@property (nonatomic, assign) BOOL cacheOriginal;
 
-@property (nonatomic, assign)BOOL swizzle;
-@property (nonatomic, assign)Class swizzleClass;
-@property (nonatomic, assign)SEL swizzleSelector;
+@property (nonatomic, assign) BOOL swizzle;
+@property (nonatomic, assign) Class swizzleClass;
+@property (nonatomic, assign) SEL swizzleSelector;
 
 @property (nonatomic, copy) NSHashTable *appliedTo;
 
 + (MPVariantAction *)actionWithJSONObject:(NSDictionary *)object;
-- (id) initWithName:(NSString *)name
+- (id)initWithName:(NSString *)name
                path:(MPObjectSelector *)path
            selector:(SEL)selector
                args:(NSArray *)args
@@ -326,7 +328,7 @@ static NSMapTable *originalCache;
     return nil;
 }
 
-- (id) initWithName:(NSString *)name
+- (id)initWithName:(NSString *)name
                path:(MPObjectSelector *)path
            selector:(SEL)selector
                args:(NSArray *)args
@@ -386,7 +388,7 @@ static NSMapTable *originalCache;
     return self;
 }
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_name forKey:@"name"];
 
@@ -499,7 +501,7 @@ static NSMapTable *originalCache;
         if (originalImage) {
             NSMutableArray *originalArgs = [self.args mutableCopy];
             uint n = [originalArgs count];
-            for (uint i = 0; i < n; i++) {
+            for (NSUInteger i = 0; i < n; i++) {
                 if ([originalArgs[i] isKindOfClass:[NSArray class]] && [originalArgs[i][1] isEqual:@"UIImage"]) {
                     originalArgs[i] = @[originalImage, @"UIImage"];
                     break;
@@ -542,7 +544,7 @@ static NSMapTable *originalCache;
                 NSUInteger requiredArgs = [signature numberOfArguments] - 2;
                 if ([args count] >= requiredArgs) {
                     [invocation setSelector:selector];
-                    for (uint i = 0; i < requiredArgs; i++) {
+                    for (NSUInteger i = 0; i < requiredArgs; i++) {
 
                         NSArray *argTuple = [args objectAtIndex:i];
                         id arg = transformValue(argTuple[0], argTuple[1]);

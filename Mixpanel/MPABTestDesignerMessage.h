@@ -7,7 +7,7 @@
 
 @protocol MPABTestDesignerMessage <NSObject>
 
-@property(nonatomic, copy, readonly) NSString *type;
+@property (nonatomic, copy, readonly) NSString *type;
 
 - (void)setPayloadObject:(id)object forKey:(NSString *)key;
 - (id)payloadObjectForKey:(NSString *)key;

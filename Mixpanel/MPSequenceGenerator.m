@@ -6,6 +6,7 @@
 
 
 @implementation MPSequenceGenerator
+
 {
     int32_t _value;
 }

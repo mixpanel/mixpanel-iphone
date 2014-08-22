@@ -37,9 +37,7 @@
                     @"mime_type" : @"text/html",
                     @"data" : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
             };
-        }
-        else
-        {
+        } else {
             NSLog(@"Failed to convert NSAttributedString to HTML: %@", error);
         }
     }

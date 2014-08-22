@@ -15,6 +15,7 @@
 #pragma mark - Interface Redefinitions
 
 @interface Mixpanel (Test)
+
 // get access to private members
 
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
@@ -40,6 +41,7 @@
 @end
 
 @interface MixpanelPeople (Test)
+
 // get access to private members
 
 @property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
@@ -54,12 +56,16 @@
  */
 #if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
 @interface XCTestExpectation
+
 - (void)fulfill;
+
 @end
 
 @interface XCTestCase (Test)
+
 - (void)waitForExpectationsWithTimeout:(NSTimeInterval)timeout handler:(id)handlerOrNil;
 - (XCTestExpectation *)expectationWithDescription:(NSString *)description;
+
 @end
 #endif
 
@@ -180,7 +186,7 @@
     XCTAssertNotNil(p[@"$ios_app_release"], @"missing $ios_app_release property");
 }
 
--(UIViewController *)topViewController {
+- (UIViewController *)topViewController {
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;

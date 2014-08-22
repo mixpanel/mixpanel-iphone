@@ -10,10 +10,10 @@
 
 @interface SecretTableViewCell : UITableViewCell
 
-@property(nonatomic, strong) IBOutlet UILabel *contentLabel;
-@property(nonatomic, strong) IBOutlet UILabel *locationLabel;
-@property(nonatomic, strong) IBOutlet UILabel *likeslabel;
-@property(nonatomic, strong) IBOutlet UILabel *commentsLabel;
-@property(nonatomic, strong) IBOutlet UIImageView *backgroundImage;
+@property (nonatomic, strong) IBOutlet UILabel *contentLabel;
+@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *likeslabel;
+@property (nonatomic, strong) IBOutlet UILabel *commentsLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImage;
 
 @end

@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation MPApplicationStateSerializer
+
 {
     MPObjectSerializer *_serializer;
     UIApplication *_application;

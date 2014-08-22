@@ -13,6 +13,7 @@
 #import "_MPTweakBindObserver.h"
 
 @interface _MPTweakBindObserver () <MPTweakObserver>
+
 @end
 
 @implementation _MPTweakBindObserver {

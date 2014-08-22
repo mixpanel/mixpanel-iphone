@@ -23,7 +23,7 @@
  This property will not be restored on unarchive, as the variant will need
  to be run again once the app is restarted.
  */
-@property (nonatomic, readonly)BOOL running;
+@property (nonatomic, readonly) BOOL running;
 
 /*!
  @property
@@ -39,10 +39,10 @@
 
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object;
 
-- (void) addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec;
-- (void) addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
-- (void) addTweaksFromJSONObject:(NSArray *)tweaks andExecute:(BOOL)exec;
-- (void) addTweakFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
+- (void)addActionsFromJSONObject:(NSArray *)actions andExecute:(BOOL)exec;
+- (void)addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
+- (void)addTweaksFromJSONObject:(NSArray *)tweaks andExecute:(BOOL)exec;
+- (void)addTweakFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec;
 - (void)removeActionWithName:(NSString *)name;
 - (void)execute;
 - (void)stop;

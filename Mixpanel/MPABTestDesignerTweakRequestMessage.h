@@ -12,4 +12,5 @@
 extern NSString *const MPABTestDesignerTweakRequestMessageType;
 
 @interface MPABTestDesignerTweakRequestMessage : MPAbstractABTestDesignerMessage
+
 @end

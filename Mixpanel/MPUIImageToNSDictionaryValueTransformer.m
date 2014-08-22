@@ -35,8 +35,7 @@
         NSArray *images = image.images ?: @[ image ];
 
         NSMutableArray *imageDictionaries = [[NSMutableArray alloc] init];
-        for (UIImage *frame in images)
-        {
+        for (UIImage *frame in images) {
             NSData *imageRep = UIImagePNGRepresentation(frame);
             NSDictionary *imageDictionary = @{
                 @"scale": @(image.scale),
@@ -80,8 +79,7 @@
         UIEdgeInsets capInsets = [[insetsTransformer reverseTransformedValue:dictionaryValue[@"capInsets"]] UIEdgeInsetsValue];
 
         NSMutableArray *images = [[NSMutableArray alloc] init];
-        for (NSDictionary *imageDictionary in imagesDictionary)
-        {
+        for (NSDictionary *imageDictionary in imagesDictionary) {
             NSNumber *scale = imageDictionary[@"scale"];
             UIImage *image;
             if (imageDictionary[@"url"]) {
@@ -123,9 +121,7 @@
             {
                 UIImageResizingMode resizingMode = (UIImageResizingMode)[dictionaryValue[@"resizingMode"] integerValue];
                 image = [image resizableImageWithCapInsets:capInsets resizingMode:resizingMode];
-            }
-            else
-            {
+            } else {
                 image = [image resizableImageWithCapInsets:capInsets];
             }
         }

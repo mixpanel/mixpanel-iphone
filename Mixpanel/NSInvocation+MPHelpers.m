@@ -95,9 +95,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
         [self setArgument:&buffer atIndex:(NSInteger)index];
 
         MPFree(buffer);
-    }
-    else
-    {
+    } else {
         switch (argumentType[0])
         {
             case _C_ID:
@@ -121,8 +119,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
 {
     NSParameterAssert([argumentArray count] == ([self.methodSignature numberOfArguments] - 2));
 
-    for (NSUInteger i = 0; i < [argumentArray count]; ++i)
-    {
+    for (NSUInteger i = 0; i < [argumentArray count]; ++i) {
         NSUInteger argumentIndex = 2 + i;
         [self mp_setArgument:argumentArray[i] atIndex:argumentIndex];
     }
@@ -162,9 +159,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
                 NSAssert1(NO, @"Unhandled return type: %s", objCType);
                 break;
         }
-    }
-    else
-    {
+    } else {
         switch (objCType[0])
         {
             case _C_STRUCT_B: returnValue = [NSValue valueWithBytes:buffer objCType:objCType]; break;
@@ -175,9 +170,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
                     (strcmp(objCType, @encode(CGColorRef)) == 0 && CFGetTypeID(cfTypeRef) == CGColorGetTypeID()))
                 {
                     returnValue = (__bridge id)cfTypeRef;
-                }
-                else
-                {
+                } else {
                     NSAssert(NO, @"Currently unsupported return type!");
                 }
                 break;

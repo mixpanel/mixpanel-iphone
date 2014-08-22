@@ -49,8 +49,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
     NSMutableDictionary *fontFamilies = [[NSMutableDictionary alloc] init];
 
     // Get all the font families and font names.
-    for (NSString *familyName in [UIFont familyNames])
-    {
+    for (NSString *familyName in [UIFont familyNames]) {
         fontFamilies[familyName] = [self fontDictionaryForFontFamilyName:familyName fontNames:[UIFont fontNamesForFamilyName:familyName]];
     }
 
@@ -59,8 +58,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             [UIFont boldSystemFontOfSize:17.0f],
             [UIFont italicSystemFontOfSize:17.0f]];
 
-    for (UIFont *systemFont in systemFonts)
-    {
+    for (UIFont *systemFont in systemFonts) {
         NSString *familyName = systemFont.familyName;
         NSString *fontName = systemFont.fontName;
 
@@ -72,9 +70,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             {
                 [fontNames addObject:fontName];
             }
-        }
-        else
-        {
+        } else {
             fontFamilies[familyName] = [self fontDictionaryForFontFamilyName:familyName fontNames:@[fontName]];
         }
     }

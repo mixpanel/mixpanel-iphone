@@ -1264,7 +1264,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
     return didWork;
 }
 
--(void)_pumpScanner;
+- (void)_pumpScanner;
 {
     [self assertOnWorkQueue];
 
@@ -1635,7 +1635,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
             uint8_t leadByte = str[lastOffset];
             U8_MASK_LEAD_BYTE(leadByte, U8_COUNT_TRAIL_BYTES(leadByte));
 
-            for (int i = lastOffset + 1; i < offset; i++) {
+            for (NSInteger i = lastOffset + 1; i < offset; i++) {
                 if (U8_IS_SINGLE(str[i]) || U8_IS_LEAD(str[i]) || !U8_IS_TRAIL(str[i])) {
                     size = -1;
                 }
@@ -1660,7 +1660,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
 static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
     static const int maxCodepointSize = 3;
 
-    for (int i = 0; i < maxCodepointSize; i++) {
+    for (NSInteger i = 0; i < maxCodepointSize; i++) {
         NSString *str = [[NSString alloc] initWithBytesNoCopy:(char *)data.bytes length:data.length - i encoding:NSUTF8StringEncoding freeWhenDone:NO];
         if (str) {
             return data.length - i;

@@ -6,12 +6,15 @@
 @class MPObjectSerializerContext;
 
 @interface MPPropertySelectorParameterDescription : NSObject
+
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *type;
+
 @end
 
 @interface MPPropertySelectorDescription : NSObject
+
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 @property (nonatomic, readonly) NSString *selectorName;
 @property (nonatomic, readonly) NSString *returnType;

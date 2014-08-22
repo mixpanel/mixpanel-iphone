@@ -42,7 +42,7 @@
     return [[MPObjectSelector alloc] initWithString:string];
 }
 
--(id) initWithString:(NSString *)string
+- (id)initWithString:(NSString *)string
 {
     if (self = [super init]) {
         _string = string;
@@ -67,7 +67,7 @@
  Starting at the root object, try and find an object
  in the view/controller tree that matches this selector.
 */
--(NSArray *)selectFromRoot:(id)root
+- (NSArray *)selectFromRoot:(id)root
 {
     NSArray *views = @[];
     if (root) {
@@ -88,7 +88,7 @@
  by this selector starting from the root object given.
 */
 
--(BOOL)isLeafSelected:(id)leaf fromRoot:(id)root
+- (BOOL)isLeafSelected:(id)leaf fromRoot:(id)root
 {
     BOOL isSelected = YES;
     NSArray *views = @[leaf];
@@ -239,7 +239,7 @@
     return NO;
 }
 
--(NSArray *)getParentsOfObject:(NSObject *)obj
+- (NSArray *)getParentsOfObject:(NSObject *)obj
 {
     NSMutableArray *result = [NSMutableArray array];
     if ([obj isKindOfClass:[UIView class]]) {
@@ -265,7 +265,7 @@
     return [result copy];
 }
 
--(NSArray *)getChildrenOfObject:(NSObject *)obj ofType:(Class)class
+- (NSArray *)getChildrenOfObject:(NSObject *)obj ofType:(Class)class
 {
     NSMutableArray *result = [NSMutableArray array];
     // A UIWindow is also a UIView, so we could in theory follow the subviews chain from UIWindow, but

@@ -6,6 +6,7 @@
 
 
 @implementation MPObjectIdentityProvider
+
 {
     NSMapTable *_objectToIdentifierMap;
     MPSequenceGenerator *_sequenceGenerator;

@@ -13,6 +13,7 @@
 #define MAX_ARGS 3
 
 @interface MPSwizzle : NSObject
+
 @property (nonatomic, assign) Class class;
 @property (nonatomic, assign) SEL selector;
 @property (nonatomic, assign) IMP originalMethod;
@@ -25,6 +26,7 @@
            selector:(SEL)aSelector
      originalMethod:(IMP)aMethod
         withNumArgs:(uint)numArgs;
+
 @end
 
 static NSMapTable *swizzles;
@@ -98,7 +100,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
     uint count;
     BOOL isLocal = NO;
     Method *methods = class_copyMethodList(aClass, &count);
-    for (uint i = 0; i < count; i++) {
+    for (NSUInteger i = 0; i < count; i++) {
         if (aMethod == methods[i]) {
             isLocal = YES;
             break;
@@ -190,6 +192,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 
 
 @implementation MPSwizzle
+
 - (id)init
 {
     if ((self = [super init])) {
