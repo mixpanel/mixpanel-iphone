@@ -20,7 +20,10 @@
 {
     if ([value respondsToSelector:@selector(CGPointValue)])
     {
-        return CFBridgingRelease(CGPointCreateDictionaryRepresentation([value CGPointValue]));
+        CGPoint point = [value CGPointValue];
+        point.x = isnormal(point.x) ? point.x : 0.0f;
+        point.y = isnormal(point.y) ? point.y : 0.0f;
+        return CFBridgingRelease(CGPointCreateDictionaryRepresentation(point));
     }
 
     return nil;
