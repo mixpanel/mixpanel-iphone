@@ -10,6 +10,7 @@ rules = [
             (r'(?<=[^\n])\n@end', lambda m: '\n\n@end' ), #add blank lines before @end
             (r'for[ ]*\((.*)\)\s*{\n', lambda m: 'for (%s) {\n' % m.group(1)), #correct spacing for for loops
             (r'}\s*else\s*{', '} else {'), #correct spacing for else statements
+            (r'\n(\s*)if\s*\((.*)\n\s*{', lambda m: '\n%sif (%s {' % (m.group(1), m.group(2))), #correct spacing for if statements
             (r'for \([ ]*uint[ ]+', 'for (NSUInteger '), #use NSUinteger instead of uint
             (r'for \([ ]*int[ ]+', 'for (NSInteger '), #use NSinteger instead of int
             (r'\n([+-])[ ]*\((\w+\s*\*?)\)\s*', lambda m: '\n%s (%s)' % (m.group(1), m.group(2))), #proper spacing in method definitions
