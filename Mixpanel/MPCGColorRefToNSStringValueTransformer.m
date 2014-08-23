@@ -12,8 +12,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if (value && CFGetTypeID((__bridge CFTypeRef)value) == CGColorGetTypeID())
-    {
+    if (value && CFGetTypeID((__bridge CFTypeRef)value) == CGColorGetTypeID()) {
         NSValueTransformer *transformer = [NSValueTransformer valueTransformerForName:@"MPUIColorToNSStringValueTransformer"];
         return [transformer transformedValue:[[UIColor alloc] initWithCGColor:(__bridge CGColorRef)value]];
     }

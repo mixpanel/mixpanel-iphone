@@ -14,8 +14,7 @@
 - (id)initWithRootObject:(id)object
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _visitedObjects = [NSMutableSet set];
         _unvisitedObjects = [NSMutableSet setWithObject:object];
         _serializedObjects = [[NSMutableDictionary alloc] init];

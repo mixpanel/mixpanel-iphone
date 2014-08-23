@@ -17,8 +17,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value isKindOfClass:[NSAttributedString class]])
-    {
+    if ([value isKindOfClass:[NSAttributedString class]]) {
         NSAttributedString *attributedString = value;
 
         NSError *error = nil;
@@ -31,8 +30,7 @@
                                              error:&error];
         }
 #endif
-        if (data)
-        {
+        if (data) {
             return @{
                     @"mime_type" : @"text/html",
                     @"data" : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
@@ -47,14 +45,12 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isKindOfClass:[NSDictionary class]])
-    {
+    if ([value isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dictionaryValue = value;
         NSString *mimeType = dictionaryValue[@"mime_type"];
         NSString *dataString = dictionaryValue[@"data"];
 
-        if ([mimeType isEqualToString:@"text/html"] && dataString)
-        {
+        if ([mimeType isEqualToString:@"text/html"] && dataString) {
             NSError *error = nil;
             NSAttributedString *attributedString;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
@@ -64,8 +60,7 @@
                                                      documentAttributes:NULL
                                                                   error:&error];
 #endif
-            if (attributedString == nil)
-            {
+            if (attributedString == nil) {
                 NSLog(@"Failed to convert HTML to NSAttributed string: %@", error);
             }
 

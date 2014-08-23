@@ -21,8 +21,7 @@
         return nil;
     }
 
-    if (value == nil)
-    {
+    if (value == nil) {
         return [NSNull null];
     }
 

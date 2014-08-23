@@ -17,8 +17,7 @@
     NSParameterAssert(dictionary[@"values"] != nil);
 
     self = [super initWithDictionary:dictionary];
-    if (self)
-    {
+    if (self) {
         _flagSet = [dictionary[@"flag_set"] boolValue];
         _baseType = [dictionary[@"base_type"] copy];
         _values = [[NSMutableDictionary alloc] init];

@@ -21,8 +21,7 @@
 {
     NSDictionary *transformedValue = nil;
 
-    if ([value isKindOfClass:[UIImage class]])
-    {
+    if ([value isKindOfClass:[UIImage class]]) {
         UIImage *image = value;
 
         NSValueTransformer *sizeTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([MPCGSizeToNSDictionaryValueTransformer class])];
@@ -69,8 +68,7 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isKindOfClass:[NSDictionary class]])
-    {
+    if ([value isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dictionaryValue = value;
 
         NSValueTransformer *insetsTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([MPUIEdgeInsetsToNSDictionaryValueTransformer class])];
@@ -97,16 +95,14 @@
                 image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
             }
 
-            if (image)
-            {
+            if (image) {
                 [images addObject:image];
             }
         }
 
         UIImage *image = nil;
 
-        if ([images count] > 1)
-        {
+        if ([images count] > 1) {
             // animated image
             image =  [UIImage animatedImageWithImages:images duration:[dictionaryValue[@"duration"] doubleValue]];
         }
@@ -115,10 +111,8 @@
             image = [images objectAtIndex:0];
         }
 
-        if (image && UIEdgeInsetsEqualToEdgeInsets(capInsets, UIEdgeInsetsZero) == NO)
-        {
-            if (dictionaryValue[@"resizingMode"])
-            {
+        if (image && UIEdgeInsetsEqualToEdgeInsets(capInsets, UIEdgeInsetsZero) == NO) {
+            if (dictionaryValue[@"resizingMode"]) {
                 UIImageResizingMode resizingMode = (UIImageResizingMode)[dictionaryValue[@"resizingMode"] integerValue];
                 image = [image resizableImageWithCapInsets:capInsets resizingMode:resizingMode];
             } else {

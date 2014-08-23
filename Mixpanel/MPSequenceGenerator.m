@@ -19,8 +19,7 @@
 - (id)initWithInitialValue:(int32_t)initialValue
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _value = initialValue;
     }
 

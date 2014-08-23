@@ -28,8 +28,7 @@
 - (id)initWithType:(NSString *)type payload:(NSDictionary *)payload
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _type = type;
         _payload = [payload mutableCopy];
     }
@@ -59,8 +58,7 @@
 
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&error];
-    if (jsonData == nil && error)
-    {
+    if (jsonData == nil && error) {
         NSLog(@"Failed to serialize test designer message: %@", error);
     }
 

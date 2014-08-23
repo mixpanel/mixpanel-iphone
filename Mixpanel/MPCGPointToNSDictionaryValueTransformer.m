@@ -18,8 +18,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(CGPointValue)])
-    {
+    if ([value respondsToSelector:@selector(CGPointValue)]) {
         CGPoint point = [value CGPointValue];
         point.x = isnormal(point.x) ? point.x : 0.0f;
         point.y = isnormal(point.y) ? point.y : 0.0f;
@@ -32,8 +31,7 @@
 - (id)reverseTransformedValue:(id)value
 {
     CGPoint point = CGPointZero;
-    if ([value isKindOfClass:[NSDictionary class]] && CGPointMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)value, &point))
-    {
+    if ([value isKindOfClass:[NSDictionary class]] && CGPointMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)value, &point)) {
         return [NSValue valueWithCGPoint:point];
     }
 

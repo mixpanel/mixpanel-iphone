@@ -666,8 +666,7 @@
 
 - (id)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration
 {
-    if ((self = [super init]))
-    {
+    if ((self = [super init])) {
         self.duration = duration;
         self.values = [self generateValuesFrom:start to:end];
     }

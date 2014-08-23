@@ -9,8 +9,7 @@
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _name = [dictionary[@"name"] copy];
     }
 

@@ -43,8 +43,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
         __strong MPABTestDesignerConnection *conn = weak_connection;
 
         // Update the class descriptions in the connection session if provided as part of the message.
-        if (serializerConfig)
-        {
+        if (serializerConfig) {
             [connection setSessionObject:serializerConfig forKey:kSnapshotSerializerConfigKey];
         } else {
             // Get the class descriptions from the connection session store.
@@ -53,8 +52,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
 
         // Get the object identity provider from the connection's session store or create one if there is none already.
         MPObjectIdentityProvider *objectIdentityProvider = [connection sessionObjectForKey:kObjectIdentityProviderKey];
-        if (objectIdentityProvider == nil)
-        {
+        if (objectIdentityProvider == nil) {
             objectIdentityProvider = [[MPObjectIdentityProvider alloc] init];
             [connection setSessionObject:objectIdentityProvider forKey:kObjectIdentityProviderKey];
         }

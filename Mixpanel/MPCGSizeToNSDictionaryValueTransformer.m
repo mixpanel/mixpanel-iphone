@@ -17,8 +17,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(CGSizeValue)])
-    {
+    if ([value respondsToSelector:@selector(CGSizeValue)]) {
         CGSize size = [value CGSizeValue];
         size.width = isnormal(size.width) ? size.width : 0.0f;
         size.height = isnormal(size.height) ? size.height : 0.0f;
@@ -31,8 +30,7 @@
 - (id)reverseTransformedValue:(id)value
 {
     CGSize size = CGSizeZero;
-    if ([value isKindOfClass:[NSDictionary class]] && CGSizeMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)value, &size))
-    {
+    if ([value isKindOfClass:[NSDictionary class]] && CGSizeMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)value, &size)) {
         return [NSValue valueWithCGSize:size];
     }
 

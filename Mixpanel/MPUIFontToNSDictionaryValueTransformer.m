@@ -20,8 +20,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value isKindOfClass:[UIFont class]])
-    {
+    if ([value isKindOfClass:[UIFont class]]) {
         UIFont *fontValue = value;
 
         return @{
@@ -36,22 +35,19 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isKindOfClass:[NSDictionary class]])
-    {
+    if ([value isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dictionaryValue = value;
 
         NSNumber *pointSize = dictionaryValue[@"pointSize"];
         NSString *fontName = dictionaryValue[@"fontName"];
 
         float fontSize = [pointSize floatValue];
-        if (fontSize > 0.0f && fontName)
-        {
+        if (fontSize > 0.0f && fontName) {
             UIFont *systemFont = [UIFont systemFontOfSize:fontSize];
             UIFont *boldSystemFont = [UIFont boldSystemFontOfSize:fontSize];
             UIFont *italicSystemFont = [UIFont italicSystemFontOfSize:fontSize];
 
-            if ([systemFont.fontName isEqualToString:fontName])
-            {
+            if ([systemFont.fontName isEqualToString:fontName]) {
                 return systemFont;
             }
             else if ([boldSystemFont.fontName isEqualToString:fontName])

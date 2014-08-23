@@ -18,8 +18,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(CGRectValue)])
-    {
+    if ([value respondsToSelector:@selector(CGRectValue)]) {
         CGRect rect = [value CGRectValue];
         rect.origin.x = isnormal(rect.origin.x) ? rect.origin.x : 0.0f;
         rect.origin.y = isnormal(rect.origin.y) ? rect.origin.y : 0.0f;
@@ -34,8 +33,7 @@
 - (id)reverseTransformedValue:(id)value
 {
     CGRect rect = CGRectZero;
-    if ([value isKindOfClass:[NSDictionary class]] && CGRectMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)value, &rect))
-    {
+    if ([value isKindOfClass:[NSDictionary class]] && CGRectMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)value, &rect)) {
         return [NSValue valueWithCGRect:rect];
     }
 

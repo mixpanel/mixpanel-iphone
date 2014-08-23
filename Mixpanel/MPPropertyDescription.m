@@ -11,8 +11,7 @@
     NSParameterAssert(dictionary[@"type"] != nil);
 
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _name = [dictionary[@"name"] copy];
         _type = [dictionary[@"type"] copy];
     }
@@ -30,8 +29,7 @@
     NSParameterAssert(dictionary[@"parameters"] != nil);
 
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _selectorName = [dictionary[@"selector"] copy];
         NSMutableArray *parameters = [[NSMutableArray alloc] initWithCapacity:[dictionary[@"parameters"] count]];
         for (NSDictionary *parameter in dictionary[@"parameters"]) {
@@ -62,8 +60,7 @@
     for (NSString *toTypeName in @[@"NSDictionary", @"NSNumber", @"NSString"]) {
         NSString *toTransformerName = [NSString stringWithFormat:@"MP%@To%@ValueTransformer", typeName, toTypeName];
         NSValueTransformer *toTransformer = [NSValueTransformer valueTransformerForName:toTransformerName];
-        if (toTransformer)
-        {
+        if (toTransformer) {
             return toTransformer;
         }
     }
@@ -77,22 +74,19 @@
     NSParameterAssert(dictionary[@"name"] != nil);
 
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _name = [dictionary[@"name"] copy]; // required
         _useInstanceVariableAccess = [dictionary[@"use_ivar"] boolValue]; // Optional
         _readonly = [dictionary[@"readonly"] boolValue]; // Optional
         _nofollow = [dictionary[@"nofollow"] boolValue]; // Optional
 
         NSString *predicateFormat = dictionary[@"predicate"]; // Optional
-        if (predicateFormat)
-        {
+        if (predicateFormat) {
             _predicate = [NSPredicate predicateWithFormat:predicateFormat];
         }
 
         NSDictionary *get = dictionary[@"get"];
-        if (get == nil)
-        {
+        if (get == nil) {
             NSParameterAssert(dictionary[@"type"] != nil);
             get = @{
                     @"selector" : _name,
@@ -105,8 +99,7 @@
         }
 
         NSDictionary *set = dictionary[@"set"];
-        if (set == nil && _readonly == NO)
-        {
+        if (set == nil && _readonly == NO) {
             NSParameterAssert(dictionary[@"type"] != nil);
             set = @{
                     @"selector" : [NSString stringWithFormat:@"set%@:", [_name capitalizedString]],
@@ -120,8 +113,7 @@
         }
 
         _getSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:get];
-        if (set)
-        {
+        if (set) {
             _setSelectorDescription = [[MPPropertySelectorDescription alloc] initWithDictionary:set];
         } else {
             _readonly = YES;
@@ -156,8 +148,7 @@
     if (_nofollow) {
         return NO;
     }
-    if (_predicate)
-    {
+    if (_predicate) {
         return [_predicate evaluateWithObject:object];
     }
 
