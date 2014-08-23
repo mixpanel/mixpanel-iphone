@@ -25,8 +25,7 @@
 - (id)initWithConfiguration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _configuration = configuration;
         _objectIdentityProvider = objectIdentityProvider;
     }
@@ -61,11 +60,9 @@
     NSMutableDictionary *propertyValues = [[NSMutableDictionary alloc] init];
 
     MPClassDescription *classDescription = [self classDescriptionForObject:object];
-    if (classDescription)
-    {
+    if (classDescription) {
         for (MPPropertyDescription *propertyDescription in [classDescription propertyDescriptions]) {
-            if ([propertyDescription shouldReadPropertyValueForObject:object])
-            {
+            if ([propertyDescription shouldReadPropertyValueForObject:object]) {
                 id propertyValue = [self propertyValueForObject:object withPropertyDescription:propertyDescription context:context];
                 propertyValues[propertyDescription.name] = propertyValue ?: [NSNull null];
             }
@@ -100,8 +97,7 @@
     NSParameterAssert(typeName != nil);
 
     MPTypeDescription *typeDescription = [_configuration typeWithName:typeName];
-    if ([typeDescription isKindOfClass:[MPEnumDescription class]])
-    {
+    if ([typeDescription isKindOfClass:[MPEnumDescription class]]) {
         MPEnumDescription *enumDescription = (MPEnumDescription *)typeDescription;
         return [enumDescription allValues];
     }
@@ -116,8 +112,7 @@
     NSMutableArray *variations = [[NSMutableArray alloc] init];
 
     // TODO: write an algorithm that generates all the variations of parameter combinations.
-    if ([selectorDescription.parameters count] > 0)
-    {
+    if ([selectorDescription.parameters count] > 0) {
         MPPropertySelectorParameterDescription *parameterDescription = [selectorDescription.parameters objectAtIndex:0];
         for (id value in [self allValuesForType:parameterDescription.type]) {
             [variations addObject:@[ value ]];
@@ -136,8 +131,7 @@
     NSParameterAssert(propertyDescription != nil);
 
     Ivar ivar = class_getInstanceVariable([object class], [propertyDescription.name UTF8String]);
-    if (ivar)
-    {
+    if (ivar) {
         const char *objCType = ivar_getTypeEncoding(ivar);
 
         ptrdiff_t ivarOffset = ivar_getOffset(ivar);
@@ -188,10 +182,8 @@
 
 - (id)propertyValue:(id)propertyValue propertyDescription:(MPPropertyDescription *)propertyDescription context:(MPObjectSerializerContext *)context
 {
-    if (propertyValue != nil)
-    {
-        if ([context isVisitedObject:propertyValue])
-        {
+    if (propertyValue != nil) {
+        if ([context isVisitedObject:propertyValue]) {
             return [_objectIdentityProvider identifierForObject:propertyValue];
         }
         else if ([self isNestedObjectType:propertyDescription.type])
@@ -203,8 +195,7 @@
         {
             NSMutableArray *arrayOfIdentifiers = [[NSMutableArray alloc] init];
             for (id value in propertyValue) {
-                if ([context isVisitedObject:value] == NO)
-                {
+                if ([context isVisitedObject:value] == NO) {
                     [context enqueueUnvisitedObject:value];
                 }
 
@@ -224,8 +215,7 @@
 
     MPPropertySelectorDescription *selectorDescription = propertyDescription.getSelectorDescription;
 
-    if (propertyDescription.useKeyValueCoding)
-    {
+    if (propertyDescription.useKeyValueCoding) {
         // the "fast" (also also simple) path is to use KVC
         id valueForKey = [object valueForKey:selectorDescription.selectorName];
 
@@ -292,8 +282,7 @@
     while (aClass != nil)
     {
         MPClassDescription *classDescription = [_configuration classWithName:NSStringFromClass(aClass)];
-        if (classDescription)
-        {
+        if (classDescription) {
             return classDescription;
         }
 

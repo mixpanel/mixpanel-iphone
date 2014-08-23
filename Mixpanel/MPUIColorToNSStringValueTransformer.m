@@ -17,18 +17,15 @@
 
 - (id)transformedValue:(id)value
 {
-    if (value && [value isKindOfClass:[UIColor class]])
-    {
+    if (value && [value isKindOfClass:[UIColor class]]) {
         UIColor *colorValue = (UIColor *)value;
 
         CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(CGColorGetColorSpace(colorValue.CGColor));
-        if (colorSpaceModel == kCGColorSpaceModelMonochrome || colorSpaceModel == kCGColorSpaceModelRGB)
-        {
+        if (colorSpaceModel == kCGColorSpaceModelMonochrome || colorSpaceModel == kCGColorSpaceModelRGB) {
             size_t numberOfComponents = CGColorGetNumberOfComponents(colorValue.CGColor);
             const CGFloat *components = CGColorGetComponents(colorValue.CGColor);
 
-            if (colorSpaceModel == kCGColorSpaceModelMonochrome && numberOfComponents >= 1)
-            {
+            if (colorSpaceModel == kCGColorSpaceModelMonochrome && numberOfComponents >= 1) {
                 CGFloat w = (255 * components[0]);
                 CGFloat a = (numberOfComponents > 1 ? components[1] : 1.0f);
 
@@ -51,8 +48,7 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isKindOfClass:[NSString class]])
-    {
+    if ([value isKindOfClass:[NSString class]]) {
         NSString *stringValue = (NSString *)value;
 
         NSScanner *scanner = [NSScanner scannerWithString:stringValue];

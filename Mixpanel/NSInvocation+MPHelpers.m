@@ -22,8 +22,7 @@ typedef union {
 
 static void MPFree(void *p)
 {
-    if (p)
-    {
+    if (p) {
         free(p);
     }
 }
@@ -36,13 +35,11 @@ static void *MPAllocBufferForObjCType(const char *objCType)
     NSGetSizeAndAlignment(objCType, &size, &alignment);
 
     int result = posix_memalign(&buffer, MAX(sizeof(void *), alignment), size);
-    if (result != 0)
-    {
+    if (result != 0) {
         NSLog(@"Error allocating aligned memory: %s", strerror(result));
     }
 
-    if (buffer)
-    {
+    if (buffer) {
         memset(buffer, 0, size);
     }
 
@@ -55,8 +52,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
 {
     const char *argumentType = [self.methodSignature getArgumentTypeAtIndex:index];
 
-    if ([argumentValue isKindOfClass:[NSNumber class]] && strlen(argumentType) == 1)
-    {
+    if ([argumentValue isKindOfClass:[NSNumber class]] && strlen(argumentType) == 1) {
         // Deal with NSNumber instances (converting to primitive numbers)
         NSNumber *numberArgument = argumentValue;
 
@@ -136,8 +132,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
 
     [self getReturnValue:buffer];
 
-    if (strlen(objCType) == 1)
-    {
+    if (strlen(objCType) == 1) {
         switch (objCType[0])
         {
             case _C_CHR:      returnValue = @(*((char *)buffer));                   break;

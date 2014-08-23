@@ -63,11 +63,9 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
         NSString *fontName = systemFont.fontName;
 
         NSMutableDictionary *font = fontFamilies[familyName];
-        if (font)
-        {
+        if (font) {
             NSMutableArray *fontNames = font[@"font_names"];
-            if ([fontNames containsObject:fontName] == NO)
-            {
+            if ([fontNames containsObject:fontName] == NO) {
                 [fontNames addObject:fontName];
             }
         } else {

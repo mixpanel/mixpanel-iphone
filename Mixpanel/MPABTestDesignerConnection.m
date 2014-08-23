@@ -140,8 +140,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
     NSError *error = nil;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-    if ([jsonObject isKindOfClass:[NSDictionary class]])
-    {
+    if ([jsonObject isKindOfClass:[NSDictionary class]]) {
         NSDictionary *messageDictionary = (NSDictionary *)jsonObject;
         NSString *type = messageDictionary[@"type"];
         NSDictionary *payload = messageDictionary[@"payload"];
@@ -170,8 +169,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
-    if (commandOperation)
-    {
+    if (commandOperation) {
         [_commandQueue addOperation:commandOperation];
     }
 }

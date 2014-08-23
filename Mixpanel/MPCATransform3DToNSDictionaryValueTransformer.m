@@ -30,8 +30,7 @@ static NSDictionary *MPCATransform3DCreateDictionaryRepresentation(CATransform3D
 
 static BOOL MPCATransform3DMakeWithDictionaryRepresentation(NSDictionary *dictionary, CATransform3D *transform)
 {
-    if (transform)
-    {
+    if (transform) {
         id m11 = dictionary[@"m11"];
         id m12 = dictionary[@"m12"];
         id m13 = dictionary[@"m13"];
@@ -98,8 +97,7 @@ static BOOL MPCATransform3DMakeWithDictionaryRepresentation(NSDictionary *dictio
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(CATransform3DValue)])
-    {
+    if ([value respondsToSelector:@selector(CATransform3DValue)]) {
         return MPCATransform3DCreateDictionaryRepresentation([value CATransform3DValue]);
     }
 
@@ -109,8 +107,7 @@ static BOOL MPCATransform3DMakeWithDictionaryRepresentation(NSDictionary *dictio
 - (id)reverseTransformedValue:(id)value
 {
     CATransform3D transform = CATransform3DIdentity;
-    if ([value isKindOfClass:[NSDictionary class]] && MPCATransform3DMakeWithDictionaryRepresentation(value, &transform))
-    {
+    if ([value isKindOfClass:[NSDictionary class]] && MPCATransform3DMakeWithDictionaryRepresentation(value, &transform)) {
         return [NSValue valueWithCATransform3D:transform];
     }
 

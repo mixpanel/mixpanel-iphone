@@ -17,8 +17,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(UIEdgeInsetsValue)])
-    {
+    if ([value respondsToSelector:@selector(UIEdgeInsetsValue)]) {
         UIEdgeInsets edgeInsetsValue = [value UIEdgeInsetsValue];
 
         return @{
@@ -34,8 +33,7 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isKindOfClass:[NSDictionary class]])
-    {
+    if ([value isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dictionaryValue = value;
 
         id top = dictionaryValue[@"top"];
@@ -43,8 +41,7 @@
         id left = dictionaryValue[@"left"];
         id right = dictionaryValue[@"right"];
 
-        if (top && bottom && left && right)
-        {
+        if (top && bottom && left && right) {
             UIEdgeInsets edgeInsets = UIEdgeInsetsMake([top floatValue], [left floatValue], [bottom floatValue], [right floatValue]);
             return [NSValue valueWithUIEdgeInsets:edgeInsets];
         }

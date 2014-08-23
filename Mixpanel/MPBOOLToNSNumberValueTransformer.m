@@ -18,8 +18,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(boolValue)])
-    {
+    if ([value respondsToSelector:@selector(boolValue)]) {
         return [value boolValue] ? @YES : @NO;
     }
 

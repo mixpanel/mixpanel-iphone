@@ -17,8 +17,7 @@
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         NSMutableDictionary *classDescriptions = [[NSMutableDictionary alloc] init];
         for (NSDictionary *d in dictionary[@"classes"]) {
             NSString *superclassName = d[@"superclass"];
@@ -60,14 +59,12 @@
 - (MPTypeDescription *)typeWithName:(NSString *)name
 {
     MPEnumDescription *enumDescription = [self enumWithName:name];
-    if (enumDescription)
-    {
+    if (enumDescription) {
         return enumDescription;
     }
 
     MPClassDescription *classDescription = [self classWithName:name];
-    if (classDescription)
-    {
+    if (classDescription) {
         return classDescription;
     }
 

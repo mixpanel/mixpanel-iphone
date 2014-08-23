@@ -13,8 +13,7 @@
 - (id)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary
 {
     self = [super initWithDictionary:dictionary];
-    if (self)
-    {
+    if (self) {
         _superclassDescription = superclassDescription;
 
         NSMutableArray *propertyDescriptions = [[NSMutableArray alloc] init];

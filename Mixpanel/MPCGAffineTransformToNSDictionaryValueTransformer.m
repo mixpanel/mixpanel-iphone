@@ -17,8 +17,7 @@ static NSDictionary *MPCGAffineTransformCreateDictionaryRepresentation(CGAffineT
 
 static BOOL MPCGAffineTransformMakeWithDictionaryRepresentation(NSDictionary *dictionary, CGAffineTransform *transform)
 {
-    if (transform)
-    {
+    if (transform) {
         id a = dictionary[@"a"];
         id b = dictionary[@"b"];
         id c = dictionary[@"c"];
@@ -26,8 +25,7 @@ static BOOL MPCGAffineTransformMakeWithDictionaryRepresentation(NSDictionary *di
         id tx = dictionary[@"tx"];
         id ty = dictionary[@"ty"];
 
-        if (a && b && c && d && tx && ty)
-        {
+        if (a && b && c && d && tx && ty) {
             transform->a = (CGFloat)[a doubleValue];
             transform->b = (CGFloat)[b doubleValue];
             transform->c = (CGFloat)[c doubleValue];
@@ -56,8 +54,7 @@ static BOOL MPCGAffineTransformMakeWithDictionaryRepresentation(NSDictionary *di
 
 - (id)transformedValue:(id)value
 {
-    if ([value respondsToSelector:@selector(CGAffineTransformValue)])
-    {
+    if ([value respondsToSelector:@selector(CGAffineTransformValue)]) {
         return MPCGAffineTransformCreateDictionaryRepresentation([value CGAffineTransformValue]);
     }
 
@@ -67,8 +64,7 @@ static BOOL MPCGAffineTransformMakeWithDictionaryRepresentation(NSDictionary *di
 - (id)reverseTransformedValue:(id)value
 {
     CGAffineTransform transform = CGAffineTransformIdentity;
-    if ([value isKindOfClass:[NSDictionary class]] && MPCGAffineTransformMakeWithDictionaryRepresentation(value, &transform))
-    {
+    if ([value isKindOfClass:[NSDictionary class]] && MPCGAffineTransformMakeWithDictionaryRepresentation(value, &transform)) {
         return [NSValue valueWithCGAffineTransform:transform];
     }
 

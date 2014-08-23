@@ -21,8 +21,7 @@
     NSParameterAssert(configuration != nil);
 
     self = [super init];
-    if (self)
-    {
+    if (self) {
         _application = application;
         _serializer = [[MPObjectSerializer alloc] initWithConfiguration:configuration objectIdentityProvider:objectIdentityProvider];
     }
@@ -35,8 +34,7 @@
     UIImage *image = nil;
 
     UIWindow *window = [self windowAtIndex:index];
-    if (window)
-    {
+    if (window) {
         UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, window.screen.scale);
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
@@ -65,8 +63,7 @@
 - (NSDictionary *)objectHierarchyForWindowAtIndex:(NSUInteger)index
 {
     UIWindow *window = [self windowAtIndex:index];
-    if (window)
-    {
+    if (window) {
         return [_serializer serializedObjectsWithRootObject:window];
     }
 
