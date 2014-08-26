@@ -269,7 +269,10 @@ static Mixpanel *sharedInstance = nil;
                            selector:@selector(applicationWillEnterForeground:)
                                name:UIApplicationWillEnterForegroundNotification
                              object:nil];
-
+    [notificationCenter addObserver:self
+                           selector:@selector(appLinksNotificationRaised:)
+                               name:@"com.parse.bolts.measurement_event"
+                             object:nil];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
@@ -962,7 +965,7 @@ static Mixpanel *sharedInstance = nil;
     [self stopFlushTimer];
 }
 
-- (void)applicationDidEnterBackground:(NSNotificationCenter *)notification
+- (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ did enter background", self);
 
@@ -1028,6 +1031,18 @@ static Mixpanel *sharedInstance = nil;
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
     [self trackPushNotification:userInfo event:@"$campaign_received"];
+}
+
+- (void)appLinksNotificationRaised:(NSNotification *)notification
+{
+    NSDictionary *eventMap = @{@"al_nav_out": @"$al_nav_out",
+                               @"al_nav_in": @"$al_nav_in",
+                               @"al_ref_back_out": @"$al_ref_back_out"
+                               };
+    NSDictionary *userInfo = [notification userInfo];
+    if (userInfo && userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
+        [self track:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
+    }
 }
 
 #pragma mark - Decide

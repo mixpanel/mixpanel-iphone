@@ -15,7 +15,6 @@
 #pragma mark - Interface Redefinitions
 
 @interface Mixpanel (Test)
-
 // get access to private members
 
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
@@ -41,7 +40,6 @@
 @end
 
 @interface MixpanelPeople (Test)
-
 // get access to private members
 
 @property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
