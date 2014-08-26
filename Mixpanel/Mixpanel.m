@@ -916,7 +916,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ? properties[@"peopleUnidentifiedQueue"] : [NSMutableArray array];
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
         self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
-        self.variants = properties[@"variants"] ? properties[@"variants"] : [NSArray array];
+        self.variants = properties[@"variants"] ? properties[@"variants"] : [NSSet set];
     }
 }
 
