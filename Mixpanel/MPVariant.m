@@ -276,8 +276,9 @@ static NSMapTable *originalCache;
 + (void)load
 {
     gettersForSetters = [[NSMapTable alloc] initWithKeyOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) valueOptions:(NSPointerFunctionsOpaqueMemory|NSPointerFunctionsOpaquePersonality) capacity:2];
-    [gettersForSetters setObject:(__bridge id)((void *)NSSelectorFromString(@"imageForState:")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:forState:"))];
-    [gettersForSetters setObject:(__bridge id)((void *)NSSelectorFromString(@"image")) forKey:(__bridge id)((void *)NSSelectorFromString(@"setImage:"))];
+    [gettersForSetters setObject:MAPTABLE_ID(NSSelectorFromString(@"imageForState:")) forKey:MAPTABLE_ID(NSSelectorFromString(@"setImage:forState:"))];
+    [gettersForSetters setObject:MAPTABLE_ID(NSSelectorFromString(@"image")) forKey:MAPTABLE_ID(NSSelectorFromString(@"setImage:"))];
+    [gettersForSetters setObject:MAPTABLE_ID(NSSelectorFromString(@"backgroundImageForState:")) forKey:MAPTABLE_ID(NSSelectorFromString(@"setBackgroundImage:forState:"))];
 
     originalCache = [NSMapTable mapTableWithKeyOptions:(NSMapTableWeakMemory|NSMapTableObjectPointerPersonality)
                                           valueOptions:(NSMapTableStrongMemory|NSMapTableObjectPointerPersonality)];
@@ -469,7 +470,7 @@ static NSMapTable *originalCache;
     SEL selector = nil, cacheSelector = nil;
     while((selector = (SEL)((__bridge void *)[selectorEnum nextObject]))) {
         if (selector == self.selector) {
-            cacheSelector = (SEL)(__bridge void *)[gettersForSetters objectForKey:(__bridge id)((void *)selector)];
+            cacheSelector = (SEL)(__bridge void *)[gettersForSetters objectForKey:MAPTABLE_ID(selector)];
             break;
         }
     }

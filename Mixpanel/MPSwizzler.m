@@ -34,7 +34,7 @@ static NSMapTable *swizzles;
 static void mp_swizzledMethod_2(id self, SEL _cmd)
 {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:(__bridge id)((void *)aMethod)];
+    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
     if (swizzle) {
         ((void(*)(id, SEL))swizzle.originalMethod)(self, _cmd);
 
@@ -49,7 +49,7 @@ static void mp_swizzledMethod_2(id self, SEL _cmd)
 static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
 {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:(__bridge id)((void *)aMethod)];
+    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
     if (swizzle) {
         ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
 
@@ -82,17 +82,17 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 
 + (MPSwizzle *)swizzleForMethod:(Method)aMethod
 {
-    return (MPSwizzle *)[swizzles objectForKey:(__bridge id)((void *)aMethod)];
+    return (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
 }
 
 + (void)removeSwizzleForMethod:(Method)aMethod
 {
-    [swizzles removeObjectForKey:(__bridge id)((void *)aMethod)];
+    [swizzles removeObjectForKey:MAPTABLE_ID(aMethod)];
 }
 
 + (void)setSwizzle:(MPSwizzle *)swizzle forMethod:(Method)aMethod
 {
-    [swizzles setObject:swizzle forKey:(__bridge id)((void *)aMethod)];
+    [swizzles setObject:swizzle forKey:MAPTABLE_ID(aMethod)];
 }
 
 + (BOOL)isLocallyDefinedMethod:(Method)aMethod onClass:(Class)aClass
