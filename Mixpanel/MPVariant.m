@@ -228,10 +228,11 @@
 }
 
 - (void)finish {
-    for (MPVariantTweak *tweak in self.tweaks) {
-        [tweak stop];
-    }
     _finished = YES;
+}
+
+- (void)restart {
+    _finished = NO;
 }
 
 #pragma mark Equality
