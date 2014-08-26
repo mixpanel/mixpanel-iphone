@@ -222,7 +222,7 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -232,7 +232,7 @@
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     for (NSUInteger i=0, n=60; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -251,7 +251,7 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
-        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -261,7 +261,7 @@
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     for (NSUInteger i=0, n=60; i<n; i++) {
-        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -280,7 +280,7 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForSerialQueue];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"50 events should be queued up");
@@ -301,13 +301,13 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=10; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForSerialQueue];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
     [self.mixpanel flush];
     for (NSUInteger i=0, n=5; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForSerialQueue];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 5U, @"5 more events should be queued up");

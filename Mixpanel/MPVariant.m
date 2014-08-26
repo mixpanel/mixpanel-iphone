@@ -502,7 +502,7 @@ static NSMapTable *originalCache;
         id originalImage = [originalCache objectForKey:o];
         if (originalImage) {
             NSMutableArray *originalArgs = [self.args mutableCopy];
-            uint n = [originalArgs count];
+            NSUInteger n = [originalArgs count];
             for (NSUInteger i = 0; i < n; i++) {
                 if ([originalArgs[i] isKindOfClass:[NSArray class]] && [originalArgs[i][1] isEqual:@"UIImage"]) {
                     originalArgs[i] = @[originalImage, @"UIImage"];
