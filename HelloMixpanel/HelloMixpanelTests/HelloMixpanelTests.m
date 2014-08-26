@@ -1116,7 +1116,7 @@
     [self waitForAsyncQueue];
 
     UIViewController *topVC = [self topViewController];
-    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Survey was not presented");
+    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification was not presented");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"$campaign_delivery", @"last event should be campaign delivery");
 

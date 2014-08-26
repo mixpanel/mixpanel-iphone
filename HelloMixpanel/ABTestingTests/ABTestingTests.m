@@ -387,37 +387,45 @@
     [self setupHTTPServer];
     int requestCount = [MixpanelDummyDecideConnection getRequestCount];
     [self.mixpanel identify:@"ABC"];
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
-        XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
-    }];
-    [self waitForSerialQueue];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expect = [self expectationWithDescription:@"wait for variants to be executed"];
+        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+            XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
+            for (MPVariant *variant in variants) {
+                [variant execute];
+            }
+            [expect fulfill];
+        }];
+        [self waitForExpectationsWithTimeout:0.1 handler:nil];
 
-    // Test that calling again uses the cache (no extra requests to decide).
-    [self.mixpanel checkForDecideResponseWithCompletion:nil];
-    [self waitForSerialQueue];
-    XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide should have been queried once");
-    XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+        // Test that calling again uses the cache (no extra requests to decide).
+        [self.mixpanel checkForDecideResponseWithCompletion:nil];
+        [self waitForSerialQueue];
 
-    // Test that we make another request if useCache is off
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
-        XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
-    } useCache:NO];
-    [self waitForSerialQueue];
-    XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 2, @"Decide should have been queried again");
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide should have been queried once");
+        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
 
-    [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
+        // Test that we make another request if useCache is off
+        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+            XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
+        } useCache:NO];
+        [self waitForSerialQueue];
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 2, @"Decide should have been queried again");
 
-    __block BOOL completionCalled = NO;
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
-        completionCalled = YES;
-        XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
-    } useCache:NO];
-    [self waitForSerialQueue];
-    XCTAssert(completionCalled, @"completion block should have been called");
-    XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 3, @"Decide should have been queried again");
+        [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
 
-    // Reset to default decide response
-    [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
+        __block BOOL completionCalled = NO;
+        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+            completionCalled = YES;
+            XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
+        } useCache:NO];
+        [self waitForSerialQueue];
+        XCTAssert(completionCalled, @"completion block should have been called");
+        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 3, @"Decide should have been queried again");
+
+        // Reset to default decide response
+        [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
+    }
 }
 
 - (void)testRunExperimentFromDecide

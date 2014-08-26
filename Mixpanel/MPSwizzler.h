@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+// Cast to turn things that are not ids into NSMapTable keys
+#define MAPTABLE_ID(x) (__bridge id)((void *)x)
+
 typedef void (^swizzleBlock)();
 
 @interface MPSwizzler : NSObject
