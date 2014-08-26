@@ -945,10 +945,13 @@ static Mixpanel *sharedInstance = nil;
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
 
-            for (MPVariant *variant in variants) {
-                [variant execute];
-                [self markVariantRun:variant];
-            }
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                for (MPVariant *variant in variants) {
+                    [variant execute];
+                    [self markVariantRun:variant];
+                }
+            });
+
         }];
     }
 }
@@ -1123,17 +1126,26 @@ static Mixpanel *sharedInstance = nil;
                 MixpanelDebug(@"%@ variants check response format error: %@", self, object);
             }
 
-            // Finished variants are those which should no longer be run.
-            NSMutableSet *finishedVariants = [NSMutableSet setWithSet:self.variants];
-            [finishedVariants minusSet:parsedVariants];
-            [finishedVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
+            // Variants that are already running (may or may not have been marked as finished).
+            NSSet *runningVariants = [NSSet setWithSet:[self.variants objectsPassingTest:^BOOL(MPVariant *var, BOOL *stop) { return var.running; }]];
+            // Variants that are marked as finished, (may or may not be running still).
+            NSSet *finishedVariants = [NSSet setWithSet:[self.variants objectsPassingTest:^BOOL(MPVariant *var, BOOL *stop) { return var.finished; }]];
+            // Variants that are running that should be marked finished.
+            NSMutableSet *toFinishVariants = [NSMutableSet setWithSet:runningVariants];
+            [toFinishVariants minusSet:parsedVariants];
+            // New variants that we just saw that are not already running.
+            newVariants = [NSMutableSet setWithSet:parsedVariants];
+            [newVariants minusSet:runningVariants];
+            // Running variants that were marked finished, but have now started again.
+            NSMutableSet *restartVariants = [NSMutableSet setWithSet:parsedVariants];
+            [restartVariants intersectSet:runningVariants];
+            [restartVariants intersectSet:finishedVariants];
+            // All variants that we still care about (stopped are thrown out)
+            NSMutableSet *allVariants = [NSMutableSet setWithSet:newVariants];
+            [allVariants unionSet:runningVariants];
 
-            // New variants are those we are running for the first time.
-            [newVariants unionSet:parsedVariants];
-            [newVariants minusSet:self.variants];
-
-            NSMutableSet *allVariants = [self.variants mutableCopy];
-            [allVariants unionSet:newVariants];
+            [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
+            [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
 
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];
