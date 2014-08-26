@@ -68,6 +68,8 @@ typedef struct {
 #define _MPTweakValueInternal(tweak_, name_, default_, hasmin_, min_, hasmax_, max_) \
 ((^{ \
   /* returns a correctly typed version of the current tweak value */ \
+  _Pragma("clang diagnostic push") \
+  _Pragma("clang diagnostic ignored \"-Wc11-extensions\"") \
   MPTweakValue currentValue = tweak_.currentValue ?: tweak_.defaultValue; \
   return _Generic(default_, \
     float: [currentValue floatValue], \
@@ -96,6 +98,7 @@ typedef struct {
     /* luckily, we only need one fallback */ \
     default: [currentValue UTF8String] \
   ); \
+  _Pragma("clang diagnostic pop") \
 })())
 
 #define _MPTweakValueWithoutRange(name_, default_) _MPTweakValueWithRangeInternal(name_, default_, NO, NULL, NO, NULL)

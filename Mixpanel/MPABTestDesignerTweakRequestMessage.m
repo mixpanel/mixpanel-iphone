@@ -24,12 +24,12 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 {
     __weak MPABTestDesignerConnection *weak_connection = connection;
     NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-        MPABTestDesignerConnection *connection = weak_connection;
+        MPABTestDesignerConnection *conn = weak_connection;
 
-        MPVariant *variant = [connection sessionObjectForKey:kSessionVariantKey];
+        MPVariant *variant = [conn sessionObjectForKey:kSessionVariantKey];
         if (!variant) {
             variant = [[MPVariant alloc] init];
-            [connection setSessionObject:variant forKey:kSessionVariantKey];
+            [conn setSessionObject:variant forKey:kSessionVariantKey];
         }
 
         if ([[[self payload] objectForKey:@"tweaks"] isKindOfClass:[NSArray class]]) {
@@ -41,7 +41,7 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 
         MPABTestDesignerTweakResponseMessage *changeResponseMessage = [MPABTestDesignerTweakResponseMessage message];
         changeResponseMessage.status = @"OK";
-        [connection sendMessage:changeResponseMessage];
+        [conn sendMessage:changeResponseMessage];
     }];
 
     return operation;
