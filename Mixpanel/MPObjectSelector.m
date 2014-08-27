@@ -296,7 +296,7 @@
     }
     NSArray *result;
     // Reorder the cells in a table view so that they are arranged by y position
-    if ([_name isEqualToString:@"UITableViewCell"]) {
+    if ([class isSubclassOfClass:[UITableViewCell class]]) {
         result = [children sortedArrayUsingComparator:^NSComparisonResult(UIView *obj1, UIView *obj2) {
             if (obj2.frame.origin.y > obj1.frame.origin.y) {
                 return NSOrderedAscending;
