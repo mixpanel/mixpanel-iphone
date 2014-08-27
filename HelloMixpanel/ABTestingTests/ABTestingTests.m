@@ -551,6 +551,15 @@
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 }
 
+- (void)testUITableViewCellOrdering
+{
+    MPObjectSelector *sel = [MPObjectSelector objectSelectorWithString:@"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell[0]"];
+    NSArray *selected = [sel selectFromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController];
+    XCTAssertEqual([selected count], 1U, @"Should have selected one object");
+    XCTAssert([selected[0] isKindOfClass:[UITableViewCell class]], @"object should be UITableViewCell");
+    XCTAssert([((UITableViewCell *)selected[0]).textLabel.text isEqualToString:@"Track"], @"Should have selected the topmost cell (which is not the same as the first in the subview list)");
+}
+
 - (void)testValueTransformers
 {
     // Bad Rect (inf, -inf, and NaN values) Main test is that we don't crash on converting this to JSON

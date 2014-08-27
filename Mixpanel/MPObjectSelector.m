@@ -267,34 +267,48 @@
 
 - (NSArray *)getChildrenOfObject:(NSObject *)obj ofType:(Class)class
 {
-    NSMutableArray *result = [NSMutableArray array];
+    NSMutableArray *children = [NSMutableArray array];
     // A UIWindow is also a UIView, so we could in theory follow the subviews chain from UIWindow, but
     // for now we only follow rootViewController from UIView.
     if ([obj isKindOfClass:[UIWindow class]] && [((UIWindow *)obj).rootViewController isKindOfClass:class]) {
-        [result addObject:((UIWindow *)obj).rootViewController];
+        [children addObject:((UIWindow *)obj).rootViewController];
     } else if ([obj isKindOfClass:[UIView class]]) {
         // NB. For UIViews, only add subviews, nothing else.
         // The ordering of this result is critical to being able to
         // apply the index filter.
         for (NSObject *child in [(UIView *)obj subviews]) {
             if (!class || [child isKindOfClass:class]) {
-                [result addObject:child];
+                [children addObject:child];
             }
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
         for (NSObject *child in [(UIViewController *)obj childViewControllers]) {
             if (!class || [child isKindOfClass:class]) {
-                [result addObject:child];
+                [children addObject:child];
             }
         }
         if (((UIViewController *)obj).presentedViewController && (!class || [((UIViewController *)obj).presentedViewController isKindOfClass:class])) {
-            [result addObject:((UIViewController *)obj).presentedViewController];
+            [children addObject:((UIViewController *)obj).presentedViewController];
         }
         if (!class || [((UIViewController *)obj).view isKindOfClass:class]) {
-            [result addObject:((UIViewController *)obj).view];
+            [children addObject:((UIViewController *)obj).view];
         }
     }
-    return [result copy];
+    NSArray *result;
+    // Reorder the cells in a table view so that they are arranged by y position
+    if ([_name isEqualToString:@"UITableViewCell"]) {
+        result = [children sortedArrayUsingComparator:^NSComparisonResult(UIView *obj1, UIView *obj2) {
+            if (obj2.frame.origin.y > obj1.frame.origin.y) {
+                return NSOrderedAscending;
+            } else if (obj2.frame.origin.y < obj1.frame.origin.y) {
+                return NSOrderedDescending;
+            }
+            return NSOrderedSame;
+        }];
+    } else {
+        result = [children copy];
+    }
+    return result;
 }
 
 - (NSString *)description;
