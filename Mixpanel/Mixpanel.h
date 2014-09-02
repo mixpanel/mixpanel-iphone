@@ -199,6 +199,18 @@
  */
 @property (atomic, weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
 
+/*!
+ @property
+
+ @abstract
+ This property holds a weak reference to your main window.
+
+ @discussion
+ Setting this property is optional, and will tell the framework to use this
+ window instead of the window it will look for on the AppDelegate.
+ */
+@property (atomic, weak) UIWindow *mainWindow;
+
 #pragma mark Methods
 
 /*!
@@ -244,6 +256,24 @@
 
  */
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
+
+/*!
+ @method
+
+ @abstract
+ Initializes a singleton instance of the API, uses it to track launchOptions information,
+ and then returns it.
+
+ @discussion
+ This is the preferred method for creating a sharedInstance with a mixpanel
+ like above. With the launchOptions parameter, Mixpanel can track referral
+ information created by push notifications.
+
+ @param apiToken        your project token
+ @param launchOptions   your application delegate's launchOptions
+ @param window          your application's main window
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions window:(UIWindow *)window;
 
 /*!
  @method

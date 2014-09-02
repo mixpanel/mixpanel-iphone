@@ -111,18 +111,23 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 static Mixpanel *sharedInstance = nil;
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions window:(UIWindow *)window
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[super alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:60];
+        sharedInstance = [[super alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:60 mainWindow:window];
     });
     return sharedInstance;
 }
 
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
+{
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions window:nil];
+}
+
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil window:nil];
 }
 
 + (Mixpanel *)sharedInstance
@@ -133,7 +138,7 @@ static Mixpanel *sharedInstance = nil;
     return sharedInstance;
 }
 
-- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval
+- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval mainWindow:(UIWindow *)window
 {
     if (apiToken == nil) {
         apiToken = @"";
@@ -147,6 +152,7 @@ static Mixpanel *sharedInstance = nil;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
+        self.mainWindow = window;
 
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
@@ -284,7 +290,8 @@ static Mixpanel *sharedInstance = nil;
         recognizer.numberOfTouchesRequired = 4;
 #endif
 
-        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
+        UIWindow *mainWindow = self.mainWindow ?: [UIApplication sharedApplication].delegate.window;
+        [mainWindow addGestureRecognizer:recognizer];
     });
 }
 
