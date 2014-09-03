@@ -733,7 +733,8 @@ static Mixpanel *sharedInstance = nil;
 
         [self updateNetworkActivityIndicator:YES];
 
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+        NSURLResponse *urlResponse = nil;
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
 
         [self updateNetworkActivityIndicator:NO];
 
@@ -1085,7 +1086,8 @@ static Mixpanel *sharedInstance = nil;
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
             [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
             NSError *error = nil;
-            NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+            NSURLResponse *urlResponse = nil;
+            NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
             if (error) {
                 NSLog(@"%@ decide check http error: %@", self, error);
                 return;
