@@ -16,6 +16,7 @@
 #import "HTTPServer.h"
 #import "MixpanelDummyDecideConnection.h"
 #import "MPValueTransformers.h"
+#import "NSData+MPBase64.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -571,6 +572,14 @@
     XCTAssert([rekt isKindOfClass:[NSDictionary class]], @"Should be converted to NSDictionary");
     XCTAssertEqual([rekt[@"X"] floatValue], 0.0f, @"Infinite value should be converted to 0");
 
+    NSString *imageString = @"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=";
+    UIImage *image = [[UIImage alloc] initWithData:[NSData mp_dataFromBase64String:imageString]];
+    NSDictionary *imgDict = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] transformedValue:image];
+    XCTAssertNotEqual(imgDict[@"images"][0][@"data"], [NSNull null], @"base64 representations should exist");
+
+    UIImage *nilImage = [[UIImage alloc] init]; //[[UIImage alloc] initWithData:[[NSData alloc] init]];
+    NSDictionary *nilImgDict = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] transformedValue:nilImage];
+    XCTAssertEqualObjects(nilImgDict[@"images"][0][@"data"], [NSNull null], @"base64 representations should ne NSNull");
 }
 
 @end

@@ -39,7 +39,7 @@
             NSDictionary *imageDictionary = @{
                 @"scale": @(image.scale),
                 @"mime_type" : @"image/png",
-                @"data": ((imageRep == nil) ? [imageRep mp_base64EncodedString] : [NSNull null])
+                @"data": ((imageRep != nil) ? [imageRep mp_base64EncodedString] : [NSNull null])
             };
 
             [imageDictionaries addObject:imageDictionary];
