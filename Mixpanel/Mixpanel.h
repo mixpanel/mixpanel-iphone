@@ -196,7 +196,7 @@
  @discussion
  Defaults to 6.0.
  */
-@property (atomic) double miniNotificationPresentationTime;
+@property (atomic) CGFloat miniNotificationPresentationTime;
 
 /*!
  @property
