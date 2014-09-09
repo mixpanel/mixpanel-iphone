@@ -155,6 +155,8 @@ static Mixpanel *sharedInstance = nil;
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
         self.checkForVariantsOnActive = YES;
+        self.checkForSurveysOnActive = YES;
+        self.miniNotificationPresentationTime = 6.0;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -171,7 +173,6 @@ static Mixpanel *sharedInstance = nil;
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
-        self.checkForSurveysOnActive = YES;
         self.surveys = nil;
         self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
@@ -1437,8 +1438,7 @@ static Mixpanel *sharedInstance = nil;
 
     [controller showWithAnimation];
 
-    double delayInSeconds = 5.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self notificationController:controller wasDismissedWithStatus:NO];
     });
