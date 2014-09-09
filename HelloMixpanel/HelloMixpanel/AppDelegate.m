@@ -15,11 +15,13 @@
     NSString *mixpanelToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"mixpanelToken"];
 
     if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
+#ifndef DEBUG
         [[[UIAlertView alloc] initWithTitle:@"Mixpanel Token Required"
                                    message:@"Go to Settings > Mixpanel and add your project's token"
                                   delegate:nil
                          cancelButtonTitle:@"OK"
                           otherButtonTitles:nil] show];
+#endif
     } else {
         // Initialize the MixpanelAPI object
         self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken launchOptions:launchOptions];
