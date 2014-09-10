@@ -352,7 +352,8 @@
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
- <code>NSURL</code> objects.
+ <code>NSURL</code> objects. If the event is being timed, the timer will
+ stop and be added as a property.
 
  @param event           event name
  @param properties      properties dictionary
@@ -465,6 +466,23 @@
  Returns the currently set super properties.
  */
 - (NSDictionary *)currentSuperProperties;
+
+/*!
+  @method
+ 
+  @abstract
+  Starts a timer that will be stopped and added as a property when a
+  corresponding event is tracked.
+ */
+- (void)timeEvent:(NSString *)event;
+
+/*!
+ @method
+ 
+ @abstract
+ Clears all current event timers.
+ */
+- (void)clearTimedEvents;
 
 /*!
  @method
