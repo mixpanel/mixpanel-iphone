@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSMutableArray *peopleQueue;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, assign) dispatch_queue_t serialQueue;
+@property (nonatomic, retain) NSMutableDictionary *timedEvents;
 
 @property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
 @property (nonatomic, strong) MPNotification *currentlyShowingNotification;
@@ -586,6 +587,7 @@
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
     [self.mixpanel.people set:p];
+    self.mixpanel.timedEvents[@"e2"] = @5.0;
     [self waitForSerialQueue];
     [self.mixpanel archive];
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
@@ -595,6 +597,7 @@
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"e1", @"event was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
+    XCTAssertEqualObjects(self.mixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
     NSFileManager *fileManager = [NSFileManager defaultManager];
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
@@ -608,6 +611,7 @@
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id from no file failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from no file is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from no file not empty");
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
     // corrupt file
     NSData *garbage = [@"garbage" dataUsingEncoding:NSUTF8StringEncoding];
     [garbage writeToFile:[self.mixpanel eventsFilePath] atomically:NO];
@@ -625,6 +629,7 @@
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id from garbage failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from garbage is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from garbage not empty");
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
 }
 
 - (void)testPeopleAddPushDeviceToken
