@@ -549,6 +549,7 @@ static Mixpanel *sharedInstance = nil;
         p[@"token"] = self.apiToken;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
+            [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @(epochInterval - [eventStartTime doubleValue]);
         }
         if (self.nameTag) {
