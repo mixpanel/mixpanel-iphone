@@ -58,6 +58,7 @@
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
 
@@ -168,6 +169,7 @@ static Mixpanel *sharedInstance = nil;
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+        self.timedEvents = [NSMutableDictionary dictionary];
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
@@ -537,12 +539,18 @@ static Mixpanel *sharedInstance = nil;
     }
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
-    NSNumber *epochSeconds = @(round([[NSDate date] timeIntervalSince1970]));
+    
+    double epochInterval = round([[NSDate date] timeIntervalSince1970]);
+    NSNumber *epochSeconds = @(epochInterval);
     dispatch_async(self.serialQueue, ^{
+        NSNumber *eventStartTime = self.timedEvents[event];
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [p addEntriesFromDictionary:self.automaticProperties];
         p[@"token"] = self.apiToken;
         p[@"time"] = epochSeconds;
+        if (eventStartTime) {
+            p[@"$duration"] = @(epochInterval - [eventStartTime doubleValue]);
+        }
         if (self.nameTag) {
             p[@"mp_name_tag"] = self.nameTag;
         }
@@ -632,6 +640,23 @@ static Mixpanel *sharedInstance = nil;
     return [self.superProperties copy];
 }
 
+- (void)timeEvent:(NSString *)event
+{
+    if (event == nil || [event length] == 0) {
+        NSLog(@"Mixpanel cannot time an empty event");
+        return;
+    }
+    dispatch_async(self.serialQueue, ^{
+        self.timedEvents[event] = @(round([[NSDate date] timeIntervalSince1970]));
+    });
+}
+
+- (void)clearTimedEvents
+{   dispatch_async(self.serialQueue, ^{
+        self.timedEvents = [NSMutableDictionary dictionary];
+    });
+}
+
 - (void)reset
 {
     dispatch_async(self.serialQueue, ^{
@@ -642,6 +667,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.unidentifiedQueue = [NSMutableArray array];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
+        self.timedEvents = [NSMutableDictionary dictionary];
         [self archive];
     });
 }
