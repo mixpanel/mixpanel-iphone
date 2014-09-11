@@ -166,7 +166,7 @@
 
 - (NSInvocation *)invocationForObject:(id)object withSelectorDescription:(MPPropertySelectorDescription *)selectorDescription
 {
-    NSUInteger parameterCount = [selectorDescription.parameters count];
+    NSUInteger __unused parameterCount = [selectorDescription.parameters count];
 
     SEL aSelector = NSSelectorFromString(selectorDescription.selectorName);
     NSAssert(aSelector != nil, @"Expected non-nil selector!");
