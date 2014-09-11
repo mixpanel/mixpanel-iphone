@@ -49,12 +49,34 @@
 
     [self.window makeKeyAndVisible];
 
+#ifdef __IPHONE_8_0
+    UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
+#else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
 
     return YES;
 }
 
 #pragma mark - Push notifications
+
+#ifdef __IPHONE_8_0
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
+{
+    if ([identifier isEqualToString:@"declineAction"]) {
+        NSLog(@"%@ user declined push notification action", self);
+        
+    } else if ([identifier isEqualToString:@"answerAction"]) {
+        NSLog(@"%@ user answered push notification action", self);
+    }
+}
+#endif
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     [self.mixpanel.people addPushDeviceToken:devToken];
