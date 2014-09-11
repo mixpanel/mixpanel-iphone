@@ -13,19 +13,31 @@
 {
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"mixpanelToken": MIXPANEL_TOKEN}];
     NSString *mixpanelToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"mixpanelToken"];
+    
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
+    self.window.rootViewController = [storyboard instantiateInitialViewController];
+    
+    [self.window makeKeyAndVisible];
 
     if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
+#ifdef __IPHONE_8_0
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Mixpanel Token Required" message:@"Go to Settings > Mixpanel and add your project's token" preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+        [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+#else
         [[[UIAlertView alloc] initWithTitle:@"Mixpanel Token Required"
                                    message:@"Go to Settings > Mixpanel and add your project's token"
                                   delegate:nil
                          cancelButtonTitle:@"OK"
                           otherButtonTitles:nil] show];
+#endif
     } else {
         // Initialize the MixpanelAPI object
         self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken launchOptions:launchOptions];
     }
-
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     // Override point for customization after application launch.
 
@@ -43,11 +55,6 @@
 
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
-
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
-    self.window.rootViewController = [storyboard instantiateInitialViewController];
-
-    [self.window makeKeyAndVisible];
 
 #ifdef __IPHONE_8_0
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
@@ -93,12 +100,18 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     // Show alert for push notifications recevied while the app is running
+#ifdef __IPHONE_8_0
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+#else
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
                                                     message:userInfo[@"aps"][@"alert"]
                                                    delegate:nil
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
+#endif
 
     [self.mixpanel trackPushNotification:userInfo];
 }
