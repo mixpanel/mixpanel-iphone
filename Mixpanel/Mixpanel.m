@@ -1256,26 +1256,30 @@ static Mixpanel *sharedInstance = nil;
                 self.currentlyShowingSurvey = survey;
                 if (showAlert) {
 #ifdef __IPHONE_8_0
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                        if (self.currentlyShowingSurvey) {
-                            [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
-                            self.currentlyShowingSurvey = nil;
-                        }
-                    }]];
-                    [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                        if (self.currentlyShowingSurvey) {
-                            [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
-                        }
-                    }]];
-                    [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
-#else
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                    message:@"Mind taking a quick survey?"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"No, Thanks"
-                                                          otherButtonTitles:@"Sure", nil];
-                    [alert show];
+                    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
+                        [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                            if (self.currentlyShowingSurvey) {
+                                [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
+                                self.currentlyShowingSurvey = nil;
+                            }
+                        }]];
+                        [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                            if (self.currentlyShowingSurvey) {
+                                [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
+                            }
+                        }]];
+                        [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
+                    } else {
+#endif
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
+                                                                        message:@"Mind taking a quick survey?"
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"No, Thanks"
+                                                              otherButtonTitles:@"Sure", nil];
+                        [alert show];
+#ifdef __IPHONE_8_0
+                    }
 #endif
                 } else {
                     [self presentSurveyWithRootViewController:survey];
