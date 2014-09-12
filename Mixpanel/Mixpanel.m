@@ -187,8 +187,6 @@ static Mixpanel *sharedInstance = nil;
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
-        } else {
-            [self track:@"$app_open"];
         }
     }
 
