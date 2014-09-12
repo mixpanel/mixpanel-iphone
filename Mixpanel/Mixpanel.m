@@ -273,6 +273,7 @@ static Mixpanel *sharedInstance = nil;
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
 
+#ifndef DISABLE_MIXPANEL_AB_DESIGNER
     dispatch_async(dispatch_get_main_queue(), ^{
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
         recognizer.minimumPressDuration = 3;
@@ -285,6 +286,7 @@ static Mixpanel *sharedInstance = nil;
 
         [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
     });
+#endif
 }
 
 - (NSString *)description
