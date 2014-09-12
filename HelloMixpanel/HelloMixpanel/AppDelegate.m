@@ -113,16 +113,20 @@
 {
     // Show alert for push notifications recevied while the app is running
 #ifdef __IPHONE_8_0
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-#else
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-                                                    message:userInfo[@"aps"][@"alert"]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    } else {
+#endif
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                        message:userInfo[@"aps"][@"alert"]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+#ifdef __IPHONE_8_0
+    }
 #endif
 
     [self.mixpanel trackPushNotification:userInfo];
