@@ -283,8 +283,7 @@ static Mixpanel *sharedInstance = nil;
 #else
         recognizer.numberOfTouchesRequired = 4;
 #endif
-
-        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
     });
 #endif
 }
