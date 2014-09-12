@@ -59,10 +59,14 @@
     self.mixpanel.nameTag = @"Walter Sobchak";
 
 #ifdef __IPHONE_8_0
-    UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
-#else
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
+    } else {
+#endif
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#ifdef __IPHONE_8_0
+    }
 #endif
 
     return YES;

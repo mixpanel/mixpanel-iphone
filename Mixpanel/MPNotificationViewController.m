@@ -316,9 +316,18 @@
 - (void)viewWillLayoutSubviews
 {
     UIView *parentView = self.view.superview;
+    CGRect parentFrame;
 
-    double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-    CGRect parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
+#ifdef __IPHONE_8_0
+    if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
+        parentFrame = parentView.frame;
+    } else {
+#endif
+        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+        parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
+#ifdef __IPHONE_8_0
+    }
+#endif
 
     self.view.frame = CGRectMake(0.0f, parentFrame.size.height - MPNotifHeight, parentFrame.size.width, MPNotifHeight * 3.0f);
 
@@ -393,9 +402,19 @@
 
     UIView *topView = [self getTopView];
     if (topView) {
-
-        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-        CGRect topFrame = CGRectApplyAffineTransform(topView.frame, CGAffineTransformMakeRotation((float)angle));
+        
+        CGRect topFrame;
+        
+#ifdef __IPHONE_8_0
+        if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
+            topFrame = topView.frame;
+        } else {
+#endif
+            double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+            topFrame = CGRectApplyAffineTransform(topView.frame, CGAffineTransformMakeRotation((float)angle));
+#ifdef __IPHONE_8_0
+        }
+#endif
 
         [topView addSubview:self.view];
 
@@ -449,9 +468,20 @@
         } else {
             duration = 0.0f;
         }
-
-        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-        CGRect parentFrame = CGRectApplyAffineTransform(self.view.superview.frame, CGAffineTransformMakeRotation((float)angle));
+        
+        UIView *parentView = self.view.superview;
+        CGRect parentFrame;
+        
+#ifdef __IPHONE_8_0
+        if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
+            parentFrame = parentView.frame;
+        } else {
+#endif
+            double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
+            parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
+#ifdef __IPHONE_8_0
+        }
+#endif
 
         [UIView animateWithDuration:duration animations:^{
             self.view.frame = CGRectMake(0.0f, parentFrame.size.height, parentFrame.size.width, MPNotifHeight * 3.0f);
