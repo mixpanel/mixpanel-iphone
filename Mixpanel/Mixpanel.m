@@ -25,7 +25,7 @@
 #import "MPWebSocket.h"
 #import "MPABTestDesignerConnection.h"
 
-#define VERSION @"2.5.1"
+#define VERSION @"2.5.2"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
@@ -161,6 +161,8 @@ static Mixpanel *sharedInstance = nil;
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
         self.checkForVariantsOnActive = YES;
+        self.checkForSurveysOnActive = YES;
+        self.miniNotificationPresentationTime = 6.0;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -177,7 +179,6 @@ static Mixpanel *sharedInstance = nil;
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
-        self.checkForSurveysOnActive = YES;
         self.surveys = nil;
         self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
@@ -192,8 +193,6 @@ static Mixpanel *sharedInstance = nil;
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
-        } else {
-            [self track:@"$app_open"];
         }
     }
 
@@ -280,6 +279,7 @@ static Mixpanel *sharedInstance = nil;
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
 
+#ifndef DISABLE_MIXPANEL_AB_DESIGNER
     dispatch_async(dispatch_get_main_queue(), ^{
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
         recognizer.minimumPressDuration = 3;
@@ -289,9 +289,9 @@ static Mixpanel *sharedInstance = nil;
 #else
         recognizer.numberOfTouchesRequired = 4;
 #endif
-
-        [[UIApplication sharedApplication].delegate.window addGestureRecognizer:recognizer];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
     });
+#endif
 }
 
 - (NSString *)description
@@ -1465,8 +1465,7 @@ static Mixpanel *sharedInstance = nil;
 
     [controller showWithAnimation];
 
-    double delayInSeconds = 5.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self notificationController:controller wasDismissedWithStatus:NO];
     });

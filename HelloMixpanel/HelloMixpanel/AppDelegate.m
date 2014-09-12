@@ -23,6 +23,7 @@
     [self.window makeKeyAndVisible];
 
     if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
+#ifndef DEBUG
 #ifdef __IPHONE_8_0
         if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Mixpanel Token Required" message:@"Go to Settings > Mixpanel and add your project's token" preferredStyle:UIAlertControllerStyleAlert];
@@ -39,6 +40,7 @@
                               otherButtonTitles:nil] show];
 #ifdef __IPHONE_8_0
         }
+#endif
 #endif
     } else {
         // Initialize the MixpanelAPI object

@@ -188,6 +188,18 @@
 
 /*!
  @property
+ 
+ @abstract
+ Determines the time, in seconds, that a mini notification will remain on
+ the screen before automatically hiding itself.
+ 
+ @discussion
+ Defaults to 6.0.
+ */
+@property (atomic) CGFloat miniNotificationPresentationTime;
+
+/*!
+ @property
 
  @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
