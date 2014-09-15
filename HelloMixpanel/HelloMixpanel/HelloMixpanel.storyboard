@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uq2-fg-yt9">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
-        <!--Top Nav View Controller - Mixpanel-->
+        <!--Mixpanel-->
         <scene sceneID="U7B-9K-Nss">
             <objects>
                 <navigationController title="Mixpanel" definesPresentationContext="YES" id="Uq2-fg-yt9" customClass="TopNavViewController" sceneMemberID="viewController">
@@ -24,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="149" y="202"/>
         </scene>
-        <!--View Controller - Track-->
+        <!--Track-->
         <scene sceneID="mQi-ex-uaJ">
             <objects>
                 <viewController title="Track" id="ibJ-TT-khi" customClass="ViewController" sceneMemberID="viewController">
@@ -105,7 +105,7 @@
             </objects>
             <point key="canvasLocation" x="1779" y="-38"/>
         </scene>
-        <!--Home View Controller - Mixpanel-->
+        <!--Mixpanel-->
         <scene sceneID="4C5-NK-bru">
             <objects>
                 <viewController title="Mixpanel" id="44e-Yt-MIg" customClass="HomeViewController" sceneMemberID="viewController">
@@ -278,7 +278,7 @@
             </objects>
             <point key="canvasLocation" x="987" y="425"/>
         </scene>
-        <!--Secret Whisper View Controller - Secret Whisper-->
+        <!--Secret Whisper-->
         <scene sceneID="z3A-Of-1gx">
             <objects>
                 <viewController title="Secret Whisper" id="atC-5D-Ob1" customClass="SecretWhisperViewController" sceneMemberID="viewController">
@@ -290,7 +290,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yoj-6C-wSB">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yoj-6C-wSB">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="331" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Ame-u7-eQE">
@@ -378,7 +378,7 @@
             </objects>
             <point key="canvasLocation" x="986" y="922"/>
         </scene>
-        <!--View Controller - Notifications-->
+        <!--Notifications-->
         <scene sceneID="bIK-8d-7hJ">
             <objects>
                 <viewController title="Notifications" id="PAi-oO-Noz" customClass="ViewController" sceneMemberID="viewController">
@@ -490,7 +490,7 @@
             </objects>
             <point key="canvasLocation" x="1779" y="1500"/>
         </scene>
-        <!--View Controller - Surveys-->
+        <!--Surveys-->
         <scene sceneID="p1O-EO-wqa">
             <objects>
                 <viewController title="Surveys" id="lkb-Ai-epM" customClass="ViewController" sceneMemberID="viewController">
@@ -618,7 +618,7 @@
             </objects>
             <point key="canvasLocation" x="2274" y="1811"/>
         </scene>
-        <!--View Controller - Item 1-->
+        <!--Item 1-->
         <scene sceneID="uLx-b1-WMe">
             <objects>
                 <viewController id="zof-Y0-cqK" sceneMemberID="viewController">
@@ -744,7 +744,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="YgV-bM-dil">
                                 <rect key="frame" x="20" y="10" width="280" height="2"/>
                             </progressView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4jt-Cl-MVK">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4jt-Cl-MVK">
                                 <rect key="frame" x="20" y="297" width="280" height="84"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ic0-nQ-pO0">
@@ -819,7 +819,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2778" y="2118"/>
         </scene>
-        <!--Tab Bar Controller - Kitchen Sink-->
+        <!--Kitchen Sink-->
         <scene sceneID="8Yl-g8-Oxb">
             <objects>
                 <tabBarController definesPresentationContext="YES" id="CZL-Lr-gEG" sceneMemberID="viewController">
@@ -841,7 +841,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2274" y="2474"/>
         </scene>
-        <!--View Controller - Item-->
+        <!--Item-->
         <scene sceneID="Ejd-Ic-I9O">
             <objects>
                 <viewController id="PYM-Pj-6bq" sceneMemberID="viewController">
@@ -887,7 +887,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2784" y="3368"/>
         </scene>
-        <!--View Controller - Item 2-->
+        <!--Item 2-->
         <scene sceneID="MlI-Hh-ZeY">
             <objects>
                 <viewController id="Z1R-cg-a4N" sceneMemberID="viewController">
@@ -939,7 +939,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="2778" y="2785"/>
         </scene>
-        <!--View Controller - A/B Testing-->
+        <!--A/B Testing-->
         <scene sceneID="cMo-ro-H4D">
             <objects>
                 <viewController title="A/B Testing" id="dag-He-PtO" customClass="ViewController" sceneMemberID="viewController">
