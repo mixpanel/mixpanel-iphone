@@ -313,6 +313,10 @@ and People record queues to disk.
 <dd><p>Initializes an instance of the API with the given project token.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/joinExperiments" target="_top">-joinExperiments</a></tt></dt>
+<dd><p>Join any experiments (A/B tests) that are available for the current user.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/registerSuperProperties:" target="_top">-registerSuperProperties:</a></tt></dt>
 <dd><p>Registers super properties, overwriting ones that have already been set.
 </p>
@@ -534,6 +538,22 @@ one Mixpanel project from a single app. If you only need to send data to one
 project, consider using <code>sharedInstanceWithToken:</code>.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;   name=Mixpanel::joinExperiments -->
+<a name="//apple_ref/occ/instm/Mixpanel/joinExperiments"></a>
+<h3><a name="joinExperiments">joinExperiments</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=start --><!-- begin abstract --><p>Join any experiments (A/B tests) that are available for the current user.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/joinExperiments //apple_ref/occ/data/Mixpanel/joinExperiments //apple_ref/occ/data/joinExperiments //apple_ref/occ/clconst/Mixpanel/joinExperiments " machineGenerated="true" --><span class="var">joinExperiments</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=start --><p>Mixpanel will check for A/B tests automatically when your app enters
+the foreground. Call this method if you would like to to check for,
+and join, any experiments are newly available for the current user.
+</p>
+<p>You do not need to call this method on the main thread.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;   name=Mixpanel::registerSuperProperties: -->
 <a name="//apple_ref/occ/instm/Mixpanel/registerSuperProperties:"></a>
 <h3><a name="registerSuperProperties:">registerSuperProperties:</a></h3>
@@ -881,6 +901,11 @@ currently identified user when the application becomes active.
 currently identified user when the application becomes active.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive" target="_top">checkForVariantsOnActive</a></tt></dt>
+<dd><p>Controls whether to automatically check for A/B test variants for the
+currently identified user when the application becomes active.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/delegate" target="_top">delegate</a></tt></dt>
 <dd><p>The a MixpanelDelegate object that can be used to assert fine-grain control
 over Mixpanel network activity.
@@ -897,6 +922,11 @@ over Mixpanel network activity.
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/flushOnBackground" target="_top">flushOnBackground</a></tt></dt>
 <dd><p>Control whether the library should flush data to Mixpanel when the app
 enters the background.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime" target="_top">miniNotificationPresentationTime</a></tt></dt>
+<dd><p>Determines the time, in seconds, that a mini notification will remain on
+the screen before automatically hiding itself.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/nameTag" target="_top">nameTag</a></tt></dt>
@@ -956,6 +986,21 @@ currently identified user when the application becomes active.
 <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
 for the currently identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;   name=Mixpanel::checkForVariantsOnActive -->
+<a name="//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive"></a>
+<h3><a name="checkForVariantsOnActive">checkForVariantsOnActive</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;name=start --><!-- begin abstract --><p>Controls whether to automatically check for A/B test variants for the
+currently identified user when the application becomes active.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/checkForVariantsOnActive //apple_ref/occ/data/Mixpanel/checkForVariantsOnActive //apple_ref/occ/data/checkForVariantsOnActive //apple_ref/occ/clconst/Mixpanel/checkForVariantsOnActive " machineGenerated="true" --><span class="var">checkForVariantsOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;name=start --><p>Defaults to YES. Will fire a network request on
+<code>applicationDidBecomeActive</code> to retrieve a list of valid variants
+for the currently identified user.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/delegate;   name=Mixpanel::delegate -->
 <a name="//apple_ref/occ/instp/Mixpanel/delegate"></a>
 <h3><a name="delegate">delegate</a></h3>
@@ -1014,6 +1059,19 @@ enters the background.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
 task support was introduced, and later.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;   name=Mixpanel::miniNotificationPresentationTime -->
+<a name="//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime"></a>
+<h3><a name="miniNotificationPresentationTime">miniNotificationPresentationTime</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=start --><!-- begin abstract --><p>Determines the time, in seconds, that a mini notification will remain on
+the screen before automatically hiding itself.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/CGFloat //apple_ref/occ/tdef/CGFloat //apple_ref/occ/tag/CGFloat //apple_ref/occ/struct/CGFloat //apple_ref/occ/intf/CGFloat //apple_ref/doc/anysymbol/CGFloat" machineGenerated="true" --><span class="type">CGFloat</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/miniNotificationPresentationTime //apple_ref/occ/data/Mixpanel/miniNotificationPresentationTime //apple_ref/occ/data/miniNotificationPresentationTime //apple_ref/occ/clconst/Mixpanel/miniNotificationPresentationTime " machineGenerated="true" --><span class="var">miniNotificationPresentationTime</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=start --><p>Defaults to 6.0.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/nameTag;   name=Mixpanel::nameTag -->
 <a name="//apple_ref/occ/instp/Mixpanel/nameTag"></a>
 <h3><a name="nameTag">nameTag</a></h3>
@@ -1094,7 +1152,7 @@ survey check retrieves at least 1 valid survey for the currently
 identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Friday, June 20, 2014
+<p class="hd_timestamp">Last Updated: Friday, September 12, 2014
 </p></div>
 </td></tr></table>
 </body></html>

@@ -1133,7 +1133,7 @@
                 [expectation fulfill];
             }];
         });
-        [self waitForExpectationsWithTimeout:10 handler:nil];
+        [self waitForExpectationsWithTimeout:self.mixpanel.miniNotificationPresentationTime * 2 handler:nil];
     }
 }
 
