@@ -18,7 +18,7 @@
 
     if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
 #ifndef DEBUG
-#ifdef __IPHONE_8_0
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
         if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Mixpanel Token Required" message:@"Go to Settings > Mixpanel and add your project's token" preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -26,14 +26,18 @@
             }]];
             [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
         } else {
-#endif
             [[[UIAlertView alloc] initWithTitle:@"Mixpanel Token Required"
                                        message:@"Go to Settings > Mixpanel and add your project's token"
                                       delegate:nil
                              cancelButtonTitle:@"OK"
                               otherButtonTitles:nil] show];
-#ifdef __IPHONE_8_0
         }
+#else
+        [[[UIAlertView alloc] initWithTitle:@"Mixpanel Token Required"
+                                    message:@"Go to Settings > Mixpanel and add your project's token"
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
 #endif
 #endif
     } else {
@@ -58,15 +62,15 @@
     // Name a user in Mixpanel Streams
     self.mixpanel.nameTag = @"Walter Sobchak";
 
-#ifdef __IPHONE_8_0
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
     } else {
-#endif
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-#ifdef __IPHONE_8_0
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
+#else
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 #endif
 
     return YES;
@@ -74,7 +78,7 @@
 
 #pragma mark - Push notifications
 
-#ifdef __IPHONE_8_0
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -106,21 +110,26 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     // Show alert for push notifications recevied while the app is running
-#ifdef __IPHONE_8_0
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
     if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
         [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     } else {
-#endif
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
                                                         message:userInfo[@"aps"][@"alert"]
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
-#ifdef __IPHONE_8_0
     }
+#else
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                    message:userInfo[@"aps"][@"alert"]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
 #endif
 
     [self.mixpanel trackPushNotification:userInfo];
