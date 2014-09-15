@@ -58,6 +58,7 @@
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
 
@@ -170,6 +171,7 @@ static Mixpanel *sharedInstance = nil;
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
         [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+        self.timedEvents = [NSMutableDictionary dictionary];
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
@@ -540,12 +542,19 @@ static Mixpanel *sharedInstance = nil;
     }
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
-    NSNumber *epochSeconds = @(round([[NSDate date] timeIntervalSince1970]));
+    
+    double epochInterval = [[NSDate date] timeIntervalSince1970];
+    NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{
+        NSNumber *eventStartTime = self.timedEvents[event];
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
         [p addEntriesFromDictionary:self.automaticProperties];
         p[@"token"] = self.apiToken;
         p[@"time"] = epochSeconds;
+        if (eventStartTime) {
+            [self.timedEvents removeObjectForKey:event];
+            p[@"$duration"] = [NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]];
+        }
         if (self.nameTag) {
             p[@"mp_name_tag"] = self.nameTag;
         }
@@ -635,6 +644,23 @@ static Mixpanel *sharedInstance = nil;
     return [self.superProperties copy];
 }
 
+- (void)timeEvent:(NSString *)event
+{
+    if (event == nil || [event length] == 0) {
+        NSLog(@"Mixpanel cannot time an empty event");
+        return;
+    }
+    dispatch_async(self.serialQueue, ^{
+        self.timedEvents[event] = @([[NSDate date] timeIntervalSince1970]);
+    });
+}
+
+- (void)clearTimedEvents
+{   dispatch_async(self.serialQueue, ^{
+        self.timedEvents = [NSMutableDictionary dictionary];
+    });
+}
+
 - (void)reset
 {
     dispatch_async(self.serialQueue, ^{
@@ -645,6 +671,7 @@ static Mixpanel *sharedInstance = nil;
         self.people.unidentifiedQueue = [NSMutableArray array];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
+        self.timedEvents = [NSMutableDictionary dictionary];
         [self archive];
     });
 }
@@ -853,6 +880,7 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
+    [p setValue:self.timedEvents forKey:@"timedEvents"];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         NSLog(@"%@ unable to archive properties data", self);
@@ -924,6 +952,7 @@ static Mixpanel *sharedInstance = nil;
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
         self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
         self.variants = properties[@"variants"] ? properties[@"variants"] : [NSSet set];
+        self.timedEvents = properties[@"timedEvents"] ? properties[@"timedEvents"] : [NSMutableDictionary dictionary];
     }
 }
 
