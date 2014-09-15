@@ -14,12 +14,6 @@
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"mixpanelToken": MIXPANEL_TOKEN}];
     NSString *mixpanelToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"mixpanelToken"];
     
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"HelloMixpanel" bundle:nil];
-    self.window.rootViewController = [storyboard instantiateInitialViewController];
-    
     [self.window makeKeyAndVisible];
 
     if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
