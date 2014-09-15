@@ -39,15 +39,9 @@
 #define MixpanelDebug(...)
 #endif
 
-#ifdef __IPHONE_8_0
-@interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
-    NSUInteger _flushInterval;
-}
-#else
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
 }
-#endif
 
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
@@ -1353,7 +1347,6 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-#ifndef __IPHONE_8_0
 #pragma mark Surveys (UIAlertViewDelegate)
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
@@ -1367,7 +1360,6 @@ static Mixpanel *sharedInstance = nil;
         }
     }
 }
-#endif
 
 #pragma mark - Notifications
 
