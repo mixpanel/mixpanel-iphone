@@ -540,8 +540,8 @@ static Mixpanel *sharedInstance = nil;
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     
-    double epochInterval = round([[NSDate date] timeIntervalSince1970]);
-    NSNumber *epochSeconds = @(epochInterval);
+    double epochInterval = [[NSDate date] timeIntervalSince1970];
+    NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[event];
         NSMutableDictionary *p = [NSMutableDictionary dictionary];
@@ -550,7 +550,7 @@ static Mixpanel *sharedInstance = nil;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:event];
-            p[@"$duration"] = @(epochInterval - [eventStartTime doubleValue]);
+            p[@"$duration"] = [NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]];
         }
         if (self.nameTag) {
             p[@"mp_name_tag"] = self.nameTag;
@@ -648,7 +648,7 @@ static Mixpanel *sharedInstance = nil;
         return;
     }
     dispatch_async(self.serialQueue, ^{
-        self.timedEvents[event] = @(round([[NSDate date] timeIntervalSince1970]));
+        self.timedEvents[event] = @([[NSDate date] timeIntervalSince1970]);
     });
 }
 
