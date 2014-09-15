@@ -41,20 +41,13 @@
 {
     [self.timer invalidate];
     self.split = [NSDate timeIntervalSinceReferenceDate] - self.timeStart;
-    self.splitLabel.text = [NSString stringWithFormat:@"%f", self.split];
+    self.splitLabel.text = [NSString stringWithFormat:@"%.3f", self.split];
     [[Mixpanel sharedInstance] track:@"Timing"];
 }
 
 - (void)tick
 {
-    self.timerLabel.text = [NSString stringWithFormat:@"%f", [NSDate timeIntervalSinceReferenceDate] - self.timeStart];
+    self.timerLabel.text = [NSString stringWithFormat:@"%.3f", [NSDate timeIntervalSinceReferenceDate] - self.timeStart];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 
 @end
