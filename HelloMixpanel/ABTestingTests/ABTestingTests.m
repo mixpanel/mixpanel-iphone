@@ -572,12 +572,47 @@
     XCTAssert([rekt isKindOfClass:[NSDictionary class]], @"Should be converted to NSDictionary");
     XCTAssertEqual([rekt[@"X"] floatValue], 0.0f, @"Infinite value should be converted to 0");
 
+    // Serialize and deserialize a UIImage
     NSString *imageString = @"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=";
     UIImage *image = [[UIImage alloc] initWithData:[NSData mp_dataFromBase64String:imageString]];
     NSDictionary *imgDict = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] transformedValue:image];
     XCTAssertNotEqual(imgDict[@"images"][0][@"data"], [NSNull null], @"base64 representations should exist");
+    image = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] reverseTransformedValue:imgDict];
+    XCTAssert(CGSizeEqualToSize(image.size, CGSizeMake(1.0f, 1.0f)), @"Image should be 1x1");
 
-    UIImage *nilImage = [[UIImage alloc] init]; //[[UIImage alloc] initWithData:[[NSData alloc] init]];
+    // Deserialize a UIImage with a URL
+    imgDict = @{
+        @"imageOrientation":@0,
+        @"images":@[@{
+                        @"url":@"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=",
+                        @"mime_type":@"image/png",
+                        @"scale":@1
+                        }],
+        @"renderingMode":@0,
+        @"resizingMode":@0,
+        @"size":@{@"Height":@1.0,@"Width":@1.0}
+    };
+    image = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] reverseTransformedValue:imgDict];
+    XCTAssert(CGSizeEqualToSize(image.size, CGSizeMake(1.0f, 1.0f)), @"Image should be 1x1");
+
+    // Deserialize a UIImage with a URL and dimensions
+    imgDict = @{
+                @"imageOrientation":@0,
+                @"images":@[@{
+                                @"url":@"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=",
+                                @"mime_type":@"image/png",
+                                @"scale":@1,
+                                @"dimensions":@{@"Height":@2.0,@"Width":@2.0}
+                                }],
+                @"renderingMode":@0,
+                @"resizingMode":@0,
+                @"size":@{@"Height":@1.0,@"Width":@1.0}
+                };
+    image = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] reverseTransformedValue:imgDict];
+    XCTAssert(CGSizeEqualToSize(image.size, CGSizeMake(2.0f, 2.0f)), @"Image should be 2x2");
+
+    // Serialize a blank image.
+    UIImage *nilImage = [[UIImage alloc] init];
     NSDictionary *nilImgDict = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] transformedValue:nilImage];
     XCTAssertEqualObjects(nilImgDict[@"images"][0][@"data"], [NSNull null], @"base64 representations should ne NSNull");
 }

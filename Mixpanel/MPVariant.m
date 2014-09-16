@@ -267,10 +267,18 @@
 @implementation MPVariantAction
 
 /*
- A mapping of setter selectors to getters. If we have an action that attempts
+ A map of setter selectors to getters. If we have an action that attempts
  to call the setter, we first cache the value returned from the getter
  */
 static NSMapTable *gettersForSetters;
+/*
+ A map of UIViews to UIImages. The UIImage is the original image for each
+ view before this VariantAction changed it, so we can quickly switch back
+ to it if we need to stop this action. We cache the original for every 
+ view we apply to, as they may all have different original images. The view
+ is weakly held, so if the view is dealloced for any reason, it will disappear
+ from this map along with the cached original image for it.
+*/
 static NSMapTable *originalCache;
 
 + (void)load
@@ -515,6 +523,7 @@ static NSMapTable *originalCache;
         }
     }
 }
+
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"Action: Change %@ on %@ matching %@ from %@ to %@", NSStringFromSelector(self.selector), NSStringFromClass(self.class), self.path.string, self.original ?: (self.cacheOriginal ? @"Cached Original" : nil) , self.args];

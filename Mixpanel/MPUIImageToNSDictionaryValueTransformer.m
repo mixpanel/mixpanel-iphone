@@ -7,6 +7,12 @@
 
 @implementation MPUIImageToNSDictionaryValueTransformer
 
+static NSMutableDictionary *imageCache;
+
++(void)load {
+    imageCache = [NSMutableDictionary dictionary];
+}
+
 + (Class)transformedValueClass
 {
     return [NSDictionary class];
@@ -81,15 +87,28 @@
             NSNumber *scale = imageDictionary[@"scale"];
             UIImage *image;
             if (imageDictionary[@"url"]) {
-                NSURL *image_url = [NSURL URLWithString: imageDictionary[@"url"]];
-                image = [UIImage imageWithData:[NSData dataWithContentsOfURL: image_url] scale:fminf(1.0, [scale floatValue])];
-
-                NSDictionary *dimensions = imageDictionary[@"dimensions"];
-                CGSize size = CGSizeMake([dimensions[@"Width"] floatValue], [dimensions[@"Height"] floatValue]);
-                UIGraphicsBeginImageContext(size);
-                [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
+                @synchronized(imageCache) {
+                    image = [imageCache valueForKey:imageDictionary[@"url"]];
+                }
+                if (!image) {
+                    NSURL *imageUrl = [NSURL URLWithString: imageDictionary[@"url"]];
+                    NSError *error;
+                    NSData *imageData = [NSData dataWithContentsOfURL:imageUrl options:0 error:&error];
+                    if (!error) {
+                        image = [UIImage imageWithData:imageData scale:fminf(1.0, [scale floatValue])];
+                        @synchronized(imageCache) {
+                            [imageCache setValue:image forKey:imageDictionary[@"url"]];
+                        }
+                    }
+                }
+                if (image && imageDictionary[@"dimensions"]) {
+                    NSDictionary *dimensions = imageDictionary[@"dimensions"];
+                    CGSize size = CGSizeMake([dimensions[@"Width"] floatValue], [dimensions[@"Height"] floatValue]);
+                    UIGraphicsBeginImageContext(size);
+                    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+                    image = UIGraphicsGetImageFromCurrentImageContext();
+                    UIGraphicsEndImageContext();
+                }
             }
             else if (imageDictionary[@"data"] && imageDictionary[@"data"] != [NSNull null]) {
                 image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
