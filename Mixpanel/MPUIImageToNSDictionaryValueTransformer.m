@@ -93,7 +93,7 @@ static NSMutableDictionary *imageCache;
                 if (!image) {
                     NSURL *imageUrl = [NSURL URLWithString: imageDictionary[@"url"]];
                     NSError *error;
-                    NSData *imageData = [NSData dataWithContentsOfURL: imageUrl options:0 error:&error];
+                    NSData *imageData = [NSData dataWithContentsOfURL:imageUrl options:0 error:&error];
                     if (!error) {
                         image = [UIImage imageWithData:imageData scale:fminf(1.0, [scale floatValue])];
                         @synchronized(imageCache) {
@@ -101,7 +101,7 @@ static NSMutableDictionary *imageCache;
                         }
                     }
                 }
-                if (image) {
+                if (image && imageDictionary[@"dimensions"]) {
                     NSDictionary *dimensions = imageDictionary[@"dimensions"];
                     CGSize size = CGSizeMake([dimensions[@"Width"] floatValue], [dimensions[@"Height"] floatValue]);
                     UIGraphicsBeginImageContext(size);
