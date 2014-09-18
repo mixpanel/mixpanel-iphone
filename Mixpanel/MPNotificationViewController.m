@@ -317,8 +317,9 @@
 {
     UIView *parentView = self.view.superview;
     CGRect parentFrame;
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+    parentFrame = parentView.frame;
+#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
     if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
         parentFrame = parentView.frame;
     } else {
@@ -406,7 +407,9 @@
         
         CGRect topFrame;
         
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+        topFrame = topView.frame;
+#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
         if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
             topFrame = topView.frame;
         } else {
@@ -474,7 +477,9 @@
         UIView *parentView = self.view.superview;
         CGRect parentFrame;
         
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+        parentFrame = parentView.frame;
+#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
         if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
             parentFrame = parentView.frame;
         } else {
