@@ -274,7 +274,7 @@ static NSMapTable *gettersForSetters;
 /*
  A map of UIViews to UIImages. The UIImage is the original image for each
  view before this VariantAction changed it, so we can quickly switch back
- to it if we need to stop this action. We cache the original for every 
+ to it if we need to stop this action. We cache the original for every
  view we apply to, as they may all have different original images. The view
  is weakly held, so if the view is dealloced for any reason, it will disappear
  from this map along with the cached original image for it.

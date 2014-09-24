@@ -542,7 +542,7 @@ static Mixpanel *sharedInstance = nil;
     }
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
-    
+
     double epochInterval = [[NSDate date] timeIntervalSince1970];
     NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{

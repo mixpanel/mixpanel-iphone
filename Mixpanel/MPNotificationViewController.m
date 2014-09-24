@@ -404,9 +404,9 @@
 
     UIView *topView = [self getTopView];
     if (topView) {
-        
+
         CGRect topFrame;
-        
+
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
         topFrame = topView.frame;
 #elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
@@ -473,10 +473,10 @@
         } else {
             duration = 0.0f;
         }
-        
+
         UIView *parentView = self.view.superview;
         CGRect parentFrame;
-        
+
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
         parentFrame = parentView.frame;
 #elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000

@@ -552,6 +552,29 @@
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 }
 
+- (void)testPredicates
+{
+    UILabel *l1 = [[UILabel alloc] initWithFrame:CGRectMake(1, 2, 3, 4)];
+    l1.text = @"label";
+
+    UIButton *b1 = [[UIButton alloc] initWithFrame:CGRectMake(1, 2, 3, 4)];
+    [b1 setTitle: @"button" forState:UIControlStateNormal];
+    NSString *action = @"signUp";
+    NSString *targetAction = [NSString stringWithFormat:@"%lu/%@", UIControlEventTouchUpInside, action];
+    [b1 addTarget:self action:NSSelectorFromString(action) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"]]];
+    [b1 setImage:image forState:UIControlStateNormal];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.mp_y == 2"];
+    XCTAssert([predicate evaluateWithObject:l1]);
+
+    predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"SELF.mp_targetActions CONTAINS \"%@\"", targetAction]];
+    XCTAssert([predicate evaluateWithObject:b1]);
+
+    predicate = [NSPredicate predicateWithFormat:@"SELF.mp_image == \"/2G+WsNguxZhnX2he59+t7t9oXqjfZ9fWaF7pXeje8HBeqN3pXqhWF+ffaN6oH26uH6ge6F+n2EWumDDWb1i/w==\""];
+    XCTAssert([predicate evaluateWithObject:b1]);
+}
+
 - (void)testUITableViewCellOrdering
 {
     MPObjectSelector *sel = [MPObjectSelector objectSelectorWithString:@"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell[0]"];

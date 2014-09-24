@@ -7,7 +7,8 @@
 //
 
 #import "MPObjectSelector.h"
-
+#import "NSData+MPBase64.h"
+#import <objc/runtime.h>
 
 @interface MPObjectFilter : NSObject
 
@@ -148,6 +149,62 @@
 @end
 
 @implementation MPObjectFilter
+
++(void)load
+{
+    // Add some extra methods to UIView that will allow us to more accurately fingerprint a view.
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_targetActions"), imp_implementationWithBlock(^id(id view, SEL command){
+        NSMutableArray *targetActions = [NSMutableArray array];
+        if ([view isKindOfClass:[UIControl class]]) {
+            for (id target in [(UIControl *)(view) allTargets]) {
+                UIControlEvents allEvents = UIControlEventAllTouchEvents | UIControlEventAllEditingEvents;
+                for(NSUInteger e = 0; (allEvents >> e) > 0; e++) {
+                    UIControlEvents event = allEvents & (0x01 << e);
+                    if(event) {
+                        NSArray *actions = [(UIControl *)(view) actionsForTarget:target forControlEvent:event];
+                        for (NSString *action in actions) {
+                            [targetActions addObject:[NSString stringWithFormat:@"%lu/%@", event, action]];
+                        }
+                    }
+                }
+            }
+        }
+        return [targetActions copy];
+    }), "@@:");
+
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_constraints"), imp_implementationWithBlock(^id(id view, SEL command){
+        NSMutableArray *constraints = [NSMutableArray array];
+        for (NSLayoutConstraint *c in ((UIView *)view).constraints) {
+            [constraints addObject:[NSString stringWithFormat:@"%f/%ld/%ld/%ld/%f/%f", c.priority, c.firstAttribute, c.secondAttribute, c.relation, c.multiplier, c.constant]];
+        }
+        return constraints;
+    }), "@@:");
+
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_x"), imp_implementationWithBlock(^id(id view, SEL command){
+        return @(((UIView *)view).frame.origin.x);
+    }), "@@:");
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_y"), imp_implementationWithBlock(^id(id view, SEL command){
+        return @(((UIView *)view).frame.origin.y);
+    }), "@@:");
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_width"), imp_implementationWithBlock(^id(id view, SEL command){
+        return @(((UIView *)view).frame.size.width);
+    }), "@@:");
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_height"), imp_implementationWithBlock(^id(id view, SEL command){
+        return @(((UIView *)view).frame.size.height);
+    }), "@@:");
+    class_addMethod([UIView class], NSSelectorFromString(@"mp_image"), imp_implementationWithBlock(^id(id view, SEL command){
+        if ([view isKindOfClass:[UIButton class]]) {
+            CGColorSpaceRef space = CGColorSpaceCreateDeviceGray();
+            unsigned char data[64]; // 8 bit grayscale data
+            CGContextRef context = CGBitmapContextCreate(data, 8, 8, 8, 8, space, kCGImageAlphaNone | kCGBitmapByteOrderDefault);
+            CGContextDrawImage(context, CGRectMake(0,0,8,8), [[((UIButton *)view) imageForState:UIControlStateNormal] CGImage]);
+            CGColorSpaceRelease(space);
+            CGContextRelease(context);
+            return [[NSData dataWithBytes:data length:64] base64EncodedStringWithOptions:0];
+        }
+        return nil;
+    }), "@@:");
+}
 
 /*
  Apply this filter to the views, returning all of their chhildren
