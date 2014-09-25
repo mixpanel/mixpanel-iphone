@@ -194,13 +194,18 @@
     }), "@@:");
     class_addMethod([UIView class], NSSelectorFromString(@"mp_image"), imp_implementationWithBlock(^id(id view, SEL command){
         if ([view isKindOfClass:[UIButton class]]) {
-            CGColorSpaceRef space = CGColorSpaceCreateDeviceGray();
-            unsigned char data[64]; // 8 bit grayscale data
-            CGContextRef context = CGBitmapContextCreate(data, 8, 8, 8, 8, space, kCGImageAlphaNone | kCGBitmapByteOrderDefault);
+            CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+            uint32_t data32[64]; // 8x8 squrare of 32 bit rgba data
+            uint8_t data8[64]; // 8x8 squrare of 8 bit rgba data
+            CGContextRef context = CGBitmapContextCreate(data32, 8, 8, 8, 8*4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
+            CGContextSetAllowsAntialiasing(context, NO);
             CGContextDrawImage(context, CGRectMake(0,0,8,8), [[((UIButton *)view) imageForState:UIControlStateNormal] CGImage]);
             CGColorSpaceRelease(space);
             CGContextRelease(context);
-            return [[NSData dataWithBytes:data length:64] base64EncodedStringWithOptions:0];
+            for(int i = 0; i < 64; i++) {
+                data8[i] = (((data32[i] & 0xC0000000) >> 24) | ((data32[i] & 0xC00000) >> 18) | ((data32[i] & 0xC000) >> 12) | ((data32[i] & 0xC0) >> 6));
+            }
+            return [[NSData dataWithBytes:data8 length:64] mp_base64EncodedString];
         }
         return nil;
     }), "@@:");

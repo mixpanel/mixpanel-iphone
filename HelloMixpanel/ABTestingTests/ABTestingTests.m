@@ -571,7 +571,7 @@
     predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"SELF.mp_targetActions CONTAINS \"%@\"", targetAction]];
     XCTAssert([predicate evaluateWithObject:b1]);
 
-    predicate = [NSPredicate predicateWithFormat:@"SELF.mp_image == \"/2G+WsNguxZhnX2he59+t7t9oXqjfZ9fWaF7pXeje8HBeqN3pXqhWF+ffaN6oH26uH6ge6F+n2EWumDDWb1i/w==\""];
+    predicate = [NSPredicate predicateWithFormat:@"SELF.mp_image == \"/1erV/9XqwNXq5erV6uXq6tXq1erV6tXV6tXq1erV///V6tXq1erV1erV6tXq5erq5erV6uXq1cDq1f/V6tX/w==\""];
     XCTAssert([predicate evaluateWithObject:b1]);
 }
 
