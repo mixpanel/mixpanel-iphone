@@ -10,6 +10,7 @@
 #import "NSData+MPBase64.h"
 #import <objc/runtime.h>
 
+
 @interface MPObjectFilter : NSObject
 
 @property (nonatomic, strong) NSString *name;
@@ -122,12 +123,27 @@
         if ([_scanner scanCharactersFromSet:_predicateStartChar intoString:nil]) {
             NSString *predicateFormat;
             NSInteger index = 0;
-            if ([_scanner scanInteger:&index]) {
+            if ([_scanner scanInteger:&index] && [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil]) {
                 filter.index = [NSNumber numberWithUnsignedInteger:(NSUInteger)index];
+            } else {
+                [_scanner scanUpToCharactersFromSet:_predicateEndChar intoString:&predicateFormat];
+                @try {
+                    NSPredicate *parsedPredicate = [NSPredicate predicateWithFormat:predicateFormat];
+                    filter.predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                        @try {
+                            return [parsedPredicate evaluateWithObject:evaluatedObject substitutionVariables:bindings];
+                        }
+                        @catch (NSException *exception) {
+                            return false;
+                        }
+                    }];
+                }
+                @catch (NSException *exception) {
+                    filter.predicate = [NSPredicate predicateWithValue:NO];
+                }
+                
+                [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil];
             }
-            [_scanner scanUpToCharactersFromSet:_predicateEndChar intoString:&predicateFormat];
-            filter.predicate = [NSPredicate predicateWithFormat:predicateFormat];
-            [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil];
         }
     }
     return filter;
@@ -149,67 +165,6 @@
 @end
 
 @implementation MPObjectFilter
-
-+(void)load
-{
-    // Add some extra methods to UIView that will allow us to more accurately fingerprint a view.
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_targetActions"), imp_implementationWithBlock(^id(id view, SEL command){
-        NSMutableArray *targetActions = [NSMutableArray array];
-        if ([view isKindOfClass:[UIControl class]]) {
-            for (id target in [(UIControl *)(view) allTargets]) {
-                UIControlEvents allEvents = UIControlEventAllTouchEvents | UIControlEventAllEditingEvents;
-                for(NSUInteger e = 0; (allEvents >> e) > 0; e++) {
-                    UIControlEvents event = allEvents & (0x01 << e);
-                    if(event) {
-                        NSArray *actions = [(UIControl *)(view) actionsForTarget:target forControlEvent:event];
-                        for (NSString *action in actions) {
-                            [targetActions addObject:[NSString stringWithFormat:@"%lu/%@", event, action]];
-                        }
-                    }
-                }
-            }
-        }
-        return [targetActions copy];
-    }), "@@:");
-
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_constraints"), imp_implementationWithBlock(^id(id view, SEL command){
-        NSMutableArray *constraints = [NSMutableArray array];
-        for (NSLayoutConstraint *c in ((UIView *)view).constraints) {
-            [constraints addObject:[NSString stringWithFormat:@"%f/%ld/%ld/%ld/%f/%f", c.priority, c.firstAttribute, c.secondAttribute, c.relation, c.multiplier, c.constant]];
-        }
-        return constraints;
-    }), "@@:");
-
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_x"), imp_implementationWithBlock(^id(id view, SEL command){
-        return @(((UIView *)view).frame.origin.x);
-    }), "@@:");
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_y"), imp_implementationWithBlock(^id(id view, SEL command){
-        return @(((UIView *)view).frame.origin.y);
-    }), "@@:");
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_width"), imp_implementationWithBlock(^id(id view, SEL command){
-        return @(((UIView *)view).frame.size.width);
-    }), "@@:");
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_height"), imp_implementationWithBlock(^id(id view, SEL command){
-        return @(((UIView *)view).frame.size.height);
-    }), "@@:");
-    class_addMethod([UIView class], NSSelectorFromString(@"mp_image"), imp_implementationWithBlock(^id(id view, SEL command){
-        if ([view isKindOfClass:[UIButton class]]) {
-            CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-            uint32_t data32[64]; // 8x8 squrare of 32 bit rgba data
-            uint8_t data8[64]; // 8x8 squrare of 8 bit rgba data
-            CGContextRef context = CGBitmapContextCreate(data32, 8, 8, 8, 8*4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
-            CGContextSetAllowsAntialiasing(context, NO);
-            CGContextDrawImage(context, CGRectMake(0,0,8,8), [[((UIButton *)view) imageForState:UIControlStateNormal] CGImage]);
-            CGColorSpaceRelease(space);
-            CGContextRelease(context);
-            for(int i = 0; i < 64; i++) {
-                data8[i] = (((data32[i] & 0xC0000000) >> 24) | ((data32[i] & 0xC00000) >> 18) | ((data32[i] & 0xC000) >> 12) | ((data32[i] & 0xC0) >> 6));
-            }
-            return [[NSData dataWithBytes:data8 length:64] mp_base64EncodedString];
-        }
-        return nil;
-    }), "@@:");
-}
 
 /*
  Apply this filter to the views, returning all of their chhildren

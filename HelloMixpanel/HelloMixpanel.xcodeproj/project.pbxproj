@@ -25,6 +25,9 @@
 		0549188E19D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
 		0549188F19D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
 		0549189019D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
+		0549189319D4A4C100056A1C /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0549189119D4A4C100056A1C /* UIView+MPHelpers.m */; };
+		0549189419D4A4C100056A1C /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0549189119D4A4C100056A1C /* UIView+MPHelpers.m */; };
+		0549189519D4A4C100056A1C /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0549189119D4A4C100056A1C /* UIView+MPHelpers.m */; };
 		05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */; };
 		05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
@@ -72,7 +75,6 @@
 		28C7E6691615311100F78E49 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E6681615311100F78E49 /* Icon.png */; };
 		28C7E66B1615317400F78E49 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E66A1615317400F78E49 /* Icon-72.png */; };
 		28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */; };
-		28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */; };
 		28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FEFA0817CAE93200691355 /* UIImage+MPImageEffects.m */; };
 		5262143622F74EDFB5C6D2AC /* libPods-ABTestingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D6C8613A6964BBDB6D13F02 /* libPods-ABTestingTests.a */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
@@ -249,6 +251,8 @@
 		0543901F192279530076094E /* MPTweakStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakStore.m; sourceTree = "<group>"; };
 		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0549188D19D24E3500056A1C /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
+		0549189119D4A4C100056A1C /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
+		0549189219D4A4C100056A1C /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		05509E4D196E4697007E5C06 /* MixpanelDummyDecideConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelDummyDecideConnection.h; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.h; sourceTree = "<group>"; };
 		05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelDummyDecideConnection.m; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.m; sourceTree = "<group>"; };
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
@@ -326,8 +330,6 @@
 		28C7E66A1615317400F78E49 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MPAverageColor.h"; sourceTree = "<group>"; };
 		28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPAverageColor.m"; sourceTree = "<group>"; };
-		28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPSnapshotImage.h"; sourceTree = "<group>"; };
-		28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPSnapshotImage.m"; sourceTree = "<group>"; };
 		28FEFA0717CAE93200691355 /* UIImage+MPImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MPImageEffects.h"; sourceTree = "<group>"; };
 		28FEFA0817CAE93200691355 /* UIImage+MPImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPImageEffects.m"; sourceTree = "<group>"; };
 		49A441AF641244CA893593CD /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanelTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -632,13 +634,13 @@
 				289B497817D913D40035439B /* NSData+MPBase64.h */,
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
 				053B4C661840191000E825FE /* UIColor+MPColor.h */,
+				0549189119D4A4C100056A1C /* UIView+MPHelpers.m */,
+				0549189219D4A4C100056A1C /* UIView+MPHelpers.h */,
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
 				28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */,
 				28FEFA0717CAE93200691355 /* UIImage+MPImageEffects.h */,
 				28FEFA0817CAE93200691355 /* UIImage+MPImageEffects.m */,
-				28FEFA0417CADCED00691355 /* UIView+MPSnapshotImage.h */,
-				28FEFA0517CADCED00691355 /* UIView+MPSnapshotImage.m */,
 				A7B462E81910898E00774977 /* WebSocket */,
 			);
 			name = Mixpanel;
@@ -1023,6 +1025,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */,
+				0549189519D4A4C100056A1C /* UIView+MPHelpers.m in Sources */,
 				055FA715194A6B020080A709 /* ABTestingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1036,6 +1039,7 @@
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				05439021192279530076094E /* MPTweak.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
+				0549189319D4A4C100056A1C /* UIView+MPHelpers.m in Sources */,
 				A7B462DB191075DE00774977 /* MPPassThroughValueTransformer.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
 				05F5F9641965CE300070280C /* MPABTestDesignerClearRequestMessage.m in Sources */,
@@ -1058,7 +1062,6 @@
 				A7B462D7191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				A7B462D8191075DE00774977 /* MPClassDescription.m in Sources */,
 				05F02D6318528F8C00527D93 /* MPNotificationViewController.m in Sources */,
-				28FEFA0617CADCED00691355 /* UIView+MPSnapshotImage.m in Sources */,
 				A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */,
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				A7B462DC191075DE00774977 /* MPPropertyDescription.m in Sources */,
@@ -1104,6 +1107,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
+				0549189419D4A4C100056A1C /* UIView+MPHelpers.m in Sources */,
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
 			);

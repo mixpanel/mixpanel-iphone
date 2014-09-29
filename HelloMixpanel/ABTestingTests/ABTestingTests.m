@@ -17,6 +17,7 @@
 #import "MixpanelDummyDecideConnection.h"
 #import "MPValueTransformers.h"
 #import "NSData+MPBase64.h"
+#import "UIView+MPHelpers.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -552,27 +553,43 @@
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 }
 
-- (void)testPredicates
+- (void)testFingerprinting
 {
+    UIView *v1 = [[UIView alloc] init];
     UILabel *l1 = [[UILabel alloc] initWithFrame:CGRectMake(1, 2, 3, 4)];
     l1.text = @"label";
-
-    UIButton *b1 = [[UIButton alloc] initWithFrame:CGRectMake(1, 2, 3, 4)];
+    UIButton *b1 = [[UIButton alloc] initWithFrame:CGRectMake(2, 3, 4, 5)];
     [b1 setTitle: @"button" forState:UIControlStateNormal];
+    [v1 addSubview:b1];
+    [v1 addSubview:l1];
+    
     NSString *action = @"signUp";
     NSString *targetAction = [NSString stringWithFormat:@"%lu/%@", UIControlEventTouchUpInside, action];
     [b1 addTarget:self action:NSSelectorFromString(action) forControlEvents:UIControlEventTouchUpInside];
     UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"]]];
     [b1 setImage:image forState:UIControlStateNormal];
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.mp_y == 2"];
-    XCTAssert([predicate evaluateWithObject:l1]);
+    NSString *format = @"SELF.mp_size == \"3,4\"";
+    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:l1]);
 
-    predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"SELF.mp_targetActions CONTAINS \"%@\"", targetAction]];
-    XCTAssert([predicate evaluateWithObject:b1]);
+    format = [NSString stringWithFormat:@"SELF.mp_targetActions CONTAINS \"%@\"", targetAction];
+    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
 
-    predicate = [NSPredicate predicateWithFormat:@"SELF.mp_image == \"/1erV/9XqwNXq5erV6uXq6tXq1erV6tXV6tXq1erV///V6tXq1erV1erV6tXq5erq5erV6uXq1cDq1f/V6tX/w==\""];
-    XCTAssert([predicate evaluateWithObject:b1]);
+    format = @"mp_imageFingerprint == \"/1erV/9XqwNXq5erV6uXq6tXq1erV6tXV6tXq1erV///V6tXq1erV1erV6tXq5erq5erV6uXq1cDq1f/V6tX/w==\"";
+    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
+    
+    // Compound predicates
+    format = @"mp_size = \"xxx\" OR (mp_position = \"2,3\" AND mp_size = \"4,5\")";
+    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
+    XCTAssert([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
+    
+    //Predicates with invalid properties
+    format = @"mp_nonexistent = 123";
+    XCTAssertThrowsSpecificNamed([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1], NSException, @"NSUnknownKeyException");
+    XCTAssertFalse([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should not have selected object due to invalid property");
+    
+    //Invalid predicate string
+    XCTAssertFalse([[MPObjectSelector objectSelectorWithString:@"/[!@#$%^]"] isLeafSelected:b1 fromRoot:v1], @"Selector should not not pass because predicate string is invalid.");
 }
 
 - (void)testUITableViewCellOrdering

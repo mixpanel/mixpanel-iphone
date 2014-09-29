@@ -11,7 +11,7 @@
 #import "MPSurveyQuestionViewController.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
-#import "UIView+MPSnapshotImage.h"
+#import "UIView+MPHelpers.h"
 #import "UIColor+MPColor.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>

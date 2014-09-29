@@ -13,7 +13,7 @@
 {
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{@"mixpanelToken": MIXPANEL_TOKEN}];
     NSString *mixpanelToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"mixpanelToken"];
-    
+
     [self.window makeKeyAndVisible];
 
     if (mixpanelToken == nil || [mixpanelToken isEqualToString:@""] || [mixpanelToken isEqualToString:@"YOUR_MIXPANEL_PROJECT_TOKEN"]) {
@@ -91,7 +91,7 @@
 {
     if ([identifier isEqualToString:@"declineAction"]) {
         NSLog(@"%@ user declined push notification action", self);
-        
+
     } else if ([identifier isEqualToString:@"answerAction"]) {
         NSLog(@"%@ user answered push notification action", self);
     }

@@ -19,7 +19,7 @@
 #import "MPNotificationViewController.h"
 #import "Mixpanel.h"
 #import "NSData+MPBase64.h"
-#import "UIView+MPSnapshotImage.h"
+#import "UIView+MPHelpers.h"
 #import "MPVariant.h"
 
 #import "MPWebSocket.h"
