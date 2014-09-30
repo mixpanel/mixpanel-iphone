@@ -192,7 +192,7 @@
     UIImageView *urlImageView = [[UIImageView alloc] init];
     XCTAssertNil(urlImageView.image, @"Image should not be set");
     [MPVariantAction executeSelector:@selector(setImage:)
-                            withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":@"http://dev.images.mxpnl.com/u%27306087%27/2712f913885455bfa2d8e439fda29438"}]}, @"UIImage"]]
+                            withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":[[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"] absoluteString]}]}, @"UIImage"]]
                            onObjects:@[urlImageView]];
     XCTAssertNotNil(urlImageView.image, @"Image should be set");
     XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
