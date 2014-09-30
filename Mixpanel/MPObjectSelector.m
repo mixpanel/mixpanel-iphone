@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSPredicate *predicate;
 @property (nonatomic, strong) NSNumber *index;
+@property (nonatomic, assign) BOOL unique;
 
 - (NSArray *)apply:(NSArray *)views;
 - (NSArray *)applyReverse:(NSArray *)views;
@@ -29,13 +30,15 @@
     NSCharacterSet *_separatorChars;
     NSCharacterSet *_predicateStartChar;
     NSCharacterSet *_predicateEndChar;
+    NSCharacterSet *_flagStartChar;
+    NSCharacterSet *_flagEndChar;
+
 }
 
 @property (nonatomic, strong) NSScanner *scanner;
 @property (nonatomic, strong) NSArray *filters;
 
 @end
-
 
 @implementation MPObjectSelector
 
@@ -54,6 +57,8 @@
         _predicateStartChar = [NSCharacterSet characterSetWithCharactersInString:@"["];
         _predicateEndChar = [NSCharacterSet characterSetWithCharactersInString:@"]"];
         _classAndPropertyChars = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.*"];
+        _flagStartChar = [NSCharacterSet characterSetWithCharactersInString:@"("];
+        _flagEndChar = [NSCharacterSet characterSetWithCharactersInString:@")"];
 
         MPObjectFilter *filter;
         NSMutableArray *filters = [NSMutableArray array];
@@ -120,6 +125,15 @@
         } else {
             filter.name = @"*";
         }
+        if ([_scanner scanCharactersFromSet:_flagStartChar intoString:nil]) {
+            NSString *flags;
+            [_scanner scanUpToCharactersFromSet:_flagEndChar intoString:&flags];
+            for (NSString *flag in[flags componentsSeparatedByString:@"|"]) {
+                if ([flag isEqualToString:@"unique"]) {
+                    filter.unique = YES;
+                }
+            }
+        }
         if ([_scanner scanCharactersFromSet:_predicateStartChar intoString:nil]) {
             NSString *predicateFormat;
             NSInteger index = 0;
@@ -141,7 +155,7 @@
                 @catch (NSException *exception) {
                     filter.predicate = [NSPredicate predicateWithValue:NO];
                 }
-                
+
                 [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil];
             }
         }
@@ -165,6 +179,14 @@
 @end
 
 @implementation MPObjectFilter
+
+- (id)init
+{
+    if((self = [super init])) {
+        self.unique = NO;
+    }
+    return self;
+}
 
 /*
  Apply this filter to the views, returning all of their chhildren
@@ -191,9 +213,13 @@
         }
     }
 
+    // If unique is set and there are more than one, return nothing
+    if(self.unique && [result count] != 1) {
+        return @[];
+    }
     // Filter any resulting views by predicate
-    if (_predicate) {
-        return [result filteredArrayUsingPredicate:_predicate];
+    if (self.predicate) {
+        return [result filteredArrayUsingPredicate:self.predicate];
     } else {
         return [result copy];
     }
@@ -220,9 +246,10 @@
  */
 - (BOOL)appliesTo:(NSObject *)view
 {
-    return ([_name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(_name)])
-            && (!_predicate || [_predicate evaluateWithObject:view])
-            && (!_index || [self isView:view siblingNumber:[_index unsignedIntegerValue]]);
+    return (([self.name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(self.name)])
+            && (!self.predicate || [_predicate evaluateWithObject:view])
+            && (!self.index || [self isView:view siblingNumber:[_index unsignedIntegerValue]])
+            && (!(self.unique) || [self isView:view oneOfNSiblings:1]));
 }
 
 /*
@@ -242,13 +269,25 @@
  Returns true if the given view is at the index given by number in
  its parent's subviews. The view's parent must be of type UIView
  */
-- (BOOL)isView:(NSObject *)view siblingNumber:(NSUInteger)number
+
+- (BOOL)isView:(NSObject *)view siblingNumber:(NSInteger)number
+{
+    return [self isView:view siblingNumber:number of:-1];
+}
+
+- (BOOL)isView:(NSObject *)view oneOfNSiblings:(NSInteger)number
+{
+    return [self isView:view siblingNumber:-1 of:number];
+}
+
+- (BOOL)isView:(NSObject *)view siblingNumber:(NSInteger)sibling of:(NSInteger)numSiblings
 {
     NSArray *parents = [self getParentsOfObject:view];
     for (NSObject *parent in parents) {
         if ([parent isKindOfClass:[UIView class]]) {
             NSArray *siblings = [self getChildrenOfObject:parent ofType:NSClassFromString(_name)];
-            if (number < [siblings count] && siblings[number] == view) {
+            if ((sibling == -1 || sibling < [siblings count] && siblings[sibling] == view)
+                && (numSiblings == -1 || [siblings count] == numSiblings)) {
                 return YES;
             }
         }
