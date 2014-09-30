@@ -486,9 +486,6 @@ static Mixpanel *sharedInstance = nil;
         NSLog(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
     }
-    if (!distinctId) {
-        NSLog(@"%@ error getting uuid: no default distinct id could be generated", self);
-    }
     return distinctId;
 }
 
