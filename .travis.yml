@@ -7,7 +7,7 @@ env:
   - APP_NAME="HelloMixpanel"
   - 'DEVELOPER_NAME="iPhone Distribution: Mixpanel, Inc."'
   - PROFILE_NAME="HelloMixpanel_InHouse"
-  - secure: VH/1fxfVjjUn5imsV+lWJguVbRmhSuTd3k3RzgA/WJWfGTXgPTSsYWfljQQ7vDOgY4I7pRWjMW9ezcpMchuBkACI7ihO+N2dN5iCXfzJFmBOSZkJuKC4SPWkCphXsVLCPLBgkYi3P6ovPIM+shykFdsz0YusZMX8eBXJV02F1ic=
+  - secure: PfI/UqHcl/h1LNs5XEk46PCn+baA5+eZhYFJId+Drc+rgFLM5N5rfolQKnpT/gVap5aFiXHM5aLyf2SLVT7Zx1/QfQRHchnKVSVYIRY1dOSzE1aBrvneor9HAwrmmrO+NrJ92B6gWH3Pq+zW4tGYffFw5gzWAkppBaCMqRSxRf4=
 before_install:
 - brew update
 - brew upgrade xctool
