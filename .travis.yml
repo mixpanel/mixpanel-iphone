@@ -6,7 +6,7 @@ env:
   global:
   - APP_NAME="HelloMixpanel"
   - 'DEVELOPER_NAME="iPhone Distribution: Mixpanel, Inc."'
-  - PROFILE_NAME="HelloMixpanel_Ad_Hoc"
+  - PROFILE_NAME="HelloMixpanel_InHouse"
   - secure: VH/1fxfVjjUn5imsV+lWJguVbRmhSuTd3k3RzgA/WJWfGTXgPTSsYWfljQQ7vDOgY4I7pRWjMW9ezcpMchuBkACI7ihO+N2dN5iCXfzJFmBOSZkJuKC4SPWkCphXsVLCPLBgkYi3P6ovPIM+shykFdsz0YusZMX8eBXJV02F1ic=
 before_install:
 - brew update
@@ -14,8 +14,8 @@ before_install:
 install: (gem update cocoapods && cd HelloMixpanel/ ; pod install)
 before_script:
 - xctool --version
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision.enc
-  -d -a -out scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision
+- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/profile/HelloMixpanel_InHouse.mobileprovision.enc
+  -d -a -out scripts/profile/HelloMixpanel_InHouse.mobileprovision
 - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.cer.enc -d -a
   -out scripts/certs/dist.cer
 - openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.p12.enc -d -a
