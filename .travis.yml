@@ -3,7 +3,7 @@ script: xctool
     -workspace HelloMixpanel/HelloMixpanel.xcworkspace
     -scheme HelloMixpanel
     -sdk iphonesimulator8.0
-    -destination platform='iOS Simulator',OS=7.0,name='iPhone Retina (4-inch)'
+    -destination platform='iOS Simulator',OS=7.0,name='iPhone 5'
     ONLY_ACTIVE_ARCH=NO
     clean test
 env:
