@@ -1,17 +1,15 @@
 language: objective-c
-script: xctool
-    -workspace HelloMixpanel/HelloMixpanel.xcworkspace
-    -scheme HelloMixpanel
-    -sdk iphonesimulator8.0
-    -destination platform='iOS Simulator',OS=8.0,name='iPhone 6'
-    ONLY_ACTIVE_ARCH=NO
-    clean test
+script: xctool -workspace HelloMixpanel/HelloMixpanel.xcworkspace -scheme HelloMixpanel
+  -sdk iphonesimulator8.0 -destination platform='iOS Simulator',OS=8.0,name='iPhone
+  6' ONLY_ACTIVE_ARCH=NO clean test
 env:
   global:
   - APP_NAME="HelloMixpanel"
   - 'DEVELOPER_NAME="iPhone Distribution: Mixpanel, Inc."'
   - PROFILE_NAME="HelloMixpanel_Ad_Hoc"
   - secure: hYFo+h9Txhp2x9sTIDHrbhiVJk1Y5rvbJkkhyaH0Rhco2v5BZNzq5Uoegl4DJ8YmM7Qm8Xl1SBDNK9WvfxowCO0Bc8DzFPWqh2p9bN2HyM/dwjLC1K9Imlssa4oxN4sHFG7x6Ck24UWpErR3wG8umY7Eyrlh3TzNtAEoaSRpMpc=
+  - secure: AHNqSAnRSj73sYf52UNhS202tvDuyvDBDId3c8qiQ2Pv9DKtXidZQ03k8rKo6AH7u1O9MPDumwWeQJ9acsEaqqKJy4riRyV7CvHHN1w/Bgj/l5G0IaGsOHI3xaLZCuIflJAJvFstZoubGk1Fa59dOtJiLRTxzCuqkeshbZXffrE=
+  - secure: Z3hMujhDOIEq5dv9Za0gG7uXz4SkT4HIlcIeoxiggdR+/6VrjKOWO52A9iBhhQkdpJN8Aq30VDa+Y3NZtFpDseh5gku5+BeLVlag3M5/cd4Z07mMUqsCrwP9Z+sto9qf6rIGErCAnEN3lcrTPdFSJdKHd4Om+LNPs3Uuwc2C8J4=
 before_install:
 - brew update
 - brew upgrade xctool
