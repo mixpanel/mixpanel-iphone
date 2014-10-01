@@ -38,6 +38,16 @@
                ReferencedContainer = "container:HelloMixpanel.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "055FA70F194A6B010080A709"
+               BuildableName = "ABTestingTests.xctest"
+               BlueprintName = "ABTestingTests"
+               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
