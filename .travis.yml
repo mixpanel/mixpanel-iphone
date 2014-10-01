@@ -1,5 +1,5 @@
 language: objective-c
-script: xctool -workspace HelloMixpanel/HelloMixpanel.xcworkspace -scheme HelloMixpanel -sdk iphonesimulator ONLY_ACTIVE_ARCH=YES test
+script: xctool -workspace HelloMixpanel/HelloMixpanel.xcworkspace -scheme HelloMixpanel -sdk iphonesimulator8.0 ONLY_ACTIVE_ARCH=YES clean test
 env:
   global:
   - APP_NAME="HelloMixpanel"
