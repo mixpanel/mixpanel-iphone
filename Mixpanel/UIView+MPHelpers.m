@@ -103,16 +103,20 @@
         if (originalImage) {
             CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
             uint32_t data32[64];
-            uint8_t data8[64];
+            uint8_t data4[32];
             CGContextRef context = CGBitmapContextCreate(data32, 8, 8, 8, 8*4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
             CGContextSetAllowsAntialiasing(context, NO);
+            CGContextSetInterpolationQuality(context, kCGInterpolationNone);
             CGContextDrawImage(context, CGRectMake(0,0,8,8), [originalImage CGImage]);
             CGColorSpaceRelease(space);
             CGContextRelease(context);
-            for(int i = 0; i < 64; i++) {
-                data8[i] = (((data32[i] & 0xC0000000) >> 24) | ((data32[i] & 0xC00000) >> 18) | ((data32[i] & 0xC000) >> 12) | ((data32[i] & 0xC0) >> 6));
+            for(int i = 0; i < 32; i++) {
+                int j = 2*i;
+                int k = 2*i + 1;
+                data4[i] = (((data32[j] & 0x80000000) >> 24) | ((data32[j] & 0x800000) >> 17) | ((data32[j] & 0x8000) >> 10) | ((data32[j] & 0x80) >> 3) |
+                            ((data32[k] & 0x80000000) >> 28) | ((data32[k] & 0x800000) >> 21) | ((data32[k] & 0x8000) >> 14) | ((data32[k] & 0x80) >> 7));
             }
-            result = [[NSData dataWithBytes:data8 length:64] mp_base64EncodedString];
+            result = [[NSData dataWithBytes:data4 length:32] base64EncodedStringWithOptions:0];
         }
     }
     return result;

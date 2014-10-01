@@ -578,7 +578,7 @@
     format = [NSString stringWithFormat:@"mp_targetActions CONTAINS \"%@\"", targetAction];
     XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
 
-    format = @"mp_imageFingerprint == \"/1erV/9XqwNXq5erV6uXq6tXq1erV6tXV6tXq1erV///V6tXq1erV1erV6tXq5erq5erV6uXq1cDq1f/V6tX/w==\"";
+    format = @"mp_imageFingerprint == \"8fHx8R8fHx/x8fHxHx8fH/Hx8fEfHx8f8fHx8R8fHx8=\"";
     XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
 
     // Compound predicates
@@ -597,6 +597,18 @@
     // Unique match only
     XCTAssert([[[MPObjectSelector objectSelectorWithString:@"/UIButton(unique)"] selectFromRoot:v1] count] == 0, @"Selector should not have matched because object is not unique");
     XCTAssertFalse([[MPObjectSelector objectSelectorWithString:@"/UIButton(unique)"] isLeafSelected:b1 fromRoot:v1], @"Selector should not have matched because object is not unique");
+}
+
+- (void)testImageFingerprint
+{
+    UIButton *b1 = [[UIButton alloc] init];
+    UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"huge_checkerboard" withExtension:@"jpg"]]];
+    [b1 setImage:image forState:UIControlStateNormal];
+    UIButton *b2 = [[UIButton alloc] init];
+    image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"small_checkerboard" withExtension:@"jpg"]]];
+    [b2 setImage:image forState:UIControlStateNormal];
+
+    XCTAssertEqualObjects([b1 performSelector:NSSelectorFromString(@"mp_imageFingerprint")], [b2 performSelector:NSSelectorFromString(@"mp_imageFingerprint")]);
 }
 
 - (void)testUITableViewCellOrdering
