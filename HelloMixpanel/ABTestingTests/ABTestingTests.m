@@ -547,7 +547,7 @@
     XCTAssertEqual([[selector selectFromRoot:vc] count], (uint)0, @"l2 should be selected by index");
 
     // Select view by predicate
-    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[SELF.text == \"Label 1\"]"];
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[text == \"Label 1\"]"];
     XCTAssertEqual([selector selectFromRoot:vc][0], l1, @"l1 should be selected by predicate");
     XCTAssert([selector isLeafSelected:l1 fromRoot:vc], @"l1 should be selected by predicate");
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
@@ -572,10 +572,10 @@
     UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"]]];
     [b1 setImage:image forState:UIControlStateNormal];
 
-    NSString *format = @"SELF.mp_size == \"3,4\"";
+    NSString *format = @"mp_size == \"3,4\"";
     XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:l1]);
 
-    format = [NSString stringWithFormat:@"SELF.mp_targetActions CONTAINS \"%@\"", targetAction];
+    format = [NSString stringWithFormat:@"mp_targetActions CONTAINS \"%@\"", targetAction];
     XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
 
     format = @"mp_imageFingerprint == \"/1erV/9XqwNXq5erV6uXq6tXq1erV6tXV6tXq1erV///V6tXq1erV1erV6tXq5erq5erV6uXq1cDq1f/V6tX/w==\"";
