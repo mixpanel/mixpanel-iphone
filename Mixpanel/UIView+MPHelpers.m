@@ -86,23 +86,36 @@
     return [NSString stringWithFormat:@"%d,%d", (int)self.frame.size.width, (int)self.frame.size.height];
 }
 
+/*
+ Creates a short string which is a fingerprint of a UIButton's image property.
+ It does this by downsampling the image to 8x8 and then downsampling the resulting
+ 32bit pixel data to 8 bit. This should allow us to select images that are identical or
+ almost identical in appearance without having to compare the whole image.
+
+ Returns a base64 encoded string representing an 8x8 bitmap of 8 bit rgba data
+ (2 bits per component).
+ */
 - (NSString *)mp_imageFingerprint
 {
+    NSString *result = nil;
     if ([self isKindOfClass:[UIButton class]]) {
-        CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-        uint32_t data32[64]; // 8x8 squrare of 32 bit rgba data
-        uint8_t data8[64]; // 8x8 squrare of 8 bit rgba data
-        CGContextRef context = CGBitmapContextCreate(data32, 8, 8, 8, 8*4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
-        CGContextSetAllowsAntialiasing(context, NO);
-        CGContextDrawImage(context, CGRectMake(0,0,8,8), [[((UIButton *)self) imageForState:UIControlStateNormal] CGImage]);
-        CGColorSpaceRelease(space);
-        CGContextRelease(context);
-        for(int i = 0; i < 64; i++) {
-            data8[i] = (((data32[i] & 0xC0000000) >> 24) | ((data32[i] & 0xC00000) >> 18) | ((data32[i] & 0xC000) >> 12) | ((data32[i] & 0xC0) >> 6));
+        UIImage *originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
+        if (originalImage) {
+            CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+            uint32_t data32[64];
+            uint8_t data8[64];
+            CGContextRef context = CGBitmapContextCreate(data32, 8, 8, 8, 8*4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
+            CGContextSetAllowsAntialiasing(context, NO);
+            CGContextDrawImage(context, CGRectMake(0,0,8,8), [originalImage CGImage]);
+            CGColorSpaceRelease(space);
+            CGContextRelease(context);
+            for(int i = 0; i < 64; i++) {
+                data8[i] = (((data32[i] & 0xC0000000) >> 24) | ((data32[i] & 0xC00000) >> 18) | ((data32[i] & 0xC000) >> 12) | ((data32[i] & 0xC0) >> 6));
+            }
+            result = [[NSData dataWithBytes:data8 length:64] mp_base64EncodedString];
         }
-        return [[NSData dataWithBytes:data8 length:64] mp_base64EncodedString];
     }
-    return nil;
+    return result;
 }
 
 @end
