@@ -51,7 +51,7 @@
 {
     if (self = [super init]) {
         _string = string;
-        self.scanner = [[NSScanner alloc] initWithString:string];
+        _scanner = [NSScanner scannerWithString:string];
         [_scanner setCharactersToBeSkipped:nil];
         _separatorChars = [NSCharacterSet characterSetWithCharactersInString:@"/"];
         _predicateStartChar = [NSCharacterSet characterSetWithCharactersInString:@"["];
