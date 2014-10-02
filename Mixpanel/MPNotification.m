@@ -81,7 +81,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
 
-        if ([type isEqualToString:MPNotificationTypeTakeover]) {
+        if ([type isEqualToString:MPNotificationTypeTakeover] && [imageURLString rangeOfString:@"@2x"].location == NSNotFound) {
             NSString *imageName = [imageURLString stringByDeletingPathExtension];
             NSString *extension = [imageURLString pathExtension];
             imageURLString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
