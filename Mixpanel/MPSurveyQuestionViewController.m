@@ -175,20 +175,20 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
-                             _label.alpha = 0;
-                             _customBackgroundView.alpha = 0;
-                             _checkmark.alpha = 1;
-                             _selectedLabel.alpha = 1;
-                             _customSelectedBackgroundView.alpha = 1;
+                             self.label.alpha = 0;
+                             self.customBackgroundView.alpha = 0;
+                             self.checkmark.alpha = 1;
+                             self.selectedLabel.alpha = 1;
+                             self.customSelectedBackgroundView.alpha = 1;
                          }
                          completion:^(BOOL finished) {
-                             _checkmarkLeadingSpace.constant = 20;
+                             self.checkmarkLeadingSpace.constant = 20;
                              [UIView animateWithDuration:duration * 0.5
                                                    delay:0
                                                  options:UIViewAnimationOptionCurveEaseOut
                                               animations:^{
                                                   [self.contentView layoutIfNeeded];
-                                                  _selectedLabelLeadingSpace.constant = 46;
+                                                  self.selectedLabelLeadingSpace.constant = 46;
                                                   [UIView animateWithDuration:duration * 0.5 * 0.5
                                                                         delay:duration * 0.5 * 0.5
                                                                       options:0
@@ -200,17 +200,17 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
                                               completion:nil];
                          }];
     } else {
-        _checkmarkLeadingSpace.constant = 15;
-        _selectedLabelLeadingSpace.constant = 30;
+        self.checkmarkLeadingSpace.constant = 15;
+        self.selectedLabelLeadingSpace.constant = 30;
         [UIView animateWithDuration:duration
                               delay:0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
-                             _checkmark.alpha = 0;
-                             _selectedLabel.alpha = 0;
-                             _customSelectedBackgroundView.alpha = 0;
-                             _label.alpha = 1;
-                             _customBackgroundView.alpha = 1;
+                             self.checkmark.alpha = 0;
+                             self.selectedLabel.alpha = 0;
+                             self.customSelectedBackgroundView.alpha = 0;
+                             self.label.alpha = 1;
+                             self.customBackgroundView.alpha = 1;
                              [self.contentView layoutIfNeeded];
                          }
                          completion:completion];
@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.contentInset = UIEdgeInsetsMake(44, 0, 44, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(44, 0, 44, 0);
 }
 
 - (void)viewDidLayoutSubviews
@@ -234,11 +234,11 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     CGColorRef innerColor = [UIColor colorWithWhite:1 alpha:1].CGColor;
     fadeLayer.colors = @[(__bridge id)outerColor, (__bridge id)innerColor, (__bridge id)innerColor, (__bridge id)outerColor];
     // add 44 pixels of fade in and out at top and bottom of table view container
-    CGFloat offset = 44 / _tableContainer.bounds.size.height;
+    CGFloat offset = 44 / self.tableContainer.bounds.size.height;
     fadeLayer.locations = @[@0, @(0 + offset), @(1 - offset), @1];
-    fadeLayer.bounds = _tableContainer.bounds;
+    fadeLayer.bounds = self.tableContainer.bounds;
     fadeLayer.anchorPoint = CGPointZero;
-    _tableContainer.layer.mask = fadeLayer;
+    self.tableContainer.layer.mask = fadeLayer;
 }
 
 - (NSString *)labelForValue:(id)value
@@ -298,6 +298,11 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44.0;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -327,12 +332,12 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3f];
-    _textView.delegate = self;
-    _textView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.5].CGColor;
-    _textView.layer.borderWidth = 1;
-    _textView.layer.cornerRadius = 5;
-    _textView.inputAccessoryView = _keyboardAccessory;
+    self.textView.backgroundColor = [self.highlightColor colorWithAlphaComponent:0.3f];
+    self.textView.delegate = self;
+    self.textView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.5].CGColor;
+    self.textView.layer.borderWidth = 1;
+    self.textView.layer.cornerRadius = 5;
+    self.textView.inputAccessoryView = self.keyboardAccessory;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -340,22 +345,22 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
     if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        [_textView becomeFirstResponder];
+        [self.textView becomeFirstResponder];
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_textView resignFirstResponder];
+    [self.textView resignFirstResponder];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _keyboardAccessoryWidth.constant = self.view.bounds.size.width;
-    _textViewHeight.constant = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
+    self.keyboardAccessoryWidth.constant = self.view.bounds.size.width;
+    self.textViewHeight.constant = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -373,8 +378,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         shouldChange = newLength <= 255;
         if (shouldChange) {
             [UIView animateWithDuration:0.3 animations:^{
-                _charactersLeftLabel.text = [NSString stringWithFormat:@"%@ character%@ left", @(255 - newLength), (255 - newLength == 1) ? @"": @"s"];
-                _charactersLeftLabel.alpha = (newLength > 155) ? 1 : 0;
+                self.charactersLeftLabel.text = [NSString stringWithFormat:@"%@ character%@ left", @(255 - newLength), (255 - newLength == 1) ? @"": @"s"];
+                self.charactersLeftLabel.alpha = (newLength > 155) ? 1 : 0;
             }];
         }
     }
@@ -405,7 +410,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         promptTopSpace = -(self.prompt.bounds.size.height + 15); // +15 for text view top space
         promptAlpha = 0;
     }
-    _promptTopSpace.constant = promptTopSpace;
+    self.promptTopSpace.constant = promptTopSpace;
     [UIView animateWithDuration:duration
                           delay:0
                         options:curve | UIViewAnimationOptionBeginFromCurrentState
@@ -421,7 +426,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSDictionary* info = [note userInfo];
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
-    _promptTopSpace.constant = 15;
+    self.promptTopSpace.constant = 15;
     [UIView animateWithDuration:duration
                           delay:0
                         options:curve | UIViewAnimationOptionBeginFromCurrentState
@@ -434,7 +439,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (IBAction)hideKeyboard
 {
-    [_textView resignFirstResponder];
+    [self.textView resignFirstResponder];
 }
 
 @end
