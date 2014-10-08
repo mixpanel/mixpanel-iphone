@@ -294,6 +294,9 @@ and People record queues to disk.
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/clearSuperProperties" target="_top">-clearSuperProperties</a></tt></dt>
 <dd><p>Clears all currently set super properties.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/clearTimedEvents" target="_top">-clearTimedEvents</a></tt></dt>
+<dd><p>Clears all current event timers.
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/currentSuperProperties" target="_top">-currentSuperProperties</a></tt></dt>
 <dd><p>Returns the currently set super properties.
 </dd>
@@ -367,6 +370,11 @@ and then returns it.
 <dd><p>Shows the survey with the given name.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/timeEvent:" target="_top">-timeEvent:</a></tt></dt>
+<dd><p>Starts a timer that will be stopped and added as a property when a
+corresponding event is tracked.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/track:" target="_top">-track:</a></tt></dt>
 <dd><p>Tracks an event.
 </p>
@@ -408,6 +416,14 @@ though, for example, if you'd like to track app crashes from main.m.
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/clearSuperProperties;name=end --></p>
 <div class='declaration_indent'>
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/clearSuperProperties;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/clearSuperProperties //apple_ref/occ/data/Mixpanel/clearSuperProperties //apple_ref/occ/data/clearSuperProperties //apple_ref/occ/clconst/Mixpanel/clearSuperProperties " machineGenerated="true" --><span class="var">clearSuperProperties</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/clearSuperProperties;name=end --></pre>
+</div>
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;   name=Mixpanel::clearTimedEvents -->
+<a name="//apple_ref/occ/instm/Mixpanel/clearTimedEvents"></a>
+<h3><a name="clearTimedEvents">clearTimedEvents</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;name=start --><!-- begin abstract --><p>Clears all current event timers.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/clearTimedEvents //apple_ref/occ/data/Mixpanel/clearTimedEvents //apple_ref/occ/data/clearTimedEvents //apple_ref/occ/clconst/Mixpanel/clearTimedEvents " machineGenerated="true" --><span class="var">clearTimedEvents</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;name=end --></pre>
 </div>
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/currentSuperProperties;   name=Mixpanel::currentSuperProperties -->
 <a name="//apple_ref/occ/instm/Mixpanel/currentSuperProperties"></a>
@@ -790,6 +806,44 @@ setting <code>showSurveyOnActive = NO;</code> so that the survey won't show auto
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=start --><p>This method allows you to explicitly show a named survey at the time of your choosing.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;   name=Mixpanel::timeEvent: -->
+<a name="//apple_ref/occ/instm/Mixpanel/timeEvent:"></a>
+<h3><a name="timeEvent:">timeEvent:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;name=start --><!-- begin abstract --><p>Starts a timer that will be stopped and added as a property when a
+corresponding event is tracked.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/timeEvent //apple_ref/occ/clm/Mixpanel/timeEvent //apple_ref/occ/intfcm/Mixpanel/timeEvent //apple_ref/occ/intfm/Mixpanel/timeEvent //apple_ref/occ/func/timeEvent //apple_ref/occ/ftmplt/Mixpanel/timeEvent //apple_ref/occ/defn/timeEvent //apple_ref/occ/macro/timeEvent //apple_ref/doc/anysymbol/timeEvent" machineGenerated="true" --><span class="function">timeEvent</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/event //apple_ref/occ/data/Mixpanel/event //apple_ref/occ/data/event //apple_ref/occ/clconst/Mixpanel/event " machineGenerated="true" --><span class="var">event</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/timeEvent:/event;   name=timeEvent:::event -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/timeEvent:/event"></a>
+<code>event</code></dt><dd><p>a string, identical to the name of the event that will be tracked</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;name=start --><p>This method is intended to be used in advance of events that have
+a duration. For example, if a developer were to track an "Image Upload" event
+she might want to also know how long the upload took. Calling this method
+before the upload code would implicitly cause the <code>track</code>
+call to record its duration.
+</p>
+ <pre>
+ // begin timing the image upload
+ [mixpanel timeEvent:@"Image Upload"];
+ 
+ // upload the image
+ [self uploadImageWithSuccessHandler:^{
+    
+    // track the event
+    [mixpanel track:@"Image Upload"];
+ }];
+ </pre>
+
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/timeEvent:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/track:;   name=Mixpanel::track: -->
 <a name="//apple_ref/occ/instm/Mixpanel/track:"></a>
 <h3><a name="track:">track:</a></h3>
@@ -832,7 +886,8 @@ setting <code>showSurveyOnActive = NO;</code> so that the survey won't show auto
 Property keys must be <code>NSString</code> objects and values must be
 <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
 <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
-<code>NSURL</code> objects.
+<code>NSURL</code> objects. If the event is being timed, the timer will
+stop and be added as a property.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/track:properties:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/trackPushNotification:;   name=Mixpanel::trackPushNotification: -->
@@ -1152,7 +1207,7 @@ survey check retrieves at least 1 valid survey for the currently
 identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Friday, September 12, 2014
+<p class="hd_timestamp">Last Updated: Wednesday, October 08, 2014
 </p></div>
 </td></tr></table>
 </body></html>
