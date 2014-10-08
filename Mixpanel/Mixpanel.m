@@ -25,7 +25,7 @@
 #import "MPWebSocket.h"
 #import "MPABTestDesignerConnection.h"
 
-#define VERSION @"2.5.3"
+#define VERSION @"2.5.4"
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
