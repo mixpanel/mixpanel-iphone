@@ -968,7 +968,7 @@ static Mixpanel *sharedInstance = nil;
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
 
-    if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive) {
+    if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive || self.checkForVariantsOnActive) {
         NSDate *start = [NSDate date];
 
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
