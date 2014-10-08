@@ -1,3 +1,105 @@
+Changes with version v2.5.3					16 September 2014
+
+iOS 8 changes & event timing
+
+This release updates Mixpanel for the SDK changes and deprecations in
+iOS 8. We have also added the ability to track elapsed time on your
+events. There are also some bugfixes to optimize the loading of images
+in A/B tests.
+
+
+Changes with version v2.5.2					12 September 2014
+
+Notification timing + bugfixes
+
+This release allows you to control the timing of mini notifications
+that appear on screen by setting the
+`miniNotificationPresentationTime` property on `Mixpanel`    There are
+also some small bug fixes for A/B Testing. We now add the Designer
+mode 4 finger gesture recognizer on the `keyWindow` instead of the
+application delegate's `window` and there is a preprocessor flag for
+disabling this feature. We have also removed automatic tracking of the
+`$app_open' event    Thanks also to @pws5068 and @ayanonagon for
+contributions.
+
+
+Changes with version v2.5.1					05 September 2014
+
+Bug fixes for AB testing
+
+This release contains fixes for some bugs that were found in v2.5.0
+Thanks to @reddavis and @tooluser for the bug reports.
+
+
+Changes with version v2.5.0					27 August 2014
+
+A/B Testing
+
+This release adds [Mixpanel A/B testing](https://mixpanel.com/mobile-
+ab-testing/) for iOS    To learn more about how it works, check out
+the [docs](https://mixpanel.com/help/reference/ios#ab-testing)
+
+
+Changes with version v2.4.2					21 August 2014
+
+App Links
+
+This release tracks Mixpanel events for [App
+Links](http://applinks.org/) when you are using the
+[Bolts](https://github.com/BoltsFramework/Bolts-iOS) iOS framework.
+If your app uses Bolts and you use inbound or outbound App Links.
+Mixpanel will track the following events.   - `$al_nav_in` : When your
+app is opened from an inbound app link  - `$al_nav_out` : When your
+app opens an outbound app link  - `$al_ref_back_out` : When someone
+navigates back to your app after an `$al_nav_out`    These events will
+show up in your mixpanel dashboard, and contain properties with
+information about the App Link including the Referrer and URL.    For
+more info on App Links see: http://applinks.org/  For info on using
+App Links with Bolts see: https://github.com/BoltsFramework/Bolts-iOS
+#app-links
+
+
+Changes with version v2.4.1					14 July 2014
+
+Fix dates for locales without Gregorian calendars.
+
+This fixes an issue where users whose phones are set to use non-
+gregorian calendars (eg Japanese, Buddhist, Hebrew) would format date
+properties incorrectly for Mixpanel. All event properties of type
+NSDate should now be formatted as gregorian dates when send to the
+Mixpanel API.
+
+
+Changes with version v2.4.0					20 June 2014
+
+2.4.0: Push notification tracking.
+
+New methods now optionally track remote notifications based on
+payloads. This will allow customers to view open rates similarly to
+those available to emails and in-app messages.  ```  + (Mixpanel
+*)sharedInstanceWithToken:(NSString *)apiToken;  -
+(instancetype)initWithToken:(NSString *)apiToken
+andFlushInterval:(NSUInteger)flushInterval;  ```  can be changed to
+```  + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
+launchOptions:(NSDictionary *)launchOptions;  -
+(instancetype)initWithToken:(NSString *)apiToken
+launchOptions:(NSDictionary *)launchOptions
+andFlushInterval:(NSUInteger)flushInterval;  ```  and a new method is
+available for push notifications that are received while the app is
+open.  ```  - (void)trackPushNotification:(NSDictionary *)userInfo;
+```    Also, more files will throw compiler errors when ARC is not
+enabled.
+
+
+Changes with version v2.3.6					10 May 2014
+
+Fix reachability callback
+
+This release fixes an issue that caused a crash when the Mixpanel
+library received a reachability notification after it had been
+deallocated.
+
+
 Changes with version v2.3.5					18 April 2014
 
 2.3.5: General bug fixes and improvements.
