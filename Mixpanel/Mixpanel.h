@@ -490,7 +490,7 @@
  This method is intended to be used in advance of events that have
  a duration. For example, if a developer were to track an "Image Upload" event
  she might want to also know how long the upload took. Calling this method
- before the upload code would implicitelly cause the <code>track</code>
+ before the upload code would implicitly cause the <code>track</code>
  call to record its duration.
  
  <pre>
