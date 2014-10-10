@@ -106,6 +106,7 @@
             uint8_t data4[32];
             CGContextRef context = CGBitmapContextCreate(data32, 8, 8, 8, 8*4, space, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
             CGContextSetAllowsAntialiasing(context, NO);
+            CGContextClearRect(context, CGRectMake(0, 0, 8, 8));
             CGContextSetInterpolationQuality(context, kCGInterpolationNone);
             CGContextDrawImage(context, CGRectMake(0,0,8,8), [originalImage CGImage]);
             CGColorSpaceRelease(space);
