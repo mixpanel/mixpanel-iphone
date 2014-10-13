@@ -194,7 +194,7 @@
                             withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":@"http://dev.images.mxpnl.com/u%27306087%27/2712f913885455bfa2d8e439fda29438"}]}, @"UIImage"]]
                            onObjects:@[urlImageView]];
     XCTAssertNotNil(urlImageView.image, @"Image should be set");
-    XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
+    XCTAssertEqual(CGImageGetWidth(urlImageView.image.CGImage), 1.0f, @"Image should be 1px wide");
 
     UILabel *label = [[UILabel alloc] init];
     [MPVariantAction executeSelector:@selector(setText:)
