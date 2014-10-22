@@ -5,6 +5,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSData+MPBase64.h"
 #import "UIView+MPHelpers.h"
+#import <objc/runtime.h>
 
 @implementation UIView (MPHelpers)
 
@@ -121,6 +122,28 @@
         }
     }
     return result;
+}
+
+- (NSString *)mp_controllerVariable
+{
+    if ([self isKindOfClass:[UIControl class]]) {
+        UIResponder *responder = [self nextResponder];
+        while (responder && ![responder isKindOfClass:[UIViewController class]]) {
+            responder = [responder nextResponder];
+        }
+        if (responder) {
+            uint count;
+            Ivar *ivars = class_copyIvarList([responder class], &count);
+            for (uint i = 0; i < count; i++) {
+                Ivar ivar = ivars[i];
+                if (ivar_getTypeEncoding(ivar)[0] == '@' && object_getIvar(responder, ivar) == self) {
+                    return [NSString stringWithCString:ivar_getName(ivar) encoding:NSUTF8StringEncoding];
+                }
+            }
+            free(ivars);
+        }
+    }
+    return nil;
 }
 
 @end
