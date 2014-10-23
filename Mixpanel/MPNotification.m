@@ -81,13 +81,22 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
 
-        if ([type isEqualToString:MPNotificationTypeTakeover]) {
-            NSString *imageName = [imageURLString stringByDeletingPathExtension];
-            NSString *extension = [imageURLString pathExtension];
-            imageURLString = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        imageURL = [NSURL URLWithString:imageURLString];
+        if (imageURL == nil) {
+            NSLog(@"invalid notif image URL: %@", imageURLString);
+            return nil;
         }
 
-        imageURL = [NSURL URLWithString:[imageURLString stringByAddingPercentEscapesUsingEncoding:NSStringEncodingConversionExternalRepresentation]];
+        NSString *imagePath = imageURL.path;
+        if ([type isEqualToString:MPNotificationTypeTakeover]) {
+            NSString *imageName = [imagePath stringByDeletingPathExtension];
+            NSString *extension = [imagePath pathExtension];
+            imagePath = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        }
+
+        imagePath = [imagePath stringByAddingPercentEscapesUsingEncoding:NSStringEncodingConversionExternalRepresentation];
+        imageURL = [[NSURL alloc] initWithScheme:imageURL.scheme host:imageURL.host path:imagePath];
+
         if (imageURL == nil) {
             NSLog(@"invalid notif image URL: %@", imageURLString);
             return nil;
