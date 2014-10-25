@@ -660,6 +660,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)reset
 {
+    [self resetWithCompletion:nil];
+}
+
+- (void)resetWithCompletion:(void (^)(void))completionBlock
+{
     dispatch_async(self.serialQueue, ^{
         self.distinctId = [self defaultDistinctId];
         self.nameTag = nil;
@@ -670,6 +675,9 @@ static Mixpanel *sharedInstance = nil;
         self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
         [self archive];
+        if (completionBlock) {
+            completionBlock();
+        }
     });
 }
 

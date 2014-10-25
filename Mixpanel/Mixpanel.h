@@ -528,6 +528,16 @@
 
 /*!
  @method
+ 
+ @abstract
+ Clears all stored properties and distinct IDs. Useful if your app's user logs out.
+ 
+ @param completionBlock A block that gets executed when reset is complete.
+ */
+- (void)resetWithCompletion:(void (^)(void))completionBlock;
+
+/*!
+ @method
 
  @abstract
  Uploads queued data to the Mixpanel server.
