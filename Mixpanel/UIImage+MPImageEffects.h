@@ -93,6 +93,8 @@
  5/3/2013
  */
 
+#import <UIKit/UIKit.h>
+
 @interface UIImage (MPImageEffects)
 
 - (UIImage *)mp_applyLightEffect;

@@ -20,6 +20,20 @@
                ReferencedContainer = "container:HelloMixpanel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "055FA70F194A6B010080A709"
+               BuildableName = "ABTestingTests.xctest"
+               BlueprintName = "ABTestingTests"
+               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -35,6 +49,16 @@
                BlueprintIdentifier = "2808F9B01610EFE4005772B7"
                BuildableName = "HelloMixpanelTests.xctest"
                BlueprintName = "HelloMixpanelTests"
+               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "055FA70F194A6B010080A709"
+               BuildableName = "ABTestingTests.xctest"
+               BlueprintName = "ABTestingTests"
                ReferencedContainer = "container:HelloMixpanel.xcodeproj">
             </BuildableReference>
          </TestableReference>

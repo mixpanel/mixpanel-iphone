@@ -1,6 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
 @class MPObjectSerializerConfig;
