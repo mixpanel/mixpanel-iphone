@@ -1,4 +1,4 @@
-#import "HelloMixpanelTests.h"
+#import <XCTest/XCTest.h>
 
 #import "Mixpanel.h"
 #import "MPNotification.h"
@@ -12,19 +12,28 @@
 
 #define TEST_TOKEN @"abc123"
 
-@interface Mixpanel (Test)
+#pragma mark - Interface Redefinitions
 
+@interface Mixpanel (Test)
 // get access to private members
+
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
 @property (nonatomic, retain) NSMutableArray *peopleQueue;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, assign) dispatch_queue_t serialQueue;
+@property (nonatomic, retain) NSMutableDictionary *timedEvents;
+
+@property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
+@property (nonatomic, strong) MPNotification *currentlyShowingNotification;
+@property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 
 - (NSString *)defaultDistinctId;
 - (void)archive;
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
+- (void)showNotificationWithObject:(MPNotification *)notification;
 
 - (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)encodeAPIData:(NSArray *)array;
@@ -32,14 +41,34 @@
 @end
 
 @interface MixpanelPeople (Test)
-
 // get access to private members
+
 @property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
 @property (nonatomic, copy) NSMutableArray *distinctId;
 
 @end
 
-@interface HelloMixpanelTests ()  <MixpanelDelegate>
+/*
+ This is to let the tests run in XCode 5, as the XCode 5
+ version of XCTest does not support asynchonous tests and
+ will not compile unless we define these symbols.
+ */
+#if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
+@interface XCTestExpectation
+
+- (void)fulfill;
+
+@end
+
+@interface XCTestCase (Test)
+
+- (void)waitForExpectationsWithTimeout:(NSTimeInterval)timeout handler:(id)handlerOrNil;
+- (XCTestExpectation *)expectationWithDescription:(NSString *)description;
+
+@end
+#endif
+
+@interface HelloMixpanelTests : XCTestCase  <MixpanelDelegate>
 
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (nonatomic, strong) HTTPServer *httpServer;
@@ -60,6 +89,8 @@
 }
 
 @end
+
+#pragma mark - Tests
 
 @implementation HelloMixpanelTests
 
@@ -154,7 +185,7 @@
     XCTAssertNotNil(p[@"$ios_app_release"], @"missing $ios_app_release property");
 }
 
--(UIViewController *)topViewController {
+- (UIViewController *)topViewController {
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (rootViewController.presentedViewController) {
         rootViewController = rootViewController.presentedViewController;
@@ -192,7 +223,7 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -202,7 +233,7 @@
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     for (NSUInteger i=0, n=60; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -221,7 +252,7 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
-        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -231,7 +262,7 @@
 
     requestCount = [MixpanelDummyHTTPConnection getRequestCount];
     for (NSUInteger i=0, n=60; i<n; i++) {
-        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%d", i]];
+        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
     [self.mixpanel flush];
     [self waitForSerialQueue];
@@ -250,7 +281,7 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForSerialQueue];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"50 events should be queued up");
@@ -271,13 +302,13 @@
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=10; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForSerialQueue];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
     [self.mixpanel flush];
     for (NSUInteger i=0, n=5; i<n; i++) {
-        [self.mixpanel track:[NSString stringWithFormat:@"event %d", i]];
+        [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForSerialQueue];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 5U, @"5 more events should be queued up");
@@ -376,7 +407,7 @@
     NSArray *a = @[@{@"event": @"an event",
                      @"properties": @{@"eventdate": fixedDate}}];
     NSString *json = [[NSString alloc] initWithData:[self.mixpanel JSONSerializeObject:a] encoding:NSUTF8StringEncoding];
-    XCTAssert([json containsString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""]);
+    XCTAssert([json rangeOfString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""].location != NSNotFound);
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken
@@ -556,15 +587,17 @@
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
     [self.mixpanel.people set:p];
+    self.mixpanel.timedEvents[@"e2"] = @5.0;
     [self waitForSerialQueue];
     [self.mixpanel archive];
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"custom name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
-    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"pending events queue archive failed");
+    XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"e1", @"event was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
+    XCTAssertEqualObjects(self.mixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
     NSFileManager *fileManager = [NSFileManager defaultManager];
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
@@ -578,6 +611,7 @@
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id from no file failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from no file is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from no file not empty");
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
     // corrupt file
     NSData *garbage = [@"garbage" dataUsingEncoding:NSUTF8StringEncoding];
     [garbage writeToFile:[self.mixpanel eventsFilePath] atomically:NO];
@@ -595,6 +629,7 @@
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id from garbage failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from garbage is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from garbage not empty");
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
 }
 
 - (void)testPeopleAddPushDeviceToken
@@ -1077,27 +1112,29 @@
                         @"cta_url": @"maps://",
                         @"image_url": @"http://mixpanel.com"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
-    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
-    [self.mixpanel performSelector:@selector(showNotificationWithObject:) withObject:notif];
+    [self.mixpanel showNotificationWithObject:notif];
+    [self.mixpanel showNotificationWithObject:notif];
 
     //wait for notifs to be shown from main queue
     [self waitForAsyncQueue];
 
     UIViewController *topVC = [self topViewController];
-    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Survey was not presented");
+    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification was not presented");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
-    XCTAssertTrue([self.mixpanel.eventsQueue.lastObject[@"event"] isEqualToString:@"$campaign_delivery"], @"last event should be campaign delivery");
+    XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"$campaign_delivery", @"last event should be campaign delivery");
 
     // Clean up
-    XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self.mixpanel performSelector:@selector(setCurrentlyShowingNotification:) withObject:nil];
-        [self.mixpanel performSelector:@selector(setNotificationViewController:) withObject:nil];
-        [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^{
-            [expectation fulfill];
-        }];
-    });
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            self.mixpanel.currentlyShowingNotification = nil;
+            self.mixpanel.notificationViewController = nil;
+            [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^{
+                [expectation fulfill];
+            }];
+        });
+        [self waitForExpectationsWithTimeout:self.mixpanel.miniNotificationPresentationTime * 2 handler:nil];
+    }
 }
 
 - (void)testNoShowSurveyOnPresentingVC
@@ -1120,7 +1157,7 @@
     [topViewController presentViewController:[[UIViewController alloc]init] animated:YES completion:^{ waitForBlock = NO; }];
 
     //Survey should not show as it cannot present on top of a currently presenting view controller
-    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    [self.mixpanel presentSurveyWithRootViewController:survey];
 
     XCTAssertFalse([[self topViewController] isKindOfClass:[MPSurveyNavigationController class]], @"Survey was presented when it shouldn't have been");
 
@@ -1143,19 +1180,50 @@
 
     MPSurvey *survey = [MPSurvey surveyWithJSONObject:o];
 
-    [self.mixpanel performSelector:@selector(presentSurveyWithRootViewController:) withObject:survey];
+    [self.mixpanel presentSurveyWithRootViewController:survey];
     UIViewController *topVC = [self topViewController];
     XCTAssertTrue([topVC isKindOfClass:[MPSurveyNavigationController class]], @"Survey was not presented");
 
     // Clean up
-    XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self.mixpanel performSelector:@selector(setCurrentlyShowingSurvey:) withObject:nil];
-        [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
-            [expectation fulfill];
-        }];
-    });
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            self.mixpanel.currentlyShowingSurvey = nil;
+            [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
+                [expectation fulfill];
+            }];
+        });
+        [self waitForExpectationsWithTimeout:10 handler:nil];
+    }
+}
+
+- (void)testEventTiming
+{
+    [self.mixpanel track:@"Something Happened"];
+    [self waitForSerialQueue];
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    NSDictionary *p = e[@"properties"];
+    XCTAssertNil(p[@"$duration"], @"New events should not be timed.");
+    
+    [self.mixpanel timeEvent:@"400 Meters"];
+    
+    [self.mixpanel track:@"500 Meters"];
+    [self waitForSerialQueue];
+    e = self.mixpanel.eventsQueue.lastObject;
+    p = e[@"properties"];
+    XCTAssertNil(p[@"$duration"], @"The exact same event name is required for timing.");
+    
+    [self.mixpanel track:@"400 Meters"];
+    [self waitForSerialQueue];
+    e = self.mixpanel.eventsQueue.lastObject;
+    p = e[@"properties"];
+    XCTAssertNotNil(p[@"$duration"], @"This event should be timed.");
+    
+    [self.mixpanel track:@"400 Meters"];
+    [self waitForSerialQueue];
+    e = self.mixpanel.eventsQueue.lastObject;
+    p = e[@"properties"];
+    XCTAssertNil(p[@"$duration"], @"Tracking the same event should require a second call to timeEvent.");
 }
 
 @end
