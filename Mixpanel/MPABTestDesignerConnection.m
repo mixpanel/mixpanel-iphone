@@ -10,12 +10,7 @@
 #import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPABTestDesignerTweakRequestMessage.h"
-
-#ifdef MESSAGING_DEBUG
-#define MessagingDebug(...) NSLog(__VA_ARGS__)
-#else
-#define MessagingDebug(...)
-#endif
+#import "MPLogging.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
 

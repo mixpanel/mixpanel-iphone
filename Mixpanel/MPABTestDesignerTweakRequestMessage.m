@@ -9,6 +9,7 @@
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerTweakResponseMessage.h"
+#import "MPLogging.h"
 #import "MPVariant.h"
 
 NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
@@ -33,7 +34,6 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
         }
 
         if ([[[self payload] objectForKey:@"tweaks"] isKindOfClass:[NSArray class]]) {
-            NSLog(@"%@", [[self payload] objectForKey:@"tweaks"]);
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [variant addTweaksFromJSONObject:[[self payload] objectForKey:@"tweaks"] andExecute:YES];
             });

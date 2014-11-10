@@ -4,6 +4,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import "MPLogging.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "UIColor+MPColor.h"
@@ -97,7 +98,7 @@
                 self.imageHeight.constant = image.size.height;
                 self.imageView.image = image;
             } else {
-                NSLog(@"image failed to load from data: %@", self.notification.image);
+                MixpanelError(@"image failed to load from data: %@", self.notification.image);
             }
         }
 
