@@ -4,15 +4,14 @@
 
 #import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
-
 #import "MPSurvey.h"
 #import "MPSurveyNavigationController.h"
 #import "MPSurveyQuestion.h"
 #import "MPSurveyQuestionViewController.h"
+#import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
 #import "UIView+MPSnapshotImage.h"
-#import "UIColor+MPColor.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 

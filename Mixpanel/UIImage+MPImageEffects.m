@@ -97,12 +97,10 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
 
-#import "UIImage+MPImageEffects.h"
-#import "UIColor+MPColor.h"
-
 #import <Accelerate/Accelerate.h>
 #import <float.h>
-
+#import "UIColor+MPColor.h"
+#import "UIImage+MPImageEffects.h"
 
 @implementation UIImage (MPImageEffects)
 

@@ -1,12 +1,12 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPApplicationStateSerializer.h"
-#import "MPObjectSerializer.h"
-#import "MPClassDescription.h"
-#import "MPObjectSerializerConfig.h"
-#import "MPObjectIdentityProvider.h"
 #import <QuartzCore/QuartzCore.h>
+#import "MPApplicationStateSerializer.h"
+#import "MPClassDescription.h"
+#import "MPObjectIdentityProvider.h"
+#import "MPObjectSerializer.h"
+#import "MPObjectSerializerConfig.h"
 
 @implementation MPApplicationStateSerializer
 

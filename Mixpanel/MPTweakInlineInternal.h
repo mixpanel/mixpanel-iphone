@@ -7,9 +7,9 @@
  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+#import "_MPTweakBindObserver.h"
 #import "MPTweak.h"
 #import "MPTweakStore.h"
-#import "_MPTweakBindObserver.h"
 
 #ifdef __cplusplus
 extern "C" {

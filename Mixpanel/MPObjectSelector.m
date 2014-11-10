@@ -8,7 +8,6 @@
 
 #import "MPObjectSelector.h"
 
-
 @interface MPObjectFilter : NSObject
 
 @property (nonatomic, strong) NSString *name;

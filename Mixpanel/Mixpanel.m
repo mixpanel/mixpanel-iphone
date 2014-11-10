@@ -13,17 +13,15 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <UIKit/UIDevice.h>
-
-#import "MPSurveyNavigationController.h"
+#import "Mixpanel.h"
+#import "MPABTestDesignerConnection.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
-#import "Mixpanel.h"
+#import "MPSurveyNavigationController.h"
+#import "MPVariant.h"
+#import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
 #import "UIView+MPSnapshotImage.h"
-#import "MPVariant.h"
-
-#import "MPWebSocket.h"
-#import "MPABTestDesignerConnection.h"
 
 #define VERSION @"2.5.4"
 
@@ -539,7 +537,7 @@ static Mixpanel *sharedInstance = nil;
     }
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
-    
+
     double epochInterval = [[NSDate date] timeIntervalSince1970];
     NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{

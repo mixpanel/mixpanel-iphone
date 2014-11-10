@@ -17,7 +17,6 @@
 //   limitations under the License.
 //
 
-
 #import "MPWebSocket.h"
 
 #if TARGET_OS_IPHONE
@@ -25,18 +24,23 @@
 #endif
 
 #ifdef HAS_ICU
+
 #import <unicode/utf8.h>
+
 #endif
 
 #if TARGET_OS_IPHONE
+
 #import <Endian.h>
+
 #else
+
 #import <CoreServices/CoreServices.h>
+
 #endif
 
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/SecRandom.h>
-
 #import "NSData+MPBase64.h"
 
 #if OS_OBJECT_USE_OBJC_RETAIN_RELEASE
