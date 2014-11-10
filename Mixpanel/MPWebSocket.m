@@ -41,6 +41,7 @@
 
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/SecRandom.h>
+#import "MPLogging.h"
 #import "NSData+MPBase64.h"
 
 #if OS_OBJECT_USE_OBJC_RETAIN_RELEASE
@@ -578,7 +579,7 @@ static __strong NSData *CRLFCRLF;
 
 #if DEBUG
         [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
-        NSLog(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
+        MixpanelDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
         [_outputStream setProperty:SSLOptions
@@ -1597,22 +1598,6 @@ static const size_t MPFrameHeaderOverhead = 32;
 }
 
 @end
-
-//#define MP_ENABLE_LOG
-
-static inline void MPLog(NSString *format, ...) {
-#ifdef MP_ENABLE_LOG
-    __block va_list arg_list;
-    va_start (arg_list, format);
-
-    NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arg_list];
-
-    va_end(arg_list);
-
-    NSLog(@"[MP] %@", formattedString);
-#endif
-}
-
 
 #ifdef HAS_ICU
 

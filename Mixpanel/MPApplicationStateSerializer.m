@@ -4,6 +4,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MPApplicationStateSerializer.h"
 #import "MPClassDescription.h"
+#import "MPLogging.h"
 #import "MPObjectIdentityProvider.h"
 #import "MPObjectSerializer.h"
 #import "MPObjectSerializerConfig.h"
@@ -39,7 +40,7 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
             if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES] == NO) {
-                NSLog(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+                MixpanelError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
             }
         } else {
             [window.layer renderInContext:UIGraphicsGetCurrentContext()];
