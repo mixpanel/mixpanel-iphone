@@ -3,7 +3,6 @@
 
 #import "MPValueTransformers.h"
 
-
 @implementation MPCGPointToNSDictionaryValueTransformer
 
 + (Class)transformedValueClass

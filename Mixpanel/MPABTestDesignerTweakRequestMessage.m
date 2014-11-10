@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
+#import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerTweakResponseMessage.h"
 #import "MPVariant.h"
 

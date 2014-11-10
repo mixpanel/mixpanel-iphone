@@ -14,6 +14,19 @@ rules = [
             (r'for \([ ]*uint[ ]+', 'for (NSUInteger '), #use NSUinteger instead of uint
             (r'for \([ ]*int[ ]+', 'for (NSInteger '), #use NSinteger instead of int
             (r'\n([+-])[ ]*\((\w+\s*\*?)\)\s*', lambda m: '\n%s (%s)' % (m.group(1), m.group(2))), #proper spacing in method definitions
+            (r'#import\s+(?=["<])', '#import '),
+            (r'(\n+(?:#import ["<][^"<>]*[">]\n+)+)', lambda m: "\n\n" + '\n'.join(
+                sorted(
+                    sorted(
+                        set(
+                            filter(lambda b: len(b) > 0,
+                                map(lambda s: s.strip(), m.group(1).split('\n'))
+                            )
+                        ),
+                        key=lambda k: k[9:].lower()),
+                    key = lambda k: k[:9], reverse=True)
+                ) + "\n\n"), # Organize imports
+
         ]
 
 if __name__ == '__main__':
