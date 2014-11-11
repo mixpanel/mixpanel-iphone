@@ -1,15 +1,15 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import <ImageIO/ImageIO.h>
 #import "MPValueTransformers.h"
 #import "NSData+MPBase64.h"
-#import <ImageIO/ImageIO.h>
 
 @implementation MPUIImageToNSDictionaryValueTransformer
 
 static NSMutableDictionary *imageCache;
 
-+(void)load {
++ (void)load {
     imageCache = [NSMutableDictionary dictionary];
 }
 

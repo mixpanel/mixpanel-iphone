@@ -4,7 +4,6 @@
 #import "MPObjectIdentityProvider.h"
 #import "MPSequenceGenerator.h"
 
-
 @implementation MPObjectIdentityProvider
 
 {

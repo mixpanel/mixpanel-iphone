@@ -2,13 +2,13 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import <objc/runtime.h>
-#import "MPObjectSerializer.h"
 #import "MPClassDescription.h"
-#import "MPPropertyDescription.h"
-#import "MPObjectSerializerContext.h"
-#import "MPObjectSerializerConfig.h"
 #import "MPEnumDescription.h"
 #import "MPObjectIdentityProvider.h"
+#import "MPObjectSerializer.h"
+#import "MPObjectSerializerConfig.h"
+#import "MPObjectSerializerContext.h"
+#import "MPPropertyDescription.h"
 #import "NSInvocation+MPHelpers.h"
 
 @interface MPObjectSerializer ()

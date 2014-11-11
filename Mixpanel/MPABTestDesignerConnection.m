@@ -1,21 +1,16 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPABTestDesignerConnection.h"
-#import "MPABTestDesignerMessage.h"
-#import "MPABTestDesignerSnapshotResponseMessage.h"
-#import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerChangeRequestMessage.h"
-#import "MPABTestDesignerDeviceInfoRequestMessage.h"
-#import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerClearRequestMessage.h"
+#import "MPABTestDesignerConnection.h"
+#import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerDisconnectMessage.h"
-
-#ifdef MESSAGING_DEBUG
-#define MessagingDebug(...) NSLog(__VA_ARGS__)
-#else
-#define MessagingDebug(...)
-#endif
+#import "MPABTestDesignerMessage.h"
+#import "MPABTestDesignerSnapshotRequestMessage.h"
+#import "MPABTestDesignerSnapshotResponseMessage.h"
+#import "MPABTestDesignerTweakRequestMessage.h"
+#import "MPLogging.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
 

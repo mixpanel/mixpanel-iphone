@@ -7,8 +7,8 @@
  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import "MPTweakStore.h"
 #import "MPTweak.h"
+#import "MPTweakStore.h"
 
 @implementation MPTweakStore {
   NSMutableArray *_orderedTweaks;

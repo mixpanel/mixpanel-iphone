@@ -3,7 +3,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface MPSequenceGenerator : NSObject
 
 - (int32_t)nextValue;

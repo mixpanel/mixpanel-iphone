@@ -4,7 +4,6 @@
 #import <libkern/OSAtomic.h>
 #import "MPSequenceGenerator.h"
 
-
 @implementation MPSequenceGenerator
 
 {

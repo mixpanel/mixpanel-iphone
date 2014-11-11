@@ -3,7 +3,6 @@
 #endif
 
 #import <QuartzCore/QuartzCore.h>
-
 #import "UIView+MPSnapshotImage.h"
 
 @implementation UIView (MPSnapshotImage)
