@@ -1226,4 +1226,9 @@
     XCTAssertNil(p[@"$duration"], @"Tracking the same event should require a second call to timeEvent.");
 }
 
+- (void)testTelephonyInfoInitialized
+{
+    XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
+}
+
 @end

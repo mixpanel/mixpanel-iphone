@@ -161,6 +161,7 @@ static Mixpanel *sharedInstance = nil;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
+        self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
         self.automaticProperties = [self collectAutomaticProperties];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
@@ -349,8 +350,7 @@ static Mixpanel *sharedInstance = nil;
     UIDevice *device = [UIDevice currentDevice];
     NSString *deviceModel = [self deviceModel];
     CGSize size = [UIScreen mainScreen].bounds.size;
-    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+    CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
