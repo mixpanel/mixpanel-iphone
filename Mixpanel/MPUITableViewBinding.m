@@ -43,8 +43,6 @@
                                             withDelegate:tableDelegate];
 }
 
-- (instancetype) init __attribute__((unavailable("init not available"))) { }
-
 - (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path
 {
     return [self initWithEventName:eventName onPath:path withDelegate:nil];

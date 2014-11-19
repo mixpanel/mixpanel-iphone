@@ -33,7 +33,7 @@
     return[classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
 }
 
-- (instancetype) init __attribute__((unavailable("init not available"))) { }
+
 
 - (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path
 {

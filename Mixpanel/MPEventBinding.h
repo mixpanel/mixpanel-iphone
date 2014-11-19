@@ -30,9 +30,11 @@
  */
 @property (nonatomic) BOOL running;
 
-
 + (id)bindngWithJSONObject:(id)object;
+
+- (instancetype)init __unavailable;
 - (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path;
+
 
 /*!
  Method stubs. Implement them in subclasses

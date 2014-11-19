@@ -59,8 +59,6 @@
                                           andVerifyEvent:verifyEvent];
 }
 
-- (instancetype) init __attribute__((unavailable("init not available"))) { }
-
 - (id)initWithEventName:(NSString *)eventName
                  onPath:(NSString *)path
        withControlEvent:(UIControlEvents)controlEvent

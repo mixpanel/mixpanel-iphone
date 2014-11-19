@@ -10,6 +10,7 @@
 
 @interface MPUITableViewBinding : MPEventBinding
 
+- (instancetype)init __unavailable;
 - (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path withDelegate:(Class)delegateClass;
 
 @end
