@@ -10,7 +10,7 @@
 #import "MPObjectSerializerContext.h"
 #import "MPPropertyDescription.h"
 #import "NSInvocation+MPHelpers.h"
-#import "UIView+MPHelpers.h"
+#import "MPCategoryHelpers.h"
 
 @interface MPObjectSerializer ()
 

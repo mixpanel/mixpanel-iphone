@@ -26,7 +26,7 @@
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
-#import "UIView+MPHelpers.h"
+#import "MPCategoryHelpers.h"
 
 
 #define VERSION @"2.5.4"

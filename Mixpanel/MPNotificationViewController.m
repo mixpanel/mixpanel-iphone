@@ -10,7 +10,7 @@
 #import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
-#import "UIView+MPHelpers.h"
+#import "MPCategoryHelpers.h"
 
 #define MPNotifHeight 65.0f
 

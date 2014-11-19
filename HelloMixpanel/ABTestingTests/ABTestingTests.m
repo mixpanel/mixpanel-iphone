@@ -17,7 +17,7 @@
 #import "MixpanelDummyDecideConnection.h"
 #import "MPValueTransformers.h"
 #import "NSData+MPBase64.h"
-#import "UIView+MPHelpers.h"
+#import "MPCategoryHelpers.h"
 
 #define TEST_TOKEN @"abc123"
 

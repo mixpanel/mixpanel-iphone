@@ -12,7 +12,7 @@
 #import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
-#import "UIView+MPHelpers.h"
+#import "MPCategoryHelpers.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 

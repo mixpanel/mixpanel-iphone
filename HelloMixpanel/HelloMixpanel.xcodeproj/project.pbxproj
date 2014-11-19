@@ -31,9 +31,6 @@
 		0549188E19D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
 		0549188F19D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
 		0549189019D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
-		0549189319D4A4C100056A1C /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0549189119D4A4C100056A1C /* UIView+MPHelpers.m */; };
-		0549189419D4A4C100056A1C /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0549189119D4A4C100056A1C /* UIView+MPHelpers.m */; };
-		0549189519D4A4C100056A1C /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0549189119D4A4C100056A1C /* UIView+MPHelpers.m */; };
 		05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */; };
 		05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
@@ -57,6 +54,10 @@
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		1818F43F197EE94800BC1F70 /* MPEventBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1818F43E197EE94800BC1F70 /* MPEventBinding.m */; };
 		1825251B1991473700C034BD /* MPUITableViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1825251A1991473700C034BD /* MPUITableViewBinding.m */; };
+		182EB8631A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
+		182EB8641A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
+		182EB8651A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
+		182EB8661A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
 		187939D019A284BF00CC4FBE /* MPUIControlBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */; };
 		187939F019A2A7F400CC4FBE /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 057264CB194913D800738CDC /* XCTest.framework */; };
 		187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9931610EFE3005772B7 /* Foundation.framework */; };
@@ -279,8 +280,6 @@
 		0543901F192279530076094E /* MPTweakStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakStore.m; sourceTree = "<group>"; };
 		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0549188D19D24E3500056A1C /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
-		0549189119D4A4C100056A1C /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
-		0549189219D4A4C100056A1C /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		05509E4D196E4697007E5C06 /* MixpanelDummyDecideConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelDummyDecideConnection.h; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.h; sourceTree = "<group>"; };
 		05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelDummyDecideConnection.m; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.m; sourceTree = "<group>"; };
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
@@ -323,6 +322,8 @@
 		182525191991473700C034BD /* MPUITableViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITableViewBinding.h; sourceTree = "<group>"; };
 		1825251A1991473700C034BD /* MPUITableViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITableViewBinding.m; sourceTree = "<group>"; };
 		182EB8611A1C1A6900BE9D75 /* MPDesignerEventBindingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerEventBindingMessage.h; sourceTree = "<group>"; };
+		182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
+		182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCategoryHelpers.h; sourceTree = "<group>"; };
 		184E4D1619A7D690003115CE /* MPDesignerSessionCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPDesignerSessionCollection.h; sourceTree = "<group>"; };
 		187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIControlBinding.m; sourceTree = "<group>"; };
 		187939CF19A284BF00CC4FBE /* MPUIControlBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIControlBinding.h; sourceTree = "<group>"; };
@@ -461,6 +462,7 @@
 			files = (
 				5262143622F74EDFB5C6D2AC /* (null) in Frameworks */,
 				C1DF1D0AB4F943AA96313F10 /* libPods-ABTestingTests.a in Frameworks */,
+				182EB8651A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +471,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				187939F019A2A7F400CC4FBE /* XCTest.framework in Frameworks */,
+				182EB8661A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
 				187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */,
 				187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */,
 				19E147D070AC45CBB30031AB /* libPods-EventBindingTests.a in Frameworks */,
@@ -479,6 +482,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				182EB8631A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
 				05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */,
 				A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */,
 				05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */,
@@ -498,6 +502,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0563B607194A18AD00B40489 /* XCTest.framework in Frameworks */,
+				182EB8641A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
@@ -746,9 +751,9 @@
 				289B497817D913D40035439B /* NSData+MPBase64.h */,
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
 				053B4C661840191000E825FE /* UIColor+MPColor.h */,
-				0549189119D4A4C100056A1C /* UIView+MPHelpers.m */,
-				0549189219D4A4C100056A1C /* UIView+MPHelpers.h */,
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
+				182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */,
+				182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
 				28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */,
 				28FEFA0717CAE93200691355 /* UIImage+MPImageEffects.h */,
@@ -1238,7 +1243,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */,
-				0549189519D4A4C100056A1C /* UIView+MPHelpers.m in Sources */,
 				055FA715194A6B020080A709 /* ABTestingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1261,7 +1265,6 @@
 				05439021192279530076094E /* MPTweak.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				1818F43F197EE94800BC1F70 /* MPEventBinding.m in Sources */,
-				0549189319D4A4C100056A1C /* UIView+MPHelpers.m in Sources */,
 				A7B462DB191075DE00774977 /* MPPassThroughValueTransformer.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
 				05F5F9641965CE300070280C /* MPABTestDesignerClearRequestMessage.m in Sources */,
@@ -1335,7 +1338,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
-				0549189419D4A4C100056A1C /* UIView+MPHelpers.m in Sources */,
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
 			);
@@ -1480,6 +1482,10 @@
 				INFOPLIST_FILE = ABTestingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+				);
 				METAL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1522,6 +1528,10 @@
 				INFOPLIST_FILE = ABTestingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+				);
 				METAL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
 					"-DNS_BLOCK_ASSERTIONS=1",
@@ -1568,6 +1578,10 @@
 				INFOPLIST_FILE = ABTestingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+				);
 				METAL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
 					"-DNS_BLOCK_ASSERTIONS=1",
@@ -1605,6 +1619,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -1634,6 +1652,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				VALIDATE_PRODUCT = YES;
@@ -1664,6 +1686,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				VALIDATE_PRODUCT = YES;
@@ -1833,6 +1859,10 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../Mixpanel",
+					"$(inherited)",
+				);
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
@@ -1865,6 +1895,10 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../Mixpanel",
+					"$(inherited)",
+				);
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "F111E4C1-01A6-44C5-9356-7D7AE9E1EC7E";
@@ -1905,6 +1939,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1944,6 +1979,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2033,6 +2069,10 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../Mixpanel",
+					"$(inherited)",
+				);
 				OTHER_CFLAGS = "-Wno-gnu";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2072,6 +2112,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
