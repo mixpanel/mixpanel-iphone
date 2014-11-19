@@ -7,6 +7,8 @@
 #import "MPTweak.h"
 #import "MPTweakStore.h"
 
+#import "Mixpanel.h"
+
 NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_request";
 
 @implementation MPABTestDesignerDeviceInfoRequestMessage
@@ -33,6 +35,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             deviceInfoResponseMessage.deviceModel = currentDevice.model;
             deviceInfoResponseMessage.appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
             deviceInfoResponseMessage.appRelease = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+            deviceInfoResponseMessage.libVersion = [[Mixpanel sharedInstance] libVersion];
             deviceInfoResponseMessage.mainBundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
             deviceInfoResponseMessage.availableFontFamilies = [self availableFontFamilies];
             deviceInfoResponseMessage.tweaks = [self getTweaks];

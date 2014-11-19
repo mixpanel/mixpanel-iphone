@@ -1,6 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import "Mixpanel.h"
 #import "MPABTestDesignerChangeRequestMessage.h"
 #import "MPABTestDesignerClearRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
@@ -10,7 +11,10 @@
 #import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "MPABTestDesignerTweakRequestMessage.h"
+#import "MPDesignerEventBindingMessage.h"
+#import "MPDesignerSessionCollection.h"
 #import "MPLogging.h"
+#import "MPSwizzler.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
 
@@ -51,6 +55,7 @@ NSString * const kSessionVariantKey = @"session_variant";
             MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
             MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
             MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
+            MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMesssage class],
         };
 
         _open = NO;
@@ -87,6 +92,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (void)close
 {
     [_webSocket close];
+    for (NSString *key in [_session keyEnumerator]) {
+        id value = [_session valueForKey:key];
+        if ([value conformsToProtocol:@protocol(MPDesignerSessionCollection)]) {
+            [value cleanup];
+        }
+    }
+    _session = nil;
 }
 
 - (void)dealloc

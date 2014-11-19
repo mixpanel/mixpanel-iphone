@@ -1204,21 +1204,21 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     NSDictionary *p = e[@"properties"];
     XCTAssertNil(p[@"$duration"], @"New events should not be timed.");
-    
+
     [self.mixpanel timeEvent:@"400 Meters"];
-    
+
     [self.mixpanel track:@"500 Meters"];
     [self waitForSerialQueue];
     e = self.mixpanel.eventsQueue.lastObject;
     p = e[@"properties"];
     XCTAssertNil(p[@"$duration"], @"The exact same event name is required for timing.");
-    
+
     [self.mixpanel track:@"400 Meters"];
     [self waitForSerialQueue];
     e = self.mixpanel.eventsQueue.lastObject;
     p = e[@"properties"];
     XCTAssertNotNil(p[@"$duration"], @"This event should be timed.");
-    
+
     [self.mixpanel track:@"400 Meters"];
     [self waitForSerialQueue];
     e = self.mixpanel.eventsQueue.lastObject;

@@ -15,14 +15,19 @@
 #import <UIKit/UIDevice.h>
 #import "Mixpanel.h"
 #import "MPABTestDesignerConnection.h"
+#import "MPDesignerSessionCollection.h"
+#import "MPDesignerEventBindingMessage.h"
+#import "MPEventBinding.h"
 #import "MPLogging.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "MPSurveyNavigationController.h"
+#import "MPSwizzler.h"
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
-#import "UIView+MPSnapshotImage.h"
+#import "UIView+MPHelpers.h"
+
 
 #define VERSION @"2.5.4"
 
@@ -60,6 +65,7 @@
 
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSSet *variants;
+@property (nonatomic, strong) NSSet *eventBindings;
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
@@ -331,6 +337,11 @@ static Mixpanel *sharedInstance = nil;
 }
 #endif
 
+- (NSString *)libVersion
+{
+    return VERSION;
+}
+
 - (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
@@ -347,7 +358,7 @@ static Mixpanel *sharedInstance = nil;
 
     [p addEntriesFromDictionary:@{
              @"mp_lib": @"iphone",
-             @"$lib_version": VERSION,
+             @"$lib_version": [self libVersion],
              @"$manufacturer": @"Apple",
              @"$os": [device systemName],
              @"$os_version": [device systemVersion],
@@ -825,12 +836,19 @@ static Mixpanel *sharedInstance = nil;
     return [self filePathForData:@"variants"];
 }
 
+- (NSString *)eventBindingsFilePath
+{
+    return [self filePathForData:@"event_bindings"];
+}
+
 - (void)archive
 {
     [self archiveEvents];
     [self archivePeople];
     [self archiveProperties];
     [self archiveVariants];
+    [self archiveEventBindings];
+
 }
 
 - (void)archiveEvents
@@ -879,12 +897,21 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
+- (void)archiveEventBindings
+{
+    NSString *filePath = [self eventBindingsFilePath];
+    if (![NSKeyedArchiver archiveRootObject:self.eventBindings toFile:filePath]) {
+        MixpanelError(@"%@ unable to archive tracking events data", self);
+    }
+}
+
 - (void)unarchive
 {
     [self unarchiveEvents];
     [self unarchivePeople];
     [self unarchiveProperties];
     [self unarchiveVariants];
+    [self unarchiveEventBindings];
 }
 
 - (id)unarchiveFromFile:(NSString *)filePath
@@ -936,6 +963,7 @@ static Mixpanel *sharedInstance = nil;
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
         self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
         self.variants = properties[@"variants"] ? properties[@"variants"] : [NSSet set];
+        self.eventBindings = properties[@"event_bindings"] ? properties[@"event_bindings"] : [NSArray array];
         self.timedEvents = properties[@"timedEvents"] ? properties[@"timedEvents"] : [NSMutableDictionary dictionary];
     }
 }
@@ -945,6 +973,19 @@ static Mixpanel *sharedInstance = nil;
     self.variants = (NSSet *)[self unarchiveFromFile:[self variantsFilePath]];
     if (!self.variants) {
         self.variants = [NSSet set];
+    }
+}
+
+- (void)unarchiveEventBindings
+{
+    self.eventBindings = (NSSet *)[self unarchiveFromFile:[self eventBindingsFilePath]];
+    if (!self.eventBindings) {
+        self.eventBindings = [NSSet set];
+    }
+    for (id binding in self.eventBindings) {
+        if ([binding isKindOfClass:[MPEventBinding class]]) {
+            [binding execute];
+        }
     }
 }
 
@@ -958,7 +999,7 @@ static Mixpanel *sharedInstance = nil;
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive || self.checkForVariantsOnActive) {
         NSDate *start = [NSDate date];
 
-        [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
             if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
                 [self showNotificationWithObject:notifications[0]];
             } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
@@ -969,6 +1010,12 @@ static Mixpanel *sharedInstance = nil;
                 for (MPVariant *variant in variants) {
                     [variant execute];
                     [self markVariantRun:variant];
+                }
+            });
+
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                for (MPEventBinding *binding in eventBindings) {
+                    [binding execute];
                 }
             });
 
@@ -1073,17 +1120,18 @@ static Mixpanel *sharedInstance = nil;
     return controller;
 }
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion
 {
     [self checkForDecideResponseWithCompletion:completion useCache:YES];
 }
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion useCache:(BOOL)useCache
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache
 {
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ decide check started", self);
 
         NSMutableSet *newVariants = [NSMutableSet set];
+        NSMutableSet *newEventBindings = [NSMutableSet set];
 
         if (!useCache || !self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
@@ -1176,9 +1224,36 @@ static Mixpanel *sharedInstance = nil;
             [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
             [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
 
+            NSArray *rawEventBindings = object[@"event_bindings"];
+            NSMutableSet *parsedEventBindings = [NSMutableSet set];
+            if (rawEventBindings && [rawEventBindings isKindOfClass:[NSArray class]]) {
+                for (id obj in rawEventBindings) {
+                    MPEventBinding *binder = [MPEventBinding bindngWithJSONObject:obj];
+                    [binder execute];
+                    if (binder) {
+                        [parsedEventBindings addObject:binder];
+                    }
+                }
+            } else {
+                MixpanelDebug(@"%@ mp tracking events check response format error: %@", self, object);
+            }
+
+            // Finished bindings are those which should no longer be run.
+            NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
+            [finishedEventBindings minusSet:parsedEventBindings];
+            [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
+
+            // New bindings are those we are running for the first time.
+            [newEventBindings unionSet:parsedEventBindings];
+            [newEventBindings minusSet:self.eventBindings];
+
+            NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
+            [allEventBindings unionSet:newEventBindings];
+
             self.surveys = [NSArray arrayWithArray:parsedSurveys];
             self.notifications = [NSArray arrayWithArray:parsedNotifications];
             self.variants = [allVariants copy];
+            self.eventBindings = [allEventBindings copy];
 
             self.decideResponseCached = YES;
         } else {
@@ -1197,16 +1272,17 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)[unseenNotifications count],
                       (unsigned long)[self.notifications count], unseenNotifications);
         MixpanelDebug(@"%@ decide check found %lu variants: %@", self, (unsigned long)[self.variants count], self.variants);
+        MixpanelDebug(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)[self.eventBindings count], self.eventBindings);
 
         if (completion) {
-            completion(unseenSurveys, unseenNotifications, newVariants);
+            completion(unseenSurveys, unseenNotifications, newVariants, newEventBindings);
         }
     });
 }
 
 - (void)checkForSurveysWithCompletion:(void (^)(NSArray *surveys))completion
 {
-    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         if (completion) {
             completion(surveys);
         }
@@ -1215,7 +1291,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)checkForNotificationsWithCompletion:(void (^)(NSArray *notifications))completion
 {
-    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         if (completion) {
             completion(notifications);
         }
@@ -1224,7 +1300,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)checkForVariantsWithCompletion:(void (^)(NSSet *variants))completion
 {
-    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         if (completion) {
             completion(variants);
         }
@@ -1555,26 +1631,50 @@ static Mixpanel *sharedInstance = nil;
     if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
         MixpanelError(@"A/B test designer connection already exists");
     } else {
+        static NSUInteger oldInterval;
         NSString *designerURLString = [NSString stringWithFormat:@"%@/connect?key=%@&type=device", self.switchboardURL, self.apiToken];
         NSURL *designerURL = [NSURL URLWithString:designerURLString];
         __weak Mixpanel *weakSelf = self;
+        void (^connectCallback)(void) = ^{
+            __strong Mixpanel *strongSelf = weakSelf;
+            oldInterval = strongSelf.flushInterval;
+            strongSelf.flushInterval = 1;
+            [UIApplication sharedApplication].idleTimerDisabled = YES;
+            if (strongSelf) {
+                for (MPVariant *variant in self.variants) {
+                    [variant stop];
+                }
+                for (MPEventBinding *binding in self.eventBindings) {
+                    [binding stop];
+                }
+                MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
+                void (^block)(id, SEL, NSString*, id) = ^(id self, SEL _cmd, NSString *event_name, id params) {
+                    MPDesignerTrackMessage *message = [MPDesignerTrackMessage messageWithPayload:@{@"event_name": event_name}];
+                    [connection sendMessage:message];
+                };
+                
+                [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
+            }
+                
+        };
+        void (^disconnectCallback)(void) = ^{
+            __strong Mixpanel *strongSelf = weakSelf;
+            strongSelf.flushInterval = oldInterval;
+            [UIApplication sharedApplication].idleTimerDisabled = NO;
+            if (strongSelf) {
+                MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
+                for (MPVariant *variant in self.variants) {
+                    [variant execute];
+                }
+                for (MPEventBinding *binding in self.eventBindings) {
+                    [binding execute];
+                }
+                [MPSwizzler unswizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] named:@"track_properties"];
+            }
+        };
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
-                                                                        connectCallback:^{
-                                                                            __strong Mixpanel *strongSelf = weakSelf;
-                                                                            if (strongSelf) {
-                                                                                for (MPVariant *variant in self.variants) {
-                                                                                    [variant stop];
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        disconnectCallback:^{
-                                                                            __strong Mixpanel *strongSelf = weakSelf;
-                                                                            if (strongSelf) {
-                                                                                for (MPVariant *variant in self.variants) {
-                                                                                    [variant execute];
-                                                                                }
-                                                                            }
-                                                                        }];
+                                                                        connectCallback:connectCallback
+                                                                        disconnectCallback:disconnectCallback];
     }
 }
 

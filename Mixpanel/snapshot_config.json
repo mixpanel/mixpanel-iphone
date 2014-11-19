@@ -252,6 +252,7 @@
             "properties": [
                 { "name": "userInteractionEnabled", "type": "BOOL" },
                 { "name": "tag", "type": "NSInteger" },
+                { "name": "mp_imageFingerprint", "type": "NSString", "use_kvc":false },
                 { "name": "frame", "type": "CGRect" },
                 { "name": "bounds", "type": "CGRect" },
                 { "name": "center", "type": "CGPoint" },

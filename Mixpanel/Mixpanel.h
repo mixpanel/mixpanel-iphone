@@ -637,6 +637,9 @@
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
+
+- (NSString *)libVersion;
+
 @end
 
 /*!

@@ -4,10 +4,23 @@
 #import "MPClassDescription.h"
 #import "MPPropertyDescription.h"
 
+@implementation MPDelegateInfo
+
+- (id)initWithDictionary:(NSDictionary *)dictionary
+{
+    if (self = [super init]) {
+        _selectorName = dictionary[@"selector"];
+    }
+    return self;
+}
+
+@end
+
 @implementation MPClassDescription
 
 {
     NSArray *_propertyDescriptions;
+    NSArray *_delegateInfos;
 }
 
 - (id)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary
@@ -16,12 +29,18 @@
     if (self) {
         _superclassDescription = superclassDescription;
 
-        NSMutableArray *propertyDescriptions = [[NSMutableArray alloc] init];
+        NSMutableArray *propertyDescriptions = [NSMutableArray array];
         for (NSDictionary *propertyDictionary in dictionary[@"properties"]) {
             [propertyDescriptions addObject:[[MPPropertyDescription alloc] initWithDictionary:propertyDictionary]];
         }
 
         _propertyDescriptions = [propertyDescriptions copy];
+
+        NSMutableArray *delegateInfos = [NSMutableArray array];
+        for (NSDictionary *delegateInfoDictionary in dictionary[@"delegateImplements"]) {
+            [delegateInfos addObject:[[MPDelegateInfo alloc] initWithDictionary:delegateInfoDictionary]];
+        }
+        _delegateInfos = [delegateInfos copy];
     }
 
     return self;

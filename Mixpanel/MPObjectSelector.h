@@ -13,10 +13,14 @@
 @property (nonatomic, strong, readonly) NSString *string;
 
 + (MPObjectSelector *)objectSelectorWithString:(NSString *)string;
-
 - (id)initWithString:(NSString *)string;
+
 - (NSArray *)selectFromRoot:(id)root;
+- (NSArray *)fuzzySelectFromRoot:(id)root;
+
 - (BOOL)isLeafSelected:(id)leaf fromRoot:(id)root;
+- (BOOL)fuzzyIsLeafSelected:(id)leaf fromRoot:(id)root;
+
 - (Class)selectedClass;
 - (NSString *)description;
 

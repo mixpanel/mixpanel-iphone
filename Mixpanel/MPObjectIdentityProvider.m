@@ -24,6 +24,9 @@
 
 - (NSString *)identifierForObject:(id)object
 {
+    if ([object isKindOfClass:[NSString class]]) {
+        return object;
+    }
     NSString *identifier = [_objectToIdentifierMap objectForKey:object];
     if (identifier == nil) {
         identifier = [NSString stringWithFormat:@"$%" PRIi32, [_sequenceGenerator nextValue]];

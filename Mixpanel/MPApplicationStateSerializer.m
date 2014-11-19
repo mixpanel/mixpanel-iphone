@@ -39,7 +39,7 @@
         UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, window.screen.scale);
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES] == NO) {
+            if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
                 MixpanelError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
             }
         } else {
