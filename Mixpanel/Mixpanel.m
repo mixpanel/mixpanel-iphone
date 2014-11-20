@@ -29,7 +29,7 @@
 #import "MPCategoryHelpers.h"
 
 
-#define VERSION @"2.5.4"
+#define VERSION @"2.6.0"
 
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;

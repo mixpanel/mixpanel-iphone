@@ -7,12 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0508CE6819DB82F80010B531 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0508CE6719DB82F80010B531 /* small_checkerboard.jpg */; };
-		0508CE6919DB84850010B531 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0508CE6719DB82F80010B531 /* small_checkerboard.jpg */; };
-		0508CE6A19DB84860010B531 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0508CE6719DB82F80010B531 /* small_checkerboard.jpg */; };
-		0508CE6C19DB900F0010B531 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0508CE6B19DB900F0010B531 /* huge_checkerboard.jpg */; };
-		0508CE6D19DB900F0010B531 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0508CE6B19DB900F0010B531 /* huge_checkerboard.jpg */; };
-		0508CE6E19DB900F0010B531 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0508CE6B19DB900F0010B531 /* huge_checkerboard.jpg */; };
 		051FDDB4198876DE00CF7385 /* MPABTestDesignerDisconnectMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 051FDDB3198876DE00CF7385 /* MPABTestDesignerDisconnectMessage.m */; };
 		053B4C63183E963100E825FE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053B4C62183E963100E825FE /* Media.xcassets */; };
 		053B4C64183E963100E825FE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053B4C62183E963100E825FE /* Media.xcassets */; };
@@ -28,9 +22,6 @@
 		05439024192279530076094E /* MPTweakInline.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901C192279530076094E /* MPTweakInline.m */; };
 		05439025192279530076094E /* MPTweakStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0543901F192279530076094E /* MPTweakStore.m */; };
 		0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0545AE29196F5382003DCE7F /* Settings.bundle */; };
-		0549188E19D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
-		0549188F19D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
-		0549189019D24E3500056A1C /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0549188D19D24E3500056A1C /* checkerboard.jpg */; };
 		05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */; };
 		05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
@@ -64,6 +55,9 @@
 		187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		187939FA19A2A7F400CC4FBE /* EventBindingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939F919A2A7F400CC4FBE /* EventBindingTests.m */; };
 		188D0AC019B7E351009C0399 /* MPDesignerTrackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D0ABF19B7E351009C0399 /* MPDesignerTrackMessage.m */; };
+		18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
+		18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
+		18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18E4561D199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */; };
 		18E4561E199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */; };
 		18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */; };
@@ -255,8 +249,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0508CE6719DB82F80010B531 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = "<group>"; };
-		0508CE6B19DB900F0010B531 /* huge_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = huge_checkerboard.jpg; sourceTree = "<group>"; };
 		050B1B8C196C944100F72974 /* MPValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPValueTransformers.h; sourceTree = "<group>"; };
 		05113949199BD7D4005189D2 /* test_decide_response_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response_2.json; sourceTree = "<group>"; };
 		051FDDB2198876DE00CF7385 /* MPABTestDesignerDisconnectMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPABTestDesignerDisconnectMessage.h; sourceTree = "<group>"; };
@@ -279,7 +271,6 @@
 		0543901E192279530076094E /* MPTweakStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweakStore.h; sourceTree = "<group>"; };
 		0543901F192279530076094E /* MPTweakStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTweakStore.m; sourceTree = "<group>"; };
 		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		0549188D19D24E3500056A1C /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
 		05509E4D196E4697007E5C06 /* MixpanelDummyDecideConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelDummyDecideConnection.h; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.h; sourceTree = "<group>"; };
 		05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelDummyDecideConnection.m; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.m; sourceTree = "<group>"; };
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
@@ -330,6 +321,7 @@
 		187939EF19A2A7F400CC4FBE /* EventBindingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventBindingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
 		188D0ABF19B7E351009C0399 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
+		18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
 		18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
 		18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
@@ -562,10 +554,8 @@
 		055FA712194A6B020080A709 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0508CE6719DB82F80010B531 /* small_checkerboard.jpg */,
-				0508CE6B19DB900F0010B531 /* huge_checkerboard.jpg */,
+				18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */,
 				05509E50196E47EE007E5C06 /* test_decide_response.json */,
-				0549188D19D24E3500056A1C /* checkerboard.jpg */,
 				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
 				055FA713194A6B020080A709 /* Info.plist */,
 				05113949199BD7D4005189D2 /* test_decide_response_2.json */,
@@ -1035,9 +1025,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05423721199BDFD800BE25E7 /* test_decide_response.json in Resources */,
-				0549189019D24E3500056A1C /* checkerboard.jpg in Resources */,
-				0508CE6E19DB900F0010B531 /* huge_checkerboard.jpg in Resources */,
-				0508CE6819DB82F80010B531 /* small_checkerboard.jpg in Resources */,
+				18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 				05423720199BDFD500BE25E7 /* test_decide_response_2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1046,6 +1034,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1062,13 +1051,11 @@
 				0542371F199BDFD100BE25E7 /* test_decide_response_2.json in Resources */,
 				286903FF17C6D2CF00DCA073 /* Default-568h@2x.png in Resources */,
 				86CC975018120A7E0003EF50 /* MPNotification.storyboard in Resources */,
-				0508CE6919DB84850010B531 /* small_checkerboard.jpg in Resources */,
 				2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */,
 				05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */,
 				053B4C63183E963100E825FE /* Media.xcassets in Resources */,
-				0549188E19D24E3500056A1C /* checkerboard.jpg in Resources */,
+				18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 				05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */,
-				0508CE6C19DB900F0010B531 /* huge_checkerboard.jpg in Resources */,
 				0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */,
 				C38D5AE54BD721CD32314934 /* snapshot_config.json in Resources */,
 			);
@@ -1079,9 +1066,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				053B4C64183E963100E825FE /* Media.xcassets in Resources */,
-				0549188F19D24E3500056A1C /* checkerboard.jpg in Resources */,
-				0508CE6D19DB900F0010B531 /* huge_checkerboard.jpg in Resources */,
-				0508CE6A19DB84860010B531 /* small_checkerboard.jpg in Resources */,
 				2808F9BD1610EFE4005772B7 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
