@@ -1044,7 +1044,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://mixpanel.com"};
+                        @"image_url": @"http://mixpanel.com/coolimage.png"};
 
     XCTAssertNotNil([MPNotification notificationWithJSONObject:o]);
 
@@ -1110,7 +1110,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://mixpanel.com"};
+                        @"image_url": @"http://mixpanel.com/someimage.png"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];

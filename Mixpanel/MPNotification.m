@@ -82,7 +82,8 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
 
-        imageURL = [NSURL URLWithString:imageURLString];
+        NSString *escapedUrl = [imageURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        imageURL = [NSURL URLWithString:escapedUrl];
         if (imageURL == nil) {
             NSLog(@"invalid notif image URL: %@", imageURLString);
             return nil;
