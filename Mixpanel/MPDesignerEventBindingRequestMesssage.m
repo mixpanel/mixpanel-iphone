@@ -26,24 +26,30 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
 - (void)updateBindings:(NSArray *)bindingPayload
 {
-    NSArray *oldBindings = self.bindings;
     NSMutableArray *newBindings = [NSMutableArray array];
-
     for (NSDictionary *bindingInfo in bindingPayload) {
         MPEventBinding *binding = [MPEventBinding bindngWithJSONObject:bindingInfo];
         [newBindings addObject:binding];
     }
 
-    if (oldBindings) {
-        [oldBindings makeObjectsPerformSelector:@selector(stop)];
+    if (self.bindings) {
+        for(MPEventBinding *oldBinding in self.bindings) {
+            [oldBinding stop];
+        }
     }
     self.bindings = newBindings;
-    [newBindings makeObjectsPerformSelector:@selector(execute)];
+    for(MPEventBinding *newBinding in self.bindings) {
+        [newBinding execute];
+    }
 }
 
 - (void)cleanup
 {
-    [self.bindings makeObjectsPerformSelector:@selector(stop)];
+    if (self.bindings) {
+        for(MPEventBinding *oldBinding in self.bindings) {
+            [oldBinding stop];
+        }
+    }
     self.bindings = nil;
 }
 

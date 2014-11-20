@@ -1662,7 +1662,6 @@ static Mixpanel *sharedInstance = nil;
             strongSelf.flushInterval = oldInterval;
             [UIApplication sharedApplication].idleTimerDisabled = NO;
             if (strongSelf) {
-                MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
                 for (MPVariant *variant in self.variants) {
                     [variant execute];
                 }

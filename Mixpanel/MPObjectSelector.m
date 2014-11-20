@@ -276,7 +276,7 @@
     return (([self.name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(self.name)])
             && (self.nameOnly || (
                 (!self.predicate || [_predicate evaluateWithObject:view])
-                && (!self.index || [self isView:view siblingNumber:[_index unsignedIntegerValue]])
+                && (!self.index || [self isView:view siblingNumber:[_index integerValue]])
                 && (!(self.unique) || [self isView:view oneOfNSiblings:1])))
             );
 }
@@ -315,8 +315,8 @@
     for (NSObject *parent in parents) {
         if ([parent isKindOfClass:[UIView class]]) {
             NSArray *siblings = [self getChildrenOfObject:parent ofType:NSClassFromString(_name)];
-            if ((index == -1 || index < [siblings count] && siblings[index] == view)
-                && (numSiblings == -1 || [siblings count] == numSiblings)) {
+            if ((index < 0 || ((NSUInteger)index < [siblings count] && siblings[(NSUInteger)index] == view))
+                && (numSiblings < 0 || [siblings count] == (NSUInteger)numSiblings)) {
                 return YES;
             }
         }

@@ -137,11 +137,11 @@
 
         executeBlock(nil, _cmd);
 
-        [MPSwizzler swizzleSelector:@selector(didMoveToWindow)
+        [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:self.swizzleClass
                           withBlock:executeBlock
                               named:self.name];
-        [MPSwizzler swizzleSelector:@selector(didMoveToSuperview)
+        [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToSuperview")
                             onClass:self.swizzleClass
                           withBlock:executeBlock
                               named:self.name];
@@ -153,10 +153,10 @@
 {
     if (self.running) {
         // remove what has been swizzled
-        [MPSwizzler unswizzleSelector:@selector(didMoveToWindow)
+        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:self.swizzleClass
                               named:self.name];
-        [MPSwizzler unswizzleSelector:@selector(didMoveToSuperview)
+        [MPSwizzler unswizzleSelector:NSSelectorFromString(@"didMoveToSuperview")
                             onClass:self.swizzleClass
                               named:self.name];
 
