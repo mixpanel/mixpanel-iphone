@@ -349,6 +349,7 @@ static Mixpanel *sharedInstance = nil;
              @"mp_lib": @"iphone",
              @"$lib_version": VERSION,
              @"$manufacturer": @"Apple",
+             @"$brand": @"Apple",
              @"$os": [device systemName],
              @"$os_version": [device systemVersion],
              @"$model": deviceModel,
