@@ -553,62 +553,23 @@
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
 }
 
-- (void)testFingerprinting
+- (void)testMpHelpers
 {
     UIView *v1 = [[UIView alloc] init];
-    UILabel *l1 = [[UILabel alloc] initWithFrame:CGRectMake(1, 2, 3, 4)];
-    l1.text = @"label";
-    [v1 addSubview:l1];
-    UIButton *b1 = [[UIButton alloc] initWithFrame:CGRectMake(2, 3, 4, 5)];
-    [b1 setTitle: @"button" forState:UIControlStateNormal];
-    [v1 addSubview:b1];
-    UIButton *b2 = [[UIButton alloc] initWithFrame:CGRectMake(20, 30, 40, 50)];
-    [b2 setTitle: @"button" forState:UIControlStateNormal];
-    [v1 addSubview:b2];
-
-    NSString *action = @"signUp";
-    NSString *targetAction = [NSString stringWithFormat:@"%lu/%@", UIControlEventTouchUpInside, action];
-    [b1 addTarget:self action:NSSelectorFromString(action) forControlEvents:UIControlEventTouchUpInside];
-    UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"]]];
-    [b1 setImage:image forState:UIControlStateNormal];
-
-    NSString *format = @"mp_size == \"3,4\"";
-    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:l1]);
-
-    format = [NSString stringWithFormat:@"mp_targetActions CONTAINS \"%@\"", targetAction];
-    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
-
-    format = @"mp_imageFingerprint == \"8fHx8R8fHx/x8fHxHx8fH/Hx8fEfHx8f8fHx8R8fHx8=\"";
-    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
-
-    // Compound predicates
-    format = @"mp_size = \"xxx\" OR (mp_position = \"2,3\" AND mp_size = \"4,5\")";
-    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
-    XCTAssert([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
-
-    // Predicates with invalid properties
-    format = @"mp_nonexistent = 123";
-    XCTAssertThrowsSpecificNamed([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1], NSException, @"NSUnknownKeyException");
-    XCTAssertFalse([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should not have selected object due to invalid property");
-
-    // Invalid predicate string
-    XCTAssertFalse([[MPObjectSelector objectSelectorWithString:@"/[!@#$%^]"] isLeafSelected:b1 fromRoot:v1], @"Selector should not not pass because predicate string is invalid.");
-
-    // Unique match only
-    XCTAssert([[[MPObjectSelector objectSelectorWithString:@"/UIButton(unique)"] selectFromRoot:v1] count] == 0, @"Selector should not have matched because object is not unique");
-    XCTAssertFalse([[MPObjectSelector objectSelectorWithString:@"/UIButton(unique)"] isLeafSelected:b1 fromRoot:v1], @"Selector should not have matched because object is not unique");
-}
-
-- (void)testImageFingerprint
-{
-    UIButton *b1 = [[UIButton alloc] init];
-    UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"huge_checkerboard" withExtension:@"jpg"]]];
-    [b1 setImage:image forState:UIControlStateNormal];
-    UIButton *b2 = [[UIButton alloc] init];
-    image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"small_checkerboard" withExtension:@"jpg"]]];
-    [b2 setImage:image forState:UIControlStateNormal];
-
-    XCTAssertEqualObjects([b1 performSelector:NSSelectorFromString(@"mp_imageFingerprint")], [b2 performSelector:NSSelectorFromString(@"mp_imageFingerprint")]);
+    
+    XCTAssert([v1 respondsToSelector:@selector(mp_fingerprintVersion)]);
+    XCTAssert([v1 mp_fingerprintVersion] == 1);
+    
+    XCTAssert([v1 respondsToSelector:@selector(mp_varA)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varB)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varC)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varSetD)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varE)]);
+    
+    XCTAssert([v1 respondsToSelector:@selector(mp_snapshotForBlur)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_snapshotImage)]);
+    
+    XCTAssertFalse([v1 respondsToSelector:@selector(mp_nonexistant)]);
 }
 
 - (void)testUITableViewCellOrdering

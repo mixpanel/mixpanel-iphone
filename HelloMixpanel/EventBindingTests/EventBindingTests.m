@@ -273,6 +273,7 @@
 
 - (void)testFingerprinting
 {
+    NSString *format;
     /*
      Selector matching is already tested pretty well in ABTestingTests.
      This adds some tests for the fingerprint versioning.
@@ -288,11 +289,9 @@
     XCTAssert([b1 respondsToSelector:NSSelectorFromString(@"mp_fingerprintVersion")]);
     XCTAssert([b1 performSelector:NSSelectorFromString(@"mp_fingerprintVersion")] >= 1);
 
-    NSString *format = @"mp_imageFingerprint == \"8fHx8R8fHx/x8fHxHx8fH/Hx8fEfHx8f8fHx8R8fHx8=\"";
-    XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
 
     // Test a versioned predicate where the first clause passes and the second would fail
-    format = @"(mp_fingerprintVersion >= 1 AND mp_size = \"4,5\") OR 1 = 2";
+    format = @"(mp_fingerprintVersion >= 1 AND true == true) OR 1 = 2";
     XCTAssert([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
     XCTAssert([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
 
@@ -302,7 +301,7 @@
     XCTAssert([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
 
     // Test where the version check passes but the version-sensitive predicate fails
-    format = @"(mp_fingerprintVersion >= 1 AND mp_size = \"x,x\") OR 1 = 2";
+    format = @"(mp_fingerprintVersion >= 1 AND mp_varA = \"not a real return value\") OR 1 = 2";
     XCTAssertFalse([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
     XCTAssertFalse([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
 }
