@@ -45,10 +45,6 @@
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
 		1818F43F197EE94800BC1F70 /* MPEventBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1818F43E197EE94800BC1F70 /* MPEventBinding.m */; };
 		1825251B1991473700C034BD /* MPUITableViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1825251A1991473700C034BD /* MPUITableViewBinding.m */; };
-		182EB8631A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
-		182EB8641A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
-		182EB8651A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
-		182EB8661A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */; };
 		187939D019A284BF00CC4FBE /* MPUIControlBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */; };
 		187939F019A2A7F400CC4FBE /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 057264CB194913D800738CDC /* XCTest.framework */; };
 		187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9931610EFE3005772B7 /* Foundation.framework */; };
@@ -58,6 +54,10 @@
 		18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
+		18B0ED231A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
+		18B0ED241A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
+		18B0ED251A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
+		18B0ED261A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
 		18E4561D199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */; };
 		18E4561E199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */; };
 		18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */; };
@@ -313,7 +313,6 @@
 		182525191991473700C034BD /* MPUITableViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUITableViewBinding.h; sourceTree = "<group>"; };
 		1825251A1991473700C034BD /* MPUITableViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITableViewBinding.m; sourceTree = "<group>"; };
 		182EB8611A1C1A6900BE9D75 /* MPDesignerEventBindingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerEventBindingMessage.h; sourceTree = "<group>"; };
-		182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
 		182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCategoryHelpers.h; sourceTree = "<group>"; };
 		184E4D1619A7D690003115CE /* MPDesignerSessionCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPDesignerSessionCollection.h; sourceTree = "<group>"; };
 		187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIControlBinding.m; sourceTree = "<group>"; };
@@ -322,6 +321,7 @@
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
 		188D0ABF19B7E351009C0399 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
 		18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
+		18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
 		18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
 		18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
@@ -454,7 +454,7 @@
 			files = (
 				5262143622F74EDFB5C6D2AC /* (null) in Frameworks */,
 				C1DF1D0AB4F943AA96313F10 /* libPods-ABTestingTests.a in Frameworks */,
-				182EB8651A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
+				18B0ED251A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,7 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				187939F019A2A7F400CC4FBE /* XCTest.framework in Frameworks */,
-				182EB8661A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
+				18B0ED261A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 				187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */,
 				187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */,
 				19E147D070AC45CBB30031AB /* libPods-EventBindingTests.a in Frameworks */,
@@ -474,9 +474,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				182EB8631A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
 				05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */,
 				A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */,
+				18B0ED231A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 				05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */,
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
 				2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */,
@@ -494,7 +494,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0563B607194A18AD00B40489 /* XCTest.framework in Frameworks */,
-				182EB8641A1D3C3700BE9D75 /* libMPCategoryHelpers.a in Frameworks */,
+				18B0ED241A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
@@ -743,7 +743,7 @@
 				053B4C661840191000E825FE /* UIColor+MPColor.h */,
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
 				182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */,
-				182EB8621A1D3C3700BE9D75 /* libMPCategoryHelpers.a */,
+				18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
 				28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */,
 				28FEFA0717CAE93200691355 /* UIImage+MPImageEffects.h */,
