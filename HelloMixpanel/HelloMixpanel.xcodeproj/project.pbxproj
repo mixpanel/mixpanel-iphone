@@ -55,6 +55,9 @@
 		187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		187939FA19A2A7F400CC4FBE /* EventBindingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939F919A2A7F400CC4FBE /* EventBindingTests.m */; };
 		188D0AC019B7E351009C0399 /* MPDesignerTrackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D0ABF19B7E351009C0399 /* MPDesignerTrackMessage.m */; };
+		18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
+		18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
+		18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18E4561D199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */; };
 		18E4561E199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */; };
 		18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */; };
@@ -318,6 +321,7 @@
 		187939EF19A2A7F400CC4FBE /* EventBindingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventBindingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
 		188D0ABF19B7E351009C0399 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
+		18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
 		18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
 		18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
@@ -550,6 +554,7 @@
 		055FA712194A6B020080A709 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */,
 				05509E50196E47EE007E5C06 /* test_decide_response.json */,
 				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
 				055FA713194A6B020080A709 /* Info.plist */,
@@ -1020,6 +1025,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05423721199BDFD800BE25E7 /* test_decide_response.json in Resources */,
+				18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 				05423720199BDFD500BE25E7 /* test_decide_response_2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1028,6 +1034,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1047,6 +1054,7 @@
 				2869040117C7EC8100DCA073 /* MPSurvey.storyboard in Resources */,
 				05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */,
 				053B4C63183E963100E825FE /* Media.xcassets in Resources */,
+				18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 				05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */,
 				0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */,
 				C38D5AE54BD721CD32314934 /* snapshot_config.json in Resources */,
