@@ -7,9 +7,8 @@
 //
 
 #import <objc/runtime.h>
-#import "MPUITableViewBinding.h"
-#import "Mixpanel.h"
 #import "MPSwizzler.h"
+#import "MPUITableViewBinding.h"
 
 @implementation MPUITableViewBinding
 
@@ -71,24 +70,16 @@
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
             // select targets based off path
             if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
-                NSInteger row = indexPath.row;
-                NSInteger section = indexPath.section || 0;
-                NSString *label;
-                if (row != nil) {
-                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-                    if (cell && cell.textLabel) {
-                        label = cell.textLabel.text;
-                    }
-                }
-                [[Mixpanel sharedInstance] track:[self eventName]
+                UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+                NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
+                [[self class] track:[self eventName]
                                       properties:@{
-                                                   @"Cell Index": [NSString stringWithFormat: @"%ld", (long)row],
-                                                   @"Cell Section": [NSString stringWithFormat: @"%ld", (long)section],
-                                                   @"Cell Label": label ?: @""
+                                                   @"Cell Index": [NSString stringWithFormat: @"%ld", indexPath.row],
+                                                   @"Cell Section": [NSString stringWithFormat: @"%ld", indexPath.section],
+                                                   @"Cell Label": label
                                                 }];
             }
         };
-
 
         [MPSwizzler swizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
                             onClass:self.swizzleClass

@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "MPUIControlBinding.h"
 #import "MPSwizzler.h"
-#import "Mixpanel.h"
+#import "MPUIControlBinding.h"
 
 @interface MPUIControlBinding()
 
@@ -209,7 +208,7 @@
         shouldTrack = [self verifyControlMatchesPath:sender];
     }
     if (shouldTrack) {
-        [[Mixpanel sharedInstance] track:[self eventName]];
+        [[self class] track:[self eventName] properties:nil];
     }
 }
 

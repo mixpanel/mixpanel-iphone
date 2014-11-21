@@ -1,13 +1,12 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import "Mixpanel.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerDeviceInfoResponseMessage.h"
 #import "MPTweak.h"
 #import "MPTweakStore.h"
-
-#import "Mixpanel.h"
 
 NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_request";
 

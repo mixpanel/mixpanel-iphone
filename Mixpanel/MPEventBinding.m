@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
+#import "Mixpanel.h"
 #import "MPEventBinding.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
@@ -33,7 +34,12 @@
     return[classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
 }
 
-
++ (void)track:(NSString *)event properties:(NSDictionary *)properties
+{
+    NSMutableDictionary *bindingProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys: @YES, @"$from_binding", nil];
+    [bindingProperties addEntriesFromDictionary:properties];
+    [[Mixpanel sharedInstance] track:event properties:bindingProperties];
+}
 
 - (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path
 {

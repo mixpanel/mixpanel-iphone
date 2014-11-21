@@ -4,13 +4,13 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import "MPCategoryHelpers.h"
 #import "MPLogging.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
-#import "MPCategoryHelpers.h"
 
 #define MPNotifHeight 65.0f
 

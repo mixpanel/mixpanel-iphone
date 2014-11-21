@@ -15,8 +15,9 @@
 #import <UIKit/UIDevice.h>
 #import "Mixpanel.h"
 #import "MPABTestDesignerConnection.h"
-#import "MPDesignerSessionCollection.h"
+#import "MPCategoryHelpers.h"
 #import "MPDesignerEventBindingMessage.h"
+#import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
 #import "MPLogging.h"
 #import "MPNotification.h"
@@ -26,8 +27,6 @@
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
-#import "MPCategoryHelpers.h"
-
 
 #define VERSION @"2.6.0"
 
@@ -1652,10 +1651,10 @@ static Mixpanel *sharedInstance = nil;
                     MPDesignerTrackMessage *message = [MPDesignerTrackMessage messageWithPayload:@{@"event_name": event_name}];
                     [connection sendMessage:message];
                 };
-                
+
                 [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
             }
-                
+
         };
         void (^disconnectCallback)(void) = ^{
             __strong Mixpanel *strongSelf = weakSelf;

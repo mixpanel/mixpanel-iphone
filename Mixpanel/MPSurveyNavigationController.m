@@ -4,6 +4,7 @@
 
 #import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
+#import "MPCategoryHelpers.h"
 #import "MPLogging.h"
 #import "MPSurvey.h"
 #import "MPSurveyNavigationController.h"
@@ -12,7 +13,6 @@
 #import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
-#import "MPCategoryHelpers.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 

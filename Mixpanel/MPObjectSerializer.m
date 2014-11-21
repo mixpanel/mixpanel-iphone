@@ -2,6 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import <objc/runtime.h>
+#import "MPCategoryHelpers.h"
 #import "MPClassDescription.h"
 #import "MPEnumDescription.h"
 #import "MPObjectIdentityProvider.h"
@@ -10,7 +11,6 @@
 #import "MPObjectSerializerContext.h"
 #import "MPPropertyDescription.h"
 #import "NSInvocation+MPHelpers.h"
-#import "MPCategoryHelpers.h"
 
 @interface MPObjectSerializer ()
 

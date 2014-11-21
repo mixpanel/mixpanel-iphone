@@ -35,7 +35,11 @@
 - (instancetype)init __unavailable;
 - (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path;
 
-
+/*!
+ Intercepts track calls and adds a property indicating the track event
+ was from a binding
+ */
++ (void)track:(NSString *)event properties:(NSDictionary *)properties;
 /*!
  Method stubs. Implement them in subclasses
  */

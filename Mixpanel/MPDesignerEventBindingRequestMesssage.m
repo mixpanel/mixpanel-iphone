@@ -7,12 +7,12 @@
 //
 
 #import "Mixpanel.h"
-#import "MPSwizzler.h"
-#import "MPObjectSelector.h"
-#import "MPDesignerEventBindingMessage.h"
 #import "MPABTestDesignerConnection.h"
-#import "MPEventBinding.h"
+#import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
+#import "MPEventBinding.h"
+#import "MPObjectSelector.h"
+#import "MPSwizzler.h"
 
 NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_request";
 
@@ -33,12 +33,12 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
     }
 
     if (self.bindings) {
-        for(MPEventBinding *oldBinding in self.bindings) {
+        for (MPEventBinding *oldBinding in self.bindings) {
             [oldBinding stop];
         }
     }
     self.bindings = newBindings;
-    for(MPEventBinding *newBinding in self.bindings) {
+    for (MPEventBinding *newBinding in self.bindings) {
         [newBinding execute];
     }
 }
@@ -46,7 +46,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 - (void)cleanup
 {
     if (self.bindings) {
-        for(MPEventBinding *oldBinding in self.bindings) {
+        for (MPEventBinding *oldBinding in self.bindings) {
             [oldBinding stop];
         }
     }

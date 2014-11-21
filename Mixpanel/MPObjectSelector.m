@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
+#import <objc/runtime.h>
 #import "MPObjectSelector.h"
 #import "NSData+MPBase64.h"
-#import <objc/runtime.h>
 
 @interface MPObjectFilter : NSObject
 
