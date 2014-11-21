@@ -130,9 +130,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message
 {
-    MessagingDebug(@"Sending message: %@", [message debugDescription]);
-    NSString *jsonString = [[NSString alloc] initWithData:[message JSONData] encoding:NSUTF8StringEncoding];
-    [_webSocket send:jsonString];
+    if (_connected) {
+        MessagingDebug(@"Sending message: %@", [message debugDescription]);
+        NSString *jsonString = [[NSString alloc] initWithData:[message JSONData] encoding:NSUTF8StringEncoding];
+        [_webSocket send:jsonString];
+    } else {
+        MessagingDebug(@"Not sending message as we are not connected: %@", [message debugDescription]);
+    }
 }
 
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message
