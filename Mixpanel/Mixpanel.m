@@ -1647,7 +1647,7 @@ static Mixpanel *sharedInstance = nil;
                     [binding stop];
                 }
                 MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
-                void (^block)(id, SEL, NSString*, id) = ^(id self, SEL _cmd, NSString *event_name, id params) {
+                void (^block)(id, SEL, NSString*, id) = ^(id obj, SEL sel, NSString *event_name, id params) {
                     MPDesignerTrackMessage *message = [MPDesignerTrackMessage messageWithPayload:@{@"event_name": event_name}];
                     [connection sendMessage:message];
                 };

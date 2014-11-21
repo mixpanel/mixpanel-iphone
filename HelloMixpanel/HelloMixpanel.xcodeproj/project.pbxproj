@@ -1468,7 +1468,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				METAL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = "$(inherited)";
@@ -1514,7 +1514,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				METAL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
@@ -1564,7 +1564,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				METAL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
@@ -1605,7 +1605,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1638,7 +1638,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1672,7 +1672,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1922,8 +1922,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1962,8 +1961,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2095,8 +2093,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-					"/Users/acanyon/mixpanel-iphone-private/Mixpanel",
+					"$(SRCROOT)/../Mixpanel",
 				);
 				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
