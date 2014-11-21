@@ -70,15 +70,15 @@
         }
     }
 
-    NSMutableArray *delegateSelectors = [NSMutableArray array];
+    NSMutableArray *delegateMethods = [NSMutableArray array];
     id delegate;
-    if (classDescription && [object respondsToSelector:@selector(delegate)]) {
-        if ([[classDescription delegateInfos] count]) {
-            delegate = ((id (*)(id, SEL))[object methodForSelector:@selector(delegate)])(object, @selector(delegate));
-            for (MPDelegateInfo *delegateInfo in [classDescription delegateInfos]) {
-                if ([delegate respondsToSelector:NSSelectorFromString(delegateInfo.selectorName)]) {
-                    [delegateSelectors addObject:delegateInfo.selectorName];
-                }
+    SEL delegateSelector = NSSelectorFromString(@"delegate");
+
+    if (classDescription && [[classDescription delegateInfos] count] > 0 && [object respondsToSelector:delegateSelector]) {
+        delegate = ((id (*)(id, SEL))[object methodForSelector:delegateSelector])(object, delegateSelector);
+        for (MPDelegateInfo *delegateInfo in [classDescription delegateInfos]) {
+            if ([delegate respondsToSelector:NSSelectorFromString(delegateInfo.selectorName)]) {
+                [delegateMethods addObject:delegateInfo.selectorName];
             }
         }
     }
@@ -89,7 +89,7 @@
         @"properties": propertyValues,
         @"delegate": @{
                 @"class": delegate ? NSStringFromClass([delegate class]) : @"",
-                @"selectors": delegateSelectors
+                @"selectors": delegateMethods
             }
     };
 
