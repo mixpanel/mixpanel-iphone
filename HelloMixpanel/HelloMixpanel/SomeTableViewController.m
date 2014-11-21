@@ -19,7 +19,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    animals = @[@"penguins", @"elephannt", @"giraffe", @"salmon", @"jaguar", @"narwal", @"blue whale", @"gekko", @"kawala", @"wambat", @"dingo", @"aardvark", @"bonobo", @"gibbon", @"tortus", @"anaconda", @"kiwi", @"red panda", @"axolotl", @"salamandar", @"army ants", @"butterfly", @"sparrow", @"mouse", @"sloth", @"howler monkey" ];
+    animals = @[@"penguins", @"elephannt", @"giraffe", @"salmon", @"jaguar", @"narwal", @"blue whale", @"gekko", @"koala", @"wombat", @"dingo", @"aardvark", @"bonobo", @"gibbon", @"tortoise", @"anaconda", @"kiwi", @"red panda", @"axolotl", @"salamander", @"army ants", @"butterfly", @"sparrow", @"mouse", @"sloth", @"howler monkey" ];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
