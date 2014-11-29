@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "MPLogging.h"
+#import "MixPanelLogging.h"
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 #import "MPTweak.h"

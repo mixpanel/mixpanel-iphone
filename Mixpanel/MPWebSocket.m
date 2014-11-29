@@ -41,7 +41,7 @@
 
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/SecRandom.h>
-#import "MPLogging.h"
+#import "MixPanelLogging.h"
 #import "NSData+MPBase64.h"
 
 #if OS_OBJECT_USE_OBJC_RETAIN_RELEASE
