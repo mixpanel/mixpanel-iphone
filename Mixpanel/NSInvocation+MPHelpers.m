@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import <objc/runtime.h>
-#import "MPLogging.h"
+#import "MixPanelLogging.h"
 #import "NSInvocation+MPHelpers.h"
 
 typedef union {
