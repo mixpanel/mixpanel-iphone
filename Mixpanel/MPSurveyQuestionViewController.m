@@ -3,7 +3,7 @@
 #endif
 
 #import <QuartzCore/QuartzCore.h>
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPSurveyQuestionViewController.h"
 
 @interface MPSurveyQuestionViewController ()

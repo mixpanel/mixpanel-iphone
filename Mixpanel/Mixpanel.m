@@ -19,7 +19,7 @@
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "MPSurveyNavigationController.h"

@@ -13,7 +13,7 @@
 #import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPSwizzler.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
