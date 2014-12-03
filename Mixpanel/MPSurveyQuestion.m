@@ -2,7 +2,7 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
 
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPSurveyQuestion.h"
 
 static NSString *MPSurveyQuestionTypeMultipleChoice = @"multiple_choice";

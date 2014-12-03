@@ -1,13 +1,13 @@
 //
-//  MPLogging.h
+//  MPLogger.h
 //  HelloMixpanel
 //
 //  Created by Alex Hofsteede on 7/11/14.
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#ifndef HelloMixpanel_MPLogging_h
-#define HelloMixpanel_MPLogging_h
+#ifndef MPLogger_h
+#define MPLogger_h
 
 static inline void MPLog(NSString *format, ...) {
     __block va_list arg_list;

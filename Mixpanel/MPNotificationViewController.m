@@ -5,7 +5,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import "MPCategoryHelpers.h"
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "UIColor+MPColor.h"

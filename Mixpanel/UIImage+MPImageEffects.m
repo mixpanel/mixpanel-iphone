@@ -99,7 +99,7 @@
 
 #import <Accelerate/Accelerate.h>
 #import <float.h>
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "UIColor+MPColor.h"
 #import "UIImage+MPImageEffects.h"
 
