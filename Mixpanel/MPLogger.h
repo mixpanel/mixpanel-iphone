@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#ifndef HelloMixpanel_MPLogger.h
-#define HelloMixpanel_MPLogger.h
+#ifndef MPLogger_h
+#define MPLogger_h
 
 static inline void MPLog(NSString *format, ...) {
     __block va_list arg_list;
