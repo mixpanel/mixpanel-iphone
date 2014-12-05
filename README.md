@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
 
-Mixpanel supports `Cocoapods` for easy instillation.
+Mixpanel supports `Cocoapods` for easy installation.
 To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
 
 **Want to Contribute?**
