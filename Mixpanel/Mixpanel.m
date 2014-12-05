@@ -28,7 +28,7 @@
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"2.6.1"
+#define VERSION @"2.6.2"
 
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
