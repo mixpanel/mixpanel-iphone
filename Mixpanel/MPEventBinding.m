@@ -84,7 +84,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    NSString *path = (NSString *)[MPObjectSelector objectSelectorWithString:[aDecoder decodeObjectForKey:@"path"]];
+    NSString *path = (NSString *)[aDecoder decodeObjectForKey:@"path"];
     NSString *eventName = (NSString *)[aDecoder decodeObjectForKey:@"eventName"];
     if (self = [self initWithEventName:eventName onPath:path]) {
         self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
