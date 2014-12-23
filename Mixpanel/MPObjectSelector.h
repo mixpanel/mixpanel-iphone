@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface MPObjectSelector : NSObject
 
