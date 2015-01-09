@@ -1,6 +1,8 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import <UIKit/UIKit.h>
+#import <CoreGraphics/CoreGraphics.h>
 #import "MPValueTransformers.h"
 
 @implementation MPCGRectToNSDictionaryValueTransformer

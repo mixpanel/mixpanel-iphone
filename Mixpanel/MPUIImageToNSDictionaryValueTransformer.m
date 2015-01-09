@@ -1,6 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import <UIKit/UIKit.h>
 #import <ImageIO/ImageIO.h>
 #import "MPValueTransformers.h"
 #import "NSData+MPBase64.h"
