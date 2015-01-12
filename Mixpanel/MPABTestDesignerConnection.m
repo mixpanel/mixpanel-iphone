@@ -1,21 +1,20 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import "MPABTestDesignerConnection.h"
-#import "MPABTestDesignerMessage.h"
-#import "MPABTestDesignerSnapshotResponseMessage.h"
-#import "MPABTestDesignerSnapshotRequestMessage.h"
+#import "Mixpanel.h"
 #import "MPABTestDesignerChangeRequestMessage.h"
-#import "MPABTestDesignerDeviceInfoRequestMessage.h"
-#import "MPABTestDesignerTweakRequestMessage.h"
 #import "MPABTestDesignerClearRequestMessage.h"
+#import "MPABTestDesignerConnection.h"
+#import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerDisconnectMessage.h"
-
-#ifdef MESSAGING_DEBUG
-#define MessagingDebug(...) NSLog(__VA_ARGS__)
-#else
-#define MessagingDebug(...)
-#endif
+#import "MPABTestDesignerMessage.h"
+#import "MPABTestDesignerSnapshotRequestMessage.h"
+#import "MPABTestDesignerSnapshotResponseMessage.h"
+#import "MPABTestDesignerTweakRequestMessage.h"
+#import "MPDesignerEventBindingMessage.h"
+#import "MPDesignerSessionCollection.h"
+#import "MPLogger.h"
+#import "MPSwizzler.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
 
@@ -56,6 +55,7 @@ NSString * const kSessionVariantKey = @"session_variant";
             MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
             MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
             MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
+            MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMesssage class],
         };
 
         _open = NO;
@@ -92,6 +92,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (void)close
 {
     [_webSocket close];
+    for (NSString *key in [_session keyEnumerator]) {
+        id value = [_session valueForKey:key];
+        if ([value conformsToProtocol:@protocol(MPDesignerSessionCollection)]) {
+            [value cleanup];
+        }
+    }
+    _session = nil;
 }
 
 - (void)dealloc
@@ -123,9 +130,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message
 {
-    MessagingDebug(@"Sending message: %@", [message debugDescription]);
-    NSString *jsonString = [[NSString alloc] initWithData:[message JSONData] encoding:NSUTF8StringEncoding];
-    [_webSocket send:jsonString];
+    if (_connected) {
+        MessagingDebug(@"Sending message: %@", [message debugDescription]);
+        NSString *jsonString = [[NSString alloc] initWithData:[message JSONData] encoding:NSUTF8StringEncoding];
+        [_webSocket send:jsonString];
+    } else {
+        MessagingDebug(@"Not sending message as we are not connected: %@", [message debugDescription]);
+    }
 }
 
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message

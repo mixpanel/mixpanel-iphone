@@ -8,6 +8,10 @@ target :ABTestingTests do
     pod 'CocoaHTTPServer', '~> 2.2.1'
 end
 
+target :EventBindingTests do
+  pod 'OCMock', '~> 3.0'
+end
+
 target :HelloMixpanel do
     pod 'iOS-Color-Picker', '~> 0.0.6'
 end

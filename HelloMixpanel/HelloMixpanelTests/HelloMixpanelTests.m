@@ -274,7 +274,7 @@
 - (void)testFlushFailure
 {
     [self setupHTTPServer];
-    self.mixpanel.serverURL = @"http://0.0.0.0";
+    self.mixpanel.serverURL = @"http://a.b.c.d"; //invalid
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
     int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
@@ -1044,7 +1044,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://mixpanel.com"};
+                        @"image_url": @"http://mixpanel.com/coolimage.png"};
 
     XCTAssertNotNil([MPNotification notificationWithJSONObject:o]);
 
@@ -1110,7 +1110,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://mixpanel.com"};
+                        @"image_url": @"http://mixpanel.com/someimage.png"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];
@@ -1129,9 +1129,11 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             self.mixpanel.currentlyShowingNotification = nil;
             self.mixpanel.notificationViewController = nil;
-            [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^{
-                [expectation fulfill];
-            }];
+            if([topVC isKindOfClass:[MPNotificationViewController class]]) {
+                [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^void{
+                    [expectation fulfill];
+                }];
+            }
         });
         [self waitForExpectationsWithTimeout:self.mixpanel.miniNotificationPresentationTime * 2 handler:nil];
     }
@@ -1204,26 +1206,31 @@
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     NSDictionary *p = e[@"properties"];
     XCTAssertNil(p[@"$duration"], @"New events should not be timed.");
-    
+
     [self.mixpanel timeEvent:@"400 Meters"];
-    
+
     [self.mixpanel track:@"500 Meters"];
     [self waitForSerialQueue];
     e = self.mixpanel.eventsQueue.lastObject;
     p = e[@"properties"];
     XCTAssertNil(p[@"$duration"], @"The exact same event name is required for timing.");
-    
+
     [self.mixpanel track:@"400 Meters"];
     [self waitForSerialQueue];
     e = self.mixpanel.eventsQueue.lastObject;
     p = e[@"properties"];
     XCTAssertNotNil(p[@"$duration"], @"This event should be timed.");
-    
+
     [self.mixpanel track:@"400 Meters"];
     [self waitForSerialQueue];
     e = self.mixpanel.eventsQueue.lastObject;
     p = e[@"properties"];
     XCTAssertNil(p[@"$duration"], @"Tracking the same event should require a second call to timeEvent.");
+}
+
+- (void)testTelephonyInfoInitialized
+{
+    XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
 }
 
 @end

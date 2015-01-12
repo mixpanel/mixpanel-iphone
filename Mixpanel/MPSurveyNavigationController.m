@@ -4,15 +4,15 @@
 
 #import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
-
+#import "MPCategoryHelpers.h"
+#import "MPLogger.h"
 #import "MPSurvey.h"
 #import "MPSurveyNavigationController.h"
 #import "MPSurveyQuestion.h"
 #import "MPSurveyQuestionViewController.h"
+#import "UIColor+MPColor.h"
 #import "UIImage+MPAverageColor.h"
 #import "UIImage+MPImageEffects.h"
-#import "UIView+MPSnapshotImage.h"
-#import "UIColor+MPColor.h"
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
@@ -153,7 +153,7 @@
                 controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
                 _questionControllers[index] = controller;
             } else {
-                NSLog(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
+                MixpanelError(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
             }
         }
     }
@@ -308,7 +308,7 @@
         [self loadQuestion:index - 1];
         [self loadQuestion:index + 1];
     } else {
-        NSLog(@"attempt to navigate to invalid question index");
+        MixpanelError(@"attempt to navigate to invalid question index");
     }
 }
 

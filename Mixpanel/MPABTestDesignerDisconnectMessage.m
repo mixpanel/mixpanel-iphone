@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "MPABTestDesignerDisconnectMessage.h"
 #import "MPABTestDesignerConnection.h"
+#import "MPABTestDesignerDisconnectMessage.h"
 #import "MPVariant.h"
 
 NSString *const MPABTestDesignerDisconnectMessageType = @"disconnect";

@@ -2,9 +2,9 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import "MPABTestDesignerChangeRequestMessage.h"
+#import "MPABTestDesignerChangeResponseMessage.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
-#import "MPABTestDesignerChangeResponseMessage.h"
 #import "MPVariant.h"
 
 NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";

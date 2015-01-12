@@ -14,6 +14,7 @@
 @property (nonatomic, copy) NSString *appRelease;
 @property (nonatomic, copy) NSString *deviceName;
 @property (nonatomic, copy) NSString *deviceModel;
+@property (nonatomic, copy) NSString *libVersion;
 @property (nonatomic, copy) NSArray *availableFontFamilies;
 @property (nonatomic, copy) NSString *mainBundleIdentifier;
 @property (nonatomic, copy) NSArray *tweaks;

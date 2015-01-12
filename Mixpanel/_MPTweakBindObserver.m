@@ -8,9 +8,8 @@
  */
 
 #import <objc/runtime.h>
-
-#import "MPTweak.h"
 #import "_MPTweakBindObserver.h"
+#import "MPTweak.h"
 
 @interface _MPTweakBindObserver () <MPTweakObserver>
 

@@ -6,11 +6,20 @@
 
 @interface MPClassDescription : MPTypeDescription
 
-- (id)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary;
-
 @property (nonatomic, readonly) MPClassDescription *superclassDescription;
 @property (nonatomic, readonly) NSArray *propertyDescriptions;
+@property (nonatomic, readonly) NSArray *delegateInfos;
+
+- (id)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary;
 
 - (BOOL)isDescriptionForKindOfClass:(Class)class;
+
+@end
+
+@interface MPDelegateInfo : NSObject
+
+@property (nonatomic, readonly) NSString *selectorName;
+
+- (id)initWithDictionary:(NSDictionary *)dictionary;
 
 @end

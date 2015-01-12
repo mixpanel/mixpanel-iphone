@@ -1,11 +1,12 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import "Mixpanel.h"
+#import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerDeviceInfoRequestMessage.h"
 #import "MPABTestDesignerDeviceInfoResponseMessage.h"
-#import "MPABTestDesignerConnection.h"
-#import "MPTweakStore.h"
 #import "MPTweak.h"
+#import "MPTweakStore.h"
 
 NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_request";
 
@@ -33,6 +34,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
             deviceInfoResponseMessage.deviceModel = currentDevice.model;
             deviceInfoResponseMessage.appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
             deviceInfoResponseMessage.appRelease = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+            deviceInfoResponseMessage.libVersion = [[Mixpanel sharedInstance] libVersion];
             deviceInfoResponseMessage.mainBundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
             deviceInfoResponseMessage.availableFontFamilies = [self availableFontFamilies];
             deviceInfoResponseMessage.tweaks = [self getTweaks];

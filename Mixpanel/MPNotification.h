@@ -17,4 +17,6 @@ extern NSString *const MPNotificationTypeTakeover;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 
+- (instancetype)init __unavailable;
+
 @end
