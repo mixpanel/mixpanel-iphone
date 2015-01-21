@@ -201,6 +201,18 @@
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to allow the lib to make connections to the Mixpanel
+ socket server regardless of the state of the DEBUG flag.
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property (atomic) BOOL allowSocketConnection;
+
+/*!
+ @property
 
  @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control

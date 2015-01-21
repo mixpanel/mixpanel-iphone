@@ -150,6 +150,7 @@ static Mixpanel *sharedInstance = nil;
         self.checkForVariantsOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
+        self.allowSocketConnection = YES;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -1631,7 +1632,9 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connectToABTestDesigner
 {
-    if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
+    if (!self.allowSocketConnection) {
+        MixpanelDebug(@"%@ ignoring socket server connection attempt.", self);
+    } else if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
         MixpanelError(@"A/B test designer connection already exists");
     } else {
         static NSUInteger oldInterval;
