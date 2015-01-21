@@ -179,6 +179,10 @@ static Mixpanel *sharedInstance = nil;
         [self setupListeners];
         [self unarchive];
         [self executeCachedVariants];
+        
+#ifdef DEBUG
+        [self connectToABTestDesigner];
+#endif
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
