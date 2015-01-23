@@ -634,6 +634,7 @@
  You do not need to call this method on the main thread.
  */
 - (void)joinExperiments;
+- (void)joinExperimentsWithExperimentsLoadedCallback:(void(^)())experimentsLoadedCallback;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
