@@ -182,7 +182,7 @@ static Mixpanel *sharedInstance = nil;
         [self executeCachedVariants];
         
 #ifdef DEBUG
-        [self connectToABTestDesigner];
+        [self connectToABTestDesigner:YES];
 #endif
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
@@ -1632,6 +1632,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connectToABTestDesigner
 {
+    [self connectToABTestDesigner:NO];
+}
+
+- (void)connectToABTestDesigner:(BOOL)reconnect
+{
     if (!self.allowSocketConnection) {
         MixpanelDebug(@"%@ ignoring socket server connection attempt.", self);
     } else if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
@@ -1661,7 +1666,6 @@ static Mixpanel *sharedInstance = nil;
 
                 [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
             }
-
         };
         void (^disconnectCallback)(void) = ^{
             __strong Mixpanel *strongSelf = weakSelf;
@@ -1678,6 +1682,7 @@ static Mixpanel *sharedInstance = nil;
             }
         };
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
+                                                                             keepTrying:reconnect
                                                                         connectCallback:connectCallback
                                                                         disconnectCallback:disconnectCallback];
     }
