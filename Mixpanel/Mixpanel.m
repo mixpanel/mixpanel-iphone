@@ -73,9 +73,8 @@
 
 @interface MixpanelPeople ()
 
-@property (nonatomic, weak) Mixpanel *mixpanel;
+@property (nonatomic, assign) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSMutableArray *unidentifiedQueue;
-@property (nonatomic, copy) NSString *distinctId;
 @property (nonatomic, strong) NSDictionary *automaticPeopleProperties;
 
 - (id)initWithMixpanel:(Mixpanel *)mixpanel;
@@ -493,21 +492,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
-    dispatch_async(self.serialQueue, ^{
-        self.distinctId = distinctId;
-        self.people.distinctId = distinctId;
-        if ([self.people.unidentifiedQueue count] > 0) {
-            for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"$distinct_id"] = distinctId;
-                [self.peopleQueue addObject:r];
-            }
-            [self.people.unidentifiedQueue removeAllObjects];
-            [self archivePeople];
-        }
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
-    });
+    self.distinctId = distinctId;
 }
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
@@ -1793,6 +1778,24 @@ static Mixpanel *sharedInstance = nil;
 }
 
 #pragma mark - Public API
+
+- (void)identify:(NSString *)distinctId
+{
+    @synchronized(self) {
+        _distinctId = [distinctId copy];
+        if (distinctId) {
+            for (NSMutableDictionary *r in self.unidentifiedQueue) {
+                [r setObject:distinctId forKey:@"$distinct_id"];
+                [self.mixpanel.peopleQueue addObject:r];
+            }
+            [self.unidentifiedQueue removeAllObjects];
+        }
+        if ([Mixpanel inBackground]) {
+            [self.mixpanel archiveProperties];
+            [self.mixpanel archivePeople];
+        }
+    }
+}
 
 - (void)addPushDeviceToken:(NSData *)deviceToken
 {
