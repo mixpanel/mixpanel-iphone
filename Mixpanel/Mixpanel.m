@@ -1717,14 +1717,25 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)joinExperiments
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
 {
     [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
         for (MPVariant *variant in newVariants) {
             [variant execute];
             [self markVariantRun:variant];
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (experimentsLoadedCallback) {
+                experimentsLoadedCallback();
+            }
+        });
     }];
+}
+
+- (void)joinExperiments
+{
+    [self joinExperimentsWithCallback:nil];
 }
 
 @end
