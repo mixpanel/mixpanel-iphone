@@ -1706,7 +1706,7 @@ static Mixpanel *sharedInstance = nil;
     });
 }
 
-- (void)joinExperimentsWithExperimentsLoadedCallback:(void(^)())experimentsLoadedCallback
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
 {
     [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
         for (MPVariant *variant in newVariants) {
@@ -1724,7 +1724,7 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)joinExperiments
 {
-    [self joinExperimentsWithExperimentsLoadedCallback:nil];
+    [self joinExperimentsWithCallback:nil];
 }
 
 @end
