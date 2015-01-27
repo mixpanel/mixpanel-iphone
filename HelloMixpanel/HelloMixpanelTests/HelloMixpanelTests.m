@@ -1110,7 +1110,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://mixpanel.com/someimage.png"};
+                        @"image_url": @"http://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];
