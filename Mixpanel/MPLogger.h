@@ -9,6 +9,8 @@
 #ifndef MPLogger_h
 #define MPLogger_h
 
+#import <Foundation/Foundation.h>
+
 static inline void MPLog(NSString *format, ...) {
     __block va_list arg_list;
     va_start (arg_list, format);
