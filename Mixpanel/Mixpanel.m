@@ -1689,7 +1689,6 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
-    [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
     if (self.people.distinctId) {
         [self.people merge:@{@"$experiments": shownVariant}];
     }
@@ -1704,6 +1703,8 @@ static Mixpanel *sharedInstance = nil;
             [self archiveProperties];
         }
     });
+
+    [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
 - (void)joinExperiments
