@@ -483,8 +483,7 @@
             XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
             for (NSDictionary *event in self.mixpanel.eventsQueue) {
                 XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
-                NSDictionary *properties = event[@"properties"];
-                XCTAssertNotNil(properties[@"$experiments"], @"$experiments super-property not set on $experiment_started event");
+                XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
             }
 
             [expect fulfill];
