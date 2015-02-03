@@ -29,6 +29,7 @@
 
 @property (atomic, copy) NSString *decideURL;
 @property (nonatomic, strong) NSSet *variants;
+@property (nonatomic, retain) NSMutableArray *eventsQueue;
 @property (atomic, strong) NSDictionary *superProperties;
 
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
@@ -478,6 +479,14 @@
             XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
             XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
             XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
+
+            XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
+            for (NSDictionary *event in self.mixpanel.eventsQueue) {
+                XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
+                NSDictionary *properties = event[@"properties"];
+                XCTAssertNotNil(properties[@"$experiments"], @"$experiments super-property not set on $experiment_started event");
+            }
+
             [expect fulfill];
         });
         [self waitForExpectationsWithTimeout:2 handler:nil];
