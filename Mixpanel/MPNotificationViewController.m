@@ -376,7 +376,6 @@
         for (UIView *subview in window.subviews) {
             if (!subview.hidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0) {
                 topView = subview;
-                break;
             }
         }
     }
