@@ -176,7 +176,7 @@ static Mixpanel *sharedInstance = nil;
         self.notifications = nil;
         self.variants = nil;
 
-        [self setupListeners];
+        [self setUpListeners];
         [self unarchive];
         [self executeCachedVariants];
         
@@ -215,7 +215,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)setupListeners
+- (void)setUpListeners
 {
     // wifi reachability
     BOOL reachabilityOk = NO;
@@ -553,7 +553,7 @@ static Mixpanel *sharedInstance = nil;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:event];
-            p[@"$duration"] = [NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]];
+            p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
         if (self.nameTag) {
             p[@"mp_name_tag"] = self.nameTag;
