@@ -721,6 +721,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)flush
 {
+    [self flushWithCompletion:nil];
+}
+
+- (void)flushWithCompletion:(void (^)())handler
+{
     dispatch_async(self.serialQueue, ^{
         MixpanelDebug(@"%@ flush starting", self);
 
@@ -732,6 +737,11 @@ static Mixpanel *sharedInstance = nil;
 
         [self flushEvents];
         [self flushPeople];
+        
+        if (handler) {
+            [self archive];
+            dispatch_async(dispatch_get_main_queue(), handler);
+        }
 
         MixpanelDebug(@"%@ flush complete", self);
     });
