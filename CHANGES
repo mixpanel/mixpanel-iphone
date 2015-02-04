@@ -1,3 +1,63 @@
+Changes with version v2.7.1					29 January 2015
+
+Made it possible to copy and build from source
+
+Solved a few issues:  1. XCode 6 stopped creating projects with
+Prefix.pch files making it impossible to manually build the Mixpanel
+folder in a new project. We removed our own pch file and imported
+UIKit as required.  2. Removed calls to MPLog. They were causing spam
+in production apps, and we should only be using MixpanelDebug and its
+counterparts.
+
+
+Changes with version v2.7.0					27 January 2015
+
+Some convenience features
+
+We've added the following features to the library:  1. The library
+will now automatically attempt to connect to the A/B Test designer
+while in the DEBUG build config. This removes the need for constant
+option+click silliness but can be turned off using the
+DISABLE_MIXPANEL_AB_DESIGNER flag.  2. In addition to joinExperiments,
+there is now a joinExperimentsWithCallback method that will allow
+developers to run code only after all experiments have been downloaded
+and applied.    An inapp-notifications test was also updated.
+
+
+Changes with version v2.6.2					05 December 2014
+
+Fix NSCoding serialization failure
+
+Fixes issue https://github.com/mixpanel/mixpanel-iphone/issues/201.
+
+
+Changes with version v2.6.1					03 December 2014
+
+Compatibility with MoPub
+
+Some users reported problems with the 2.6.0 release conflicting with
+MoPub as both projects have a `MPLogging.h`. This release changes the
+name to `MPLogger.h` to avoid the conflict.
+
+
+Changes with version v2.6.0					21 November 2014
+
+Visual Event Tracking
+
+This release allows our customers to define new elements to be tracked
+in their app dynamically without having to re-release to the app
+store.
+
+
+Changes with version v2.5.4					08 October 2014
+
+Default distinct_id for decide queries
+
+Users no longer have to be identified before querying
+decide.mixpanel.com. This will allow customers to use features like
+A/B testing without signing up for a People plan.
+
+
 Changes with version v2.5.3					16 September 2014
 
 iOS 8 changes & event timing
@@ -286,29 +346,3 @@ Changes with version v2.0.2					12 September 2013
 Adds some required casting for 64-bit builds.
 
 
-Changes with version 2.0.0                                         25 Apr 2013
-
-    * New [mixpanel identify:], removed [mixpanel.people identify:]. 
-
-        IMPORTANT: We used to have a separate [mixpanel.people identify:]
-        method. You had to call it before we'd flush people records. It's gone
-        (hence incrementing the major version number for this release). The new
-        behavior is this: events will go right away with default distinct ID.
-        People records will be queued until identify: is called. At that point
-        the distinct ID used in identify: is used for both events and people
-        records. if you want to use the default ID for people, use [mixpanel
-        identify:mixpanel.distinctId];
-
-    * Distinct ID defaults to iOS IFA for iOS 6+ and falls back to ODIN1
-
-    * New automatic properties:
-        
-        $app_release and $ios_app_release (for Engagement and People,
-        respectively) which are CFBundleShortVersionString. Note: old
-        $ios_app_version remains for backward compatibility.
-
-        $ios_ifa 
-
-    * Added setOnce:
-
-    * Added unregisterSuperProperty:
