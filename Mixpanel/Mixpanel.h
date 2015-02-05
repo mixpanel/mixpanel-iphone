@@ -635,6 +635,18 @@
  */
 - (void)joinExperiments;
 
+/*!
+ @method
+ 
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+ 
+ @discussion
+ Same as joinExperiments but will fire the given callback after all experiments
+ have been loaded and applied.
+ */
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
+
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 

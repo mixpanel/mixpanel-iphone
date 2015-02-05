@@ -7,6 +7,8 @@
 //
 
 #import <objc/runtime.h>
+#import <UIKit/UIKit.h>
+
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
 
