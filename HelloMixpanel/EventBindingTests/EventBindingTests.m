@@ -167,13 +167,12 @@
     XCTAssertEqual([selector selectFromRoot:rootViewController][0], c2, @"c2 should be selected by path");
 
     // Create binding and check state
-    MPEventBinding *binding = [MPEventBinding bindngWithJSONObject:eventParams];
+    MPUIControlBinding *binding = [MPEventBinding bindngWithJSONObject:eventParams];
     [binding execute];
     XCTAssertEqual([binding class], [MPUIControlBinding class], @"Binding type should be a UIControl binding");
     XCTAssertEqual([binding running], YES, @"Binding should be running");
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0,
                    @"Mixpanel track should not have been called.");
-
 
     // Fire event
     [c1 sendActionsForControlEvents:UIControlEventTouchDown];
@@ -218,6 +217,18 @@
     XCTAssertEqual([selector selectFromRoot:rootViewController][0], c1, @"c1 should have been replaced");
     [c1 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"didMoveToWindow should have been unSwizzled");
+    
+    
+    // Test archive
+    NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
+    MPUIControlBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
+    XCTAssertEqual(binding.ID, unarchivedBinding.ID, @"Binding should have correct serialized properties after archive");
+    XCTAssertEqual(binding.class, unarchivedBinding.class, @"Binding should have correct serialized properties after archive");
+    XCTAssertTrue([binding.name isEqualToString:unarchivedBinding.name], @"Binding should have correct serialized properties after archive");
+    XCTAssertTrue([binding.path.string isEqualToString:unarchivedBinding.path.string], @"Binding should have correct serialized properties after archive");
+    XCTAssertEqual(binding.controlEvent, unarchivedBinding.controlEvent, @"Binding should have correct serialized properties after archive");
+    XCTAssertEqual(binding.verifyEvent, unarchivedBinding.verifyEvent, @"Binding should have correct serialized properties after archive");
+
 }
 
 - (void)testUITableViewBindings
@@ -268,6 +279,14 @@
     indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     [vc tableView:tv didSelectRowAtIndexPath:indexPath];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"No track calls should be fired");
+    
+    // Test archive
+    NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
+    MPUITableViewBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
+    XCTAssertEqual(binding.ID, unarchivedBinding.ID, @"Binding should have correct serialized properties after archive");
+    XCTAssertEqual(binding.class, unarchivedBinding.class, @"Binding should have correct serialized properties after archive");
+    XCTAssertTrue([binding.name isEqualToString:unarchivedBinding.name], @"Binding should have correct serialized properties after archive");
+    XCTAssertTrue([binding.path.string isEqualToString:unarchivedBinding.path.string], @"Binding should have correct serialized properties after archive");
 
 }
 

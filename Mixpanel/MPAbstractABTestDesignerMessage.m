@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import "MPAbstractABTestDesignerMessage.h"
-#import "MPLogging.h"
+#import "MPLogger.h"
 
 @interface MPAbstractABTestDesignerMessage ()
 

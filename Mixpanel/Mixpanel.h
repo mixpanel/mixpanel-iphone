@@ -635,6 +635,18 @@
  */
 - (void)joinExperiments;
 
+/*!
+ @method
+ 
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+ 
+ @discussion
+ Same as joinExperiments but will fire the given callback after all experiments
+ have been loaded and applied.
+ */
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
+
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 
@@ -660,12 +672,11 @@
  </pre>
 
  Please note that the core <code>Mixpanel</code> and
- <code>MixpanelPeople</code> classes have separate <code>identify:<code>
- methods. The <code>Mixpanel</code> <code>identify:</code> affects the
+ <code>MixpanelPeople</code> classes share the <code>identify:<code> method.
+ The <code>Mixpanel</code> <code>identify:</code> affects the
  <code>distinct_id</code> property of events sent by <code>track:</code> and
- <code>track:properties:</code>. The <code>MixpanelPeople</code>
- <code>identify:</code> determines which Mixpanel People user record will be
- updated by <code>set:</code>, <code>increment:</code> and other
+ <code>track:properties:</code> and determines which Mixpanel People user
+ record will be updated by <code>set:</code>, <code>increment:</code> and other
  <code>MixpanelPeople</code> methods.
 
  <b>If you are going to set your own distinct IDs for core Mixpanel event

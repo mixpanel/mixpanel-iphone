@@ -7,6 +7,8 @@
 //
 
 #import <objc/runtime.h>
+#import <UIKit/UIKit.h>
+
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
 
@@ -74,8 +76,8 @@
                 NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
                 [[self class] track:[self eventName]
                                       properties:@{
-                                                   @"Cell Index": [NSString stringWithFormat: @"%ld", indexPath.row],
-                                                   @"Cell Section": [NSString stringWithFormat: @"%ld", indexPath.section],
+                                                   @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
+                                                   @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
                                                    @"Cell Label": label
                                                 }];
             }

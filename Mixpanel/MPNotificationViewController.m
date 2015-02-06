@@ -5,7 +5,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import "MPCategoryHelpers.h"
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "UIColor+MPColor.h"
@@ -376,7 +376,6 @@
         for (UIView *subview in window.subviews) {
             if (!subview.hidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0) {
                 topView = subview;
-                break;
             }
         }
     }

@@ -450,7 +450,10 @@
 
     // Returning a new variant for the same experiment from decide should override the old one
     [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
-    [self.mixpanel joinExperiments];
+    __block BOOL lastCall = NO;
+    [self.mixpanel joinExperimentsWithCallback:^{
+        XCTAssert(lastCall, @"callback should run after variants have been processed");
+    }];
     [self waitForSerialQueue];
 
     XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
@@ -458,6 +461,7 @@
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && variant.running && variant.finished;}] count], 1u, @"Variant 2 should be running but marked as finished.");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 3 && variant.running;}] count], 1u, @"We should be running variant 3");
     XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[2] * 255), 255, @"Button background should be blue");
+    lastCall = YES;
 }
 
 - (void)testVariantsTracked

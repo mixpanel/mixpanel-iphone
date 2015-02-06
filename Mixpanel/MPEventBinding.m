@@ -84,10 +84,10 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    NSString *path = (NSString *)[MPObjectSelector objectSelectorWithString:[aDecoder decodeObjectForKey:@"path"]];
-    NSString *eventName = (NSString *)[aDecoder decodeObjectForKey:@"eventName"];
+    NSString *path = [aDecoder decodeObjectForKey:@"path"];
+    NSString *eventName = [aDecoder decodeObjectForKey:@"eventName"];
     if (self = [self initWithEventName:eventName onPath:path]) {
-        self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
+        self.ID = [[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.swizzleClass = NSClassFromString([aDecoder decodeObjectForKey:@"swizzleClass"]);
     }

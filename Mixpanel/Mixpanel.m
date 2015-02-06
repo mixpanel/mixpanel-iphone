@@ -19,7 +19,7 @@
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
-#import "MPLogging.h"
+#import "MPLogger.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "MPSurveyNavigationController.h"
@@ -28,7 +28,7 @@
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
 
-#define VERSION @"2.6.0"
+#define VERSION @"2.7.1"
 
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
@@ -176,9 +176,15 @@ static Mixpanel *sharedInstance = nil;
         self.notifications = nil;
         self.variants = nil;
 
-        [self setupListeners];
+        [self setUpListeners];
         [self unarchive];
         [self executeCachedVariants];
+        
+#ifdef DEBUG
+#ifndef DISABLE_MIXPANEL_AB_DESIGNER
+        [self connectToABTestDesigner:YES];
+#endif
+#endif
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
@@ -209,7 +215,7 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)setupListeners
+- (void)setUpListeners
 {
     // wifi reachability
     BOOL reachabilityOk = NO;
@@ -547,7 +553,7 @@ static Mixpanel *sharedInstance = nil;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:event];
-            p[@"$duration"] = [NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]];
+            p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
         if (self.nameTag) {
             p[@"mp_name_tag"] = self.nameTag;
@@ -1627,6 +1633,11 @@ static Mixpanel *sharedInstance = nil;
 
 - (void)connectToABTestDesigner
 {
+    [self connectToABTestDesigner:NO];
+}
+
+- (void)connectToABTestDesigner:(BOOL)reconnect
+{
     if (self.abtestDesignerConnection && self.abtestDesignerConnection.connected) {
         MixpanelError(@"A/B test designer connection already exists");
     } else {
@@ -1654,7 +1665,6 @@ static Mixpanel *sharedInstance = nil;
 
                 [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
             }
-
         };
         void (^disconnectCallback)(void) = ^{
             __strong Mixpanel *strongSelf = weakSelf;
@@ -1671,6 +1681,7 @@ static Mixpanel *sharedInstance = nil;
             }
         };
         self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
+                                                                             keepTrying:reconnect
                                                                         connectCallback:connectCallback
                                                                         disconnectCallback:disconnectCallback];
     }
@@ -1707,14 +1718,25 @@ static Mixpanel *sharedInstance = nil;
     [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
-- (void)joinExperiments
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
 {
     [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
         for (MPVariant *variant in newVariants) {
             [variant execute];
             [self markVariantRun:variant];
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (experimentsLoadedCallback) {
+                experimentsLoadedCallback();
+            }
+        });
     }];
+}
+
+- (void)joinExperiments
+{
+    [self joinExperimentsWithCallback:nil];
 }
 
 @end
