@@ -1,4 +1,5 @@
 #import "HomeViewController.h"
+#import "MPTweakInline.h"
 
 @interface HomeViewController ()
 
@@ -11,6 +12,7 @@
     [super viewDidLoad];
 
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"MPLogo.png"]];
+
 }
 
 @end

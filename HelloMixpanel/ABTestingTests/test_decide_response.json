@@ -1,0 +1,36 @@
+{
+    "notifications":[],
+    "surveys":[],
+    "variants":[
+        {
+            "actions":[
+                {
+                    "name":"c65",
+                    "args":[["rgba(255, 93, 66, 1.00)","UIColor"]],
+                    "selector":"setBackgroundColor:",
+                    "path":"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell/UITableViewCellContentView/UILabel[]",
+                    "prop":"backgroundColor",
+                    "original":[["rgba(255, 255, 255, 1.00)","UIColor"]]
+                }
+            ],
+            "tweaks":[],
+            "id":1,
+            "experiment_id":1
+        },
+        {
+            "actions":[
+                {
+                    "name":"c627",
+                    "args":[["rgba(255, 0, 0, 1.00)","UIColor"]],
+                    "selector":"setBackgroundColor:",
+                    "path":"/UIView/UIButton",
+                    "prop":"backgroundColor",
+                    "original":[[null,"UIColor"]]
+                }
+            ],
+            "tweaks":[],
+            "id":2,
+            "experiment_id":2
+        }
+    ]
+}

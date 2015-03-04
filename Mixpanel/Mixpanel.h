@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+
 #import <UIKit/UIKit.h>
 
 @class    MixpanelPeople;
@@ -33,6 +34,8 @@
  Library Guide</a>.
  */
 @interface Mixpanel : NSObject
+
+#pragma mark Properties
 
 /*!
  @property
@@ -162,6 +165,20 @@
  @property
 
  @abstract
+ Controls whether to automatically check for A/B test variants for the
+ currently identified user when the application becomes active.
+
+ @discussion
+ Defaults to YES. Will fire a network request on
+ <code>applicationDidBecomeActive</code> to retrieve a list of valid variants
+ for the currently identified user.
+ */
+@property (atomic) BOOL checkForVariantsOnActive;
+
+/*!
+ @property
+
+ @abstract
  Controls whether to automatically check for and show in-app notifications
  for the currently identified user when the application becomes active.
 
@@ -169,6 +186,18 @@
  Defaults to YES.
  */
 @property (atomic) BOOL showNotificationOnActive;
+
+/*!
+ @property
+
+ @abstract
+ Determines the time, in seconds, that a mini notification will remain on
+ the screen before automatically hiding itself.
+
+ @discussion
+ Defaults to 6.0.
+ */
+@property (atomic) CGFloat miniNotificationPresentationTime;
 
 /*!
  @property
@@ -182,6 +211,8 @@
  below for more information.
  */
 @property (atomic, weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
+
+#pragma mark Methods
 
 /*!
  @method
@@ -211,19 +242,19 @@
 
 /*!
  @method
- 
+
  @abstract
  Initializes a singleton instance of the API, uses it to track launchOptions information,
  and then returns it.
- 
+
  @discussion
  This is the preferred method for creating a sharedInstance with a mixpanel
  like above. With the launchOptions parameter, Mixpanel can track referral
  information created by push notifications.
- 
+
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
- 
+
  */
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
 
@@ -259,14 +290,14 @@
 
 /*!
  @method
- 
+
  @abstract
  Initializes an instance of the API with the given project token.
- 
+
  @discussion
  Supports for the old initWithToken method format but really just passes
  launchOptions to the above method as nil.
- 
+
  @param apiToken        your project token
  @param flushInterval   interval to run background flushing
  */
@@ -334,7 +365,8 @@
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
- <code>NSURL</code> objects.
+ <code>NSURL</code> objects. If the event is being timed, the timer will
+ stop and be added as a property.
 
  @param event           event name
  @param properties      properties dictionary
@@ -344,16 +376,16 @@
 
 /*!
  @method
- 
+
  @abstract
  Track a push notification using its payload sent from Mixpanel.
- 
+
  @discussion
  To simplify user interaction tracking and a/b testing, Mixpanel
  automatically sends IDs for the relevant notification and a/b variants
  of each push. This method parses the standard payload and queues a
  track call using this information.
- 
+
  @param userInfo         remote notification payload dictionary
  */
 - (void)trackPushNotification:(NSDictionary *)userInfo;
@@ -447,6 +479,45 @@
  Returns the currently set super properties.
  */
 - (NSDictionary *)currentSuperProperties;
+
+/*!
+ @method
+
+ @abstract
+ Starts a timer that will be stopped and added as a property when a
+ corresponding event is tracked.
+
+ @discussion
+ This method is intended to be used in advance of events that have
+ a duration. For example, if a developer were to track an "Image Upload" event
+ she might want to also know how long the upload took. Calling this method
+ before the upload code would implicitly cause the <code>track</code>
+ call to record its duration.
+
+ <pre>
+ // begin timing the image upload
+ [mixpanel timeEvent:@"Image Upload"];
+
+ // upload the image
+ [self uploadImageWithSuccessHandler:^{
+
+    // track the event
+    [mixpanel track:@"Image Upload"];
+ }];
+ </pre>
+
+ @param event   a string, identical to the name of the event that will be tracked
+
+ */
+- (void)timeEvent:(NSString *)event;
+
+/*!
+ @method
+
+ @abstract
+ Clears all current event timers.
+ */
+- (void)clearTimedEvents;
 
 /*!
  @method
@@ -549,7 +620,37 @@
  */
 - (void)showNotification;
 
+/*!
+ @method
+
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+
+ @discussion
+ Mixpanel will check for A/B tests automatically when your app enters
+ the foreground. Call this method if you would like to to check for,
+ and join, any experiments are newly available for the current user.
+
+ You do not need to call this method on the main thread.
+ */
+- (void)joinExperiments;
+
+/*!
+ @method
+ 
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+ 
+ @discussion
+ Same as joinExperiments but will fire the given callback after all experiments
+ have been loaded and applied.
+ */
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
+
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
+
+
+- (NSString *)libVersion;
 
 @end
 
@@ -571,12 +672,11 @@
  </pre>
 
  Please note that the core <code>Mixpanel</code> and
- <code>MixpanelPeople</code> classes have separate <code>identify:<code>
- methods. The <code>Mixpanel</code> <code>identify:</code> affects the
+ <code>MixpanelPeople</code> classes share the <code>identify:<code> method.
+ The <code>Mixpanel</code> <code>identify:</code> affects the
  <code>distinct_id</code> property of events sent by <code>track:</code> and
- <code>track:properties:</code>. The <code>MixpanelPeople</code>
- <code>identify:</code> determines which Mixpanel People user record will be
- updated by <code>set:</code>, <code>increment:</code> and other
+ <code>track:properties:</code> and determines which Mixpanel People user
+ record will be updated by <code>set:</code>, <code>increment:</code> and other
  <code>MixpanelPeople</code> methods.
 
  <b>If you are going to set your own distinct IDs for core Mixpanel event
