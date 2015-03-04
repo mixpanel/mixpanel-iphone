@@ -2,6 +2,7 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
 
+#import "MPLogger.h"
 #import "MPSurveyQuestion.h"
 
 static NSString *MPSurveyQuestionTypeMultipleChoice = @"multiple_choice";
@@ -30,27 +31,27 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 + (MPSurveyQuestion *)questionWithJSONObject:(NSDictionary *)object
 {
     if (object == nil) {
-        NSLog(@"question json object should not be nil");
+        MixpanelError(@"question json object should not be nil");
         return nil;
     }
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
-        NSLog(@"invalid question id: %@", ID);
+        MixpanelError(@"invalid question id: %@", ID);
         return nil;
     }
     NSString *prompt = object[@"prompt"];
     if (![prompt isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid question prompt: %@", prompt);
+        MixpanelError(@"invalid question prompt: %@", prompt);
         return nil;
     }
     NSDictionary *extraData = object[@"extra_data"];
     if (![extraData isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"invalid question extra data: %@", extraData);
+        MixpanelError(@"invalid question extra data: %@", extraData);
         return nil;
     }
     NSString *type = object[@"type"];
     if (![type isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid question type: %@", type);
+        MixpanelError(@"invalid question type: %@", type);
         return nil;
     }
     if ([type isEqualToString:MPSurveyQuestionTypeMultipleChoice]) {
@@ -64,7 +65,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
                                                     type:type
                                                andPrompt:prompt];
     }
-    NSLog(@"unknown question type: %@", type);
+    MixpanelError(@"unknown question type: %@", type);
     return nil;
 }
 
@@ -79,10 +80,10 @@ static NSString *MPSurveyQuestionTypeText = @"text";
                 self.prompt = prompt;
                 valid = YES;
             } else {
-                NSLog(@"invalid question type: %@", type);
+                MixpanelError(@"invalid question type: %@", type);
             }
         } else {
-            NSLog(@"invalid question type: %@", type);
+            MixpanelError(@"invalid question type: %@", type);
         }
         if (!valid) {
             self = nil;
@@ -103,7 +104,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
             self.choices = choices;
         }
     } else {
-        NSLog(@"invalid choices: %@", choices);
+        MixpanelError(@"invalid choices: %@", choices);
     }
     return self;
 }

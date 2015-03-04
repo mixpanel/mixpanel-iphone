@@ -2,6 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import "MPAbstractABTestDesignerMessage.h"
+#import "MPLogger.h"
 
 @interface MPAbstractABTestDesignerMessage ()
 
@@ -59,7 +60,7 @@
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&error];
     if (jsonData == nil && error) {
-        NSLog(@"Failed to serialize test designer message: %@", error);
+        MixpanelError(@"Failed to serialize test designer message: %@", error);
     }
 
     return jsonData;

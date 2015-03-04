@@ -1,9 +1,8 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "MPAbstractABTestDesignerMessage.h"
-
 
 @interface MPABTestDesignerSnapshotResponseMessage : MPAbstractABTestDesignerMessage
 

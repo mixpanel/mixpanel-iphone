@@ -3,7 +3,7 @@
 #endif
 
 #import <QuartzCore/QuartzCore.h>
-
+#import "MPLogger.h"
 #import "MPSurveyQuestionViewController.h"
 
 @interface MPSurveyQuestionViewController ()
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     } else if ([value isKindOfClass:[NSNull class]]) {
         label = @"None";
     } else {
-        NSLog(@"%@ unexpected value for survey choice: %@", self, value);
+        MixpanelError(@"%@ unexpected value for survey choice: %@", self, value);
         label = [value description];
     }
     return label;

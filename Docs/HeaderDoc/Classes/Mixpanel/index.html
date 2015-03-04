@@ -320,6 +320,10 @@ and People record queues to disk.
 <dd><p>Join any experiments (A/B tests) that are available for the current user.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:" target="_top">-joinExperimentsWithCallback:</a></tt></dt>
+<dd><p>Join any experiments (A/B tests) that are available for the current user.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/registerSuperProperties:" target="_top">-registerSuperProperties:</a></tt></dt>
 <dd><p>Registers super properties, overwriting ones that have already been set.
 </p>
@@ -570,6 +574,19 @@ and join, any experiments are newly available for the current user.
 </p>
 <p>You do not need to call this method on the main thread.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;   name=Mixpanel::joinExperimentsWithCallback: -->
+<a name="//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:"></a>
+<h3><a name="joinExperimentsWithCallback:">joinExperimentsWithCallback:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=start --><!-- begin abstract --><p>Join any experiments (A/B tests) that are available for the current user.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback //apple_ref/occ/clm/Mixpanel/joinExperimentsWithCallback //apple_ref/occ/intfcm/Mixpanel/joinExperimentsWithCallback //apple_ref/occ/intfm/Mixpanel/joinExperimentsWithCallback //apple_ref/occ/func/joinExperimentsWithCallback //apple_ref/occ/ftmplt/Mixpanel/joinExperimentsWithCallback //apple_ref/occ/defn/joinExperimentsWithCallback //apple_ref/occ/macro/joinExperimentsWithCallback //apple_ref/doc/anysymbol/joinExperimentsWithCallback" machineGenerated="true" --><span class="function">joinExperimentsWithCallback</span><!-- /a -->:(void(^)())<!-- a logicalPath="//apple_ref/occ/econst/experimentsLoadedCallback //apple_ref/occ/data/Mixpanel/experimentsLoadedCallback //apple_ref/occ/data/experimentsLoadedCallback //apple_ref/occ/clconst/Mixpanel/experimentsLoadedCallback " machineGenerated="true" --><span class="var">experimentsLoadedCallback</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=start --><p>Same as joinExperiments but will fire the given callback after all experiments
+have been loaded and applied.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;   name=Mixpanel::registerSuperProperties: -->
 <a name="//apple_ref/occ/instm/Mixpanel/registerSuperProperties:"></a>
 <h3><a name="registerSuperProperties:">registerSuperProperties:</a></h3>
@@ -834,10 +851,10 @@ call to record its duration.
  <pre>
  // begin timing the image upload
  [mixpanel timeEvent:@"Image Upload"];
- 
+
  // upload the image
  [self uploadImageWithSuccessHandler:^{
-    
+
     // track the event
     [mixpanel track:@"Image Upload"];
  }];
@@ -1207,7 +1224,7 @@ survey check retrieves at least 1 valid survey for the currently
 identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Wednesday, October 08, 2014
+<p class="hd_timestamp">Last Updated: Monday, January 26, 2015
 </p></div>
 </td></tr></table>
 </body></html>

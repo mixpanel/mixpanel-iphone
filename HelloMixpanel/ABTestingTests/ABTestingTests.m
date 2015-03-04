@@ -17,6 +17,7 @@
 #import "MixpanelDummyDecideConnection.h"
 #import "MPValueTransformers.h"
 #import "NSData+MPBase64.h"
+#import "MPCategoryHelpers.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -28,10 +29,11 @@
 
 @property (atomic, copy) NSString *decideURL;
 @property (nonatomic, strong) NSSet *variants;
+@property (nonatomic, retain) NSMutableArray *eventsQueue;
 @property (atomic, strong) NSDictionary *superProperties;
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants))completion useCache:(BOOL)useCache;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
 - (void)markVariantRun:(MPVariant *)variant;
 
 @end
@@ -191,7 +193,7 @@
     UIImageView *urlImageView = [[UIImageView alloc] init];
     XCTAssertNil(urlImageView.image, @"Image should not be set");
     [MPVariantAction executeSelector:@selector(setImage:)
-                            withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":@"http://dev.images.mxpnl.com/u%27306087%27/2712f913885455bfa2d8e439fda29438"}]}, @"UIImage"]]
+                            withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":[[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"] absoluteString]}]}, @"UIImage"]]
                            onObjects:@[urlImageView]];
     XCTAssertNotNil(urlImageView.image, @"Image should be set");
     XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
@@ -390,7 +392,7 @@
     [self.mixpanel identify:@"ABC"];
     if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
         XCTestExpectation *expect = [self expectationWithDescription:@"wait for variants to be executed"];
-        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
             XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
             for (MPVariant *variant in variants) {
                 [variant execute];
@@ -407,7 +409,7 @@
         XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
 
         // Test that we make another request if useCache is off
-        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
             XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
         } useCache:NO];
         [self waitForSerialQueue];
@@ -416,7 +418,7 @@
         [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
 
         __block BOOL completionCalled = NO;
-        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
             completionCalled = YES;
             XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
         } useCache:NO];
@@ -448,7 +450,10 @@
 
     // Returning a new variant for the same experiment from decide should override the old one
     [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
-    [self.mixpanel joinExperiments];
+    __block BOOL lastCall = NO;
+    [self.mixpanel joinExperimentsWithCallback:^{
+        XCTAssert(lastCall, @"callback should run after variants have been processed");
+    }];
     [self waitForSerialQueue];
 
     XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
@@ -456,6 +461,7 @@
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && variant.running && variant.finished;}] count], 1u, @"Variant 2 should be running but marked as finished.");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 3 && variant.running;}] count], 1u, @"We should be running variant 3");
     XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[2] * 255), 255, @"Button background should be blue");
+    lastCall = YES;
 }
 
 - (void)testVariantsTracked
@@ -463,7 +469,7 @@
     [self setupHTTPServer];
     int requestCount = [MixpanelDummyDecideConnection getRequestCount];
     [self.mixpanel identify:@"DEF"];
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants) {
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         for (MPVariant *variant in variants) {
             [variant execute];
             [self.mixpanel markVariantRun:variant];
@@ -477,6 +483,13 @@
             XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
             XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
             XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
+
+            XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
+            for (NSDictionary *event in self.mixpanel.eventsQueue) {
+                XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
+                XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
+            }
+
             [expect fulfill];
         });
         [self waitForExpectationsWithTimeout:2 handler:nil];
@@ -546,10 +559,29 @@
     XCTAssertEqual([[selector selectFromRoot:vc] count], (uint)0, @"l2 should be selected by index");
 
     // Select view by predicate
-    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[SELF.text == \"Label 1\"]"];
+    selector = [MPObjectSelector objectSelectorWithString:@"/UIView/UIView/UILabel[text == \"Label 1\"]"];
     XCTAssertEqual([selector selectFromRoot:vc][0], l1, @"l1 should be selected by predicate");
     XCTAssert([selector isLeafSelected:l1 fromRoot:vc], @"l1 should be selected by predicate");
     XCTAssert(![selector isLeafSelected:l2 fromRoot:vc], @"l2 should not be selected by predicate");
+}
+
+- (void)testMpHelpers
+{
+    UIView *v1 = [[UIView alloc] init];
+    
+    XCTAssert([v1 respondsToSelector:@selector(mp_fingerprintVersion)]);
+    XCTAssert([v1 mp_fingerprintVersion] == 1);
+    
+    XCTAssert([v1 respondsToSelector:@selector(mp_varA)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varB)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varC)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varSetD)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_varE)]);
+    
+    XCTAssert([v1 respondsToSelector:@selector(mp_snapshotForBlur)]);
+    XCTAssert([v1 respondsToSelector:@selector(mp_snapshotImage)]);
+    
+    XCTAssertFalse([v1 respondsToSelector:@selector(mp_nonexistant)]);
 }
 
 - (void)testUITableViewCellOrdering

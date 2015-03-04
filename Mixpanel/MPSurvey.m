@@ -2,6 +2,7 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
 
+#import "MPLogger.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
 
@@ -21,32 +22,32 @@
 + (MPSurvey *)surveyWithJSONObject:(NSDictionary *)object
 {
     if (object == nil) {
-        NSLog(@"survey json object should not be nil");
+        MixpanelError(@"survey json object should not be nil");
         return nil;
     }
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
-        NSLog(@"invalid survey id: %@", ID);
+        MixpanelError(@"invalid survey id: %@", ID);
         return nil;
     }
     NSString *name = object[@"name"];
     if (![name isKindOfClass:[NSString class]]) {
-        NSLog(@"invalid survey name: %@", name);
+        MixpanelError(@"invalid survey name: %@", name);
         return nil;
     }
     NSArray *collections = object[@"collections"];
     if (!([collections isKindOfClass:[NSArray class]] && [collections count] > 0)) {
-        NSLog(@"invalid survey collections: %@", collections);
+        MixpanelError(@"invalid survey collections: %@", collections);
         return nil;
     }
     NSDictionary *collection = collections[0];
     if (![collection isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"invalid survey collection: %@", collection);
+        MixpanelError(@"invalid survey collection: %@", collection);
         return nil;
     }
     NSNumber *collectionID = collection[@"id"];
     if (!([collectionID isKindOfClass:[NSNumber class]] && [collectionID integerValue] > 0)) {
-        NSLog(@"invalid survey collection id: %@", collectionID);
+        MixpanelError(@"invalid survey collection id: %@", collectionID);
         return nil;
     }
     NSMutableArray *questions = [NSMutableArray array];
@@ -68,11 +69,11 @@
         BOOL valid = YES;
         if (!(name && name.length > 0)) {
             valid = NO;
-            NSLog(@"Invalid survey name %@", name);
+            MixpanelError(@"Invalid survey name %@", name);
         }
         if (!(questions && [questions count] > 0)) {
             valid = NO;
-            NSLog(@"Survey must have at least one question %@", questions);
+            MixpanelError(@"Survey must have at least one question %@", questions);
         }
 
         if (valid) {

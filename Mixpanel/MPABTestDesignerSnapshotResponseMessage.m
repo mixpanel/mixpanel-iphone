@@ -1,10 +1,9 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import <CommonCrypto/CommonDigest.h>
 #import "MPABTestDesignerSnapshotResponseMessage.h"
 #import "NSData+MPBase64.h"
-
-#import <CommonCrypto/CommonDigest.h>
 
 @implementation MPABTestDesignerSnapshotResponseMessage
 

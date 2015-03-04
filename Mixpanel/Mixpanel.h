@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+
 #import <UIKit/UIKit.h>
 
 @class    MixpanelPeople;
@@ -193,6 +194,18 @@
  Determines the time, in seconds, that a mini notification will remain on
  the screen before automatically hiding itself.
  
+ @discussion
+ Defaults to 6.0.
+ */
+@property (atomic) CGFloat miniNotificationPresentationTime;
+
+/*!
+ @property
+
+ @abstract
+ Determines the time, in seconds, that a mini notification will remain on
+ the screen before automatically hiding itself.
+
  @discussion
  Defaults to 6.0.
  */
@@ -534,6 +547,45 @@
  @method
 
  @abstract
+ Starts a timer that will be stopped and added as a property when a
+ corresponding event is tracked.
+
+ @discussion
+ This method is intended to be used in advance of events that have
+ a duration. For example, if a developer were to track an "Image Upload" event
+ she might want to also know how long the upload took. Calling this method
+ before the upload code would implicitly cause the <code>track</code>
+ call to record its duration.
+
+ <pre>
+ // begin timing the image upload
+ [mixpanel timeEvent:@"Image Upload"];
+
+ // upload the image
+ [self uploadImageWithSuccessHandler:^{
+
+    // track the event
+    [mixpanel track:@"Image Upload"];
+ }];
+ </pre>
+
+ @param event   a string, identical to the name of the event that will be tracked
+
+ */
+- (void)timeEvent:(NSString *)event;
+
+/*!
+ @method
+
+ @abstract
+ Clears all current event timers.
+ */
+- (void)clearTimedEvents;
+
+/*!
+ @method
+
+ @abstract
  Clears all stored properties and distinct IDs. Useful if your app's user logs out.
  */
 - (void)reset;
@@ -646,7 +698,22 @@
  */
 - (void)joinExperiments;
 
+/*!
+ @method
+ 
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+ 
+ @discussion
+ Same as joinExperiments but will fire the given callback after all experiments
+ have been loaded and applied.
+ */
+- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
+
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
+
+
+- (NSString *)libVersion;
 
 @end
 
@@ -668,12 +735,11 @@
  </pre>
 
  Please note that the core <code>Mixpanel</code> and
- <code>MixpanelPeople</code> classes have separate <code>identify:<code>
- methods. The <code>Mixpanel</code> <code>identify:</code> affects the
+ <code>MixpanelPeople</code> classes share the <code>identify:<code> method.
+ The <code>Mixpanel</code> <code>identify:</code> affects the
  <code>distinct_id</code> property of events sent by <code>track:</code> and
- <code>track:properties:</code>. The <code>MixpanelPeople</code>
- <code>identify:</code> determines which Mixpanel People user record will be
- updated by <code>set:</code>, <code>increment:</code> and other
+ <code>track:properties:</code> and determines which Mixpanel People user
+ record will be updated by <code>set:</code>, <code>increment:</code> and other
  <code>MixpanelPeople</code> methods.
 
  <b>If you are going to set your own distinct IDs for core Mixpanel event
