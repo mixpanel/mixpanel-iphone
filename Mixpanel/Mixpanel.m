@@ -982,14 +982,6 @@ static Mixpanel *sharedInstance = nil;
     }
 }
 
-- (void)archiveVariants
-{
-    NSString *filePath = [self variantsFilePath];
-    if (![NSKeyedArchiver archiveRootObject:self.variants toFile:filePath]) {
-        NSLog(@"%@ unable to archive variants data", self);
-    }
-}
-
 - (void)unarchive
 {
     [self unarchiveEvents];
@@ -1817,38 +1809,6 @@ static Mixpanel *sharedInstance = nil;
 - (void)joinExperiments
 {
     [self joinExperimentsWithCallback:nil];
-}
-
-- (void)markVariantRun:(MPVariant *)variant
-{
-    MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
-    NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
-    [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
-    if (self.people.distinctId) {
-        [self.people merge:@{@"$experiments": shownVariant}];
-    }
-
-    dispatch_async(self.serialQueue, ^{
-        NSMutableDictionary *superProperties = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary: superProperties[@"$experiments"]];
-        [shownVariants addEntriesFromDictionary:shownVariant];
-        [superProperties addEntriesFromDictionary:@{@"$experiments": [shownVariants copy]}];
-        self.superProperties = [superProperties copy];
-        NSLog(@"Super properties are now %@", self.superProperties);
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
-    });
-}
-
-- (void)joinExperiments
-{
-    [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
-        for (MPVariant *variant in newVariants) {
-            [variant execute];
-            [self markVariantRun:variant];
-        }
-    }];
 }
 
 @end
