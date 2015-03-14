@@ -79,6 +79,7 @@
 		A05CCA471AB4859A00CF62E8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05CCA461AB4859A00CF62E8 /* Accelerate.framework */; };
 		A05CCA491AB485A100CF62E8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05CCA481AB485A100CF62E8 /* CoreGraphics.framework */; };
 		A05CCA4B1AB485A800CF62E8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05CCA4A1AB485A800CF62E8 /* QuartzCore.framework */; };
+		A05CCA5E1AB4962200CF62E8 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A05CCA5D1AB4962200CF62E8 /* libicucore.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -227,6 +228,7 @@
 		A05CCA461AB4859A00CF62E8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		A05CCA481AB485A100CF62E8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A05CCA4A1AB485A800CF62E8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A05CCA5D1AB4962200CF62E8 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A05CCA5E1AB4962200CF62E8 /* libicucore.dylib in Frameworks */,
 				A05CCA4B1AB485A800CF62E8 /* QuartzCore.framework in Frameworks */,
 				A05CCA491AB485A100CF62E8 /* CoreGraphics.framework in Frameworks */,
 				A05CCA471AB4859A00CF62E8 /* Accelerate.framework in Frameworks */,
@@ -251,6 +254,7 @@
 		A05CC8A01AB47B9800CF62E8 = {
 			isa = PBXGroup;
 			children = (
+				A05CCA5D1AB4962200CF62E8 /* libicucore.dylib */,
 				A05CCA4A1AB485A800CF62E8 /* QuartzCore.framework */,
 				A05CCA481AB485A100CF62E8 /* CoreGraphics.framework */,
 				A05CCA461AB4859A00CF62E8 /* Accelerate.framework */,
