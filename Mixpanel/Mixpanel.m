@@ -142,7 +142,7 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
-        self.decideURL = @"https://decide.mixpanel.com";
+        self.decideURL = @"http://rob.dev.mixpanel.org";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;
@@ -1700,7 +1700,7 @@ static Mixpanel *sharedInstance = nil;
 {
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
-    if (self.people.distinctId) {
+    if (variant.targeting) {
         [self.people merge:@{@"$experiments": shownVariant}];
     }
 

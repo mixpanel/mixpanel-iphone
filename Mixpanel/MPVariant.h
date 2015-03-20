@@ -12,6 +12,7 @@
 
 @property (nonatomic) NSUInteger ID;
 @property (nonatomic) NSUInteger experimentID;
+@property (nonatomic) NSNumber *targeting;
 
 /*!
  @property
