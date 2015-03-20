@@ -102,11 +102,7 @@
         return nil;
     }
 
-    NSNumber *targeting = [object objectForKey:@"targeting"];
-    if (![targeting isKindOfClass:[NSNumber class]]) {
-        MixpanelError(@"variant requires a targeting value");
-        return nil;
-    }
+    BOOL targeting = [object objectForKey:@"targeting"];
 
     return [[MPVariant alloc] initWithID:[ID unsignedIntegerValue]
                             experimentID:[experimentID unsignedIntegerValue]
@@ -120,7 +116,7 @@
     return [self initWithID:0 experimentID:0 actions:nil tweaks:nil targeting:0];
 }
 
-- (id)initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID actions:(NSArray *)actions tweaks:(NSArray *)tweaks targeting:(NSNumber *)targeting
+- (id)initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID actions:(NSArray *)actions tweaks:(NSArray *)tweaks targeting:(BOOL)targeting
 {
     if(self = [super init]) {
         self.ID = ID;
@@ -145,7 +141,7 @@
         self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
         self.actions = [aDecoder decodeObjectForKey:@"actions"];
         self.tweaks = [aDecoder decodeObjectForKey:@"tweaks"];
-        self.targeting = [aDecoder decodeObjectForKey:@"targeting"];
+        self.targeting = [aDecoder decodeBoolForKey:@"targeting"];
         _finished = [(NSNumber *)[aDecoder decodeObjectForKey:@"finished"] boolValue];
     }
     return self;
@@ -157,8 +153,8 @@
     [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_experimentID] forKey:@"experimentID"];
     [aCoder encodeObject:_actions forKey:@"actions"];
     [aCoder encodeObject:_tweaks forKey:@"tweaks"];
-    [aCoder encodeObject:_targeting forKey:@"targeting"];
-    [aCoder encodeObject:[NSNumber numberWithBool:_finished] forKey:@"finished"];
+    [aCoder encodeBool:_targeting forKey:@"targeting"];
+    [aCoder encodeBool:[NSNumber numberWithBool:_finished] forKey:@"finished"];
 }
 
 #pragma mark Actions
