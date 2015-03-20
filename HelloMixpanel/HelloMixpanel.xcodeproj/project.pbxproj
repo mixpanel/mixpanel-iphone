@@ -131,6 +131,8 @@
 		C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */; };
 		C38D5F1EC13BC9516244A3D1 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */; };
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
+		D4C3A1F31ABCB07B0043C770 /* test_variant_targeting.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3A1F21ABCB07B0043C770 /* test_variant_targeting.json */; };
+		D4C3A1F41ABCB4A30043C770 /* test_variant_targeting.json in Resources */ = {isa = PBXBuildFile; fileRef = D4C3A1F21ABCB07B0043C770 /* test_variant_targeting.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -442,6 +444,7 @@
 		C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPBOOLToNSNumberValueTransformer.m; sourceTree = "<group>"; };
 		C38D5F4F61761A35C80A668D /* NSInvocation+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+MPHelpers.h"; sourceTree = "<group>"; };
 		C38D5F58D1809C6432B8B45B /* MPABTestDesignerChangeResponseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MPABTestDesignerChangeResponseMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		D4C3A1F21ABCB07B0043C770 /* test_variant_targeting.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = test_variant_targeting.json; path = ../../../test_variant_targeting.json; sourceTree = "<group>"; };
 		EBBED9E8EC134DC598B35DC2 /* libPods-ABTestingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABTestingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFA77763734E325585C0F2BE /* Pods-EventBindingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventBindingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FF297B2686389D0DE61F0CF1 /* Pods-HelloMixpanel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel/Pods-HelloMixpanel.debug.xcconfig"; sourceTree = "<group>"; };
@@ -557,6 +560,7 @@
 				18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */,
 				05509E50196E47EE007E5C06 /* test_decide_response.json */,
 				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
+				D4C3A1F21ABCB07B0043C770 /* test_variant_targeting.json */,
 				055FA713194A6B020080A709 /* Info.plist */,
 				05113949199BD7D4005189D2 /* test_decide_response_2.json */,
 			);
@@ -1027,6 +1031,7 @@
 				05423721199BDFD800BE25E7 /* test_decide_response.json in Resources */,
 				18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
 				05423720199BDFD500BE25E7 /* test_decide_response_2.json in Resources */,
+				D4C3A1F31ABCB07B0043C770 /* test_variant_targeting.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1042,6 +1047,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4C3A1F41ABCB4A30043C770 /* test_variant_targeting.json in Resources */,
 				2808F99C1610EFE3005772B7 /* InfoPlist.strings in Resources */,
 				0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */,
 				05E98DF3191AE27200AFF3E1 /* test_variant.json in Resources */,
