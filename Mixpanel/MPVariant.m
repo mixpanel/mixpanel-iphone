@@ -102,7 +102,7 @@
         return nil;
     }
 
-    BOOL targeting = [object objectForKey:@"targeting"];
+    BOOL targeting = [[object objectForKey:@"targeting"] boolValue];
 
     return [[MPVariant alloc] initWithID:[ID unsignedIntegerValue]
                             experimentID:[experimentID unsignedIntegerValue]
