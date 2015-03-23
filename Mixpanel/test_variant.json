@@ -6,5 +6,5 @@
         {"path": "/UIView/UILabel[text == \"Old Text 2\"]", "args": [["New Text","NSString"]], "original": [["Old Text 2","NSString"]], "selector": "setText:", "name":"YYYY-YYYY-YYYY"}
     ],
     "tweaks":[],
-    "targeting": false,
+    "targeting": false
 }

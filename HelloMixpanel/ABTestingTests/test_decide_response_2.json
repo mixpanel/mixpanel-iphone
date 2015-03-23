@@ -16,7 +16,7 @@
             "tweaks":[],
             "id":1,
             "experiment_id":1,
-            "targeting": false,
+            "targeting": false
         },
         {
             "actions":[
@@ -32,7 +32,7 @@
             "tweaks":[],
             "id":3,
             "experiment_id":2,
-            "targeting": false,
+            "targeting": false
         }
     ]
 }
