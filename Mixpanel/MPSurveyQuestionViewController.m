@@ -15,7 +15,7 @@
 
 @interface MPSurveyMultipleChoiceQuestionViewController : MPSurveyQuestionViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) MPSurveyMultipleChoiceQuestion *question;
+@property (nonatomic, strong, readonly) MPSurveyMultipleChoiceQuestion *multipleChoiceQuestion;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UIView *tableContainer;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *tableContainerVerticalPadding;
@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 @interface MPSurveyTextQuestionViewController : MPSurveyQuestionViewController <UITextViewDelegate>
 
-@property (nonatomic, strong) MPSurveyTextQuestion *question;
+@property (nonatomic, strong, readonly) MPSurveyTextQuestion *textQuestion;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *promptTopSpace;
 @property (nonatomic, strong) IBOutlet UITextView *textView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *textViewHeight;
@@ -266,13 +266,13 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return (NSInteger)[self.question.choices count];
+    return (NSInteger)[self.multipleChoiceQuestion.choices count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
-    NSString *text = [self labelForValue:(self.question.choices)[(NSUInteger)indexPath.row]];
+    NSString *text = [self labelForValue:(self.multipleChoiceQuestion.choices)[(NSUInteger)indexPath.row]];
     cell.label.text = text;
     cell.selectedLabel.text = text;
     UIColor *strokeColor = [UIColor colorWithWhite:1 alpha:0.5];
@@ -283,12 +283,12 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3f];
     MPSurveyTableViewCellPosition position;
     if (indexPath.row == 0) {
-        if ([self.question.choices count] == 1) {
+        if ([self.multipleChoiceQuestion.choices count] == 1) {
             position = MPSurveyTableViewCellPositionSingle;
         } else {
             position = MPSurveyTableViewCellPositionTop;
         }
-    } else if (indexPath.row == (NSInteger)([self.question.choices count] - 1)) {
+    } else if (indexPath.row == (NSInteger)([self.multipleChoiceQuestion.choices count] - 1)) {
         position = MPSurveyTableViewCellPositionBottom;
     } else {
         position = MPSurveyTableViewCellPositionMiddle;
@@ -308,7 +308,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (!cell.isChecked) {
         [cell setChecked:YES animatedWithCompletion:^(BOOL finished){
-            id value = (self.question.choices)[(NSUInteger)indexPath.row];
+            id value = (self.multipleChoiceQuestion.choices)[(NSUInteger)indexPath.row];
             __strong id<MPSurveyQuestionViewControllerDelegate> strongDelegate = self.delegate;
             if (strongDelegate != nil) {
                 [strongDelegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
@@ -323,6 +323,15 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     if (cell.isChecked) {
         [cell setChecked:NO animatedWithCompletion:nil];
     }
+}
+
+- (MPSurveyMultipleChoiceQuestion *)multipleChoiceQuestion {
+  if ([self.question isKindOfClass:[MPSurveyMultipleChoiceQuestion class]] ||
+      self.question == nil) {
+    return (MPSurveyMultipleChoiceQuestion *)self.question;
+  }
+  MixpanelError(@"%@ unexpected question. Expecting MC question, had %@", [self.question class]);
+  return nil;
 }
 
 @end
@@ -440,6 +449,15 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 - (IBAction)hideKeyboard
 {
     [self.textView resignFirstResponder];
+}
+
+- (MPSurveyTextQuestion *)textQuestion {
+  if ([self.question isKindOfClass:[MPSurveyTextQuestion class]] ||
+      self.question == nil) {
+    return (MPSurveyTextQuestion *)self.question;
+  }
+  MixpanelError(@"%@ unexpected question. Expecting text question, had %@", [self.question class]);
+  return nil;
 }
 
 @end

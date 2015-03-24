@@ -16,7 +16,7 @@
 
 @interface MPSurveyNavigationController () <MPSurveyQuestionViewControllerDelegate>
 
-@property (nonatomic, strong) IBOutlet UIImageView *view;
+@property (nonatomic, strong, readonly) UIImageView *imageView;
 @property (nonatomic, strong) IBOutlet UIColor *highlightColor;
 @property (nonatomic, strong) IBOutlet UIView *containerView;
 @property (nonatomic, strong) IBOutlet UILabel *pageNumberLabel;
@@ -35,10 +35,18 @@
 @implementation MPSurveyNavigationController
 
 
+- (UIImageView *)imageView {
+  if ([self.view isKindOfClass:[UIImageView class]] || self.view == nil) {
+    return (UIImageView *)self.view;
+  }
+  MixpanelError(@"Expecting self.view to be a UIImageView! Got %@ instead", [self.view class]);
+  return nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.image = [_backgroundImage mp_applyDarkEffect];
+    self.imageView.image = [_backgroundImage mp_applyDarkEffect];
 
     // set highlight color based on average background color
     UIColor *avgColor = [_backgroundImage mp_averageColor];
