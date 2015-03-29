@@ -27,8 +27,21 @@
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #import "NSData+MPBase64.h"
+#import "UIView+MPSnapshotImage.h"
 
 #define VERSION @"2.7.3"
+
+#ifdef MIXPANEL_LOG
+#define MixpanelLog(...) NSLog(__VA_ARGS__)
+#else
+#define MixpanelLog(...)
+#endif
+
+#ifdef MIXPANEL_DEBUG
+#define MixpanelDebug(...) NSLog(__VA_ARGS__)
+#else
+#define MixpanelDebug(...)
+#endif
 
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
@@ -68,6 +81,7 @@
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
+@property (atomic) BOOL trackIp;
 
 @end
 
@@ -168,6 +182,7 @@ static Mixpanel *sharedInstance = nil;
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
+        self.checkForSurveysOnActive = YES;
         self.surveys = nil;
         self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
@@ -177,6 +192,59 @@ static Mixpanel *sharedInstance = nil;
         self.variants = nil;
 
         [self setUpListeners];
+        self.trackIp = YES;
+        
+        // wifi reachability
+        BOOL reachabilityOk = NO;
+        if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
+            SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
+            if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
+                if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
+                    reachabilityOk = YES;
+                    MixpanelDebug(@"%@ successfully set up reachability callback", self);
+                } else {
+                    // cleanup callback if setting dispatch queue failed
+                    SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
+                }
+            }
+        }
+        if (!reachabilityOk) {
+            NSLog(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
+        }
+
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+        // cellular info
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+            [self setCurrentRadio];
+            [notificationCenter addObserver:self
+                                   selector:@selector(setCurrentRadio)
+                                       name:CTRadioAccessTechnologyDidChangeNotification
+                                     object:nil];
+        }
+#endif
+
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillTerminate:)
+                                   name:UIApplicationWillTerminateNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillResignActive:)
+                                   name:UIApplicationWillResignActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidBecomeActive:)
+                                   name:UIApplicationDidBecomeActiveNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationDidEnterBackground:)
+                                   name:UIApplicationDidEnterBackgroundNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(applicationWillEnterForeground:)
+                                   name:UIApplicationWillEnterForegroundNotification
+                                 object:nil];
         [self unarchive];
         [self executeCachedVariants];
         
@@ -197,6 +265,10 @@ static Mixpanel *sharedInstance = nil;
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
 {
     return [self initWithToken:apiToken launchOptions:nil andFlushInterval:flushInterval];
+}
+
+- (void) setConfigTrackIp:(BOOL)trackIp{
+    self.trackIp = trackIp;
 }
 
 - (void)dealloc
@@ -756,7 +828,7 @@ static Mixpanel *sharedInstance = nil;
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
 
         NSString *requestData = [self encodeAPIData:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
+        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.trackIp ? 1 : 0, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
