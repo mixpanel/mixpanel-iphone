@@ -776,7 +776,7 @@ static Mixpanel *sharedInstance = nil;
         NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         if ([response intValue] == 0) {
             MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
-        };
+        }
 
         [queue removeObjectsInArray:batch];
     }
