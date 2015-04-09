@@ -486,7 +486,7 @@ static __strong NSData *CRLFCRLF;
     [self _performDelegateBlock:^{
         if ([self.delegate respondsToSelector:@selector(webSocketDidOpen:)]) {
             [self.delegate webSocketDidOpen:self];
-        };
+        }
     }];
 }
 
@@ -1467,7 +1467,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                     if (bytes_read != bufferSize) {
                         break;
                     }
-                };
+                }
                 [self _pumpScanner];
                 break;
             }
