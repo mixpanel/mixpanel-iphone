@@ -672,7 +672,7 @@
  </pre>
 
  Please note that the core <code>Mixpanel</code> and
- <code>MixpanelPeople</code> classes share the <code>identify:<code> method.
+ <code>MixpanelPeople</code> classes share the <code>identify:</code> method.
  The <code>Mixpanel</code> <code>identify:</code> affects the
  <code>distinct_id</code> property of events sent by <code>track:</code> and
  <code>track:properties:</code> and determines which Mixpanel People user
