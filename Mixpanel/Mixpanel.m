@@ -30,6 +30,15 @@
 
 #define VERSION @"2.7.3"
 
+static NSHashTable *mp_mixpanelInstances;
+static NSUncaughtExceptionHandler *mp_originalExceptionHandler;
+static void mp_uncaughtExceptionHandler(NSException *exception) {
+    for (Mixpanel *mixpanel in mp_mixpanelInstances) {
+        [mixpanel archive];
+    }
+    mp_originalExceptionHandler(exception);
+}
+
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate> {
     NSUInteger _flushInterval;
 }
@@ -189,6 +198,12 @@ static Mixpanel *sharedInstance = nil;
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
         }
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            mp_mixpanelInstances = [NSHashTable weakObjectsHashTable];
+        });
+        [mp_mixpanelInstances addObject:self];
     }
 
     return self;
