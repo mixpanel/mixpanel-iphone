@@ -1322,7 +1322,7 @@ static Mixpanel *sharedInstance = nil;
     // survey on a viewcontroller that is itself being presented.
     if (![presentingViewController isBeingPresented] && ![presentingViewController isBeingDismissed]) {
 
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:[NSBundle bundleForClass:Mixpanel.class]];
         MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
         controller.survey = survey;
         controller.delegate = self;
@@ -1531,7 +1531,7 @@ static Mixpanel *sharedInstance = nil;
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if (![presentingViewController isBeingPresented] && ![presentingViewController isBeingDismissed]) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:[NSBundle bundleForClass:Mixpanel.class]];
         MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
 
         controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
