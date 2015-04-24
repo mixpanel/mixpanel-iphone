@@ -1091,6 +1091,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSDate *start = [NSDate date];
 
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+            
+            __strong id<MixpanelDelegate> strongDelegate = self.delegate;
+            if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelOnActiveCheck:forNotifications:andSurveys:)]) {
+                [strongDelegate mixpanelOnActiveCheck:self forNotifications:notifications andSurveys:surveys];
+            }
+            
             if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
                 [self showNotificationWithObject:notifications[0]];
             } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {

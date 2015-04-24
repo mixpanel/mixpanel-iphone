@@ -948,4 +948,21 @@
  */
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
 
+/*!
+ @method
+ 
+ @abstract
+ Tells the delegate that mixpanel checked for notifications and surveys on applicationDidBecomeActive
+ 
+ @discussion
+ This is an optional delegate method added to the Mixpanel library. The intention 
+ is to allow the host application know if Mixpanel is going to display a notification
+ and make UI adjustments if necessary.
+ 
+ @param mixpanel        Mixpanel API instance
+ @param notifications   Array of notifications
+ @param surveys         Array of surveys
+ */
+- (void)mixpanelOnActiveCheck:(Mixpanel *)mixpanel forNotifications:(NSArray*)notifications andSurveys:(NSArray*)surveys;
+
 @end
