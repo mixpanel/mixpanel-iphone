@@ -304,6 +304,28 @@ static Mixpanel *sharedInstance = nil;
     return results;
 }
 
+- (NSString *)watchModel
+{
+    NSString *model = nil;
+    Class WKInterfaceDeviceClass = NSClassFromString(@"WKInterfaceDevice");
+    if (WKInterfaceDeviceClass) {
+        id device = [WKInterfaceDeviceClass performSelector:NSSelectorFromString(@"currentDevice")];
+        if (device && [device respondsToSelector:NSSelectorFromString(@"screenBounds")]) {
+            NSInvocation *screenBoundsInvocation = [NSInvocation invocationWithMethodSignature:[device methodSignatureForSelector:NSSelectorFromString(@"screenBounds")]];
+            [screenBoundsInvocation invokeWithTarget:device];
+            CGRect screenBounds;
+            [screenBoundsInvocation getReturnValue:(void *)&screenBounds];
+            if (screenBounds.size.width == 136.0f){
+                model = @"Watch1,1";
+            } else {
+                model = @"Watch1,2";
+            }
+        }
+
+    }
+    return model;
+}
+
 - (NSString *)IFA
 {
     NSString *ifa = nil;
@@ -360,6 +382,7 @@ static Mixpanel *sharedInstance = nil;
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_release"];
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
+    [p setValue:[self watchModel] forKey:@"$watch_model"];
 
     [p addEntriesFromDictionary:@{
              @"mp_lib": @"iphone",
