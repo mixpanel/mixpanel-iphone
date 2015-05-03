@@ -92,7 +92,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
     NSEnumerator *en = [swizzles objectEnumerator];
     MPSwizzle *swizzle;
     while((swizzle = (MPSwizzle *)[en nextObject])) {
-        NSLog(@"%@", swizzle);
+        MixpanelError(@"%@", swizzle);
     }
 }
 

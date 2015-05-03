@@ -85,7 +85,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSString *escapedUrl = [imageURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         imageURL = [NSURL URLWithString:escapedUrl];
         if (imageURL == nil) {
-            NSLog(@"invalid notif image URL: %@", imageURLString);
+            MixpanelError(@"invalid notif image URL: %@", imageURLString);
             return nil;
         }
 
