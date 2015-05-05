@@ -6,15 +6,13 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-
+#import <XCTest/XCTest.h>
 #import "Mixpanel.h"
-#import "MPObjectSelector.h"
 #import "MPEventBinding.h"
+#import "MPObjectSelector.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
-
 
 #define TEST_TOKEN @"xxxxxxxxxxxxxxxxxxxxxxx"
 
@@ -217,8 +215,8 @@
     XCTAssertEqual([selector selectFromRoot:rootViewController][0], c1, @"c1 should have been replaced");
     [c1 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"didMoveToWindow should have been unSwizzled");
-    
-    
+
+
     // Test archive
     NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
     MPUIControlBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
@@ -279,7 +277,7 @@
     indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     [vc tableView:tv didSelectRowAtIndexPath:indexPath];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"No track calls should be fired");
-    
+
     // Test archive
     NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
     MPUITableViewBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];

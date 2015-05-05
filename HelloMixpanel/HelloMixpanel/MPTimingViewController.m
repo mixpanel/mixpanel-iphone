@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "MPTimingViewController.h"
-
 #import "Mixpanel.h"
+#import "MPTimingViewController.h"
 
 @interface MPTimingViewController ()
 
