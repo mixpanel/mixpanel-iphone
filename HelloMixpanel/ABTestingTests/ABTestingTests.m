@@ -93,7 +93,7 @@
  version of XCTest does not support asynchonous tests and
  will not compile unless we define these symbols
  */
-#if !__has_include("XCTest/XCTextCase+AsynchronousTesting.h")
+#if !__has_include("XCTest/XCTestCase+AsynchronousTesting.h")
 @interface XCTestExpectation
 
 - (void)fulfill;
