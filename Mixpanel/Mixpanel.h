@@ -212,7 +212,7 @@
  */
 @property (atomic, weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
 
-#pragma mark Methods
+#pragma mark Tracking
 
 /*!
  @method
@@ -557,6 +557,14 @@
  */
 - (void)archive;
 
+- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
+
+- (NSString *)libVersion;
+
+
+#if !defined(MIXPANEL_APP_EXTENSION)
+#pragma mark - Mixpanel Surveys
+
 /*!
  @method
 
@@ -583,6 +591,7 @@
  */
 - (void)showSurvey;
 
+#pragma mark - Mixpanel Notifications
 
 /*!
  @method
@@ -620,6 +629,8 @@
  */
 - (void)showNotification;
 
+#pragma mark - Mixpanel A/B Testing
+
 /*!
  @method
 
@@ -637,20 +648,17 @@
 
 /*!
  @method
- 
+
  @abstract
  Join any experiments (A/B tests) that are available for the current user.
- 
+
  @discussion
  Same as joinExperiments but will fire the given callback after all experiments
  have been loaded and applied.
  */
 - (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
 
-- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
-
-
-- (NSString *)libVersion;
+#endif
 
 @end
 
