@@ -34,6 +34,7 @@
 
 @implementation MPSurveyNavigationController
 
+@dynamic view;
 
 - (void)viewDidLoad
 {
