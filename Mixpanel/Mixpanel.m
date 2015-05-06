@@ -35,7 +35,7 @@
 #endif
 
 
-#define VERSION @"2.7.4"
+#define VERSION @"2.8.0"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
