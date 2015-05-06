@@ -91,7 +91,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     static int retries = 0;
     BOOL inRetryLoop = retries > 0;
-    
+
     MessagingDebug(@"In open. initiate = %d, retries = %d, maxRetries = %d, maxInterval = %d, connected = %d", initiate, retries, maxRetries, maxInterval, _connected);
 
     if (self.sessionEnded || _connected || (inRetryLoop && retries >= maxRetries) ) {
