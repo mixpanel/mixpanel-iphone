@@ -1,20 +1,21 @@
 #import <XCTest/XCTest.h>
 
-#import "Mixpanel.h"
-#import "MPNotification.h"
-#import "MPSurvey.h"
-#import "MPSurveyQuestion.h"
-#import "HTTPServer.h"
-#import "MixpanelDummyHTTPConnection.h"
-#import "MPSurveyNavigationController.h"
-#import "MPNotificationViewController.h"
 #import <objc/runtime.h>
+#import "HTTPServer.h"
+#import "Mixpanel.h"
+#import "MixpanelDummyHTTPConnection.h"
+#import "MPNotification.h"
+#import "MPNotificationViewController.h"
+#import "MPSurvey.h"
+#import "MPSurveyNavigationController.h"
+#import "MPSurveyQuestion.h"
 
 #define TEST_TOKEN @"abc123"
 
 #pragma mark - Interface Redefinitions
 
 @interface Mixpanel (Test)
+
 // get access to private members
 
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
@@ -41,6 +42,7 @@
 @end
 
 @interface MixpanelPeople (Test)
+
 // get access to private members
 
 @property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
