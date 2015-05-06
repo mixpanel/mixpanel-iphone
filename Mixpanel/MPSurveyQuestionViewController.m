@@ -221,6 +221,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 @implementation MPSurveyMultipleChoiceQuestionViewController
 
+@dynamic question;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -328,6 +330,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 @end
 
 @implementation MPSurveyTextQuestionViewController
+
+@dynamic question;
 
 - (void)viewDidLoad
 {
