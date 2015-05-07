@@ -537,6 +537,9 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
+        self.variants = [NSSet set];
+        self.shownNotifications = [NSMutableSet set];
+        
         [self archive];
     });
 }
