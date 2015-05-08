@@ -342,7 +342,7 @@ static __strong NSData *CRLFCRLF;
     _workQueue = dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL);
 
     // Going to set a specific on the queue so we can validate we're on the work queue
-    dispatch_queue_set_specific(_workQueue, (__bridge void *)self, maybe_bridge(_workQueue), NULL);
+    dispatch_queue_set_specific(_workQueue, (__bridge void *)_workQueue, maybe_bridge(_workQueue), NULL);
 
     _delegateDispatchQueue = dispatch_get_main_queue();
     mp_dispatch_retain(_delegateDispatchQueue);
@@ -365,17 +365,13 @@ static __strong NSData *CRLFCRLF;
 
 - (void)assertOnWorkQueue;
 {
-    assert(dispatch_get_specific((__bridge void *)self) == maybe_bridge(_workQueue));
+    assert(dispatch_get_specific((__bridge void *)_workQueue) == maybe_bridge(_workQueue));
 }
 
 - (void)dealloc
 {
-    _inputStream.delegate = nil;
-    _outputStream.delegate = nil;
-
-    [_inputStream close];
-    [_outputStream close];
-
+    [self _closeStream];
+    
     mp_dispatch_release(_workQueue);
     _workQueue = NULL;
 
@@ -689,7 +685,6 @@ static __strong NSData *CRLFCRLF;
             }];
 
             self.readyState = MPWebSocketStateClosed;
-            self->_selfRetain = nil;
 
             MixpanelError(@"Failing with error %@", error.localizedDescription);
 
@@ -1059,6 +1054,24 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     });
 }
 
+- (void)_closeStream
+{
+    @synchronized(self) {
+        [_outputStream close];
+        [_inputStream close];
+        
+        for (NSArray *runLoop in [_scheduledRunloops copy]) {
+            [self unscheduleFromRunLoop:[runLoop objectAtIndex:0] forMode:[runLoop objectAtIndex:1]];
+        }
+        
+        [_outputStream setDelegate:nil];
+        [_inputStream setDelegate:nil];
+        
+        _inputStream = nil;
+        _outputStream = nil;
+    }
+}
+
 - (void)_pumpWriting;
 {
     [self assertOnWorkQueue];
@@ -1067,6 +1080,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     if (dataLength - _outputBufferOffset > 0 && _outputStream.hasSpaceAvailable) {
         NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
+            [self _closeStream];
             [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
              return;
         }
@@ -1086,23 +1100,18 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         !_sentClose) {
         _sentClose = YES;
 
-        [_outputStream close];
-        [_inputStream close];
-
-
-        for (NSArray *runLoop in [_scheduledRunloops copy]) {
-            [self unscheduleFromRunLoop:[runLoop objectAtIndex:0] forMode:[runLoop objectAtIndex:1]];
-        }
+        [self _closeStream];
 
         if (!_failed) {
             [self _performDelegateBlock:^{
                 if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
                     [self.delegate webSocket:self didCloseWithCode:self->_closeCode reason:self->_closeReason wasClean:YES];
                 }
+                _selfRetain = nil;
             }];
+        } else {
+            _selfRetain = nil;
         }
-
-        _selfRetain = nil;
     }
 }
 
@@ -1431,11 +1440,6 @@ static const size_t MPFrameHeaderOverhead = 32;
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
-                    if (self.readyState != MPWebSocketStateClosed) {
-                        self.readyState = MPWebSocketStateClosed;
-                        self->_selfRetain = nil;
-                    }
-
                     if (!self->_sentClose && !self->_failed) {
                         self->_sentClose = YES;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages

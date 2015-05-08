@@ -11,6 +11,10 @@
 #ifndef MPLogger_h
 #define MPLogger_h
 
+#if DEBUG
+#define MIXPANEL_DEBUG
+#endif
+
 static inline void MPLog(NSString *format, ...) {
     __block va_list arg_list;
     va_start (arg_list, format);
