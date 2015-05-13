@@ -7,7 +7,7 @@
 //
 
 #import <objc/runtime.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 #import "MPObjectSelector.h"
 #import "NSData+MPBase64.h"
