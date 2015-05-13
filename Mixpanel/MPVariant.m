@@ -444,7 +444,7 @@ static NSMapTable *originalCache;
         dispatch_async(dispatch_get_main_queue(), ^{ executeBlock(view, command);});
     };
 
-    if (self.swizzle) {
+    if (self.swizzle && self.swizzleClass != nil) {
         // Swizzle the method needed to check for this object coming onscreen
         [MPSwizzler swizzleSelector:self.swizzleSelector
                             onClass:self.swizzleClass
@@ -455,10 +455,12 @@ static NSMapTable *originalCache;
 
 - (void)stop
 {
-    // Stop this change from applying in future
-    [MPSwizzler unswizzleSelector:self.swizzleSelector
-                          onClass:self.swizzleClass
-                            named:self.name];
+    if (self.swizzle && self.swizzleClass != nil) {
+        // Stop this change from applying in future
+        [MPSwizzler unswizzleSelector:self.swizzleSelector
+                              onClass:self.swizzleClass
+                                named:self.name];
+    }
 
     if (self.original) {
         // Undo the changes with the original values specified in the action

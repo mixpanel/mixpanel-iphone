@@ -323,5 +323,23 @@
     XCTAssertFalse([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
 }
 
+- (void)testInvalidEventBindings
+{
+    // This event binding references a class (NoSuchController) that
+    // doesn't exist. Running the binding should have no effect.
+    NSString *badData = @"YnBsaXN0MDDUAQIDBAUGIiNYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0\
+b3ASAAGGoKgHCBUWFxgZGlUkbnVsbNYJCgsMDQ4PEBESExRSSURUcGF0aFYkY2xh\
+c3NUbmFtZVlldmVudE5hbWVSJDCAAoAEgAeAA4AFgAYQAF8QJDg3QUMyRDU2LTc4\
+OEUtNEYyNS05MEE0LTc4MDVCQUFENkYwOF8QHS9VSVZpZXdDb250cm9sbGVyL1VJ\
+VGFibGVWaWV3XXVpIHRhYmxlIHZpZXdfEBBOb1N1Y2hDb250cm9sbGVy0hscHR5a\
+JGNsYXNzbmFtZVgkY2xhc3Nlc18QFE1QVUlUYWJsZVZpZXdCaW5kaW5nox8gIV8Q\
+FE1QVUlUYWJsZVZpZXdCaW5kaW5nXk1QRXZlbnRCaW5kaW5nWE5TT2JqZWN0XxAP\
+TlNLZXllZEFyY2hpdmVy0SQlVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBTAFYA\
+WwBiAGcAcQB0AHYAeAB6AHwAfgCAAIIAqQDJANcA6gDvAPoBAwEaAR4BNQFEAU0B\
+XwFiAWcAAAAAAAACAQAAAAAAAAAmAAAAAAAAAAAAAAAAAAABaQ==";
+    MPUIControlBinding *badBinding = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSData alloc] initWithBase64EncodedString:badData options:0]];
+    [badBinding execute]; // This should have no effect, and should not raise.
+}
+
 
 @end

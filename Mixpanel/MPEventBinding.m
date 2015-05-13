@@ -47,7 +47,7 @@
         self.eventName = eventName;
         self.path = [[MPObjectSelector alloc] initWithString:path];
         self.name = [[NSUUID UUID] UUIDString];
-        self.running = false;
+        self.running = NO;
     }
     return self;
 }

@@ -66,7 +66,7 @@
 
 - (void)execute
 {
-    if (!self.running) {
+    if (!self.running && self.swizzleClass != nil) {
         NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
             // select targets based off path
@@ -92,7 +92,7 @@
 
 - (void)stop
 {
-    if (self.running) {
+    if (self.running && self.swizzleClass != nil) {
         [MPSwizzler unswizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
                               onClass:self.swizzleClass
                                 named:self.name];
