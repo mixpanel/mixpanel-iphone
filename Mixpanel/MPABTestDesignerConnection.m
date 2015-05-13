@@ -91,15 +91,18 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     static int retries = 0;
     BOOL inRetryLoop = retries > 0;
-    
+
+    MessagingDebug(@"In open. initiate = %d, retries = %d, maxRetries = %d, maxInterval = %d, connected = %d", initiate, retries, maxRetries, maxInterval, _connected);
+
     if (self.sessionEnded || _connected || (inRetryLoop && retries >= maxRetries) ) {
-        // break out of retry loop if any of the conditions are met.
+        // break out of retry loop if any of the success conditions are met.
         retries = 0;
     } else if (initiate ^ inRetryLoop) {
         // If we are initiating a new connection, or we are already in a
         // retry loop (but not both). Then open a socket.
         if (!_open) {
-            MessagingDebug(@"Attempting to open WebSocket to: %@, try %d / %d ", _url, retries, maxRetries);
+            MessagingDebug(@"Attempting to open WebSocket to: %@, try %d/%d ", _url, retries, maxRetries);
+            _open = YES;
             _webSocket = [[MPWebSocket alloc] initWithURL:_url];
             _webSocket.delegate = self;
             [_webSocket open];
@@ -213,8 +216,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
-    _open = YES;
-    MessagingDebug(@"WebSocket did open.");
+    MessagingDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
 }
 

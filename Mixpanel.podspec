@@ -1,22 +1,33 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
-  s.version      = '2.7.3'
+  s.version      = '2.8.0'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Mixpanel, Inc' => 'support@mixpanel.com' }
   s.platform     = :ios, '6.0'
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
-  s.source_files  = 'Mixpanel/**/*.{m,h}'
-  s.private_header_files =  'Mixpanel/Library/**/*.h'
-  s.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
-  s.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
-  s.libraries = 'icucore', 'MPCategoryHelpers'
   s.requires_arc = true
+  s.default_subspec = 'Mixpanel'
+
+  s.subspec 'Mixpanel' do |ss|
+    ss.source_files  = 'Mixpanel/**/*.{m,h}'
+    ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
+    ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
+    ss.dependency 'Mixpanel/MPCategoryHelpers'
+    ss.libraries = 'icucore', 'MPCategoryHelpers'
+  end
 
   s.subspec 'MPCategoryHelpers' do |ss|
     ss.preserve_paths = 'Mixpanel/MPCategoryHelpers.h'
     ss.vendored_libraries = 'Mixpanel/libMPCategoryHelpers.a'
     ss.libraries = 'MPCategoryHelpers'
+  end
+
+  s.subspec 'AppExtension' do |ss|
+    ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/NSData+MPBase64.{m,h}' ]
+    ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
+    ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
+    ss.libraries = 'icucore'
   end
 end
