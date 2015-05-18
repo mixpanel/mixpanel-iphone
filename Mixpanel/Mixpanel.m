@@ -670,13 +670,13 @@ static __unused NSString *MPURLEncode(NSString *s)
         [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
-        DLog(@"%@ http request: %@?%@", self, [self.serverURL stringByAppendingString:@"/import/"], postBody);
+        //DLog(@"%@ http request: %@?%@", self, [self.serverURL stringByAppendingString:@"/import/"], postBody);
 
         [NSURLConnection sendAsynchronousRequest:request
             queue:self.importQueue
             completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error){
                 NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                DLog(@"response %@, error = %@", responseString, error);
+                //DLog(@"response %@, error = %@", responseString, error);
             }];
     }
 }
