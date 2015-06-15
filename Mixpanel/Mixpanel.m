@@ -1854,7 +1854,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 r[@"$time"] = epochMilliseconds;
             }
             if (ignore_time) {
-                r[@"$ignore_time"] = @(true);
+                r[@"$ignore_time"] = @YES;
             }
             if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
                 [p addEntriesFromDictionary:self.automaticPeopleProperties];
