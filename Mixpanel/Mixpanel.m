@@ -1750,7 +1750,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
-    if (self.people.distinctId) {
+    if (variant.targeting) {
         [self.people merge:@{@"$experiments": shownVariant}];
     }
 

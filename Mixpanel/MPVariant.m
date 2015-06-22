@@ -102,24 +102,28 @@
         return nil;
     }
 
+    BOOL targeting = [[object objectForKey:@"targeting"] boolValue];
+
     return [[MPVariant alloc] initWithID:[ID unsignedIntegerValue]
                             experimentID:[experimentID unsignedIntegerValue]
                                  actions:actions
-                                  tweaks:tweaks];
+                                  tweaks:tweaks
+                               targeting:targeting];
 }
 
 - (id)init
 {
-    return [self initWithID:0 experimentID:0 actions:nil tweaks:nil];
+    return [self initWithID:0 experimentID:0 actions:nil tweaks:nil targeting:0];
 }
 
-- (id)initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID actions:(NSArray *)actions tweaks:(NSArray *)tweaks
+- (id)initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID actions:(NSArray *)actions tweaks:(NSArray *)tweaks targeting:(BOOL)targeting
 {
     if(self = [super init]) {
         self.ID = ID;
         self.experimentID = experimentID;
         self.actions = [NSMutableOrderedSet orderedSet];
         self.tweaks = [NSMutableArray array];
+        self.targeting = targeting;
         [self addTweaksFromJSONObject:tweaks andExecute:NO];
         [self addActionsFromJSONObject:actions andExecute:NO];
         _finished = NO;
@@ -137,6 +141,7 @@
         self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
         self.actions = [aDecoder decodeObjectForKey:@"actions"];
         self.tweaks = [aDecoder decodeObjectForKey:@"tweaks"];
+        self.targeting = [aDecoder decodeBoolForKey:@"targeting"];
         _finished = [(NSNumber *)[aDecoder decodeObjectForKey:@"finished"] boolValue];
     }
     return self;
@@ -148,7 +153,8 @@
     [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_experimentID] forKey:@"experimentID"];
     [aCoder encodeObject:_actions forKey:@"actions"];
     [aCoder encodeObject:_tweaks forKey:@"tweaks"];
-    [aCoder encodeObject:[NSNumber numberWithBool:_finished] forKey:@"finished"];
+    [aCoder encodeBool:_targeting forKey:@"targeting"];
+    [aCoder encodeBool:[NSNumber numberWithBool:_finished] forKey:@"finished"];
 }
 
 #pragma mark Actions

@@ -28,6 +28,7 @@
 
 @property (atomic, copy) NSString *decideURL;
 @property (nonatomic, strong) NSSet *variants;
+@property (nonatomic, retain) NSMutableArray *peopleQueue;
 @property (nonatomic, retain) NSMutableArray *eventsQueue;
 @property (atomic, strong) NSDictionary *superProperties;
 
@@ -247,6 +248,25 @@
         [self waitForExpectationsWithTimeout:0.1 handler:nil];
         [variant stop];
     }
+}
+
+- (void)testTargetingVariant
+{
+    [self.mixpanel identify:@"test_distinct_id"];
+    NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_variant" withExtension:@"json"]]
+                                                           options:0 error:nil];
+    MPVariant *variant = [MPVariant variantWithJSONObject:object];
+    [self.mixpanel markVariantRun:variant];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, "Should not merge experiment id");
+    
+    [self.mixpanel identify:@"test_distinct_id"];
+    NSDictionary *targetingObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"test_variant_targeting" withExtension:@"json"]]
+                                                           options:0 error:nil];
+    MPVariant *targetingVariant = [MPVariant variantWithJSONObject:targetingObject];
+    [self.mixpanel markVariantRun:targetingVariant];
+    [self waitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, "Should merge experiment id");
 }
 
 - (void)testStopVariant
