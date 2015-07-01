@@ -352,6 +352,12 @@ static __unused NSString *MPURLEncode(NSString *s)
         if ([Mixpanel inBackground]) {
             [self archiveProperties];
         }
+        
+        
+        __strong id<MixpanelDelegate> strongDelegate = self.delegate;
+        if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelDidSetIdentify:)]){
+            [strongDelegate mixpanelDidSetIdentify:self];
+        }
     });
 }
 
