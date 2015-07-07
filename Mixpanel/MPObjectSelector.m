@@ -368,16 +368,17 @@
             }
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
-        for (NSObject *child in [(UIViewController *)obj childViewControllers]) {
+        UIViewController *viewController = (UIViewController *)obj;
+        for (NSObject *child in [viewController childViewControllers]) {
             if (!class || [child isKindOfClass:class]) {
                 [children addObject:child];
             }
         }
-        if (((UIViewController *)obj).presentedViewController && (!class || [((UIViewController *)obj).presentedViewController isKindOfClass:class])) {
-            [children addObject:((UIViewController *)obj).presentedViewController];
+        if (viewController.presentedViewController && (!class || [viewController.presentedViewController isKindOfClass:class])) {
+            [children addObject:viewController.presentedViewController];
         }
-        if (!class || [((UIViewController *)obj).view isKindOfClass:class]) {
-            [children addObject:((UIViewController *)obj).view];
+        if (!class || (viewController.isViewLoaded && [viewController.view isKindOfClass:class])) {
+            [children addObject:viewController.view];
         }
     }
     NSArray *result;
