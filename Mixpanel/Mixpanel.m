@@ -616,34 +616,36 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
-    while ([queue count] > 0) {
-        NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
-        NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
+    @synchronized (queue) {
+        while ([queue count] > 0) {
+            NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
+            NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
 
-        NSString *requestData = [self encodeAPIData:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
-        NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
-        NSError *error = nil;
+            NSString *requestData = [self encodeAPIData:batch];
+            NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
+            MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
+            NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
+            NSError *error = nil;
 
-        [self updateNetworkActivityIndicator:YES];
+            [self updateNetworkActivityIndicator:YES];
 
-        NSURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+            NSURLResponse *urlResponse = nil;
+            NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
 
-        [self updateNetworkActivityIndicator:NO];
+            [self updateNetworkActivityIndicator:NO];
 
-        if (error) {
-            MixpanelError(@"%@ network failure: %@", self, error);
-            break;
+            if (error) {
+                MixpanelError(@"%@ network failure: %@", self, error);
+                break;
+            }
+
+            NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            if ([response intValue] == 0) {
+                MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
+            }
+
+            [queue removeObjectsInArray:batch];
         }
-
-        NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        if ([response intValue] == 0) {
-            MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
-        }
-
-        [queue removeObjectsInArray:batch];
     }
 }
 
