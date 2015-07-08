@@ -354,10 +354,12 @@ static __unused NSString *MPURLEncode(NSString *s)
         }
         
         
-        __strong id<MixpanelDelegate> strongDelegate = self.delegate;
-        if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelDidSetIdentify:)]){
-            [strongDelegate mixpanelDidSetIdentify:self];
-        }
+        [self joinExperimentsWithCallback:^{
+            __strong id<MixpanelDelegate> strongDelegate = self.delegate;
+            if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelDidSetIdentify:)]){
+                [strongDelegate mixpanelDidSetIdentify:self];
+            }
+         }];
     });
 }
 
