@@ -353,7 +353,10 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self archiveProperties];
         }
         
+        // Clear cached variants
+        self.variants = nil;
         
+        // Get the variants of the current identify
         [self joinExperimentsWithCallback:^{
             __strong id<MixpanelDelegate> strongDelegate = self.delegate;
             if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelDidSetIdentify:)]){
