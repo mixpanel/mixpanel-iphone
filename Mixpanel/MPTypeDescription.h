@@ -5,7 +5,7 @@
 
 @interface MPTypeDescription : NSObject
 
-- (id)initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, readonly) NSString *name;
 

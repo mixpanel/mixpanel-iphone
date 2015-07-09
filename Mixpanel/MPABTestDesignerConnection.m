@@ -45,7 +45,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     void (^_disconnectCallback)();
 }
 
-- (id)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
+- (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
 {
     self = [super init];
     if (self) {
@@ -81,7 +81,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     return self;
 }
 
-- (id)initWithURL:(NSURL *)url
+- (instancetype)initWithURL:(NSURL *)url
 {
     return [self initWithURL:url keepTrying:NO connectCallback:nil disconnectCallback:nil];
 }

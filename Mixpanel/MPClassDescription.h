@@ -10,7 +10,7 @@
 @property (nonatomic, readonly) NSArray *propertyDescriptions;
 @property (nonatomic, readonly) NSArray *delegateInfos;
 
-- (id)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)isDescriptionForKindOfClass:(Class)class;
 
@@ -20,6 +20,6 @@
 
 @property (nonatomic, readonly) NSString *selectorName;
 
-- (id)initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
 @end

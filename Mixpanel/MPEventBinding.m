@@ -20,7 +20,7 @@
         return nil;
     }
 
-    NSString *bindingType = [object objectForKey:@"event_type"];
+    NSString *bindingType = object[@"event_type"];
     Class klass = [self subclassFromString:bindingType];
     return [klass bindngWithJSONObject:object];
 }
@@ -41,7 +41,7 @@
     [[Mixpanel sharedInstance] track:event properties:bindingProperties];
 }
 
-- (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path
+- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path
 {
     if (self = [super init]) {
         self.eventName = eventName;
@@ -82,7 +82,7 @@
 
 #pragma mark -- NSCoder
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     NSString *path = [aDecoder decodeObjectForKey:@"path"];
     NSString *eventName = [aDecoder decodeObjectForKey:@"eventName"];
@@ -96,7 +96,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:[NSNumber numberWithUnsignedLong:_ID] forKey:@"ID"];
+    [aCoder encodeObject:@(_ID) forKey:@"ID"];
     [aCoder encodeObject:_name forKey:@"name"];
     [aCoder encodeObject:_path.string forKey:@"path"];
     [aCoder encodeObject:_eventName forKey:@"eventName"];
