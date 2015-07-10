@@ -54,10 +54,6 @@
 		18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
-		18B0ED231A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
-		18B0ED241A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
-		18B0ED251A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
-		18B0ED261A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */; };
 		18E4561D199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */; };
 		18E4561E199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */; };
 		18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */; };
@@ -89,6 +85,11 @@
 		28C7E66B1615317400F78E49 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 28C7E66A1615317400F78E49 /* Icon-72.png */; };
 		28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */; };
 		28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FEFA0817CAE93200691355 /* UIImage+MPImageEffects.m */; };
+		5115A0D01B4F48F000787217 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 5115A0CF1B4F48F000787217 /* UIView+MPHelpers.m */; };
+		5115A0DA1B4F49C000787217 /* MPCategoryHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */; };
+		5115A0E41B4F4DF700787217 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E11B4F4DF700787217 /* checkerboard.jpg */; };
+		5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
+		5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		5262143622F74EDFB5C6D2AC /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		86978874197466780095B277 /* MPNSNumberToCGFloatValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 86978873197466780095B277 /* MPNSNumberToCGFloatValueTransformer.m */; };
@@ -246,6 +247,13 @@
 			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
 			remoteInfo = HelloMixpanel;
 		};
+		5115A0DB1B4F49C000787217 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
+			remoteInfo = HelloMixpanel;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -321,7 +329,6 @@
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
 		188D0ABF19B7E351009C0399 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
 		18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
-		18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
 		18E45619199EB960000D5BCB /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
 		18E4561B199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
@@ -371,6 +378,13 @@
 		28FEFA0817CAE93200691355 /* UIImage+MPImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPImageEffects.m"; sourceTree = "<group>"; };
 		42C5DFF7007DFFD8C17930A3 /* Pods-HelloMixpanel.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel/Pods-HelloMixpanel.appstore.xcconfig"; sourceTree = "<group>"; };
 		49A441AF641244CA893593CD /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanelTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5115A0CF1B4F48F000787217 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
+		5115A0D51B4F49C000787217 /* MPCategoryHelpersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MPCategoryHelpersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5115A0D81B4F49C000787217 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCategoryHelpersTests.m; sourceTree = "<group>"; };
+		5115A0E11B4F4DF700787217 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = SOURCE_ROOT; };
+		5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = huge_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
+		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		57915FC1D2F8A5607E73B555 /* Pods-ABTestingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.release.xcconfig"; sourceTree = "<group>"; };
 		62121D2ECD6FD5229C3CC27A /* Pods-HelloMixpanelTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6CDC3EFDCEE34FF091C30173 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -454,7 +468,6 @@
 			files = (
 				5262143622F74EDFB5C6D2AC /* (null) in Frameworks */,
 				C1DF1D0AB4F943AA96313F10 /* libPods-ABTestingTests.a in Frameworks */,
-				18B0ED251A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,7 +476,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				187939F019A2A7F400CC4FBE /* XCTest.framework in Frameworks */,
-				18B0ED261A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 				187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */,
 				187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */,
 				19E147D070AC45CBB30031AB /* libPods-EventBindingTests.a in Frameworks */,
@@ -476,7 +488,6 @@
 			files = (
 				05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */,
 				A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */,
-				18B0ED231A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 				05E98DDB19115FB200AFF3E1 /* libicucore.dylib in Frameworks */,
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
 				2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */,
@@ -494,10 +505,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				0563B607194A18AD00B40489 /* XCTest.framework in Frameworks */,
-				18B0ED241A1D89A60014F3B3 /* libMPCategoryHelpers.a in Frameworks */,
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5115A0D21B4F49C000787217 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +627,7 @@
 				055FA711194A6B020080A709 /* ABTestingTests */,
 				187939F319A2A7F400CC4FBE /* EventBindingTests */,
 				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
+				5115A0D61B4F49C000787217 /* MPCategoryHelpersTests */,
 				2808F9901610EFE3005772B7 /* Frameworks */,
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
 				286760AD1611982600B1BEC8 /* Mixpanel */,
@@ -627,6 +645,7 @@
 				2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */,
 				055FA710194A6B010080A709 /* ABTestingTests.xctest */,
 				187939EF19A2A7F400CC4FBE /* EventBindingTests.xctest */,
+				5115A0D51B4F49C000787217 /* MPCategoryHelpersTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -717,6 +736,7 @@
 		286760AD1611982600B1BEC8 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
+				5115A0E71B55C5A400787217 /* MPCategoryHelpersSupport */,
 				18108265197DCD04005B543E /* EventTrackingSupport */,
 				A7B462B31910759E00774977 /* ABTestingSupport */,
 				053B4C62183E963100E825FE /* Media.xcassets */,
@@ -742,8 +762,6 @@
 				289B497917D913D50035439B /* NSData+MPBase64.m */,
 				053B4C661840191000E825FE /* UIColor+MPColor.h */,
 				053B4C671840191000E825FE /* UIColor+MPColor.m */,
-				182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */,
-				18B0ED221A1D89A60014F3B3 /* libMPCategoryHelpers.a */,
 				28ECB33F17CE7A7D0075ADE7 /* UIImage+MPAverageColor.h */,
 				28ECB34017CE7A7D0075ADE7 /* UIImage+MPAverageColor.m */,
 				28FEFA0717CAE93200691355 /* UIImage+MPImageEffects.h */,
@@ -753,6 +771,35 @@
 			);
 			name = Mixpanel;
 			path = ../Mixpanel;
+			sourceTree = "<group>";
+		};
+		5115A0D61B4F49C000787217 /* MPCategoryHelpersTests */ = {
+			isa = PBXGroup;
+			children = (
+				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
+				5115A0D71B4F49C000787217 /* Supporting Files */,
+			);
+			path = MPCategoryHelpersTests;
+			sourceTree = "<group>";
+		};
+		5115A0D71B4F49C000787217 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5115A0E11B4F4DF700787217 /* checkerboard.jpg */,
+				5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */,
+				5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */,
+				5115A0D81B4F49C000787217 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5115A0E71B55C5A400787217 /* MPCategoryHelpersSupport */ = {
+			isa = PBXGroup;
+			children = (
+				182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */,
+				5115A0CF1B4F48F000787217 /* UIView+MPHelpers.m */,
+			);
+			name = MPCategoryHelpersSupport;
 			sourceTree = "<group>";
 		};
 		9003ECED95D33B569C44DB53 /* Pods */ = {
@@ -973,6 +1020,24 @@
 			productReference = 2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		5115A0D41B4F49C000787217 /* MPCategoryHelpersTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5115A0DD1B4F49C000787217 /* Build configuration list for PBXNativeTarget "MPCategoryHelpersTests" */;
+			buildPhases = (
+				5115A0D11B4F49C000787217 /* Sources */,
+				5115A0D21B4F49C000787217 /* Frameworks */,
+				5115A0D31B4F49C000787217 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5115A0DC1B4F49C000787217 /* PBXTargetDependency */,
+			);
+			name = MPCategoryHelpersTests;
+			productName = MPCategoryHelpersTests;
+			productReference = 5115A0D51B4F49C000787217 /* MPCategoryHelpersTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -996,6 +1061,10 @@
 					2808F9B01610EFE4005772B7 = {
 						TestTargetID = 2808F98C1610EFE3005772B7;
 					};
+					5115A0D41B4F49C000787217 = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = 2808F98C1610EFE3005772B7;
+					};
 				};
 			};
 			buildConfigurationList = 2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */;
@@ -1015,6 +1084,7 @@
 				2808F9B01610EFE4005772B7 /* HelloMixpanelTests */,
 				055FA70F194A6B010080A709 /* ABTestingTests */,
 				187939EE19A2A7F400CC4FBE /* EventBindingTests */,
+				5115A0D41B4F49C000787217 /* MPCategoryHelpersTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1067,6 +1137,16 @@
 			files = (
 				053B4C64183E963100E825FE /* Media.xcassets in Resources */,
 				2808F9BD1610EFE4005772B7 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5115A0D31B4F49C000787217 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5115A0E41B4F4DF700787217 /* checkerboard.jpg in Resources */,
+				5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */,
+				5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1268,6 +1348,7 @@
 				18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */,
 				A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				05E98DF6191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.m in Sources */,
+				5115A0D01B4F48F000787217 /* UIView+MPHelpers.m in Sources */,
 				05E98DF9191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */,
 				A7B462D7191075DE00774977 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
@@ -1324,6 +1405,14 @@
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5115A0D11B4F49C000787217 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5115A0DA1B4F49C000787217 /* MPCategoryHelpersTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1409,6 +1498,11 @@
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 2808F9B61610EFE4005772B7 /* PBXContainerItemProxy */;
+		};
+		5115A0DC1B4F49C000787217 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
+			targetProxy = 5115A0DB1B4F49C000787217 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2102,6 +2196,97 @@
 			};
 			name = AppStore;
 		};
+		5115A0DE1B4F49C000787217 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
+			};
+			name = Debug;
+		};
+		5115A0DF1B4F49C000787217 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5115A0E01B4F49C000787217 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2151,6 +2336,16 @@
 				2808F9C71610EFE4005772B7 /* Debug */,
 				2808F9C81610EFE4005772B7 /* Release */,
 				28C2136716376D3300696E4F /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5115A0DD1B4F49C000787217 /* Build configuration list for PBXNativeTarget "MPCategoryHelpersTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5115A0DE1B4F49C000787217 /* Debug */,
+				5115A0DF1B4F49C000787217 /* Release */,
+				5115A0E01B4F49C000787217 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
