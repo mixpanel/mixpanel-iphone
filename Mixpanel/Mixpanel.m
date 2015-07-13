@@ -135,7 +135,7 @@ static Mixpanel *sharedInstance = nil;
     if (self = [self init]) {
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
-        _flushInterval = flushInterval;
+        self.flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
 
