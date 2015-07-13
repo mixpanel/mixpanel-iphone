@@ -2,7 +2,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (MPHelpers)
+@interface UIView (AloomaHelpers)
 
 - (UIImage *)mp_snapshotImage;
 - (UIImage *)mp_snapshotForBlur;

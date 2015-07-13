@@ -17,7 +17,7 @@
 //   limitations under the License.
 //
 
-#import "MPWebSocket.h"
+#import "AloomaWebSocket.h"
 
 #if TARGET_OS_IPHONE
 #define HAS_ICU
@@ -41,8 +41,8 @@
 
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/SecRandom.h>
-#import "MPLogger.h"
-#import "NSData+MPBase64.h"
+#import "AloomaLogger.h"
+#import "NSData+AloomaBase64.h"
 
 #if OS_OBJECT_USE_OBJC_RETAIN_RELEASE
 #define mp_dispatch_retain(x)
@@ -55,7 +55,7 @@
 #endif
 
 #if !__has_feature(objc_arc)
-#error MPWebSocket must be compiled with ARC enabled
+#error AloomaWebSocket must be compiled with ARC enabled
 #endif
 
 
@@ -92,25 +92,25 @@ typedef struct {
     uint64_t payload_length;
 } frame_header;
 
-static NSString *const MPWebSocketAppendToSecKeyString = @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+static NSString *const AloomaWebSocketAppendToSecKeyString = @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
 static inline int32_t validate_dispatch_data_partial_string(NSData *data);
 
-@interface NSData (MPWebSocket)
+@interface NSData (AloomaWebSocket)
 
 - (NSString *)stringBySHA1ThenBase64Encoding;
 
 @end
 
 
-@interface NSString (MPWebSocket)
+@interface NSString (AloomaWebSocket)
 
 - (NSString *)stringBySHA1ThenBase64Encoding;
 
 @end
 
 
-@interface NSURL (MPWebSocket)
+@interface NSURL (AloomaWebSocket)
 
 // The origin isn't really applicable for a native application.
 // So instead, just map ws -> http and wss -> https.
@@ -119,7 +119,7 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data);
 @end
 
 
-@interface _MPRunLoopThread : NSThread
+@interface _AloomaRunLoopThread : NSThread
 
 @property (nonatomic, readonly) NSRunLoop *runLoop;
 
@@ -134,7 +134,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
     return [NSData dataWithBytes:md length:CC_SHA1_DIGEST_LENGTH];
 }
 
-@implementation NSData (MPWebSocket)
+@implementation NSData (AloomaWebSocket)
 
 - (NSString *)stringBySHA1ThenBase64Encoding
 {
@@ -144,7 +144,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 @end
 
 
-@implementation NSString (MPWebSocket)
+@implementation NSString (AloomaWebSocket)
 
 - (NSString *)stringBySHA1ThenBase64Encoding
 {
@@ -153,15 +153,15 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 @end
 
-NSString *const MPWebSocketErrorDomain = @"com.mixpanel.error.WebSocket";
+NSString *const AloomaWebSocketErrorDomain = @"com.mixpanel.error.WebSocket";
 
 // Returns number of bytes consumed. Returning 0 means you didn't match.
 // Sends bytes to callback handler;
 typedef size_t (^stream_scanner)(NSData *collected_data);
 
-typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
+typedef void (^data_callback)(AloomaWebSocket *webSocket,  NSData *data);
 
-@interface MPIOConsumer : NSObject {
+@interface AloomaIOConsumer : NSObject {
     stream_scanner _scanner;
     data_callback _handler;
     size_t _bytesNeeded;
@@ -177,16 +177,16 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 @end
 
 // This class is not thread-safe, and is expected to always be run on the same queue.
-@interface MPIOConsumerPool : NSObject
+@interface AloomaIOConsumerPool : NSObject
 
 - (id)initWithBufferCapacity:(NSUInteger)poolSize;
 
-- (MPIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
-- (void)returnConsumer:(MPIOConsumer *)consumer;
+- (AloomaIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
+- (void)returnConsumer:(AloomaIOConsumer *)consumer;
 
 @end
 
-@interface MPWebSocket ()  <NSStreamDelegate>
+@interface AloomaWebSocket ()  <NSStreamDelegate>
 
 - (void)_writeData:(NSData *)data;
 - (void)_closeWithProtocolError:(NSString *)message;
@@ -215,7 +215,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 - (void)_initializeStreams;
 - (void)_connect;
 
-@property (nonatomic) MPWebSocketReadyState readyState;
+@property (nonatomic) AloomaWebSocketReadyState readyState;
 
 @property (nonatomic) NSOperationQueue *delegateOperationQueue;
 @property (nonatomic) dispatch_queue_t delegateDispatchQueue;
@@ -223,7 +223,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 @end
 
 
-@implementation MPWebSocket {
+@implementation AloomaWebSocket {
     NSInteger _webSocketVersion;
 
     NSOperationQueue *_delegateOperationQueue;
@@ -275,10 +275,10 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
     NSMutableSet *_scheduledRunloops;
 
     // We use this to retain ourselves.
-    __strong MPWebSocket *_selfRetain;
+    __strong AloomaWebSocket *_selfRetain;
 
     NSArray *_requestedProtocols;
-    MPIOConsumerPool *_consumerPool;
+    AloomaIOConsumerPool *_consumerPool;
 }
 
 @synthesize delegate = _delegate;
@@ -335,7 +335,7 @@ static __strong NSData *CRLFCRLF;
         _secure = YES;
     }
 
-    _readyState = MPWebSocketStateConnecting;
+    _readyState = AloomaWebSocketStateConnecting;
     _consumerStopped = YES;
     _webSocketVersion = 13;
 
@@ -354,7 +354,7 @@ static __strong NSData *CRLFCRLF;
 
     _consumers = [[NSMutableArray alloc] init];
 
-    _consumerPool = [[MPIOConsumerPool alloc] init];
+    _consumerPool = [[AloomaIOConsumerPool alloc] init];
 
     _scheduledRunloops = [[NSMutableSet alloc] init];
 
@@ -392,7 +392,7 @@ static __strong NSData *CRLFCRLF;
 
 #ifndef NDEBUG
 
-- (void)setReadyState:(MPWebSocketReadyState)aReadyState;
+- (void)setReadyState:(AloomaWebSocketReadyState)aReadyState;
 {
     [self willChangeValueForKey:@"readyState"];
     assert(aReadyState > _readyState);
@@ -405,7 +405,7 @@ static __strong NSData *CRLFCRLF;
 - (void)open;
 {
     assert(_url);
-    NSAssert(_readyState == MPWebSocketStateConnecting, @"Cannot call -(void)open on MPWebSocket more than once");
+    NSAssert(_readyState == AloomaWebSocketStateConnecting, @"Cannot call -(void)open on MPWebSocket more than once");
 
     _selfRetain = self;
 
@@ -444,7 +444,7 @@ static __strong NSData *CRLFCRLF;
         return NO;
     }
 
-    NSString *concattedString = [_secKey stringByAppendingString:MPWebSocketAppendToSecKeyString];
+    NSString *concattedString = [_secKey stringByAppendingString:AloomaWebSocketAppendToSecKeyString];
     NSString *expectedAccept = [concattedString stringBySHA1ThenBase64Encoding];
 
     return [acceptHeader isEqualToString:expectedAccept];
@@ -455,14 +455,14 @@ static __strong NSData *CRLFCRLF;
     NSInteger responseCode = CFHTTPMessageGetResponseStatusCode(_receivedHTTPHeaders);
 
     if (responseCode >= 400) {
-        MixpanelError(@"Request failed with response code %d", responseCode);
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode] forKey:NSLocalizedDescriptionKey]]];
+        AloomaError(@"Request failed with response code %d", responseCode);
+        [self _failWithError:[NSError errorWithDomain:AloomaWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode] forKey:NSLocalizedDescriptionKey]]];
         return;
 
     }
 
     if(![self _checkHandshake:_receivedHTTPHeaders]) {
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"] forKey:NSLocalizedDescriptionKey]]];
+        [self _failWithError:[NSError errorWithDomain:AloomaWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"] forKey:NSLocalizedDescriptionKey]]];
         return;
     }
 
@@ -470,14 +470,14 @@ static __strong NSData *CRLFCRLF;
     if (negotiatedProtocol) {
         // Make sure we requested the protocol
         if ([_requestedProtocols indexOfObject:negotiatedProtocol] == NSNotFound) {
-            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Server specified Sec-WebSocket-Protocol that wasn't requested"] forKey:NSLocalizedDescriptionKey]]];
+            [self _failWithError:[NSError errorWithDomain:AloomaWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Server specified Sec-WebSocket-Protocol that wasn't requested"] forKey:NSLocalizedDescriptionKey]]];
             return;
         }
 
         _protocol = negotiatedProtocol;
     }
 
-    self.readyState = MPWebSocketStateOpen;
+    self.readyState = AloomaWebSocketStateOpen;
 
     if (!_didFail) {
         [self _readFrameNew];
@@ -497,11 +497,11 @@ static __strong NSData *CRLFCRLF;
         _receivedHTTPHeaders = CFHTTPMessageCreateEmpty(NULL, NO);
     }
 
-    [self _readUntilHeaderCompleteWithCallback:^(MPWebSocket *websocket,  NSData *data) {
+    [self _readUntilHeaderCompleteWithCallback:^(AloomaWebSocket *websocket,  NSData *data) {
         CFHTTPMessageAppendBytes(websocket->_receivedHTTPHeaders, (const UInt8 *)data.bytes, (CFIndex)data.length);
 
         if (CFHTTPMessageIsHeaderComplete(websocket->_receivedHTTPHeaders)) {
-            MixpanelDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
+            AloomaDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
             [websocket _HTTPHeadersDidFinish];
         } else {
             [websocket _readHTTPHeader];
@@ -511,7 +511,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MixpanelDebug(@"Connected");
+    AloomaDebug(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
 
     // Set host first so it defaults
@@ -578,7 +578,7 @@ static __strong NSData *CRLFCRLF;
 
 #if DEBUG
         [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
-        MixpanelDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
+        AloomaDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
         [_outputStream setProperty:SSLOptions
@@ -625,15 +625,15 @@ static __strong NSData *CRLFCRLF;
 {
     assert(code);
     dispatch_async(_workQueue, ^{
-        if (self.readyState == MPWebSocketStateClosing || self.readyState == MPWebSocketStateClosed) {
+        if (self.readyState == AloomaWebSocketStateClosing || self.readyState == AloomaWebSocketStateClosed) {
             return;
         }
 
-        BOOL wasConnecting = self.readyState == MPWebSocketStateConnecting;
+        BOOL wasConnecting = self.readyState == AloomaWebSocketStateConnecting;
 
-        self.readyState = MPWebSocketStateClosing;
+        self.readyState = AloomaWebSocketStateClosing;
 
-        MixpanelDebug(@"Closing with code %d reason %@", code, reason);
+        AloomaDebug(@"Closing with code %d reason %@", code, reason);
 
         if (wasConnecting) {
             [self _disconnect];
@@ -680,7 +680,7 @@ static __strong NSData *CRLFCRLF;
 - (void)_failWithError:(NSError *)error;
 {
     dispatch_async(_workQueue, ^{
-        if (self.readyState != MPWebSocketStateClosed) {
+        if (self.readyState != AloomaWebSocketStateClosed) {
             self->_failed = YES;
             [self _performDelegateBlock:^{
                 if ([self.delegate respondsToSelector:@selector(webSocket:didFailWithError:)]) {
@@ -688,10 +688,10 @@ static __strong NSData *CRLFCRLF;
                 }
             }];
 
-            self.readyState = MPWebSocketStateClosed;
+            self.readyState = AloomaWebSocketStateClosed;
             self->_selfRetain = nil;
 
-            MixpanelError(@"Failing with error %@", error.localizedDescription);
+            AloomaError(@"Failing with error %@", error.localizedDescription);
 
             [self _disconnect];
         }
@@ -711,7 +711,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)send:(id)data;
 {
-    NSAssert(self.readyState != MPWebSocketStateConnecting, @"Invalid State: Cannot call send: until connection is open");
+    NSAssert(self.readyState != AloomaWebSocketStateConnecting, @"Invalid State: Cannot call send: until connection is open");
     // TODO: maybe not copy this for performance
     data = [data copy];
     dispatch_async(_workQueue, ^{
@@ -744,7 +744,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)_handleMessage:(id)message
 {
-    MixpanelDebug(@"Received message");
+    AloomaDebug(@"Received message");
     [self _performDelegateBlock:^{
         [self.delegate webSocket:self didReceiveMessage:message];
     }];
@@ -790,7 +790,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     size_t dataSize = data.length;
     __block uint16_t closeCode = 0;
 
-    MixpanelDebug(@"Received close frame");
+    AloomaDebug(@"Received close frame");
 
     if (dataSize == 1) {
         // TODO handle error
@@ -816,7 +816,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 
     [self assertOnWorkQueue];
 
-    if (self.readyState == MPWebSocketStateOpen) {
+    if (self.readyState == AloomaWebSocketStateOpen) {
         [self closeWithCode:1000 reason:nil];
     }
     dispatch_async(_workQueue, ^{
@@ -827,7 +827,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 - (void)_disconnect;
 {
     [self assertOnWorkQueue];
-    MixpanelDebug(@"Trying to disconnect");
+    AloomaDebug(@"Trying to disconnect");
     _closeWhenFinishedWriting = YES;
     [self _pumpWriting];
 }
@@ -882,7 +882,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 {
     NSParameterAssert(frame_header.opcode != 0);
 
-    if (self.readyState != MPWebSocketStateOpen) {
+    if (self.readyState != AloomaWebSocketStateOpen) {
         return;
     }
 
@@ -916,7 +916,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
             }
         }
     } else {
-        [self _addConsumerWithDataLength:(size_t)frame_header.payload_length callback:^(MPWebSocket *websocket, NSData *newData) {
+        [self _addConsumerWithDataLength:(size_t)frame_header.payload_length callback:^(AloomaWebSocket *websocket, NSData *newData) {
             if (isControlFrame) {
                 [websocket _handleFrameWithData:newData opCode:frame_header.opcode];
             } else {
@@ -965,7 +965,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 {
     assert((_currentFrameCount == 0 && _currentFrameOpcode == 0) || (_currentFrameCount > 0 && _currentFrameOpcode > 0));
 
-    [self _addConsumerWithDataLength:2 callback:^(MPWebSocket *websocket, NSData *data) {
+    [self _addConsumerWithDataLength:2 callback:^(AloomaWebSocket *websocket, NSData *data) {
         __block frame_header header = { .fin = NO, .opcode = 0, .masked = NO, .payload_length = 0 };
 
         const uint8_t *headerBuffer = data.bytes;
@@ -1015,7 +1015,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         if (extra_bytes_needed == 0) {
             [websocket _handleFrameHeader:header curData:websocket->_currentFrameData];
         } else {
-            [websocket _addConsumerWithDataLength:extra_bytes_needed callback:^(MPWebSocket *websocket2, NSData *data2) {
+            [websocket _addConsumerWithDataLength:extra_bytes_needed callback:^(AloomaWebSocket *websocket2, NSData *data2) {
                 size_t mapped_size = data2.length;
                 const void *mapped_buffer = data2.bytes;
                 size_t offset = 0;
@@ -1067,7 +1067,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     if (dataLength - _outputBufferOffset > 0 && _outputStream.hasSpaceAvailable) {
         NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
-            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
+            [self _failWithError:[NSError errorWithDomain:AloomaWebSocketErrorDomain code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
              return;
         }
 
@@ -1167,7 +1167,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
 
     BOOL didWork = NO;
 
-    if (self.readyState >= MPWebSocketStateClosing) {
+    if (self.readyState >= AloomaWebSocketStateClosing) {
         return didWork;
     }
 
@@ -1180,7 +1180,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
         return didWork;
     }
 
-    MPIOConsumer *consumer = [_consumers objectAtIndex:0];
+    AloomaIOConsumer *consumer = [_consumers objectAtIndex:0];
 
     size_t bytesNeeded = consumer.bytesNeeded;
 
@@ -1401,13 +1401,13 @@ static const size_t MPFrameHeaderOverhead = 32;
     dispatch_async(_workQueue, ^{
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
-                MessagingDebug(@"NSStreamEventOpenCompleted %@", aStream);
-                if (self.readyState >= MPWebSocketStateClosing) {
+                AloomaMessagingDebug(@"NSStreamEventOpenCompleted %@", aStream);
+                if (self.readyState >= AloomaWebSocketStateClosing) {
                     return;
                 }
                 assert(self->_readBuffer);
 
-                if (self.readyState == MPWebSocketStateConnecting && aStream == self->_inputStream) {
+                if (self.readyState == AloomaWebSocketStateConnecting && aStream == self->_inputStream) {
                     [self didConnect];
                 }
                 [self _pumpWriting];
@@ -1416,7 +1416,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventErrorOccurred: {
-                MessagingDebug(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
+                AloomaMessagingDebug(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
                 /// TODO specify error better!
                 [self _failWithError:aStream.streamError];
                 self->_readBufferOffset = 0;
@@ -1427,12 +1427,12 @@ static const size_t MPFrameHeaderOverhead = 32;
 
             case NSStreamEventEndEncountered: {
                 [self _pumpScanner];
-                MixpanelDebug(@"NSStreamEventEndEncountered %@", aStream);
+                AloomaDebug(@"NSStreamEventEndEncountered %@", aStream);
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
-                    if (self.readyState != MPWebSocketStateClosed) {
-                        self.readyState = MPWebSocketStateClosed;
+                    if (self.readyState != AloomaWebSocketStateClosed) {
+                        self.readyState = AloomaWebSocketStateClosed;
                         self->_selfRetain = nil;
                     }
 
@@ -1451,7 +1451,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasBytesAvailable: {
-                MixpanelDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
+                AloomaDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
                 const int bufferSize = 2048;
                 uint8_t buffer[bufferSize];
 
@@ -1473,13 +1473,13 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasSpaceAvailable: {
-                MixpanelDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
+                AloomaDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
                 [self _pumpWriting];
                 break;
             }
 
             default:
-                MixpanelDebug(@"(default)  %@", aStream);
+                AloomaDebug(@"(default)  %@", aStream);
                 break;
         }
     });
@@ -1488,7 +1488,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 @end
 
 
-@implementation MPIOConsumer
+@implementation AloomaIOConsumer
 
 @synthesize bytesNeeded = _bytesNeeded;
 @synthesize consumer = _scanner;
@@ -1510,7 +1510,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 @end
 
 
-@implementation MPIOConsumerPool {
+@implementation AloomaIOConsumerPool {
     NSUInteger _poolSize;
     NSMutableArray *_bufferedConsumers;
 }
@@ -1530,14 +1530,14 @@ static const size_t MPFrameHeaderOverhead = 32;
     return [self initWithBufferCapacity:8];
 }
 
-- (MPIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
+- (AloomaIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
 {
-    MPIOConsumer *consumer = nil;
+    AloomaIOConsumer *consumer = nil;
     if (_bufferedConsumers.count) {
         consumer = [_bufferedConsumers lastObject];
         [_bufferedConsumers removeLastObject];
     } else {
-        consumer = [[MPIOConsumer alloc] init];
+        consumer = [[AloomaIOConsumer alloc] init];
     }
 
     [consumer setupWithScanner:scanner handler:handler bytesNeeded:bytesNeeded readToCurrentFrame:readToCurrentFrame unmaskBytes:unmaskBytes];
@@ -1545,7 +1545,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     return consumer;
 }
 
-- (void)returnConsumer:(MPIOConsumer *)consumer
+- (void)returnConsumer:(AloomaIOConsumer *)consumer
 {
     if (_bufferedConsumers.count < _poolSize) {
         [_bufferedConsumers addObject:consumer];
@@ -1578,7 +1578,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
 @end
 
-@implementation NSURL (MPWebSocket)
+@implementation NSURL (AloomaWebSocket)
 
 - (NSString *)mp_origin;
 {
@@ -1661,15 +1661,15 @@ static inline int32_t validate_dispatch_data_partial_string(NSData *data) {
 
 #endif
 
-static _MPRunLoopThread *networkThread = nil;
+static _AloomaRunLoopThread *networkThread = nil;
 static NSRunLoop *networkRunLoop = nil;
 
-@implementation NSRunLoop (MPWebSocket)
+@implementation NSRunLoop (AloomaWebSocket)
 
 + (NSRunLoop *)mp_networkRunLoop {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        networkThread = [[_MPRunLoopThread alloc] init];
+        networkThread = [[_AloomaRunLoopThread alloc] init];
         networkThread.name = @"com.mixpanel.WebSocket.NetworkThread";
         [networkThread start];
         networkRunLoop = networkThread.runLoop;
@@ -1681,7 +1681,7 @@ static NSRunLoop *networkRunLoop = nil;
 @end
 
 
-@implementation _MPRunLoopThread {
+@implementation _AloomaRunLoopThread {
     dispatch_group_t _waitGroup;
 }
 

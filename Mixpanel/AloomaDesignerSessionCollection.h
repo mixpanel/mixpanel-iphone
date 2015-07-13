@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MPDesignerSessionCollection <NSObject>
+@protocol AloomaDesignerSessionCollection <NSObject>
 
 - (void)cleanup;
 

@@ -93,7 +93,7 @@
  5/3/2013
  */
 
-@interface UIImage (MPImageEffects)
+@interface UIImage (AloomaImageEffects)
 
 - (UIImage *)mp_applyLightEffect;
 - (UIImage *)mp_applyExtraLightEffect;

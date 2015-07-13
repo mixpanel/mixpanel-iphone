@@ -8,33 +8,33 @@
 
 #import <UIKit/UIKit.h>
 
-#ifndef MPLogger_h
-#define MPLogger_h
+#ifndef AloomaLogger_h
+#define AloomaLogger_h
 
-static inline void MPLog(NSString *format, ...) {
+static inline void AloomaLog(NSString *format, ...) {
     __block va_list arg_list;
     va_start (arg_list, format);
     NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arg_list];
     va_end(arg_list);
-    NSLog(@"[Mixpanel] %@", formattedString);
+    NSLog(@"[Alooma] %@", formattedString);
 }
 
-#ifdef MIXPANEL_ERROR
-#define MixpanelError(...) MPLog(__VA_ARGS__)
+#ifdef ALOOMA_ERROR
+#define AloomaError(...) AloomaLog(__VA_ARGS__)
 #else
-#define MixpanelError(...)
+#define AloomaError(...)
 #endif
 
-#ifdef MIXPANEL_DEBUG
-#define MixpanelDebug(...) MPLog(__VA_ARGS__)
+#ifdef ALOOMA_DEBUG
+#define AloomaDebug(...) AloomaLog(__VA_ARGS__)
 #else
-#define MixpanelDebug(...)
+#define AloomaDebug(...)
 #endif
 
-#ifdef MIXPANEL_MESSAGING_DEBUG
-#define MessagingDebug(...) MPLog(__VA_ARGS__)
+#ifdef ALOOMA_MESSAGING_DEBUG
+#define AloomaMessagingDebug(...) AloomaLog(__VA_ARGS__)
 #else
-#define MessagingDebug(...)
+#define AloomaMessagingDebug(...)
 #endif
 
 #endif

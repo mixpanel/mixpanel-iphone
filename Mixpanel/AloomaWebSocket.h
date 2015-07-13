@@ -21,27 +21,27 @@
 #import <Security/SecCertificate.h>
 
 typedef enum {
-    MPWebSocketStateConnecting = 0,
-    MPWebSocketStateOpen = 1,
-    MPWebSocketStateClosing = 2,
-    MPWebSocketStateClosed = 3,
-} MPWebSocketReadyState;
+    AloomaWebSocketStateConnecting = 0,
+    AloomaWebSocketStateOpen = 1,
+    AloomaWebSocketStateClosing = 2,
+    AloomaWebSocketStateClosed = 3,
+} AloomaWebSocketReadyState;
 
-@class MPWebSocket;
+@class AloomaWebSocket;
 
-extern NSString *const MPWebSocketErrorDomain;
+extern NSString *const AloomaWebSocketErrorDomain;
 
-#pragma mark - MPWebSocketDelegate
+#pragma mark - AloomaWebSocketDelegate
 
-@protocol MPWebSocketDelegate;
+@protocol AloomaWebSocketDelegate;
 
-#pragma mark - MPWebSocket
+#pragma mark - AloomaWebSocket
 
-@interface MPWebSocket : NSObject <NSStreamDelegate>
+@interface AloomaWebSocket : NSObject <NSStreamDelegate>
 
-@property (nonatomic, assign) id <MPWebSocketDelegate> delegate;
+@property (nonatomic, assign) id <AloomaWebSocketDelegate> delegate;
 
-@property (nonatomic, readonly) MPWebSocketReadyState readyState;
+@property (nonatomic, readonly) AloomaWebSocketReadyState readyState;
 @property (nonatomic, readonly, retain) NSURL *url;
 
 // This returns the negotiated protocol.
@@ -76,19 +76,19 @@ extern NSString *const MPWebSocketErrorDomain;
 
 @end
 
-#pragma mark - MPWebSocketDelegate
+#pragma mark - AloomaWebSocketDelegate
 
-@protocol MPWebSocketDelegate <NSObject>
+@protocol AloomaWebSocketDelegate <NSObject>
 
 // message will either be an NSString if the server is using text
 // or NSData if the server is using binary.
-- (void)webSocket:(MPWebSocket *)webSocket didReceiveMessage:(id)message;
+- (void)webSocket:(AloomaWebSocket *)webSocket didReceiveMessage:(id)message;
 
 @optional
 
-- (void)webSocketDidOpen:(MPWebSocket *)webSocket;
-- (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error;
-- (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+- (void)webSocketDidOpen:(AloomaWebSocket *)webSocket;
+- (void)webSocket:(AloomaWebSocket *)webSocket didFailWithError:(NSError *)error;
+- (void)webSocket:(AloomaWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 
 @end
 
@@ -110,7 +110,7 @@ extern NSString *const MPWebSocketErrorDomain;
 
 #pragma mark - NSRunLoop (SRWebSocket)
 
-@interface NSRunLoop (MPWebSocket)
+@interface NSRunLoop (AloomaWebSocket)
 
 + (NSRunLoop *)mp_networkRunLoop;
 

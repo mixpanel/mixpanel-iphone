@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface UIImage (MPAverageColor)
+@interface UIImage (AloomaAverageColor)
 
 - (UIColor *)mp_averageColor;
 - (UIColor *)mp_importantColor;

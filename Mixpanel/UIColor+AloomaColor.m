@@ -2,9 +2,9 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
 #endif
 
-#import "UIColor+MPColor.h"
+#import "UIColor+AloomaColor.h"
 
-@implementation UIColor (MPColor)
+@implementation UIColor (AloomaColor)
 
 + (UIColor *)mp_applicationPrimaryColor
 {

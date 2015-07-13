@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface UIColor (MPColor)
+@interface UIColor (AloomaColor)
 
 + (UIColor *)mp_applicationPrimaryColor;
 + (UIColor *)mp_lightEffectColor;
