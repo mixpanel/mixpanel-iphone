@@ -1,9 +1,29 @@
-[![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
+# AloomaIosSDK
 
-Mixpanel supports `Cocoapods` for easy installation.
-To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
+[![CI Status](http://img.shields.io/travis/Alooma/AloomaIosSDK.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIosSDK)
+[![Version](https://img.shields.io/cocoapods/v/AloomaIosSDK.svg?style=flat)](http://cocoapods.org/pods/AloomaIosSDK)
+[![License](https://img.shields.io/cocoapods/l/AloomaIosSDK.svg?style=flat)](http://cocoapods.org/pods/AloomaIosSDK)
+[![Platform](https://img.shields.io/cocoapods/p/AloomaIosSDK.svg?style=flat)](http://cocoapods.org/pods/AloomaIosSDK)
 
-**Want to Contribute?**
+## Usage
 
-The Mixpanel library for iOS is an open source project, and we'd love to see your contributions! We'd also love for you to come and work with us! Check out http://boards.greenhouse.io/mixpanel/jobs/25226#.U_4JXEhORKU for details.
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+## Requirements
+
+## Installation
+
+AloomaIosSDK is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "AloomaIosSDK"
+```
+
+## Author
+
+Alooma, oren@mobixon.com
+
+## License
+
+AloomaIosSDK is available under the MIT license. See the LICENSE file for more info.
