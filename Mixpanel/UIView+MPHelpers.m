@@ -89,7 +89,7 @@
 
 - (NSString *)mp_viewId
 {
-    return mp_encryptHelper(objc_getAssociatedObject(self, @selector(mixpanelViewId)));
+    return objc_getAssociatedObject(self, @selector(mixpanelViewId));
 }
 
 - (NSString *)mp_controllerVariable
@@ -113,7 +113,7 @@
             free(ivars);
         }
     }
-    return mp_encryptHelper(result);
+    return result;
 }
 
 /*
@@ -154,7 +154,7 @@
         }
         result = [[NSData dataWithBytes:data4 length:32] base64EncodedStringWithOptions:0];
     }
-    return mp_encryptHelper(result);
+    return result;
 }
 
 - (NSArray *)mp_encryptedTargetActions
@@ -183,7 +183,7 @@
             text = title;
         }
     }
-    return mp_encryptHelper(text);
+    return text;
 }
         
 static NSString* mp_encryptHelper(id input)
@@ -205,17 +205,17 @@ static NSString* mp_encryptHelper(id input)
 #pragma mark - Aliases for compatibility
 - (NSString *)mp_varA
 {
-    return [self mp_viewId];
+    return mp_encryptHelper([self mp_viewId]);
 }
 
 - (NSString *)mp_varB
 {
-    return [self mp_controllerVariable];
+    return mp_encryptHelper([self mp_controllerVariable]);
 }
 
 - (NSString *)mp_varC
 {
-    return [self mp_imageFingerprint];
+    return mp_encryptHelper([self mp_imageFingerprint]);
 }
 
 - (NSArray *)mp_varSetD
@@ -225,7 +225,7 @@ static NSString* mp_encryptHelper(id input)
 
 - (NSString *)mp_varE
 {
-    return [self mp_text];
+    return mp_encryptHelper([self mp_text]);
 }
 
 @end
