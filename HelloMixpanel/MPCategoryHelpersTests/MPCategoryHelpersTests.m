@@ -17,7 +17,7 @@
 
 @implementation MPCategoryHelpersTests
 
-- (void) testExistance
+- (void)testExistence
 {
     UIView *v1 = [[UIView alloc] init];
     XCTAssert([v1 respondsToSelector:@selector(mp_varA)]);
@@ -26,7 +26,7 @@
     XCTAssert([v1 respondsToSelector:@selector(mp_varSetD)]);
     XCTAssert([v1 respondsToSelector:@selector(mp_varE)]);
     
-    XCTAssertFalse([v1 respondsToSelector:@selector(mp_nonexistant)]);
+    XCTAssertFalse([v1 respondsToSelector:@selector(mp_nonexistent)]);
 }
 
 - (void)testFingerprinting
