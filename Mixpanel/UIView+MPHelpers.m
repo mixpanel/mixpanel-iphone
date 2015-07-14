@@ -87,16 +87,12 @@
     objc_setAssociatedObject(self, @selector(mixpanelViewId), [object copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-
-// mp_viewId
-//
-- (NSString *)mp_varA
+- (NSString *)mp_viewId
 {
     return mp_encryptHelper(objc_getAssociatedObject(self, @selector(mixpanelViewId)));
 }
 
-// mp_controllerVariable
-- (NSString *)mp_varB
+- (NSString *)mp_controllerVariable
 {
     NSString *result = nil;
     if ([self isKindOfClass:[UIControl class]]) {
@@ -121,8 +117,6 @@
 }
 
 /*
- mp_imageFingerprint
- 
  Creates a short string which is a fingerprint of a UIButton's image property.
  It does this by downsampling the image to 8x8 and then downsampling the resulting
  32bit pixel data to 8 bit. This should allow us to select images that are identical or
@@ -131,7 +125,7 @@
  Returns a base64 encoded string representing an 8x8 bitmap of 8 bit rgba data
  (2 bits per component).
  */
-- (NSString *)mp_varC
+- (NSString *)mp_imageFingerprint
 {
     NSString *result = nil;
     UIImage *originalImage = nil;
@@ -163,8 +157,7 @@
     return mp_encryptHelper(result);
 }
 
-// alias for mp_targetActions
-- (NSArray *)mp_varSetD
+- (NSArray *)mp_encryptedTargetActions
 {
     NSArray *targetActions = [self mp_targetActions];
     NSMutableArray *encryptedActions = [NSMutableArray array];
@@ -174,8 +167,7 @@
     return encryptedActions;
 }
 
-// mp_text
-- (NSString *)mp_varE
+- (NSString *)mp_text
 {
     NSString *text = nil;
     SEL titleSelector = NSSelectorFromString(@"title");
@@ -208,6 +200,32 @@ static NSString* mp_encryptHelper(id input)
         }
     }
     return encryptedStuff;
+}
+
+#pragma mark - Aliases for compatibility
+- (NSString *)mp_varA
+{
+    return [self mp_viewId];
+}
+
+- (NSString *)mp_varB
+{
+    return [self mp_controllerVariable];
+}
+
+- (NSString *)mp_varC
+{
+    return [self mp_imageFingerprint];
+}
+
+- (NSArray *)mp_varSetD
+{
+    return [self mp_encryptedTargetActions];
+}
+
+- (NSString *)mp_varE
+{
+    return [self mp_text];
 }
 
 @end
