@@ -157,16 +157,6 @@
     return result;
 }
 
-- (NSArray *)mp_encryptedTargetActions
-{
-    NSArray *targetActions = [self mp_targetActions];
-    NSMutableArray *encryptedActions = [NSMutableArray array];
-    for (int i = 0 ; i < [targetActions count]; i++) {
-        [encryptedActions addObject:mp_encryptHelper(targetActions[i])];
-    }
-    return encryptedActions;
-}
-
 - (NSString *)mp_text
 {
     NSString *text = nil;
@@ -220,7 +210,12 @@ static NSString* mp_encryptHelper(id input)
 
 - (NSArray *)mp_varSetD
 {
-    return [self mp_encryptedTargetActions];
+    NSArray *targetActions = [self mp_targetActions];
+    NSMutableArray *encryptedActions = [NSMutableArray array];
+    for (int i = 0 ; i < [targetActions count]; i++) {
+        [encryptedActions addObject:mp_encryptHelper(targetActions[i])];
+    }
+    return encryptedActions;
 }
 
 - (NSString *)mp_varE
