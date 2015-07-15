@@ -952,12 +952,11 @@
  @method
  
  @abstract
- Tells the delegate that mixpanel checked for notifications and surveys on applicationDidBecomeActive
+ Tells the delegate that mixpanel checked for notifications and surveys on applicationDidBecomeActive.
  
  @discussion
- This is an optional delegate method added to the Mixpanel library. The intention 
- is to allow the host application know if Mixpanel is going to display a notification
- and make UI adjustments if necessary.
+ Gives the host application the opportunity to know if Mixpanel is going to display a notification or
+ survey.
  
  @param mixpanel        Mixpanel API instance
  @param notifications   Array of notifications
