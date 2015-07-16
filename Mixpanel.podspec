@@ -18,12 +18,6 @@ Pod::Spec.new do |s|
     ss.libraries = 'icucore', 'MPCategoryHelpers'
   end
 
-  s.subspec 'MPCategoryHelpers' do |ss|
-    ss.preserve_paths = 'Mixpanel/MPCategoryHelpers.h'
-    ss.vendored_libraries = 'Mixpanel/libMPCategoryHelpers.a'
-    ss.libraries = 'MPCategoryHelpers'
-  end
-
   s.subspec 'AppExtension' do |ss|
     ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/NSData+MPBase64.{m,h}' ]
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
