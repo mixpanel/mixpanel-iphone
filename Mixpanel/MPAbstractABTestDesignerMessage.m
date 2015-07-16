@@ -21,12 +21,12 @@
     return [[self alloc] initWithType:type payload:payload];
 }
 
-- (id)initWithType:(NSString *)type
+- (instancetype)initWithType:(NSString *)type
 {
     return [self initWithType:type payload:@{}];
 }
 
-- (id)initWithType:(NSString *)type payload:(NSDictionary *)payload
+- (instancetype)initWithType:(NSString *)type payload:(NSDictionary *)payload
 {
     self = [super init];
     if (self) {
@@ -39,12 +39,12 @@
 
 - (void)setPayloadObject:(id)object forKey:(NSString *)key
 {
-    [_payload setObject:object ?: [NSNull null] forKey:key];
+    _payload[key] = object ?: [NSNull null];
 }
 
 - (id)payloadObjectForKey:(NSString *)key
 {
-    id object = [_payload objectForKey:key];
+    id object = _payload[key];
     return [object isEqual:[NSNull null]] ? nil : object;
 }
 

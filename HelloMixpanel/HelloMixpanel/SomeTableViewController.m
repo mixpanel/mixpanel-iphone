@@ -36,7 +36,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    cell.textLabel.text = [animals objectAtIndex:(unsigned)indexPath.row];
+    cell.textLabel.text = animals[(unsigned)indexPath.row];
 
     return cell;
 }

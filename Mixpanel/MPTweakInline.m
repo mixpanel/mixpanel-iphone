@@ -23,64 +23,64 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
   if (strcmp(*entry->encoding, @encode(BOOL)) == 0) {
     tweak.defaultValue = @(*(BOOL *)entry->value);
   } else if (strcmp(*entry->encoding, @encode(float)) == 0) {
-    tweak.defaultValue = [NSNumber numberWithFloat:*(float *)entry->value];
+    tweak.defaultValue = @(*(float *)entry->value);
     if (entry->min != NULL && entry->max != NULL) {
-      tweak.minimumValue = [NSNumber numberWithFloat:*(float *)entry->min];
-      tweak.maximumValue = [NSNumber numberWithFloat:*(float *)entry->max];
+      tweak.minimumValue = @(*(float *)entry->min);
+      tweak.maximumValue = @(*(float *)entry->max);
     }
   } else if (strcmp(*entry->encoding, @encode(double)) == 0) {
-    tweak.defaultValue = [NSNumber numberWithDouble:*(double *)entry->value];
+    tweak.defaultValue = @(*(double *)entry->value);
     if (entry->min != NULL && entry->max != NULL) {
-      tweak.minimumValue = [NSNumber numberWithDouble:*(double *)entry->min];
-      tweak.maximumValue = [NSNumber numberWithDouble:*(double *)entry->max];
+      tweak.minimumValue = @(*(double *)entry->min);
+      tweak.maximumValue = @(*(double *)entry->max);
     }
   } else if (strcmp(*entry->encoding, @encode(short)) == 0) {
-      tweak.defaultValue = [NSNumber numberWithShort:*(short *)entry->value];
+      tweak.defaultValue = @(*(short *)entry->value);
       if (entry->min != NULL && entry->max != NULL) {
-          tweak.minimumValue = [NSNumber numberWithShort:*(short *)entry->min];
-          tweak.maximumValue = [NSNumber numberWithShort:*(short *)entry->max];
+          tweak.minimumValue = @(*(short *)entry->min);
+          tweak.maximumValue = @(*(short *)entry->max);
       }
   } else if (strcmp(*entry->encoding, @encode(unsigned short)) == 0) {
-      tweak.defaultValue = [NSNumber numberWithUnsignedShort:*(unsigned short int *)entry->value];
+      tweak.defaultValue = @(*(unsigned short int *)entry->value);
       if (entry->min != NULL && entry->max != NULL) {
-          tweak.minimumValue = [NSNumber numberWithUnsignedShort:*(unsigned short *)entry->min];
-          tweak.maximumValue = [NSNumber numberWithUnsignedShort:*(unsigned short *)entry->max];
+          tweak.minimumValue = @(*(unsigned short *)entry->min);
+          tweak.maximumValue = @(*(unsigned short *)entry->max);
       }
   } else if (strcmp(*entry->encoding, @encode(int)) == 0) {
-    tweak.defaultValue = [NSNumber numberWithInt:*(int *)entry->value];
+    tweak.defaultValue = @(*(int *)entry->value);
     if (entry->min != NULL && entry->max != NULL) {
-      tweak.minimumValue = [NSNumber numberWithInt:*(int *)entry->min];
-      tweak.maximumValue = [NSNumber numberWithInt:*(int *)entry->max];
+      tweak.minimumValue = @(*(int *)entry->min);
+      tweak.maximumValue = @(*(int *)entry->max);
     }
   } else if (strcmp(*entry->encoding, @encode(uint)) == 0) {
-    tweak.defaultValue = [NSNumber numberWithUnsignedInt:*(uint *)entry->value];
+    tweak.defaultValue = @(*(uint *)entry->value);
     if (entry->min != NULL && entry->max != NULL) {
-      tweak.minimumValue = [NSNumber numberWithUnsignedInt:*(uint *)entry->min];
-      tweak.maximumValue = [NSNumber numberWithUnsignedInt:*(uint *)entry->max];
+      tweak.minimumValue = @(*(uint *)entry->min);
+      tweak.maximumValue = @(*(uint *)entry->max);
     }
   } else if (strcmp(*entry->encoding, @encode(long)) == 0) {
-      tweak.defaultValue = [NSNumber numberWithLong:*(long *)entry->value];
+      tweak.defaultValue = @(*(long *)entry->value);
       if (entry->min != NULL && entry->max != NULL) {
-          tweak.minimumValue = [NSNumber numberWithLong:*(long *)entry->min];
-          tweak.maximumValue = [NSNumber numberWithLong:*(long *)entry->max];
+          tweak.minimumValue = @(*(long *)entry->min);
+          tweak.maximumValue = @(*(long *)entry->max);
       }
   } else if (strcmp(*entry->encoding, @encode(unsigned long)) == 0) {
-      tweak.defaultValue = [NSNumber numberWithUnsignedLong:*(unsigned long *)entry->value];
+      tweak.defaultValue = @(*(unsigned long *)entry->value);
       if (entry->min != NULL && entry->max != NULL) {
-          tweak.minimumValue = [NSNumber numberWithUnsignedLong:*(unsigned long *)entry->min];
-          tweak.maximumValue = [NSNumber numberWithUnsignedLong:*(unsigned long *)entry->max];
+          tweak.minimumValue = @(*(unsigned long *)entry->min);
+          tweak.maximumValue = @(*(unsigned long *)entry->max);
       }
   } else if (strcmp(*entry->encoding, @encode(long long)) == 0) {
-      tweak.defaultValue = [NSNumber numberWithLongLong:*(long long *)entry->value];
+      tweak.defaultValue = @(*(long long *)entry->value);
       if (entry->min != NULL && entry->max != NULL) {
-          tweak.minimumValue = [NSNumber numberWithLongLong:*(long long *)entry->min];
-          tweak.maximumValue = [NSNumber numberWithLongLong:*(long long *)entry->max];
+          tweak.minimumValue = @(*(long long *)entry->min);
+          tweak.maximumValue = @(*(long long *)entry->max);
       }
   } else if (strcmp(*entry->encoding, @encode(unsigned long long)) == 0) {
-      tweak.defaultValue = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)entry->value];
+      tweak.defaultValue = @(*(unsigned long long *)entry->value);
       if (entry->min != NULL && entry->max != NULL) {
-          tweak.minimumValue = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)entry->min];
-          tweak.maximumValue = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)entry->max];
+          tweak.minimumValue = @(*(unsigned long long *)entry->min);
+          tweak.maximumValue = @(*(unsigned long long *)entry->max);
       }
   } else if (*entry->encoding[0] == '[') {
     // Assume it's a C string.

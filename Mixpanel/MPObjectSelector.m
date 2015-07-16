@@ -48,7 +48,7 @@
     return [[MPObjectSelector alloc] initWithString:string];
 }
 
-- (id)initWithString:(NSString *)string
+- (instancetype)initWithString:(NSString *)string
 {
     if (self = [super init]) {
         _string = string;
@@ -164,7 +164,7 @@
             NSString *predicateFormat;
             NSInteger index = 0;
             if ([_scanner scanInteger:&index] && [_scanner scanCharactersFromSet:_predicateEndChar intoString:nil]) {
-                filter.index = [NSNumber numberWithUnsignedInteger:(NSUInteger)index];
+                filter.index = @((NSUInteger)index);
             } else {
                 [_scanner scanUpToCharactersFromSet:_predicateEndChar intoString:&predicateFormat];
                 @try {
@@ -206,7 +206,7 @@
 
 @implementation MPObjectFilter
 
-- (id)init
+- (instancetype)init
 {
     if((self = [super init])) {
         self.unique = NO;

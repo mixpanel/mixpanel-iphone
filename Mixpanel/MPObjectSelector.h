@@ -13,7 +13,7 @@
 @property (nonatomic, strong, readonly) NSString *string;
 
 + (MPObjectSelector *)objectSelectorWithString:(NSString *)string;
-- (id)initWithString:(NSString *)string;
+- (instancetype)initWithString:(NSString *)string NS_DESIGNATED_INITIALIZER;
 
 - (NSArray *)selectFromRoot:(id)root;
 - (NSArray *)fuzzySelectFromRoot:(id)root;

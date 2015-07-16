@@ -11,6 +11,6 @@
 @interface MPUITableViewBinding : MPEventBinding
 
 - (instancetype)init __unavailable;
-- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path withDelegate:(Class)delegateClass;
+- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path withDelegate:(Class)delegateClass NS_DESIGNATED_INITIALIZER;
 
 @end
