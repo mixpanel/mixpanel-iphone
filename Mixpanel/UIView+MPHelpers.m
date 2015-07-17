@@ -71,7 +71,7 @@
                     for (NSString *action in actions) {
                         if ([ignoreActions indexOfObject:action] == NSNotFound)
                         {
-                            [targetActions addObject:[NSString stringWithFormat:@"%lu/%@", event, action]];
+                            [targetActions addObject:[NSString stringWithFormat:@"%lu/%@", (unsigned long)event, action]];
                         }
                     }
                 }
@@ -81,6 +81,8 @@
     return [targetActions copy];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
 // Set by a userDefinedRuntimeAttr in the MPTagNibs.rb script
 - (void)setMixpanelViewId:(id)object
 {
@@ -91,6 +93,7 @@
 {
     return objc_getAssociatedObject(self, @selector(mixpanelViewId));
 }
+#pragma clang diagnostic pop
 
 - (NSString *)mp_controllerVariable
 {
@@ -183,7 +186,7 @@ static NSString* mp_encryptHelper(id input)
     if ([input isKindOfClass:[NSString class]]) {
         NSData *data = [[input stringByAppendingString:SALT]  dataUsingEncoding:NSASCIIStringEncoding];
         uint8_t digest[CC_SHA256_DIGEST_LENGTH];
-        CC_SHA256(data.bytes, data.length, digest);
+        CC_SHA256(data.bytes, (CC_LONG)data.length, digest);
         encryptedStuff = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];
         for (int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++) {
             [encryptedStuff appendFormat:@"%02x", digest[i]];
@@ -212,7 +215,7 @@ static NSString* mp_encryptHelper(id input)
 {
     NSArray *targetActions = [self mp_targetActions];
     NSMutableArray *encryptedActions = [NSMutableArray array];
-    for (int i = 0 ; i < [targetActions count]; i++) {
+    for (NSUInteger i = 0 ; i < [targetActions count]; i++) {
         [encryptedActions addObject:mp_encryptHelper(targetActions[i])];
     }
     return encryptedActions;

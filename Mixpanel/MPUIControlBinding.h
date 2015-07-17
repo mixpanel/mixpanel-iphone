@@ -16,8 +16,8 @@
 
 - (instancetype)init __unavailable;
 - (instancetype)initWithEventName:(NSString *)eventName
-                 onPath:(NSString *)path
-       withControlEvent:(UIControlEvents)controlEvent
-         andVerifyEvent:(UIControlEvents)verifyEvent NS_DESIGNATED_INITIALIZER;
+                           onPath:(NSString *)path
+                 withControlEvent:(UIControlEvents)controlEvent
+                   andVerifyEvent:(UIControlEvents)verifyEvent;
 
 @end
