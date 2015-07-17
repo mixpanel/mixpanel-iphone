@@ -537,6 +537,8 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
+        self.shownSurveyCollections = [NSMutableSet set];
+        self.decideResponseCached = NO;
         [self archive];
     });
 }
@@ -1491,6 +1493,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 [self.people append:@{@"$answers": answers[i]}];
             }
         }
+
+        [self flushPeople];
     }
 }
 
