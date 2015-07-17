@@ -14,8 +14,7 @@ Pod::Spec.new do |s|
     ss.source_files  = 'Mixpanel/**/*.{m,h}'
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
-    ss.dependency 'Mixpanel/MPCategoryHelpers'
-    ss.libraries = 'icucore', 'MPCategoryHelpers'
+    ss.libraries = 'icucore'
   end
 
   s.subspec 'AppExtension' do |ss|
