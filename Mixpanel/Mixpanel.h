@@ -962,6 +962,6 @@
  @param notifications   Array of notifications
  @param surveys         Array of surveys
  */
-- (void)mixpanelOnActiveCheck:(Mixpanel *)mixpanel forNotifications:(NSArray*)notifications andSurveys:(NSArray*)surveys;
+- (void)mixpanelOnActiveCheck:(Mixpanel *)mixpanel forNotifications:(NSArray *)notifications andSurveys:(NSArray *)surveys;
 
 @end
