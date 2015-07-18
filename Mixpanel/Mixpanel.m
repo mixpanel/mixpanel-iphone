@@ -136,6 +136,7 @@ static Mixpanel *sharedInstance = nil;
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
+        self.trackLocation = YES;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
 
@@ -633,7 +634,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
 
         NSString *requestData = [self encodeAPIData:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
+        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.trackLocation ? 1 : 0, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
