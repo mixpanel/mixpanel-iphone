@@ -957,6 +957,9 @@
  
  @discussion
  Return YES to have Mixpanel display a survey or notification immediately, NO to supress it.
+ objectArray contains MixpanelPresentationObject instances for all notifications and surveys 
+ available to be shown. Returning YES will display the first item in the array, preferring
+ notifications over surveys.
  
  @param mixpanel        Mixpanel API instance
  @param objectArray     Array of MixpanelPresentationObject instances.
