@@ -1503,8 +1503,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 [self.people append:@{@"$answers": answers[i]}];
             }
         }
-
-        [self flushPeople];
+        
+        dispatch_async(_serialQueue, ^{
+            [self flushPeople];
+        });
     }
 }
 
