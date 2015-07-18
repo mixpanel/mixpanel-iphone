@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 
 @class    MixpanelPeople;
+@class    MixpanelPresentationObject;
 @protocol MixpanelDelegate;
 
 /*!
@@ -952,16 +953,14 @@
  @method
  
  @abstract
- Tells the delegate that mixpanel checked for notifications and surveys on applicationDidBecomeActive.
+ Asks the delegate if notification or survey may be shown.
  
  @discussion
- Gives the host application the opportunity to know if Mixpanel is going to display a notification or
- survey.
+ Return YES to have Mixpanel display a survey or notification immediately, NO to supress it.
  
  @param mixpanel        Mixpanel API instance
- @param notifications   Array of notifications
- @param surveys         Array of surveys
+ @param objectArray     Array of MixpanelPresentationObject instances.
  */
-- (void)mixpanelOnActiveCheck:(Mixpanel *)mixpanel forNotifications:(NSArray *)notifications andSurveys:(NSArray *)surveys;
+- (BOOL)mixpanel:(Mixpanel *)mixpanel willShowNotificationOrSurveyFromArray:(NSArray *)objectArray;
 
 @end
