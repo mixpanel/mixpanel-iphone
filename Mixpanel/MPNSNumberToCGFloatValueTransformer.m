@@ -2,7 +2,6 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import "MPValueTransformers.h"
-#import <UIKit/UIKit.h>
 
 @implementation MPNSNumberToCGFloatValueTransformer
 
