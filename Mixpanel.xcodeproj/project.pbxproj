@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7C170C361A4A02F500D9E0F2 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */; };
-		7C170C3D1A4A02F500D9E0F2 /* MixpanelFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C3C1A4A02F500D9E0F2 /* MixpanelFrameworkTests.swift */; };
 		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */; };
@@ -139,25 +137,11 @@
 		7C170D4C1A4A05B400D9E0F2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */; };
 		7C170D4E1A4A05BE00D9E0F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */; };
 		7C170D501A4A05DD00D9E0F2 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4F1A4A05DD00D9E0F2 /* libicucore.dylib */; };
-		E3DA80701B3E277200157B98 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3DA806F1B3E277200157B98 /* libMPCategoryHelpers.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		7C170C371A4A02F500D9E0F2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7C170C211A4A02F500D9E0F2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7C170C291A4A02F500D9E0F2;
-			remoteInfo = MixpanelFramework;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C170C2E1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7C170C351A4A02F500D9E0F2 /* MixpanelFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = MixpanelFrameworkTests.xctest; path = MixpanelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C170C3B1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7C170C3C1A4A02F500D9E0F2 /* MixpanelFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixpanelFrameworkTests.swift; sourceTree = "<group>"; };
 		7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
 		7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
 		7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = Mixpanel/Media.xcassets; sourceTree = "<group>"; };
@@ -288,7 +272,6 @@
 		7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7C170D4F1A4A05DD00D9E0F2 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		E3DA806F1B3E277200157B98 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,15 +287,6 @@
 				7C170D461A4A05A000D9E0F2 /* Foundation.framework in Frameworks */,
 				7C170D441A4A059800D9E0F2 /* Accelerate.framework in Frameworks */,
 				7C170D421A4A059400D9E0F2 /* UIKit.framework in Frameworks */,
-				E3DA80701B3E277200157B98 /* libMPCategoryHelpers.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7C170C321A4A02F500D9E0F2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C170C361A4A02F500D9E0F2 /* Mixpanel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,7 +297,6 @@
 			isa = PBXGroup;
 			children = (
 				7C170C2C1A4A02F500D9E0F2 /* Mixpanel */,
-				7C170C391A4A02F500D9E0F2 /* MixpanelFrameworkTests */,
 				7C170C2B1A4A02F500D9E0F2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -332,7 +305,6 @@
 			isa = PBXGroup;
 			children = (
 				7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */,
-				7C170C351A4A02F500D9E0F2 /* MixpanelFrameworkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -345,7 +317,6 @@
 				7C170D511A4A060300D9E0F2 /* Frameworks */,
 			);
 			name = Mixpanel;
-			path = MixpanelFramework;
 			sourceTree = "<group>";
 		};
 		7C170C2D1A4A02F500D9E0F2 /* Supporting Files */ = {
@@ -357,29 +328,11 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		7C170C391A4A02F500D9E0F2 /* MixpanelFrameworkTests */ = {
-			isa = PBXGroup;
-			children = (
-				7C170C3C1A4A02F500D9E0F2 /* MixpanelFrameworkTests.swift */,
-				7C170C3A1A4A02F500D9E0F2 /* Supporting Files */,
-			);
-			path = MixpanelFrameworkTests;
-			sourceTree = "<group>";
-		};
-		7C170C3A1A4A02F500D9E0F2 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7C170C3B1A4A02F500D9E0F2 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		7C170C461A4A035F00D9E0F2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */,
 				7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */,
-				E3DA806F1B3E277200157B98 /* libMPCategoryHelpers.a */,
 				7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */,
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
 				7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */,
@@ -604,24 +557,6 @@
 			productReference = 7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		7C170C341A4A02F500D9E0F2 /* MixpanelTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7C170C431A4A02F500D9E0F2 /* Build configuration list for PBXNativeTarget "MixpanelTests" */;
-			buildPhases = (
-				7C170C311A4A02F500D9E0F2 /* Sources */,
-				7C170C321A4A02F500D9E0F2 /* Frameworks */,
-				7C170C331A4A02F500D9E0F2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7C170C381A4A02F500D9E0F2 /* PBXTargetDependency */,
-			);
-			name = MixpanelTests;
-			productName = MixpanelFrameworkTests;
-			productReference = 7C170C351A4A02F500D9E0F2 /* MixpanelFrameworkTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -632,9 +567,6 @@
 				ORGANIZATIONNAME = "Justin Makaila";
 				TargetAttributes = {
 					7C170C291A4A02F500D9E0F2 = {
-						CreatedOnToolsVersion = 6.1.1;
-					};
-					7C170C341A4A02F500D9E0F2 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
@@ -652,7 +584,6 @@
 			projectRoot = "";
 			targets = (
 				7C170C291A4A02F500D9E0F2 /* Mixpanel */,
-				7C170C341A4A02F500D9E0F2 /* MixpanelTests */,
 			);
 		};
 /* End PBXProject section */
@@ -667,13 +598,6 @@
 				7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */,
 				7C170D3A1A4A035F00D9E0F2 /* test_variant.json in Resources */,
 				7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7C170C331A4A02F500D9E0F2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,23 +674,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7C170C311A4A02F500D9E0F2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7C170C3D1A4A02F500D9E0F2 /* MixpanelFrameworkTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7C170C381A4A02F500D9E0F2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7C170C291A4A02F500D9E0F2 /* Mixpanel */;
-			targetProxy = 7C170C371A4A02F500D9E0F2 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7C170C3E1A4A02F500D9E0F2 /* Debug */ = {
@@ -892,36 +800,6 @@
 			};
 			name = Release;
 		};
-		7C170C441A4A02F500D9E0F2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = MixpanelFrameworkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		7C170C451A4A02F500D9E0F2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = MixpanelFrameworkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -939,15 +817,6 @@
 			buildConfigurations = (
 				7C170C411A4A02F500D9E0F2 /* Debug */,
 				7C170C421A4A02F500D9E0F2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7C170C431A4A02F500D9E0F2 /* Build configuration list for PBXNativeTarget "MixpanelTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7C170C441A4A02F500D9E0F2 /* Debug */,
-				7C170C451A4A02F500D9E0F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
