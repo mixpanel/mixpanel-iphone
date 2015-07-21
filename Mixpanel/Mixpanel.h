@@ -543,6 +543,23 @@
 
 /*!
  @method
+ 
+ @abstract
+ Calls flush, then optionally archives and calls a handler when finished.
+ 
+ @discussion
+ When calling <code>flush</code> manually, it is sometimes important to verify
+ that the flush has finished before before further action is taken. This is
+ especially important when the app is in the background and could be suspended
+ at any time if protocol is not followed. Delegate methods like
+ <code>application:didReceiveRemoteNotification:fetchCompletionHandler:</code>
+ are called when an app is brought to the background and require a handler to
+ be called when it finishes.
+ */
+- (void)flushWithCompletion:(void (^)())handler;
+
+/*!
+ @method
 
  @abstract
  Writes current project info, including distinct ID, super properties and pending event
@@ -557,6 +574,34 @@
  */
 - (void)archive;
 
+/*!
+ @method
+
+ @abstract
+ Creates a distinct_id alias from alias to original id.
+
+ @discussion
+ This method is used to map an identifer called an alias to the existing Mixpanel
+ distinct id. This causes all events and people requests sent with the alias to be
+ mapped back to the original distinct id. The recommended usage pattern is to call
+ both createAlias: and identify: when the user signs up, and only identify: (with
+ their new user ID) when they log in. This will keep your signup funnels working
+ correctly.
+
+ <pre>
+ // This makes the current ID (an auto-generated GUID)
+ // and 'Alias' interchangeable distinct ids.
+ [mixpanel createAlias:@"Alias"
+    forDistinctID:mixpanel.distinctId];
+
+ // You must call identify if you haven't already
+ // (e.g., when your app launches).
+ [mixpanel identify:mixpanel.distinctId];
+</pre>
+
+@param alias 		the new distinct_id that should represent original
+@param distinctID 	the old distinct_id that alias will be mapped to
+ */
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 - (NSString *)libVersion;
@@ -680,7 +725,7 @@
  </pre>
 
  Please note that the core <code>Mixpanel</code> and
- <code>MixpanelPeople</code> classes share the <code>identify:<code> method.
+ <code>MixpanelPeople</code> classes share the <code>identify:</code> method.
  The <code>Mixpanel</code> <code>identify:</code> affects the
  <code>distinct_id</code> property of events sent by <code>track:</code> and
  <code>track:properties:</code> and determines which Mixpanel People user

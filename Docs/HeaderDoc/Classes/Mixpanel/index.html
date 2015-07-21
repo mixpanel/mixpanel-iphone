@@ -297,11 +297,19 @@ and People record queues to disk.
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/clearTimedEvents" target="_top">-clearTimedEvents</a></tt></dt>
 <dd><p>Clears all current event timers.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:" target="_top">-createAlias:forDistinctID:</a></tt></dt>
+<dd><p>Creates a distinct_id alias from alias to original id.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/currentSuperProperties" target="_top">-currentSuperProperties</a></tt></dt>
 <dd><p>Returns the currently set super properties.
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/flush" target="_top">-flush</a></tt></dt>
 <dd><p>Uploads queued data to the Mixpanel server.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/flushWithCompletion:" target="_top">-flushWithCompletion:</a></tt></dt>
+<dd><p>Calls flush, then optionally archives and calls a handler when finished.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/identify:" target="_top">-identify:</a></tt></dt>
@@ -429,6 +437,46 @@ though, for example, if you'd like to track app crashes from main.m.
 <div class='declaration_indent'>
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/clearTimedEvents //apple_ref/occ/data/Mixpanel/clearTimedEvents //apple_ref/occ/data/clearTimedEvents //apple_ref/occ/clconst/Mixpanel/clearTimedEvents " machineGenerated="true" --><span class="var">clearTimedEvents</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/clearTimedEvents;name=end --></pre>
 </div>
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;   name=Mixpanel::createAlias:forDistinctID: -->
+<a name="//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:"></a>
+<h3><a name="createAlias:forDistinctID:">createAlias:forDistinctID:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;name=start --><!-- begin abstract --><p>Creates a distinct_id alias from alias to original id.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/createAlias //apple_ref/occ/clm/Mixpanel/createAlias //apple_ref/occ/intfcm/Mixpanel/createAlias //apple_ref/occ/intfm/Mixpanel/createAlias //apple_ref/occ/func/createAlias //apple_ref/occ/ftmplt/Mixpanel/createAlias //apple_ref/occ/defn/createAlias //apple_ref/occ/macro/createAlias //apple_ref/doc/anysymbol/createAlias" machineGenerated="true" --><span class="function">createAlias</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span>)<span class="param">alias</span> <!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/forDistinctID //apple_ref/occ/clm/Mixpanel/forDistinctID //apple_ref/occ/intfcm/Mixpanel/forDistinctID //apple_ref/occ/intfm/Mixpanel/forDistinctID //apple_ref/occ/func/forDistinctID //apple_ref/occ/ftmplt/Mixpanel/forDistinctID //apple_ref/occ/defn/forDistinctID //apple_ref/occ/macro/forDistinctID //apple_ref/doc/anysymbol/forDistinctID" machineGenerated="true" --><span class="function">forDistinctID</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/distinctID //apple_ref/occ/data/Mixpanel/distinctID //apple_ref/occ/data/distinctID //apple_ref/occ/clconst/Mixpanel/distinctID " machineGenerated="true" --><span class="var">distinctID</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/createAlias:forDistinctID:/alias;   name=createAlias:forDistinctID:::alias -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/createAlias:forDistinctID:/alias"></a>
+<code>alias</code></dt><dd><p>the new distinct_id that should represent original</dd>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/createAlias:forDistinctID:/distinctID;   name=createAlias:forDistinctID:::distinctID -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/createAlias:forDistinctID:/distinctID"></a>
+<code>distinctID</code></dt><dd><p>the old distinct_id that alias will be mapped to</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;name=start --><p>This method is used to map an identifer called an alias to the existing Mixpanel
+distinct id. This causes all events and people requests sent with the alias to be
+mapped back to the original distinct id. The recommended usage pattern is to call
+both createAlias: and identify: when the user signs up, and only identify: (with
+their new user ID) when they log in. This will keep your signup funnels working
+correctly.
+</p>
+ <pre>
+ // This makes the current ID (an auto-generated GUID)
+ // and 'Alias' interchangeable distinct ids.
+ [mixpanel createAlias:@"Alias"
+    forDistinctID:mixpanel.distinctId];
+
+ // You must call identify if you haven't already
+ // (e.g., when your app launches).
+ [mixpanel identify:mixpanel.distinctId];
+</pre>
+
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/createAlias:forDistinctID:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/currentSuperProperties;   name=Mixpanel::currentSuperProperties -->
 <a name="//apple_ref/occ/instm/Mixpanel/currentSuperProperties"></a>
 <h3><a name="currentSuperProperties">currentSuperProperties</a></h3>
@@ -452,6 +500,24 @@ default for <code>flushInvterval</code>), and on background (since
 <code>flushOnBackground</code> is on by default). You only need to call this
 method manually if you want to force a flush at a particular moment.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/flush;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;   name=Mixpanel::flushWithCompletion: -->
+<a name="//apple_ref/occ/instm/Mixpanel/flushWithCompletion:"></a>
+<h3><a name="flushWithCompletion:">flushWithCompletion:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;name=start --><!-- begin abstract --><p>Calls flush, then optionally archives and calls a handler when finished.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/flushWithCompletion //apple_ref/occ/clm/Mixpanel/flushWithCompletion //apple_ref/occ/intfcm/Mixpanel/flushWithCompletion //apple_ref/occ/intfm/Mixpanel/flushWithCompletion //apple_ref/occ/func/flushWithCompletion //apple_ref/occ/ftmplt/Mixpanel/flushWithCompletion //apple_ref/occ/defn/flushWithCompletion //apple_ref/occ/macro/flushWithCompletion //apple_ref/doc/anysymbol/flushWithCompletion" machineGenerated="true" --><span class="function">flushWithCompletion</span><!-- /a -->:(void (^)())<!-- a logicalPath="//apple_ref/occ/econst/handler //apple_ref/occ/data/Mixpanel/handler //apple_ref/occ/data/handler //apple_ref/occ/clconst/Mixpanel/handler " machineGenerated="true" --><span class="var">handler</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;name=start --><p>When calling <code>flush</code> manually, it is sometimes important to verify
+that the flush has finished before before further action is taken. This is
+especially important when the app is in the background and could be suspended
+at any time if protocol is not followed. Delegate methods like
+<code>application:didReceiveRemoteNotification:fetchCompletionHandler:</code>
+are called when an app is brought to the background and require a handler to
+be called when it finishes.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/flushWithCompletion:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/identify:;   name=Mixpanel::identify: -->
 <a name="//apple_ref/occ/instm/Mixpanel/identify:"></a>
 <h3><a name="identify:">identify:</a></h3>
@@ -1224,7 +1290,7 @@ survey check retrieves at least 1 valid survey for the currently
 identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Monday, January 26, 2015
+<p class="hd_timestamp">Last Updated: Thursday, July 16, 2015
 </p></div>
 </td></tr></table>
 </body></html>

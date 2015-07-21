@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
+[![Cocoapods Version](http://img.shields.io/cocoapods/v/Mixpanel.svg?style=flat)](https://mixpanel.com)
+[![Apache License](http://img.shields.io/cocoapods/l/Mixpanel.svg?style=flat)](https://mixpanel.com)
 
 Mixpanel supports `Cocoapods` for easy installation.
 To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**

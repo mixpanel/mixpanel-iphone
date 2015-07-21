@@ -33,7 +33,7 @@
 + (id)bindngWithJSONObject:(id)object;
 
 - (instancetype)init __unavailable;
-- (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path;
+- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
 /*!
  Intercepts track calls and adds a property indicating the track event

@@ -59,7 +59,7 @@
 #endif
 
 
-typedef enum  {
+typedef NS_OPTIONS(unsigned int, MPOpCode)  {
     MPOpCodeTextFrame = 0x1,
     MPOpCodeBinaryFrame = 0x2,
     // 3-7 reserved.
@@ -67,9 +67,9 @@ typedef enum  {
     MPOpCodePing = 0x9,
     MPOpCodePong = 0xA,
     // B-F reserved.
-} MPOpCode;
+};
 
-typedef enum {
+typedef NS_ENUM(unsigned int, MPStatusCode) {
     MPStatusCodeNormal = 1000,
     MPStatusCodeGoingAway = 1001,
     MPStatusCodeProtocolError = 1002,
@@ -80,7 +80,7 @@ typedef enum {
     MPStatusCodeInvalidUTF8 = 1007,
     MPStatusCodePolicyViolated = 1008,
     MPStatusCodeMessageTooBig = 1009,
-} MPStatusCode;
+};
 
 typedef struct {
     BOOL fin;
@@ -179,7 +179,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 // This class is not thread-safe, and is expected to always be run on the same queue.
 @interface MPIOConsumerPool : NSObject
 
-- (id)initWithBufferCapacity:(NSUInteger)poolSize;
+- (instancetype)initWithBufferCapacity:(NSUInteger)poolSize NS_DESIGNATED_INITIALIZER;
 
 - (MPIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
 - (void)returnConsumer:(MPIOConsumer *)consumer;
@@ -293,7 +293,7 @@ static __strong NSData *CRLFCRLF;
     CRLFCRLF = [[NSData alloc] initWithBytes:"\r\n\r\n" length:4];
 }
 
-- (id)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
+- (instancetype)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
 {
     self = [super init];
     if (self) {
@@ -309,17 +309,17 @@ static __strong NSData *CRLFCRLF;
     return self;
 }
 
-- (id)initWithURLRequest:(NSURLRequest *)request;
+- (instancetype)initWithURLRequest:(NSURLRequest *)request;
 {
     return [self initWithURLRequest:request protocols:nil];
 }
 
-- (id)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url;
 {
     return [self initWithURL:url protocols:nil];
 }
 
-- (id)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
+- (instancetype)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
 {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     return [self initWithURLRequest:request protocols:protocols];
@@ -456,13 +456,13 @@ static __strong NSData *CRLFCRLF;
 
     if (responseCode >= 400) {
         MixpanelError(@"Request failed with response code %d", responseCode);
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode] forKey:NSLocalizedDescriptionKey]]];
+        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode]}]];
         return;
 
     }
 
     if(![self _checkHandshake:_receivedHTTPHeaders]) {
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"] forKey:NSLocalizedDescriptionKey]]];
+        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"]}]];
         return;
     }
 
@@ -470,7 +470,7 @@ static __strong NSData *CRLFCRLF;
     if (negotiatedProtocol) {
         // Make sure we requested the protocol
         if ([_requestedProtocols indexOfObject:negotiatedProtocol] == NSNotFound) {
-            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Server specified Sec-WebSocket-Protocol that wasn't requested"] forKey:NSLocalizedDescriptionKey]]];
+            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Server specified Sec-WebSocket-Protocol that wasn't requested"]}]];
             return;
         }
 
@@ -486,7 +486,7 @@ static __strong NSData *CRLFCRLF;
     [self _performDelegateBlock:^{
         if ([self.delegate respondsToSelector:@selector(webSocketDidOpen:)]) {
             [self.delegate webSocketDidOpen:self];
-        };
+        }
     }];
 }
 
@@ -573,11 +573,11 @@ static __strong NSData *CRLFCRLF;
 
         // If we're using pinned certs, don't validate the certificate chain
         if ([_urlRequest mp_SSLPinnedCertificates].count) {
-            [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
+            [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
         }
 
 #if DEBUG
-        [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
+        [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
         MixpanelDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
@@ -1067,7 +1067,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     if (dataLength - _outputBufferOffset > 0 && _outputStream.hasSpaceAvailable) {
         NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
-            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
+            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:@{NSLocalizedDescriptionKey: @"Error writing to stream"}]];
              return;
         }
 
@@ -1091,7 +1091,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 
 
         for (NSArray *runLoop in [_scheduledRunloops copy]) {
-            [self unscheduleFromRunLoop:[runLoop objectAtIndex:0] forMode:[runLoop objectAtIndex:1]];
+            [self unscheduleFromRunLoop:runLoop[0] forMode:runLoop[1]];
         }
 
         if (!_failed) {
@@ -1180,7 +1180,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
         return didWork;
     }
 
-    MPIOConsumer *consumer = [_consumers objectAtIndex:0];
+    MPIOConsumer *consumer = _consumers[0];
 
     size_t bytesNeeded = consumer.bytesNeeded;
 
@@ -1391,7 +1391,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
             if (!_pinnedCertFound) {
                 dispatch_async(_workQueue, ^{
-                    [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:23556 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid server cert"] forKey:NSLocalizedDescriptionKey]]];
+                    [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:23556 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid server cert"]}]];
                 });
                 return;
             }
@@ -1467,7 +1467,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                     if (bytes_read != bufferSize) {
                         break;
                     }
-                };
+                }
                 [self _pumpScanner];
                 break;
             }
@@ -1515,7 +1515,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     NSMutableArray *_bufferedConsumers;
 }
 
-- (id)initWithBufferCapacity:(NSUInteger)poolSize;
+- (instancetype)initWithBufferCapacity:(NSUInteger)poolSize;
 {
     self = [super init];
     if (self) {
@@ -1525,7 +1525,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     return self;
 }
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithBufferCapacity:8];
 }
@@ -1692,7 +1692,7 @@ static NSRunLoop *networkRunLoop = nil;
     mp_dispatch_release(_waitGroup);
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

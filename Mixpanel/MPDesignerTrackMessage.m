@@ -24,12 +24,12 @@
     return[[self alloc] initWithType:@"track_message" andPayload:payload];
 }
 
-- (id)initWithType:(NSString *)type
+- (instancetype)initWithType:(NSString *)type
 {
     return [self initWithType:type andPayload:@{}];
 }
 
-- (id)initWithType:(NSString *)type andPayload:(NSDictionary *)payload
+- (instancetype)initWithType:(NSString *)type andPayload:(NSDictionary *)payload
 {
     if (self = [super initWithType:type]) {
         _payload = payload;
