@@ -153,7 +153,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 @end
 
-NSString *const AloomaWebSocketErrorDomain = @"com.mixpanel.error.WebSocket";
+NSString *const AloomaWebSocketErrorDomain = @"com.alooma.error.WebSocket";
 
 // Returns number of bytes consumed. Returning 0 means you didn't match.
 // Sends bytes to callback handler;
@@ -405,7 +405,7 @@ static __strong NSData *CRLFCRLF;
 - (void)open;
 {
     assert(_url);
-    NSAssert(_readyState == AloomaWebSocketStateConnecting, @"Cannot call -(void)open on MPWebSocket more than once");
+    NSAssert(_readyState == AloomaWebSocketStateConnecting, @"Cannot call -(void)open on AloomaWebSocket more than once");
 
     _selfRetain = self;
 
@@ -1670,7 +1670,7 @@ static NSRunLoop *networkRunLoop = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         networkThread = [[_AloomaRunLoopThread alloc] init];
-        networkThread.name = @"com.mixpanel.WebSocket.NetworkThread";
+        networkThread.name = @"com.alooma.WebSocket.NetworkThread";
         [networkThread start];
         networkRunLoop = networkThread.runLoop;
     });

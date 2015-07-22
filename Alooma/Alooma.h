@@ -296,7 +296,7 @@
  stop and be added as a property.
 
  @param event           event name
- @param arguments       arguments dictionary
+ @param properties      properties dictionary
  */
 - (void)track:(NSString *)event customEvent:(NSDictionary *)customEvent;
 
@@ -315,7 +315,7 @@
  stop and be added as a property.
  
  @param event           event name
- @param arguments       arguments dictionary
+ @param properties      properties dictionary
  */
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 

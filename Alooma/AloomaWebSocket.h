@@ -65,7 +65,7 @@ extern NSString *const AloomaWebSocketErrorDomain;
 - (void)scheduleInRunLoop:(NSRunLoop *)aRunLoop forMode:(NSString *)mode;
 - (void)unscheduleFromRunLoop:(NSRunLoop *)aRunLoop forMode:(NSString *)mode;
 
-// MPWebSockets are intended for one-time-use only.  Open should be called once and only once.
+// AloomaWebSockets are intended for one-time-use only.  Open should be called once and only once.
 - (void)open;
 
 - (void)close;

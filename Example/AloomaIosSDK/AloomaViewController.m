@@ -42,7 +42,7 @@
 }
 
 - (IBAction)sendTextArgsEventButtonClicked:(id)sender {
-    [[Alooma sharedInstance] track:self.eventTextField.text arguments:@{ @"key1" : @"val1", @"key2" : @"val2", @"key3" : @"val3", @"key4" : @"val4", @"key5" : @"val5"}];
+    [[Alooma sharedInstance] track:self.eventTextField.text customEvent:@{ @"key1" : @"val1", @"key2" : @"val2", @"key3" : @"val3", @"key4" : @"val4", @"key5" : @"val5"}];
 }
 
 #pragma mark UITextFieldDelegate methods

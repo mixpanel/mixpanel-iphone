@@ -519,7 +519,7 @@
 				INFOPLIST_FILE = "AloomaIosSDK/AloomaIosSDK-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a5b18549-eb84-4eb5-b044-ca4c0266c6b0";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -535,7 +535,7 @@
 				INFOPLIST_FILE = "AloomaIosSDK/AloomaIosSDK-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a5b18549-eb84-4eb5-b044-ca4c0266c6b0";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

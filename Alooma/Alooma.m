@@ -29,6 +29,9 @@
 
 #define VERSION @"2.8.1"
 
+static NSString * const kSendingTimePlaceHolder = @"<SendingTimePlaceHolder>";
+static NSString * const kSendingTimeKey = @"sendingTime";
+
 @interface Alooma () <UIAlertViewDelegate>
 
 {
@@ -49,15 +52,6 @@
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
-
-//@property (nonatomic) BOOL decideResponseCached;
-
-//@property (nonatomic, strong) id abtestDesignerConnection;
-//@property (nonatomic, strong) NSSet *variants;
-//@property (nonatomic, strong) NSSet *eventBindings;
-
-//@property (atomic, copy) NSString *decideURL;
-//@property (atomic, copy) NSString *switchboardURL;
 
 @end
 
@@ -115,7 +109,7 @@ static Alooma *sharedInstance = nil;
         self.automaticProperties = [self collectAutomaticProperties];
         self.eventsQueue = [NSMutableArray array];
         self.taskId = UIBackgroundTaskInvalid;
-        NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
+        NSString *label = [NSString stringWithFormat:@"com.alooma.%@.%p", apiToken, self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
@@ -123,20 +117,11 @@ static Alooma *sharedInstance = nil;
         [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         self.timedEvents = [NSMutableDictionary dictionary];
 
-//        self.decideResponseCached = NO;
-//        self.variants = nil;
 
 #if !defined(ALOOMA_APP_EXTENSION)
         [self setUpListeners];
 #endif
         [self unarchive];
-#if !defined(ALOOMA_APP_EXTENSION)
-//        [self executeCachedVariants];
-//        [self executeCachedEventBindings];
-#if defined(DEBUG) && !defined(DISABLE_MIXPANEL_AB_DESIGNER)
-//        [self connectToABTestDesigner:YES];
-#endif
-#endif
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
@@ -331,8 +316,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)track:(NSString *)event properties:(NSDictionary *)properties customEvent:(NSDictionary*)customEvent
 {
     if (event == nil || [event length] == 0) {
-        AloomaError(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
-//        event = @"mp_event";
+        AloomaError(@"%@ Alooma track called with empty event parameter. not using an event", self);
     }
     properties = [properties copy];
     [Alooma assertPropertyTypes:properties];
@@ -370,6 +354,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [args addEntriesFromDictionary:e];
             e = args;
         }
+        [e setObject:kSendingTimePlaceHolder forKey:kSendingTimeKey];
         AloomaDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if ([self.eventsQueue count] > 500) {
@@ -575,6 +560,12 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
 
+        // adding Sending Timestamp
+        double epochInterval = [[NSDate date] timeIntervalSince1970];
+        for (NSMutableDictionary *event in batch){
+            [event setObject:@(round(epochInterval)) forKey:kSendingTimeKey];
+        }
+        
         NSString *requestData = [self encodeAPIData:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=1&data=%@", requestData];
         AloomaDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
@@ -903,20 +894,6 @@ static __unused NSString *MPURLEncode(NSString *s)
                            selector:@selector(appLinksNotificationRaised:)
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
-
-//#if !defined(DISABLE_MIXPANEL_AB_DESIGNER)
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
-//        recognizer.minimumPressDuration = 3;
-//        recognizer.cancelsTouchesInView = NO;
-//#if TARGET_IPHONE_SIMULATOR
-//        recognizer.numberOfTouchesRequired = 2;
-//#else
-//        recognizer.numberOfTouchesRequired = 4;
-//#endif
-//        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
-//    });
-//#endif
 }
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
