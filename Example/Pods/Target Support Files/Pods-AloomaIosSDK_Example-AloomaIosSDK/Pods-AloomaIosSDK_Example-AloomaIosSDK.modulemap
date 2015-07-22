@@ -1,6 +1,0 @@
-framework module AloomaIosSDK {
-  umbrella header "Pods-AloomaIosSDK_Example-AloomaIosSDK-umbrella.h"
-
-  export *
-  module * { export * }
-}
