@@ -17,22 +17,22 @@ Pod::Spec.new do |s|
                        * Markdown format.
                        * Don't worry about the indent, we strip it!
                        DESC
-  s.homepage         = "https://OrenMobixon@bitbucket.org/aloomasdkiosteam/alooma-ios-sdk.git"
+  s.homepage         = "https://www.github.com/aloomaio/iossdk.git"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
-  s.license          = 'MIT'
-  s.author           = { "Alooma" => "oren@mobixon.com" }
-  s.source           = { :git => "https://OrenMobixon@bitbucket.org/aloomasdkiosteam/alooma-ios-sdk.git", :tag => s.version.to_s }
+  s.license          = 'Apache 2'
+  s.author           = { "Alooma" => "info@alooma.io" }
+  s.source           = { :git => "https://www.github.com/aloomaio/iossdk.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*'
+  s.source_files = 'Alooma/*'
   s.resource_bundles = {
-    'AloomaIosSDK' => ['Pod/Assets/*.png']
+    'AloomaIosSDK' => ['Alooma/*.png']
   }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  # s.public_header_files = 'Alooma/*.h'
   # s.frameworks = 'UIKit'
   s.library = 'icucore'
   # s.dependency 'AFNetworking', '~> 2.3'
