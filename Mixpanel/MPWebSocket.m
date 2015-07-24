@@ -376,8 +376,10 @@ static __strong NSData *CRLFCRLF;
     [_inputStream close];
     [_outputStream close];
 
-    mp_dispatch_release(_workQueue);
-    _workQueue = NULL;
+    if (_workQueue) {
+        mp_dispatch_release(_workQueue);
+        _workQueue = NULL;
+    }
 
     if (_receivedHTTPHeaders) {
         CFRelease(_receivedHTTPHeaders);
@@ -618,7 +620,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)close;
 {
-    [self closeWithCode:-1 reason:nil];
+    [self closeWithCode:MPStatusCodeNormal reason:nil];
 }
 
 - (void)closeWithCode:(NSInteger)code reason:(NSString *)reason;
@@ -817,7 +819,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     [self assertOnWorkQueue];
 
     if (self.readyState == MPWebSocketStateOpen) {
-        [self closeWithCode:1000 reason:nil];
+        [self closeWithCode:MPStatusCodeNormal reason:nil];
     }
     dispatch_async(_workQueue, ^{
         [self _disconnect];
@@ -1441,7 +1443,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages
                         [self _performDelegateBlock:^{
                             if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                                [self.delegate webSocket:self didCloseWithCode:0 reason:@"Stream end encountered" wasClean:NO];
+                                [self.delegate webSocket:self didCloseWithCode:MPStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
                             }
                         }];
                     }
@@ -1708,8 +1710,22 @@ static NSRunLoop *networkRunLoop = nil;
         _runLoop = [NSRunLoop currentRunLoop];
         dispatch_group_leave(_waitGroup);
 
-        NSTimer *timer = [[NSTimer alloc] initWithFireDate:[NSDate distantFuture] interval:0.0 target:nil selector:nil userInfo:nil repeats:NO];
-        [_runLoop addTimer:timer forMode:NSDefaultRunLoopMode];
+        // Add an empty run loop source to prevent runloop from spinning.
+        CFRunLoopSourceContext sourceCtx = {
+            .version = 0,
+            .info = NULL,
+            .retain = NULL,
+            .release = NULL,
+            .copyDescription = NULL,
+            .equal = NULL,
+            .hash = NULL,
+            .schedule = NULL,
+            .cancel = NULL,
+            .perform = NULL
+        };
+        CFRunLoopSourceRef source = CFRunLoopSourceCreate(NULL, 0, &sourceCtx);
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+        CFRelease(source);
 
         while ([_runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
 
