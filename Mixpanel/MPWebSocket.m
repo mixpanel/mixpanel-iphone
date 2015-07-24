@@ -1070,7 +1070,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
             [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:@{NSLocalizedDescriptionKey: @"Error writing to stream"}]];
-             return;
+            return;
         }
 
         _outputBufferOffset += (NSUInteger) bytesWritten;
@@ -1157,16 +1157,18 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
 - (void)_cleanupSelfReference
 {
     @synchronized(self) {
-        // Nuke NSStream delegate's
+        // Remove the delegates for each stream so we don't fire any events on
+        // close or error
         _inputStream.delegate = nil;
         _outputStream.delegate = nil;
         
-        // Remove the streams, right now, from the networkRunLoop
+        // Close the streams, which will immediately remove them from the run
+        // loop.
         [_inputStream close];
         [_outputStream close];
     }
     
-    // Cleanup selfRetain in the same GCD queue as usual
+    // Cleanup self reference in the same GCD queue as usual
     dispatch_async(_workQueue, ^{
         self->_selfRetain = nil;
     });
