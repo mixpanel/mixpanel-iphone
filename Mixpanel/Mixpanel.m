@@ -31,6 +31,7 @@
 #import "MPSwizzler.h"
 #import "MPVariant.h"
 #import "MPWebSocket.h"
+#import "MixpanelPresentationObject.h"
 
 #endif
 
@@ -1091,10 +1092,32 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSDate *start = [NSDate date];
 
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
-            if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
-                [self showNotificationWithObject:notifications[0]];
-            } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
-                [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
+            
+            BOOL showPresentationObject = YES;
+            if ([notifications count] > 0 || [surveys count] > 0) {
+                NSMutableArray *presentationObjects = [NSMutableArray new];
+                for (MPNotification *notif in notifications) {
+                    MixpanelPresentationObject *presentationObject = [[MixpanelPresentationObject alloc] initWithID:notif.ID
+                                                                                                         objectType:MPPresentationObjectTypeNotification];
+                    [presentationObjects addObject:presentationObject];
+                }
+                for (MPSurvey *survey in surveys) {
+                    MixpanelPresentationObject *presentationObject = [[MixpanelPresentationObject alloc] initWithID:survey.ID
+                                                                                                         objectType:MPPresentationObjectTypeSurvey];
+                    [presentationObjects addObject:presentationObject];
+                }
+                
+                __strong id<MixpanelDelegate> strongDelegate = self.delegate;
+                if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelOnActiveCheck:forNotifications:andSurveys:)]) {
+                    showPresentationObject = [strongDelegate mixpanel:self willShowNotificationOrSurveyFromArray:presentationObjects];
+                }
+            }
+            if (showPresentationObject) {
+                if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
+                    [self showNotificationWithObject:notifications[0]];
+                } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
+                    [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
+                }
             }
 
             dispatch_sync(dispatch_get_main_queue(), ^{

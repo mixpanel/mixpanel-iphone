@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 
 @class    MixpanelPeople;
+@class    MixpanelPresentationObject;
 @protocol MixpanelDelegate;
 
 /*!
@@ -947,5 +948,22 @@
  @param mixpanel        Mixpanel API instance
  */
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
+
+/*!
+ @method
+ 
+ @abstract
+ Asks the delegate if notification or survey may be shown.
+ 
+ @discussion
+ Return YES to have Mixpanel display a survey or notification immediately, NO to supress it.
+ objectArray contains MixpanelPresentationObject instances for all notifications and surveys 
+ available to be shown. Returning YES will display the first item in the array, preferring
+ notifications over surveys.
+ 
+ @param mixpanel        Mixpanel API instance
+ @param objectArray     Array of MixpanelPresentationObject instances.
+ */
+- (BOOL)mixpanel:(Mixpanel *)mixpanel willShowNotificationOrSurveyFromArray:(NSArray *)objectArray;
 
 @end
