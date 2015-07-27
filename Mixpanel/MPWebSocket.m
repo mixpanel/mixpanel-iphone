@@ -268,6 +268,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 
     BOOL _sentClose;
     BOOL _didFail;
+    BOOL _cleanupScheduled;
     int _closeCode;
 
     BOOL _isPumping;
@@ -376,8 +377,10 @@ static __strong NSData *CRLFCRLF;
     [_inputStream close];
     [_outputStream close];
 
-    mp_dispatch_release(_workQueue);
-    _workQueue = NULL;
+    if (_workQueue) {
+        mp_dispatch_release(_workQueue);
+        _workQueue = NULL;
+    }
 
     if (_receivedHTTPHeaders) {
         CFRelease(_receivedHTTPHeaders);
@@ -618,7 +621,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)close;
 {
-    [self closeWithCode:-1 reason:nil];
+    [self closeWithCode:MPStatusCodeNormal reason:nil];
 }
 
 - (void)closeWithCode:(NSInteger)code reason:(NSString *)reason;
@@ -647,8 +650,7 @@ static __strong NSData *CRLFCRLF;
         ((uint16_t *)mutablePayload.mutableBytes)[0] = EndianU16_BtoN(code);
 
         if (reason) {
-            NSRange remainingRange = { .location = 0, .length = 0 };
-
+            NSRange remainingRange = NSMakeRange(0, 0);
             NSUInteger usedLength = 0;
 
             BOOL success = [reason getBytes:(char *)mutablePayload.mutableBytes + sizeof(uint16_t) maxLength:payload.length - sizeof(uint16_t) usedLength:&usedLength encoding:NSUTF8StringEncoding options:NSStringEncodingConversionExternalRepresentation range:NSMakeRange(0, reason.length) remainingRange:&remainingRange];
@@ -689,11 +691,11 @@ static __strong NSData *CRLFCRLF;
             }];
 
             self.readyState = MPWebSocketStateClosed;
-            self->_selfRetain = nil;
 
             MixpanelError(@"Failing with error %@", error.localizedDescription);
 
             [self _disconnect];
+            [self _scheduleCleanup];
         }
     });
 }
@@ -817,7 +819,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     [self assertOnWorkQueue];
 
     if (self.readyState == MPWebSocketStateOpen) {
-        [self closeWithCode:1000 reason:nil];
+        [self closeWithCode:MPStatusCodeNormal reason:nil];
     }
     dispatch_async(_workQueue, ^{
         [self _disconnect];
@@ -1068,7 +1070,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
             [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:@{NSLocalizedDescriptionKey: @"Error writing to stream"}]];
-             return;
+            return;
         }
 
         _outputBufferOffset += (NSUInteger) bytesWritten;
@@ -1086,12 +1088,14 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         !_sentClose) {
         _sentClose = YES;
 
-        [_outputStream close];
-        [_inputStream close];
+        @synchronized(self) {
+            [_outputStream close];
+            [_inputStream close];
 
 
-        for (NSArray *runLoop in [_scheduledRunloops copy]) {
-            [self unscheduleFromRunLoop:runLoop[0] forMode:runLoop[1]];
+            for (NSArray *runLoop in [_scheduledRunloops copy]) {
+                [self unscheduleFromRunLoop:runLoop[0] forMode:runLoop[1]];
+            }
         }
 
         if (!_failed) {
@@ -1102,7 +1106,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
             }];
         }
 
-        _selfRetain = nil;
+        [self _scheduleCleanup];
     }
 }
 
@@ -1126,6 +1130,48 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     [self assertOnWorkQueue];
     [_consumers addObject:[_consumerPool consumerWithScanner:consumer handler:callback bytesNeeded:dataLength readToCurrentFrame:NO unmaskBytes:NO]];
     [self _pumpScanner];
+}
+
+- (void)_scheduleCleanup
+{
+    @synchronized(self) {
+        if (_cleanupScheduled) {
+            return;
+        }
+        
+        _cleanupScheduled = YES;
+        
+        // Cleanup NSStream delegate's in the same RunLoop used by the streams themselves:
+        // This way we'll prevent race conditions between handleEvent and SRWebsocket's dealloc
+        NSTimer *timer = [NSTimer timerWithTimeInterval:0.f
+                                                 target:self
+                                               selector:@selector(_cleanupSelfReference)
+                                               userInfo:nil
+                                                repeats:NO];
+        
+        [[NSRunLoop mp_networkRunLoop] addTimer:timer
+                                        forMode:NSDefaultRunLoopMode];
+    }
+}
+
+- (void)_cleanupSelfReference
+{
+    @synchronized(self) {
+        // Remove the delegates for each stream so we don't fire any events on
+        // close or error
+        _inputStream.delegate = nil;
+        _outputStream.delegate = nil;
+        
+        // Close the streams, which will immediately remove them from the run
+        // loop.
+        [_inputStream close];
+        [_outputStream close];
+    }
+    
+    // Cleanup self reference in the same GCD queue as usual
+    dispatch_async(_workQueue, ^{
+        self->_selfRetain = nil;
+    });
 }
 
 
@@ -1433,7 +1479,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                 } else {
                     if (self.readyState != MPWebSocketStateClosed) {
                         self.readyState = MPWebSocketStateClosed;
-                        self->_selfRetain = nil;
+                        [self _scheduleCleanup];
                     }
 
                     if (!self->_sentClose && !self->_failed) {
@@ -1441,7 +1487,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages
                         [self _performDelegateBlock:^{
                             if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                                [self.delegate webSocket:self didCloseWithCode:0 reason:@"Stream end encountered" wasClean:NO];
+                                [self.delegate webSocket:self didCloseWithCode:MPStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
                             }
                         }];
                     }
@@ -1708,8 +1754,22 @@ static NSRunLoop *networkRunLoop = nil;
         _runLoop = [NSRunLoop currentRunLoop];
         dispatch_group_leave(_waitGroup);
 
-        NSTimer *timer = [[NSTimer alloc] initWithFireDate:[NSDate distantFuture] interval:0.0 target:nil selector:nil userInfo:nil repeats:NO];
-        [_runLoop addTimer:timer forMode:NSDefaultRunLoopMode];
+        // Add an empty run loop source to prevent runloop from spinning.
+        CFRunLoopSourceContext sourceCtx = {
+            .version = 0,
+            .info = NULL,
+            .retain = NULL,
+            .release = NULL,
+            .copyDescription = NULL,
+            .equal = NULL,
+            .hash = NULL,
+            .schedule = NULL,
+            .cancel = NULL,
+            .perform = NULL
+        };
+        CFRunLoopSourceRef source = CFRunLoopSourceCreate(NULL, 0, &sourceCtx);
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+        CFRelease(source);
 
         while ([_runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
 
