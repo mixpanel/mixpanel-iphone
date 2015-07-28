@@ -942,8 +942,8 @@ static __unused NSString *MPURLEncode(NSString *s)
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_release"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_release"];
+    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version"];
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
     [p setValue:[self watchModel] forKey:@"$watch_model"];
