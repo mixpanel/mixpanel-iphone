@@ -1042,20 +1042,10 @@ static __unused NSString *MPURLEncode(NSString *s)
                            selector:@selector(appLinksNotificationRaised:)
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
-
-#if !defined(DISABLE_MIXPANEL_AB_DESIGNER)
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
-        recognizer.minimumPressDuration = 3;
-        recognizer.cancelsTouchesInView = NO;
-#if TARGET_IPHONE_SIMULATOR
-        recognizer.numberOfTouchesRequired = 2;
-#else
-        recognizer.numberOfTouchesRequired = 4;
-#endif
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
-    });
-#endif
+    [notificationCenter addObserver:self
+                           selector:@selector(windowDidBecomeKey:)
+                               name:UIWindowDidBecomeKeyNotification
+                             object:nil];
 }
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
@@ -1080,6 +1070,28 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     properties[@"$wifi"] = wifi ? @YES : @NO;
     self.automaticProperties = [properties copy];
     MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+}
+
+- (void)windowDidBecomeKey:(NSNotification *)notification {
+    // First clean up the observer so we don't receive this notification again.
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIWindowDidBecomeKeyNotification
+                                                  object:nil];
+    
+    // Next add the gesture recognizer, now that the window is ready
+#if !defined(DISABLE_MIXPANEL_AB_DESIGNER)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
+        recognizer.minimumPressDuration = 3;
+        recognizer.cancelsTouchesInView = NO;
+#if TARGET_IPHONE_SIMULATOR
+        recognizer.numberOfTouchesRequired = 2;
+#else
+        recognizer.numberOfTouchesRequired = 4;
+#endif
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
+    });
+#endif
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
