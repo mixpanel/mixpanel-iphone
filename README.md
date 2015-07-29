@@ -14,31 +14,8 @@ To Install, see our **[full documentation »](https://mixpanel.com/help/referenc
 
 # Carthage
 
-To install the `carthage` tool on your system, please download and run the `Carthage.pkg` file for the latest  [release](https://github.com/Carthage/Carthage/releases), then follow the on-screen instructions.
-
-Alternately, you can use [Homebrew](http://brew.sh) and install the `carthage` tool on your system simply by running `brew update` and `brew install carthage`.
-
-## Adding frameworks to an application
-
-Once you have Carthage installed, you can begin adding frameworks to your project. Note that Carthage only supports dynamic frameworks, which are **only available on iOS 8 or later**.
-
-## If you're building for iOS
-
-1. Create a [Cartfile][] that lists the frameworks you’d like to use in your project.
-1. Run `carthage update`. This will fetch dependencies into a [Carthage/Checkouts][] folder, then build each one.
-1. On your application targets’ “General” settings tab, in the “Linked Frameworks and Libraries” section, drag and drop each framework you want to use from the [Carthage/Build][] folder on disk.
-1. On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase”. Create a Run Script with the following contents:
-
-  ```sh
-  /usr/local/bin/carthage copy-frameworks
-  ```
-and add the paths to the frameworks you want to use under “Input Files”, e.g.:
-
-  ```
-  $(SRCROOT)/Carthage/Build/iOS/LlamaKit.framework
-  $(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework
-  ```
-This script works around an [App Store submission bug](http://www.openradar.me/radar?id=6409498411401216) triggered by universal binaries.
+Mixpanel also supports `Carthage` to package your dependencies as a framework.
+Check out the **[Carthage docs »](https://github.com/Carthage/Carthage)** for more info.
 
 # Manual Installation
 
