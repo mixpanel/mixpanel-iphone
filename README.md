@@ -1,15 +1,44 @@
 [![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
 [![Cocoapods Version](http://img.shields.io/cocoapods/v/Mixpanel.svg?style=flat)](https://mixpanel.com)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Apache License](http://img.shields.io/cocoapods/l/Mixpanel.svg?style=flat)](https://mixpanel.com)
 
 **Want to Contribute?**
 
 The Mixpanel library for iOS is an open source project, and we'd love to see your contributions! We'd also love for you to come and work with us! Check out http://boards.greenhouse.io/mixpanel/jobs/25226#.U_4JXEhORKU for details.
 
-# Painless Installation
+# Painless Installation (CocoaPods)
 
 Mixpanel supports `Cocoapods` for easy installation.
 To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
+
+# Carthage
+
+To install the `carthage` tool on your system, please download and run the `Carthage.pkg` file for the latest  [release](https://github.com/Carthage/Carthage/releases), then follow the on-screen instructions.
+
+Alternately, you can use [Homebrew](http://brew.sh) and install the `carthage` tool on your system simply by running `brew update` and `brew install carthage`.
+
+## Adding frameworks to an application
+
+Once you have Carthage installed, you can begin adding frameworks to your project. Note that Carthage only supports dynamic frameworks, which are **only available on iOS 8 or later**.
+
+## If you're building for iOS
+
+1. Create a [Cartfile][] that lists the frameworks you’d like to use in your project.
+1. Run `carthage update`. This will fetch dependencies into a [Carthage/Checkouts][] folder, then build each one.
+1. On your application targets’ “General” settings tab, in the “Linked Frameworks and Libraries” section, drag and drop each framework you want to use from the [Carthage/Build][] folder on disk.
+1. On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase”. Create a Run Script with the following contents:
+
+  ```sh
+  /usr/local/bin/carthage copy-frameworks
+  ```
+and add the paths to the frameworks you want to use under “Input Files”, e.g.:
+
+  ```
+  $(SRCROOT)/Carthage/Build/iOS/LlamaKit.framework
+  $(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework
+  ```
+This script works around an [App Store submission bug](http://www.openradar.me/radar?id=6409498411401216) triggered by universal binaries.
 
 # Manual Installation
 
