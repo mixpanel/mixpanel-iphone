@@ -29,7 +29,7 @@ typedef void (^_MPTweakBindObserverBlock)(id object);
   @param block The block to call on change.
   @return A new bind observer.
 */
-- (instancetype)initWithTweak:(MPTweak *)tweak block:(_MPTweakBindObserverBlock)block NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTweak:(MPTweak *)tweak block:(_MPTweakBindObserverBlock)block;
 
 /**
   @abstract Attaches to an object and deallocates with it.

@@ -23,7 +23,7 @@
 
 @interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
 
-- (instancetype)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration;
 
 @end
 

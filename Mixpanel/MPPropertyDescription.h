@@ -7,7 +7,7 @@
 
 @interface MPPropertySelectorParameterDescription : NSObject
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *type;
 
@@ -15,7 +15,7 @@
 
 @interface MPPropertySelectorDescription : NSObject
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @property (nonatomic, readonly) NSString *selectorName;
 @property (nonatomic, readonly) NSString *returnType;
 @property (nonatomic, readonly) NSArray *parameters; // array of MPPropertySelectorParameterDescription
@@ -24,7 +24,7 @@
 
 @interface MPPropertyDescription : NSObject
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
 @property (nonatomic, readonly) NSString *type;
 @property (nonatomic, readonly) BOOL readonly;

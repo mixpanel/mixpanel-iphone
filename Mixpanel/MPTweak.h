@@ -28,7 +28,7 @@ typedef id MPTweakValue;
   @abstract Creates a new tweak model.
   @discussion This is the designated initializer.
  */
-- (instancetype)initWithName:(NSString *)name andEncoding:(NSString *)encoding NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(NSString *)name andEncoding:(NSString *)encoding;
 
 /**
   @abstract This tweak's unique name.
