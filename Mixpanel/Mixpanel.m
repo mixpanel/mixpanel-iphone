@@ -106,7 +106,14 @@ static Mixpanel *sharedInstance = nil;
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[super alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:60];
+        
+#if defined(DEBUG)
+        const NSUInteger flushInterval = 1;
+#else
+        const NSUInteger flushInterval = 60;
+#endif
+        
+        sharedInstance = [[super alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
     });
     return sharedInstance;
 }
