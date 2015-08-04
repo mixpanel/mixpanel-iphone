@@ -11,6 +11,28 @@ The Mixpanel library for iOS is an open source project, and we'd love to see you
 Mixpanel supports `Cocoapods` for easy installation.
 To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
 
+If you choose to go with this method and want to activate the logging and debugging modes in the SDK
+(see "Debugging and logging" in **[the documentation »](https://mixpanel.com/help/reference/ios)**), you can use a
+`post_install` hook in your Podfile, like so:
+
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      settings = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
+      settings = ['$(inherited)'] if settings.nil?
+
+      if target.name == 'Pods-MyProject-Mixpanel'
+        settings << 'MIXPANEL_DEBUG=1'
+        settings << 'MIXPANEL_ERROR=1'
+      end
+
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = settings
+    end
+  end
+end
+```
+
 # Manual Installation
 
 To help users stay up to date with the latests version of our iOS SDK, we always recommend integrating our SDK via CocoaPods, which simplifies version updates and dependency management. However, there are cases where users can't use CocoaPods. Not to worry, just follow these manual installation steps and you'll be all set.
@@ -37,7 +59,7 @@ And drag and drop the Mixpanel folder into your XCode Project Workspace:
 
 ##Step 3: Import All dependencies
 
-Add all dependencies of the Mixpanel SDK to your app. The full list of necessary frameworks and libraries on lines 16-17 in the "Mixpanel.podspec" file in the "mixpanel-iphone" directory: 
+Add all dependencies of the Mixpanel SDK to your app. The full list of necessary frameworks and libraries on lines 16-17 in the "Mixpanel.podspec" file in the "mixpanel-iphone" directory:
 
 ![alt text](http://images.mxpnl.com/blog/2014-09-24%2001:32:27.445697-1__vim_and_spritybird_and_Mixpanel_-_Agent_and_spritybird.png)
 
