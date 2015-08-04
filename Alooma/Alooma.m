@@ -382,7 +382,7 @@ static __unused NSString *MPURLEncode(NSString *s)
                                            @"message_id": mpPayload[@"m"],
                                            @"message_type": @"push"}];
         } else {
-            AloomaError(@"%@ malformed mixpanel push payload %@", self, mpPayload);
+            AloomaError(@"%@ malformed Alooma push payload %@", self, mpPayload);
         }
     }
 }
@@ -462,7 +462,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)timeEvent:(NSString *)event
 {
     if (event == nil || [event length] == 0) {
-        AloomaError(@"Mixpanel cannot time an empty event");
+        AloomaError(@"Alooma cannot time an empty event");
         return;
     }
     dispatch_async(self.serialQueue, ^{
@@ -610,7 +610,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)filePathForData:(NSString *)data
 {
-    NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
+    NSString *filename = [NSString stringWithFormat:@"alooma-%@-%@.plist", self.apiToken, data];
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
 }
@@ -844,7 +844,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     BOOL reachabilityOk = NO;
     if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, self.serverURL.UTF8String)) != NULL) {
         SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
-        if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
+        if (SCNetworkReachabilitySetCallback(_reachability, AloomaReachabilityCallback, &context)) {
             if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
                 reachabilityOk = YES;
                 AloomaDebug(@"%@ successfully set up reachability callback", self);
@@ -898,12 +898,12 @@ static __unused NSString *MPURLEncode(NSString *s)
                              object:nil];
 }
 
-static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
+static void AloomaReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
     if (info != NULL && [(__bridge NSObject*)info isKindOfClass:[Alooma class]]) {
         @autoreleasepool {
-            Alooma *mixpanel = (__bridge Alooma *)info;
-            [mixpanel reachabilityChanged:flags];
+            Alooma *alooma = (__bridge Alooma *)info;
+            [alooma reachabilityChanged:flags];
         }
     } else {
         AloomaError(@"reachability callback received unexpected info object");
