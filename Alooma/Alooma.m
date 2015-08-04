@@ -30,7 +30,7 @@
 #define VERSION @"2.8.1"
 
 static NSString * const kSendingTimePlaceHolder = @"<SendingTimePlaceHolder>";
-static NSString * const kSendingTimeKey = @"sendingTime";
+static NSString * const kSendingTimeKey = @"sending_time";
 
 @interface Alooma () <UIAlertViewDelegate>
 
@@ -339,6 +339,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (self.distinctId) {
             p[@"distinct_id"] = self.distinctId;
         }
+        p[kSendingTimeKey] = kSendingTimePlaceHolder;
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];
@@ -354,7 +355,6 @@ static __unused NSString *MPURLEncode(NSString *s)
             [args addEntriesFromDictionary:e];
             e = args;
         }
-        [e setObject:kSendingTimePlaceHolder forKey:kSendingTimeKey];
         AloomaDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if ([self.eventsQueue count] > 500) {
@@ -563,7 +563,9 @@ static __unused NSString *MPURLEncode(NSString *s)
         // adding Sending Timestamp
         double epochInterval = [[NSDate date] timeIntervalSince1970];
         for (NSMutableDictionary *event in batch){
-            [event setObject:@(round(epochInterval)) forKey:kSendingTimeKey];
+            NSMutableDictionary *properties = [[event objectForKeyedSubscript:@"properties"] mutableCopy];
+            properties[kSendingTimeKey] = @(round(epochInterval));
+            [event setObject:[NSDictionary dictionaryWithDictionary:properties] forKeyedSubscript:@"properties"];
         }
         
         NSString *requestData = [self encodeAPIData:batch];
