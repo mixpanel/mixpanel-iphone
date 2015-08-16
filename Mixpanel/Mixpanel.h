@@ -14,7 +14,7 @@
 
  @discussion
  Use the Mixpanel class to set up your project and track events in Mixpanel
- Engagement. It now also includes a <code>people</code> property for accesseing
+ Engagement. It now also includes a <code>people</code> property for accessing
  the Mixpanel People API.
 
  <pre>
@@ -127,7 +127,7 @@
 
  @discussion
  Defaults to YES. Will fire a network request on
- <code>applicationDidBecomeActive</code> to retrieve a list of valid suerveys
+ <code>applicationDidBecomeActive</code> to retrieve a list of valid surveys
  for the currently identified user.
  */
 @property (atomic) BOOL checkForSurveysOnActive;
@@ -535,7 +535,7 @@
 
  @discussion
  By default, queued data is flushed to the Mixpanel servers every minute (the
- default for <code>flushInvterval</code>), and on background (since
+ default for <code>flushInterval</code>), and on background (since
  <code>flushOnBackground</code> is on by default). You only need to call this
  method manually if you want to force a flush at a particular moment.
  */
@@ -581,7 +581,7 @@
  Creates a distinct_id alias from alias to original id.
 
  @discussion
- This method is used to map an identifer called an alias to the existing Mixpanel
+ This method is used to map an identifier called an alias to the existing Mixpanel
  distinct id. This causes all events and people requests sent with the alias to be
  mapped back to the original distinct id. The recommended usage pattern is to call
  both createAlias: and identify: when the user signs up, and only identify: (with
@@ -896,7 +896,7 @@
 
  @discussion
  Charge properties allow you segment on types of revenue. For instance, you
- could record a product ID with each charge so that you could segement on it in
+ could record a product ID with each charge so that you could segment on it in
  revenue analytics to see which products are generating the most revenue.
  */
 - (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties;
