@@ -23,6 +23,8 @@ typedef void (^_MPTweakBindObserverBlock)(id object);
  */
 @interface _MPTweakBindObserver : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 /**
   @abstract Designated initializer.
   @param tweak The tweak to observe.

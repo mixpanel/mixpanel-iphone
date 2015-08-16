@@ -7,6 +7,8 @@
 
 @interface MPPropertySelectorParameterDescription : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *type;
@@ -14,6 +16,8 @@
 @end
 
 @interface MPPropertySelectorDescription : NSObject
+
+- (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 @property (nonatomic, readonly) NSString *selectorName;
@@ -23,6 +27,8 @@
 @end
 
 @interface MPPropertyDescription : NSObject
+
+- (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 

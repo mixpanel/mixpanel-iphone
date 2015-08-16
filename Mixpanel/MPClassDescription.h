@@ -20,6 +20,8 @@
 
 @property (nonatomic, readonly) NSString *selectorName;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -5,6 +5,8 @@
 
 @interface MPObjectSerializerContext : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithRootObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)hasUnvisitedObjects;

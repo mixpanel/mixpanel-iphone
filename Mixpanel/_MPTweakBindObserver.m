@@ -21,6 +21,8 @@
   __weak id _object;
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithTweak:(MPTweak *)tweak block:(_MPTweakBindObserverBlock)block
 {
   if ((self = [super init])) {

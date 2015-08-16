@@ -13,6 +13,8 @@
   NSHashTable *_observers;
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithName:(NSString *)name andEncoding:(NSString *)encoding
 {
   if ((self = [super init])) {

@@ -23,6 +23,7 @@
 
 @interface ElasticEaseOutAnimation : CAKeyframeAnimation {}
 
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration NS_DESIGNATED_INITIALIZER;
 
 @end
@@ -699,6 +700,8 @@
 @end
 
 @implementation ElasticEaseOutAnimation
+
+- (instancetype)init { @throw nil; }
 
 - (instancetype)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration
 {

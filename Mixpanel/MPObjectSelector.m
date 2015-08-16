@@ -48,6 +48,8 @@
     return [[MPObjectSelector alloc] initWithString:string];
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithString:(NSString *)string
 {
     if (self = [super init]) {

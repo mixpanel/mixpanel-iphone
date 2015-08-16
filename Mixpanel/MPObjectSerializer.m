@@ -23,6 +23,8 @@
     MPObjectIdentityProvider *_objectIdentityProvider;
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithConfiguration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
 {
     self = [super init];

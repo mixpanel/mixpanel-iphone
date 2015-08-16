@@ -13,6 +13,8 @@
     NSDictionary *_enums;
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
