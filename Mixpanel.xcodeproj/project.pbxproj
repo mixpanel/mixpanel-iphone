@@ -52,8 +52,8 @@
 		7C170CEF1A4A035F00D9E0F2 /* MPClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C721A4A035F00D9E0F2 /* MPClassDescription.h */; };
 		7C170CF01A4A035F00D9E0F2 /* MPClassDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C731A4A035F00D9E0F2 /* MPClassDescription.m */; };
 		7C170CF31A4A035F00D9E0F2 /* MPDesignerEventBindingMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C761A4A035F00D9E0F2 /* MPDesignerEventBindingMessage.h */; };
-		7C170CF41A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C771A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m */; };
-		7C170CF51A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMesssage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C781A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMesssage.m */; };
+		7C170CF41A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C771A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMessage.m */; };
+		7C170CF51A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C781A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMessage.m */; };
 		7C170CF61A4A035F00D9E0F2 /* MPDesignerSessionCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C791A4A035F00D9E0F2 /* MPDesignerSessionCollection.h */; };
 		7C170CF71A4A035F00D9E0F2 /* MPDesignerTrackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C7A1A4A035F00D9E0F2 /* MPDesignerTrackMessage.m */; };
 		7C170CF81A4A035F00D9E0F2 /* MPEnumDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7B1A4A035F00D9E0F2 /* MPEnumDescription.h */; };
@@ -187,8 +187,8 @@
 		7C170C721A4A035F00D9E0F2 /* MPClassDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPClassDescription.h; sourceTree = "<group>"; };
 		7C170C731A4A035F00D9E0F2 /* MPClassDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPClassDescription.m; sourceTree = "<group>"; };
 		7C170C761A4A035F00D9E0F2 /* MPDesignerEventBindingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerEventBindingMessage.h; sourceTree = "<group>"; };
-		7C170C771A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMesssage.m; sourceTree = "<group>"; };
-		7C170C781A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMesssage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMesssage.m; sourceTree = "<group>"; };
+		7C170C771A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingRequestMessage.m; sourceTree = "<group>"; };
+		7C170C781A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerEventBindingResponseMessage.m; sourceTree = "<group>"; };
 		7C170C791A4A035F00D9E0F2 /* MPDesignerSessionCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerSessionCollection.h; sourceTree = "<group>"; };
 		7C170C7A1A4A035F00D9E0F2 /* MPDesignerTrackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDesignerTrackMessage.m; sourceTree = "<group>"; };
 		7C170C7B1A4A035F00D9E0F2 /* MPEnumDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEnumDescription.h; sourceTree = "<group>"; };
@@ -375,8 +375,8 @@
 				7C170C721A4A035F00D9E0F2 /* MPClassDescription.h */,
 				7C170C731A4A035F00D9E0F2 /* MPClassDescription.m */,
 				7C170C761A4A035F00D9E0F2 /* MPDesignerEventBindingMessage.h */,
-				7C170C771A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m */,
-				7C170C781A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMesssage.m */,
+				7C170C771A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMessage.m */,
+				7C170C781A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMessage.m */,
 				7C170C791A4A035F00D9E0F2 /* MPDesignerSessionCollection.h */,
 				7C170C7A1A4A035F00D9E0F2 /* MPDesignerTrackMessage.m */,
 				7C170C7B1A4A035F00D9E0F2 /* MPEnumDescription.h */,
@@ -624,7 +624,7 @@
 				7C170D2D1A4A035F00D9E0F2 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				7C170CF71A4A035F00D9E0F2 /* MPDesignerTrackMessage.m in Sources */,
 				7C170D111A4A035F00D9E0F2 /* MPPropertyDescription.m in Sources */,
-				7C170CF51A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
+				7C170CF51A4A035F00D9E0F2 /* MPDesignerEventBindingResponseMessage.m in Sources */,
 				7C170D021A4A035F00D9E0F2 /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */,
 				7C170CD31A4A035F00D9E0F2 /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				7C170CED1A4A035F00D9E0F2 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
@@ -658,7 +658,7 @@
 				7C170CCD1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				7C170CCB1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m in Sources */,
 				7C170D081A4A035F00D9E0F2 /* MPObjectSelector.m in Sources */,
-				7C170CF41A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m in Sources */,
+				7C170CF41A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMessage.m in Sources */,
 				7C170D271A4A035F00D9E0F2 /* MPTypeDescription.m in Sources */,
 				7C170CEB1A4A035F00D9E0F2 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				7C170D2B1A4A035F00D9E0F2 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,

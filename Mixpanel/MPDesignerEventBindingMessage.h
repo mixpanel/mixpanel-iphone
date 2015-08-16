@@ -10,16 +10,28 @@
 
 extern NSString *const MPDesignerEventBindingRequestMessageType;
 
-@interface MPDesignerEventBindingRequestMesssage : MPAbstractABTestDesignerMessage
+@interface MPDesignerEventBindingRequestMessage : MPAbstractABTestDesignerMessage
 
 @end
 
 
-@interface MPDesignerEventBindingResponseMesssage : MPAbstractABTestDesignerMessage
+__deprecated
+@interface MPDesignerEventBindingRequestMesssage : MPDesignerEventBindingRequestMessage
+
+@end
+
+
+@interface MPDesignerEventBindingResponseMessage : MPAbstractABTestDesignerMessage
 
 + (instancetype)message;
 
 @property (nonatomic, copy) NSString *status;
+
+@end
+
+
+__deprecated
+@interface MPDesignerEventBindingResponseMesssage : MPDesignerEventBindingResponseMessage
 
 @end
 

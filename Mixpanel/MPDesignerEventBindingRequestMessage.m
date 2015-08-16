@@ -1,5 +1,5 @@
 //
-//  MPDesignerEventBindingRequestMesssage.m
+//  MPDesignerEventBindingRequestMessage.m
 //  HelloMixpanel
 //
 //  Created by Amanda Canyon on 7/15/14.
@@ -55,7 +55,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
 @end
 
-@implementation MPDesignerEventBindingRequestMesssage
+@implementation MPDesignerEventBindingRequestMessage
 
 + (instancetype)message
 {
@@ -79,12 +79,16 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
             [bindingCollection updateBindings:payload];
         });
 
-        MPDesignerEventBindingResponseMesssage *changeResponseMessage = [MPDesignerEventBindingResponseMesssage message];
+        MPDesignerEventBindingResponseMessage *changeResponseMessage = [MPDesignerEventBindingResponseMessage message];
         changeResponseMessage.status = @"OK";
         [conn sendMessage:changeResponseMessage];
     }];
 
     return operation;
 }
+
+@end
+
+@implementation MPDesignerEventBindingRequestMesssage
 
 @end

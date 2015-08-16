@@ -1,5 +1,5 @@
 //
-//  MPDesignerEventBindingResponseMesssage.m
+//  MPDesignerEventBindingResponseMessage.m
 //  HelloMixpanel
 //
 //  Created by Amanda Canyon on 7/15/14.
@@ -8,7 +8,7 @@
 
 #import "MPDesignerEventBindingMessage.h"
 
-@implementation MPDesignerEventBindingResponseMesssage
+@implementation MPDesignerEventBindingResponseMessage
 
 + (instancetype)message
 {
@@ -24,5 +24,9 @@
 {
     return [self payloadObjectForKey:@"status"];
 }
+
+@end
+
+@implementation MPDesignerEventBindingResponseMesssage
 
 @end
