@@ -56,7 +56,7 @@ NSString * const kSessionVariantKey = @"session_variant";
             MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
             MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
             MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
-            MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMesssage class],
+            MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMessage class],
         };
 
         _open = NO;
