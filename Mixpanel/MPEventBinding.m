@@ -13,7 +13,7 @@
 
 @implementation MPEventBinding
 
-+ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
++ (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
     if (object == nil) {
         NSLog(@"must supply an JSON object to initialize from");
@@ -22,7 +22,12 @@
 
     NSString *bindingType = object[@"event_type"];
     Class klass = [self subclassFromString:bindingType];
-    return [klass bindngWithJSONObject:object];
+    return [klass bindingWithJSONObject:object];
+}
+
++ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
+{
+    return [self bindingWithJSONObject:object];
 }
 
 + (Class)subclassFromString:(NSString *)bindingType

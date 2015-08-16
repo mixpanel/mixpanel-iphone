@@ -30,7 +30,9 @@
  */
 @property (nonatomic) BOOL running;
 
-+ (id)bindngWithJSONObject:(id)object;
++ (id)bindingWithJSONObject:(id)object;
+
++ (id)bindngWithJSONObject:(id)object __deprecated;
 
 - (instancetype)init __unavailable;
 - (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path NS_DESIGNATED_INITIALIZER;

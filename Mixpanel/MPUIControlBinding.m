@@ -32,7 +32,7 @@
     return @"ui_control";
 }
 
-+ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
++ (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
     NSString *path = object[@"path"];
     if (![path isKindOfClass:[NSString class]] || [path length] < 1) {
@@ -56,6 +56,11 @@
                                         onPath:path
                               withControlEvent:[object[@"control_event"] unsignedIntegerValue]
                                           andVerifyEvent:verifyEvent];
+}
+
++ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
+{
+    return [self bindingWithJSONObject:object];
 }
 
 - (instancetype)initWithEventName:(NSString *)eventName
