@@ -48,6 +48,8 @@ extern NSString *const MPWebSocketErrorDomain;
 // It will be nil until after the handshake completes.
 @property (nonatomic, readonly, copy) NSString *protocol;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 // Protocols should be an array of strings that turn into Sec-WebSocket-Protocol.
 - (instancetype)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithURLRequest:(NSURLRequest *)request;

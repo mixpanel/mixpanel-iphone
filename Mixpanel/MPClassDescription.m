@@ -6,6 +6,8 @@
 
 @implementation MPDelegateInfo
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
     if (self = [super init]) {

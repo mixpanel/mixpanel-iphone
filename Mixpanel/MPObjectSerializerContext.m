@@ -11,6 +11,8 @@
     NSMutableDictionary *_serializedObjects;
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithRootObject:(id)object
 {
     self = [super init];

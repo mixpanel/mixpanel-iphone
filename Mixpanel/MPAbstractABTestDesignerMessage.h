@@ -10,6 +10,8 @@
 
 + (instancetype)messageWithType:(NSString *)type payload:(NSDictionary *)payload;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithType:(NSString *)type;
 - (instancetype)initWithType:(NSString *)type payload:(NSDictionary *)payload NS_DESIGNATED_INITIALIZER;
 

@@ -46,6 +46,8 @@
     [[Mixpanel sharedInstance] track:event properties:bindingProperties];
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path
 {
     if (self = [super init]) {

@@ -45,6 +45,8 @@ NSString * const kSessionVariantKey = @"session_variant";
     void (^_disconnectCallback)();
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
 {
     self = [super init];

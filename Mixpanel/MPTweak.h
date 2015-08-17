@@ -24,6 +24,8 @@ typedef id MPTweakValue;
  */
 @interface MPTweak : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 /**
   @abstract Creates a new tweak model.
   @discussion This is the designated initializer.

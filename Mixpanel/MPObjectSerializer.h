@@ -10,6 +10,8 @@
 
 @interface MPObjectSerializer : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 /*!
  @param     An array of MPClassDescription instances.
  */

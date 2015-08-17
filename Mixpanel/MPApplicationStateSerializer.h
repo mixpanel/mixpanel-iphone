@@ -8,6 +8,8 @@
 
 @interface MPApplicationStateSerializer : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider NS_DESIGNATED_INITIALIZER;
 
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index;

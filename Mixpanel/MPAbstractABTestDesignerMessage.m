@@ -21,6 +21,8 @@
     return [[self alloc] initWithType:type payload:payload];
 }
 
+- (instancetype)init { @throw nil; }
+
 - (instancetype)initWithType:(NSString *)type
 {
     return [self initWithType:type payload:@{}];

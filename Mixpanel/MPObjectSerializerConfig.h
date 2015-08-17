@@ -13,6 +13,8 @@
 @property (nonatomic, readonly) NSArray *classDescriptions;
 @property (nonatomic, readonly) NSArray *enumDescriptions;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary NS_DESIGNATED_INITIALIZER;
 
 - (MPTypeDescription *)typeWithName:(NSString *)name;
