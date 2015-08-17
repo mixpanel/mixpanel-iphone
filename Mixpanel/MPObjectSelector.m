@@ -216,7 +216,7 @@
 }
 
 /*
- Apply this filter to the views, returning all of their chhildren
+ Apply this filter to the views, returning all of their children
  that match this filter's class / predicate pattern
  */
 - (NSArray *)apply:(NSArray *)views
