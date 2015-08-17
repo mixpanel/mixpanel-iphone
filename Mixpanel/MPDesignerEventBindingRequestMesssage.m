@@ -28,7 +28,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 {
     NSMutableArray *newBindings = [NSMutableArray array];
     for (NSDictionary *bindingInfo in bindingPayload) {
-        MPEventBinding *binding = [MPEventBinding bindngWithJSONObject:bindingInfo];
+        MPEventBinding *binding = [MPEventBinding bindingWithJSONObject:bindingInfo];
         [newBindings addObject:binding];
     }
 

@@ -18,7 +18,7 @@
     return @"ui_table_view";
 }
 
-+ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
++ (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
     NSString *path = object[@"path"];
     if (![path isKindOfClass:[NSString class]] || [path length] < 1) {
@@ -41,6 +41,11 @@
     return [[MPUITableViewBinding alloc] initWithEventName:eventName
                                                   onPath:path
                                             withDelegate:tableDelegate];
+}
+
++ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
+{
+    return [self bindingWithJSONObject:object];
 }
 
 - (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path
