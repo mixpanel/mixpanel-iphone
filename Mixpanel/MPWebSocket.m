@@ -179,7 +179,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 // This class is not thread-safe, and is expected to always be run on the same queue.
 @interface MPIOConsumerPool : NSObject
 
-- (instancetype)initWithBufferCapacity:(NSUInteger)poolSize NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithBufferCapacity:(NSUInteger)poolSize;
 
 - (MPIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
 - (void)returnConsumer:(MPIOConsumer *)consumer;

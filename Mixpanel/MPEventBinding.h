@@ -35,7 +35,7 @@
 + (id)bindngWithJSONObject:(id)object __deprecated;
 
 - (instancetype)init __unavailable;
-- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path;
 
 /*!
  Intercepts track calls and adds a property indicating the track event
