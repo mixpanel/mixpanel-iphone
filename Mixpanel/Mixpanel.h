@@ -549,7 +549,7 @@
  
  @discussion
  When calling <code>flush</code> manually, it is sometimes important to verify
- that the flush has finished before before further action is taken. This is
+ that the flush has finished before further action is taken. This is
  especially important when the app is in the background and could be suspended
  at any time if protocol is not followed. Delegate methods like
  <code>application:didReceiveRemoteNotification:fetchCompletionHandler:</code>
