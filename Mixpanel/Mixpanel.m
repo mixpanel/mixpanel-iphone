@@ -1205,6 +1205,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return NO;
     }
 
+    Class UIAlertControllerClass = NSClassFromString(@"UIAlertController");
+    if (UIAlertControllerClass && [viewController isKindOfClass:UIAlertControllerClass]) {
+        return NO;
+    }
+
     return YES;
 }
 
