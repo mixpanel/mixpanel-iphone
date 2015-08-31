@@ -1173,6 +1173,24 @@
 
     topVC = [self topViewController];
     XCTAssertFalse([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification was presented");
+
+    // Dismiss the alert and try to present notification again
+    waitForBlock = YES;
+    [topVC dismissViewControllerAnimated:YES completion:^{
+        waitForBlock = NO;
+    }];
+
+    while(waitForBlock) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    }
+
+    [self.mixpanel showNotificationWithObject:notif];
+
+    //wait for notifs to be shown from main queue
+    [self waitForAsyncQueue];
+
+    topVC = [self topViewController];
+    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification wasn't presented");
 }
 
 - (void)testNoShowSurveyOnPresentingVC

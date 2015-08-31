@@ -1609,6 +1609,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (shown && ![notification.title isEqualToString:@"$ignore"]) {
                 [self markNotificationShown:notification];
             }
+
+            if (!shown) {
+                self.currentlyShowingNotification = nil;
+            }
         }
     });
 }
