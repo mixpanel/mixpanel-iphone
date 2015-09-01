@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		20CC1BC2757D3F9589B88CF9 /* Pods_AloomaIosSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E694280DBB45D2D1512689 /* Pods_AloomaIosSDK_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -16,12 +15,10 @@
 		6003F59E195388D20070C39A /* AloomaAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* AloomaAppDelegate.m */; };
 		6003F5A7195388D20070C39A /* AloomaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* AloomaViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
-		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		83F029053E03F35DF618F765 /* Pods_AloomaIosSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2AB594C109D4272459D2BE4 /* Pods_AloomaIosSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -38,7 +35,6 @@
 /* Begin PBXFileReference section */
 		123AF0C1A47F15E1F860B5BE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		2BC93F6C5236500435ADD501 /* AloomaIosSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AloomaIosSDK.podspec; path = ../AloomaIosSDK.podspec; sourceTree = "<group>"; };
-		6003F58A195388D20070C39A /* AloomaIosSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AloomaIosSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -51,8 +47,6 @@
 		6003F5A5195388D20070C39A /* AloomaViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AloomaViewController.h; sourceTree = "<group>"; };
 		6003F5A6195388D20070C39A /* AloomaViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AloomaViewController.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		6003F5AE195388D20070C39A /* AloomaIosSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AloomaIosSDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
@@ -60,11 +54,10 @@
 		7860CA71AB6CD795423114EF /* Pods-AloomaIosSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AloomaIosSDK_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AloomaIosSDK_Tests/Pods-AloomaIosSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A55517479A39D3423C0B0EEF /* Pods-AloomaIosSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AloomaIosSDK_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AloomaIosSDK_Tests/Pods-AloomaIosSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		A5B688361B8CDD47005418B0 /* AloomaIosSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = AloomaIosSDK_Example.app; path = "/Users/ramamar/Dev/eclipse/alooma/iossdk/Example/build/Debug-iphoneos/AloomaIosSDK_Example.app"; sourceTree = "<absolute>"; };
+		A5B688371B8CDD47005418B0 /* AloomaIosSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = AloomaIosSDK_Tests.xctest; path = "/Users/ramamar/Dev/eclipse/alooma/iossdk/Example/build/Debug-iphoneos/AloomaIosSDK_Tests.xctest"; sourceTree = "<absolute>"; };
 		B15022B9BEE1BBD3B41B5AC5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		B2AB594C109D4272459D2BE4 /* Pods_AloomaIosSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AloomaIosSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA938A651B4141F6002A8EF9 /* libAloomaCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAloomaCategoryHelpers.a; path = ../Pod/Classes/libAloomaCategoryHelpers.a; sourceTree = "<group>"; };
 		DA4F6B91BFF1777D7BD28C79 /* Pods-AloomaIosSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AloomaIosSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AloomaIosSDK_Example/Pods-AloomaIosSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
-		F0E694280DBB45D2D1512689 /* Pods_AloomaIosSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AloomaIosSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F500C635E2F95ABC6325C96A /* Pods-AloomaIosSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AloomaIosSDK_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AloomaIosSDK_Example/Pods-AloomaIosSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,7 +69,6 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				83F029053E03F35DF618F765 /* Pods_AloomaIosSDK_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,10 +76,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				20CC1BC2757D3F9589B88CF9 /* Pods_AloomaIosSDK_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,23 +87,12 @@
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
-				BA938A651B4141F6002A8EF9 /* libAloomaCategoryHelpers.a */,
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for AloomaIosSDK */,
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
-				6003F58B195388D20070C39A /* Products */,
 				71E9DA6ED020864B863AAE80 /* Pods */,
 			);
-			sourceTree = "<group>";
-		};
-		6003F58B195388D20070C39A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6003F58A195388D20070C39A /* AloomaIosSDK_Example.app */,
-				6003F5AE195388D20070C39A /* AloomaIosSDK_Tests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6003F58C195388D20070C39A /* Frameworks */ = {
@@ -122,9 +101,6 @@
 				6003F58D195388D20070C39A /* Foundation.framework */,
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
-				6003F5AF195388D20070C39A /* XCTest.framework */,
-				B2AB594C109D4272459D2BE4 /* Pods_AloomaIosSDK_Example.framework */,
-				F0E694280DBB45D2D1512689 /* Pods_AloomaIosSDK_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -215,7 +191,7 @@
 			);
 			name = AloomaIosSDK_Example;
 			productName = AloomaIosSDK;
-			productReference = 6003F58A195388D20070C39A /* AloomaIosSDK_Example.app */;
+			productReference = A5B688361B8CDD47005418B0 /* AloomaIosSDK_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6003F5AD195388D20070C39A /* AloomaIosSDK_Tests */ = {
@@ -236,7 +212,7 @@
 			);
 			name = AloomaIosSDK_Tests;
 			productName = AloomaIosSDKTests;
-			productReference = 6003F5AE195388D20070C39A /* AloomaIosSDK_Tests.xctest */;
+			productReference = A5B688371B8CDD47005418B0 /* AloomaIosSDK_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -246,7 +222,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Alooma;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Alooma;
 				TargetAttributes = {
 					6003F5AD195388D20070C39A = {
@@ -263,7 +239,7 @@
 				Base,
 			);
 			mainGroup = 6003F581195388D10070C39A;
-			productRefGroup = 6003F58B195388D20070C39A /* Products */;
+			productRefGroup = 6003F581195388D10070C39A;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -454,6 +430,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -468,7 +445,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -501,7 +478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -518,6 +495,7 @@
 				GCC_PREFIX_HEADER = "AloomaIosSDK/AloomaIosSDK-Prefix.pch";
 				INFOPLIST_FILE = "AloomaIosSDK/AloomaIosSDK-Info.plist";
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -534,6 +512,7 @@
 				GCC_PREFIX_HEADER = "AloomaIosSDK/AloomaIosSDK-Prefix.pch";
 				INFOPLIST_FILE = "AloomaIosSDK/AloomaIosSDK-Info.plist";
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -557,6 +536,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AloomaIosSDK_Example.app/AloomaIosSDK_Example";
 				WRAPPER_EXTENSION = xctest;
@@ -576,6 +556,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AloomaIosSDK_Example.app/AloomaIosSDK_Example";
 				WRAPPER_EXTENSION = xctest;

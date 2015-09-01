@@ -18,15 +18,6 @@
 #import "AloomaLogger.h"
 #import "NSData+AloomaBase64.h"
 
-#if !defined(ALOOMA_APP_EXTENSION)
-
-#import "AloomaCategoryHelpers.h"
-#import "AloomaDesignerSessionCollection.h"
-#import "AloomaWebSocket.h"
-
-#endif
-
-
 #define VERSION @"2.8.1"
 
 static NSString * const kSendingTimePlaceHolder = @"<SendingTimePlaceHolder>";

@@ -1,0 +1,258 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A5974ED01B8D059C00AAEBAD /* Alooma.m in Sources */ = {isa = PBXBuildFile; fileRef = A5974EC21B8D059C00AAEBAD /* Alooma.m */; };
+		A5974ED21B8D059C00AAEBAD /* NSData+AloomaBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = A5974EC91B8D059C00AAEBAD /* NSData+AloomaBase64.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A5974EB31B8D055300AAEBAD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A5974EB51B8D055300AAEBAD /* libAloomaIos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAloomaIos.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5974EC11B8D059C00AAEBAD /* Alooma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alooma.h; sourceTree = "<group>"; };
+		A5974EC21B8D059C00AAEBAD /* Alooma.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alooma.m; sourceTree = "<group>"; };
+		A5974EC51B8D059C00AAEBAD /* AloomaLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AloomaLogger.h; sourceTree = "<group>"; };
+		A5974EC81B8D059C00AAEBAD /* NSData+AloomaBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AloomaBase64.h"; sourceTree = "<group>"; };
+		A5974EC91B8D059C00AAEBAD /* NSData+AloomaBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AloomaBase64.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A5974EB21B8D055300AAEBAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A5974EAC1B8D055300AAEBAD = {
+			isa = PBXGroup;
+			children = (
+				A5974EB71B8D055300AAEBAD /* AloomaIos */,
+				A5974EB61B8D055300AAEBAD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A5974EB61B8D055300AAEBAD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A5974EB51B8D055300AAEBAD /* libAloomaIos.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A5974EB71B8D055300AAEBAD /* AloomaIos */ = {
+			isa = PBXGroup;
+			children = (
+				A5974EC11B8D059C00AAEBAD /* Alooma.h */,
+				A5974EC21B8D059C00AAEBAD /* Alooma.m */,
+				A5974EC51B8D059C00AAEBAD /* AloomaLogger.h */,
+				A5974EC81B8D059C00AAEBAD /* NSData+AloomaBase64.h */,
+				A5974EC91B8D059C00AAEBAD /* NSData+AloomaBase64.m */,
+			);
+			path = AloomaIos;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A5974EB41B8D055300AAEBAD /* AloomaIos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5974EBE1B8D055300AAEBAD /* Build configuration list for PBXNativeTarget "AloomaIos" */;
+			buildPhases = (
+				A5974EB11B8D055300AAEBAD /* Sources */,
+				A5974EB21B8D055300AAEBAD /* Frameworks */,
+				A5974EB31B8D055300AAEBAD /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AloomaIos;
+			productName = AloomaIos;
+			productReference = A5974EB51B8D055300AAEBAD /* libAloomaIos.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A5974EAD1B8D055300AAEBAD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = Alooma;
+				TargetAttributes = {
+					A5974EB41B8D055300AAEBAD = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = A5974EB01B8D055300AAEBAD /* Build configuration list for PBXProject "AloomaIos" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A5974EAC1B8D055300AAEBAD;
+			productRefGroup = A5974EB61B8D055300AAEBAD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A5974EB41B8D055300AAEBAD /* AloomaIos */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5974EB11B8D055300AAEBAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5974ED21B8D059C00AAEBAD /* NSData+AloomaBase64.m in Sources */,
+				A5974ED01B8D059C00AAEBAD /* Alooma.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A5974EBC1B8D055300AAEBAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A5974EBD1B8D055300AAEBAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A5974EBF1B8D055300AAEBAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		A5974EC01B8D055300AAEBAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A5974EB01B8D055300AAEBAD /* Build configuration list for PBXProject "AloomaIos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5974EBC1B8D055300AAEBAD /* Debug */,
+				A5974EBD1B8D055300AAEBAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5974EBE1B8D055300AAEBAD /* Build configuration list for PBXNativeTarget "AloomaIos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5974EBF1B8D055300AAEBAD /* Debug */,
+				A5974EC01B8D055300AAEBAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A5974EAD1B8D055300AAEBAD /* Project object */;
+}
