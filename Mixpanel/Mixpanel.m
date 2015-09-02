@@ -37,6 +37,8 @@
 
 #define VERSION @"2.8.3"
 
+#define MIXPANEL_ACCEPTED_MAX_TIME_INTERVAL 432000.0
+
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 
@@ -64,6 +66,7 @@
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
+@property(nonatomic,retain) NSOperationQueue *importQueue;
 
 @property (nonatomic) BOOL decideResponseCached;
 
@@ -171,6 +174,9 @@ static Mixpanel *sharedInstance = nil;
         [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         self.timedEvents = [NSMutableDictionary dictionary];
 
+        self.importQueue = [[NSOperationQueue alloc] init];
+        [self.importQueue setMaxConcurrentOperationCount:1];
+
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
         self.surveys = nil;
@@ -219,6 +225,10 @@ static Mixpanel *sharedInstance = nil;
         _reachability = NULL;
         MixpanelDebug(@"realeased reachability");
     }
+
+    self.apiKey = nil;
+    [self.importQueue cancelAllOperations];
+    self.importQueue = nil;
 }
 
 #pragma mark - Encoding/decoding utilities
@@ -625,14 +635,72 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)flushEvents
 {
     [self flushQueue:_eventsQueue
-            endpoint:@"/track/"];
+        endpoint:@"/track/"];
+
+    // use /import/ endpoint for old data
+    NSMutableArray *imports = [NSMutableArray array];
+    for (NSDictionary *event in _eventsQueue) {
+        NSNumber *timestamp = [(NSDictionary *)[event objectForKey:@"properties"] objectForKey:@"time"];
+        if (timestamp) {
+            NSTimeInterval age = [[NSDate date] timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1970:[timestamp doubleValue]]];
+            if (age > MIXPANEL_ACCEPTED_MAX_TIME_INTERVAL) {
+                [imports addObject:event];
+            }
+        }
+    }
+
+    // can only use import endpoint if apiKey is set
+    if(self.apiKey) {
+        [self importData:imports];
+    }
 }
 
 - (void)flushPeople
 {
-    [self flushQueue:_peopleQueue
-            endpoint:@"/engage/"];
+    // use /import/ endpoint for old data
+    NSMutableArray *imports = [NSMutableArray array];
+    for (NSDictionary *people in _peopleQueue) {
+        NSNumber *timestamp = [people objectForKey:@"$time"];
+        if(timestamp) {
+            NSTimeInterval age = [[NSDate date] timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1970:[timestamp doubleValue]/1000.0]];
+            if (age > MIXPANEL_ACCEPTED_MAX_TIME_INTERVAL) {
+                [imports addObject:people];
+            }
+        }
+    }
+
+    // can only use import endpoint if apiKey is set
+    if(self.apiKey) {
+        [self importData:imports];
+    }
+
+  [self flushQueue:_peopleQueue
+          endpoint:@"/engage/"];
 }
+
+// use /import/ endpoint for aged data
+-(void)importData:(NSArray *)imports
+{
+    for (id import in imports) {
+        NSString *data = [self encodeAPIData:import];
+        NSString *postBody = [NSString stringWithFormat:@"data=%@&api_key=%@", data, self.apiKey];
+
+        NSURL *url = [NSURL URLWithString:[self.serverURL stringByAppendingString:@"/import/"]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];
+        //DLog(@"%@ http request: %@?%@", self, [self.serverURL stringByAppendingString:@"/import/"], postBody);
+
+        [NSURLConnection sendAsynchronousRequest:request
+            queue:self.importQueue
+            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error){
+                NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                //DLog(@"response %@, error = %@", responseString, error);
+            }];
+    }
+}
+
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
