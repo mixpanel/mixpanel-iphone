@@ -155,6 +155,7 @@ static Mixpanel *sharedInstance = nil;
         self.checkForVariantsOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
+        self.miniNotificationBackgroundColor = nil;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -1625,6 +1626,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     MPMiniNotificationViewController *controller = [[MPMiniNotificationViewController alloc] init];
     controller.notification = notification;
     controller.delegate = self;
+    controller.backgroundColor = self.miniNotificationBackgroundColor;
     self.notificationViewController = controller;
 
     [controller showWithAnimation];

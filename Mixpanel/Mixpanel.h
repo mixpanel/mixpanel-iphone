@@ -201,6 +201,19 @@
 
 /*!
  @property
+ 
+ @abstract
+ If set, determines the background color of mini notifications.
+
+ @discussion
+ If this isn't set, we default to either the color of the UINavigationBar of the top 
+ UINavigationController that is showing when the notification is presented, the 
+ UINavigationBar default color for the app or the UITabBar default color.
+ */
+@property (atomic) UIColor* miniNotificationBackgroundColor;
+
+/*!
+ @property
 
  @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
