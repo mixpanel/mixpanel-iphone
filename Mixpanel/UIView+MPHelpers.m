@@ -135,7 +135,7 @@
     if ([self isKindOfClass:[UIButton class]]) {
         originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
     } else if ([NSStringFromClass([self class]) isEqual:@"UITabBarButton"] && [self.subviews count] > 0 && [self.subviews[0] respondsToSelector:NSSelectorFromString(@"image")]) {
-        originalImage = [self.subviews[0] image];
+        originalImage = (UIImage *)[self.subviews[0] image];
     }
     
     if (originalImage) {
