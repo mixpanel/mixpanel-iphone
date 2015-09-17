@@ -127,7 +127,7 @@ static NSMutableDictionary *imageCache;
         }
         else if ([images count] > 0)
         {
-            image = [images objectAtIndex:0];
+            image = images[0];
         }
 
         if (image && UIEdgeInsetsEqualToEdgeInsets(capInsets, UIEdgeInsetsZero) == NO) {

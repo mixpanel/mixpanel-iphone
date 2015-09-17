@@ -53,7 +53,7 @@
 @end
 @implementation A
 
-- (id)init
+- (instancetype)init
 {
     if((self = [super init])) {
         self.count = 0;

@@ -13,7 +13,7 @@
 @property (nonatomic, readonly) NSArray *classDescriptions;
 @property (nonatomic, readonly) NSArray *enumDescriptions;
 
-- (id)initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
 - (MPTypeDescription *)typeWithName:(NSString *)name;
 - (MPEnumDescription *)enumWithName:(NSString *)name;

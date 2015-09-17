@@ -28,7 +28,7 @@
 
 @implementation MixpanelStub
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
         _calls = [NSMutableArray array];
@@ -60,7 +60,7 @@
 @end
 @implementation TableController
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
         self.tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStylePlain];
@@ -141,7 +141,7 @@
                                   @"event_type": @"ui_control",
                                   @"event_name": @"ui control",
                                   @"path": c1_path,
-                                  @"control_event": [NSNumber numberWithInt:64] // touchUpInside
+                                  @"control_event": @64 // touchUpInside
                                   };
 
 

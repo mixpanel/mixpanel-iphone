@@ -13,8 +13,8 @@ extern NSString *const kSessionVariantKey;
 @property (nonatomic, readonly) BOOL connected;
 @property (nonatomic, assign) BOOL sessionEnded;
 
-- (id)initWithURL:(NSURL *)url;
-- (id)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback;
+- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback;
 
 - (void)setSessionObject:(id)object forKey:(NSString *)key;
 - (id)sessionObjectForKey:(NSString *)key;

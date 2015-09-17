@@ -16,7 +16,7 @@
     UIApplication *_application;
 }
 
-- (id)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
+- (instancetype)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider
 {
     NSParameterAssert(application != nil);
     NSParameterAssert(configuration != nil);
@@ -35,7 +35,7 @@
     UIImage *image = nil;
 
     UIWindow *window = [self windowAtIndex:index];
-    if (window) {
+    if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
         UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, window.screen.scale);
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {

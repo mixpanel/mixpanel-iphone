@@ -30,10 +30,12 @@
  */
 @property (nonatomic) BOOL running;
 
-+ (id)bindngWithJSONObject:(id)object;
++ (id)bindingWithJSONObject:(id)object;
+
++ (id)bindngWithJSONObject:(id)object __deprecated;
 
 - (instancetype)init __unavailable;
-- (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path;
+- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path;
 
 /*!
  Intercepts track calls and adds a property indicating the track event

@@ -20,12 +20,12 @@
 #import <Foundation/Foundation.h>
 #import <Security/SecCertificate.h>
 
-typedef enum {
+typedef NS_ENUM(unsigned int, MPWebSocketReadyState) {
     MPWebSocketStateConnecting = 0,
     MPWebSocketStateOpen = 1,
     MPWebSocketStateClosing = 2,
     MPWebSocketStateClosed = 3,
-} MPWebSocketReadyState;
+};
 
 @class MPWebSocket;
 
@@ -49,12 +49,12 @@ extern NSString *const MPWebSocketErrorDomain;
 @property (nonatomic, readonly, copy) NSString *protocol;
 
 // Protocols should be an array of strings that turn into Sec-WebSocket-Protocol.
-- (id)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
-- (id)initWithURLRequest:(NSURLRequest *)request;
+- (instancetype)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
+- (instancetype)initWithURLRequest:(NSURLRequest *)request;
 
 // Some helper constructors.
-- (id)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
-- (id)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
+- (instancetype)initWithURL:(NSURL *)url;
 
 // Delegate queue will be dispatch_main_queue by default.
 // You cannot set both OperationQueue and dispatch_queue.

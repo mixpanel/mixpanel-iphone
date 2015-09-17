@@ -10,8 +10,8 @@
 
 + (instancetype)messageWithType:(NSString *)type payload:(NSDictionary *)payload;
 
-- (id)initWithType:(NSString *)type;
-- (id)initWithType:(NSString *)type payload:(NSDictionary *)payload;
+- (instancetype)initWithType:(NSString *)type;
+- (instancetype)initWithType:(NSString *)type payload:(NSDictionary *)payload;
 
 - (void)setPayloadObject:(id)object forKey:(NSString *)key;
 - (id)payloadObjectForKey:(NSString *)key;
