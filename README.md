@@ -1,29 +1,28 @@
 # AloomaIosSDK
 
-[![CI Status](http://img.shields.io/travis/Alooma/AloomaIosSDK.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIosSDK)
-[![Version](https://img.shields.io/cocoapods/v/AloomaIosSDK.svg?style=flat)](http://cocoapods.org/pods/AloomaIosSDK)
-[![License](https://img.shields.io/cocoapods/l/AloomaIosSDK.svg?style=flat)](http://cocoapods.org/pods/AloomaIosSDK)
-[![Platform](https://img.shields.io/cocoapods/p/AloomaIosSDK.svg?style=flat)](http://cocoapods.org/pods/AloomaIosSDK)
+[![CI Status](http://img.shields.io/travis/Alooma/AloomaIos.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIos)
+[![Version](https://img.shields.io/cocoapods/v/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
+[![License](https://img.shields.io/cocoapods/l/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
+[![Platform](https://img.shields.io/cocoapods/p/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
 
-## Usage
+## Example Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example project, clone the repo, and run `pod install` from the Example directory.
 
-## Requirements
 
 ## Installation
 
-AloomaIosSDK is available through [CocoaPods](http://cocoapods.org). To install
+AloomaIos is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "AloomaIosSDK"
+pod "AloomaIos"
 ```
 
 ## Author
 
-Alooma, oren@mobixon.com
+Alooma, info@alooma.com
 
 ## License
 
-AloomaIosSDK is available under the MIT license. See the LICENSE file for more info.
+AloomaIos is available under the Apache v2 license. See the LICENSE file for more info.
