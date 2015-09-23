@@ -8,7 +8,6 @@
 
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
-
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
 
@@ -19,15 +18,15 @@
     return @"ui_table_view";
 }
 
-+ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
++ (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
-    NSString *path = [object objectForKey:@"path"];
+    NSString *path = object[@"path"];
     if (![path isKindOfClass:[NSString class]] || [path length] < 1) {
         NSLog(@"must supply a view path to bind by");
         return nil;
     }
 
-    NSString *eventName = [object objectForKey:@"event_name"];
+    NSString *eventName = object[@"event_name"];
     if (![eventName isKindOfClass:[NSString class]] || [eventName length] < 1 ) {
         NSLog(@"binding requires an event name");
         return nil;
@@ -44,7 +43,12 @@
                                             withDelegate:tableDelegate];
 }
 
-- (id)initWithEventName:(NSString *)eventName onPath:(NSString *)path
++ (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
+{
+    return [self bindingWithJSONObject:object];
+}
+
+- (instancetype)initWithEventName:(NSString *)eventName onPath:(NSString *)path
 {
     return [self initWithEventName:eventName onPath:path withDelegate:nil];
 }
@@ -67,7 +71,7 @@
 
 - (void)execute
 {
-    if (!self.running) {
+    if (!self.running && self.swizzleClass != nil) {
         NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
             // select targets based off path
@@ -93,7 +97,7 @@
 
 - (void)stop
 {
-    if (self.running) {
+    if (self.running && self.swizzleClass != nil) {
         [MPSwizzler unswizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
                               onClass:self.swizzleClass
                                 named:self.name];

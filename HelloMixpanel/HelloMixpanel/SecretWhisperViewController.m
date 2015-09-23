@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import "SecretWhisperViewController.h"
 #import "SecretTableViewCell.h"
+#import "SecretWhisperViewController.h"
 
 @interface SecretWhisperViewController ()
 

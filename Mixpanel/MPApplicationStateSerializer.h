@@ -8,7 +8,7 @@
 
 @interface MPApplicationStateSerializer : NSObject
 
-- (id)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider;
+- (instancetype)initWithApplication:(UIApplication *)application configuration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider;
 
 - (UIImage *)screenshotImageForWindowAtIndex:(NSUInteger)index;
 

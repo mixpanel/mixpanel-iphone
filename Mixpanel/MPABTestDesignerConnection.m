@@ -34,7 +34,7 @@ NSString * const kSessionVariantKey = @"session_variant";
      */
     BOOL _open;
     BOOL _connected;
-    BOOL _keepTrying;
+
     NSURL *_url;
     NSMutableDictionary *_session;
     NSDictionary *_typeToMessageClassMap;
@@ -45,7 +45,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     void (^_disconnectCallback)();
 }
 
-- (id)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
+- (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
 {
     self = [super init];
     if (self) {
@@ -61,7 +61,6 @@ NSString * const kSessionVariantKey = @"session_variant";
 
         _open = NO;
         _connected = NO;
-        _keepTrying = keepTrying;
         _sessionEnded = NO;
         _session = [[NSMutableDictionary alloc] init];
         _url = url;
@@ -72,23 +71,51 @@ NSString * const kSessionVariantKey = @"session_variant";
         _commandQueue.maxConcurrentOperationCount = 1;
         _commandQueue.suspended = YES;
 
-        [self open];
+        if (keepTrying) {
+            [self open:YES maxInterval:30 maxRetries:40];
+        } else {
+            [self open:YES maxInterval:0 maxRetries:0];
+        }
     }
 
     return self;
 }
 
-- (id)initWithURL:(NSURL *)url
+- (instancetype)initWithURL:(NSURL *)url
 {
     return [self initWithURL:url keepTrying:NO connectCallback:nil disconnectCallback:nil];
 }
 
-- (void)open
+
+- (void)open:(BOOL)initiate maxInterval:(int)maxInterval maxRetries:(int)maxRetries
 {
-    MessagingDebug(@"Attempting to open WebSocket to: %@", _url);
-    _webSocket = [[MPWebSocket alloc] initWithURL:_url];
-    _webSocket.delegate = self;
-    [_webSocket open];
+    static int retries = 0;
+    BOOL inRetryLoop = retries > 0;
+
+    MessagingDebug(@"In open. initiate = %d, retries = %d, maxRetries = %d, maxInterval = %d, connected = %d", initiate, retries, maxRetries, maxInterval, _connected);
+
+    if (self.sessionEnded || _connected || (inRetryLoop && retries >= maxRetries) ) {
+        // break out of retry loop if any of the success conditions are met.
+        retries = 0;
+    } else if (initiate ^ inRetryLoop) {
+        // If we are initiating a new connection, or we are already in a
+        // retry loop (but not both). Then open a socket.
+        if (!_open) {
+            MessagingDebug(@"Attempting to open WebSocket to: %@, try %d/%d ", _url, retries, maxRetries);
+            _open = YES;
+            _webSocket = [[MPWebSocket alloc] initWithURL:_url];
+            _webSocket.delegate = self;
+            [_webSocket open];
+        }
+        if (retries < maxRetries) {
+            __weak MPABTestDesignerConnection *weakSelf = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(1.4, retries), maxInterval) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                MPABTestDesignerConnection *strongSelf = weakSelf;
+                [strongSelf open:NO maxInterval:maxInterval maxRetries:maxRetries];
+            });
+            retries++;
+        }
+    }
 }
 
 - (void)close
@@ -189,8 +216,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
-    _open = YES;
-    MessagingDebug(@"WebSocket did open.");
+    MessagingDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
 }
 
@@ -203,12 +229,10 @@ NSString * const kSessionVariantKey = @"session_variant";
     _open = NO;
     if (_connected) {
         _connected = NO;
-        [self reconnect:YES maxInterval:10 maxRetries:10];
+        [self open:YES maxInterval:10 maxRetries:10];
         if (_disconnectCallback) {
             _disconnectCallback();
         }
-    } else if (_keepTrying) {
-        [self reconnect:YES maxInterval:30 maxRetries:40];
     }
 }
 
@@ -222,36 +246,10 @@ NSString * const kSessionVariantKey = @"session_variant";
     _open = NO;
     if (_connected) {
         _connected = NO;
-        [self reconnect:YES maxInterval:10 maxRetries:10];
+        [self open:YES maxInterval:10 maxRetries:10];
         if (_disconnectCallback) {
             _disconnectCallback();
         }
-    } else if (_keepTrying) {
-        [self reconnect:YES maxInterval:30 maxRetries:40];
-    }
-}
-
-- (void)reconnect:(BOOL)initiate maxInterval:(int)maxInterval maxRetries:(int)maxRetries
-{
-    static int retries = 0;
-    
-    if (self.sessionEnded || _connected || retries >= maxRetries) {
-        // If we deliberately closed the connection, or are already connected
-        // or we tried too many times, then stop retrying.
-        retries = 0;
-    } else if (initiate ^ (retries > 0)) {
-        // If we are initiating a reconnect, or we are already in a
-        // reconnect cycle (but not both). Then continue trying.
-        MessagingDebug(@"Attempting to reconnect, attempt %d", retries);
-        if (!_open) {
-            [self open];
-        }
-        __weak MPABTestDesignerConnection *weakSelf = self;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MIN(pow(2, retries), maxInterval) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            MPABTestDesignerConnection *strongSelf = weakSelf;
-            [strongSelf reconnect:NO maxInterval:maxInterval maxRetries:maxRetries];
-        });
-        retries++;
     }
 }
 

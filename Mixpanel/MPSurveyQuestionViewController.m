@@ -74,7 +74,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 {
     // Can't use _prompt.bounds here cause it hasn't been calculated yet.
     CGFloat promptWidth = self.view.bounds.size.width - 30; // 2x 15 point horizontal padding on prompt
-    CGFloat promptHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
+    CGFloat promptHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
     UIFont *font = _prompt.font;
     CGSize constraintSize = CGSizeMake(promptWidth, CGFLOAT_MAX);
 
@@ -221,6 +221,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 @implementation MPSurveyMultipleChoiceQuestionViewController
 
+// Since question is declared as a different class in superclass MPSurveyQuestionViewController,
+// indicate dynamic to use parent accessors.
+@dynamic question;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -329,6 +333,10 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 @implementation MPSurveyTextQuestionViewController
 
+// Since question is declared as a different class in superclass MPSurveyQuestionViewController,
+// indicate dynamic to use parent accessors.
+@dynamic question;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -344,7 +352,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
-    if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
         [self.textView becomeFirstResponder];
     }
 }
@@ -360,7 +368,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 {
     [super viewWillLayoutSubviews];
     self.keyboardAccessoryWidth.constant = self.view.bounds.size.width;
-    self.textViewHeight.constant = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
+    self.textViewHeight.constant = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? 72 : 48;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -403,7 +411,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
     CGFloat promptTopSpace, promptAlpha;
-    if (UIDeviceOrientationIsPortrait(([UIApplication sharedApplication].statusBarOrientation))) {
+    if (UIInterfaceOrientationIsPortrait(([UIApplication sharedApplication].statusBarOrientation))) {
         promptTopSpace = 15;
         promptAlpha = 1;
     } else {

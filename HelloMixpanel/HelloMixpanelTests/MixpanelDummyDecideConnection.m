@@ -5,10 +5,11 @@
 //  Created by Alex Hofsteede on 9/7/14.
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
+
 #import <Foundation/Foundation.h>
-#import "MixpanelDummyDecideConnection.h"
 #import "HTTPDataResponse.h"
 #import "HTTPResponse.h"
+#import "MixpanelDummyDecideConnection.h"
 
 @implementation MixpanelDummyDecideConnection
 

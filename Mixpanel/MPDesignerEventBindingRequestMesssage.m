@@ -28,7 +28,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 {
     NSMutableArray *newBindings = [NSMutableArray array];
     for (NSDictionary *bindingInfo in bindingPayload) {
-        MPEventBinding *binding = [MPEventBinding bindngWithJSONObject:bindingInfo];
+        MPEventBinding *binding = [MPEventBinding bindingWithJSONObject:bindingInfo];
         [newBindings addObject:binding];
     }
 
@@ -69,8 +69,8 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         MPABTestDesignerConnection *conn = weak_connection;
 
         dispatch_sync(dispatch_get_main_queue(), ^{
-            NSLog(@"Loading event bindings:\n%@",[[self payload] objectForKey:@"events"]);
-            NSArray *payload = [[self payload] objectForKey:@"events"];
+            NSLog(@"Loading event bindings:\n%@",[self payload][@"events"]);
+            NSArray *payload = [self payload][@"events"];
             MPEventBindingCollection *bindingCollection = [conn sessionObjectForKey:@"event_bindings"];
             if (!bindingCollection) {
                 bindingCollection = [[MPEventBindingCollection alloc] init];

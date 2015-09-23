@@ -14,7 +14,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *prompt;
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt;
+- (instancetype)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt;
 
 @end
 
@@ -22,7 +22,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 @property (nonatomic, strong) NSArray *choices;
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices;
+- (instancetype)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices;
 
 @end
 
@@ -69,7 +69,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
     return nil;
 }
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt
+- (instancetype)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt
 {
     if (self = [super init]) {
         BOOL valid = NO;
@@ -97,7 +97,7 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 @implementation MPSurveyMultipleChoiceQuestion
 
-- (id)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices
+- (instancetype)initWithID:(NSUInteger)ID type:(NSString *)type prompt:(NSString *)prompt andChoices:(NSArray *)choices
 {
     if (choices != nil && [choices count] > 0) {
         if (self = [super initWithID:ID type:type andPrompt:prompt]) {

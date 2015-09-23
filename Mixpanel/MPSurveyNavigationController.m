@@ -34,6 +34,9 @@
 
 @implementation MPSurveyNavigationController
 
+// Since view is declared as a different class in superclass UIViewController,
+// indicate dynamic to use parent accessors.
+@dynamic view;
 
 - (void)viewDidLoad
 {

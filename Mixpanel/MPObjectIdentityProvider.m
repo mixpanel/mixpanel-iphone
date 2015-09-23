@@ -11,7 +11,7 @@
     MPSequenceGenerator *_sequenceGenerator;
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

@@ -33,9 +33,9 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
             [conn setSessionObject:variant forKey:kSessionVariantKey];
         }
 
-        if ([[[self payload] objectForKey:@"tweaks"] isKindOfClass:[NSArray class]]) {
+        if ([[self payload][@"tweaks"] isKindOfClass:[NSArray class]]) {
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [variant addTweaksFromJSONObject:[[self payload] objectForKey:@"tweaks"] andExecute:YES];
+                [variant addTweaksFromJSONObject:[self payload][@"tweaks"] andExecute:YES];
             });
         }
 

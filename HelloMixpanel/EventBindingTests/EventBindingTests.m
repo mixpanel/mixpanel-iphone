@@ -6,15 +6,13 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-
+#import <XCTest/XCTest.h>
 #import "Mixpanel.h"
-#import "MPObjectSelector.h"
 #import "MPEventBinding.h"
+#import "MPObjectSelector.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
-
 
 #define TEST_TOKEN @"xxxxxxxxxxxxxxxxxxxxxxx"
 
@@ -30,7 +28,7 @@
 
 @implementation MixpanelStub
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
         _calls = [NSMutableArray array];
@@ -62,7 +60,7 @@
 @end
 @implementation TableController
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
         self.tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStylePlain];
@@ -143,7 +141,7 @@
                                   @"event_type": @"ui_control",
                                   @"event_name": @"ui control",
                                   @"path": c1_path,
-                                  @"control_event": [NSNumber numberWithInt:64] // touchUpInside
+                                  @"control_event": @64 // touchUpInside
                                   };
 
 
@@ -217,8 +215,8 @@
     XCTAssertEqual([selector selectFromRoot:rootViewController][0], c1, @"c1 should have been replaced");
     [c1 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"didMoveToWindow should have been unSwizzled");
-    
-    
+
+
     // Test archive
     NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
     MPUIControlBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
@@ -279,7 +277,7 @@
     indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     [vc tableView:tv didSelectRowAtIndexPath:indexPath];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"No track calls should be fired");
-    
+
     // Test archive
     NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
     MPUITableViewBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
@@ -323,6 +321,24 @@
     format = @"(mp_fingerprintVersion >= 1 AND mp_varA = \"not a real return value\") OR 1 = 2";
     XCTAssertFalse([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1]);
     XCTAssertFalse([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
+}
+
+- (void)testInvalidEventBindings
+{
+    // This event binding references a class (NoSuchController) that
+    // doesn't exist. Running the binding should have no effect.
+    NSString *badData = @"YnBsaXN0MDDUAQIDBAUGIiNYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0\
+b3ASAAGGoKgHCBUWFxgZGlUkbnVsbNYJCgsMDQ4PEBESExRSSURUcGF0aFYkY2xh\
+c3NUbmFtZVlldmVudE5hbWVSJDCAAoAEgAeAA4AFgAYQAF8QJDg3QUMyRDU2LTc4\
+OEUtNEYyNS05MEE0LTc4MDVCQUFENkYwOF8QHS9VSVZpZXdDb250cm9sbGVyL1VJ\
+VGFibGVWaWV3XXVpIHRhYmxlIHZpZXdfEBBOb1N1Y2hDb250cm9sbGVy0hscHR5a\
+JGNsYXNzbmFtZVgkY2xhc3Nlc18QFE1QVUlUYWJsZVZpZXdCaW5kaW5nox8gIV8Q\
+FE1QVUlUYWJsZVZpZXdCaW5kaW5nXk1QRXZlbnRCaW5kaW5nWE5TT2JqZWN0XxAP\
+TlNLZXllZEFyY2hpdmVy0SQlVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBTAFYA\
+WwBiAGcAcQB0AHYAeAB6AHwAfgCAAIIAqQDJANcA6gDvAPoBAwEaAR4BNQFEAU0B\
+XwFiAWcAAAAAAAACAQAAAAAAAAAmAAAAAAAAAAAAAAAAAAABaQ==";
+    MPUIControlBinding *badBinding = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSData alloc] initWithBase64EncodedString:badData options:0]];
+    [badBinding execute]; // This should have no effect, and should not raise.
 }
 
 

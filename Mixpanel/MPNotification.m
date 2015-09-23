@@ -7,7 +7,7 @@
 
 @interface MPNotification ()
 
-- (id)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL;
+- (instancetype)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL;
 
 @end
 
@@ -85,7 +85,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         NSString *escapedUrl = [imageURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         imageURL = [NSURL URLWithString:escapedUrl];
         if (imageURL == nil) {
-            NSLog(@"invalid notif image URL: %@", imageURLString);
+            MixpanelError(@"invalid notif image URL: %@", imageURLString);
             return nil;
         }
 
@@ -105,7 +105,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         }
     }
 
-    NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
+    NSArray *supportedOrientations = [[NSBundle mainBundle] infoDictionary][@"UISupportedInterfaceOrientations"];
     if (![supportedOrientations containsObject:@"UIInterfaceOrientationPortrait"] && [type isEqualToString:@"takeover"]) {
         MixpanelError(@"takeover notifications are not supported in landscape-only apps.");
         return nil;
@@ -121,7 +121,7 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                                       imageURL:imageURL];
 }
 
-- (id)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
+- (instancetype)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
 {
     if (self = [super init]) {
         BOOL valid = YES;

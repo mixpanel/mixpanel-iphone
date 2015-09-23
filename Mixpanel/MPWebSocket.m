@@ -59,7 +59,7 @@
 #endif
 
 
-typedef enum  {
+typedef NS_OPTIONS(unsigned int, MPOpCode)  {
     MPOpCodeTextFrame = 0x1,
     MPOpCodeBinaryFrame = 0x2,
     // 3-7 reserved.
@@ -67,9 +67,9 @@ typedef enum  {
     MPOpCodePing = 0x9,
     MPOpCodePong = 0xA,
     // B-F reserved.
-} MPOpCode;
+};
 
-typedef enum {
+typedef NS_ENUM(unsigned int, MPStatusCode) {
     MPStatusCodeNormal = 1000,
     MPStatusCodeGoingAway = 1001,
     MPStatusCodeProtocolError = 1002,
@@ -80,7 +80,7 @@ typedef enum {
     MPStatusCodeInvalidUTF8 = 1007,
     MPStatusCodePolicyViolated = 1008,
     MPStatusCodeMessageTooBig = 1009,
-} MPStatusCode;
+};
 
 typedef struct {
     BOOL fin;
@@ -179,7 +179,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 // This class is not thread-safe, and is expected to always be run on the same queue.
 @interface MPIOConsumerPool : NSObject
 
-- (id)initWithBufferCapacity:(NSUInteger)poolSize;
+- (instancetype)initWithBufferCapacity:(NSUInteger)poolSize;
 
 - (MPIOConsumer *)consumerWithScanner:(stream_scanner)scanner handler:(data_callback)handler bytesNeeded:(size_t)bytesNeeded readToCurrentFrame:(BOOL)readToCurrentFrame unmaskBytes:(BOOL)unmaskBytes;
 - (void)returnConsumer:(MPIOConsumer *)consumer;
@@ -268,6 +268,7 @@ typedef void (^data_callback)(MPWebSocket *webSocket,  NSData *data);
 
     BOOL _sentClose;
     BOOL _didFail;
+    BOOL _cleanupScheduled;
     int _closeCode;
 
     BOOL _isPumping;
@@ -293,7 +294,7 @@ static __strong NSData *CRLFCRLF;
     CRLFCRLF = [[NSData alloc] initWithBytes:"\r\n\r\n" length:4];
 }
 
-- (id)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
+- (instancetype)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
 {
     self = [super init];
     if (self) {
@@ -309,17 +310,17 @@ static __strong NSData *CRLFCRLF;
     return self;
 }
 
-- (id)initWithURLRequest:(NSURLRequest *)request;
+- (instancetype)initWithURLRequest:(NSURLRequest *)request;
 {
     return [self initWithURLRequest:request protocols:nil];
 }
 
-- (id)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url;
 {
     return [self initWithURL:url protocols:nil];
 }
 
-- (id)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
+- (instancetype)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
 {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     return [self initWithURLRequest:request protocols:protocols];
@@ -376,8 +377,10 @@ static __strong NSData *CRLFCRLF;
     [_inputStream close];
     [_outputStream close];
 
-    mp_dispatch_release(_workQueue);
-    _workQueue = NULL;
+    if (_workQueue) {
+        mp_dispatch_release(_workQueue);
+        _workQueue = NULL;
+    }
 
     if (_receivedHTTPHeaders) {
         CFRelease(_receivedHTTPHeaders);
@@ -456,13 +459,13 @@ static __strong NSData *CRLFCRLF;
 
     if (responseCode >= 400) {
         MixpanelError(@"Request failed with response code %d", responseCode);
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode] forKey:NSLocalizedDescriptionKey]]];
+        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode]}]];
         return;
 
     }
 
     if(![self _checkHandshake:_receivedHTTPHeaders]) {
-        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"] forKey:NSLocalizedDescriptionKey]]];
+        [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid Sec-WebSocket-Accept response"]}]];
         return;
     }
 
@@ -470,7 +473,7 @@ static __strong NSData *CRLFCRLF;
     if (negotiatedProtocol) {
         // Make sure we requested the protocol
         if ([_requestedProtocols indexOfObject:negotiatedProtocol] == NSNotFound) {
-            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Server specified Sec-WebSocket-Protocol that wasn't requested"] forKey:NSLocalizedDescriptionKey]]];
+            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2133 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Server specified Sec-WebSocket-Protocol that wasn't requested"]}]];
             return;
         }
 
@@ -486,7 +489,7 @@ static __strong NSData *CRLFCRLF;
     [self _performDelegateBlock:^{
         if ([self.delegate respondsToSelector:@selector(webSocketDidOpen:)]) {
             [self.delegate webSocketDidOpen:self];
-        };
+        }
     }];
 }
 
@@ -573,11 +576,11 @@ static __strong NSData *CRLFCRLF;
 
         // If we're using pinned certs, don't validate the certificate chain
         if ([_urlRequest mp_SSLPinnedCertificates].count) {
-            [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
+            [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
         }
 
 #if DEBUG
-        [SSLOptions setValue:[NSNumber numberWithBool:NO] forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
+        [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
         MixpanelDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
@@ -618,7 +621,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)close;
 {
-    [self closeWithCode:-1 reason:nil];
+    [self closeWithCode:MPStatusCodeNormal reason:nil];
 }
 
 - (void)closeWithCode:(NSInteger)code reason:(NSString *)reason;
@@ -647,8 +650,7 @@ static __strong NSData *CRLFCRLF;
         ((uint16_t *)mutablePayload.mutableBytes)[0] = EndianU16_BtoN(code);
 
         if (reason) {
-            NSRange remainingRange = { .location = 0, .length = 0 };
-
+            NSRange remainingRange = NSMakeRange(0, 0);
             NSUInteger usedLength = 0;
 
             BOOL success = [reason getBytes:(char *)mutablePayload.mutableBytes + sizeof(uint16_t) maxLength:payload.length - sizeof(uint16_t) usedLength:&usedLength encoding:NSUTF8StringEncoding options:NSStringEncodingConversionExternalRepresentation range:NSMakeRange(0, reason.length) remainingRange:&remainingRange];
@@ -689,11 +691,11 @@ static __strong NSData *CRLFCRLF;
             }];
 
             self.readyState = MPWebSocketStateClosed;
-            self->_selfRetain = nil;
 
             MixpanelError(@"Failing with error %@", error.localizedDescription);
 
             [self _disconnect];
+            [self _scheduleCleanup];
         }
     });
 }
@@ -817,7 +819,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     [self assertOnWorkQueue];
 
     if (self.readyState == MPWebSocketStateOpen) {
-        [self closeWithCode:1000 reason:nil];
+        [self closeWithCode:MPStatusCodeNormal reason:nil];
     }
     dispatch_async(_workQueue, ^{
         [self _disconnect];
@@ -1067,8 +1069,8 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     if (dataLength - _outputBufferOffset > 0 && _outputStream.hasSpaceAvailable) {
         NSInteger bytesWritten = [_outputStream write:((const uint8_t *)_outputBuffer.bytes + _outputBufferOffset) maxLength:(dataLength - _outputBufferOffset)];
         if (bytesWritten == -1) {
-            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:[NSDictionary dictionaryWithObject:@"Error writing to stream" forKey:NSLocalizedDescriptionKey]]];
-             return;
+            [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2145 userInfo:@{NSLocalizedDescriptionKey: @"Error writing to stream"}]];
+            return;
         }
 
         _outputBufferOffset += (NSUInteger) bytesWritten;
@@ -1086,12 +1088,14 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         !_sentClose) {
         _sentClose = YES;
 
-        [_outputStream close];
-        [_inputStream close];
+        @synchronized(self) {
+            [_outputStream close];
+            [_inputStream close];
 
 
-        for (NSArray *runLoop in [_scheduledRunloops copy]) {
-            [self unscheduleFromRunLoop:[runLoop objectAtIndex:0] forMode:[runLoop objectAtIndex:1]];
+            for (NSArray *runLoop in [_scheduledRunloops copy]) {
+                [self unscheduleFromRunLoop:runLoop[0] forMode:runLoop[1]];
+            }
         }
 
         if (!_failed) {
@@ -1102,7 +1106,7 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
             }];
         }
 
-        _selfRetain = nil;
+        [self _scheduleCleanup];
     }
 }
 
@@ -1126,6 +1130,48 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
     [self assertOnWorkQueue];
     [_consumers addObject:[_consumerPool consumerWithScanner:consumer handler:callback bytesNeeded:dataLength readToCurrentFrame:NO unmaskBytes:NO]];
     [self _pumpScanner];
+}
+
+- (void)_scheduleCleanup
+{
+    @synchronized(self) {
+        if (_cleanupScheduled) {
+            return;
+        }
+        
+        _cleanupScheduled = YES;
+        
+        // Cleanup NSStream delegate's in the same RunLoop used by the streams themselves:
+        // This way we'll prevent race conditions between handleEvent and SRWebsocket's dealloc
+        NSTimer *timer = [NSTimer timerWithTimeInterval:0.f
+                                                 target:self
+                                               selector:@selector(_cleanupSelfReference)
+                                               userInfo:nil
+                                                repeats:NO];
+        
+        [[NSRunLoop mp_networkRunLoop] addTimer:timer
+                                        forMode:NSDefaultRunLoopMode];
+    }
+}
+
+- (void)_cleanupSelfReference
+{
+    @synchronized(self) {
+        // Remove the delegates for each stream so we don't fire any events on
+        // close or error
+        _inputStream.delegate = nil;
+        _outputStream.delegate = nil;
+        
+        // Close the streams, which will immediately remove them from the run
+        // loop.
+        [_inputStream close];
+        [_outputStream close];
+    }
+    
+    // Cleanup self reference in the same GCD queue as usual
+    dispatch_async(_workQueue, ^{
+        self->_selfRetain = nil;
+    });
 }
 
 
@@ -1180,7 +1226,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
         return didWork;
     }
 
-    MPIOConsumer *consumer = [_consumers objectAtIndex:0];
+    MPIOConsumer *consumer = _consumers[0];
 
     size_t bytesNeeded = consumer.bytesNeeded;
 
@@ -1391,7 +1437,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
             if (!_pinnedCertFound) {
                 dispatch_async(_workQueue, ^{
-                    [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:23556 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid server cert"] forKey:NSLocalizedDescriptionKey]]];
+                    [self _failWithError:[NSError errorWithDomain:@"org.lolrus.SocketRocket" code:23556 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Invalid server cert"]}]];
                 });
                 return;
             }
@@ -1433,7 +1479,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                 } else {
                     if (self.readyState != MPWebSocketStateClosed) {
                         self.readyState = MPWebSocketStateClosed;
-                        self->_selfRetain = nil;
+                        [self _scheduleCleanup];
                     }
 
                     if (!self->_sentClose && !self->_failed) {
@@ -1441,7 +1487,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                         // If we get closed in this state it's probably not clean because we should be sending this when we send messages
                         [self _performDelegateBlock:^{
                             if ([self.delegate respondsToSelector:@selector(webSocket:didCloseWithCode:reason:wasClean:)]) {
-                                [self.delegate webSocket:self didCloseWithCode:0 reason:@"Stream end encountered" wasClean:NO];
+                                [self.delegate webSocket:self didCloseWithCode:MPStatusCodeGoingAway reason:@"Stream end encountered" wasClean:NO];
                             }
                         }];
                     }
@@ -1467,7 +1513,7 @@ static const size_t MPFrameHeaderOverhead = 32;
                     if (bytes_read != bufferSize) {
                         break;
                     }
-                };
+                }
                 [self _pumpScanner];
                 break;
             }
@@ -1515,7 +1561,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     NSMutableArray *_bufferedConsumers;
 }
 
-- (id)initWithBufferCapacity:(NSUInteger)poolSize;
+- (instancetype)initWithBufferCapacity:(NSUInteger)poolSize;
 {
     self = [super init];
     if (self) {
@@ -1525,7 +1571,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     return self;
 }
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithBufferCapacity:8];
 }
@@ -1692,7 +1738,7 @@ static NSRunLoop *networkRunLoop = nil;
     mp_dispatch_release(_waitGroup);
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -1708,8 +1754,22 @@ static NSRunLoop *networkRunLoop = nil;
         _runLoop = [NSRunLoop currentRunLoop];
         dispatch_group_leave(_waitGroup);
 
-        NSTimer *timer = [[NSTimer alloc] initWithFireDate:[NSDate distantFuture] interval:0.0 target:nil selector:nil userInfo:nil repeats:NO];
-        [_runLoop addTimer:timer forMode:NSDefaultRunLoopMode];
+        // Add an empty run loop source to prevent runloop from spinning.
+        CFRunLoopSourceContext sourceCtx = {
+            .version = 0,
+            .info = NULL,
+            .retain = NULL,
+            .release = NULL,
+            .copyDescription = NULL,
+            .equal = NULL,
+            .hash = NULL,
+            .schedule = NULL,
+            .cancel = NULL,
+            .perform = NULL
+        };
+        CFRunLoopSourceRef source = CFRunLoopSourceCreate(NULL, 0, &sourceCtx);
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+        CFRelease(source);
 
         while ([_runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
 

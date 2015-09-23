@@ -13,7 +13,7 @@
 @property (nonatomic) NSUInteger collectionID;
 @property (nonatomic, strong) NSArray *questions;
 
-- (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
+- (instancetype)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions;
 
 @end
 
@@ -63,7 +63,7 @@
                             andQuestions:[NSArray arrayWithArray:questions]];
 }
 
-- (id)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
+- (instancetype)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
     if (self = [super init]) {
         BOOL valid = YES;
