@@ -1,28 +1,26 @@
 //
-//  AloomaViewController.m
-//  AloomaIosSDK
+//  ViewController.m
+//  SampleApp
 //
-//  Created by Alooma on 06/28/2015.
-//  Copyright (c) 2014 Alooma. All rights reserved.
+//  Created by Ram Amar on 25/08/2015.
+//  Copyright © 2015 Alooma. All rights reserved.
 //
 
-#import "AloomaViewController.h"
-#import <AloomaIosSDK/Alooma.h>
+#import "ViewController.h"
+#import <AloomaIos/Alooma.h>
 
-@interface AloomaViewController ()
+@interface ViewController ()
 
 @end
 
-@implementation AloomaViewController
+@implementation ViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    // Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -45,10 +43,5 @@
     [[Alooma sharedInstance] track:self.eventTextField.text customEvent:@{ @"key1" : @"val1", @"key2" : @"val2", @"key3" : @"val3", @"key4" : @"val4", @"key5" : @"val5"}];
 }
 
-#pragma mark UITextFieldDelegate methods
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return YES;
-}
 
 @end

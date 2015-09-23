@@ -1,14 +1,14 @@
 //
-//  AloomaViewController.h
-//  AloomaIosSDK
+//  ViewController.h
+//  SampleApp
 //
-//  Created by Alooma on 06/28/2015.
-//  Copyright (c) 2014 Alooma. All rights reserved.
+//  Created by Ram Amar on 25/08/2015.
+//  Copyright © 2015 Alooma. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 
-@interface AloomaViewController : UIViewController <UITextFieldDelegate>
+@interface ViewController : UIViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *eventTextField;
 
@@ -18,3 +18,4 @@
 - (IBAction)sendTextArgsEventButtonClicked:(id)sender;
 
 @end
+
