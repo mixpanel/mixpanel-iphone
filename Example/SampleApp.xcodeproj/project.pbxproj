@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6D2920342FDD7672F1748782 /* Pods_SampleApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB737A1795E65D848846A458 /* Pods_SampleApp.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A5435E491BB2B5F100D61A24 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5435E481BB2B5F100D61A24 /* Default-568h@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A5974E911B8D000600AAEBAD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5974E901B8D000600AAEBAD /* main.m */; };
 		A5974E941B8D000600AAEBAD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A5974E931B8D000600AAEBAD /* AppDelegate.m */; };
 		A5974E971B8D000600AAEBAD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5974E961B8D000600AAEBAD /* ViewController.m */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		418BC408408E92A507BB8283 /* Pods-SampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.release.xcconfig"; sourceTree = "<group>"; };
+		A5435E481BB2B5F100D61A24 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A5974E8C1B8D000600AAEBAD /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5974E901B8D000600AAEBAD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5974E921B8D000600AAEBAD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 		A5974E831B8D000600AAEBAD = {
 			isa = PBXGroup;
 			children = (
+				A5435E481BB2B5F100D61A24 /* Default-568h@2x.png */,
 				A5974E8E1B8D000600AAEBAD /* SampleApp */,
 				A5974E8D1B8D000600AAEBAD /* Products */,
 				5FFE9F86ABDFBD607582A9F8 /* Pods */,
@@ -162,6 +165,7 @@
 			files = (
 				A5974E9C1B8D000600AAEBAD /* Assets.xcassets in Resources */,
 				A5974E9A1B8D000600AAEBAD /* Main.storyboard in Resources */,
+				A5435E491BB2B5F100D61A24 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
