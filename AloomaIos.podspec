@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint AloomaIosSDK.podspec' to ensure this is a
+# Be sure to run `pod lib lint AloomaIos.podspec' to ensure this is a
 # valid spec and remove all comments before submitting the spec.
 #
 # Any lines starting with a # are optional, but encouraged
