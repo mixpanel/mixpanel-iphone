@@ -1,4 +1,4 @@
-# AloomaIos iOS Event Tracking Library
+# AloomaIos - an iOS Event Tracking Library
 
 [![CI Status](http://img.shields.io/travis/Alooma/AloomaIos.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIos)
 [![Version](https://img.shields.io/cocoapods/v/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
