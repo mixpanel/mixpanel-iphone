@@ -935,6 +935,7 @@
 				055FA70D194A6B010080A709 /* Frameworks */,
 				055FA70E194A6B010080A709 /* Resources */,
 				1E4AE2A5F1034B24822048D9 /* Copy Pods Resources */,
+				C49AFA645DE3193C56910A6F /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -958,6 +959,7 @@
 				187939EC19A2A7F400CC4FBE /* Frameworks */,
 				187939ED19A2A7F400CC4FBE /* Resources */,
 				F403E2E2F4364D4FA24314F8 /* Copy Pods Resources */,
+				735BF6181BFFE0E2BC4BD91E /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -979,6 +981,7 @@
 				2808F98B1610EFE3005772B7 /* Resources */,
 				118A38CBA6114BD69D1260D0 /* Copy Pods Resources */,
 				18C7D4C81A018A3300A79634 /* ShellScript */,
+				353737AC316041AC5E961C6D /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -999,6 +1002,7 @@
 				2808F9AE1610EFE4005772B7 /* Resources */,
 				2808F9AF1610EFE4005772B7 /* ShellScript */,
 				3EEA23EF5B17446994262C49 /* Copy Pods Resources */,
+				596B60D83896F08839065B26 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1224,6 +1228,21 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
+		353737AC316041AC5E961C6D /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel/Pods-HelloMixpanel-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3EEA23EF5B17446994262C49 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1254,6 +1273,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		596B60D83896F08839065B26 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		735BF6181BFFE0E2BC4BD91E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9E95958518D549F3A77AB7CA /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1282,6 +1331,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C49AFA645DE3193C56910A6F /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F403E2E2F4364D4FA24314F8 /* Copy Pods Resources */ = {
