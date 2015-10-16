@@ -13,5 +13,5 @@ target :EventBindingTests do
 end
 
 target :HelloMixpanel do
-    pod 'iOS-Color-Picker', '~> 0.0.6'
+    pod 'iOS-Color-Picker'
 end
