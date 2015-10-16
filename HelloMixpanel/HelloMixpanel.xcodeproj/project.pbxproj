@@ -1927,16 +1927,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"MIXPANEL_LOG=1",
-					"DEBUG=1",
-					"MIXPANEL_DEBUG=1",
-				);
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
-					"MIXPANEL_LOG=1",
-					"DEBUG=1",
-					"MIXPANEL_DEBUG=1",
-				);
 				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
 				GCC_WARN_PEDANTIC = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
@@ -1947,7 +1937,10 @@
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
 				);
-				OTHER_CFLAGS = "-Wno-gnu";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Wno-gnu",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
@@ -1973,7 +1966,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "MP_TWEAK_ENABLED=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"MP_TWEAK_ENABLED=1",
+				);
 				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
 				GCC_WARN_PEDANTIC = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
@@ -1984,7 +1981,10 @@
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
 				);
-				OTHER_CFLAGS = "-Wno-gnu";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Wno-gnu",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "F111E4C1-01A6-44C5-9356-7D7AE9E1EC7E";
@@ -2011,7 +2011,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers\"",
 					"\"${PODS_ROOT}/Headers/CocoaAsyncSocket\"",
@@ -2026,7 +2025,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
-				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -2051,7 +2049,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers\"",
 					"\"${PODS_ROOT}/Headers/CocoaAsyncSocket\"",
@@ -2066,7 +2063,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
-				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -2149,7 +2145,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = MIXPANEL_NO_IFA;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					MIXPANEL_NO_IFA,
+				);
 				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
 				GCC_WARN_PEDANTIC = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
@@ -2160,7 +2159,10 @@
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
 				);
-				OTHER_CFLAGS = "-Wno-gnu";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Wno-gnu",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2186,7 +2188,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloMixpanel/HelloMixpanel-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers\"",
 					"\"${PODS_ROOT}/Headers/CocoaAsyncSocket\"",
@@ -2201,7 +2202,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
-				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -2219,10 +2219,6 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2253,10 +2249,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -2284,10 +2276,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
