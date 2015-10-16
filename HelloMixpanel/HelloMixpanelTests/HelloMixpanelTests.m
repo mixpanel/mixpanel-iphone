@@ -1141,6 +1141,58 @@
     }
 }
 
+- (void)testNoShowNotificationOnAlertController
+{
+    UIViewController *topVC = [self topViewController];
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Alert" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+
+    __block BOOL waitForBlock = YES;
+    [topVC presentViewController:alertController animated:NO completion:^{
+        waitForBlock = NO;
+    }];
+
+    while(waitForBlock) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    }
+
+    NSDictionary *o = @{@"id": @3,
+                        @"message_id": @1,
+                        @"title": @"title",
+                        @"type": @"takeover",
+                        @"body": @"body",
+                        @"cta": @"cta",
+                        @"cta_url": @"maps://",
+                        @"image_url": @"http://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
+    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    [self.mixpanel showNotificationWithObject:notif];
+
+    //wait for notifs to be shown from main queue
+    [self waitForAsyncQueue];
+
+    topVC = [self topViewController];
+    XCTAssertFalse([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification was presented");
+
+    // Dismiss the alert and try to present notification again
+    waitForBlock = YES;
+    [topVC dismissViewControllerAnimated:YES completion:^{
+        waitForBlock = NO;
+    }];
+
+    while(waitForBlock) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    }
+
+    [self.mixpanel showNotificationWithObject:notif];
+
+    //wait for notifs to be shown from main queue
+    [self waitForAsyncQueue];
+
+    topVC = [self topViewController];
+    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification wasn't presented");
+}
+
 - (void)testNoShowSurveyOnPresentingVC
 {
     NSDictionary *o = @{@"id": @3,
