@@ -28,6 +28,8 @@
 
 - (void)setCurrentValue:(MPTweakValue)currentValue
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-selector-match"
     if (_minimumValue != nil && currentValue != nil && [_minimumValue compare:currentValue] == NSOrderedDescending) {
         currentValue = _minimumValue;
     }
@@ -35,6 +37,7 @@
     if (_maximumValue != nil && currentValue != nil && [_maximumValue compare:currentValue] == NSOrderedAscending) {
         currentValue = _maximumValue;
     }
+#pragma clang diagnostic pop
     
     if (_currentValue != currentValue) {
         _currentValue = currentValue;

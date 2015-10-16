@@ -1945,7 +1945,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B345B645-0BBA-4DC5-81F7-703A0A2E9A90";
-				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1989,7 +1988,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "F111E4C1-01A6-44C5-9356-7D7AE9E1EC7E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F111E4C1-01A6-44C5-9356-7D7AE9E1EC7E";
-				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -2166,7 +2164,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
 			name = AppStore;

@@ -58,10 +58,13 @@
                                           andVerifyEvent:verifyEvent];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 + (MPEventBinding *)bindngWithJSONObject:(NSDictionary *)object
 {
     return [self bindingWithJSONObject:object];
 }
+#pragma clang diagnostic pop
 
 - (instancetype)initWithEventName:(NSString *)eventName
                  onPath:(NSString *)path

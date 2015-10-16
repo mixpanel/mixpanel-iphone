@@ -8,7 +8,7 @@
 
 #import "MPDesignerEventBindingMessage.h"
 
-@implementation MPDesignerEventBindingResponseMesssage
+@implementation MPDesignerEventBindingResponseMessage
 
 + (instancetype)message
 {
