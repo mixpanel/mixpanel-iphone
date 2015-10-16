@@ -4,7 +4,7 @@
 
 #import <Availability.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import "MPLogger.h"
 #import "MPSurvey.h"
 #import "MPSurveyNavigationController.h"

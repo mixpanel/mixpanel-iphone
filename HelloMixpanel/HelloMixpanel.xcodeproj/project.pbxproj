@@ -321,7 +321,7 @@
 		182525191991473700C034BD /* MPUITableViewBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MPUITableViewBinding.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		1825251A1991473700C034BD /* MPUITableViewBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUITableViewBinding.m; sourceTree = "<group>"; };
 		182EB8611A1C1A6900BE9D75 /* MPDesignerEventBindingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDesignerEventBindingMessage.h; sourceTree = "<group>"; };
-		182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCategoryHelpers.h; sourceTree = "<group>"; };
+		182EB8671A1D3C4000BE9D75 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		184E4D1619A7D690003115CE /* MPDesignerSessionCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPDesignerSessionCollection.h; sourceTree = "<group>"; };
 		187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPUIControlBinding.m; sourceTree = "<group>"; };
 		187939CF19A284BF00CC4FBE /* MPUIControlBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPUIControlBinding.h; sourceTree = "<group>"; };
@@ -796,7 +796,7 @@
 		5115A0E71B55C5A400787217 /* MPCategoryHelpersSupport */ = {
 			isa = PBXGroup;
 			children = (
-				182EB8671A1D3C4000BE9D75 /* MPCategoryHelpers.h */,
+				182EB8671A1D3C4000BE9D75 /* UIView+MPHelpers.h */,
 				5115A0CF1B4F48F000787217 /* UIView+MPHelpers.m */,
 			);
 			name = MPCategoryHelpersSupport;

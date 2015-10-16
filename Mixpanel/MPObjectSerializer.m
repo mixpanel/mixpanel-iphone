@@ -2,7 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import <objc/runtime.h>
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import "MPClassDescription.h"
 #import "MPEnumDescription.h"
 #import "MPObjectIdentityProvider.h"

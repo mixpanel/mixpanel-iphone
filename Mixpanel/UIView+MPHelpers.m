@@ -5,7 +5,7 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 
 // NB If you add any more fingerprint methods, increment this.
 #define MP_FINGERPRINT_VERSION 1

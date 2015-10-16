@@ -7,7 +7,7 @@
 //
 
 
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 

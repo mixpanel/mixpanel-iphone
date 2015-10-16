@@ -21,7 +21,7 @@
 #if !defined(MIXPANEL_APP_EXTENSION)
 
 #import "MPABTestDesignerConnection.h"
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
