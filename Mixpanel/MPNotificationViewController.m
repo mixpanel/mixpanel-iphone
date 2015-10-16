@@ -275,12 +275,15 @@
     self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.bodyLabel.numberOfLines = 0;
 
-    UIColor *backgroundColor = [UIColor mp_applicationPrimaryColor];
-    if (!backgroundColor) {
-        backgroundColor = [UIColor mp_darkEffectColor];
+    if (!self.backgroundColor) {
+        self.backgroundColor = [UIColor mp_applicationPrimaryColor];
+        if (!self.backgroundColor) {
+            self.backgroundColor = [UIColor mp_darkEffectColor];
+        }
     }
-    backgroundColor = [backgroundColor colorWithAlphaComponent:0.95f];
-    self.view.backgroundColor = backgroundColor;
+
+    UIColor *backgroundColorWithAlphaComponent = [self.backgroundColor colorWithAlphaComponent:0.95f];
+    self.view.backgroundColor = backgroundColorWithAlphaComponent;
 
     if (self.notification != nil) {
         if (self.notification.image != nil) {

@@ -23,6 +23,8 @@
 
 @interface MPMiniNotificationViewController : MPNotificationViewController
 
+@property (nonatomic, strong) UIColor *backgroundColor;
+
 - (void)showWithAnimation;
 
 @end
