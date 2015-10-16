@@ -980,7 +980,6 @@
 				2808F98A1610EFE3005772B7 /* Frameworks */,
 				2808F98B1610EFE3005772B7 /* Resources */,
 				118A38CBA6114BD69D1260D0 /* Copy Pods Resources */,
-				18C7D4C81A018A3300A79634 /* ShellScript */,
 				353737AC316041AC5E961C6D /* Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -1171,19 +1170,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel/Pods-HelloMixpanel-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		18C7D4C81A018A3300A79634 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "";
 		};
 		1E4AE2A5F1034B24822048D9 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
