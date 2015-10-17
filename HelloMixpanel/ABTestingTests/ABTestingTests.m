@@ -11,7 +11,7 @@
 #import "HTTPServer.h"
 #import "Mixpanel.h"
 #import "MixpanelDummyDecideConnection.h"
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 #import "MPValueTransformers.h"
@@ -275,7 +275,7 @@
             XCTAssertEqualObjects(label2.text, @"Old Text 2", @"Label2 text should never have changed, as it was added after the variant was stopped");
             [expect fulfill];
         });
-        [self waitForExpectationsWithTimeout:0.1 handler:nil];
+        [self waitForExpectationsWithTimeout:0.5 handler:nil];
     }
 }
 
@@ -570,7 +570,8 @@
 
     XCTAssert([v1 respondsToSelector:@selector(mp_fingerprintVersion)]);
     XCTAssert([v1 mp_fingerprintVersion] == 1);
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     XCTAssert([v1 respondsToSelector:@selector(mp_varA)]);
     XCTAssert([v1 respondsToSelector:@selector(mp_varB)]);
     XCTAssert([v1 respondsToSelector:@selector(mp_varC)]);
@@ -581,6 +582,7 @@
     XCTAssert([v1 respondsToSelector:@selector(mp_snapshotImage)]);
 
     XCTAssertFalse([v1 respondsToSelector:@selector(mp_nonexistant)]);
+#pragma clang diagnostic pop
 }
 
 - (void)testUITableViewCellOrdering
