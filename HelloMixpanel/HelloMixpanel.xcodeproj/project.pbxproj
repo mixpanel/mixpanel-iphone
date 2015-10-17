@@ -636,7 +636,9 @@
 				2808F9981610EFE3005772B7 /* Supporting Files */,
 				9003ECED95D33B569C44DB53 /* Pods */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		2808F98E1610EFE3005772B7 /* Products */ = {
 			isa = PBXGroup;
