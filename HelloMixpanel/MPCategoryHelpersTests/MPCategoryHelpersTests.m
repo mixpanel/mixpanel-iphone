@@ -7,7 +7,7 @@
 //
 
 
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
@@ -20,6 +20,9 @@
 - (void)testExistence
 {
     UIView *v1 = [[UIView alloc] init];
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     XCTAssert([v1 respondsToSelector:@selector(mp_varA)]);
     XCTAssert([v1 respondsToSelector:@selector(mp_varB)]);
     XCTAssert([v1 respondsToSelector:@selector(mp_varC)]);
@@ -27,6 +30,7 @@
     XCTAssert([v1 respondsToSelector:@selector(mp_varE)]);
     
     XCTAssertFalse([v1 respondsToSelector:@selector(mp_nonexistent)]);
+#pragma clang diagnostic pop
 }
 
 - (void)testFingerprinting
@@ -44,7 +48,7 @@
     [v1 addSubview:b2];
     
     NSString *action = @"signUp";
-    NSString *targetAction = [NSString stringWithFormat:@"%lu/%@", UIControlEventTouchUpInside, action];
+    
     [b1 addTarget:self action:NSSelectorFromString(action) forControlEvents:UIControlEventTouchUpInside];
     UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"checkerboard" withExtension:@"jpg"]]];
     XCTAssert(image);
@@ -77,7 +81,10 @@
     XCTAssert(image);
     [b2 setImage:image forState:UIControlStateNormal];
     
-    XCTAssertEqualObjects([b1 performSelector:NSSelectorFromString(@"mp_varC")], [b2 performSelector:NSSelectorFromString(@"mp_varC")]);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    XCTAssertEqualObjects([b1 performSelector:@selector(mp_varC)], [b2 performSelector:@selector(mp_varC)]);
+#pragma clang diagnostic pop
 }
 
 

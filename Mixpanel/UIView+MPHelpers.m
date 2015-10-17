@@ -5,7 +5,7 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 
 // NB If you add any more fingerprint methods, increment this.
 #define MP_FINGERPRINT_VERSION 1
@@ -135,7 +135,7 @@
     if ([self isKindOfClass:[UIButton class]]) {
         originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
     } else if ([NSStringFromClass([self class]) isEqual:@"UITabBarButton"] && [self.subviews count] > 0 && [self.subviews[0] respondsToSelector:NSSelectorFromString(@"image")]) {
-        originalImage = (UIImage *)[self.subviews[0] image];
+        originalImage = (UIImage *)[self.subviews[0] performSelector:@selector(image)];
     }
     
     if (originalImage) {

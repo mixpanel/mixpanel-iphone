@@ -21,7 +21,7 @@
 #if !defined(MIXPANEL_APP_EXTENSION)
 
 #import "MPABTestDesignerConnection.h"
-#import "MPCategoryHelpers.h"
+#import "UIView+MPHelpers.h"
 #import "MPDesignerEventBindingMessage.h"
 #import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
@@ -35,7 +35,7 @@
 #endif
 
 
-#define VERSION @"2.8.3"
+#define VERSION @"2.9.0"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
