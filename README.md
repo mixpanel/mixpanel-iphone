@@ -1,6 +1,6 @@
 # AloomaIos - an iOS Event Tracking Library
 
-[![CI Status](http://img.shields.io/travis/Alooma/AloomaIos.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIos)
+[![CI Status](http://img.shields.io/travis/Aloomaio/iossdk.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIos)
 [![Version](https://img.shields.io/cocoapods/v/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
 [![License](https://img.shields.io/cocoapods/l/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
 [![Platform](https://img.shields.io/cocoapods/p/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)

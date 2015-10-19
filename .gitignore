@@ -23,7 +23,6 @@ profile
 # AppCode
 .idea
 
-HelloMixpanel/build/
 Example/Pods
 Podfile.lock
 Example/build
