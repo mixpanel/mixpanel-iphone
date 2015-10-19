@@ -504,7 +504,7 @@ static __strong NSData *CRLFCRLF;
         CFHTTPMessageAppendBytes(websocket->_receivedHTTPHeaders, (const UInt8 *)data.bytes, (CFIndex)data.length);
 
         if (CFHTTPMessageIsHeaderComplete(websocket->_receivedHTTPHeaders)) {
-            MixpanelDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
+            MessagingDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
             [websocket _HTTPHeadersDidFinish];
         } else {
             [websocket _readHTTPHeader];
@@ -514,7 +514,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MixpanelDebug(@"Connected");
+    MessagingDebug(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
 
     // Set host first so it defaults
@@ -581,7 +581,7 @@ static __strong NSData *CRLFCRLF;
 
 #if DEBUG
         [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
-        MixpanelDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
+        MessagingDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
         [_outputStream setProperty:SSLOptions
@@ -636,7 +636,7 @@ static __strong NSData *CRLFCRLF;
 
         self.readyState = MPWebSocketStateClosing;
 
-        MixpanelDebug(@"Closing with code %d reason %@", code, reason);
+        MessagingDebug(@"Closing with code %d reason %@", code, reason);
 
         if (wasConnecting) {
             [self _disconnect];
@@ -746,7 +746,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)_handleMessage:(id)message
 {
-    MixpanelDebug(@"Received message");
+    MessagingDebug(@"Received message");
     [self _performDelegateBlock:^{
         [self.delegate webSocket:self didReceiveMessage:message];
     }];
@@ -792,7 +792,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     size_t dataSize = data.length;
     __block uint16_t closeCode = 0;
 
-    MixpanelDebug(@"Received close frame");
+    MessagingDebug(@"Received close frame");
 
     if (dataSize == 1) {
         // TODO handle error
@@ -829,7 +829,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 - (void)_disconnect;
 {
     [self assertOnWorkQueue];
-    MixpanelDebug(@"Trying to disconnect");
+    MessagingDebug(@"Trying to disconnect");
     _closeWhenFinishedWriting = YES;
     [self _pumpWriting];
 }
@@ -1473,7 +1473,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
             case NSStreamEventEndEncountered: {
                 [self _pumpScanner];
-                MixpanelDebug(@"NSStreamEventEndEncountered %@", aStream);
+                MessagingDebug(@"NSStreamEventEndEncountered %@", aStream);
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
@@ -1497,7 +1497,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasBytesAvailable: {
-                MixpanelDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
+                MessagingDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
                 const int bufferSize = 2048;
                 uint8_t buffer[bufferSize];
 
@@ -1519,13 +1519,13 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasSpaceAvailable: {
-                MixpanelDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
+                MessagingDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
                 [self _pumpWriting];
                 break;
             }
 
             default:
-                MixpanelDebug(@"(default)  %@", aStream);
+                MessagingDebug(@"(default)  %@", aStream);
                 break;
         }
     });
