@@ -20,6 +20,7 @@
     
     __weak IBOutlet UISwitch *propertiesSwitch;
     __weak IBOutlet UILabel *timedEventsLabel;
+    __weak IBOutlet UISwitch *timedEventsSwitch;
     
     int eventsCount;
 }
@@ -96,6 +97,11 @@
     
     eventsCount++;
     [self.delegate statusChanged:[NSString stringWithFormat:@"Event queued! total: %d", eventsCount]];
+    // also reset timed events if there are any:
+    if ([timedEventsSwitch isOn]) {
+        [timedEventsSwitch setOn:FALSE];
+        [timedEventsLabel setText:@"Add $duration to next event"];
+    }
 }
 
 - (IBAction)eventTypeSegmentValueChanged:(id)sender {
@@ -204,11 +210,11 @@
 - (IBAction)registerTimedEventsSwitchValueChanged:(id)sender {
     if (((UISwitch*)sender).isOn){
         [alooma timeEvent:stringTextField.text];
-        [timedEventsLabel setText:[NSString stringWithFormat:@"Registered events: \"%@\"", stringTextField.text]];
+        [timedEventsLabel setText:[NSString stringWithFormat:@"Duration measured for: \"%@\"", stringTextField.text]];
     }
     else {
         [alooma clearTimedEvents];
-        [timedEventsLabel setText:@"Register timed events"];
+        [timedEventsLabel setText:@"Add $duration to next event"];
     }
 }
 

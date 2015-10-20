@@ -308,6 +308,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IVI-Kc-xLn">
+                            <rect key="frame" x="0.0" y="755.5" width="600" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <animations/>
+                            <attributedString key="attributedText">
+                                <fragment content="Timed events must have an event string">
+                                    <attributes>
+                                        <color key="NSColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="12" name="HelveticaNeue"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <sections>
                             <tableViewSection headerTitle="General" id="hgZ-1x-2rE">
                                 <cells>
@@ -687,7 +701,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Register timed events" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3xT-N8-2VN">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add $duration to next event" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3xT-N8-2VN">
                                                     <rect key="frame" x="18" y="12" width="515" height="20"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -731,6 +745,7 @@
                         <outlet property="stringSwitch" destination="Fj6-91-Mxb" id="3PU-ck-4kF"/>
                         <outlet property="stringTextField" destination="n4T-YE-p5k" id="aMS-HL-1uY"/>
                         <outlet property="timedEventsLabel" destination="3xT-N8-2VN" id="qT1-WL-2Md"/>
+                        <outlet property="timedEventsSwitch" destination="hxH-8e-7OX" id="dR6-nJ-zuA"/>
                         <outlet property="tokenSegment" destination="1e6-Mr-QJb" id="Nun-ab-po6"/>
                     </connections>
                 </tableViewController>
