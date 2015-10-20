@@ -1,3 +1,3 @@
 language: objective-c
-script: xctool -workspace Example/SampleApp.xcworkspace -scheme SampleApp -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+script: xctool -workspace Example/SampleApp.xcworkspace -scheme Pods-SampleApp -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 install: (gem update cocoapods && cd Example/ ; pod install)
