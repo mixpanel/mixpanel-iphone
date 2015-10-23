@@ -662,6 +662,13 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         if ([response intValue] == 0) {
             MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
+        } else if ([response intValue] == 1) {
+            // Success
+        } else {
+            // Another failure occurred. We expected a response of either `0` or `1`, but received something else.
+            // Maybe we were on hotel WiFi and had the request intercepted. Don't drop the data but retry again later.
+            // XXX Ideally we'd do something more intelligent, maybe by looking at `urlResponse` more closely.
+            break;
         }
 
         [queue removeObjectsInArray:batch];
