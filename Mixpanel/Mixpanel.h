@@ -189,6 +189,20 @@
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to automatically send the device's IP Address to
+ Mixpanel. Transmission allows Mixpanel to geo-locate a user down to
+ city-level specification. For privacy reasons, you may need to forego
+ having such collection.
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property (atomic) BOOL transmitIPAddress;
+
+/*!
+ @property
 
  @abstract
  Determines the time, in seconds, that a mini notification will remain on
