@@ -1,16 +1,13 @@
 //
 //  main.m
-//  AloomaIosSDK
+//  SampleApp
 //
-//  Created by Alooma on 06/28/2015.
-//  Copyright (c) 2014 Alooma. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-int main(int argc, char * argv[])
-{
+int main(int argc, char * argv[]) {
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }

@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint AloomaIos.podspec' to ensure this is a
+# Be sure to run `pod lib lint Alooma-iOS.podspec' to ensure this is a
 # valid spec and remove all comments before submitting the spec.
 #
 # Any lines starting with a # are optional, but encouraged
@@ -8,8 +8,8 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "AloomaIos"
-  s.version          = "0.1.0"
+  s.name             = "Alooma-iOS"
+  s.version          = "0.1.1"
   s.summary          = "An iOS library for sending events to Alooma"
   s.homepage         = "https://github.com/aloomaio/iossdk.git"
   s.license          = 'Apache License, Version 2.0'
@@ -20,13 +20,11 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '6.0'
   s.requires_arc = true
 
-  s.source_files = 'AloomaIos/*.{m,h}'
+  s.source_files = 'Alooma-iOS/*.{m,h}'
   s.resource_bundles = {
-    'AloomaIos' => ['AloomaIos/*.png']
+    'Alooma-iOS' => ['Alooma-iOS/*.png']
   }
 
   s.library = 'icucore'
-  # s.public_header_files = 'Alooma/*.h'
   s.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

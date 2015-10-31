@@ -18,7 +18,7 @@
 #import "AloomaLogger.h"
 #import "NSData+AloomaBase64.h"
 
-#define VERSION @"2.8.1"
+#define VERSION @"0.1.1"
 
 static NSString * const kSendingTimePlaceHolder = @"<SendingTimePlaceHolder>";
 static NSString * const kSendingTimeKey = @"sending_time";
@@ -88,11 +88,6 @@ static Alooma *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
 
         self.serverURL = url;
-//        self.serverURL = @"https://api.mixpanel.com";
-//        self.decideURL = @"https://decide.mixpanel.com";
-//        self.switchboardURL = @"wss://switchboard.mixpanel.com";
-
-//        self.checkForVariantsOnActive = YES;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];

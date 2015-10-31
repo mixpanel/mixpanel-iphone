@@ -2,12 +2,9 @@
 //  AppDelegate.m
 //  SampleApp
 //
-//  Created by Ram Amar on 25/08/2015.
-//  Copyright © 2015 Alooma. All rights reserved.
 //
 
 #import "AppDelegate.h"
-#import <AloomaIos/Alooma.h>
 
 @interface AppDelegate ()
 
@@ -18,9 +15,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-    [Alooma sharedInstanceWithToken:@"" serverURL:@"https://mobixon-qa.alooma.io"];
-    
     return YES;
 }
 
