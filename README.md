@@ -1,26 +1,26 @@
-# AloomaIos - an iOS Event Tracking Library
+# Alooma-iOS - an iOS Event Tracking Library
 
-[![CI Status](http://img.shields.io/travis/Aloomaio/iossdk.svg?style=flat)](https://travis-ci.org/Alooma/AloomaIos)
-[![Version](https://img.shields.io/cocoapods/v/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
-[![License](https://img.shields.io/cocoapods/l/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
-[![Platform](https://img.shields.io/cocoapods/p/AloomaIos.svg?style=flat)](http://cocoapods.org/pods/AloomaIos)
+[![CI Status](http://img.shields.io/travis/Aloomaio/iossdk.svg?style=flat)](https://travis-ci.org/Alooma/Alooma-iOS)
+[![Version](https://img.shields.io/cocoapods/v/Alooma-iOS.svg?style=flat)](http://cocoapods.org/pods/Alooma-iOS)
+[![License](https://img.shields.io/cocoapods/l/Alooma-iOS.svg?style=flat)](http://cocoapods.org/pods/Alooma-iOS)
+[![Platform](https://img.shields.io/cocoapods/p/Alooma-iOS.svg?style=flat)](http://cocoapods.org/pods/Alooma-iOS)
 
 ## Installation
 
-Integrating the AloomaIos library can be done in a few simple steps, using [CocoaPods](http://cocoapods.org).
+Integrating the Alooma-iOS library can be done in a few simple steps, using [CocoaPods](http://cocoapods.org).
 
 ### To install CocoaPods:
 
 1. Open a terminal and run `sudo gem install cocoapods`
 2. Run `pod setup`
 
-### To integrate the AloomaIos library in your project:
+### To integrate the Alooma-iOS library in your project:
 
 1. Create a file called `Podfile` in the root directory of your project
 2. Add the following line to your Podfile:
 
 ```ruby
-pod "AloomaIos"
+pod "Alooma-iOS"
 ```
 
 3. Close XCode
@@ -29,16 +29,16 @@ pod "AloomaIos"
 
 ### Compatibility
 
-The AloomaIos library is a modified version of the [Mixpanel-iphone](http://www.github.com/mixpanel/mixpanel-iphone/) library, trimmed down to the bare event tracking necessities.
+The Alooma-iOS library is a modified version of the [Mixpanel-iphone](http://www.github.com/mixpanel/mixpanel-iphone/) library, trimmed down to the bare event tracking necessities.
 
-To integrate AloomaIos, you need to be using Xcode 5 and a Base SDK of iOS 7.0. The library will work with deployment targets of iOS 6.0 and above.
+To integrate Alooma-iOS, you need to be using XCode 5 and a Base SDK of iOS 7.0. The library will work with deployment targets of iOS 6.0 and above.
 
 ## Initialization
 
-To use the AloomaIos library, you must first initialize it with the hostname of your Alooma endpoint, and your token. Since this should be done only once, it makes sense to initialize AloomaIos when your app finishes launching:
+To use the Alooma-iOS library, you must first initialize it with the hostname of your Alooma endpoint, and your token. Since this should be done only once, it makes sense to initialize Alooma-iOS when your app finishes launching:
 
 ```objectivec
-#import <AloomaIos/Alooma.h>
+#import <Alooma-iOS/Alooma.h>
 
 @interface AppDelegate ()
 
@@ -57,7 +57,7 @@ To use the AloomaIos library, you must first initialize it with the hostname of 
 }
 ```
 
-Once initialized, you can use the AloomaIos library anywhere in your code just by calling the `sharedInstance` method:
+Once initialized, you can use the Alooma-iOS library anywhere in your code just by calling the `sharedInstance` method:
 
 ```objectivec
     Alooma *alooma = [Alooma sharedInstance];
@@ -65,11 +65,11 @@ Once initialized, you can use the AloomaIos library anywhere in your code just b
 
 ## Sending events
 
-To send an event to Alooma, you can stick to the Mixpanel convention of `track:properties:`, or you can use a more free-form `trackCustomEvent:` to send a JSON serializable NSDictionary object.
+To send an event to Alooma, you can stick to the Mixpanel convention of `track:properties:`, or you can use the more free-form `trackCustomEvent:` to send a JSON serializable NSDictionary object.
 
 ### The Mixpanel Way
 
-As we mentioned, AloomaIos is forked from Mixpanel, therefore it supports all of the methods implemented by the Mixpanel library:
+As we mentioned, Alooma-iOS is forked from Mixpanel, therefore it supports all of the methods implemented by the Mixpanel library:
 
 - `track:`
 - `track:properties:`
@@ -111,11 +111,11 @@ Using these methods will send events in the following format:
 }
 ```
 
-Documentation to the rest of the Mixpanel provided functions can be found on the [Mixpanel website](https://mixpanel.com/help/reference/ios)
+Documentation of the rest of the Mixpanel provided functions can be found on the [Mixpanel website](https://mixpanel.com/help/reference/ios).
 
 ### The Custom Way
 
-In case you haven't been using Mixpanel, and all you want is to send custom JSON objects, you can use the following snippet:
+In case you haven't been using Mixpanel, and all you want to do is send custom JSON objects, you can use the following snippet:
 
 ```objectivec
 Alooma *alooma = [Alooma sharedInstance];
@@ -147,13 +147,13 @@ Using this method will send events in the following format:
 
 ### General Notes
 
-- AloomaIos adds additional properties to each event:
+- Alooma-iOS adds additional properties to each event:
   - time - the epoch time (seconds) when the event was tracked
   - sending_time - the epoch time (seconds) when the event was actually sent (in case the device was offline)
   - distinct_id - a unique identifier, identifying the device
-  - additional fields and their values can be seen in the function [collectAutomaticProperties](https://github.com/Aloomaio/iossdk/blob/master/AloomaIos/Alooma.m#L781)
+  - additional fields and their values can be seen in the function [collectAutomaticProperties](https://github.com/Aloomaio/iossdk/blob/master/Alooma-iOS/Alooma.m#L781)
 
-- The AloomaIos stores in internal queue of events, to be sent when the device is online. The queue has a fixed size of 500 events. If the device is offline and the queue fills up, the 501th event will cause the 1st (oldest) event to be popped from the queue and discarded.
+- The Alooma-iOS stores events in an internal queue of events, to be sent when the device is online. The queue has a fixed size of 500 events. If the device is offline and the queue fills up, the 501th event will cause the 1st (oldest) event to be popped from the queue and discarded.
 
 
 ## Testing with our SampleApp
@@ -166,4 +166,4 @@ Alooma, info@alooma.com
 
 ## License
 
-AloomaIos is available under the Apache v2 license. See the LICENSE file for more info.
+Alooma-iOS is available under the Apache v2 license. See the LICENSE file for more info.

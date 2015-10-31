@@ -5,7 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AloomaIos/Alooma.h>
+#import <Alooma-iOS/Alooma.h>
 
 @protocol SettingsDelegate <NSObject>
 
