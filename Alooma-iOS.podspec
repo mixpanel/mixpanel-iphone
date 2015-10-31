@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Alooma-iOS"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "An iOS library for sending events to Alooma"
   s.homepage         = "https://github.com/aloomaio/iossdk.git"
   s.license          = 'Apache License, Version 2.0'
@@ -26,7 +26,5 @@ Pod::Spec.new do |s|
   }
 
   s.library = 'icucore'
-  # s.public_header_files = 'Alooma/*.h'
   s.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end
