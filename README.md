@@ -159,6 +159,7 @@ Using this method will send events in the following format:
 ## Testing with our SampleApp
 
 To run the example project, clone the repo, and run `pod install` from the Example directory.
+Open the `SampleApp.xcworkspace` and run the app.
 
 ## Author
 
