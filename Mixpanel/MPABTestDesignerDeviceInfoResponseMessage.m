@@ -63,7 +63,7 @@
 
 - (NSString *)libVersion
 {
-    return [self payloadObjectForKey:@"device_name"];
+    return [self payloadObjectForKey:@"lib_version"];
 }
 
 - (void)setLibVersion:(NSString *)libVersion

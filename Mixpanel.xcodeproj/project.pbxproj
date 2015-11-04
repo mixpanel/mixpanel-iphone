@@ -301,7 +301,9 @@
 				7C170C2C1A4A02F500D9E0F2 /* Mixpanel */,
 				7C170C2B1A4A02F500D9E0F2 /* Products */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		7C170C2B1A4A02F500D9E0F2 /* Products */ = {
 			isa = PBXGroup;
