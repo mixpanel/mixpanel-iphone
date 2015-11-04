@@ -836,6 +836,22 @@
 
 /*!
  @method
+ 
+ @abstract
+ Remove a list of properties and their values from the current user's profile 
+ in Mixpanel People.
+ 
+ @discussion
+ The properties array must ony contain NSString names of properties. For properties
+ that don't exist there will be no effect.
+ 
+ @param properties       properties array
+ 
+ */
+- (void)unset:(NSArray *)properties;
+
+/*!
+ @method
 
  @abstract
  Increment the given numeric properties by the given values.

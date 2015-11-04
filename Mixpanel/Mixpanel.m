@@ -1894,11 +1894,18 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 // milliseconds unix timestamp
                 r[@"$time"] = epochMilliseconds;
             }
-            if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
-                [p addEntriesFromDictionary:self.automaticPeopleProperties];
+            if ([action isEqualToString:@"$unset"]) {
+                // $unset takes an array of property names which is supplied to this method
+                // in the properties parameter under the key "$properties"
+                r[action] = properties[@"$properties"];
+            } else {
+                if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
+                    [p addEntriesFromDictionary:self.automaticPeopleProperties];
+                }
+                [p addEntriesFromDictionary:properties];
+                r[action] = [NSDictionary dictionaryWithDictionary:p];
             }
-            [p addEntriesFromDictionary:properties];
-            r[action] = [NSDictionary dictionaryWithDictionary:p];
+            
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
                 MixpanelDebug(@"%@ queueing people record: %@", self.mixpanel, r);
@@ -1962,6 +1969,18 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSAssert(properties != nil, @"properties must not be nil");
     [Mixpanel assertPropertyTypes:properties];
     [self addPeopleRecordToQueueWithAction:@"$set_once" andProperties:properties];
+}
+
+- (void)unset:(NSArray *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    for (id __unused v in properties) {
+        NSAssert([v isKindOfClass:[NSString class]],
+                 @"%@ unset property names should be NSString. found: %@", self, v);
+    }
+    // $unset takes an array but addPeopleRecordToQueueWithAction:andProperties takes an NSDictionary
+    // so the array is stored under the key "$properties" which the above method expects when action is $unset
+    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:@{@"$properties":properties}];
 }
 
 - (void)increment:(NSDictionary *)properties
