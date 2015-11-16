@@ -153,7 +153,7 @@
 - (NSUInteger)supportedInterfaceOrientations
 #endif
 {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAll;
 }
 
 - (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
@@ -600,7 +600,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    CGPoint center = CGPointMake(160.0f, 200.0f);
+    CGPoint center = CGPointMake(self.center.x, 200.0f);
     CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
     CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
 
