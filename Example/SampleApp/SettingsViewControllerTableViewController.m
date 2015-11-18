@@ -15,12 +15,11 @@
     __weak IBOutlet UITextField *stringTextField;
     
     __weak IBOutlet UISegmentedControl *objectTypeSegment;
-    __weak IBOutlet UISwitch *keySwitch;
-    __weak IBOutlet UITextField *keyTextField;
     
-    __weak IBOutlet UISwitch *propertiesSwitch;
-    __weak IBOutlet UILabel *timedEventsLabel;
-    __weak IBOutlet UISwitch *timedEventsSwitch;
+    __weak IBOutlet UIButton *registerSuperPropsButton;
+    __weak IBOutlet UIButton *timedEventsButton;
+    __weak IBOutlet UITextField *superPropertyOnceValue;
+    __weak IBOutlet UITextField *superPropertyToRemove;
     
     int eventsCount;
 }
@@ -45,7 +44,6 @@
     eventsCount = 0;
     
     [stringTextField setDelegate:self];
-    [keyTextField setDelegate:self];
     
     alooma = [self createAlooma];
 }
@@ -64,32 +62,35 @@
 }
 
 - (void)sendEvent{
-    NSDictionary *object = nil;
+    NSString *event = stringSwitch.isOn ? stringTextField.text : nil;
+
+    NSDictionary *object = objectTypeSegment.selectedSegmentIndex == 0 ? nil :
+        @{ @"event" : @"customEventObject",
+           @"custom_string" : @"val1",
+           @"custom_float" : @(1.5),
+           @"custom_bool" : @(YES),
+           @"custom_int" : @(1983),
+           @"custom_date" : [NSDate date],
+           @"custom_array" : @[@"arr_val1", @"arr_val2", @"arr_val3"]};
     
-    // event is object or object+string && object is not nil
-    NSDictionary *itemsDictionary = @{};
-    if (eventTypeSegment.selectedSegmentIndex > 0 && objectTypeSegment.selectedSegmentIndex > 0){
-        itemsDictionary = @{ @"key_str" : @"val1", @"key_float" : @(1.5), @"key_bool" : @(YES), @"key_int" : @(1983), @"key_date" : [NSDate date], @"key_array" : @[@"arr_val1", @"arr_val2", @"arr_val3"]};
-        
-        object = keySwitch.isOn ? @{keyTextField.text : itemsDictionary} : itemsDictionary;
-    }
     
     switch (eventTypeSegment.selectedSegmentIndex) {
         case 0:
-            // string
-            [alooma track:stringSwitch.isOn ? stringTextField.text : nil];
+            // track:
+            [alooma track:event];
             break;
         case 1:
-            // object
-            [alooma trackCustomEvent:object];
+            // track: props:
+            [alooma track:event properties:object];
             break;
         case 2:
-            // string + object
-            [alooma track:stringSwitch.isOn ? stringTextField.text : nil
-              customEvent:object];
+            // trackCustomEvent:
+            [alooma trackCustomEvent:object];
             break;
         case 3:
-            [alooma track:stringSwitch.isOn ? stringTextField.text : nil properties:itemsDictionary];
+            // track:CustomEvent
+            [alooma track:event
+              customEvent:object];
             break;
         default:
             break;
@@ -97,50 +98,37 @@
     
     eventsCount++;
     [self.delegate statusChanged:[NSString stringWithFormat:@"Event queued! total: %d", eventsCount]];
-    // also reset timed events if there are any:
-    if ([timedEventsSwitch isOn]) {
-        [timedEventsSwitch setOn:FALSE];
-        [timedEventsLabel setText:@"Add $duration to next event"];
-    }
 }
 
 - (IBAction)eventTypeSegmentValueChanged:(id)sender {
     switch (((UISegmentedControl*)sender).selectedSegmentIndex) {
         case 0:
-            // string
+            // track: (allow string only)
             [stringSwitch setEnabled:YES];
             [stringTextField setEnabled:YES];
             
             [objectTypeSegment setEnabled:NO];
-            [keySwitch setEnabled:NO];
-            [keyTextField setEnabled:NO];
             break;
         case 1:
-            // object
+            // track:props: (allow string + obj)
+            [stringSwitch setEnabled:YES];
+            [stringTextField setEnabled:stringSwitch.isOn];
+
+            [objectTypeSegment setEnabled:YES];
+            break;
+        case 2:
+            // trackCustomEvent: (allow only object)
             [stringSwitch setEnabled:NO];
             [stringTextField setEnabled:NO];
 
             [objectTypeSegment setEnabled:YES];
-            [keySwitch setEnabled:YES];
-            [keyTextField setEnabled:YES];
-            break;
-        case 2:
-            // string + object
-            [stringSwitch setEnabled:YES];
-            [stringTextField setEnabled:YES];
-
-            [objectTypeSegment setEnabled:YES];
-            [keySwitch setEnabled:YES];
-            [keyTextField setEnabled:YES];
             break;
         case 3:
-            // string + properties
+            // track:CustomEvent: (allow string + obj)
             [stringSwitch setEnabled:YES];
-            [stringTextField setEnabled:YES];
+            [stringTextField setEnabled:stringSwitch.isOn];
             
-            [objectTypeSegment setEnabled:NO];
-            [keySwitch setEnabled:NO];
-            [keyTextField setEnabled:NO];
+            [objectTypeSegment setEnabled:YES];
             break;
         default:
             break;
@@ -148,74 +136,87 @@
 }
 
 - (IBAction)objectTypeSegmentValueChanged:(id)sender {
-    
-    //        case 0:
-    // nil
-    //        case 1:
-    // items
-    
-    [keySwitch setEnabled:((UISegmentedControl*)sender).selectedSegmentIndex == 1];
-    [keyTextField setEnabled:((UISegmentedControl*)sender).selectedSegmentIndex == 1];
 }
 
 - (IBAction)stringSwitchValueChanged:(id)sender {
     [stringTextField setEnabled:((UISwitch*)sender).isOn];
 }
 
-- (IBAction)keySwitchValueChanged:(id)sender {
-    [keyTextField setEnabled:((UISwitch*)sender).isOn];
-}
-
 - (IBAction)tokenSelectValueChanged:(id)sender {
     alooma = [self createAlooma];
+    [self.delegate statusChanged:@"Alooma re-initialized"];
 }
 
 - (IBAction)serverSelectValueChanged:(id)sender {
     alooma = [self createAlooma];
+    [self.delegate statusChanged:@"Alooma re-initialized"];
 }
 
-- (IBAction)superPropertiesSwichValueChanged:(id)sender {
-    if (((UISwitch*)sender).isOn){
-        [alooma registerSuperProperties:@{ @"super_key_str" : @"super properties", @"super_key_float" : @(1.5), @"super_key_bool" : @(YES), @"super_key_int" : @(100), @"super_key_date" : [NSDate date], @"super_key_array" : @[@"arr_val1", @"arr_val2", @"arr_val3"]}];
-    }
-    else{
-        [alooma clearSuperProperties];
-    }
+- (IBAction)registerSuperPropertiesButtonPressed:(id)sender {
+    [alooma registerSuperProperties:@{
+                                      @"super_prop_str" : @"super properties",
+                                      @"super_prop_float" : @(1.5),
+                                      @"super_prop_bool" : @(YES),
+                                      @"super_prop_int" : @(100),
+                                      @"super_prop_date" : [NSDate date],
+                                      @"super_prop_array" : @[@"sup_arr_val1", @"sup_arr_val2", @"sup_arr_val3"]}];
+    [self.delegate statusChanged:@"Registered super properties"];
+}
+
+- (IBAction)clearSuperPropertiesButtonPressed:(id)sender {
+    [alooma clearSuperProperties];
+    [self.delegate statusChanged:@"Cleared super properties"];
+
 }
 
 - (IBAction)registerSuperPropertiesOnceButtonClicked:(id)sender {
-    [alooma registerSuperPropertiesOnce:@{ @"super_key_str2" : @"super properties once", @"super_key_float" : @(111.111), @"super_key_bool" : @(NO)}];
-    [self.delegate statusChanged:@"Registered super properties Once"];
+    if (superPropertyOnceValue.text.length == 0) {
+        [self.delegate statusChanged:@"Please enter a value to set in the super property"];
+        return;
+    }
+    [alooma registerSuperPropertiesOnce:@{
+          @"super_prop_once" : superPropertyOnceValue.text
+          }];
+    [self.delegate statusChanged:@"Registered a super property Once"];
 }
 
 - (IBAction)registerSuperPropertiesOnceAndDefault:(id)sender {
-    [alooma registerSuperPropertiesOnce:@{ @"super_key_str" : @"super properties once + default", @"super_key_float" : @(123.123), @"super_key_bool" : @(NO)} defaultValue:@"super properties"];
+    [alooma registerSuperPropertiesOnce:@{
+          @"super_prop_once" : superPropertyOnceValue.text,
+          } defaultValue:@"default-one-time-value"];
     [self.delegate statusChanged:@"Registered super properties Once + Overwrite default"];
 }
 
 - (IBAction)removePropertyButtonClicked:(id)sender {
-    [alooma unregisterSuperProperty:@"super_key_str"];
-    [self.delegate statusChanged:@"super_key_str property unregistered"];
+    if (superPropertyToRemove.text.length == 0) {
+        [self.delegate statusChanged:@"Please enter a name of a super property to remove"];
+        return;
+    }
+    [alooma unregisterSuperProperty:superPropertyToRemove.text];
+    [self.delegate statusChanged:[NSString stringWithFormat:@"Removed the super prop: %@",
+                                  superPropertyToRemove.text]];
 }
 
 - (IBAction)resetButtonClicked:(id)sender {
     [alooma reset];
     
-    [propertiesSwitch setOn:NO];
     eventsCount = 0;
     
-    [self.delegate statusChanged:@"Properties were reset"];
+    [self.delegate statusChanged:@"Alooma was reset"];
 }
 
-- (IBAction)registerTimedEventsSwitchValueChanged:(id)sender {
-    if (((UISwitch*)sender).isOn){
+- (IBAction)registerTimedEventsPressed:(id)sender {
+    if (stringTextField.text != nil && stringTextField.text.length > 0){
         [alooma timeEvent:stringTextField.text];
-        [timedEventsLabel setText:[NSString stringWithFormat:@"Duration measured for: \"%@\"", stringTextField.text]];
+        [self.delegate statusChanged:[NSString stringWithFormat:@"Duration measured for: \"%@\"", stringTextField.text]];
+    } else {
+        [self.delegate statusChanged:[NSString stringWithFormat:@"Can't measure duration for event with no name"]];
     }
-    else {
-        [alooma clearTimedEvents];
-        [timedEventsLabel setText:@"Add $duration to next event"];
-    }
+}
+
+- (IBAction)clearTimedEventsPressed:(id)sender {
+    [alooma clearTimedEvents];
+    [self.delegate statusChanged:@"Cleared timed events"];
 }
 
 - (void)flushEvents{
