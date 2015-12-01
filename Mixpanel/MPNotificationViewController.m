@@ -76,6 +76,7 @@
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageHeight;
 @property (nonatomic, strong) IBOutlet UIView *imageDragView;
 @property (nonatomic, strong) IBOutlet UIView *bgMask;
+@property (nonatomic, weak) UIView *presentingView;
 
 @end
 
@@ -88,7 +89,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.backgroundImageView.image = self.backgroundImage;
 
     if (self.notification) {
         if (self.notification.image) {
@@ -111,7 +111,7 @@
         }
     }
 
-    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.imageView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     self.imageView.layer.shadowOpacity = 1.0f;
     self.imageView.layer.shadowRadius = 5.0f;
@@ -124,6 +124,11 @@
     [self.imageDragView addGestureRecognizer:gesture];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.presentingView = self.presentingViewController.view;
+}
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
 {
     [self.presentingViewController dismissViewControllerAnimated:animated completion:completion];
@@ -131,8 +136,9 @@
 
 - (void)viewDidLayoutSubviews
 {
+    [super viewDidLayoutSubviews];
+    
     [self.okayButton sizeToFit];
-    [self.imageAlphaMaskView sizeToFit];
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
@@ -153,52 +159,7 @@
 - (NSUInteger)supportedInterfaceOrientations
 #endif
 {
-    return UIInterfaceOrientationMaskPortrait;
-}
-
-- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
-{
-    [super beginAppearanceTransition:isAppearing animated:animated];
-
-    if (isAppearing) {
-        self.bgMask.alpha = 0.0f;
-        self.imageView.alpha = 0.0f;
-        self.titleView.alpha = 0.0f;
-        self.bodyView.alpha = 0.0f;
-        self.okayButton.alpha = 0.0f;
-        self.closeButton.alpha = 0.0f;
-    }
-}
-
-- (void)endAppearanceTransition
-{
-    [super endAppearanceTransition];
-
-    NSTimeInterval duration = 0.20f;
-
-    CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
-    transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
-    self.imageView.transform = transform;
-    self.titleView.transform = transform;
-    self.bodyView.transform = transform;
-    self.okayButton.transform = transform;
-
-    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.titleView.transform = CGAffineTransformIdentity;
-        self.titleView.alpha = 1.0f;
-        self.bodyView.transform = CGAffineTransformIdentity;
-        self.bodyView.alpha = 1.0f;
-        self.okayButton.transform = CGAffineTransformIdentity;
-        self.okayButton.alpha = 1.0f;
-        self.imageView.transform = CGAffineTransformIdentity;
-        self.imageView.alpha = 1.0f;
-        self.bgMask.alpha = 1.0f;
-    } completion:nil];
-
-    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.closeButton.transform = CGAffineTransformIdentity;
-        self.closeButton.alpha = 1.0f;
-    } completion:nil];
+    return UIInterfaceOrientationMaskAll;
 }
 
 - (void)pressedOkay
@@ -555,6 +516,7 @@
         [self.layer setMask:_maskLayer];
         self.opaque = NO;
         _maskLayer.opaque = NO;
+        _maskLayer.needsDisplayOnBoundsChange = YES;
         [_maskLayer setNeedsDisplay];
     }
     return self;
@@ -600,7 +562,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    CGPoint center = CGPointMake(160.0f, 200.0f);
+    CGPoint center = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
     CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
     CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
 
