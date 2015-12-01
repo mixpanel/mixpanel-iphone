@@ -566,6 +566,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     @synchronized(self) {
         _flushInterval = interval;
     }
+    [self flush];
     [self startFlushTimer];
 }
 
