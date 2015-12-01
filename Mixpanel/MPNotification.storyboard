@@ -15,7 +15,7 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="j3M-ip-xjd" userLabel="Bg Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <animations/>
                             </imageView>
                             <view contentMode="scaleToFill" id="If2-9m-eT9" userLabel="Bg Mask" customClass="MPBgRadialGradientView">
@@ -28,7 +28,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="435"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="LyM-hA-PHV" userLabel="Notif Image View">
+                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="LyM-hA-PHV" userLabel="Notif Image View">
                                         <rect key="frame" x="20" y="60" width="280" height="375"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                         <animations/>
@@ -38,6 +38,9 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="vTI-zv-1sR" appends="YES" id="hsF-VW-BmA"/>
+                                        </connections>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EGH-qT-4wM" userLabel="Button - Close">
                                         <rect key="frame" x="275" y="30" width="35" height="35"/>
@@ -49,6 +52,9 @@
                                             <color key="titleColor" red="0.6588235294117647" green="0.70588235294117641" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="pressedClose" destination="puo-Hy-QiQ" eventType="touchUpInside" id="VSP-3j-7Js"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <animations/>
@@ -86,6 +92,9 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="pressedOkay" destination="puo-Hy-QiQ" eventType="touchUpInside" id="1Jg-Qa-90i"/>
+                                </connections>
                             </button>
                         </subviews>
                         <animations/>
@@ -104,6 +113,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U1O-0Q-ISd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="vTI-zv-1sR">
+                    <connections>
+                        <action selector="didPan:" destination="puo-Hy-QiQ" id="R4z-9g-2KN"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="278" y="248"/>
         </scene>

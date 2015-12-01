@@ -72,11 +72,8 @@
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
 @property (nonatomic, strong) IBOutlet MPAlphaMaskView *imageAlphaMaskView;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageWidth;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageHeight;
 @property (nonatomic, strong) IBOutlet UIView *imageDragView;
 @property (nonatomic, strong) IBOutlet UIView *bgMask;
-@property (nonatomic, weak) UIView *presentingView;
 
 @end
 
@@ -94,8 +91,6 @@
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
-                self.imageWidth.constant = image.size.width;
-                self.imageHeight.constant = image.size.height;
                 self.imageView.image = image;
             } else {
                 MixpanelError(@"image failed to load from data: %@", self.notification.image);
@@ -110,25 +105,16 @@
             [self.okayButton sizeToFit];
         }
     }
-
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    self.backgroundImageView.image = self.backgroundImage;
+    
     self.imageView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     self.imageView.layer.shadowOpacity = 1.0f;
     self.imageView.layer.shadowRadius = 5.0f;
     self.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-
-    [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchUpInside];
-    [self.closeButton addTarget:self action:@selector(pressedClose) forControlEvents:UIControlEventTouchUpInside];
-
-    UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
-    [self.imageDragView addGestureRecognizer:gesture];
+    self.imageView.layer.allowsEdgeAntialiasing = YES;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    self.presentingView = self.presentingViewController.view;
-}
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
 {
     [self.presentingViewController dismissViewControllerAnimated:animated completion:completion];
@@ -138,7 +124,12 @@
 {
     [super viewDidLayoutSubviews];
     
-    [self.okayButton sizeToFit];
+    self.okayButton.center = CGPointMake(CGRectGetMidX(self.okayButton.superview.bounds), self.okayButton.center.y);
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
@@ -162,23 +153,21 @@
     return UIInterfaceOrientationMaskAll;
 }
 
-- (void)pressedOkay
+- (IBAction)pressedOkay
 {
-    id strongDelegate = self.delegate;
-    if (strongDelegate) {
-        [strongDelegate notificationController:self wasDismissedWithStatus:YES];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
-- (void)pressedClose
+- (IBAction)pressedClose
 {
-    id strongDelegate = self.delegate;
-    if (strongDelegate) {
-        [strongDelegate notificationController:self wasDismissedWithStatus:NO];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
 
-- (void)didPan:(UIPanGestureRecognizer *)gesture
+- (IBAction)didPan:(UIPanGestureRecognizer *)gesture
 {
     if (gesture.numberOfTouches == 1) {
         if (gesture.state == UIGestureRecognizerStateBegan) {
@@ -547,7 +536,6 @@
 - (void)setHighlighted:(BOOL)highlighted
 {
     if (highlighted) {
-        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
         self.layer.borderColor = [UIColor grayColor].CGColor;
     } else {
         self.layer.borderColor = [UIColor whiteColor].CGColor;
