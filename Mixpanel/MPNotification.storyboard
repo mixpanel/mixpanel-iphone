@@ -102,10 +102,8 @@
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="j3M-ip-xjd" id="EVc-3C-Pm6"/>
-                        <outlet property="bgMask" destination="If2-9m-eT9" id="dIj-LB-Qog"/>
                         <outlet property="bodyView" destination="MmD-8U-og7" id="B7o-i2-uMk"/>
                         <outlet property="closeButton" destination="EGH-qT-4wM" id="Xjn-Xo-pek"/>
-                        <outlet property="imageAlphaMaskView" destination="1s2-xv-3au" id="8ow-LG-krW"/>
                         <outlet property="imageDragView" destination="NtW-qx-qOt" id="VGo-AD-HKH"/>
                         <outlet property="imageView" destination="LyM-hA-PHV" id="HDE-mT-R4c"/>
                         <outlet property="okayButton" destination="LDp-cp-cpg" id="LS3-Ih-mH9"/>

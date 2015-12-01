@@ -70,10 +70,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *bodyView;
 @property (nonatomic, strong) IBOutlet UIButton *okayButton;
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
-@property (nonatomic, strong) IBOutlet MPAlphaMaskView *imageAlphaMaskView;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, strong) IBOutlet UIView *imageDragView;
-@property (nonatomic, strong) IBOutlet UIView *bgMask;
 
 @end
 
