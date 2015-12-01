@@ -70,12 +70,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *bodyView;
 @property (nonatomic, strong) IBOutlet UIButton *okayButton;
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
-@property (nonatomic, strong) IBOutlet MPAlphaMaskView *imageAlphaMaskView;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageWidth;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *imageHeight;
 @property (nonatomic, strong) IBOutlet UIView *imageDragView;
-@property (nonatomic, strong) IBOutlet UIView *bgMask;
 
 @end
 
@@ -88,14 +84,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.backgroundImageView.image = self.backgroundImage;
 
     if (self.notification) {
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
-                self.imageWidth.constant = image.size.width;
-                self.imageHeight.constant = image.size.height;
                 self.imageView.image = image;
             } else {
                 MixpanelError(@"image failed to load from data: %@", self.notification.image);
@@ -110,18 +103,13 @@
             [self.okayButton sizeToFit];
         }
     }
-
-    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    self.backgroundImageView.image = self.backgroundImage;
+    
     self.imageView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     self.imageView.layer.shadowOpacity = 1.0f;
     self.imageView.layer.shadowRadius = 5.0f;
     self.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-
-    [self.okayButton addTarget:self action:@selector(pressedOkay) forControlEvents:UIControlEventTouchUpInside];
-    [self.closeButton addTarget:self action:@selector(pressedClose) forControlEvents:UIControlEventTouchUpInside];
-
-    UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
-    [self.imageDragView addGestureRecognizer:gesture];
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
@@ -131,8 +119,14 @@
 
 - (void)viewDidLayoutSubviews
 {
-    [self.okayButton sizeToFit];
-    [self.imageAlphaMaskView sizeToFit];
+    [super viewDidLayoutSubviews];
+    
+    self.okayButton.center = CGPointMake(CGRectGetMidX(self.okayButton.superview.bounds), self.okayButton.center.y);
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
@@ -153,71 +147,24 @@
 - (NSUInteger)supportedInterfaceOrientations
 #endif
 {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAll;
 }
 
-- (void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated
+- (IBAction)pressedOkay
 {
-    [super beginAppearanceTransition:isAppearing animated:animated];
-
-    if (isAppearing) {
-        self.bgMask.alpha = 0.0f;
-        self.imageView.alpha = 0.0f;
-        self.titleView.alpha = 0.0f;
-        self.bodyView.alpha = 0.0f;
-        self.okayButton.alpha = 0.0f;
-        self.closeButton.alpha = 0.0f;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
-- (void)endAppearanceTransition
+- (IBAction)pressedClose
 {
-    [super endAppearanceTransition];
-
-    NSTimeInterval duration = 0.20f;
-
-    CGAffineTransform transform = CGAffineTransformMakeTranslation(0.0f, 10.0f);
-    transform = CGAffineTransformScale(transform, 0.9f, 0.9f);
-    self.imageView.transform = transform;
-    self.titleView.transform = transform;
-    self.bodyView.transform = transform;
-    self.okayButton.transform = transform;
-
-    [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.titleView.transform = CGAffineTransformIdentity;
-        self.titleView.alpha = 1.0f;
-        self.bodyView.transform = CGAffineTransformIdentity;
-        self.bodyView.alpha = 1.0f;
-        self.okayButton.transform = CGAffineTransformIdentity;
-        self.okayButton.alpha = 1.0f;
-        self.imageView.transform = CGAffineTransformIdentity;
-        self.imageView.alpha = 1.0f;
-        self.bgMask.alpha = 1.0f;
-    } completion:nil];
-
-    [UIView animateWithDuration:duration delay:0.15f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.closeButton.transform = CGAffineTransformIdentity;
-        self.closeButton.alpha = 1.0f;
-    } completion:nil];
-}
-
-- (void)pressedOkay
-{
-    id strongDelegate = self.delegate;
-    if (strongDelegate) {
-        [strongDelegate notificationController:self wasDismissedWithStatus:YES];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
 
-- (void)pressedClose
-{
-    id strongDelegate = self.delegate;
-    if (strongDelegate) {
-        [strongDelegate notificationController:self wasDismissedWithStatus:NO];
-    }
-}
-
-- (void)didPan:(UIPanGestureRecognizer *)gesture
+- (IBAction)didPan:(UIPanGestureRecognizer *)gesture
 {
     if (gesture.numberOfTouches == 1) {
         if (gesture.state == UIGestureRecognizerStateBegan) {
@@ -555,6 +502,7 @@
         [self.layer setMask:_maskLayer];
         self.opaque = NO;
         _maskLayer.opaque = NO;
+        _maskLayer.needsDisplayOnBoundsChange = YES;
         [_maskLayer setNeedsDisplay];
     }
     return self;
@@ -585,7 +533,6 @@
 - (void)setHighlighted:(BOOL)highlighted
 {
     if (highlighted) {
-        self.layer.borderColor = [UIColor colorWithRed:26.0f/255.0f green:26.0f/255.0f blue:35.0f/255.0f alpha:1.0f].CGColor;
         self.layer.borderColor = [UIColor grayColor].CGColor;
     } else {
         self.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -600,7 +547,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    CGPoint center = CGPointMake(160.0f, 200.0f);
+    CGPoint center = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
     CGSize circleSize = CGSizeMake(center.y * 2.0f, center.y * 2.0f);
     CGRect circleFrame = CGRectMake(center.x - center.y, 0.0f, circleSize.width, circleSize.height);
 
