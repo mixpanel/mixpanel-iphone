@@ -112,7 +112,6 @@
     self.imageView.layer.shadowOpacity = 1.0f;
     self.imageView.layer.shadowRadius = 5.0f;
     self.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.imageView.layer.allowsEdgeAntialiasing = YES;
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
