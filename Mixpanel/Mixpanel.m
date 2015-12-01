@@ -1134,11 +1134,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MixpanelDebug(@"%@ did enter background", self);
 
-    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
-        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+    UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
+        [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
         self.taskId = UIBackgroundTaskInvalid;
     }];
+    self.taskId = backgroundTask;
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
 
     if (self.flushOnBackground) {
