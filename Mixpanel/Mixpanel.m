@@ -836,7 +836,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
         self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
         self.variants = properties[@"variants"] ? properties[@"variants"] : [NSSet set];
-        self.eventBindings = properties[@"event_bindings"] ? properties[@"event_bindings"] : [NSArray array];
+        self.eventBindings = properties[@"event_bindings"] ? properties[@"event_bindings"] : [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ? properties[@"timedEvents"] : [NSMutableDictionary dictionary];
     }
 }
@@ -852,7 +852,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)unarchiveEventBindings
 {
     self.eventBindings = (NSSet *)[self unarchiveFromFile:[self eventBindingsFilePath]];
-    if (!self.eventBindings) {
+    if (!self.eventBindings || ![self.eventBindings isKindOfClass:[NSSet class]]) {
         self.eventBindings = [NSSet set];
     }
 }
