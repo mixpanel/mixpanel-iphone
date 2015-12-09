@@ -1888,10 +1888,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
-    properties = [properties copy];
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = _mixpanel;
     if (strongMixpanel) {
+        properties = [properties copy];
+        BOOL ignore_time = self.ignoreTime;
+
         dispatch_async(strongMixpanel.serialQueue, ^{
             NSMutableDictionary *r = [NSMutableDictionary dictionary];
             NSMutableDictionary *p = [NSMutableDictionary dictionary];
@@ -1899,6 +1901,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (!r[@"$time"]) {
                 // milliseconds unix timestamp
                 r[@"$time"] = epochMilliseconds;
+            }
+            if (ignore_time) {
+                r[@"$ignore_time"] = @YES;
             }
             if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
                 [p addEntriesFromDictionary:self.automaticPeopleProperties];
