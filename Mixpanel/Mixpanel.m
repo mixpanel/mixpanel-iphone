@@ -921,8 +921,10 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     dispatch_async(self.serialQueue, ^(){
         NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-        properties[@"$radio"] = [self currentRadio];
-        self.automaticProperties = [properties copy];
+        if (properties) {
+            properties[@"$radio"] = [self currentRadio];
+            self.automaticProperties = [properties copy];
+        }
     });
 }
 
@@ -1087,9 +1089,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
     BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-    properties[@"$wifi"] = wifi ? @YES : @NO;
-    self.automaticProperties = [properties copy];
-    MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+    if (properties) {
+        properties[@"$wifi"] = wifi ? @YES : @NO;
+        self.automaticProperties = [properties copy];
+        MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+    }
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
