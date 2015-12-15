@@ -85,7 +85,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
         // Use boundingRectWithSize for iOS 7 and above, sizeWithFont otherwise.
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending) {
+        if (NSFoundationVersionNumber >= /* NSFoundationVersionNumber_iOS_7_0 */1047.20) {
             sizeToFit = [_prompt.text boundingRectWithSize:constraintSize
                                                        options:NSStringDrawingUsesLineFragmentOrigin
                                                     attributes:@{NSFontAttributeName: font}
