@@ -152,15 +152,17 @@
 
 - (IBAction)pressedOkay
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
-        [self.delegate notificationController:self wasDismissedWithStatus:YES];
+    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
 - (IBAction)pressedClose
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
-        [self.delegate notificationController:self wasDismissedWithStatus:NO];
+    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [delegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
 
@@ -626,7 +628,7 @@
     CGFloat locations[] = {0.0f, 0.7f, 0.8f, 1.0f};
 
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
-    CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(5.0f, self.bounds.size.height), 0);
+    CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(5.0f, self.bounds.size.height), (CGGradientDrawingOptions)0);
 
 
     NSUInteger bits = (NSUInteger)fabs(self.bounds.size.width) * (NSUInteger)fabs(self.bounds.size.height);

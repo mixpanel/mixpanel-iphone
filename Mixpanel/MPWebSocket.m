@@ -447,8 +447,8 @@ static __strong NSData *CRLFCRLF;
         return NO;
     }
 
-    NSString *concattedString = [_secKey stringByAppendingString:MPWebSocketAppendToSecKeyString];
-    NSString *expectedAccept = [concattedString stringBySHA1ThenBase64Encoding];
+    NSString *concatenatedString = [_secKey stringByAppendingString:MPWebSocketAppendToSecKeyString];
+    NSString *expectedAccept = [concatenatedString stringBySHA1ThenBase64Encoding];
 
     return [acceptHeader isEqualToString:expectedAccept];
 }
@@ -1000,8 +1000,6 @@ static const uint8_t MPPayloadLenMask   = 0x7F;
         header.masked = !!(MPMaskMask & headerBuffer[1]);
         header.payload_length = MPPayloadLenMask & headerBuffer[1];
 
-        headerBuffer = NULL;
-
         if (header.masked) {
             [websocket _closeWithProtocolError:@"Client must receive unmasked data"];
         }
@@ -1192,7 +1190,7 @@ static const char CRLFCRLFBytes[] = {'\r', '\n', '\r', '\n'};
         size_t size = data.length;
         const unsigned char *buffer = data.bytes;
         for (size_t i = 0; i < size; i++ ) {
-            if (((const unsigned char *)buffer)[i] == ((const unsigned char *)bytes)[match_count]) {
+            if (buffer[i] == ((const unsigned char *)bytes)[match_count]) {
                 match_count += 1;
                 if (match_count == length) {
                     found_size = i + 1;
@@ -1394,7 +1392,7 @@ static const size_t MPFrameHeaderOverhead = 32;
         }
     } else {
         uint8_t *mask_key = frame_buffer + frame_buffer_size;
-        SecRandomCopyBytes(kSecRandomDefault, sizeof(uint32_t), (uint8_t *)mask_key);
+        SecRandomCopyBytes(kSecRandomDefault, sizeof(uint32_t), mask_key);
         frame_buffer_size += sizeof(uint32_t);
 
         // TODO: could probably optimize this with SIMD

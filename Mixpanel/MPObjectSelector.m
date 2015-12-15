@@ -329,23 +329,28 @@
 {
     NSMutableArray *result = [NSMutableArray array];
     if ([obj isKindOfClass:[UIView class]]) {
-        if ([(UIView *)obj superview]) {
-            [result addObject:[(UIView *)obj superview]];
+        UIView *superview = [(UIView *)obj superview];
+        if (superview) {
+            [result addObject:superview];
         }
+        UIResponder *nextResponder = [(UIView *)obj nextResponder];
         // For UIView, nextResponder should be its controller or its superview.
-        if ([(UIView *)obj nextResponder] && [(UIView *)obj nextResponder] != [(UIView *)obj superview]) {
-            [result addObject:[(UIView *)obj nextResponder]];
+        if (nextResponder && nextResponder != superview) {
+            [result addObject:nextResponder];
         }
     } else if ([obj isKindOfClass:[UIViewController class]]) {
-        if ([(UIViewController *)obj parentViewController]) {
-            [result addObject:[(UIViewController *)obj parentViewController]];
+        UIViewController *parentViewController = [(UIViewController *)obj parentViewController];
+        if (parentViewController) {
+            [result addObject:parentViewController];
         }
-        if ([(UIViewController *)obj presentingViewController]) {
-            [result addObject:[(UIViewController *)obj presentingViewController]];
+        UIViewController *presentingViewController = [(UIViewController *)obj presentingViewController];
+        if (presentingViewController) {
+            [result addObject:presentingViewController];
         }
-        if ([UIApplication sharedApplication].keyWindow.rootViewController == obj) {
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        if (keyWindow.rootViewController == obj) {
             //TODO is there a better way to get the actual window that has this VC
-            [result addObject:[UIApplication sharedApplication].keyWindow];
+            [result addObject:keyWindow];
         }
     }
     return [result copy];
@@ -356,8 +361,11 @@
     NSMutableArray *children = [NSMutableArray array];
     // A UIWindow is also a UIView, so we could in theory follow the subviews chain from UIWindow, but
     // for now we only follow rootViewController from UIView.
-    if ([obj isKindOfClass:[UIWindow class]] && [((UIWindow *)obj).rootViewController isKindOfClass:class]) {
-        [children addObject:((UIWindow *)obj).rootViewController];
+    if ([obj isKindOfClass:[UIWindow class]]) {
+        UIViewController *rootViewController = ((UIWindow *)obj).rootViewController;
+        if ([rootViewController isKindOfClass:class]) {
+            [children addObject:rootViewController];
+        }
     } else if ([obj isKindOfClass:[UIView class]]) {
         // NB. For UIViews, only add subviews, nothing else.
         // The ordering of this result is critical to being able to
@@ -374,8 +382,9 @@
                 [children addObject:child];
             }
         }
-        if (viewController.presentedViewController && (!class || [viewController.presentedViewController isKindOfClass:class])) {
-            [children addObject:viewController.presentedViewController];
+        UIViewController *presentedViewController = viewController.presentedViewController;
+        if (presentedViewController && (!class || [presentedViewController isKindOfClass:class])) {
+            [children addObject:presentedViewController];
         }
         if (!class || (viewController.isViewLoaded && [viewController.view isKindOfClass:class])) {
             [children addObject:viewController.view];

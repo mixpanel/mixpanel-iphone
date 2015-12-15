@@ -143,7 +143,7 @@
             effectColor = [UIColor colorWithRed:r green:g blue:b alpha:EffectColorAlpha];
         }
     }
-    return [self mp_applyBlurWithRadius:10 tintColor:effectColor saturationDeltaFactor:-1.0 maskImage:nil];
+    return [self mp_applyBlurWithRadius:10 tintColor:effectColor saturationDeltaFactor:-1 maskImage:nil];
 }
 
 
@@ -171,7 +171,7 @@
     if (hasBlur || hasSaturationChange) {
         UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
         CGContextRef effectInContext = UIGraphicsGetCurrentContext();
-        CGContextScaleCTM(effectInContext, 1.0, -1.0);
+        CGContextScaleCTM(effectInContext, 1, -1);
         CGContextTranslateCTM(effectInContext, 0, -self.size.height);
         CGContextDrawImage(effectInContext, imageRect, self.CGImage);
 
@@ -245,7 +245,7 @@
     // Set up output context.
     UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
     CGContextRef outputContext = UIGraphicsGetCurrentContext();
-    CGContextScaleCTM(outputContext, 1.0, -1.0);
+    CGContextScaleCTM(outputContext, 1, -1);
     CGContextTranslateCTM(outputContext, 0, -self.size.height);
 
     // Draw base image.

@@ -209,7 +209,7 @@
 
 - (void)execute:(id)sender forEvent:(UIEvent *)event
 {
-    BOOL shouldTrack = NO;
+    BOOL shouldTrack;
     if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
         shouldTrack = [self.verified containsObject:sender];
     } else {

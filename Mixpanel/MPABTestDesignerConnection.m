@@ -179,7 +179,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     NSData *jsonData = [message isKindOfClass:[NSString class]] ? [(NSString *)message dataUsingEncoding:NSUTF8StringEncoding] : message;
 
     NSError *error = nil;
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:(NSJSONReadingOptions)0 error:&error];
     if ([jsonObject isKindOfClass:[NSDictionary class]]) {
         NSDictionary *messageDictionary = (NSDictionary *)jsonObject;
         NSString *type = messageDictionary[@"type"];

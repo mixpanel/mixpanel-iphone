@@ -135,7 +135,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     if (_position == MPSurveyTableViewCellPositionTop) {
         corners = UIRectCornerTopLeft | UIRectCornerTopRight;
     } else if (_position == MPSurveyTableViewCellPositionMiddle) {
-        corners = 0;
+        corners = (UIRectCorner)0;
     } else if (_position == MPSurveyTableViewCellPositionBottom) {
         corners = UIRectCornerBottomLeft | UIRectCornerBottomRight;
     } else {
@@ -252,7 +252,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
         label = value;
     } else if ([value isKindOfClass:[NSNumber class]]) {
         int i = [value intValue];
-        if (CFNumberGetType((CFNumberRef)value) == kCFNumberCharType && (i == 0 || i == 1)) {
+        if (CFNumberGetType((__bridge CFNumberRef)value) == kCFNumberCharType && (i == 0 || i == 1)) {
             label = i ? @"Yes" : @"No";
         } else {
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
