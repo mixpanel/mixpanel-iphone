@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  [mixpanel track:@"Button Clicked"];
 
  // Set properties on a user in Mixpanel People
- [mixpanel.people identify:@"CURRENT USER DISTINCT ID"];
+ [mixpanel identify:@"CURRENT USER DISTINCT ID"];
  [mixpanel.people set:@"Plan" to:@"Premium"];
  </pre>
 
@@ -736,7 +736,7 @@ NS_ASSUME_NONNULL_BEGIN
  People methods will look like this:
 
  <pre>
- [mixpanel.people increment:@"App Opens" by:1];
+ [mixpanel.people increment:@"App Opens" by:[NSNumber numberWithInt:1]];
  </pre>
 
  Please note that the core <code>Mixpanel</code> and
@@ -791,9 +791,6 @@ NS_ASSUME_NONNULL_BEGIN
  // applies to both Mixpanel Engagement track: AND Mixpanel People set: and
  // increment: calls
  [mixpanel identify:distinctId];
-
- // applies ONLY to Mixpanel People set: and increment: calls
- [mixpanel.people identify:distinctId];
  </pre>
 
  @param properties       properties dictionary

@@ -566,6 +566,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     @synchronized(self) {
         _flushInterval = interval;
     }
+    [self flush];
     [self startFlushTimer];
 }
 
@@ -835,7 +836,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
         self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
         self.variants = properties[@"variants"] ? properties[@"variants"] : [NSSet set];
-        self.eventBindings = properties[@"event_bindings"] ? properties[@"event_bindings"] : [NSArray array];
+        self.eventBindings = properties[@"event_bindings"] ? properties[@"event_bindings"] : [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ? properties[@"timedEvents"] : [NSMutableDictionary dictionary];
     }
 }
@@ -851,7 +852,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)unarchiveEventBindings
 {
     self.eventBindings = (NSSet *)[self unarchiveFromFile:[self eventBindingsFilePath]];
-    if (!self.eventBindings) {
+    if (!self.eventBindings || ![self.eventBindings isKindOfClass:[NSSet class]]) {
         self.eventBindings = [NSSet set];
     }
 }
@@ -920,8 +921,10 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     dispatch_async(self.serialQueue, ^(){
         NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-        properties[@"$radio"] = [self currentRadio];
-        self.automaticProperties = [properties copy];
+        if (properties) {
+            properties[@"$radio"] = [self currentRadio];
+            self.automaticProperties = [properties copy];
+        }
     });
 }
 
@@ -1086,9 +1089,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
     BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
-    properties[@"$wifi"] = wifi ? @YES : @NO;
-    self.automaticProperties = [properties copy];
-    MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+    if (properties) {
+        properties[@"$wifi"] = wifi ? @YES : @NO;
+        self.automaticProperties = [properties copy];
+        MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+    }
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -1133,11 +1138,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MixpanelDebug(@"%@ did enter background", self);
 
-    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
-        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+    __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
+        [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
         self.taskId = UIBackgroundTaskInvalid;
     }];
+    self.taskId = backgroundTask;
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
 
     if (self.flushOnBackground) {
@@ -1631,7 +1637,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         controller.delegate = self;
         self.notificationViewController = controller;
 
-        [presentingViewController presentViewController:controller animated:NO completion:nil];
+        [presentingViewController presentViewController:controller animated:YES completion:nil];
         return YES;
     } else {
         return NO;
