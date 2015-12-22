@@ -9,6 +9,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol MPTweakObserver;
 
 /**
@@ -93,3 +95,5 @@ typedef id MPTweakValue;
 - (void)tweakDidChange:(MPTweak *)tweak;
 
 @end
+
+NS_ASSUME_NONNULL_END

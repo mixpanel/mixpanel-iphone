@@ -5,6 +5,8 @@
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /*!
  @class
  Mixpanel API.
@@ -68,7 +70,7 @@
  @abstract
  Current user's name in Mixpanel Streams.
  */
-@property (atomic, copy) NSString *nameTag;
+@property (nullable, atomic, copy) NSString *nameTag;
 
 /*!
  @property
@@ -210,7 +212,7 @@
  UINavigationController that is showing when the notification is presented, the 
  UINavigationBar default color for the app or the UITabBar default color.
  */
-@property (atomic) UIColor* miniNotificationBackgroundColor;
+@property (nullable, atomic) UIColor *miniNotificationBackgroundColor;
 
 /*!
  @property
@@ -269,7 +271,7 @@
  @param launchOptions   your application delegate's launchOptions
 
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
 /*!
  @method
@@ -299,7 +301,7 @@
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  @method
@@ -384,7 +386,7 @@
  @param event           event name
  @param properties      properties dictionary
  */
-- (void)track:(NSString *)event properties:(NSDictionary *)properties;
+- (void)track:(NSString *)event properties:(nullable NSDictionary *)properties;
 
 
 /*!
@@ -455,7 +457,7 @@
  @param properties      properties dictionary
  @param defaultValue    overwrite existing properties that have this value
  */
-- (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue;
+- (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(nullable id)defaultValue;
 
 /*!
  @method
@@ -569,7 +571,7 @@
  are called when an app is brought to the background and require a handler to
  be called when it finishes.
  */
-- (void)flushWithCompletion:(void (^)())handler;
+- (void)flushWithCompletion:(nullable void (^)())handler;
 
 /*!
  @method
@@ -714,7 +716,7 @@
  Same as joinExperiments but will fire the given callback after all experiments
  have been loaded and applied.
  */
-- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback;
+- (void)joinExperimentsWithCallback:(nullable void (^)())experimentsLoadedCallback;
 
 #endif
 
@@ -909,7 +911,7 @@
  could record a product ID with each charge so that you could segment on it in
  revenue analytics to see which products are generating the most revenue.
  */
-- (void)trackCharge:(NSNumber *)amount withProperties:(NSDictionary *)properties;
+- (void)trackCharge:(NSNumber *)amount withProperties:(nullable NSDictionary *)properties;
 
 
 /*!
@@ -959,3 +961,5 @@
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
 
 @end
+
+NS_ASSUME_NONNULL_END
