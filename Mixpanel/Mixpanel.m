@@ -373,7 +373,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
-    [self track:@"$create_alias" properties:@{@"distinct_id": distinctID, @"alias": alias}];
+    [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
 }
 
 - (void)track:(NSString *)event
