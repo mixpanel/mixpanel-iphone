@@ -1855,8 +1855,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 @end
 
 #pragma mark - WatchExtensions
-
-#if defined(MIXPANEL_WATCH_EXTENSION)
 @implementation Mixpanel (WatchExtensions)
 
 /** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
@@ -1881,7 +1879,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 }
 
 @end
-#endif
 
 #pragma mark - People
 @implementation MixpanelPeople
