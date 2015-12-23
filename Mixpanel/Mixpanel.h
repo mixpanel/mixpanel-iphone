@@ -752,6 +752,21 @@ NS_ASSUME_NONNULL_BEGIN
  People</b>.
  */
 @interface MixpanelPeople : NSObject
+/*!
+ @property
+ 
+ @abstract
+ controls the $ignore_time property in any subsequent MixpanelPeople operation.
+ 
+ If the $ignore_time property is present and true in your request,
+ Mixpanel will not automatically update the "Last Seen" property of the profile.
+ Otherwise, Mixpanel will add a "Last Seen" property associated with the
+ current time for all $set, $append, and $add operations
+ 
+ @discussion
+ Defaults to NO.
+ */
+@property (atomic) BOOL ignoreTime;
 
 /*!
  @method

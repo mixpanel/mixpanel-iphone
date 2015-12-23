@@ -1062,6 +1062,10 @@ over Mixpanel network activity.
 enters the background.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor" target="_top">miniNotificationBackgroundColor</a></tt></dt>
+<dd><p>If set, determines the background color of mini notifications.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime" target="_top">miniNotificationPresentationTime</a></tt></dt>
 <dd><p>Determines the time, in seconds, that a mini notification will remain on
 the screen before automatically hiding itself.
@@ -1197,6 +1201,20 @@ enters the background.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
 task support was introduced, and later.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;   name=Mixpanel::miniNotificationBackgroundColor -->
+<a name="//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor"></a>
+<h3><a name="miniNotificationBackgroundColor">miniNotificationBackgroundColor</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=start --><!-- begin abstract --><p>If set, determines the background color of mini notifications.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/UIColor //apple_ref/occ/tdef/UIColor //apple_ref/occ/tag/UIColor //apple_ref/occ/struct/UIColor //apple_ref/occ/intf/UIColor //apple_ref/doc/anysymbol/UIColor" machineGenerated="true" --><span class="type">UIColor</span><!-- /a --><span class="type">*</span> <!-- a logicalPath="//apple_ref/occ/econst/miniNotificationBackgroundColor //apple_ref/occ/data/Mixpanel/miniNotificationBackgroundColor //apple_ref/occ/data/miniNotificationBackgroundColor //apple_ref/occ/clconst/Mixpanel/miniNotificationBackgroundColor " machineGenerated="true" --><span class="var">miniNotificationBackgroundColor</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=start --><p>If this isn't set, we default to either the color of the UINavigationBar of the top 
+UINavigationController that is showing when the notification is presented, the 
+UINavigationBar default color for the app or the UITabBar default color.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;   name=Mixpanel::miniNotificationPresentationTime -->
 <a name="//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime"></a>
 <h3><a name="miniNotificationPresentationTime">miniNotificationPresentationTime</a></h3>
@@ -1290,7 +1308,7 @@ survey check retrieves at least 1 valid survey for the currently
 identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Friday, October 16, 2015
+<p class="hd_timestamp">Last Updated: Tuesday, December 01, 2015
 </p></div>
 </td></tr></table>
 </body></html>
