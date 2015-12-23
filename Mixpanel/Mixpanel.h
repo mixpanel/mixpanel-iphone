@@ -193,14 +193,14 @@
  @abstract
  Controls whether to automatically send the client IP Address as part of 
  event tracking. With an IP address, geo-location is possible down to neighborhoods
- with a city, although the Mixpanel Dashboard will just show you city level location
+ within a city, although the Mixpanel Dashboard will just show you city level location
  specificity. For privacy reasons, you may be in a situation where you need to forego
  effectively having access to such granular location information via the IP Address.
  
  @discussion
  Defaults to YES.
  */
-@property (atomic) BOOL transmitIPAddress;
+@property (atomic) BOOL useIPAddressForGeoLocation;
 
 /*!
  @property
