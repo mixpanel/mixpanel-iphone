@@ -23,4 +23,8 @@ Pod::Spec.new do |s|
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
   end
+
+  s.subspec 'WatchOS' do |ss|
+
+  end
 end
