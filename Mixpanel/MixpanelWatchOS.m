@@ -39,6 +39,7 @@
 
 @end
 
+#if !defined(MIXPANEL_WATCH_EXTENSION)
 @implementation Mixpanel (WatchExtensions)
 
 /** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
@@ -63,3 +64,4 @@
 }
 
 @end
+#endif
