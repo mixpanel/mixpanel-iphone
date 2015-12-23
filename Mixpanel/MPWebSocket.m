@@ -1599,7 +1599,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 @end
 
 
-@implementation  NSURLRequest (CertificateAdditions)
+@implementation  NSURLRequest (MPCertificateAdditions)
 
 - (NSArray *)mp_SSLPinnedCertificates;
 {
@@ -1608,7 +1608,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
 @end
 
-@implementation  NSMutableURLRequest (CertificateAdditions)
+@implementation  NSMutableURLRequest (MPCertificateAdditions)
 
 - (NSArray *)mp_SSLPinnedCertificates;
 {
