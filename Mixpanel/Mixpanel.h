@@ -1,6 +1,9 @@
 #import <Foundation/Foundation.h>
-
 #import <UIKit/UIKit.h>
+
+#if defined(MIXPANEL_WATCH_EXTENSION)
+#import <WatchConnectivity/WatchConnectivity.h>
+#endif
 
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;
@@ -721,6 +724,14 @@ NS_ASSUME_NONNULL_BEGIN
 #endif
 
 @end
+
+#if defined(MIXPANEL_WATCH_EXTENSION)
+@interface Mixpanel (WatchExtensions) <WCSessionDelegate>
+- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message;
+- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler;
+@end
+#endif 
+
 
 /*!
  @class

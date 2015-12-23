@@ -9,7 +9,40 @@
 #import "MixpanelWatchOS.h"
 #import "MPLogger.h"
 
+@interface MixpanelWatchOS ()
+
+/*!
+ @property
+ 
+ @abstract
+ Setter for your default WCSession.
+ 
+ @discussion
+ This will allow Mixpanel to send tracked events to the host iOS application.
+ */
+@property (nonatomic, strong) WCSession *session;
+
+@end
+
 @implementation MixpanelWatchOS
+
+static MixpanelWatchOS *sharedInstance = nil;
+
++ (instancetype)sharedInstance {
+    if (sharedInstance == nil) {
+        MixpanelDebug(@"warning sharedInstance called before sharedInstanceWithSession:");
+    }
+    return sharedInstance;
+}
+
++ (instancetype)sharedInstanceWithSession:(WCSession *)session {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[MixpanelWatchOS alloc] init];
+        sharedInstance.session = session;
+    });
+    return sharedInstance;
+}
 
 - (void)track:(NSString *)event {
     [self track:event properties:nil];
@@ -38,30 +71,3 @@
 }
 
 @end
-
-#if !defined(MIXPANEL_WATCH_EXTENSION)
-@implementation Mixpanel (WatchExtensions)
-
-/** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
-    if ([Mixpanel isValidWatchSessionMessage:message]) {
-        [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
-    }
-}
-
-/** Called on the delegate of the receiver when the sender sends a message that expects a reply. Will be called on startup if the incoming message caused the receiver to launch. */
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler {
-    if ([Mixpanel isValidWatchSessionMessage:message]) {
-        [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
-        replyHandler(@{ @"success": @YES });
-    } else {
-        replyHandler(@{ @"success": @NO, @"message": @"Message is not a mixpanel message" });
-    }
-}
-
-+ (BOOL)isValidWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
-    return [[message objectForKey:@"$mp_message_type"] boolValue];
-}
-
-@end
-#endif

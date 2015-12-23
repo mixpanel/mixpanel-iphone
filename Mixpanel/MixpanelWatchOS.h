@@ -18,15 +18,38 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MixpanelWatchOS : NSObject
 
 /*!
- @property
+ @method
  
  @abstract
- Setter for your default WCSession.
+ Initializes and returns a singleton instance of the watchOS API.
  
  @discussion
- This will allow Mixpanel to send tracked events to the host iOS application.
+ If you are only going to send data to a single Mixpanel project from your app,
+ as is the common case, then this is the easiest way to use the API. This
+ method will set up a singleton instance of the <code>Mixpanel</code> class for
+ you using the given project token. When you want to make calls to Mixpanel
+ elsewhere in your code, you can use <code>sharedInstance</code>.
+ 
+ <pre>
+ [Mixpanel sharedInstance] track:@"Something Happened"]];
+ </pre>
+ 
+ If you are going to use this singleton approach,
+ <code>sharedInstanceWithSession:</code> <b>must be the first call</b> to the
+ <code>Mixpanel</code> class, since it performs important initializations to
+ the API.
+ 
+ @param session        your <code>WCSession</code> object
  */
-@property (nonatomic, strong) WCSession *session;
++ (instancetype)sharedInstanceWithSession:(WCSession *)session;
+
+/*!
+ @method
+ 
+ @abstract
+ Returns the singleton instance of the watchOS API.
+ */
++ (instancetype)sharedInstance;
 
 /*!
  @method
@@ -58,12 +81,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)track:(NSString *)event properties:(nullable NSDictionary *)properties;
 
 @end
-
-#if !defined(MIXPANEL_WATCH_EXTENSION)
-@interface Mixpanel (WatchExtensions) <WCSessionDelegate>
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message;
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler;
-@end
-#endif
 
 NS_ASSUME_NONNULL_END
