@@ -92,17 +92,17 @@ extern NSString *const MPWebSocketErrorDomain;
 
 @end
 
-#pragma mark - NSURLRequest (CertificateAdditions)
+#pragma mark - NSURLRequest (MPCertificateAdditions)
 
-@interface NSURLRequest (CertificateAdditions)
+@interface NSURLRequest (MPCertificateAdditions)
 
 @property (nonatomic, retain, readonly) NSArray *mp_SSLPinnedCertificates;
 
 @end
 
-#pragma mark - NSMutableURLRequest (CertificateAdditions)
+#pragma mark - NSMutableURLRequest (MPCertificateAdditions)
 
-@interface NSMutableURLRequest (CertificateAdditions)
+@interface NSMutableURLRequest (MPCertificateAdditions)
 
 @property (nonatomic, retain) NSArray *mp_SSLPinnedCertificates;
 
