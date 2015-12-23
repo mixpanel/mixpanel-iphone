@@ -341,7 +341,7 @@ e.g., set:, append:, etc., are called.
 
 Changes with version v2.0.2					12 September 2013
 
-64-bit compatibilty
+64-bit compatibility
 
 Adds some required casting for 64-bit builds.
 

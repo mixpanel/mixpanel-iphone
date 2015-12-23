@@ -42,7 +42,7 @@
     NSDictionary *jsonObject = @{ @"type" : self.type, @"payload" : [_payload copy] };
 
     NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&error];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:(NSJSONWritingOptions)0 error:&error];
     if (error) {
         NSLog(@"Failed to serialize test designer message: %@", error);
     }
