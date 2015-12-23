@@ -9,6 +9,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol MPTweakObserver;
 
 /**
@@ -51,7 +53,7 @@ typedef id MPTweakValue;
   @abstract The current value of the tweak. Can be nil.
   @discussion Changes to this property will be propagated to disk.
  */
-@property (nonatomic, strong, readwrite) MPTweakValue currentValue;
+@property (nullable, nonatomic, strong, readwrite) MPTweakValue currentValue;
 
 /**
   @abstract The minimum value of the tweak.
@@ -93,3 +95,5 @@ typedef id MPTweakValue;
 - (void)tweakDidChange:(MPTweak *)tweak;
 
 @end
+
+NS_ASSUME_NONNULL_END

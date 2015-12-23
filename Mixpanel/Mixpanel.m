@@ -35,7 +35,7 @@
 #endif
 
 
-#define VERSION @"2.9.0"
+#define VERSION @"2.9.1"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
@@ -373,7 +373,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
-    [self track:@"$create_alias" properties:@{@"distinct_id": distinctID, @"alias": alias}];
+    [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
 }
 
 - (void)track:(NSString *)event
