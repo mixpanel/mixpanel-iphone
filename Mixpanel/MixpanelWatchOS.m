@@ -52,14 +52,13 @@ static MixpanelWatchOS *sharedInstance = nil;
     NSAssert(event != nil, @"Missing event name");
     
     if ([self.session isReachable]) {
-        
         // Ensure properties is not nil
         if (!properties) {
             properties = @{};
         }
         
         // Send the event name and properties to the host app
-        NSDictionary *message = @{ @"messageType": @"mp_track", @"event": event, @"properties": properties };
+        NSDictionary *message = @{ @"$mp_message_type": @"track", @"event": event, @"properties": properties };
         [self.session sendMessage:message
                      replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
                          MixpanelDebug(@"Received reply from host for track: message. Details: %@", replyMessage);
@@ -67,6 +66,8 @@ static MixpanelWatchOS *sharedInstance = nil;
                      errorHandler:^(NSError * _Nonnull error) {
                          MixpanelError(@"Error sending track: message to host application. Details: %@", [error localizedDescription]);
                      }];
+    } else {
+        MixpanelDebug(@"Host session is unreachable from watchOS.");
     }
 }
 
