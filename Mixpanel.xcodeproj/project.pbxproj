@@ -150,7 +150,7 @@
 /* Begin PBXFileReference section */
 		511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
-		511FC39D1C2B74BD00DC4796 /* Mixpanel_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		511FC39E1C2B74BD00DC4796 /* Mixpanel-watchOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Mixpanel-watchOS-Info.plist"; path = "/Users/samgreen/code/mixpanel-iphone/Mixpanel-watchOS-Info.plist"; sourceTree = "<absolute>"; };
 		511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
@@ -332,7 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */,
-				511FC39D1C2B74BD00DC4796 /* Mixpanel_watchOS.framework */,
+				511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -595,7 +595,7 @@
 			);
 			name = Mixpanel_watchOS;
 			productName = MixpanelFramework;
-			productReference = 511FC39D1C2B74BD00DC4796 /* Mixpanel_watchOS.framework */;
+			productReference = 511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7C170C291A4A02F500D9E0F2 /* Mixpanel */ = {
@@ -770,7 +770,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				VALID_ARCHS = armv7k;
@@ -793,7 +793,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				VALID_ARCHS = armv7k;
