@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "511FC3101C2B74BD00DC4796"
-               BuildableName = "Mixpanel-watchOS.framework"
-               BlueprintName = "Mixpanel-watchOS"
+               BuildableName = "Mixpanel_watchOS.framework"
+               BlueprintName = "Mixpanel_watchOS"
                ReferencedContainer = "container:Mixpanel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "511FC3101C2B74BD00DC4796"
-            BuildableName = "Mixpanel-watchOS.framework"
-            BlueprintName = "Mixpanel-watchOS"
+            BuildableName = "Mixpanel_watchOS.framework"
+            BlueprintName = "Mixpanel_watchOS"
             ReferencedContainer = "container:Mixpanel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "511FC3101C2B74BD00DC4796"
-            BuildableName = "Mixpanel-watchOS.framework"
-            BlueprintName = "Mixpanel-watchOS"
+            BuildableName = "Mixpanel_watchOS.framework"
+            BlueprintName = "Mixpanel_watchOS"
             ReferencedContainer = "container:Mixpanel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
