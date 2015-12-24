@@ -22,7 +22,7 @@
     CGFloat offsetHeight = 0.0f;
     
     //Avoid the status bar on phones running iOS < 7
-    if (NSFoundationVersionNumber < /* NSFoundationVersionNumber_iOS_7_0 */1047.20 &&
+    if (NSFoundationVersionNumber < NSFoundationVersionNumber_iOS_7_0 &&
         ![UIApplication sharedApplication].statusBarHidden) {
         offsetHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     }

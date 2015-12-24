@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */; settings = {ASSET_TAGS = (); }; };
-		513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */; settings = {ASSET_TAGS = (); }; };
+		37F9F7F21C2B8BFC00783DDB /* Mixpanel.pch in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */; };
+		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
+		513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */; };
+		513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */; };
 		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */; };
@@ -141,6 +143,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.pch; sourceTree = "<group>"; };
+		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFoundation.h; sourceTree = "<group>"; };
 		513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -339,6 +343,7 @@
 				7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */,
 				7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */,
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
+				37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */,
 				7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */,
 				7C170C4E1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m */,
 				7C170C4F1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.h */,
@@ -386,6 +391,7 @@
 				7C170C7C1A4A035F00D9E0F2 /* MPEnumDescription.m */,
 				7C170C7D1A4A035F00D9E0F2 /* MPEventBinding.h */,
 				7C170C7E1A4A035F00D9E0F2 /* MPEventBinding.m */,
+				37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */,
 				7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */,
 				7C170C801A4A035F00D9E0F2 /* MPNotification.h */,
 				7C170C811A4A035F00D9E0F2 /* MPNotification.m */,
@@ -508,6 +514,7 @@
 				7C170CF81A4A035F00D9E0F2 /* MPEnumDescription.h in Headers */,
 				7C170D311A4A035F00D9E0F2 /* MPVariant.h in Headers */,
 				7C170D101A4A035F00D9E0F2 /* MPPropertyDescription.h in Headers */,
+				37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */,
 				513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */,
 				7C170CCC1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
 				7C170D2E1A4A035F00D9E0F2 /* MPUITableViewBinding.h in Headers */,
@@ -532,6 +539,7 @@
 				7C170CE51A4A035F00D9E0F2 /* MPApplicationStateSerializer.h in Headers */,
 				7C170D1F1A4A035F00D9E0F2 /* MPTweak.h in Headers */,
 				7C170CFD1A4A035F00D9E0F2 /* MPNotification.h in Headers */,
+				37F9F7F21C2B8BFC00783DDB /* Mixpanel.pch in Headers */,
 				7C170CE31A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
 				7C170D331A4A035F00D9E0F2 /* MPWebSocket.h in Headers */,
 				7C170CDA1A4A035F00D9E0F2 /* MPABTestDesignerDisconnectMessage.h in Headers */,
@@ -707,6 +715,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = Mixpanel/Mixpanel.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -752,6 +761,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREFIX_HEADER = Mixpanel/Mixpanel.pch;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

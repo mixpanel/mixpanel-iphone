@@ -1020,7 +1020,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
     // cellular info
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
         [self setCurrentRadio];
         [notificationCenter addObserver:self
                                selector:@selector(setCurrentRadio)
@@ -1435,7 +1435,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 self.currentlyShowingSurvey = survey;
                 if (showAlert) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-                    if (NSFoundationVersionNumber >= /* NSFoundationVersionNumber_iOS_8_0 */1140.11) {
+                    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_8_0) {
                         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
                         [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                             if (self.currentlyShowingSurvey) {
