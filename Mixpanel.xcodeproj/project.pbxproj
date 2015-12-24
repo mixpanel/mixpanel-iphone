@@ -772,7 +772,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MODULEMAP_FILE = module.modulemap;
+				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
@@ -796,7 +796,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MODULEMAP_FILE = module.modulemap;
+				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
