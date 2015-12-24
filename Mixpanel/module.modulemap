@@ -1,0 +1,7 @@
+framework module Mixpanel {
+    umbrella header "Mixpanel.h"
+    header "MixpanelWatchOS.h"
+    
+    export *
+    module * { export * }
+}

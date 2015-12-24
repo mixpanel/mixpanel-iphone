@@ -155,6 +155,7 @@
 		511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
+		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C170C2E1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
@@ -320,7 +321,6 @@
 		7C170C201A4A02F500D9E0F2 = {
 			isa = PBXGroup;
 			children = (
-				511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */,
 				7C170C2C1A4A02F500D9E0F2 /* Mixpanel */,
 				7C170C2B1A4A02F500D9E0F2 /* Products */,
 			);
@@ -343,6 +343,7 @@
 				7C170C461A4A035F00D9E0F2 /* Source */,
 				7C170C2D1A4A02F500D9E0F2 /* Supporting Files */,
 				7C170D511A4A060300D9E0F2 /* Frameworks */,
+				51FF9AB71C2B77B4004B0028 /* module.modulemap */,
 			);
 			name = Mixpanel;
 			sourceTree = "<group>";
@@ -492,6 +493,7 @@
 		7C170D511A4A060300D9E0F2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */,
 				7C170D4F1A4A05DD00D9E0F2 /* libicucore.dylib */,
 				7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */,
 				7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */,
@@ -770,6 +772,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
@@ -793,6 +796,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MODULEMAP_FILE = module.modulemap;
 				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
