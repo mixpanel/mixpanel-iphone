@@ -828,7 +828,9 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     // wifi reachability
     BOOL reachabilityOk = NO;
-    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, self.serverURL.UTF8String)) != NULL) {
+    NSURL* url = [NSURL URLWithString:self.serverURL]; 
+    NSString* host = [url host]; 
+    if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, host.UTF8String)) != NULL) {
         SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
         if (SCNetworkReachabilitySetCallback(_reachability, AloomaReachabilityCallback, &context)) {
             if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
