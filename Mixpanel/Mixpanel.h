@@ -620,6 +620,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 - (NSString *)libVersion;
++ (NSString *)libVersion;
 
 
 #if !defined(MIXPANEL_APP_EXTENSION)
