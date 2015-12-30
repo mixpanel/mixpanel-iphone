@@ -290,6 +290,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @method
+ 
+ @abstract
+ Initializes a singleton instance of the API, uses it to track launchOptions information,
+ sets a custom user agent, and then returns it.
+ 
+ @param apiToken        your project token
+ @param launchOptions   your application delegate's launchOptions
+ @param userAgent       custom user agent for API requests
+ 
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions userAgent:(nullable NSString *)userAgent;
+
+/*!
+ @method
 
  @abstract
  Returns the previously instantiated singleton instance of the API.
@@ -299,6 +313,25 @@ NS_ASSUME_NONNULL_BEGIN
  calling this class method.
  */
 + (Mixpanel *)sharedInstance;
+
+/*!
+ @method
+ 
+ @abstract
+ Initializes an instance of the API with the given project token.
+ 
+ @discussion
+ Returns the a new API object. This allows you to create more than one instance
+ of the API object, which is convenient if you'd like to send data to more than
+ one Mixpanel project from a single app. If you only need to send data to one
+ project, consider using <code>sharedInstanceWithToken:</code>.
+ 
+ @param apiToken        your project token
+ @param launchOptions   optional app delegate launchOptions
+ @param userAgent       custom user agent for API requests
+ @param flushInterval   interval to run background flushing
+ */
+- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions userAgent:(nullable NSString *)userAgent andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  @method
