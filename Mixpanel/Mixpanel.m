@@ -549,6 +549,8 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
         self.decideResponseCached = NO;
+        self.variants = [NSSet set];
+        self.eventBindings = [NSSet set];
         [self archive];
     });
 }
