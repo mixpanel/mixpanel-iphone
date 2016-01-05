@@ -135,7 +135,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     if (_position == MPSurveyTableViewCellPositionTop) {
         corners = UIRectCornerTopLeft | UIRectCornerTopRight;
     } else if (_position == MPSurveyTableViewCellPositionMiddle) {
-        corners = (UIRectCorner)0;
+        corners = kNilOptions;
     } else if (_position == MPSurveyTableViewCellPositionBottom) {
         corners = UIRectCornerBottomLeft | UIRectCornerBottomRight;
     } else {

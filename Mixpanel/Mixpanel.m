@@ -236,7 +236,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSError *error = nil;
     NSData *data = nil;
     @try {
-        data = [NSJSONSerialization dataWithJSONObject:coercedObj options:(NSJSONWritingOptions)0 error:&error];
+        data = [NSJSONSerialization dataWithJSONObject:coercedObj options:kNilOptions error:&error];
     }
     @catch (NSException *exception) {
         MixpanelError(@"%@ exception encoding api data: %@", self, exception);
@@ -1239,7 +1239,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         if (!useCache || !self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
             NSString *distinctId = self.people.distinctId ? self.people.distinctId : self.distinctId;
-            NSData *peoplePropertiesJSON = [NSJSONSerialization dataWithJSONObject:self.people.automaticPeopleProperties options:(NSJSONWritingOptions)0 error:nil];
+            NSData *peoplePropertiesJSON = [NSJSONSerialization dataWithJSONObject:self.people.automaticPeopleProperties options:kNilOptions error:nil];
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&properties=%@%@",
                                 self.apiToken,
                                 MPURLEncode([[NSString alloc] initWithData:peoplePropertiesJSON encoding:NSUTF8StringEncoding]),
@@ -1255,7 +1255,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 MixpanelError(@"%@ decide check http error: %@", self, error);
                 return;
             }
-            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:&error];
+            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             if (error) {
                 MixpanelError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                 return;
