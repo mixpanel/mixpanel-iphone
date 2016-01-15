@@ -525,7 +525,6 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelError(@"Mixpanel cannot time an empty event");
         return;
     }
-    
     dispatch_async(self.serialQueue, ^{
         self.timedEvents[event] = startTime;
     });
