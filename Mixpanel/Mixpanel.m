@@ -15,6 +15,7 @@
 #import <UIKit/UIDevice.h>
 
 #import "Mixpanel.h"
+#import "MixpanelExceptionHandler.h"
 #import "MPLogger.h"
 #import "NSData+MPBase64.h"
 
@@ -140,6 +141,9 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ warning empty api token", self);
     }
     if (self = [self init]) {
+        // Install uncaught exception handlers first
+        [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
+        
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
@@ -726,7 +730,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     [self archiveProperties];
     [self archiveVariants];
     [self archiveEventBindings];
-
 }
 
 - (void)archiveEvents
