@@ -19,43 +19,43 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object
 {
     if (object == nil) {
-        MixpanelError(@"notif json object should not be nil");
+        MixpanelError(@"notification json object should not be nil");
         return nil;
     }
 
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
-        MixpanelError(@"invalid notif id: %@", ID);
+        MixpanelError(@"invalid notification id: %@", ID);
         return nil;
     }
 
     NSNumber *messageID = object[@"message_id"];
     if (!([messageID isKindOfClass:[NSNumber class]] && [messageID integerValue] > 0)) {
-        MixpanelError(@"invalid notif message id: %@", messageID);
+        MixpanelError(@"invalid notification message id: %@", messageID);
         return nil;
     }
 
     NSString *type = object[@"type"];
     if (![type isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid notif type: %@", type);
+        MixpanelError(@"invalid notification type: %@", type);
         return nil;
     }
 
     NSString *title = object[@"title"];
     if (![title isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid notif title: %@", title);
+        MixpanelError(@"invalid notification title: %@", title);
         return nil;
     }
 
     NSString *body = object[@"body"];
     if (![body isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid notif body: %@", body);
+        MixpanelError(@"invalid notification body: %@", body);
         return nil;
     }
 
     NSString *callToAction = object[@"cta"];
     if (![callToAction isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid notif cta: %@", callToAction);
+        MixpanelError(@"invalid notification call to action: %@", callToAction);
         return nil;
     }
 
@@ -63,13 +63,13 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     NSObject *URLString = object[@"cta_url"];
     if (URLString != nil && ![URLString isKindOfClass:[NSNull class]]) {
         if (![URLString isKindOfClass:[NSString class]] || [(NSString *)URLString length] == 0) {
-            MixpanelError(@"invalid notif URL: %@", URLString);
+            MixpanelError(@"invalid notification URL: %@", URLString);
             return nil;
         }
 
         callToActionURL = [NSURL URLWithString:(NSString *)URLString];
         if (callToActionURL == nil) {
-            MixpanelError(@"invalid notif URL: %@", URLString);
+            MixpanelError(@"invalid notification URL: %@", URLString);
             return nil;
         }
     }
@@ -78,44 +78,37 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     NSString *imageURLString = object[@"image_url"];
     if (imageURLString != nil && ![imageURLString isKindOfClass:[NSNull class]]) {
         if (![imageURLString isKindOfClass:[NSString class]]) {
-            MixpanelError(@"invalid notif image URL: %@", imageURLString);
+            MixpanelError(@"invalid notification image URL: %@", imageURLString);
             return nil;
         }
         
-        NSString *escapedUrl = [imageURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-        imageURL = [NSURL URLWithString:escapedUrl];
-        if (imageURL == nil) {
-            MixpanelError(@"invalid notif image URL: %@", imageURLString);
+        NSURLComponents *components = [NSURLComponents componentsWithString:imageURLString];
+        if ([components URL] == nil) {
+            MixpanelError(@"unable to parse notification image URL componenets from string: %@", imageURLString);
             return nil;
         }
-        
-        NSString *imagePath = imageURL.path;
-        if ([type isEqualToString:MPNotificationTypeTakeover]) {
-            NSString *imageName = [imagePath stringByDeletingPathExtension];
-            NSString *extension = [imagePath pathExtension];
-            imagePath = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
-        }
-        
-        NSMutableCharacterSet *characterSetForPath = [[NSCharacterSet alphanumericCharacterSet] mutableCopy];
-        [characterSetForPath addCharactersInString:@"@"];
-        
-        imagePath = [imagePath stringByAddingPercentEncodingWithAllowedCharacters:characterSetForPath];
-        imageURL = [[NSURL alloc] initWithScheme:imageURL.scheme host:imageURL.host path:imagePath];
 
+        if ([type isEqualToString:MPNotificationTypeTakeover]) {
+            NSString *imageName = [imageURL.path stringByDeletingPathExtension];
+            NSString *extension = [imageURL.path pathExtension];
+            components.path = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
+        }
+
+        imageURL = [components URL];
         if (imageURL == nil) {
-            MixpanelError(@"invalid notif image URL: %@", imageURLString);
+            MixpanelError(@"failed to encode notification image URL from components: %@", imageURLString);
             return nil;
         }
     }
-
+    
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                     messageID:[messageID unsignedIntegerValue]
-                                          type:type
-                                         title:title
-                                          body:body
-                                           callToAction:callToAction
-                                           callToActionURL:callToActionURL
-                                      imageURL:imageURL];
+                                         type:type
+                                        title:title
+                                         body:body
+                                 callToAction:callToAction
+                              callToActionURL:callToActionURL
+                                     imageURL:imageURL];
 }
 
 - (instancetype)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
