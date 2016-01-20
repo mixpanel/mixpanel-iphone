@@ -39,7 +39,7 @@ typedef id MPTweakValue;
 @property (nonatomic, copy, readonly) NSString *name;
 
 /**
- @abstract This tweak's value encoding, as returned by @encoding
+ @abstract This tweak's value encoding, as returned by `@encoding`
  */
 @property (nonatomic, copy, readonly) NSString *encoding;
 
