@@ -69,7 +69,7 @@ typedef id MPTweakValue;
 
 /**
   @abstract Adds an observer to the tweak.
-  @param object The observer. Must not be nil.
+  @param observer The observer. Must not be nil.
   @discussion A weak reference is taken on the observer.
  */
 - (void)addObserver:(id<MPTweakObserver>)observer;
