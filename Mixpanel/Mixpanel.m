@@ -231,7 +231,7 @@ static Mixpanel *sharedInstance = nil;
 
 static __unused NSString *MPURLEncode(NSString *s)
 {
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
+    return [s stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
 }
 
 - (NSData *)JSONSerializeObject:(id)obj
