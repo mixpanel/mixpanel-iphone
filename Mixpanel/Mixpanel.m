@@ -520,12 +520,14 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)timeEvent:(NSString *)event
 {
+    NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
+    
     if (event == nil || [event length] == 0) {
         MixpanelError(@"Mixpanel cannot time an empty event");
         return;
     }
     dispatch_async(self.serialQueue, ^{
-        self.timedEvents[event] = @([[NSDate date] timeIntervalSince1970]);
+        self.timedEvents[event] = startTime;
     });
 }
 
