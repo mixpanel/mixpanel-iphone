@@ -947,8 +947,14 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)libVersion
 {
+    return [Mixpanel libVersion];
+}
+
++ (NSString *)libVersion
+{
     return VERSION;
 }
+
 
 - (NSDictionary *)collectAutomaticProperties
 {
