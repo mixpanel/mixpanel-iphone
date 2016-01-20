@@ -155,7 +155,7 @@
             data4[i] = (((data32[j] & 0x80000000) >> 24) | ((data32[j] & 0x800000) >> 17) | ((data32[j] & 0x8000) >> 10) | ((data32[j] & 0x80) >> 3) |
                         ((data32[k] & 0x80000000) >> 28) | ((data32[k] & 0x800000) >> 21) | ((data32[k] & 0x8000) >> 14) | ((data32[k] & 0x80) >> 7));
         }
-        result = [[NSData dataWithBytes:data4 length:32] base64EncodedStringWithOptions:(NSDataBase64EncodingOptions)0];
+        result = [[NSData dataWithBytes:data4 length:32] base64EncodedStringWithOptions:kNilOptions];
     }
     return result;
 }
