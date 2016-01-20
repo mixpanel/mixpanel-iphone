@@ -81,22 +81,25 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             MixpanelError(@"invalid notif image URL: %@", imageURLString);
             return nil;
         }
-
-        NSString *escapedUrl = [imageURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        NSString *escapedUrl = [imageURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
         imageURL = [NSURL URLWithString:escapedUrl];
         if (imageURL == nil) {
             MixpanelError(@"invalid notif image URL: %@", imageURLString);
             return nil;
         }
-
+        
         NSString *imagePath = imageURL.path;
         if ([type isEqualToString:MPNotificationTypeTakeover]) {
             NSString *imageName = [imagePath stringByDeletingPathExtension];
             NSString *extension = [imagePath pathExtension];
             imagePath = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         }
-
-        imagePath = [imagePath stringByAddingPercentEscapesUsingEncoding:NSStringEncodingConversionExternalRepresentation];
+        
+        NSMutableCharacterSet *characterSetForPath = [[NSCharacterSet alphanumericCharacterSet] mutableCopy];
+        [characterSetForPath addCharactersInString:@"@"];
+        
+        imagePath = [imagePath stringByAddingPercentEncodingWithAllowedCharacters:characterSetForPath];
         imageURL = [[NSURL alloc] initWithScheme:imageURL.scheme host:imageURL.host path:imagePath];
 
         if (imageURL == nil) {
