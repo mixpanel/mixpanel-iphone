@@ -803,6 +803,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @method
+ 
+ @abstract
+ Unregister the given device to receive push notifications.
+ 
+ @discussion
+ This will unset all of the push tokens saved to this people profile. This is useful
+ in conjunction with a call to `reset`, or when a user is logging out.
+ */
+- (void)removePushDeviceToken;
+
+/*!
+ @method
 
  @abstract
  Set properties on the current user in Mixpanel People.

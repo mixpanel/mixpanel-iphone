@@ -1969,6 +1969,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
 }
 
+- (void)removePushDeviceToken
+{
+    NSDictionary *properties = @{ @"$properties": @"$ios_devices" };
+    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
+}
+
 - (void)set:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
