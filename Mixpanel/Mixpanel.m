@@ -888,12 +888,10 @@ static __unused NSString *MPURLEncode(NSString *s)
             [screenBoundsInvocation invokeWithTarget:device];
             CGRect screenBounds;
             [screenBoundsInvocation getReturnValue:(void *)&screenBounds];
-             if(screenBounds.size.width == 136.0f){
+            if (screenBounds.size.width == 136.0f){
                 model = @"Apple Watch 38mm";
-            } else if(screenBounds.size.width == 156.0f) {
+            } else if (screenBounds.size.width == 156.0f) {
                 model = @"Apple Watch 42mm";
-            } else {
-                model = @"Apple Watch";
             }
         }
     }
