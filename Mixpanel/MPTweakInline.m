@@ -108,15 +108,9 @@ static MPTweak *_MPTweakCreateWithEntry(NSString *name, mp_tweak_entry *entry)
     }
     
 #ifdef __LP64__
-    typedef uint64_t mp_tweak_value;
-    typedef struct section_64 mp_tweak_section;
     typedef struct mach_header_64 mp_tweak_header;
-#define mp_tweak_getsectbynamefromheader getsectbynamefromheader_64
 #else
-    typedef uint32_t mp_tweak_value;
-    typedef struct section mp_tweak_section;
     typedef struct mach_header mp_tweak_header;
-#define mp_tweak_getsectbynamefromheader getsectbynamefromheader
 #endif
     
     MPTweakStore *store = [MPTweakStore sharedInstance];
