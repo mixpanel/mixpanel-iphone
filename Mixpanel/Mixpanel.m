@@ -1873,7 +1873,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 }
 
 + (BOOL)isValidWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
-    return [[message objectForKey:@"$mp_message_type"] boolValue];
+    return [message objectForKey:@"$mp_message_type"] != nil;
 }
 
 @end
