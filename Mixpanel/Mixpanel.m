@@ -379,6 +379,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         return;
     }
     [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+    [self flush];
 }
 
 - (void)track:(NSString *)event
