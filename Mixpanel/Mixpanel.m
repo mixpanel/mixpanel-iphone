@@ -1857,23 +1857,29 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 /** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
-    if ([Mixpanel isValidWatchSessionMessage:message]) {
-        [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
+    if (messageType) {
+        if ([messageType isEqualToString:@"track"]) {
+            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+        }
     }
 }
 
 /** Called on the delegate of the receiver when the sender sends a message that expects a reply. Will be called on startup if the incoming message caused the receiver to launch. */
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler {
-    if ([Mixpanel isValidWatchSessionMessage:message]) {
-        [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
+    if (messageType) {
+        if ([messageType isEqualToString:@"track"]) {
+            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+        }
         replyHandler(@{ @"success": @YES });
     } else {
         replyHandler(@{ @"success": @NO, @"message": @"Message is not a mixpanel message" });
     }
 }
 
-+ (BOOL)isValidWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
-    return [message objectForKey:@"$mp_message_type"] != nil;
++ (NSString *)messageTypeForWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
+    return [message objectForKey:@"$mp_message_type"];
 }
 
 @end

@@ -51,14 +51,21 @@ static MixpanelWatchOS *sharedInstance = nil;
 - (void)track:(NSString *)event properties:(nullable NSDictionary *)properties {
     NSAssert(event != nil, @"Missing event name");
     
+    // Ensure properties is not nil
+    if (!properties) {
+        properties = @{};
+    }
+    [self sendMessage:@"track" withParameters:@{ @"event": event, @"properties": properties }];
+}
+
+- (void)sendMessage:(NSString *)type withParameters:(nullable NSDictionary *)parameters {
+    NSParameterAssert(type);
+    
     if ([self.session isReachable]) {
-        // Ensure properties is not nil
-        if (!properties) {
-            properties = @{};
-        }
+        NSMutableDictionary *message = [parameters mutableCopy];
+        message[@"$mp_message_type"] = type;
         
         // Send the event name and properties to the host app
-        NSDictionary *message = @{ @"$mp_message_type": @"track", @"event": event, @"properties": properties };
         [self.session sendMessage:message
                      replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
                          MixpanelDebug(@"Received reply from host for track: message. Details: %@", replyMessage);
