@@ -27,9 +27,9 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'WatchOS' do |ss|
-    ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}']
+    ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/MPLogger.h']
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_WATCH_EXTENSION' }
-    ss.frameworks = 'WatchConnectivity'
+    ss.frameworks = 'WatchConnectivity', 'Foundation'
     ss.platform = :watchos
   end
 end
