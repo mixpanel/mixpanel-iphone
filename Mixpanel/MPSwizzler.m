@@ -57,7 +57,7 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while((block = [blocks nextObject])) {
-            block(self, _cmd);
+            block(self, _cmd, arg);
         }
     }
 }
