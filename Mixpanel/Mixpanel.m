@@ -15,13 +15,13 @@
 #import <UIKit/UIDevice.h>
 
 #import "Mixpanel.h"
-#import "MixpanelExceptionHandler.h"
 #import "MPLogger.h"
 #import "NSData+MPBase64.h"
 #import "MPFoundation.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 
+#import "MixpanelExceptionHandler.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
 #import "MPDesignerEventBindingMessage.h"
