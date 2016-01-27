@@ -706,7 +706,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     NSNumber *retryTime = response.allHeaderFields[@"Retry-After"];
     
-    BOOL was5XX = (response.statusCode >= 500 && response.statusCode < 600);
+    BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error.code == NSURLErrorTimedOut);
     if (was5XX) {
         self.networkConsecutiveFailures++;
     } else {
@@ -716,14 +716,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     if (self.networkConsecutiveFailures > 1) {
         // Exponential backoff
         retryTime = [self retryBackOffTime];
-    }
-    
-    if (!retryTime) {
-        BOOL wasTimeout = (error.code == NSURLErrorTimedOut);
-        if (wasTimeout || was5XX) {
-            // Prevent network requests for the next minute
-            retryTime = @(60);
-        }
     }
     
     self.networkRequestsAllowedAfterTime = [[NSDate dateWithTimeIntervalSinceNow:retryTime.doubleValue] timeIntervalSince1970];
