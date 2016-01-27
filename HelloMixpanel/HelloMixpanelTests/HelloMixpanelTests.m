@@ -1098,7 +1098,7 @@
 
     // an image with a space in the URL should be % encoded
     m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @"http://test.com/animagewithaspace init.jpg";
+    m[@"image_url"] = @"https://test.com/animagewithaspace init.jpg";
     XCTAssertNotNil([MPNotification notificationWithJSONObject:m]);
 
 }
@@ -1112,7 +1112,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
+                        @"image_url": @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];
@@ -1164,7 +1164,7 @@
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
-                        @"image_url": @"http://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
+                        @"image_url": @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
     MPNotification *notif = [MPNotification notificationWithJSONObject:o];
     [self.mixpanel showNotificationWithObject:notif];
 
