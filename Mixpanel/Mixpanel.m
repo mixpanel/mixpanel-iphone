@@ -715,16 +715,16 @@ static __unused NSString *MPURLEncode(NSString *s)
     
     if (self.networkConsecutiveFailures > 1) {
         // Exponential backoff
-        retryTime = [self retryBackOffTime];
+        retryTime = [self retryBackOffTimeWithConsecutiveFailures:self.networkConsecutiveFailures];
     }
     
     self.networkRequestsAllowedAfterTime = [[NSDate dateWithTimeIntervalSinceNow:retryTime.doubleValue] timeIntervalSince1970];
 }
 
-- (NSNumber *)retryBackOffTime
+- (NSNumber *)retryBackOffTimeWithConsecutiveFailures:(NSUInteger)failureCount
 {
-    const NSUInteger retryInterval = (arc4random() % 30) + 30;
-    return @(pow(retryInterval, self.networkConsecutiveFailures));
+    NSTimeInterval time = pow(2.0, failureCount) * 60 + arc4random_uniform(30);
+    return @(MIN(MAX(60, time), 600));
 }
 
 #pragma mark - Persistence
