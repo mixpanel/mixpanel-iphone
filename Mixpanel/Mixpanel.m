@@ -84,6 +84,8 @@
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
+@property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
+@property (nonatomic) NSUInteger networkConsecutiveFailures;
 
 @end
 
@@ -147,6 +149,7 @@ static Mixpanel *sharedInstance = nil;
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
 #endif
         
+        self.networkRequestsAllowedAfterTime = -1;
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
@@ -399,7 +402,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
 
-    double epochInterval = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
     NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[event];
@@ -651,6 +654,11 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
+    if (self.networkRequestsAllowedAfterTime > [[NSDate date] timeIntervalSince1970]) {
+        MixpanelDebug(@"Attempted to flush queue, when we still have a timeout. Ignoring flush.");
+        return;
+    }
+    
     while ([queue count] > 0) {
         NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
@@ -662,12 +670,13 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSError *error = nil;
 
         [self updateNetworkActivityIndicator:YES];
-
-        NSURLResponse *urlResponse = nil;
+        
+        NSHTTPURLResponse *urlResponse = nil;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
 
         [self updateNetworkActivityIndicator:NO];
-
+        
+        [self handleNetworkResponse:urlResponse withError:error];
         if (error) {
             MixpanelError(@"%@ network failure: %@", self, error);
             break;
@@ -691,6 +700,39 @@ static __unused NSString *MPURLEncode(NSString *s)
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     MixpanelDebug(@"%@ http request: %@?%@", self, URL, body);
     return request;
+}
+
+- (void)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error
+{
+    NSNumber *retryTime = response.allHeaderFields[@"Retry-After"];
+    
+    BOOL was500 = (response.statusCode >= 500 && response.statusCode < 600);
+    if (was500) {
+        self.networkConsecutiveFailures++;
+    } else {
+        self.networkConsecutiveFailures = 0;
+    }
+    
+    if (self.networkConsecutiveFailures > 1) {
+        // Exponential backoff
+        retryTime = [self retryBackOffTime];
+    }
+    
+    if (!retryTime) {
+        BOOL wasTimeout = (error.code == NSURLErrorTimedOut);
+        if (wasTimeout || was500) {
+            // Prevent network requests for the next minute
+            retryTime = @(60);
+        }
+    }
+    
+    self.networkRequestsAllowedAfterTime = [[NSDate dateWithTimeIntervalSinceNow:retryTime.doubleValue] timeIntervalSince1970];
+}
+
+- (NSNumber *)retryBackOffTime
+{
+    const NSInteger retryInterval = (arc4random() % 45) + 45;
+    return @(retryInterval * self.networkConsecutiveFailures);
 }
 
 #pragma mark - Persistence
