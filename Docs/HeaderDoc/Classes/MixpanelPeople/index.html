@@ -270,7 +270,7 @@ be available as a property of the main Mixpanel object. Calls to Mixpanel
 People methods will look like this:
 </p>
  <pre>
- [mixpanel.people increment:@"App Opens" by:1];
+ [mixpanel.people increment:@"App Opens" by:[NSNumber numberWithInt:1]];
  </pre>
 
 <p>Please note that the core <code>Mixpanel</code> and
@@ -311,6 +311,10 @@ People</b>.
 amount.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken" target="_top">-removePushDeviceToken</a></tt></dt>
+<dd><p>Unregister the given device to receive push notifications.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelPeople/set:" target="_top">-set:</a></tt></dt>
 <dd><p>Set properties on the current user in Mixpanel People.
 </p>
@@ -331,6 +335,11 @@ there is an existing value.
 <dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:" target="_top">-trackCharge:withProperties:</a></tt></dt>
 <dd><p>Track money spent by the current user for revenue analytics and associate
 properties with the charge.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/MixpanelPeople/unset:" target="_top">-unset:</a></tt></dt>
+<dd><p>Remove a list of properties and their values from the current user's profile 
+in Mixpanel People.
 </p>
 </dd>
 </dl>
@@ -443,6 +452,19 @@ amount.
 <code>amount</code></dt><dd><p>amount to increment by</dd>
 </dl>
 </div>
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;   name=MixpanelPeople::removePushDeviceToken -->
+<a name="//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken"></a>
+<h3><a name="removePushDeviceToken">removePushDeviceToken</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;name=start --><!-- begin abstract --><p>Unregister the given device to receive push notifications.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/removePushDeviceToken //apple_ref/occ/data/MixpanelPeople/removePushDeviceToken //apple_ref/occ/data/removePushDeviceToken //apple_ref/occ/clconst/MixpanelPeople/removePushDeviceToken " machineGenerated="true" --><span class="var">removePushDeviceToken</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;name=start --><p>This will unset all of the push tokens saved to this people profile. This is useful
+in conjunction with a call to `reset`, or when a user is logging out.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/removePushDeviceToken;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelPeople/set:;   name=MixpanelPeople::set: -->
 <a name="//apple_ref/occ/instm/MixpanelPeople/set:"></a>
 <h3><a name="set:">set:</a></h3>
@@ -475,9 +497,6 @@ value is overwritten. Other existing properties will not be affected.
  // applies to both Mixpanel Engagement track: AND Mixpanel People set: and
  // increment: calls
  [mixpanel identify:distinctId];
-
- // applies ONLY to Mixpanel People set: and increment: calls
- [mixpanel.people identify:distinctId];
  </pre>
 
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/set:;name=end --><!-- end discussion -->
@@ -558,15 +577,69 @@ properties with the charge.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelPeople/trackCharge //apple_ref/occ/clm/MixpanelPeople/trackCharge //apple_ref/occ/intfcm/MixpanelPeople/trackCharge //apple_ref/occ/intfm/MixpanelPeople/trackCharge //apple_ref/occ/func/trackCharge //apple_ref/occ/ftmplt/MixpanelPeople/trackCharge //apple_ref/occ/defn/trackCharge //apple_ref/occ/macro/trackCharge //apple_ref/doc/anysymbol/trackCharge" machineGenerated="true" --><span class="function">trackCharge</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSNumber //apple_ref/occ/tdef/NSNumber //apple_ref/occ/tag/NSNumber //apple_ref/occ/struct/NSNumber //apple_ref/occ/intf/NSNumber //apple_ref/doc/anysymbol/NSNumber" machineGenerated="true" --><span class="type">NSNumber</span><!-- /a --> <span class="type">*</span>)<span class="param">amount</span> <!-- a logicalPath="//apple_ref/occ/instm/MixpanelPeople/withProperties //apple_ref/occ/clm/MixpanelPeople/withProperties //apple_ref/occ/intfcm/MixpanelPeople/withProperties //apple_ref/occ/intfm/MixpanelPeople/withProperties //apple_ref/occ/func/withProperties //apple_ref/occ/ftmplt/MixpanelPeople/withProperties //apple_ref/occ/defn/withProperties //apple_ref/occ/macro/withProperties //apple_ref/doc/anysymbol/withProperties" machineGenerated="true" --><span class="function">withProperties</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/intf/NSDictionary //apple_ref/doc/anysymbol/NSDictionary" machineGenerated="true" --><span class="type">NSDictionary</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/MixpanelPeople/properties //apple_ref/occ/data/properties //apple_ref/occ/clconst/MixpanelPeople/properties " machineGenerated="true" --><span class="var">properties</span><!-- /a -->;  <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelPeople/trackCharge //apple_ref/occ/clm/MixpanelPeople/trackCharge //apple_ref/occ/intfcm/MixpanelPeople/trackCharge //apple_ref/occ/intfm/MixpanelPeople/trackCharge //apple_ref/occ/func/trackCharge //apple_ref/occ/ftmplt/MixpanelPeople/trackCharge //apple_ref/occ/defn/trackCharge //apple_ref/occ/macro/trackCharge //apple_ref/doc/anysymbol/trackCharge" machineGenerated="true" --><span class="function">trackCharge</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSNumber //apple_ref/occ/tdef/NSNumber //apple_ref/occ/tag/NSNumber //apple_ref/occ/struct/NSNumber //apple_ref/occ/intf/NSNumber //apple_ref/doc/anysymbol/NSNumber" machineGenerated="true" --><span class="type">NSNumber</span><!-- /a --> <span class="type">*</span>)<span class="param">amount</span> <!-- a logicalPath="//apple_ref/occ/instm/MixpanelPeople/withProperties //apple_ref/occ/clm/MixpanelPeople/withProperties //apple_ref/occ/intfcm/MixpanelPeople/withProperties //apple_ref/occ/intfm/MixpanelPeople/withProperties //apple_ref/occ/func/withProperties //apple_ref/occ/ftmplt/MixpanelPeople/withProperties //apple_ref/occ/defn/withProperties //apple_ref/occ/macro/withProperties //apple_ref/doc/anysymbol/withProperties" machineGenerated="true" --><span class="function">withProperties</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/nullable //apple_ref/occ/tdef/nullable //apple_ref/occ/tag/nullable //apple_ref/occ/struct/nullable //apple_ref/occ/intf/nullable //apple_ref/doc/anysymbol/nullable" machineGenerated="true" --><span class="type">nullable</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/intf/NSDictionary //apple_ref/doc/anysymbol/NSDictionary" machineGenerated="true" --><span class="type">NSDictionary</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/MixpanelPeople/properties //apple_ref/occ/data/properties //apple_ref/occ/clconst/MixpanelPeople/properties " machineGenerated="true" --><span class="var">properties</span><!-- /a -->;  <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=start --><p>Charge properties allow you segment on types of revenue. For instance, you
 could record a product ID with each charge so that you could segment on it in
 revenue analytics to see which products are generating the most revenue.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/trackCharge:withProperties:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/MixpanelPeople/unset:;   name=MixpanelPeople::unset: -->
+<a name="//apple_ref/occ/instm/MixpanelPeople/unset:"></a>
+<h3><a name="unset:">unset:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelPeople/unset:;name=start --><!-- begin abstract --><p>Remove a list of properties and their values from the current user's profile 
+in Mixpanel People.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/MixpanelPeople/unset:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/unset:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/MixpanelPeople/unset //apple_ref/occ/clm/MixpanelPeople/unset //apple_ref/occ/intfcm/MixpanelPeople/unset //apple_ref/occ/intfm/MixpanelPeople/unset //apple_ref/occ/func/unset //apple_ref/occ/ftmplt/MixpanelPeople/unset //apple_ref/occ/defn/unset //apple_ref/occ/macro/unset //apple_ref/doc/anysymbol/unset" machineGenerated="true" --><span class="function">unset</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSArray //apple_ref/occ/tdef/NSArray //apple_ref/occ/tag/NSArray //apple_ref/occ/struct/NSArray //apple_ref/occ/intf/NSArray //apple_ref/doc/anysymbol/NSArray" machineGenerated="true" --><span class="type">NSArray</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/properties //apple_ref/occ/data/MixpanelPeople/properties //apple_ref/occ/data/properties //apple_ref/occ/clconst/MixpanelPeople/properties " machineGenerated="true" --><span class="var">properties</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/MixpanelPeople/unset:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/MixpanelPeople/unset:/properties;   name=unset:::properties -->
+<a name="//apple_ref/doc/methodparam/MixpanelPeople/unset:/properties"></a>
+<code>properties</code></dt><dd><p>properties array</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/unset:;name=start --><p>The properties array must ony contain NSString names of properties. For properties
+that don't exist there will be no effect.
+</p>
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/MixpanelPeople/unset:;name=end --><!-- end discussion -->
+<hr class="betweenSections">
+<a name="HeaderDoc_props"></a>
+<h2 class="h2tight">Properties</h2>
+<dl>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/MixpanelPeople/ignoreTime" target="_top">ignoreTime</a></tt></dt>
+<dd><p>controls the $ignore_time property in any subsequent MixpanelPeople operation.
+</p>
+<p>If the $ignore_time property is present and true in your request,
+Mixpanel will not automatically update the "Last Seen" property of the profile.
+Otherwise, Mixpanel will add a "Last Seen" property associated with the
+current time for all $set, $append, and $add operations
+</p>
+</dd>
+</dl>
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;   name=MixpanelPeople::ignoreTime -->
+<a name="//apple_ref/occ/instp/MixpanelPeople/ignoreTime"></a>
+<h3><a name="ignoreTime">ignoreTime</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;name=start --><!-- begin abstract --><p>controls the $ignore_time property in any subsequent MixpanelPeople operation.
+</p>
+<p>If the $ignore_time property is present and true in your request,
+Mixpanel will not automatically update the "Last Seen" property of the profile.
+Otherwise, Mixpanel will add a "Last Seen" property associated with the
+current time for all $set, $append, and $add operations
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/ignoreTime //apple_ref/occ/data/MixpanelPeople/ignoreTime //apple_ref/occ/data/ignoreTime //apple_ref/occ/clconst/MixpanelPeople/ignoreTime " machineGenerated="true" --><span class="var">ignoreTime</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;name=start --><p>Defaults to NO.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/MixpanelPeople/ignoreTime;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Tuesday, December 01, 2015
+<p class="hd_timestamp">Last Updated: Wednesday, January 27, 2016
 </p></div>
 </td></tr></table>
 </body></html>
