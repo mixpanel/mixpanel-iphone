@@ -1,6 +1,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
+#if defined(MIXPANEL_WATCH_EXTENSION)
 #import <WatchConnectivity/WatchConnectivity.h>
+#endif
 
 @class    MixpanelPeople;
 @protocol MixpanelDelegate;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37F9F7F21C2B8BFC00783DDB /* Mixpanel.pch in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */; };
+		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		511FC30B1C2B739B00DC4796 /* MixpanelWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */; };
 		511FC30C1C2B739B00DC4796 /* MixpanelWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
@@ -16,12 +18,10 @@
 		511FC3A11C2B751100DC4796 /* MixpanelWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */; };
 		513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */; };
 		513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */; };
-		37F9F7F21C2B8BFC00783DDB /* Mixpanel.pch in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */; };
-		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
-		513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */; };
-		513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */; };
 		5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
 		5177CFC81C5032B600271843 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
+		51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
+		51D221021C595EBA003ECFB3 /* Mixpanel.pch in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */; };
 		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */; };
@@ -154,18 +154,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.pch; sourceTree = "<group>"; };
+		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFoundation.h; sourceTree = "<group>"; };
 		511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		511FC39E1C2B74BD00DC4796 /* Mixpanel-watchOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Mixpanel-watchOS-Info.plist"; path = "/Users/samgreen/code/mixpanel-iphone/Mixpanel-watchOS-Info.plist"; sourceTree = "<absolute>"; };
 		511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
-		37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.pch; sourceTree = "<group>"; };
-		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFoundation.h; sourceTree = "<group>"; };
 		513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
-		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
 		5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
+		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C170C2E1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
@@ -527,6 +527,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51D221021C595EBA003ECFB3 /* Mixpanel.pch in Headers */,
+				51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */,
 				511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
