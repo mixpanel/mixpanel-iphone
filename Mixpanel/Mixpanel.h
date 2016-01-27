@@ -741,10 +741,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+#if defined(MIXPANEL_WATCH_EXTENSION)
 @interface Mixpanel (WatchExtensions) <WCSessionDelegate>
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message;
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler;
 @end
+#endif
 
 
 /*!

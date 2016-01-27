@@ -2,6 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import <objc/runtime.h>
+#import <UIKit/UIKit.h>
 #import "MPLogger.h"
 #import "NSInvocation+MPHelpers.h"
 

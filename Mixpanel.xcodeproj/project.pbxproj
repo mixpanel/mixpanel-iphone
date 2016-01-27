@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		37F9F7F21C2B8BFC00783DDB /* Mixpanel.pch in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */; };
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
-		511FC30B1C2B739B00DC4796 /* MixpanelWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */; };
-		511FC30C1C2B739B00DC4796 /* MixpanelWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		511FC35B1C2B74BD00DC4796 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
 		511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -21,7 +18,6 @@
 		5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
 		5177CFC81C5032B600271843 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
-		51D221021C595EBA003ECFB3 /* Mixpanel.pch in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */; };
 		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */; };
@@ -154,7 +150,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.pch; sourceTree = "<group>"; };
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPFoundation.h; sourceTree = "<group>"; };
 		511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
@@ -225,7 +220,7 @@
 		7C170C811A4A035F00D9E0F2 /* MPNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotification.m; sourceTree = "<group>"; };
 		7C170C821A4A035F00D9E0F2 /* MPNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MPNotification.storyboard; sourceTree = "<group>"; };
 		7C170C831A4A035F00D9E0F2 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
-		7C170C841A4A035F00D9E0F2 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; };
+		7C170C841A4A035F00D9E0F2 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7C170C851A4A035F00D9E0F2 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSAttributedStringToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
 		7C170C861A4A035F00D9E0F2 /* MPNSNumberToCGFloatValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSNumberToCGFloatValueTransformer.m; sourceTree = "<group>"; };
 		7C170C871A4A035F00D9E0F2 /* MPObjectIdentifierProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPObjectIdentifierProvider.h; sourceTree = "<group>"; };
@@ -379,7 +374,6 @@
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
 				511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */,
 				511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */,
-				37F9F7F01C2B8BFC00783DDB /* Mixpanel.pch */,
 				7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */,
 				7C170C4E1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m */,
 				7C170C4F1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.h */,
@@ -527,7 +521,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51D221021C595EBA003ECFB3 /* Mixpanel.pch in Headers */,
 				51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */,
 				511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */,
 			);
@@ -537,7 +530,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				511FC30C1C2B739B00DC4796 /* MixpanelWatchOS.h in Headers */,
 				7C170CC81A4A035F00D9E0F2 /* Mixpanel.h in Headers */,
 				7C170D3F1A4A035F00D9E0F2 /* UIImage+MPImageEffects.h in Headers */,
 				7C170CD61A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
@@ -587,7 +579,6 @@
 				7C170CE51A4A035F00D9E0F2 /* MPApplicationStateSerializer.h in Headers */,
 				7C170D1F1A4A035F00D9E0F2 /* MPTweak.h in Headers */,
 				7C170CFD1A4A035F00D9E0F2 /* MPNotification.h in Headers */,
-				37F9F7F21C2B8BFC00783DDB /* Mixpanel.pch in Headers */,
 				7C170CE31A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
 				7C170D331A4A035F00D9E0F2 /* MPWebSocket.h in Headers */,
 				7C170CDA1A4A035F00D9E0F2 /* MPABTestDesignerDisconnectMessage.h in Headers */,
@@ -648,6 +639,7 @@
 				TargetAttributes = {
 					7C170C291A4A02F500D9E0F2 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = E8FVX7QLET;
 					};
 				};
 			};
@@ -750,7 +742,6 @@
 				7C170CFB1A4A035F00D9E0F2 /* MPEventBinding.m in Sources */,
 				7C170CE71A4A035F00D9E0F2 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				7C170CD91A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
-				511FC30B1C2B739B00DC4796 /* MixpanelWatchOS.m in Sources */,
 				7C170D131A4A035F00D9E0F2 /* MPSequenceGenerator.m in Sources */,
 				7C170D2C1A4A035F00D9E0F2 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				7C170D181A4A035F00D9E0F2 /* MPSurveyNavigationController.m in Sources */,
@@ -784,6 +775,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Mixpanel-watchOS-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -808,6 +800,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Mixpanel-watchOS-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -917,10 +910,12 @@
 		7C170C411A4A02F500D9E0F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -938,10 +933,12 @@
 		7C170C421A4A02F500D9E0F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

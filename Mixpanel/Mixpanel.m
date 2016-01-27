@@ -18,6 +18,7 @@
 #import "MixpanelExceptionHandler.h"
 #import "MPLogger.h"
 #import "NSData+MPBase64.h"
+#import "MPFoundation.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 
@@ -1861,6 +1862,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 @end
 
+#if defined(MIXPANEL_WATCH_EXTENSION)
 #pragma mark - WatchExtensions
 @implementation Mixpanel (WatchExtensions)
 
@@ -1892,6 +1894,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 }
 
 @end
+#endif
 
 #pragma mark - People
 @implementation MixpanelPeople
