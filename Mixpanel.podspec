@@ -7,7 +7,6 @@ Pod::Spec.new do |s|
   s.author       = { 'Mixpanel, Inc' => 'support@mixpanel.com' }
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
   s.requires_arc = true
-  s.prefix_header_file = 'Mixpanel/Mixpanel.pch'
   s.default_subspec = 'Mixpanel'
 
   s.subspec 'Mixpanel' do |ss|
