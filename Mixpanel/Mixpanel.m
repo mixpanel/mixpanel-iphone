@@ -654,7 +654,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
-    if (self.networkRequestsAllowedAfterTime > [[NSDate date] timeIntervalSince1970]) {
+    if ([[NSDate date] timeIntervalSince1970] < self.networkRequestsAllowedAfterTime) {
         MixpanelDebug(@"Attempted to flush queue, when we still have a timeout. Ignoring flush.");
         return;
     }
