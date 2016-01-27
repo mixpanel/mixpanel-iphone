@@ -731,8 +731,8 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSNumber *)retryBackOffTime
 {
-    const NSUInteger retryInterval = (arc4random() % 45) + 45;
-    return @(retryInterval * self.networkConsecutiveFailures);
+    const NSUInteger retryInterval = (arc4random() % 30) + 30;
+    return @(pow(retryInterval, self.networkConsecutiveFailures));
 }
 
 #pragma mark - Persistence
