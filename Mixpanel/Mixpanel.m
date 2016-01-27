@@ -149,7 +149,7 @@ static Mixpanel *sharedInstance = nil;
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
 #endif
         
-        self.networkRequestsAllowedAfterTime = -1;
+        self.networkRequestsAllowedAfterTime = 0;
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
