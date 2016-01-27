@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
+    ss.platform = :ios
   end
 
   s.subspec 'AppExtension' do |ss|
@@ -22,11 +23,13 @@ Pod::Spec.new do |s|
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
+    ss.platform = :ios
   end
 
   s.subspec 'WatchOS' do |ss|
     ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}']
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_WATCH_EXTENSION' }
     ss.frameworks = 'WatchConnectivity'
+    ss.platform = :watchos
   end
 end
