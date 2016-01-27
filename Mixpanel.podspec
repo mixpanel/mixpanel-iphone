@@ -5,7 +5,6 @@ Pod::Spec.new do |s|
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Mixpanel, Inc' => 'support@mixpanel.com' }
-  s.platform     = :ios, '6.0'
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
   s.requires_arc = true
   s.prefix_header_file = 'Mixpanel/Mixpanel.pch'
@@ -23,5 +22,11 @@ Pod::Spec.new do |s|
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
+  end
+
+  s.subspec 'WatchOS' do |ss|
+    ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}']
+    ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_WATCH_EXTENSION' }
+    ss.frameworks = 'WatchConnectivity'
   end
 end

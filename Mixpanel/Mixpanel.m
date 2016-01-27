@@ -60,7 +60,7 @@
 @property (nonatomic, strong) NSMutableArray *eventsQueue;
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
-@property (nonatomic, strong) dispatch_queue_t serialQueue;
+@property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -896,12 +896,10 @@ static __unused NSString *MPURLEncode(NSString *s)
             [screenBoundsInvocation invokeWithTarget:device];
             CGRect screenBounds;
             [screenBoundsInvocation getReturnValue:(void *)&screenBounds];
-             if(screenBounds.size.width == 136.0f){
+            if (screenBounds.size.width == 136.0f){
                 model = @"Apple Watch 38mm";
-            } else if(screenBounds.size.width == 156.0f) {
+            } else if (screenBounds.size.width == 156.0f) {
                 model = @"Apple Watch 42mm";
-            } else {
-                model = @"Apple Watch";
             }
         }
     }
@@ -1862,8 +1860,39 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 @end
 
-#pragma mark - People
+#pragma mark - WatchExtensions
+@implementation Mixpanel (WatchExtensions)
 
+/** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
+- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
+    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
+    if (messageType) {
+        if ([messageType isEqualToString:@"track"]) {
+            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+        }
+    }
+}
+
+/** Called on the delegate of the receiver when the sender sends a message that expects a reply. Will be called on startup if the incoming message caused the receiver to launch. */
+- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler {
+    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
+    if (messageType) {
+        if ([messageType isEqualToString:@"track"]) {
+            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+        }
+        replyHandler(@{ @"success": @YES });
+    } else {
+        replyHandler(@{ @"success": @NO, @"message": @"Message is not a mixpanel message" });
+    }
+}
+
++ (NSString *)messageTypeForWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
+    return [message objectForKey:@"$mp_message_type"];
+}
+
+@end
+
+#pragma mark - People
 @implementation MixpanelPeople
 
 - (instancetype)initWithMixpanel:(Mixpanel *)mixpanel
