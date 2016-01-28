@@ -91,6 +91,8 @@
 		5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
 		5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		5116F8741B68397A00C14704 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5116F8731B68397A00C14704 /* MixpanelExceptionHandler.m */; };
+		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
+		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
 		5262143622F74EDFB5C6D2AC /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		86978874197466780095B277 /* MPNSNumberToCGFloatValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 86978873197466780095B277 /* MPNSNumberToCGFloatValueTransformer.m */; };
@@ -388,6 +390,10 @@
 		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		5116F8721B68397A00C14704 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5116F8731B68397A00C14704 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
+		51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummy5XXHTTPConnection.h; sourceTree = "<group>"; };
+		51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummy5XXHTTPConnection.m; sourceTree = "<group>"; };
+		51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyRetryAfterConnection.h; sourceTree = "<group>"; };
+		51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyRetryAfterConnection.m; sourceTree = "<group>"; };
 		51D6DAE21C2B533C0003A41F /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
 		51D6DAE31C2B533C0003A41F /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		57915FC1D2F8A5607E73B555 /* Pods-ABTestingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -726,6 +732,10 @@
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
 				05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */,
 				05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */,
+				51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */,
+				51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */,
+				51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */,
+				51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */,
 				2808F9B91610EFE4005772B7 /* Supporting Files */,
 			);
 			path = HelloMixpanelTests;
@@ -1464,7 +1474,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */,
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
+				51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */,
 				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
 				289B497B17D913D50035439B /* NSData+MPBase64.m in Sources */,
 			);

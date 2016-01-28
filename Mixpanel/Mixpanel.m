@@ -676,8 +676,8 @@ static __unused NSString *MPURLEncode(NSString *s)
 
         [self updateNetworkActivityIndicator:NO];
         
-        [self handleNetworkResponse:urlResponse withError:error];
-        if (error) {
+        BOOL success = [self handleNetworkResponse:urlResponse withError:error];
+        if (error || !success) {
             MixpanelError(@"%@ network failure: %@", self, error);
             break;
         }
@@ -702,14 +702,17 @@ static __unused NSString *MPURLEncode(NSString *s)
     return request;
 }
 
-- (void)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error
+- (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error
 {
-    NSNumber *retryTime = response.allHeaderFields[@"Retry-After"];
+    BOOL success = NO;
+    BOOL hasRetryTime = (response.allHeaderFields[@"Retry-After"] != nil);
+    NSTimeInterval retryTime = [response.allHeaderFields[@"Retry-After"] doubleValue];
     
     BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error.code == NSURLErrorTimedOut);
     if (was5XX) {
         self.networkConsecutiveFailures++;
-    } else {
+    } else if (!hasRetryTime) {
+        success = YES;
         self.networkConsecutiveFailures = 0;
     }
     
@@ -718,13 +721,14 @@ static __unused NSString *MPURLEncode(NSString *s)
         retryTime = [self retryBackOffTimeWithConsecutiveFailures:self.networkConsecutiveFailures];
     }
     
-    self.networkRequestsAllowedAfterTime = [[NSDate dateWithTimeIntervalSinceNow:retryTime.doubleValue] timeIntervalSince1970];
+    self.networkRequestsAllowedAfterTime = [[NSDate dateWithTimeIntervalSinceNow:retryTime] timeIntervalSince1970];
+    return success;
 }
 
-- (NSNumber *)retryBackOffTimeWithConsecutiveFailures:(NSUInteger)failureCount
+- (NSTimeInterval)retryBackOffTimeWithConsecutiveFailures:(NSUInteger)failureCount
 {
     NSTimeInterval time = pow(2.0, failureCount) * 60 + arc4random_uniform(30);
-    return @(MIN(MAX(60, time), 600));
+    return MIN(MAX(60, time), 600);
 }
 
 #pragma mark - Persistence
