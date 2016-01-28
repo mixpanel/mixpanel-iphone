@@ -2006,7 +2006,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)removePushDeviceToken
 {
-    NSDictionary *properties = @{ @"$properties": @"$ios_devices" };
+    NSDictionary *properties = @{ @"$properties": @[@"$ios_devices"] };
     [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
 }
 
