@@ -1404,7 +1404,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         if (completion) {
             completion(surveys);
         }
-    }];
+    } useCache:NO];
 }
 
 - (void)checkForNotificationsWithCompletion:(void (^)(NSArray *notifications))completion
@@ -1413,7 +1413,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         if (completion) {
             completion(notifications);
         }
-    }];
+    } useCache:NO];
 }
 
 - (void)checkForVariantsWithCompletion:(void (^)(NSSet *variants))completion
@@ -2006,7 +2006,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)removePushDeviceToken
 {
-    NSDictionary *properties = @{ @"$properties": @"$ios_devices" };
+    NSDictionary *properties = @{ @"$properties": @[@"$ios_devices"] };
     [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
 }
 
