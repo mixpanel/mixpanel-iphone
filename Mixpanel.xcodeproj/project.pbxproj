@@ -784,6 +784,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MIXPANEL_WATCH_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
@@ -809,6 +810,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MIXPANEL_WATCH_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_NAME = Mixpanel;
 				SKIP_INSTALL = YES;
