@@ -7,12 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#if !defined(MIXPANEL_WATCH_EXTENSION)
-#import "Mixpanel.h"
-#else
 #import <WatchConnectivity/WatchConnectivity.h>
-#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
