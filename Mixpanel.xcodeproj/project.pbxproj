@@ -787,8 +787,10 @@
 				MIXPANEL_WATCH_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_NAME = Mixpanel;
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
 				VALID_ARCHS = armv7k;
 			};
 			name = Debug;
@@ -813,8 +815,10 @@
 				MIXPANEL_WATCH_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_NAME = Mixpanel;
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
 				VALID_ARCHS = armv7k;
 			};
 			name = Release;
