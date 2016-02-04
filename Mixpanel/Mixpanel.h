@@ -956,7 +956,7 @@
  
  @discussion
  Execute your code after the identify set.
- It is usefull for getting the ABTesting MPTweakValue (and keep it consistent value for each user identify)
+ It is useful for getting the ABTesting MPTweakValue (and keep it consistent value for each user identify)
  
  @param mixpanel        Mixpanel API instance
  */
