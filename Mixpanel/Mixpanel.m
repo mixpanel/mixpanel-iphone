@@ -360,9 +360,11 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self archiveProperties];
         }
         
-        // Clear cached variants
-        self.variants = nil;
-        
+        // Stop all cached variants - avoid mixup variants from previous user
+        for (MPVariant* variant in self.variants) {
+            [variant stop];
+        }
+                
         // Get the variants of the current identify
         [self joinExperimentsWithCallback:^{
             __strong id<MixpanelDelegate> strongDelegate = self.delegate;
