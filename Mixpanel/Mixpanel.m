@@ -157,8 +157,8 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
 
-        self.serverURL = @"https://api.mixpanel.com";
-        self.decideURL = @"https://decide.mixpanel.com";
+        self.serverURL = @"http://api.mixpanel.com";
+        self.decideURL = @"http://decide.mixpanel.org";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;
@@ -655,7 +655,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
     if ([[NSDate date] timeIntervalSince1970] < self.networkRequestsAllowedAfterTime) {
-        MixpanelDebug(@"Attempted to flush queue, when we still have a timeout. Ignoring flush.");
+        MixpanelDebug(@"Attempted to flush to %@, when we still have a timeout. Ignoring flush.", endpoint);
         return;
     }
     
@@ -705,29 +705,34 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error
 {
     BOOL success = NO;
-    BOOL hasRetryTime = (response.allHeaderFields[@"Retry-After"] != nil);
     NSTimeInterval retryTime = [response.allHeaderFields[@"Retry-After"] doubleValue];
     
-    BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error.code == NSURLErrorTimedOut);
+    MixpanelDebug(@"HTTP Response: %@", response.allHeaderFields);
+    
+    BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error != nil);
     if (was5XX) {
         self.networkConsecutiveFailures++;
-    } else if (!hasRetryTime) {
+    } else {
         success = YES;
         self.networkConsecutiveFailures = 0;
     }
     
     if (self.networkConsecutiveFailures > 1) {
         // Exponential backoff
-        retryTime = [self retryBackOffTimeWithConsecutiveFailures:self.networkConsecutiveFailures];
+        retryTime = MAX(retryTime, [self retryBackOffTimeWithConsecutiveFailures:self.networkConsecutiveFailures]);
     }
     
-    self.networkRequestsAllowedAfterTime = [[NSDate dateWithTimeIntervalSinceNow:retryTime] timeIntervalSince1970];
+    NSDate *retryDate = [NSDate dateWithTimeIntervalSinceNow:retryTime];
+    self.networkRequestsAllowedAfterTime = [retryDate timeIntervalSince1970];
+    
+    MixpanelDebug(@"Retry backoff time: %.2f - %@", retryTime, retryDate);
+    
     return success;
 }
 
 - (NSTimeInterval)retryBackOffTimeWithConsecutiveFailures:(NSUInteger)failureCount
 {
-    NSTimeInterval time = pow(2.0, failureCount) * 60 + arc4random_uniform(30);
+    NSTimeInterval time = pow(2.0, failureCount - 1) * 60 + arc4random_uniform(30);
     return MIN(MAX(60, time), 600);
 }
 
