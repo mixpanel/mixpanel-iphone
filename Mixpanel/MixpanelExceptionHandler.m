@@ -11,16 +11,19 @@
 #import "MPLogger.h"
 
 #include <libkern/OSAtomic.h>
+void registerFatalSignals(void);
+void unregisterFatalSignals(void);
+void prevSignalHandlerCallback(int sig, siginfo_t *info, void *context);
 
 @interface MixpanelExceptionHandler ()
 
 @property (nonatomic) NSUncaughtExceptionHandler *defaultExceptionHandler;
 @property (nonatomic, strong) NSHashTable *mixpanelInstances;
-
 @end
 
 @implementation MixpanelExceptionHandler
 
+static NSMutableDictionary *prevSigActions;
 static uint32_t volatile isAlreadyExceptionOccured =0;
 static int fatal_signals[] =
 {
@@ -34,6 +37,9 @@ static int fatal_signals[] =
 };
 static int n_fatal_signals = (sizeof(fatal_signals) / sizeof(fatal_signals[0]));
 
++ (void)initialize {
+    prevSigActions = [NSMutableDictionary dictionary];
+}
 + (instancetype)sharedHandler {
     static MixpanelExceptionHandler *gSharedHandler = nil;
     static dispatch_once_t onceToken;
@@ -48,6 +54,8 @@ static int n_fatal_signals = (sizeof(fatal_signals) / sizeof(fatal_signals[0]));
     if (self) {
         // Create a hash table of weak pointers to mixpanel instances
         _mixpanelInstances = [NSHashTable weakObjectsHashTable];
+        // Create mutable dictionary for save prev sigaction
+        
         // Save the existing exception handler
         _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
         // Install our handler
@@ -84,7 +92,9 @@ static void mp_handleUncaughtException(NSException *exception) {
 }
 
 static void mp_handleSignal(int sig, siginfo_t *info, void *context) {
+    
     unregisterFatalSignals();
+
     NSException* exception = [NSException
                               exceptionWithName:@"UncaughtException"
                               reason:
@@ -96,22 +106,42 @@ static void mp_handleSignal(int sig, siginfo_t *info, void *context) {
                                dictionaryWithObject:[NSNumber numberWithInt:sig]
                                forKey:@"UncaughtExceptionSignalKey"]];
     mp_handleUncaughtException(exception);
+    prevSignalHandlerCallback(sig, info, context);
+
 }
 
-static void registerFatalSignals() {
+void prevSignalHandlerCallback(int sig, siginfo_t *info, void *context) {
+  
+    NSValue *prevSigaction = [prevSigActions objectForKey:[NSNumber numberWithInt:sig]];
+    if(prevSigaction) {
+        struct sigaction prev;
+        [prevSigaction getValue:&prev];
+        prev.sa_sigaction(sig,info,context);
+    }
+    
+}
 
+void registerFatalSignals() {
+    
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
     sa.sa_flags =  SA_SIGINFO | SA_ONSTACK;
     sa.sa_sigaction = &mp_handleSignal;
     sigemptyset(&sa.sa_mask);
     for (int i=0; i<n_fatal_signals; i++) {
-        sigaction(fatal_signals[i], &sa, NULL);
+        struct sigaction prev;
+        memset(&prev, 0, sizeof(prev));
+        sigaction(fatal_signals[i], &sa, &prev);
+        
+        //Save previous sigaction.
+        if(prev.sa_flags & SA_SIGINFO) {
+            NSValue *prevSigaction = [NSValue valueWithBytes:&prev objCType:@encode(struct sigaction)];
+            [prevSigActions setObject:prevSigaction forKey:[NSNumber numberWithInt:fatal_signals[i]]];
+        }
     }
-    
 }
 
-static void unregisterFatalSignals() {
+void unregisterFatalSignals() {
     
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
