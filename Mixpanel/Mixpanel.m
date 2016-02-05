@@ -157,8 +157,8 @@ static Mixpanel *sharedInstance = nil;
         self.showNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
 
-        self.serverURL = @"http://api.mixpanel.com";
-        self.decideURL = @"http://decide.mixpanel.org";
+        self.serverURL = @"https://api.mixpanel.com";
+        self.decideURL = @"https://decide.mixpanel.com";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;
@@ -708,6 +708,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSTimeInterval retryTime = [response.allHeaderFields[@"Retry-After"] doubleValue];
     
     MixpanelDebug(@"HTTP Response: %@", response.allHeaderFields);
+    MixpanelDebug(@"HTTP Error: %@", error.localizedDescription);
     
     BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error != nil);
     if (was5XX) {
@@ -716,6 +717,8 @@ static __unused NSString *MPURLEncode(NSString *s)
         success = YES;
         self.networkConsecutiveFailures = 0;
     }
+    
+    MixpanelDebug(@"Consecutive network failures: %lu", self.networkConsecutiveFailures);
     
     if (self.networkConsecutiveFailures > 1) {
         // Exponential backoff
