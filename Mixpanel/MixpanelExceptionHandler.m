@@ -38,6 +38,7 @@ static int fatal_signals[] =
 static int n_fatal_signals = (sizeof(fatal_signals) / sizeof(fatal_signals[0]));
 
 + (void)initialize {
+    // Create mutable dictionary for save prev sigaction
     prevSigActions = [NSMutableDictionary dictionary];
 }
 + (instancetype)sharedHandler {
@@ -54,8 +55,6 @@ static int n_fatal_signals = (sizeof(fatal_signals) / sizeof(fatal_signals[0]));
     if (self) {
         // Create a hash table of weak pointers to mixpanel instances
         _mixpanelInstances = [NSHashTable weakObjectsHashTable];
-        // Create mutable dictionary for save prev sigaction
-        
         // Save the existing exception handler
         _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
         // Install our handler
