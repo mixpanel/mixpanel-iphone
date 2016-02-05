@@ -24,7 +24,7 @@
 
 - (NSObject<HTTPResponse> *)httpResponseForMethod:(NSString *)method URI:(NSString *)path
 {
-    return [[HTTPRetryAfterResponse alloc] initWithData:[@"1" dataUsingEncoding:NSUTF8StringEncoding]];
+    return [[HTTPRetryAfterResponse alloc] initWithData:[@"0" dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 @end

@@ -5,7 +5,7 @@
 #import "Mixpanel.h"
 #import "MixpanelDummyHTTPConnection.h"
 #import "MixpanelDummyRetryAfterConnection.h"
-#import "MixpanelDummyTimeoutHTTPConnection.h"
+#import "MixpanelDummy5XXHTTPConnection.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "MPSurvey.h"
@@ -234,7 +234,9 @@
     [self waitForSerialQueue];
     
     // Failure count should be 3
-    NSLog(@"Delta wait time is %.3f", self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970]);
+    NSTimeInterval waitTime = self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970];
+    NSLog(@"Delta wait time is %.3f", waitTime);
+    XCTAssert(waitTime >= 120.f, "Network backoff time is less than 2 minutes.");
     XCTAssert(self.mixpanel.networkConsecutiveFailures == 2, @"Network failures did not equal 2");
     XCTAssert(self.mixpanel.eventsQueue.count == 1, @"Removed an event from the queue that was not sent");
 }
@@ -258,7 +260,6 @@
     NSTimeInterval deltaWaitTime = self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970];
     XCTAssert(fabs(60 - deltaWaitTime) < 5, @"Mixpanel did not respect 'Retry-After' HTTP header");
     XCTAssert(self.mixpanel.networkConsecutiveFailures == 0, @"Network failures did not equal 0");
-    XCTAssert(self.mixpanel.eventsQueue.count == 1, @"Removed an event from the queue that was not sent");
 }
 
 - (void)testFlushEvents
