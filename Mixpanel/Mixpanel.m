@@ -84,6 +84,8 @@
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
+@property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
+@property (nonatomic) NSUInteger networkConsecutiveFailures;
 
 @end
 
@@ -147,6 +149,7 @@ static Mixpanel *sharedInstance = nil;
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
 #endif
         
+        self.networkRequestsAllowedAfterTime = 0;
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
@@ -399,7 +402,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
 
-    double epochInterval = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
     NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[event];
@@ -424,7 +427,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSDictionary *e = @{@"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]};
         MixpanelDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
-        if ([self.eventsQueue count] > 500) {
+        if ([self.eventsQueue count] > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
         if ([Mixpanel inBackground]) {
@@ -651,6 +654,11 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
 {
+    if ([[NSDate date] timeIntervalSince1970] < self.networkRequestsAllowedAfterTime) {
+        MixpanelDebug(@"Attempted to flush to %@, when we still have a timeout. Ignoring flush.", endpoint);
+        return;
+    }
+    
     while ([queue count] > 0) {
         NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
@@ -662,13 +670,14 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSError *error = nil;
 
         [self updateNetworkActivityIndicator:YES];
-
-        NSURLResponse *urlResponse = nil;
+        
+        NSHTTPURLResponse *urlResponse = nil;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
 
         [self updateNetworkActivityIndicator:NO];
-
-        if (error) {
+        
+        BOOL success = [self handleNetworkResponse:urlResponse withError:error];
+        if (error || !success) {
             MixpanelError(@"%@ network failure: %@", self, error);
             break;
         }
@@ -691,6 +700,43 @@ static __unused NSString *MPURLEncode(NSString *s)
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     MixpanelDebug(@"%@ http request: %@?%@", self, URL, body);
     return request;
+}
+
+- (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error
+{
+    BOOL success = NO;
+    NSTimeInterval retryTime = [response.allHeaderFields[@"Retry-After"] doubleValue];
+    
+    MixpanelDebug(@"HTTP Response: %@", response.allHeaderFields);
+    MixpanelDebug(@"HTTP Error: %@", error.localizedDescription);
+    
+    BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error != nil);
+    if (was5XX) {
+        self.networkConsecutiveFailures++;
+    } else {
+        success = YES;
+        self.networkConsecutiveFailures = 0;
+    }
+    
+    MixpanelDebug(@"Consecutive network failures: %lu", self.networkConsecutiveFailures);
+    
+    if (self.networkConsecutiveFailures > 1) {
+        // Exponential backoff
+        retryTime = MAX(retryTime, [self retryBackOffTimeWithConsecutiveFailures:self.networkConsecutiveFailures]);
+    }
+    
+    NSDate *retryDate = [NSDate dateWithTimeIntervalSinceNow:retryTime];
+    self.networkRequestsAllowedAfterTime = [retryDate timeIntervalSince1970];
+    
+    MixpanelDebug(@"Retry backoff time: %.2f - %@", retryTime, retryDate);
+    
+    return success;
+}
+
+- (NSTimeInterval)retryBackOffTimeWithConsecutiveFailures:(NSUInteger)failureCount
+{
+    NSTimeInterval time = pow(2.0, failureCount - 1) * 60 + arc4random_uniform(30);
+    return MIN(MAX(60, time), 600);
 }
 
 #pragma mark - Persistence
