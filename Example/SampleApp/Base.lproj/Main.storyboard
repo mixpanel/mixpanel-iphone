@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A278b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15A278b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -21,7 +21,6 @@
                         <subviews>
                             <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Vsd-9u-Y0X">
                                 <rect key="frame" x="213" y="20" width="175" height="29"/>
-                                <animations/>
                                 <segments>
                                     <segment title="Good Token"/>
                                     <segment title="Bad Token"/>
@@ -29,7 +28,6 @@
                             </segmentedControl>
                             <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="T24-tT-xqA">
                                 <rect key="frame" x="210" y="68" width="181" height="29"/>
-                                <animations/>
                                 <segments>
                                     <segment title="Good Server"/>
                                     <segment title="Bad Server"/>
@@ -37,7 +35,6 @@
                             </segmentedControl>
                             <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="nEl-fC-vKl">
                                 <rect key="frame" x="61" y="116" width="480" height="29"/>
-                                <animations/>
                                 <segments>
                                     <segment title="String"/>
                                     <segment title="Object"/>
@@ -50,23 +47,19 @@
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Empty string" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v6v-yd-Ttq">
                                         <rect key="frame" x="97" y="9" width="493" height="30"/>
-                                        <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nil" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLs-1b-i1u">
                                         <rect key="frame" x="10" y="13" width="18" height="21"/>
-                                        <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C5h-UU-2Ae">
                                         <rect key="frame" x="38" y="8" width="51" height="31"/>
-                                        <animations/>
                                     </switch>
                                 </subviews>
-                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="C5h-UU-2Ae" firstAttribute="leading" secondItem="RLs-1b-i1u" secondAttribute="trailing" constant="10" id="3Bf-fo-RBl"/>
@@ -92,38 +85,32 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Object Parameters" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IpL-J8-5Rl">
                                         <rect key="frame" x="10" y="0.0" width="144" height="21"/>
-                                        <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Empty key" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JFL-cE-Nii">
                                         <rect key="frame" x="97" y="70" width="493" height="30"/>
-                                        <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nil" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2R-Xi-iBw">
                                         <rect key="frame" x="10" y="74" width="18" height="21"/>
-                                        <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6xf-pQ-zvf">
                                         <rect key="frame" x="38" y="69" width="51" height="31"/>
-                                        <animations/>
                                     </switch>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="nFy-f8-yUE">
                                         <rect key="frame" x="10" y="31" width="95" height="29"/>
-                                        <animations/>
                                         <segments>
                                             <segment title="nil"/>
                                             <segment title="items"/>
                                         </segments>
                                     </segmentedControl>
                                 </subviews>
-                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="JFL-cE-Nii" firstAttribute="leading" secondItem="6xf-pQ-zvf" secondAttribute="trailing" constant="-270" id="4ey-Ag-oo3"/>
@@ -152,25 +139,21 @@
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Use Super Properties" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rA5-bQ-KqO">
                                 <rect key="frame" x="10" y="331" width="164" height="21"/>
-                                <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8Lg-fD-0mJ">
                                 <rect key="frame" x="194" y="326" width="51" height="31"/>
-                                <animations/>
                             </switch>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sA3-2j-dC3">
                                 <rect key="frame" x="10" y="367" width="218" height="30"/>
-                                <animations/>
                                 <state key="normal" title="Register Super Properties Once">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBk-zc-Hq6">
                                 <rect key="frame" x="10" y="405" width="306" height="28"/>
-                                <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Register Super Properties Once (Overwrite Default)">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -178,21 +161,18 @@
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sJh-bG-dbE">
                                 <rect key="frame" x="10" y="436" width="173" height="30"/>
-                                <animations/>
                                 <state key="normal" title="Remove key_str Property">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fem-xd-JkC">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="550"/>
-                                <animations/>
                                 <connections>
                                     <segue destination="Yj7-Kn-49V" kind="embed" identifier="Settings" id="ZU6-fU-sZj"/>
                                 </connections>
                             </containerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwf-0h-Qh2" userLabel="Status Label">
                                 <rect key="frame" x="0.0" y="550" width="600" height="17"/>
-                                <animations/>
                                 <color key="backgroundColor" red="0.78275645348084744" green="0.95686274510000002" blue="0.92786105042679379" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -200,7 +180,6 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e8V-gB-goW">
                                 <rect key="frame" x="450" y="571" width="150" height="30"/>
-                                <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Flush Now">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -211,7 +190,6 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tRi-VX-qqF">
                                 <rect key="frame" x="0.0" y="572" width="150" height="28"/>
-                                <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Send 1 Event">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -222,7 +200,6 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Not-tU-MKt">
                                 <rect key="frame" x="150" y="572" width="300" height="28"/>
-                                <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Send Bulk (200) Events">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -232,7 +209,6 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="e8V-gB-goW" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.25" id="0bC-Bl-y8G"/>
@@ -306,12 +282,10 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Ol4-3t-oqD">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="550"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IVI-Kc-xLn">
                             <rect key="frame" x="0.0" y="799.5" width="600" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <animations/>
                             <attributedString key="attributedText">
                                 <fragment content="Timed events must have an event string">
                                     <attributes>
@@ -334,7 +308,6 @@
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="1e6-Mr-QJb">
                                                     <rect key="frame" x="213" y="8" width="175" height="29"/>
-                                                    <animations/>
                                                     <segments>
                                                         <segment title="Good Token"/>
                                                         <segment title="Bad Token"/>
@@ -344,13 +317,11 @@
                                                     </connections>
                                                 </segmentedControl>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerX" secondItem="1e6-Mr-QJb" secondAttribute="centerX" constant="-0.5" id="TBO-vI-y5i"/>
                                                 <constraint firstAttribute="centerY" secondItem="1e6-Mr-QJb" secondAttribute="centerY" constant="-0.5" id="cJi-fe-4hN"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Dhq-Fz-Nmn">
                                         <rect key="frame" x="0.0" y="93.5" width="600" height="44"/>
@@ -361,7 +332,6 @@
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jsV-uM-gNY">
                                                     <rect key="frame" x="210" y="8" width="181" height="29"/>
-                                                    <animations/>
                                                     <segments>
                                                         <segment title="Good Server"/>
                                                         <segment title="Bad Server"/>
@@ -371,13 +341,11 @@
                                                     </connections>
                                                 </segmentedControl>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerX" secondItem="jsV-uM-gNY" secondAttribute="centerX" constant="-0.5" id="Ovx-UR-cS0"/>
                                                 <constraint firstAttribute="centerY" secondItem="jsV-uM-gNY" secondAttribute="centerY" constant="-0.5" id="tSv-qY-0bW"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Iii-jk-WLa">
                                         <rect key="frame" x="0.0" y="137.5" width="600" height="44"/>
@@ -388,7 +356,6 @@
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0kY-Oi-f1B">
                                                     <rect key="frame" x="67" y="8" width="468" height="29"/>
-                                                    <animations/>
                                                     <segments>
                                                         <segment title="track"/>
                                                         <segment title="track:props:"/>
@@ -400,13 +367,11 @@
                                                     </connections>
                                                 </segmentedControl>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="0kY-Oi-f1B" secondAttribute="centerY" id="0Ab-Zx-rn0"/>
                                                 <constraint firstAttribute="centerX" secondItem="0kY-Oi-f1B" secondAttribute="centerX" id="XAS-bI-49Z"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -421,7 +386,6 @@
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Empty string" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n4T-YE-p5k">
                                                     <rect key="frame" x="97" y="7" width="493" height="30"/>
-                                                    <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                     <connections>
@@ -430,20 +394,17 @@
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nil" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZFe-4E-jxJ">
                                                     <rect key="frame" x="10" y="11" width="18" height="21"/>
-                                                    <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fj6-91-Mxb">
                                                     <rect key="frame" x="38" y="6" width="51" height="31"/>
-                                                    <animations/>
                                                     <connections>
                                                         <action selector="stringSwitchValueChanged:" destination="Yj7-Kn-49V" eventType="valueChanged" id="uV5-eD-6Sh"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstItem="Fj6-91-Mxb" firstAttribute="leading" secondItem="ZFe-4E-jxJ" secondAttribute="trailing" constant="10" id="Pt2-LW-Eaq"/>
                                                 <constraint firstItem="Fj6-91-Mxb" firstAttribute="top" secondItem="4es-O1-6eh" secondAttribute="topMargin" constant="-2" id="Tyf-Po-Ssf"/>
@@ -454,7 +415,6 @@
                                                 <constraint firstItem="Fj6-91-Mxb" firstAttribute="leading" secondItem="4es-O1-6eh" secondAttribute="leadingMargin" constant="30" id="xsk-Ot-u7A"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -469,7 +429,6 @@
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oNM-Rx-Sdy">
                                                     <rect key="frame" x="200" y="8" width="201" height="29"/>
-                                                    <animations/>
                                                     <segments>
                                                         <segment title="nil"/>
                                                         <segment title="sample object"/>
@@ -479,13 +438,11 @@
                                                     </connections>
                                                 </segmentedControl>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerX" secondItem="oNM-Rx-Sdy" secondAttribute="centerX" constant="-0.5" id="Kmy-gp-2Zf"/>
                                                 <constraint firstAttribute="centerY" secondItem="oNM-Rx-Sdy" secondAttribute="centerY" id="wnA-F7-UgI"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -500,16 +457,13 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tDU-3Z-C5v">
                                                     <rect key="frame" x="18" y="7" width="232" height="30"/>
-                                                    <animations/>
                                                     <state key="normal" title="Register a set of Super Properties"/>
                                                     <connections>
                                                         <action selector="registerSuperPropertiesButtonPressed:" destination="Yj7-Kn-49V" eventType="touchUpInside" id="S33-s4-m6E"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <animations/>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="X3m-Jd-gwc">
                                         <rect key="frame" x="0.0" y="439.5" width="600" height="44"/>
@@ -520,7 +474,6 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N8f-KJ-Exy">
                                                     <rect key="frame" x="18" y="0.0" width="582" height="43"/>
-                                                    <animations/>
                                                     <state key="normal" title="Register a Super Property Once">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -529,20 +482,17 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Value:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GEx-rQ-mTG">
-                                                    <rect key="frame" x="269" y="11" width="47" height="21"/>
-                                                    <animations/>
+                                                    <rect key="frame" x="238" y="11" width="47" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9GM-jf-7te">
-                                                    <rect key="frame" x="324" y="7" width="97" height="30"/>
-                                                    <animations/>
+                                                    <rect key="frame" x="288" y="7" width="97" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="N8f-KJ-Exy" secondAttribute="trailing" constant="-8" id="KoD-kK-k7E"/>
                                                 <constraint firstAttribute="centerY" secondItem="N8f-KJ-Exy" secondAttribute="centerY" id="Xhk-eF-u30"/>
@@ -550,7 +500,6 @@
                                                 <constraint firstItem="N8f-KJ-Exy" firstAttribute="leading" secondItem="1B1-aw-r2f" secondAttribute="leadingMargin" constant="10" id="jqt-2K-Ruy"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="u2z-1h-dvB">
                                         <rect key="frame" x="0.0" y="483.5" width="600" height="44"/>
@@ -561,7 +510,6 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="83z-jf-WVu">
                                                     <rect key="frame" x="18" y="0.0" width="582" height="43"/>
-                                                    <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <state key="normal" title="Register Super Properties Once (Overwrite Default)">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -571,7 +519,6 @@
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstItem="83z-jf-WVu" firstAttribute="leading" secondItem="B5c-V1-2rq" secondAttribute="leadingMargin" constant="10" id="6z8-Yz-q1P"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="83z-jf-WVu" secondAttribute="trailing" constant="-8" id="BWE-RD-QTW"/>
@@ -579,7 +526,6 @@
                                                 <constraint firstAttribute="bottom" secondItem="83z-jf-WVu" secondAttribute="bottom" id="Zuw-JO-86f"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="X2F-us-Zzw">
                                         <rect key="frame" x="0.0" y="527.5" width="600" height="44"/>
@@ -590,7 +536,6 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4OW-BN-hU8">
                                                     <rect key="frame" x="18" y="0.0" width="582" height="43"/>
-                                                    <animations/>
                                                     <state key="normal" title="Unregister a super property">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -599,20 +544,17 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Prop name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sUD-Lw-mc6">
-                                                    <rect key="frame" x="218" y="11" width="88" height="21"/>
-                                                    <animations/>
+                                                    <rect key="frame" x="213" y="11" width="88" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CUU-ox-hNC">
-                                                    <rect key="frame" x="314" y="7" width="97" height="30"/>
-                                                    <animations/>
+                                                    <rect key="frame" x="306" y="7" width="97" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstItem="4OW-BN-hU8" firstAttribute="leading" secondItem="JX2-i3-2HI" secondAttribute="leadingMargin" constant="10" id="CAa-8K-beg"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="4OW-BN-hU8" secondAttribute="trailing" constant="-8" id="b3c-1q-kEd"/>
@@ -620,7 +562,6 @@
                                                 <constraint firstAttribute="bottom" secondItem="4OW-BN-hU8" secondAttribute="bottom" id="w3g-IE-pFL"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Ucz-4F-phd">
                                         <rect key="frame" x="0.0" y="571.5" width="600" height="44"/>
@@ -631,16 +572,13 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GFI-kG-9jO">
                                                     <rect key="frame" x="18" y="7" width="177" height="30"/>
-                                                    <animations/>
                                                     <state key="normal" title="Clear All Super Properties"/>
                                                     <connections>
                                                         <action selector="clearSuperPropertiesButtonPressed:" destination="Yj7-Kn-49V" eventType="touchUpInside" id="R1s-1y-wQw"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <animations/>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1iZ-6B-Bvd">
                                         <rect key="frame" x="0.0" y="615.5" width="600" height="44"/>
@@ -651,7 +589,6 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LSj-E8-8EH">
                                                     <rect key="frame" x="18" y="0.0" width="582" height="43"/>
-                                                    <animations/>
                                                     <state key="normal" title="Reset Alooma-iOS">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -660,7 +597,6 @@
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="LSj-E8-8EH" secondAttribute="trailing" constant="-8" id="0g3-Cl-MzZ"/>
                                                 <constraint firstItem="LSj-E8-8EH" firstAttribute="leading" secondItem="RkR-qi-vR2" secondAttribute="leadingMargin" constant="10" id="UVY-j1-EWY"/>
@@ -668,7 +604,6 @@
                                                 <constraint firstItem="LSj-E8-8EH" firstAttribute="top" secondItem="RkR-qi-vR2" secondAttribute="top" id="fcj-A2-xU8"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -683,7 +618,6 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qVn-Yv-AUa">
                                                     <rect key="frame" x="16" y="7" width="191" height="30"/>
-                                                    <animations/>
                                                     <state key="normal" title="Add $duration to next event"/>
                                                     <connections>
                                                         <action selector="registerTimedEventsPressed:" destination="Yj7-Kn-49V" eventType="touchUpInside" id="Tzm-4p-wrk"/>
@@ -691,9 +625,7 @@
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <animations/>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mas-Gf-1Ty">
                                         <rect key="frame" x="0.0" y="745.5" width="600" height="44"/>
@@ -704,16 +636,13 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zzX-rb-FZj">
                                                     <rect key="frame" x="14" y="7" width="133" height="30"/>
-                                                    <animations/>
                                                     <state key="normal" title="Clear Timed Events"/>
                                                     <connections>
                                                         <action selector="clearTimedEventsPressed:" destination="Yj7-Kn-49V" eventType="touchUpInside" id="ibg-FX-Xd3"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <animations/>
                                         </tableViewCellContentView>
-                                        <animations/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
