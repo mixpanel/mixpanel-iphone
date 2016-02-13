@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 
-@interface MPNotification : NSObject
-
 extern NSString *const MPNotificationTypeMini;
 extern NSString *const MPNotificationTypeTakeover;
+
+@interface MPNotification : NSObject
 
 @property (nonatomic, readonly) NSUInteger ID;
 @property (nonatomic, readonly) NSUInteger messageID;
@@ -16,7 +16,6 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (nonatomic, strong) NSURL *callToActionURL;
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
-
 - (instancetype)init __unavailable;
 
 @end
