@@ -107,12 +107,12 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                     messageID:[messageID unsignedIntegerValue]
-                                          type:type
-                                         title:title
-                                          body:body
-                                           callToAction:callToAction
-                                           callToActionURL:callToActionURL
-                                      imageURL:imageURL];
+                                         type:type
+                                        title:title
+                                         body:body
+                                 callToAction:callToAction
+                              callToActionURL:callToActionURL
+                                     imageURL:imageURL];
 }
 
 - (instancetype)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
