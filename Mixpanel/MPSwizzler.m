@@ -211,11 +211,11 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 }
 
 - (instancetype)initWithBlock:(swizzleBlock)aBlock
-              named:(NSString *)aName
-           forClass:(Class)aClass
-           selector:(SEL)aSelector
-     originalMethod:(IMP)aMethod
-        withNumArgs:(uint)numArgs
+                        named:(NSString *)aName
+                     forClass:(Class)aClass
+                     selector:(SEL)aSelector
+               originalMethod:(IMP)aMethod
+                  withNumArgs:(uint)numArgs
 {
     if ((self = [self init])) {
         self.class = aClass;
