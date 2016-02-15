@@ -154,6 +154,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @property
+ 
+ @abstract
+ Determines whether a valid survey is available to show to the user.
+ 
+ @discussion
+ If we haven't fetched the surveys yet, this will return NO. Otherwise
+ it will return yes if there is at least one survey available.
+ */
+@property (atomic, readonly) BOOL isSurveyAvailable;
+
+/*!
+ @property
 
  @abstract
  Controls whether to automatically check for notifications for the

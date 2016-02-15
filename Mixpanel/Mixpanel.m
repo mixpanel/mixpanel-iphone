@@ -1472,6 +1472,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 }
 
 #pragma mark - Surveys
+- (BOOL)isSurveyAvailable {
+    return (self.surveys.count > 0);
+}
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
