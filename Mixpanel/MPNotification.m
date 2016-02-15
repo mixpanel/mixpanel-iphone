@@ -5,16 +5,10 @@
 #import "MPLogger.h"
 #import "MPNotification.h"
 
-@interface MPNotification ()
-
-- (instancetype)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL;
-
-@end
-
-@implementation MPNotification
-
 NSString *const MPNotificationTypeMini = @"mini";
 NSString *const MPNotificationTypeTakeover = @"takeover";
+
+@implementation MPNotification
 
 + (MPNotification *)notificationWithJSONObject:(NSDictionary *)object
 {
@@ -107,47 +101,48 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
 
     return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
                                     messageID:[messageID unsignedIntegerValue]
-                                          type:type
-                                         title:title
-                                          body:body
-                                           callToAction:callToAction
-                                           callToActionURL:callToActionURL
-                                      imageURL:imageURL];
+                                         type:type
+                                        title:title
+                                         body:body
+                                 callToAction:callToAction
+                              callToActionURL:callToActionURL
+                                     imageURL:imageURL];
 }
 
-- (instancetype)initWithID:(NSUInteger)ID messageID:(NSUInteger)messageID type:(NSString *)type title:(NSString *)title body:(NSString *)body callToAction:(NSString *)callToAction callToActionURL:(NSURL *)callToActionURL imageURL:(NSURL *)imageURL
+- (instancetype)initWithID:(NSUInteger)ID
+                 messageID:(NSUInteger)messageID
+                      type:(NSString *)type
+                     title:(NSString *)title
+                      body:(NSString *)body
+              callToAction:(NSString *)callToAction
+           callToActionURL:(NSURL *)callToActionURL
+                  imageURL:(NSURL *)imageURL
 {
     if (self = [super init]) {
-        BOOL valid = YES;
-
         if (!(title && title.length > 0)) {
-            valid = NO;
             MixpanelError(@"Notification title nil or empty: %@", title);
+            return nil;
         }
 
         if (!(body && body.length > 0)) {
-            valid = NO;
             MixpanelError(@"Notification body nil or empty: %@", body);
+            return nil;
         }
 
         if (!([type isEqualToString:MPNotificationTypeTakeover] || [type isEqualToString:MPNotificationTypeMini])) {
-            valid = NO;
             MixpanelError(@"Invalid notification type: %@, must be %@ or %@", type, MPNotificationTypeMini, MPNotificationTypeTakeover);
+            return nil;
         }
 
-        if (valid) {
-            _ID = ID;
-            _messageID = messageID;
-            self.type = type;
-            self.title = title;
-            self.body = body;
-            self.imageURL = imageURL;
-            self.callToAction = callToAction;
-            self.callToActionURL = callToActionURL;
-            self.image = nil;
-        } else {
-            self = nil;
-        }
+        _ID = ID;
+        _messageID = messageID;
+        _type = type;
+        _title = title;
+        _body = body;
+        _imageURL = imageURL;
+        _callToAction = callToAction;
+        _callToActionURL = callToActionURL;
+        _image = nil;
     }
 
     return self;

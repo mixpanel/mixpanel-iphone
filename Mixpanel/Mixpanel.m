@@ -357,6 +357,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelDebug(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
+    
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
         self.people.distinctId = distinctId;
