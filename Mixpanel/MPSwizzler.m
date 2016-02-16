@@ -22,11 +22,11 @@
 @property (nonatomic, copy) NSMapTable *blocks;
 
 - (instancetype)initWithBlock:(swizzleBlock)aBlock
-                        named:(NSString *)aName
-                     forClass:(Class)aClass
-                     selector:(SEL)aSelector
-               originalMethod:(IMP)aMethod
-                  withNumArgs:(uint)numArgs;
+              named:(NSString *)aName
+           forClass:(Class)aClass
+           selector:(SEL)aSelector
+     originalMethod:(IMP)aMethod
+        withNumArgs:(uint)numArgs;
 
 @end
 
@@ -39,7 +39,9 @@ static void mp_swizzledMethod_2(id self, SEL _cmd)
     if (swizzle) {
         ((void(*)(id, SEL))swizzle.originalMethod)(self, _cmd);
 
-        for (swizzleBlock block in swizzle.blocks) {
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while((block = [blocks nextObject])) {
             block(self, _cmd);
         }
     }
@@ -51,8 +53,10 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
     MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
     if (swizzle) {
         ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
-        
-        for (swizzleBlock block in swizzle.blocks) {
+
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while((block = [blocks nextObject])) {
             block(self, _cmd, arg);
         }
     }
@@ -61,11 +65,13 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
 static void mp_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2)
 {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:MAPTABLE_ID(aMethod)];
+    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:(__bridge id)((void *)aMethod)];
     if (swizzle) {
         ((void(*)(id, SEL, id, id))swizzle.originalMethod)(self, _cmd, arg, arg2);
 
-        for (swizzleBlock block in swizzle.blocks) {
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while((block = [blocks nextObject])) {
             block(self, _cmd, arg, arg2);
         }
     }
@@ -83,8 +89,10 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 
 + (void)printSwizzles
 {
-    for (MPSwizzle *swizzle in swizzles) {
-        MixpanelError(@"%@", swizzle)
+    NSEnumerator *en = [swizzles objectEnumerator];
+    MPSwizzle *swizzle;
+    while((swizzle = (MPSwizzle *)[en nextObject])) {
+        MixpanelError(@"%@", swizzle);
     }
 }
 
@@ -134,7 +142,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
                     IMP originalMethod = method_getImplementation(aMethod);
 
                     // Replace the local implementation of this method with the swizzled one
-                    method_setImplementation(aMethod, swizzledMethod);
+                    method_setImplementation(aMethod,swizzledMethod);
 
                     // Create and add the swizzle
                     swizzle = [[MPSwizzle alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
@@ -211,11 +219,11 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 }
 
 - (instancetype)initWithBlock:(swizzleBlock)aBlock
-                        named:(NSString *)aName
-                     forClass:(Class)aClass
-                     selector:(SEL)aSelector
-               originalMethod:(IMP)aMethod
-                  withNumArgs:(uint)numArgs
+              named:(NSString *)aName
+           forClass:(Class)aClass
+           selector:(SEL)aSelector
+     originalMethod:(IMP)aMethod
+        withNumArgs:(uint)numArgs
 {
     if ((self = [self init])) {
         self.class = aClass;
