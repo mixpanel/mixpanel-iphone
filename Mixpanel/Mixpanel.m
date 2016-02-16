@@ -50,6 +50,11 @@
     NSUInteger _flushInterval;
 }
 
+#if !defined(MIXPANEL_APP_EXTENSION)
+@property (nonatomic, assign) SCNetworkReachabilityRef reachability;
+@property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
+#endif
+
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, copy) NSString *distinctId;
@@ -62,8 +67,6 @@
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic) dispatch_queue_t serialQueue;
-@property (nonatomic, assign) SCNetworkReachabilityRef reachability;
-@property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
@@ -147,6 +150,7 @@ static Mixpanel *sharedInstance = nil;
 #if !defined(MIXPANEL_APP_EXTENSION)
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
+        self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
         
         self.networkRequestsAllowedAfterTime = 0;
@@ -170,7 +174,6 @@ static Mixpanel *sharedInstance = nil;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
-        self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
         self.automaticProperties = [self collectAutomaticProperties];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
@@ -220,6 +223,8 @@ static Mixpanel *sharedInstance = nil;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+#if !defined(MIXPANEL_APP_EXTENSION)
     if (_reachability != NULL) {
         if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
             MixpanelError(@"%@ error unsetting reachability callback", self);
@@ -231,6 +236,7 @@ static Mixpanel *sharedInstance = nil;
         _reachability = NULL;
         MixpanelDebug(@"released reachability");
     }
+#endif
 }
 
 #pragma mark - Encoding/decoding utilities
@@ -987,6 +993,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)currentRadio
 {
+#if !defined(MIXPANEL_APP_EXTENSION)
     NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
     if (!radio) {
         radio = @"None";
@@ -994,6 +1001,9 @@ static __unused NSString *MPURLEncode(NSString *s)
         radio = [radio substringFromIndex:23];
     }
     return radio;
+#else 
+    return @"";
+#endif
 }
 #endif
 
@@ -1007,14 +1017,12 @@ static __unused NSString *MPURLEncode(NSString *s)
     return VERSION;
 }
 
-
 - (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     UIDevice *device = [UIDevice currentDevice];
     NSString *deviceModel = [self deviceModel];
     CGSize size = [UIScreen mainScreen].bounds.size;
-    CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
@@ -1022,7 +1030,12 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_build_number"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version_string"];
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
+    
+#if !defined(MIXPANEL_APP_EXTENSION)
+    CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
+#endif
+    
     [p setValue:[self watchModel] forKey:@"$watch_model"];
 
     [p addEntriesFromDictionary:@{
