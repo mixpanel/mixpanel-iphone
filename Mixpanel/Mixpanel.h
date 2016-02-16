@@ -1054,6 +1054,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)mixpanelWillFlush:(Mixpanel *)mixpanel;
 
+/*!
+ @method
+ 
+ @abstract
+ Raise after the identify sets asynchronously.
+ 
+ @discussion
+ Execute your code after the identify set.
+ It is useful for getting the ABTesting MPTweakValue (and keep it consistent value for each user identify)
+ 
+ @param mixpanel        Mixpanel API instance
+ */
+- (void)mixpanelDidSetIdentify:(Mixpanel *)mixpanel;
+
 @end
 
 NS_ASSUME_NONNULL_END

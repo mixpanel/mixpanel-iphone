@@ -378,6 +378,19 @@ static __unused NSString *MPURLEncode(NSString *s)
         if ([Mixpanel inBackground]) {
             [self archiveProperties];
         }
+        
+        // Stop all cached variants - avoid mixup variants from previous user
+        for (MPVariant* variant in self.variants) {
+            [variant stop];
+        }
+                
+        // Get the variants of the current identify
+        [self joinExperimentsWithCallback:^{
+            __strong id<MixpanelDelegate> strongDelegate = self.delegate;
+            if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelDidSetIdentify:)]){
+                [strongDelegate mixpanelDidSetIdentify:self];
+            }
+         }];
     });
 }
 
