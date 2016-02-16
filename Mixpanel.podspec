@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'AppExtension' do |ss|
     ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/NSData+MPBase64.{m,h}' ]
-    ss.header_files = ['MPFoundation.h']
+    ss.private_header_files = ['MPFoundation.h']
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
