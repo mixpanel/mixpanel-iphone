@@ -1490,6 +1490,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     return (self.surveys.count > 0);
 }
 
+- (NSArray<MPSurvey *> *)availableSurveys {
+    return self.surveys;
+}
+
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];

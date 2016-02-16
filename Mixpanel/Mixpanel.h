@@ -5,7 +5,7 @@
 #import <WatchConnectivity/WatchConnectivity.h>
 #endif
 
-@class    MixpanelPeople;
+@class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -163,6 +163,18 @@ NS_ASSUME_NONNULL_BEGIN
  it will return yes if there is at least one survey available.
  */
 @property (atomic, readonly) BOOL isSurveyAvailable;
+
+/*!
+ @property
+ 
+ @abstract
+ Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
+ and pass in <code>survey.ID</code>
+ 
+ @discussion
+ If we haven't fetched the surveys yet, this will return nil.
+ */
+@property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys;
 
 /*!
  @property
