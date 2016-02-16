@@ -1400,7 +1400,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             [allVariants unionSet:runningVariants];
 
             [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
-            [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
+            [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
 
             NSArray *rawEventBindings = object[@"event_bindings"];
             NSMutableSet *parsedEventBindings = [NSMutableSet set];
