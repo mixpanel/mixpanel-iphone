@@ -23,15 +23,15 @@ Integrating the Alooma-iOS library can be done in a few simple steps, using [Coc
 pod "Alooma-iOS"
 ```
 
-3. Close XCode
+3. Close Xcode
 4. Open a terminal and run `pod install` in the root directory of your project.
-5. Open the new XCode workspace (`<your-project>.xcworkspace`)
+5. Open the new Xcode workspace (`<your-project>.xcworkspace`)
 
 ### Compatibility
 
 The Alooma-iOS library is a modified version of the [Mixpanel-iphone](http://www.github.com/mixpanel/mixpanel-iphone/) library, trimmed down to the bare event tracking necessities.
 
-To integrate Alooma-iOS, you need to be using XCode 5 and a Base SDK of iOS 7.0. The library will work with deployment targets of iOS 6.0 and above.
+To integrate Alooma-iOS, you need to be using Xcode 5 and a Base SDK of iOS 7.0. The library will work with deployment targets of iOS 6.0 and above.
 
 ## Initialization
 
