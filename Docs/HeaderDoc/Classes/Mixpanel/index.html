@@ -1063,6 +1063,10 @@ over Mixpanel network activity.
 enters the background.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/isSurveyAvailable" target="_top">isSurveyAvailable</a></tt></dt>
+<dd><p>Determines whether a valid survey is available to show to the user.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor" target="_top">miniNotificationBackgroundColor</a></tt></dt>
 <dd><p>If set, determines the background color of mini notifications.
 </p>
@@ -1210,6 +1214,20 @@ enters the background.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
 task support was introduced, and later.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;   name=Mixpanel::isSurveyAvailable -->
+<a name="//apple_ref/occ/instp/Mixpanel/isSurveyAvailable"></a>
+<h3><a name="isSurveyAvailable">isSurveyAvailable</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=start --><!-- begin abstract --><p>Determines whether a valid survey is available to show to the user.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=start -->@property (<span class="param">atomic</span>,
+    <span class="param">readonly</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/isSurveyAvailable //apple_ref/occ/data/Mixpanel/isSurveyAvailable //apple_ref/occ/data/isSurveyAvailable //apple_ref/occ/clconst/Mixpanel/isSurveyAvailable " machineGenerated="true" --><span class="var">isSurveyAvailable</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=start --><p>If we haven't fetched the surveys yet, this will return NO. Otherwise
+it will return yes if there is at least one survey available.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;   name=Mixpanel::miniNotificationBackgroundColor -->
 <a name="//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor"></a>
 <h3><a name="miniNotificationBackgroundColor">miniNotificationBackgroundColor</a></h3>
@@ -1335,7 +1353,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Wednesday, January 27, 2016
+<p class="hd_timestamp">Last Updated: Monday, February 15, 2016
 </p></div>
 </td></tr></table>
 </body></html>
