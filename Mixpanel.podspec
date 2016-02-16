@@ -19,6 +19,13 @@ Pod::Spec.new do |s|
     ss.platform = :ios
   end
 
+  s.subspec 'AppExtension' do |ss|
+    ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/NSData+MPBase64.{m,h}' ]
+    ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
+    ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
+    ss.libraries = 'icucore'
+  end
+
   s.subspec 'WatchOS' do |ss|
     ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/MPLogger.h']
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_WATCH_EXTENSION' }
