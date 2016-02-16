@@ -931,11 +931,17 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)deviceModel
 {
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char answer[size];
-    sysctlbyname("hw.machine", answer, &size, NULL, 0);
-    NSString *results = @(answer);
+    NSString *results = nil;
+    @try {
+        size_t size;
+        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+        char answer[size];
+        sysctlbyname("hw.machine", answer, &size, NULL, 0);
+        results = @(answer);
+    }
+    @catch (NSException *exception) {
+        MixpanelError(@"Failed fetch hw.machine from sysctl. Details: %@", exception);
+    }
     return results;
 }
 
