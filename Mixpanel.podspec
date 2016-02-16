@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
-  s.version      = '2.9.3'
+  s.version      = '2.9.4'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
   s.requires_arc = true
   s.default_subspec = 'Mixpanel'
-  s.platforms = { :ios => "7.0", :watchos => "2.0" }
+  s.platforms = { :ios => '7.0', :watchos => '2.0' }
 
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
