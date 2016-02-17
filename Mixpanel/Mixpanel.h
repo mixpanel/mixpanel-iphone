@@ -761,6 +761,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)joinExperimentsWithCallback:(nullable void (^)())experimentsLoadedCallback;
 
+/*!
+ @method
+ 
+ @abstract
+ Join any experiments (A/B tests) that are available for the current user.
+ 
+ @discussion
+ Same as joinExperiments but will fire the given callback after all experiments
+ have been loaded and applied. If there were no errors, the <code>error</code> parameter
+ is expected to be nil.
+ */
+- (void)joinExperimentsWithErrorCallback:(nullable void (^)(NSError *error))experimentsLoadedErrorCallback;
+
 #endif
 
 @end

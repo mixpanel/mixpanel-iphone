@@ -1334,15 +1334,24 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
             if (error) {
                 MixpanelError(@"%@ decide check http error: %@", self, error);
+                if (completion) {
+                    completion(nil, nil, nil, nil);
+                }
                 return;
             }
             NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:&error];
             if (error) {
                 MixpanelError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                if (completion) {
+                    completion(nil, nil, nil, nil);
+                }
                 return;
             }
             if (object[@"error"]) {
                 MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
+                if (completion) {
+                    completion(nil, nil, nil, nil);
+                }
                 return;
             }
 
@@ -1903,6 +1912,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
+- (void)joinExperiments
+{
+    [self joinExperimentsWithCallback:nil];
+}
+
 - (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
 {
     [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
@@ -1919,9 +1933,25 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }];
 }
 
-- (void)joinExperiments
+- (void)joinExperimentsWithErrorCallback:(nullable void (^)(NSError *error))experimentsLoadedErrorCallback
 {
-    [self joinExperimentsWithCallback:nil];
+    [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
+        for (MPVariant *variant in newVariants) {
+            [variant execute];
+            [self markVariantRun:variant];
+        }
+        
+        NSError *error = nil;
+        if (newVariants == nil) {
+            error = [NSError errorWithDomain:@"com.mixpanel.mixpanel" code:0 userInfo:@{ @"message": @"Failed to fetch variants." }];
+        }
+        
+        if (experimentsLoadedErrorCallback) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                experimentsLoadedErrorCallback(error);
+            });
+        }
+    }];
 }
 
 #pragma mark - Mixpanel Event Bindings
