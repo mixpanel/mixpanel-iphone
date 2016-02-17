@@ -1758,16 +1758,17 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     };
 
     if (status && controller.notification.callToActionURL) {
-        MixpanelDebug(@"%@ opening URL %@", self, controller.notification.callToActionURL);
-        BOOL success = [[UIApplication sharedApplication] openURL:controller.notification.callToActionURL];
+        [controller hideWithAnimation:YES completion:^{
+            NSURL *URL = controller.notification.callToActionURL;
+            MixpanelDebug(@"%@ opening URL %@", self, URL);
 
-        [controller hideWithAnimation:!success completion:completionBlock];
+            if (![[UIApplication sharedApplication] openURL:URL]) {
+                MixpanelError(@"Mixpanel failed to open given URL: %@", URL);
+            }
 
-        if (!success) {
-            MixpanelError(@"Mixpanel failed to open given URL: %@", controller.notification.callToActionURL);
-        }
-
-        [self trackNotification:controller.notification event:@"$campaign_open"];
+            [self trackNotification:controller.notification event:@"$campaign_open"];
+            completionBlock();
+        }];
     } else {
         [controller hideWithAnimation:YES completion:completionBlock];
     }
