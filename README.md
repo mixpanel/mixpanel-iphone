@@ -33,11 +33,11 @@ If you don't have git installed, get it [here](http://git-scm.com/downloads).
 
 ##Step 2: Add the SDK to your app!
 
-Add the "Mixpanel" folder from the "mixpanel-iphone" to your XCode project's folder:
+Add the "Mixpanel" folder from the "mixpanel-iphone" to your Xcode project's folder:
 
 ![alt text](http://images.mxpnl.com/blog/2014-09-24%2000:56:07.905215-SprityBird_and_mixpanel-iphone.png)
 
-And drag and drop the Mixpanel folder into your XCode Project Workspace:
+And drag and drop the Mixpanel folder into your Xcode Project Workspace:
 
 ![alt text](http://images.mxpnl.com/blog/2014-09-24%2001:08:51.474250-AppDelegate_m_and_SprityBird.png)
 
