@@ -792,7 +792,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)archiveEvents
 {
     NSString *filePath = [self eventsFilePath];
-    NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
+    NSMutableArray *eventsQueueCopy = [[NSMutableArray alloc] initWithArray:self.eventsQueue copyItems:YES];
     MixpanelDebug(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
     if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
         MixpanelError(@"%@ unable to archive events data", self);
@@ -802,7 +802,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)archivePeople
 {
     NSString *filePath = [self peopleFilePath];
-    NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
+    NSMutableArray *peopleQueueCopy = [[NSMutableArray alloc] initWithArray:self.peopleQueue copyItems:YES];
     MixpanelDebug(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
     if (![NSKeyedArchiver archiveRootObject:peopleQueueCopy toFile:filePath]) {
         MixpanelError(@"%@ unable to archive people data", self);
@@ -815,12 +815,23 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     [p setValue:self.distinctId forKey:@"distinctId"];
     [p setValue:self.nameTag forKey:@"nameTag"];
-    [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
-    [p setValue:self.shownNotifications forKey:@"shownNotifications"];
-    [p setValue:self.timedEvents forKey:@"timedEvents"];
+    
+    NSDictionary *superPropertiesCopy = [[NSDictionary alloc] initWithDictionary:self.superProperties copyItems:YES];
+    [p setValue:superPropertiesCopy forKey:@"superProperties"];
+    
+    NSMutableArray *unidentifiedPeopleQueueCopy = [[NSMutableArray alloc] initWithArray:self.people.unidentifiedQueue copyItems:YES];
+    [p setValue:unidentifiedPeopleQueueCopy forKey:@"peopleUnidentifiedQueue"];
+    
+    NSMutableSet *shownSurveyCollectionsCopy = [[NSMutableSet alloc] initWithSet:self.shownSurveyCollections copyItems:YES];
+    [p setValue:shownSurveyCollectionsCopy forKey:@"shownSurveyCollections"];
+    
+    NSMutableSet *shownNotificationsCopy = [[NSMutableSet alloc] initWithSet:self.shownNotifications copyItems:YES];
+    [p setValue:shownNotificationsCopy forKey:@"shownNotifications"];
+    
+    NSMutableDictionary *timedEventsCopy = [[NSMutableDictionary alloc] initWithDictionary:self.timedEvents copyItems:YES];
+    [p setValue:timedEventsCopy forKey:@"timedEvents"];
+    
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         MixpanelError(@"%@ unable to archive properties data", self);
