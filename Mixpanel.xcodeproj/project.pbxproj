@@ -26,6 +26,16 @@
 		5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
 		5177CFC81C5032B600271843 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
+		51F308811C86881900614A13 /* Mixpanel+CollectEverything.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F308771C86881900614A13 /* Mixpanel+CollectEverything.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		51F308821C86881900614A13 /* Mixpanel+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F308781C86881900614A13 /* Mixpanel+CollectEverything.m */; };
+		51F308831C86881900614A13 /* MPSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F308791C86881900614A13 /* MPSwizzle.h */; };
+		51F308841C86881900614A13 /* MPSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F3087A1C86881900614A13 /* MPSwizzle.m */; };
+		51F308851C86881900614A13 /* NSNotificationCenter+CollectEverything.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F3087B1C86881900614A13 /* NSNotificationCenter+CollectEverything.h */; };
+		51F308861C86881900614A13 /* NSNotificationCenter+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F3087C1C86881900614A13 /* NSNotificationCenter+CollectEverything.m */; };
+		51F308871C86881900614A13 /* UIApplication+CollectEverything.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F3087D1C86881900614A13 /* UIApplication+CollectEverything.h */; };
+		51F308881C86881900614A13 /* UIApplication+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F3087E1C86881900614A13 /* UIApplication+CollectEverything.m */; };
+		51F308891C86881900614A13 /* UIViewController+CollectEverything.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F3087F1C86881900614A13 /* UIViewController+CollectEverything.h */; };
+		51F3088A1C86881900614A13 /* UIViewController+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F308801C86881900614A13 /* UIViewController+CollectEverything.m */; };
 		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */; };
@@ -170,6 +180,16 @@
 		513B0BFB1C73D5DA008EEE6E /* Mixpanel-AppExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-AppExtension-Info.plist"; sourceTree = "<group>"; };
 		5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
+		51F308771C86881900614A13 /* Mixpanel+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mixpanel+CollectEverything.h"; sourceTree = "<group>"; };
+		51F308781C86881900614A13 /* Mixpanel+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+CollectEverything.m"; sourceTree = "<group>"; };
+		51F308791C86881900614A13 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
+		51F3087A1C86881900614A13 /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
+		51F3087B1C86881900614A13 /* NSNotificationCenter+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+CollectEverything.h"; sourceTree = "<group>"; };
+		51F3087C1C86881900614A13 /* NSNotificationCenter+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+CollectEverything.m"; sourceTree = "<group>"; };
+		51F3087D1C86881900614A13 /* UIApplication+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+CollectEverything.h"; sourceTree = "<group>"; };
+		51F3087E1C86881900614A13 /* UIApplication+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+CollectEverything.m"; sourceTree = "<group>"; };
+		51F3087F1C86881900614A13 /* UIViewController+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CollectEverything.h"; sourceTree = "<group>"; };
+		51F308801C86881900614A13 /* UIViewController+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CollectEverything.m"; sourceTree = "<group>"; };
 		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C170C2E1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -387,6 +407,16 @@
 		7C170C461A4A035F00D9E0F2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				51F308771C86881900614A13 /* Mixpanel+CollectEverything.h */,
+				51F308781C86881900614A13 /* Mixpanel+CollectEverything.m */,
+				51F308791C86881900614A13 /* MPSwizzle.h */,
+				51F3087A1C86881900614A13 /* MPSwizzle.m */,
+				51F3087B1C86881900614A13 /* NSNotificationCenter+CollectEverything.h */,
+				51F3087C1C86881900614A13 /* NSNotificationCenter+CollectEverything.m */,
+				51F3087D1C86881900614A13 /* UIApplication+CollectEverything.h */,
+				51F3087E1C86881900614A13 /* UIApplication+CollectEverything.m */,
+				51F3087F1C86881900614A13 /* UIViewController+CollectEverything.h */,
+				51F308801C86881900614A13 /* UIViewController+CollectEverything.m */,
 				5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */,
 				5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */,
 				7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */,
@@ -563,6 +593,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C170CC81A4A035F00D9E0F2 /* Mixpanel.h in Headers */,
+				51F308811C86881900614A13 /* Mixpanel+CollectEverything.h in Headers */,
 				7C170D3F1A4A035F00D9E0F2 /* UIImage+MPImageEffects.h in Headers */,
 				7C170CD61A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
 				7C170D071A4A035F00D9E0F2 /* MPObjectSelector.h in Headers */,
@@ -576,6 +607,7 @@
 				7C170D291A4A035F00D9E0F2 /* MPUIControlBinding.h in Headers */,
 				7C170D191A4A035F00D9E0F2 /* MPSurveyQuestion.h in Headers */,
 				7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */,
+				51F308831C86881900614A13 /* MPSwizzle.h in Headers */,
 				7C170D171A4A035F00D9E0F2 /* MPSurveyNavigationController.h in Headers */,
 				7C170CD81A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
 				7C170D051A4A035F00D9E0F2 /* MPObjectIdentityProvider.h in Headers */,
@@ -595,6 +627,7 @@
 				7C170D351A4A035F00D9E0F2 /* NSData+MPBase64.h in Headers */,
 				7C170CDF1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				7C170CE11A4A035F00D9E0F2 /* MPABTestDesignerTweakRequestMessage.h in Headers */,
+				51F308851C86881900614A13 /* NSNotificationCenter+CollectEverything.h in Headers */,
 				7C170D211A4A035F00D9E0F2 /* MPTweakInline.h in Headers */,
 				7C170CD41A4A035F00D9E0F2 /* MPABTestDesignerConnection.h in Headers */,
 				7C170D141A4A035F00D9E0F2 /* MPSurvey.h in Headers */,
@@ -616,6 +649,8 @@
 				7C170CDA1A4A035F00D9E0F2 /* MPABTestDesignerDisconnectMessage.h in Headers */,
 				7C170CF61A4A035F00D9E0F2 /* MPDesignerSessionCollection.h in Headers */,
 				5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */,
+				51F308871C86881900614A13 /* UIApplication+CollectEverything.h in Headers */,
+				51F308891C86881900614A13 /* UIViewController+CollectEverything.h in Headers */,
 				7C170D041A4A035F00D9E0F2 /* MPObjectIdentifierProvider.h in Headers */,
 				7C170CD21A4A035F00D9E0F2 /* MPABTestDesignerClearResponseMessage.h in Headers */,
 			);
@@ -763,7 +798,9 @@
 				7C170D381A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m in Sources */,
 				7C170D031A4A035F00D9E0F2 /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
 				7C170D0F1A4A035F00D9E0F2 /* MPPassThroughValueTransformer.m in Sources */,
+				51F308881C86881900614A13 /* UIApplication+CollectEverything.m in Sources */,
 				7C170D3C1A4A035F00D9E0F2 /* UIColor+MPColor.m in Sources */,
+				51F308861C86881900614A13 /* NSNotificationCenter+CollectEverything.m in Sources */,
 				7C170CD11A4A035F00D9E0F2 /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				7C170D011A4A035F00D9E0F2 /* MPNotificationViewController.m in Sources */,
 				7C170D151A4A035F00D9E0F2 /* MPSurvey.m in Sources */,
@@ -791,8 +828,10 @@
 				7C170CDE1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
 				7C170CEE1A4A035F00D9E0F2 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				7C170D321A4A035F00D9E0F2 /* MPVariant.m in Sources */,
+				51F308821C86881900614A13 /* Mixpanel+CollectEverything.m in Sources */,
 				7C170D281A4A035F00D9E0F2 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				7C170D0A1A4A035F00D9E0F2 /* MPObjectSerializer.m in Sources */,
+				51F3088A1C86881900614A13 /* UIViewController+CollectEverything.m in Sources */,
 				7C170CF01A4A035F00D9E0F2 /* MPClassDescription.m in Sources */,
 				7C170D2F1A4A035F00D9E0F2 /* MPUITableViewBinding.m in Sources */,
 				7C170CCF1A4A035F00D9E0F2 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
@@ -805,6 +844,7 @@
 				7C170D181A4A035F00D9E0F2 /* MPSurveyNavigationController.m in Sources */,
 				7C170CCD1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				7C170CCB1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m in Sources */,
+				51F308841C86881900614A13 /* MPSwizzle.m in Sources */,
 				7C170D081A4A035F00D9E0F2 /* MPObjectSelector.m in Sources */,
 				7C170CF41A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m in Sources */,
 				7C170D271A4A035F00D9E0F2 /* MPTypeDescription.m in Sources */,
@@ -1037,6 +1077,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1050,6 +1091,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1060,6 +1106,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1073,6 +1120,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

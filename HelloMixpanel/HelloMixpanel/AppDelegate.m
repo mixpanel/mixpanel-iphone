@@ -4,7 +4,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"483e7a3a61b59852b8141da41b1c25f4"
 
 @implementation AppDelegate
 
@@ -53,10 +53,8 @@
     self.mixpanel.checkForNotificationsOnActive = YES;
     self.mixpanel.showNotificationOnActive = YES; //Change this to NO to show your notifs manually.
 
-    // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
-    self.mixpanel.flushInterval = 20; // defaults to 60 seconds
-
     // Set some super properties, which will be added to every tracked event
+    self.mixpanel.flushInterval = 900;
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
 
     // Name a user in Mixpanel Streams
