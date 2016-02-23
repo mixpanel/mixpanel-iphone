@@ -43,6 +43,7 @@
 		05F5F9641965CE300070280C /* MPABTestDesignerClearRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F5F9631965CE300070280C /* MPABTestDesignerClearRequestMessage.m */; };
 		05F5F9671965F5680070280C /* MPABTestDesignerClearResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F5F9661965F5680070280C /* MPABTestDesignerClearResponseMessage.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
+		07A1BCAFA7433D587852102B /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A441AF641244CA893593CD /* libPods-HelloMixpanelTests.a */; };
 		1818F43F197EE94800BC1F70 /* MPEventBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1818F43E197EE94800BC1F70 /* MPEventBinding.m */; };
 		1825251B1991473700C034BD /* MPUITableViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1825251A1991473700C034BD /* MPUITableViewBinding.m */; };
 		187939D019A284BF00CC4FBE /* MPUIControlBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */; };
@@ -519,6 +520,7 @@
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
+				07A1BCAFA7433D587852102B /* libPods-HelloMixpanelTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
