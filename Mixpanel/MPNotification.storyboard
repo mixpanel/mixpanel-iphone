@@ -27,6 +27,9 @@
                             </view>
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="LyM-hA-PHV" userLabel="Notif Image View">
                                 <rect key="frame" x="20" y="75" width="280" height="373"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="vTI-zv-1sR" appends="YES" id="TLK-1r-Y2H"/>
+                                </connections>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGH-qT-4wM" userLabel="Button - Close">
                                 <rect key="frame" x="270" y="30" width="35" height="35"/>
