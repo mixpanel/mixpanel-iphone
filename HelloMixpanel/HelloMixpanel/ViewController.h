@@ -1,6 +1,4 @@
 #import <UIKit/UIKit.h>
-#import <FCColorPickerViewController.h>
 
-@interface ViewController : UIViewController <FCColorPickerViewControllerDelegate>
-
+@interface ViewController : UIViewController
 @end
