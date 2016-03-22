@@ -98,6 +98,7 @@
 		86978874197466780095B277 /* MPNSNumberToCGFloatValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 86978873197466780095B277 /* MPNSNumberToCGFloatValueTransformer.m */; };
 		86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CC974D1811F82D0003EF50 /* MPNotification.m */; };
 		86CC975018120A7E0003EF50 /* MPNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86CC974F18120A7E0003EF50 /* MPNotification.storyboard */; };
+		A0CDAA94FD06A3C2E8DE6BD4 /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A441AF641244CA893593CD /* libPods-HelloMixpanelTests.a */; };
 		A7B462D1191075DE00774977 /* MPApplicationStateSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462B5191075DE00774977 /* MPApplicationStateSerializer.m */; };
 		A7B462D2191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462B7191075DE00774977 /* MPCATransform3DToNSDictionaryValueTransformer.m */; };
 		A7B462D3191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462B9191075DE00774977 /* MPCGAffineTransformToNSDictionaryValueTransformer.m */; };
@@ -519,6 +520,7 @@
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
+				A0CDAA94FD06A3C2E8DE6BD4 /* libPods-HelloMixpanelTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
