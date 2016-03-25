@@ -40,6 +40,7 @@
                                      error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle viewDidAppear: on UIViewController. Details: %@", error);
+            [[Mixpanel internalMixpanel] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
         }
 
         [UIApplication mp_swizzleMethod:@selector(sendEvent:)
@@ -47,6 +48,7 @@
                                   error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle sendEvent: on UIAppplication. Details: %@", error);
+            [[Mixpanel internalMixpanel] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
         }
         
         [UIApplication mp_swizzleMethod:@selector(sendAction:to:from:forEvent:)
@@ -54,19 +56,29 @@
                                   error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle sendAction:to:from:forEvent: on UIAppplication. Details: %@", error);
+            [[Mixpanel internalMixpanel] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
         }
         
         [NSNotificationCenter mp_swizzleMethod:@selector(postNotification:)
                                     withMethod:@selector(mp_postNotification:)
                                          error:&error];
+        if (error) {
+            MixpanelError(@"Failed to swizzle postNotification: on NSNotificationCenter. Details: %@", error);
+            [[Mixpanel internalMixpanel] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+        }
         [NSNotificationCenter mp_swizzleMethod:@selector(postNotificationName:object:)
                                     withMethod:@selector(mp_postNotificationName:object:)
                                          error:&error];
+        if (error) {
+            MixpanelError(@"Failed to swizzle postNotificationName:object: on NSNotificationCenter. Details: %@", error);
+            [[Mixpanel internalMixpanel] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+        }
         [NSNotificationCenter mp_swizzleMethod:@selector(postNotificationName:object:userInfo:)
                                     withMethod:@selector(mp_postNotificationName:object:userInfo:)
                                          error:&error];
         if (error) {
-            MixpanelError(@"Failed to swizzle NSNotificationCenter. Details: %@", error);
+            MixpanelError(@"Failed to swizzle postNotificationName:object:userInfo: on NSNotificationCenter. Details: %@", error);
+            [[Mixpanel internalMixpanel] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
         }
     });
 }
