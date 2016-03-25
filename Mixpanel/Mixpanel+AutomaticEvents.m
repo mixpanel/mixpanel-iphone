@@ -39,6 +39,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         if (error) {
             MixpanelError(@"Failed to swizzle viewDidAppear: on UIViewController. Details: %@", error);
             [internalMixpanel track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+            error = NULL;
         }
 
         [UIApplication mp_swizzleMethod:@selector(sendEvent:)
@@ -47,6 +48,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         if (error) {
             MixpanelError(@"Failed to swizzle sendEvent: on UIAppplication. Details: %@", error);
             [internalMixpanel track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+            error = NULL;
         }
         
         [UIApplication mp_swizzleMethod:@selector(sendAction:to:from:forEvent:)
@@ -55,6 +57,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         if (error) {
             MixpanelError(@"Failed to swizzle sendAction:to:from:forEvent: on UIAppplication. Details: %@", error);
             [internalMixpanel track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+            error = NULL;
         }
         
         [NSNotificationCenter mp_swizzleMethod:@selector(postNotification:)
@@ -63,6 +66,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         if (error) {
             MixpanelError(@"Failed to swizzle postNotification: on NSNotificationCenter. Details: %@", error);
             [internalMixpanel track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+            error = NULL;
         }
         [NSNotificationCenter mp_swizzleMethod:@selector(postNotificationName:object:)
                                     withMethod:@selector(mp_postNotificationName:object:)
@@ -70,6 +74,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         if (error) {
             MixpanelError(@"Failed to swizzle postNotificationName:object: on NSNotificationCenter. Details: %@", error);
             [internalMixpanel track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+            error = NULL;
         }
         [NSNotificationCenter mp_swizzleMethod:@selector(postNotificationName:object:userInfo:)
                                     withMethod:@selector(mp_postNotificationName:object:userInfo:)
@@ -77,6 +82,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         if (error) {
             MixpanelError(@"Failed to swizzle postNotificationName:object:userInfo: on NSNotificationCenter. Details: %@", error);
             [internalMixpanel track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
+            error = NULL;
         }
     });
 }

@@ -129,7 +129,7 @@
     Ivar *ivars = class_copyIvarList([object class], &count);
     for (uint i = 0; i < count; i++) {
         Ivar ivar = ivars[i];
-        if (ivar_getTypeEncoding(ivar)[0] == '@' && object_getIvar(object, ivar) == self) {
+        if (ivar_getTypeEncoding(ivar)[0] == '@' && object_getIvar(object, ivar) == instanceVariable) {
             name = [NSString stringWithCString:ivar_getName(ivar) encoding:NSUTF8StringEncoding];
             break;
         }

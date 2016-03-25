@@ -43,7 +43,9 @@
     // iOS spams notifications. We're whitelisting for now.
     NSArray *names = @[
                        // UITextField Editing
+                       UITextFieldTextDidBeginEditingNotification,
                        UITextFieldTextDidChangeNotification,
+                       UITextFieldTextDidEndEditingNotification,
                        
                        // UIApplication Lifecycle
                        UIApplicationDidFinishLaunchingNotification,
