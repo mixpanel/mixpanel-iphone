@@ -1,5 +1,5 @@
 //
-//  CollectEverythingConstants.h
+//  AutomaticEventsConstants.h
 //  Mixpanel
 //
 //  Created by Sam Green on 3/22/16.
@@ -8,7 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const kCollectEverythingEventName = @"$event";
+typedef NS_ENUM(NSUInteger, AutomaticEventMode) {
+    CollectionModeNone,
+    CollectionModeCount,
+    CollectionModeFullCollection,
+};
+
+#pragma mark - Strings
+static NSString *const kCollectEverythingEventName = @"$ios_event";
 
 #pragma mark - Top Level Keys
 static NSString *const kActionKey = @"$event_action";
@@ -24,6 +31,7 @@ static NSString *const kTypeNavigation = @"navigation";
 static NSString *const kSourceTextKey = @"$event_source_text";
 static NSString *const kSourceNameKey = @"$event_source_name";
 static NSString *const kSourceClassKey = @"$event_source_class";
+static NSString *const kSourceInfoKey = @"$event_source_info";
 static NSString *const kSourceAccessibilityIdentifierKey = @"$event_source_accessibility_identifier";
 static NSString *const kSourceAccessibilityLabelKey = @"$event_source_accessibility_label";
 

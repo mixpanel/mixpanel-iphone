@@ -1,5 +1,5 @@
 //
-//  Mixpanel+CollectEverything.h
+//  Mixpanel+AutomaticEvents.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -8,9 +8,11 @@
 
 #import "Mixpanel.h"
 
-@interface Mixpanel (CollectEverything)
+@interface Mixpanel (AutomaticEvents)
 
-+ (instancetype)internalMixpanel;
++ (instancetype)sharedAutomatedInstance;
++ (void)setSharedAutomatedInstance:(Mixpanel *)instance;
+
 + (void)addSwizzles;
 
 #pragma mark - UIApplication

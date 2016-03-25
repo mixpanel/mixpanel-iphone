@@ -1,5 +1,5 @@
 //
-//  UIViewController+CollectEverything.h
+//  UIViewController+AutomaticEvents.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (CollectEverything)
+@interface UIViewController (AutomaticEvents)
 
 - (void)mp_viewDidAppear:(BOOL)animated;
 

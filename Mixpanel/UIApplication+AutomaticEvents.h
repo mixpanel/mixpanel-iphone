@@ -1,5 +1,5 @@
 //
-//  UIApplication+CollectEverything.h
+//  UIApplication+AutomaticEvents.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIApplication (CollectEverything)
+@interface UIApplication (AutomaticEvents)
 
 - (BOOL)mp_sendAction:(SEL)action to:(id)to from:(id)from forEvent:(UIEvent *)event;
 - (void)mp_sendEvent:(UIEvent *)event;

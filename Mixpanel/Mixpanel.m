@@ -12,8 +12,8 @@
 #import "MPLogger.h"
 #import "NSData+MPBase64.h"
 #import "MPFoundation.h"
-#import "Mixpanel+CollectEverything.h"
-#import "CollectEverythingConstants.h"
+#import "Mixpanel+AutomaticEvents.h"
+#import "AutomaticEventsConstants.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 
@@ -61,7 +61,7 @@
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, copy) NSString *distinctId;
 @property (nonatomic, getter=isCollectionEnabled) BOOL collectionEnabled;
-@property (nonatomic) CollectionMode collectionMode;
+@property (nonatomic) AutomaticEventMode collectionMode;
 @property (nonatomic) NSUInteger collectionEventCount;
 
 @property (nonatomic, copy) NSString *apiToken;
@@ -245,9 +245,8 @@ static Mixpanel *sharedInstance = nil;
 - (void)setCollectionEnabled:(BOOL)collectionEnabled {
     _collectionEnabled = collectionEnabled;
     
-    [[Mixpanel internalMixpanel] track:@"$event" properties:@{ @"$ce_enabled": @(collectionEnabled) }];
-    
     if (_collectionEnabled) {
+        [Mixpanel setSharedAutomatedInstance:self];
         [Mixpanel addSwizzles];
     }
 }
@@ -456,7 +455,7 @@ static __unused NSString *MPURLEncode(NSString *s)
                     self.collectionEventCount++;
                 } else {
                     if (self.collectionEventCount > 0) {
-                        p[@"$event_count"] = @(self.collectionEventCount);
+                        p[@"$__c"] = @(self.collectionEventCount);
                         self.collectionEventCount = 0;
                     }
                 }
@@ -1382,8 +1381,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (config && [config isKindOfClass:NSDictionary.class]) {
                 NSDictionary *collectEverythingConfig = config[@"ce"];
                 if (collectEverythingConfig && [collectEverythingConfig isKindOfClass:NSDictionary.class]) {
-                    self.collectionEnabled = [collectEverythingConfig[@"enabled"] boolValue];
-                    
                     NSString *method = collectEverythingConfig[@"method"];
                     if (method && [method isKindOfClass:NSString.class]) {
                         if ([method isEqualToString:@"count"]) {
@@ -1392,6 +1389,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                             self.collectionMode = CollectionModeFullCollection;
                         }
                     }
+                    
+                    self.collectionEnabled = [collectEverythingConfig[@"enabled"] boolValue];
                 }
             }
 

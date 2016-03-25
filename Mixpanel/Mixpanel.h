@@ -5,12 +5,6 @@
 #import <WatchConnectivity/WatchConnectivity.h>
 #endif
 
-typedef NS_ENUM(NSUInteger, CollectionMode) {
-    CollectionModeNone,
-    CollectionModeCount,
-    CollectionModeFullCollection,
-};
-
 @class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;
 
