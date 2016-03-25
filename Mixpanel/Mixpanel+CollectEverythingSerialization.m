@@ -127,13 +127,20 @@
     return name;
 }
 
-+ (UIViewController *)viewControllerContainingView:(UIView *)view {
-    id responder = [view nextResponder];
-    while (responder != nil) {
-        if ([responder isKindOfClass:UIViewController.class]) {
-            return (UIViewController *)responder;
++ (UIViewController *)viewControllerContainingView:(id)view {
+    SEL viewControllerSelector = NSSelectorFromString(@"viewController");
+    if ([view respondsToSelector:viewControllerSelector]) {
+        return [view performSelector:viewControllerSelector];
+    }
+    
+    if ([view respondsToSelector:@selector(nextResponder)]) {
+        id responder = [view nextResponder];
+        while (responder != nil) {
+            if ([responder isKindOfClass:UIViewController.class]) {
+                return (UIViewController *)responder;
+            }
+            responder = [responder nextResponder];
         }
-        responder = [responder nextResponder];
     }
     return nil;
 }
