@@ -12,6 +12,8 @@
 #import "MPLogger.h"
 #import "NSData+MPBase64.h"
 #import "MPFoundation.h"
+#import "Mixpanel+AutomaticEvents.h"
+#import "AutomaticEventsConstants.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 
@@ -58,6 +60,9 @@
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, copy) NSString *distinctId;
+@property (nonatomic, getter=isCollectionEnabled) BOOL collectionEnabled;
+@property (nonatomic) AutomaticEventMode collectionMode;
+@property (nonatomic) NSUInteger collectionEventCount;
 
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSDictionary *superProperties;
@@ -107,8 +112,6 @@
 @implementation Mixpanel
 
 static Mixpanel *sharedInstance = nil;
-
-
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
     static dispatch_once_t onceToken;
@@ -237,6 +240,15 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"released reachability");
     }
 #endif
+}
+
+- (void)setCollectionEnabled:(BOOL)collectionEnabled {
+    _collectionEnabled = collectionEnabled;
+    
+    if (_collectionEnabled) {
+        [Mixpanel setSharedAutomatedInstance:self];
+        [Mixpanel addSwizzles];
+    }
 }
 
 #pragma mark - Encoding/decoding utilities
@@ -406,6 +418,11 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelError(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
     }
+    
+    // Safety check
+    BOOL isCollectEverythingEvent = [event isEqualToString:kCollectEverythingEventName];
+    if (isCollectEverythingEvent && !self.isCollectionEnabled) return;
+    
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
 
@@ -431,6 +448,20 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (properties) {
             [p addEntriesFromDictionary:properties];
         }
+        
+        if (self.collectionEnabled) {
+            if (self.collectionMode == CollectionModeCount) {
+                if (isCollectEverythingEvent) {
+                    self.collectionEventCount++;
+                } else {
+                    if (self.collectionEventCount > 0) {
+                        p[@"$__c"] = @(self.collectionEventCount);
+                        self.collectionEventCount = 0;
+                    }
+                }
+            }
+        }
+        
         NSDictionary *e = @{@"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]};
         MixpanelDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
@@ -1344,6 +1375,23 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (object[@"error"]) {
                 MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
                 return;
+            }
+            
+            NSDictionary *config = object[@"config"];
+            if (config && [config isKindOfClass:NSDictionary.class]) {
+                NSDictionary *collectEverythingConfig = config[@"ce"];
+                if (collectEverythingConfig && [collectEverythingConfig isKindOfClass:NSDictionary.class]) {
+                    NSString *method = collectEverythingConfig[@"method"];
+                    if (method && [method isKindOfClass:NSString.class]) {
+                        if ([method isEqualToString:@"count"]) {
+                            self.collectionMode = CollectionModeCount;
+                        } else {
+                            self.collectionMode = CollectionModeFullCollection;
+                        }
+                    }
+                    
+                    self.collectionEnabled = [collectEverythingConfig[@"enabled"] boolValue];
+                }
             }
 
             NSArray *rawSurveys = object[@"surveys"];

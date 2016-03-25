@@ -92,6 +92,11 @@
 		5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
 		5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		5116F8741B68397A00C14704 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5116F8731B68397A00C14704 /* MixpanelExceptionHandler.m */; };
+		519F0B811C7CF9AD00DBE61F /* MPSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 519F0B801C7CF9AD00DBE61F /* MPSwizzle.m */; };
+		519F0B841C7CFAC700DBE61F /* UIApplication+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 519F0B831C7CFAC700DBE61F /* UIApplication+CollectEverything.m */; };
+		519F0B881C7CFD8A00DBE61F /* UIViewController+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 519F0B871C7CFD8A00DBE61F /* UIViewController+CollectEverything.m */; };
+		519F0B8B1C7CFE2C00DBE61F /* Mixpanel+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 519F0B8A1C7CFE2C00DBE61F /* Mixpanel+CollectEverything.m */; };
+		519F0B8E1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.m in Sources */ = {isa = PBXBuildFile; fileRef = 519F0B8D1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.m */; };
 		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
 		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
 		5262143622F74EDFB5C6D2AC /* (null) in Frameworks */ = {isa = PBXBuildFile; };
@@ -391,6 +396,16 @@
 		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		5116F8721B68397A00C14704 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5116F8731B68397A00C14704 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
+		519F0B7F1C7CF9AD00DBE61F /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
+		519F0B801C7CF9AD00DBE61F /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
+		519F0B821C7CFAC700DBE61F /* UIApplication+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+CollectEverything.h"; sourceTree = "<group>"; };
+		519F0B831C7CFAC700DBE61F /* UIApplication+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+CollectEverything.m"; sourceTree = "<group>"; };
+		519F0B861C7CFD8A00DBE61F /* UIViewController+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CollectEverything.h"; sourceTree = "<group>"; };
+		519F0B871C7CFD8A00DBE61F /* UIViewController+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CollectEverything.m"; sourceTree = "<group>"; };
+		519F0B891C7CFE2C00DBE61F /* Mixpanel+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mixpanel+CollectEverything.h"; sourceTree = "<group>"; };
+		519F0B8A1C7CFE2C00DBE61F /* Mixpanel+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+CollectEverything.m"; sourceTree = "<group>"; };
+		519F0B8C1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+CollectEverything.h"; sourceTree = "<group>"; };
+		519F0B8D1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+CollectEverything.m"; sourceTree = "<group>"; };
 		51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummy5XXHTTPConnection.h; sourceTree = "<group>"; };
 		51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummy5XXHTTPConnection.m; sourceTree = "<group>"; };
 		51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyRetryAfterConnection.h; sourceTree = "<group>"; };
@@ -755,6 +770,7 @@
 		286760AD1611982600B1BEC8 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
+				519F0B7E1C7CF98600DBE61F /* CollectEverythingSupport */,
 				5115A0E71B55C5A400787217 /* MPCategoryHelpersSupport */,
 				18108265197DCD04005B543E /* EventTrackingSupport */,
 				A7B462B31910759E00774977 /* ABTestingSupport */,
@@ -823,6 +839,31 @@
 				5115A0CF1B4F48F000787217 /* UIView+MPHelpers.m */,
 			);
 			name = MPCategoryHelpersSupport;
+			sourceTree = "<group>";
+		};
+		519F0B7E1C7CF98600DBE61F /* CollectEverythingSupport */ = {
+			isa = PBXGroup;
+			children = (
+				519F0B851C7CFD6500DBE61F /* Swizzling */,
+				519F0B891C7CFE2C00DBE61F /* Mixpanel+CollectEverything.h */,
+				519F0B8A1C7CFE2C00DBE61F /* Mixpanel+CollectEverything.m */,
+			);
+			name = CollectEverythingSupport;
+			sourceTree = "<group>";
+		};
+		519F0B851C7CFD6500DBE61F /* Swizzling */ = {
+			isa = PBXGroup;
+			children = (
+				519F0B7F1C7CF9AD00DBE61F /* MPSwizzle.h */,
+				519F0B801C7CF9AD00DBE61F /* MPSwizzle.m */,
+				519F0B821C7CFAC700DBE61F /* UIApplication+CollectEverything.h */,
+				519F0B831C7CFAC700DBE61F /* UIApplication+CollectEverything.m */,
+				519F0B861C7CFD8A00DBE61F /* UIViewController+CollectEverything.h */,
+				519F0B871C7CFD8A00DBE61F /* UIViewController+CollectEverything.m */,
+				519F0B8C1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.h */,
+				519F0B8D1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.m */,
+			);
+			name = Swizzling;
 			sourceTree = "<group>";
 		};
 		9003ECED95D33B569C44DB53 /* Pods */ = {
@@ -919,11 +960,11 @@
 			children = (
 				C38D5740CD1C124D8200944D /* MPAbstractABTestDesignerMessage.h */,
 				C38D5B5C7222BDA95DAFC404 /* MPAbstractABTestDesignerMessage.m */,
+				C38D55C83387B909D63C9C51 /* MPABTestDesignerMessage.h */,
 				C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoResponseMessage.m */,
 				C38D5E33208664B1FFAE2974 /* MPABTestDesignerDeviceInfoResponseMessage.h */,
 				C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */,
 				C38D54F927EDE7223F214F4B /* MPABTestDesignerSnapshotRequestMessage.h */,
-				C38D55C83387B909D63C9C51 /* MPABTestDesignerMessage.h */,
 				C38D5DF058742F8D8B919676 /* MPABTestDesignerSnapshotResponseMessage.m */,
 				C38D5D20034D0E52454F0552 /* MPABTestDesignerSnapshotResponseMessage.h */,
 				C38D58453399B01B470D3993 /* MPABTestDesignerChangeRequestMessage.m */,
@@ -1422,6 +1463,7 @@
 				18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */,
 				A7B462DE191075DE00774977 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				05E98DF6191B0A5C00AFF3E1 /* MPABTestDesignerTweakRequestMessage.m in Sources */,
+				519F0B881C7CFD8A00DBE61F /* UIViewController+CollectEverything.m in Sources */,
 				5115A0D01B4F48F000787217 /* UIView+MPHelpers.m in Sources */,
 				05E98DF9191B0B1400AFF3E1 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				86CC974E1811F82D0003EF50 /* MPNotification.m in Sources */,
@@ -1432,6 +1474,7 @@
 				28FEFA0917CAE93200691355 /* UIImage+MPImageEffects.m in Sources */,
 				A7B462DC191075DE00774977 /* MPPropertyDescription.m in Sources */,
 				28ECB34117CE7A7D0075ADE7 /* UIImage+MPAverageColor.m in Sources */,
+				519F0B811C7CF9AD00DBE61F /* MPSwizzle.m in Sources */,
 				A7B462D1191075DE00774977 /* MPApplicationStateSerializer.m in Sources */,
 				188D0AC019B7E351009C0399 /* MPDesignerTrackMessage.m in Sources */,
 				05439025192279530076094E /* MPTweakStore.m in Sources */,
@@ -1442,6 +1485,7 @@
 				289B497A17D913D50035439B /* NSData+MPBase64.m in Sources */,
 				A7B462D9191075DE00774977 /* MPObjectSerializer.m in Sources */,
 				18E4561E199EB960000D5BCB /* MPDesignerEventBindingRequestMesssage.m in Sources */,
+				519F0B8B1C7CFE2C00DBE61F /* Mixpanel+CollectEverything.m in Sources */,
 				A7B462D5191075DE00774977 /* MPCGPointToNSDictionaryValueTransformer.m in Sources */,
 				187939D019A284BF00CC4FBE /* MPUIControlBinding.m in Sources */,
 				C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
@@ -1449,9 +1493,11 @@
 				C38D5BAA83DEE244F3E2F69A /* MPABTestDesignerConnection.m in Sources */,
 				C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */,
+				519F0B8E1C7CFF6E00DBE61F /* NSNotificationCenter+CollectEverything.m in Sources */,
 				051FDDB4198876DE00CF7385 /* MPABTestDesignerDisconnectMessage.m in Sources */,
 				05439020192279530076094E /* _MPTweakBindObserver.m in Sources */,
 				C38D5611E2CADE3E60B1AD3B /* MPAbstractABTestDesignerMessage.m in Sources */,
+				519F0B841C7CFAC700DBE61F /* UIApplication+CollectEverything.m in Sources */,
 				C38D5BBCDD16904A9D99BDB6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				C38D5A25F71A31E130B264B4 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
