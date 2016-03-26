@@ -11,13 +11,25 @@ The Mixpanel library for iOS is an open source project, and we'd love to see you
 
 # Painless Installation (CocoaPods)
 
-Mixpanel supports `CocoaPods` for easy installation.
-To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
+Add our private cocoapods spec repo
+```
+pod repo add mixpanel-private 
+```
 
 # Carthage
 
 Mixpanel also supports `Carthage` to package your dependencies as a framework.
 Check out the **[Carthage docs »](https://github.com/Carthage/Carthage)** for more info.
+
+Cartfile:
+```
+github "mixpanel/mixpanel-iphone-CE" "master"
+```
+
+Since it's a private repo, we need carthage to use SSH keys
+```
+carthage update --platform iOS --use-ssh
+```
 
 # Manual Installation
 
@@ -28,7 +40,7 @@ To help users stay up to date with the latests version of our iOS SDK, we always
 Git clone the latest version of "mixpanel-iphone" to your local machine using the following code in your terminal:
 
 ```
-git clone https://github.com/mixpanel/mixpanel-iphone.git
+git clone https://github.com/mixpanel/mixpanel-iphone-CE.git
 ```
 
 If you don't have git installed, get it [here](http://git-scm.com/downloads).
