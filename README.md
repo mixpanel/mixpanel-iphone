@@ -13,7 +13,17 @@ The Mixpanel library for iOS is an open source project, and we'd love to see you
 
 Add our private cocoapods spec repo
 ```
-pod repo add mixpanel-private 
+pod repo add mixpanel-private https://github.com/mixpanel/PrivatePodSpecs.git
+```
+
+Then add this line to the top of your `Podfile`:
+```
+source 'https://github.com/mixpanel/PrivatePodSpecs.git'
+```
+
+Instead of the normal Mixpanel pod, we'll be using this private version:
+```
+pod 'MixpanelPrivate'
 ```
 
 # Carthage
