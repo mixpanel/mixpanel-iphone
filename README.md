@@ -9,7 +9,7 @@
 
 # Integration
 
-Download the framework from the releases tab, and drag `Mixpanel.framework` in to your Xcode project. Please add the framework to "Embedded Binaries" as well, this will resolve a framework loading bug on iOS 9.2.1+
+Download the framework from the [releases tab](https://github.com/mixpanel/mixpanel-iphone-CE/releases), and drag `Mixpanel.framework` in to your Xcode project. Please add the framework to "Embedded Binaries" as well, this will resolve a framework loading bug on iOS 9.2.1+
 
 ## Import All dependencies
 
