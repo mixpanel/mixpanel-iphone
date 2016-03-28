@@ -25,6 +25,13 @@ Add all dependencies of the Mixpanel SDK to your app. The full list of necessary
 
 ![alt text](http://images.mxpnl.com/blog/2014-09-24%2001:32:27.445697-1__vim_and_spritybird_and_Mixpanel_-_Agent_and_spritybird.png)
 
+## Add linker flags
+
+Add two linker flags in "Build Settings" under "Other Linker Flags":
+
+* `-ObjC`
+* `-all_load`
+
 ## Set up your token and initialize Mixpanel
 
 Import "Mixpanel.h" into AppDelegate.m, and initialize Mixpanel within `application:didFinishLaunchingWithOptions:`
