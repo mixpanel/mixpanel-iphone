@@ -1,6 +1,6 @@
 # This is a private and confidential repository
 
-### Please review our [Terms of Service](https://mixpanel.com/terms/)
+### Please review our [Terms of Use](https://mixpanel.com/terms/), which governs your use of the Mixpanel SDK.  By integrating the Mixpanel SDK, you expressly agree to our Terms of Use.
 
 [![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
