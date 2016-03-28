@@ -39,6 +39,6 @@ Import "Mixpanel.h" into AppDelegate.m, and initialize Mixpanel within `applicat
 
 ## Start tracking
 
-You're done! You've successfully integrated the Mixpanel SDK into your app. To stay up to speed on important SDK releases and updates, subscribe to the [mp-dev Google group](https://groups.google.com/forum/?fromgroups#!forum/mp-dev) or watch the iPhone repository on [Github](https://github.com/mixpanel/mixpanel-iphone).
+You're done! You've successfully integrated the Mixpanel SDK into your app.
 
 Have any questions? Reach out to [support@mixpanel.com](mailto:support@mixpanel.com) to speak to someone smart, quickly.
