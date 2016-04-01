@@ -630,16 +630,18 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelDebug(@"%@ flush starting", self);
 
         __strong id<MixpanelDelegate> strongDelegate = self.delegate;
-        if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![strongDelegate mixpanelWillFlush:self]) {
-            MixpanelDebug(@"%@ flush deferred by delegate", self);
-            return;
+        if (strongDelegate && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
+            if (![strongDelegate mixpanelWillFlush:self]) {
+                MixpanelDebug(@"%@ flush deferred by delegate", self);
+                return;
+            }
         }
 
         [self flushEvents];
         [self flushPeople];
+        [self archive];
         
         if (handler) {
-            [self archive];
             dispatch_async(dispatch_get_main_queue(), handler);
         }
 
