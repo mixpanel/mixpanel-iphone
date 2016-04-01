@@ -3,8 +3,8 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 
-// IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"287001c04107218d5e9445feead1f410"
+// IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
+#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
 
 @implementation AppDelegate
 
