@@ -1947,7 +1947,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
     if (messageType) {
         if ([messageType isEqualToString:@"track"]) {
-            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+            [self track:message[@"event"] properties:message[@"properties"]];
         }
     }
 }
@@ -1957,7 +1957,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
     if (messageType) {
         if ([messageType isEqualToString:@"track"]) {
-            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
+            [self track:message[@"event"] properties:message[@"properties"]];
         }
         replyHandler(@{ @"success": @YES });
     } else {
