@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Mixpanel (HostWatchOS) <WCSessionDelegate>
 
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message;
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler;
 
 @end
 

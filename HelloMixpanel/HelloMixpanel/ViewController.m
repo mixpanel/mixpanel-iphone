@@ -1,4 +1,6 @@
 #import <Mixpanel/Mixpanel.h>
+#import <Mixpanel/MPTweak.h>
+#import <Mixpanel/MPTweakInline.h>
 #import "ViewController.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -151,7 +153,7 @@
     FCColorPickerViewController *colorPicker = [[FCColorPickerViewController alloc]
                                                 initWithNibName:@"FCColorPickerViewController"
                                                 bundle:[NSBundle mainBundle]];
-    colorPicker.color = [UIColor mp_applicationPrimaryColor];
+    colorPicker.color = [UIColor redColor];
     colorPicker.delegate = self;
 
     [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
