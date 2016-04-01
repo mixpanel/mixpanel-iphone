@@ -91,6 +91,7 @@
 		5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
 		5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		5116F8741B68397A00C14704 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5116F8731B68397A00C14704 /* MixpanelExceptionHandler.m */; };
+		5166DD051CAF3FF800920FF1 /* Mixpanel+HostWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5166DD041CAF3FF800920FF1 /* Mixpanel+HostWatchOS.m */; };
 		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
 		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
 		5262143622F74EDFB5C6D2AC /* (null) in Frameworks */ = {isa = PBXBuildFile; };
@@ -390,6 +391,8 @@
 		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		5116F8721B68397A00C14704 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5116F8731B68397A00C14704 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
+		5166DD031CAF3FF800920FF1 /* Mixpanel+HostWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mixpanel+HostWatchOS.h"; sourceTree = "<group>"; };
+		5166DD041CAF3FF800920FF1 /* Mixpanel+HostWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+HostWatchOS.m"; sourceTree = "<group>"; };
 		51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummy5XXHTTPConnection.h; sourceTree = "<group>"; };
 		51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummy5XXHTTPConnection.m; sourceTree = "<group>"; };
 		51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyRetryAfterConnection.h; sourceTree = "<group>"; };
@@ -759,6 +762,8 @@
 				053B4C62183E963100E825FE /* Media.xcassets */,
 				286760B91611982600B1BEC8 /* Mixpanel.h */,
 				286760BA1611982600B1BEC8 /* Mixpanel.m */,
+				5166DD031CAF3FF800920FF1 /* Mixpanel+HostWatchOS.h */,
+				5166DD041CAF3FF800920FF1 /* Mixpanel+HostWatchOS.m */,
 				51D6DAE21C2B533C0003A41F /* MixpanelWatchOS.h */,
 				51D6DAE31C2B533C0003A41F /* MixpanelWatchOS.m */,
 				5116F8721B68397A00C14704 /* MixpanelExceptionHandler.h */,
@@ -1453,6 +1458,7 @@
 				C38D5BBCDD16904A9D99BDB6 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				C38D5B875967DF2C2CF76158 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				C38D5A25F71A31E130B264B4 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
+				5166DD051CAF3FF800920FF1 /* Mixpanel+HostWatchOS.m in Sources */,
 				C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				05F5F9671965F5680070280C /* MPABTestDesignerClearResponseMessage.m in Sources */,
 				C38D5441C78F3F33FD640279 /* MPEnumDescription.m in Sources */,
