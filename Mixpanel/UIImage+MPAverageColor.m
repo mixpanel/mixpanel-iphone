@@ -29,9 +29,16 @@
     static const size_t kNumberOfRows = 124;
     static const size_t kNumberOfHexColors = 262144;
     
+    const size_t kImageWidth = CGImageGetWidth(self.CGImage);
+    const size_t kImageHeight = CGImageGetHeight(self.CGImage);
+    
     const size_t kBytesPerPixel = CGImageGetBitsPerPixel(self.CGImage) / 8;
     const size_t kBytesPerRow = CGImageGetBytesPerRow(self.CGImage);
-    const size_t kImageWidth = CGImageGetWidth(self.CGImage);
+    
+    // Don't calculate
+    if (kImageHeight < kImageStartRow + kNumberOfRows) {
+        return [self mp_averageColor];
+    }
     
     CFDataRef imageData = CGDataProviderCopyData(CGImageGetDataProvider(self.CGImage));
     const uint8_t *imageDataBuffer = CFDataGetBytePtr(imageData);
