@@ -1938,40 +1938,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 @end
 
-#if defined(MIXPANEL_WATCH_EXTENSION)
-#pragma mark - WatchExtensions
-@implementation Mixpanel (WatchExtensions)
-
-/** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
-    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
-    if (messageType) {
-        if ([messageType isEqualToString:@"track"]) {
-            [self track:message[@"event"] properties:message[@"properties"]];
-        }
-    }
-}
-
-/** Called on the delegate of the receiver when the sender sends a message that expects a reply. Will be called on startup if the incoming message caused the receiver to launch. */
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler {
-    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
-    if (messageType) {
-        if ([messageType isEqualToString:@"track"]) {
-            [self track:message[@"event"] properties:message[@"properties"]];
-        }
-        replyHandler(@{ @"success": @YES });
-    } else {
-        replyHandler(@{ @"success": @NO, @"message": @"Message is not a mixpanel message" });
-    }
-}
-
-+ (NSString *)messageTypeForWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
-    return [message objectForKey:@"$mp_message_type"];
-}
-
-@end
-#endif
-
 #pragma mark - People
 @implementation MixpanelPeople
 

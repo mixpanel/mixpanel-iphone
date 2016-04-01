@@ -23,10 +23,12 @@
 		513B0BBC1C73CA94008EEE6E /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		513B0BBD1C73CBA0008EEE6E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513B0BBE1C73CBA4008EEE6E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
+		5166DCE81CAF15FF00920FF1 /* Mixpanel+HostWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5166DCE61CAF15FF00920FF1 /* Mixpanel+HostWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5166DCE91CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5166DCE71CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m */; };
 		5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
 		5177CFC81C5032B600271843 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
-		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; };
+		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */; };
 		7C170CC81A4A035F00D9E0F2 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -113,12 +115,12 @@
 		7C170D1C1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C9F1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m */; };
 		7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA01A4A035F00D9E0F2 /* MPSwizzler.h */; };
 		7C170D1E1A4A035F00D9E0F2 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CA11A4A035F00D9E0F2 /* MPSwizzler.m */; };
-		7C170D1F1A4A035F00D9E0F2 /* MPTweak.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA21A4A035F00D9E0F2 /* MPTweak.h */; };
+		7C170D1F1A4A035F00D9E0F2 /* MPTweak.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA21A4A035F00D9E0F2 /* MPTweak.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C170D201A4A035F00D9E0F2 /* MPTweak.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CA31A4A035F00D9E0F2 /* MPTweak.m */; };
-		7C170D211A4A035F00D9E0F2 /* MPTweakInline.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA41A4A035F00D9E0F2 /* MPTweakInline.h */; };
+		7C170D211A4A035F00D9E0F2 /* MPTweakInline.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA41A4A035F00D9E0F2 /* MPTweakInline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C170D221A4A035F00D9E0F2 /* MPTweakInline.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CA51A4A035F00D9E0F2 /* MPTweakInline.m */; };
-		7C170D231A4A035F00D9E0F2 /* MPTweakInlineInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA61A4A035F00D9E0F2 /* MPTweakInlineInternal.h */; };
-		7C170D241A4A035F00D9E0F2 /* MPTweakStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA71A4A035F00D9E0F2 /* MPTweakStore.h */; };
+		7C170D231A4A035F00D9E0F2 /* MPTweakInlineInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA61A4A035F00D9E0F2 /* MPTweakInlineInternal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C170D241A4A035F00D9E0F2 /* MPTweakStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA71A4A035F00D9E0F2 /* MPTweakStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C170D251A4A035F00D9E0F2 /* MPTweakStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CA81A4A035F00D9E0F2 /* MPTweakStore.m */; };
 		7C170D261A4A035F00D9E0F2 /* MPTypeDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA91A4A035F00D9E0F2 /* MPTypeDescription.h */; };
 		7C170D271A4A035F00D9E0F2 /* MPTypeDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CAA1A4A035F00D9E0F2 /* MPTypeDescription.m */; };
@@ -168,6 +170,9 @@
 		513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
 		513B0BB61C73CA35008EEE6E /* MixpanelAppExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MixpanelAppExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		513B0BFB1C73D5DA008EEE6E /* Mixpanel-AppExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-AppExtension-Info.plist"; sourceTree = "<group>"; };
+		5166DCDF1CAF0D2C00920FF1 /* watchos.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = watchos.modulemap; path = Mixpanel/watchos.modulemap; sourceTree = "<group>"; };
+		5166DCE61CAF15FF00920FF1 /* Mixpanel+HostWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mixpanel+HostWatchOS.h"; sourceTree = "<group>"; };
+		5166DCE71CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+HostWatchOS.m"; sourceTree = "<group>"; };
 		5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
 		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
@@ -342,6 +347,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5166DCEA1CAF162000920FF1 /* watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				5166DCE61CAF15FF00920FF1 /* Mixpanel+HostWatchOS.h */,
+				5166DCE71CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m */,
+				511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */,
+				511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */,
+			);
+			name = watchOS;
+			sourceTree = "<group>";
+		};
 		7C170C201A4A02F500D9E0F2 = {
 			isa = PBXGroup;
 			children = (
@@ -368,7 +384,6 @@
 				7C170C461A4A035F00D9E0F2 /* Source */,
 				7C170C2D1A4A02F500D9E0F2 /* Supporting Files */,
 				7C170D511A4A060300D9E0F2 /* Frameworks */,
-				51FF9AB71C2B77B4004B0028 /* module.modulemap */,
 			);
 			name = Mixpanel;
 			sourceTree = "<group>";
@@ -377,6 +392,8 @@
 			isa = PBXGroup;
 			children = (
 				7C170C4A1A4A035F00D9E0F2 /* Media.xcassets */,
+				51FF9AB71C2B77B4004B0028 /* module.modulemap */,
+				5166DCDF1CAF0D2C00920FF1 /* watchos.modulemap */,
 				7C170C2E1A4A02F500D9E0F2 /* Info.plist */,
 				513B0BFB1C73D5DA008EEE6E /* Mixpanel-AppExtension-Info.plist */,
 				511FC39E1C2B74BD00DC4796 /* Mixpanel-watchOS-Info.plist */,
@@ -387,14 +404,13 @@
 		7C170C461A4A035F00D9E0F2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5166DCEA1CAF162000920FF1 /* watchOS */,
 				5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */,
 				5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */,
 				7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */,
 				7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */,
 				7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */,
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
-				511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */,
-				511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */,
 				7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */,
 				7C170C4E1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m */,
 				7C170C4F1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.h */,
@@ -563,6 +579,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C170CC81A4A035F00D9E0F2 /* Mixpanel.h in Headers */,
+				5166DCE81CAF15FF00920FF1 /* Mixpanel+HostWatchOS.h in Headers */,
+				7C170D231A4A035F00D9E0F2 /* MPTweakInlineInternal.h in Headers */,
+				7C170D211A4A035F00D9E0F2 /* MPTweakInline.h in Headers */,
+				7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */,
+				7C170D241A4A035F00D9E0F2 /* MPTweakStore.h in Headers */,
+				7C170D1F1A4A035F00D9E0F2 /* MPTweak.h in Headers */,
 				7C170D3F1A4A035F00D9E0F2 /* UIImage+MPImageEffects.h in Headers */,
 				7C170CD61A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
 				7C170D071A4A035F00D9E0F2 /* MPObjectSelector.h in Headers */,
@@ -572,7 +594,6 @@
 				7C170D1B1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h in Headers */,
 				7C170D0B1A4A035F00D9E0F2 /* MPObjectSerializerConfig.h in Headers */,
 				7C170D261A4A035F00D9E0F2 /* MPTypeDescription.h in Headers */,
-				7C170D231A4A035F00D9E0F2 /* MPTweakInlineInternal.h in Headers */,
 				7C170D291A4A035F00D9E0F2 /* MPUIControlBinding.h in Headers */,
 				7C170D191A4A035F00D9E0F2 /* MPSurveyQuestion.h in Headers */,
 				7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */,
@@ -595,7 +616,6 @@
 				7C170D351A4A035F00D9E0F2 /* NSData+MPBase64.h in Headers */,
 				7C170CDF1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				7C170CE11A4A035F00D9E0F2 /* MPABTestDesignerTweakRequestMessage.h in Headers */,
-				7C170D211A4A035F00D9E0F2 /* MPTweakInline.h in Headers */,
 				7C170CD41A4A035F00D9E0F2 /* MPABTestDesignerConnection.h in Headers */,
 				7C170D141A4A035F00D9E0F2 /* MPSurvey.h in Headers */,
 				7C170D301A4A035F00D9E0F2 /* MPValueTransformers.h in Headers */,
@@ -603,13 +623,10 @@
 				7C170CEF1A4A035F00D9E0F2 /* MPClassDescription.h in Headers */,
 				7C170D3B1A4A035F00D9E0F2 /* UIColor+MPColor.h in Headers */,
 				7C170CD01A4A035F00D9E0F2 /* MPABTestDesignerClearRequestMessage.h in Headers */,
-				7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */,
 				7C170CCA1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h in Headers */,
-				7C170D241A4A035F00D9E0F2 /* MPTweakStore.h in Headers */,
 				7C170D121A4A035F00D9E0F2 /* MPSequenceGenerator.h in Headers */,
 				7C170CDC1A4A035F00D9E0F2 /* MPABTestDesignerMessage.h in Headers */,
 				7C170CE51A4A035F00D9E0F2 /* MPApplicationStateSerializer.h in Headers */,
-				7C170D1F1A4A035F00D9E0F2 /* MPTweak.h in Headers */,
 				7C170CFD1A4A035F00D9E0F2 /* MPNotification.h in Headers */,
 				7C170CE31A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
 				7C170D331A4A035F00D9E0F2 /* MPWebSocket.h in Headers */,
@@ -683,8 +700,8 @@
 		7C170C211A4A02F500D9E0F2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
-				ORGANIZATIONNAME = "Justin Makaila";
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
 					7C170C291A4A02F500D9E0F2 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -801,6 +818,7 @@
 				7C170CE71A4A035F00D9E0F2 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				7C170CD91A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				7C170D131A4A035F00D9E0F2 /* MPSequenceGenerator.m in Sources */,
+				5166DCE91CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m in Sources */,
 				7C170D2C1A4A035F00D9E0F2 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				7C170D181A4A035F00D9E0F2 /* MPSurveyNavigationController.m in Sources */,
 				7C170CCD1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
@@ -828,7 +846,7 @@
 		511FC39B1C2B74BD00DC4796 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = bitcode;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -844,7 +862,7 @@
 					"$(PROJECT_DIR)/Mixpanel",
 				);
 				MIXPANEL_WATCH_EXTENSION = YES;
-				MODULEMAP_FILE = Mixpanel/module.modulemap;
+				MODULEMAP_FILE = Mixpanel/watchos.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
 				PRODUCT_NAME = Mixpanel;
 				SDKROOT = watchos;
@@ -859,7 +877,7 @@
 		511FC39C1C2B74BD00DC4796 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = bitcode;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -875,7 +893,7 @@
 					"$(PROJECT_DIR)/Mixpanel",
 				);
 				MIXPANEL_WATCH_EXTENSION = YES;
-				MODULEMAP_FILE = Mixpanel/module.modulemap;
+				MODULEMAP_FILE = Mixpanel/watchos.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
 				PRODUCT_NAME = Mixpanel;
 				SDKROOT = watchos;
@@ -910,7 +928,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
+				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -936,7 +954,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
+				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1050,6 +1068,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1073,6 +1092,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
