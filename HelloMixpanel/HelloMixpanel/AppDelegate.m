@@ -1,4 +1,4 @@
-#import <Mixpanel/Mixpanel.h>
+#import "Mixpanel.h"
 
 #import "AppDelegate.h"
 #import "ViewController.h"

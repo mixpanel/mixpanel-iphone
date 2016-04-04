@@ -1,6 +1,12 @@
-#import <Mixpanel/Mixpanel.h>
-#import <Mixpanel/MPTweak.h>
-#import <Mixpanel/MPTweakInline.h>
+#import "Mixpanel.h"
+
+#import "MPABTestDesignerConnection.h"
+#import "MPABTestDesignerSnapshotRequestMessage.h"
+#import "MPApplicationStateSerializer.h"
+#import "MPNotification.h"
+#import "MPSurvey.h"
+#import "MPTweakInline.h"
+#import "UIColor+MPColor.h"
 #import "ViewController.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -26,7 +32,7 @@
 {
     [super viewDidLoad];
 
-    self.showNotificationType = @"takeover";
+    self.showNotificationType = MPNotificationTypeTakeover;
     UIScrollView *strongScrollView = _scrollView;
     if (strongScrollView != nil) {
         strongScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -79,7 +85,7 @@
 
 - (IBAction)setNotificationType:(id)sender
 {
-    NSArray *types = @[@"takeover", @"mini"];
+    NSArray *types = @[MPNotificationTypeTakeover, MPNotificationTypeMini];
     self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
 }
 
@@ -153,7 +159,7 @@
     FCColorPickerViewController *colorPicker = [[FCColorPickerViewController alloc]
                                                 initWithNibName:@"FCColorPickerViewController"
                                                 bundle:[NSBundle mainBundle]];
-    colorPicker.color = [UIColor redColor];
+    colorPicker.color = [UIColor mp_applicationPrimaryColor];
     colorPicker.delegate = self;
 
     [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
