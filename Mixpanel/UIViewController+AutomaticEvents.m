@@ -14,7 +14,7 @@
 
 - (void)mp_viewDidAppear:(BOOL)animated {
     if ([self shouldTrackClass:self.class]) {
-        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
+        [[Mixpanel sharedAutomatedInstance] track:kAutomaticEventName];
     }
     [self mp_viewDidAppear:animated];
 }

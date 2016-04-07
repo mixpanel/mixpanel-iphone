@@ -14,7 +14,7 @@
 
 - (void)mp_postNotification:(NSNotification *)notification {
     if ([NSNotificationCenter shouldTrackNotificationNamed:notification.name]) {
-        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
+        [[Mixpanel sharedAutomatedInstance] track:kAutomaticEventName];
     }
     
     [self mp_postNotification:notification];
@@ -24,7 +24,7 @@
                          object:(nullable id)object
                        userInfo:(nullable NSDictionary *)info {
     if ([NSNotificationCenter shouldTrackNotificationNamed:name]) {
-        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
+        [[Mixpanel sharedAutomatedInstance] track:kAutomaticEventName];
     }
     
     [self mp_postNotificationName:name object:object userInfo:info];

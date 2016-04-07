@@ -419,8 +419,8 @@ static __unused NSString *MPURLEncode(NSString *s)
     }
     
     // Safety check
-    BOOL isCollectEverythingEvent = [event isEqualToString:kCollectEverythingEventName];
-    if (isCollectEverythingEvent && !self.isCollectionEnabled) return;
+    BOOL isAutomaticEvent = [event isEqualToString:kAutomaticEventName];
+    if (isAutomaticEvent && !self.isCollectionEnabled) return;
     
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
@@ -450,7 +450,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         
         if (self.collectionEnabled) {
             if (self.collectionMode == AutomaticEventModeCount) {
-                if (isCollectEverythingEvent) {
+                if (isAutomaticEvent) {
                     self.collectionEventCount++;
                 } else {
                     if (self.collectionEventCount > 0) {
@@ -461,12 +461,13 @@ static __unused NSString *MPURLEncode(NSString *s)
             }
         }
         
-        NSDictionary *e = @{@"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]};
+        NSDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
         MixpanelDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if ([self.eventsQueue count] > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
+        
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
         }
@@ -1382,22 +1383,19 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (config && [config isKindOfClass:NSDictionary.class]) {
                 NSDictionary *collectEverythingConfig = config[@"ce"];
                 if (collectEverythingConfig && [collectEverythingConfig isKindOfClass:NSDictionary.class]) {
+                    self.collectionEnabled = [collectEverythingConfig[@"enabled"] boolValue];
+                    
                     NSString *method = collectEverythingConfig[@"method"];
                     if (method && [method isKindOfClass:NSString.class]) {
                         if ([method isEqualToString:@"count"]) {
                             self.collectionMode = AutomaticEventModeCount;
-                        } else {
-                            self.collectionMode = AutomaticEventModeFullCollection;
                         }
                     }
-                    
-                    self.collectionEnabled = [collectEverythingConfig[@"enabled"] boolValue];
                 }
             }
 
             NSArray *rawSurveys = object[@"surveys"];
             NSMutableArray *parsedSurveys = [NSMutableArray array];
-
             if (rawSurveys && [rawSurveys isKindOfClass:[NSArray class]]) {
                 for (id obj in rawSurveys) {
                     MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
@@ -1411,7 +1409,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
             NSArray *rawNotifications = object[@"notifications"];
             NSMutableArray *parsedNotifications = [NSMutableArray array];
-
             if (rawNotifications && [rawNotifications isKindOfClass:[NSArray class]]) {
                 for (id obj in rawNotifications) {
                     MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
