@@ -15,9 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)mp_postNotification:(NSNotification *)notification;
 
 - (void)mp_postNotificationName:(NSString *)name
-                         object:(nullable id)object;
-
-- (void)mp_postNotificationName:(NSString *)name
                          object:(nullable id)object
                        userInfo:(nullable NSDictionary *)info;
 

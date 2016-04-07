@@ -21,14 +21,6 @@
     [self mp_postNotification:notification];
 }
 
-- (void)mp_postNotificationName:(NSString *)name object:(nullable id)object {
-    if ([NSNotificationCenter shouldTrackNotificationNamed:name]) {
-        [[Mixpanel sharedAutomatedInstance] trackNotificationName:name object:object];
-    }
-    
-    [self mp_postNotificationName:name object:object];
-}
-
 - (void)mp_postNotificationName:(NSString *)name
                          object:(nullable id)object
                        userInfo:(nullable NSDictionary *)info {
@@ -43,8 +35,6 @@
     // iOS spams notifications. We're whitelisting for now.
     NSArray *names = @[
                        // UITextField Editing
-                       UITextFieldTextDidBeginEditingNotification,
-                       UITextFieldTextDidChangeNotification,
                        UITextFieldTextDidEndEditingNotification,
                        
                        // UIApplication Lifecycle

@@ -55,7 +55,9 @@ static MixpanelWatchOS *sharedInstance = nil;
     if (!properties) {
         properties = @{};
     }
-    [self sendMessage:@"track" withParameters:@{ @"event": event, @"properties": properties }];
+    
+    [self sendMessage:NSStringFromSelector(@selector(track:properties:))
+       withParameters:@{ @"event": event, @"properties": properties }];
 }
 
 - (void)sendMessage:(NSString *)type withParameters:(nullable NSDictionary *)parameters {
@@ -67,9 +69,7 @@ static MixpanelWatchOS *sharedInstance = nil;
         
         // Send the event name and properties to the host app
         [self.session sendMessage:message
-                     replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
-                         MixpanelDebug(@"Received reply from host for track: message. Details: %@", replyMessage);
-                     }
+                     replyHandler:nil
                      errorHandler:^(NSError * _Nonnull error) {
                          MixpanelError(@"Error sending track: message to host application. Details: %@", [error localizedDescription]);
                      }];

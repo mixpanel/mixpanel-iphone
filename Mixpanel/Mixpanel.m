@@ -38,8 +38,7 @@
 
 #endif
 
-
-#define VERSION @"2.9.5-pre"
+#define VERSION @"2.9.5"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
@@ -661,16 +660,18 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelDebug(@"%@ flush starting", self);
 
         __strong id<MixpanelDelegate> strongDelegate = self.delegate;
-        if (strongDelegate != nil && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)] && ![strongDelegate mixpanelWillFlush:self]) {
-            MixpanelDebug(@"%@ flush deferred by delegate", self);
-            return;
+        if (strongDelegate && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
+            if (![strongDelegate mixpanelWillFlush:self]) {
+                MixpanelDebug(@"%@ flush deferred by delegate", self);
+                return;
+            }
         }
 
         [self flushEvents];
         [self flushPeople];
+        [self archive];
         
         if (handler) {
-            [self archive];
             dispatch_async(dispatch_get_main_queue(), handler);
         }
 
@@ -1454,7 +1455,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             [allVariants unionSet:runningVariants];
 
             [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
-            [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
+            [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
 
             NSArray *rawEventBindings = object[@"event_bindings"];
             NSMutableSet *parsedEventBindings = [NSMutableSet set];
@@ -1985,40 +1986,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 #endif
 
 @end
-
-#if defined(MIXPANEL_WATCH_EXTENSION)
-#pragma mark - WatchExtensions
-@implementation Mixpanel (WatchExtensions)
-
-/** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
-    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
-    if (messageType) {
-        if ([messageType isEqualToString:@"track"]) {
-            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
-        }
-    }
-}
-
-/** Called on the delegate of the receiver when the sender sends a message that expects a reply. Will be called on startup if the incoming message caused the receiver to launch. */
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler {
-    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
-    if (messageType) {
-        if ([messageType isEqualToString:@"track"]) {
-            [[Mixpanel sharedInstance] track:message[@"event"] properties:message[@"properties"]];
-        }
-        replyHandler(@{ @"success": @YES });
-    } else {
-        replyHandler(@{ @"success": @NO, @"message": @"Message is not a mixpanel message" });
-    }
-}
-
-+ (NSString *)messageTypeForWatchSessionMessage:(NSDictionary<NSString *, id> *)message {
-    return [message objectForKey:@"$mp_message_type"];
-}
-
-@end
-#endif
 
 #pragma mark - People
 @implementation MixpanelPeople

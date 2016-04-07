@@ -1,12 +1,4 @@
-#import "Mixpanel.h"
-
-#import "MPABTestDesignerConnection.h"
-#import "MPABTestDesignerSnapshotRequestMessage.h"
-#import "MPApplicationStateSerializer.h"
-#import "MPNotification.h"
-#import "MPSurvey.h"
-#import "MPTweakInline.h"
-#import "UIColor+MPColor.h"
+@import Mixpanel;
 #import "ViewController.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -32,7 +24,7 @@
 {
     [super viewDidLoad];
 
-    self.showNotificationType = MPNotificationTypeTakeover;
+    self.showNotificationType = @"takeover";
     UIScrollView *strongScrollView = _scrollView;
     if (strongScrollView != nil) {
         strongScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -85,7 +77,7 @@
 
 - (IBAction)setNotificationType:(id)sender
 {
-    NSArray *types = @[MPNotificationTypeTakeover, MPNotificationTypeMini];
+    NSArray *types = @[@"takeover", @"mini"];
     self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
 }
 
@@ -152,38 +144,6 @@
 
     [strongSurveyIDField resignFirstResponder];
     [strongNotificationIDField resignFirstResponder];
-}
-
-- (IBAction)changeColor
-{
-    FCColorPickerViewController *colorPicker = [[FCColorPickerViewController alloc]
-                                                initWithNibName:@"FCColorPickerViewController"
-                                                bundle:[NSBundle mainBundle]];
-    colorPicker.color = [UIColor mp_applicationPrimaryColor];
-    colorPicker.delegate = self;
-
-    [colorPicker setModalPresentationStyle:UIModalPresentationFormSheet];
-    [self presentViewController:colorPicker animated:YES completion:nil];
-}
-
-- (void)colorPickerViewController:(FCColorPickerViewController *)colorPicker didSelectColor:(UIColor *)color {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if ([[UINavigationBar appearance] respondsToSelector:@selector(setBarTintColor:)]) {
-        [[UINavigationBar appearance] setBarTintColor:color];
-    } else if (self.navigationController != nil && self.navigationController.navigationBar != nil) {
-        self.navigationController.navigationBar.tintColor = color;
-    }
-#else
-    if (self.navigationController != nil && self.navigationController.navigationBar != nil) {
-        self.navigationController.navigationBar.tintColor = color;
-    }
-#endif
-
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)colorPickerViewControllerDidCancel:(FCColorPickerViewController *)colorPicker {
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)testBarButtonItemWasPressed:(id)sender

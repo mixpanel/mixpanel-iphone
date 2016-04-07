@@ -101,7 +101,6 @@
 
         if (self.notification.callToAction && [self.notification.callToAction length] > 0) {
             [self.okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
-            [self.okayButton sizeToFit];
         }
     }
     

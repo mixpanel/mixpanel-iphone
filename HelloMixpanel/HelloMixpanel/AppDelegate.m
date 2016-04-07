@@ -1,10 +1,9 @@
-#import "Mixpanel.h"
-
+@import Mixpanel;
 #import "AppDelegate.h"
 #import "ViewController.h"
 
-// IMPORTANT!!! replace with you api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"483e7a3a61b59852b8141da41b1c25f4"
+// IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
+#define MIXPANEL_TOKEN @"24f6b67807bfa4e3aeb3dfecb571bdbb"
 
 @implementation AppDelegate
 
