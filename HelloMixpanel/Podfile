@@ -11,7 +11,3 @@ end
 target :EventBindingTests do
   pod 'OCMock', '~> 3.0'
 end
-
-target :HelloMixpanel do
-    pod 'iOS-Color-Picker'
-end
