@@ -8,14 +8,13 @@
 
 #import "NSNotificationCenter+AutomaticEvents.h"
 #import "Mixpanel+AutomaticEvents.h"
-#import "MPSwizzle.h"
-#import "MPLogger.h"
+#import "AutomaticEventsConstants.h"
 
 @implementation NSNotificationCenter (AutomaticEvents)
 
 - (void)mp_postNotification:(NSNotification *)notification {
     if ([NSNotificationCenter shouldTrackNotificationNamed:notification.name]) {
-        [[Mixpanel sharedAutomatedInstance] trackNotification:notification];
+        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
     }
     
     [self mp_postNotification:notification];
@@ -25,7 +24,7 @@
                          object:(nullable id)object
                        userInfo:(nullable NSDictionary *)info {
     if ([NSNotificationCenter shouldTrackNotificationNamed:name]) {
-        [[Mixpanel sharedAutomatedInstance] trackNotificationName:name object:object userInfo:info];
+        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
     }
     
     [self mp_postNotificationName:name object:object userInfo:info];

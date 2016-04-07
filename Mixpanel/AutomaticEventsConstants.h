@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, AutomaticEventMode) {
-    CollectionModeNone,
-    CollectionModeCount,
-    CollectionModeFullCollection,
+    AutomaticEventModeNone,
+    AutomaticEventModeCount,
+    AutomaticEventModeFullCollection,
 };
 
 #pragma mark - Strings

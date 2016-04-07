@@ -8,19 +8,20 @@
 
 #import "UIApplication+AutomaticEvents.h"
 #import "Mixpanel+AutomaticEvents.h"
-#import "MPSwizzle.h"
-#import "MPLogger.h"
+#import "AutomaticEventsConstants.h"
 
 @implementation UIApplication (AutomaticEvents)
 
-- (BOOL)mp_sendAction:(SEL)action to:(id)to from:(id)from forEvent:(UIEvent *)event {
-    [[Mixpanel sharedAutomatedInstance] trackSendAction:action to:to from:from forEvent:event];
-    return [self mp_sendAction:action to:to from:from forEvent:event];
+- (void)mp_sendEvent:(UIEvent *)event {
+    if (event.type == UIEventTypeTouches) {
+        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
+    }
+    [self mp_sendEvent:event];
 }
 
-- (void)mp_sendEvent:(UIEvent *)event {
-    [[Mixpanel sharedAutomatedInstance] trackSendEvent:event];
-    [self mp_sendEvent:event];
+- (BOOL)mp_sendAction:(SEL)action to:(id)to from:(id)from forEvent:(UIEvent *)event {
+    [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
+    return [self mp_sendAction:action to:to from:from forEvent:event];
 }
 
 @end

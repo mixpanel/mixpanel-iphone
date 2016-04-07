@@ -7,7 +7,6 @@
 //
 
 #import "Mixpanel+AutomaticEvents.h"
-#import "Mixpanel+AutomaticEventsSerialization.h"
 #import "UIApplication+AutomaticEvents.h"
 #import "UIViewController+AutomaticEvents.h"
 #import "NSNotificationCenter+AutomaticEvents.h"
@@ -89,66 +88,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
             error = NULL;
         }
     });
-}
-
-#pragma mark - UIApplication
-- (void)trackSendEvent:(UIEvent *)event {
-    // Only track UIEvents for touches
-    if (event.type != UIEventTypeTouches) return;
-    
-    NSDictionary *eventProperties = @{ kTypeKey: kTypeTouch };
-    
-    // Only track touches that are in the phase `Began`
-    NSPredicate *touchBeganPredicate = [NSPredicate predicateWithBlock:^BOOL(UITouch * _Nonnull evaluatedObject, NSDictionary<NSString *, id> * _Nullable bindings) {
-        return evaluatedObject.phase == UITouchPhaseBegan;
-    }];
-    NSSet<UITouch *> *beganTouches = [event.allTouches filteredSetUsingPredicate:touchBeganPredicate];
-    for (UITouch *touch in beganTouches) {
-        NSMutableDictionary *touchProperties = [[Mixpanel propertiesForDestination:touch.view] mutableCopy];
-        [touchProperties addEntriesFromDictionary:eventProperties];
-        [self track:kCollectEverythingEventName properties:touchProperties];
-    }
-}
-
-- (void)trackSendAction:(SEL)action to:(id)to from:(id)from forEvent:(UIEvent *)event {
-    MixpanelDebug(@"[CE] <%@> - %@ - %@ - %@ - %@", NSStringFromSelector(_cmd), NSStringFromSelector(action), to, from, event);
-    
-    NSMutableDictionary *eventProperties = [NSMutableDictionary dictionary];
-    [eventProperties addEntriesFromDictionary:@{ kTypeKey: kTypeAction, kActionKey: NSStringFromSelector(action) }];
-    [eventProperties addEntriesFromDictionary:[Mixpanel propertiesForDestination:to]];
-    [eventProperties addEntriesFromDictionary:[Mixpanel propertiesForSource:from]];
-    [self track:kCollectEverythingEventName properties:eventProperties];
-}
-
-#pragma mark - UIViewController
-- (void)trackViewControllerAppeared:(UIViewController *)viewController {
-    MixpanelDebug(@"[CE] <%@> - %@", NSStringFromSelector(_cmd), NSStringFromClass(viewController.class));
-    
-    NSMutableDictionary *eventProperties = [NSMutableDictionary dictionary];
-    [eventProperties addEntriesFromDictionary:@{ kTypeKey: kTypeNavigation }];
-    [eventProperties addEntriesFromDictionary:[Mixpanel propertiesForSourceViewController:viewController]];
-    [self track:kCollectEverythingEventName properties:eventProperties];
-}
-
-#pragma mark - NSNotification
-- (void)trackNotification:(NSNotification *)notification {
-    [self trackNotificationName:notification.name object:nil userInfo:notification.userInfo];
-}
-
-- (void)trackNotificationName:(NSString *)name object:(id)object {
-    [self trackNotificationName:name object:object userInfo:nil];
-}
-
-- (void)trackNotificationName:(NSString *)name object:(id)object userInfo:(NSDictionary *)info {
-    MixpanelDebug(@"[CE] <%@> - %@ - %@ - %@", NSStringFromSelector(_cmd), name, object, info);
-    
-    NSMutableDictionary *eventProperties = [NSMutableDictionary dictionary];
-    [eventProperties addEntriesFromDictionary:@{ kTypeKey: kTypeNotification, kNotificationNameKey: name }];
-    [eventProperties addEntriesFromDictionary:[Mixpanel propertiesForSource:object]];
-    if (info) {
-        [eventProperties addEntriesFromDictionary:@{ kSourceInfoKey: info }];
-    }
-    [self track:kCollectEverythingEventName properties:eventProperties];
 }
 
 @end

@@ -449,7 +449,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         }
         
         if (self.collectionEnabled) {
-            if (self.collectionMode == CollectionModeCount) {
+            if (self.collectionMode == AutomaticEventModeCount) {
                 if (isCollectEverythingEvent) {
                     self.collectionEventCount++;
                 } else {
@@ -1385,9 +1385,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     NSString *method = collectEverythingConfig[@"method"];
                     if (method && [method isKindOfClass:NSString.class]) {
                         if ([method isEqualToString:@"count"]) {
-                            self.collectionMode = CollectionModeCount;
+                            self.collectionMode = AutomaticEventModeCount;
                         } else {
-                            self.collectionMode = CollectionModeFullCollection;
+                            self.collectionMode = AutomaticEventModeFullCollection;
                         }
                     }
                     

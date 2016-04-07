@@ -37,11 +37,9 @@
 		51C3B23D1CA5B2D3004CE37C /* UIApplication+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2331CA5B2D3004CE37C /* UIApplication+AutomaticEvents.h */; };
 		51C3B23E1CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 51C3B2341CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.m */; };
 		51C3B23F1CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2351CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.h */; };
-		51C3B2401CA5B2D3004CE37C /* Mixpanel+AutomaticEventsSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 51C3B2361CA5B2D3004CE37C /* Mixpanel+AutomaticEventsSerialization.m */; };
 		51C3B2411CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 51C3B2371CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.m */; };
 		51C3B2421CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2381CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h */; };
 		51C3B2431CA5B2D3004CE37C /* AutomaticEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2391CA5B2D3004CE37C /* AutomaticEventsConstants.h */; };
-		51C3B2451CA5B2FF004CE37C /* Mixpanel+AutomaticEventsSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2441CA5B2FF004CE37C /* Mixpanel+AutomaticEventsSerialization.h */; };
 		51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		51F308831C86881900614A13 /* MPSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F308791C86881900614A13 /* MPSwizzle.h */; };
 		51F308841C86881900614A13 /* MPSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F3087A1C86881900614A13 /* MPSwizzle.m */; };
@@ -199,11 +197,9 @@
 		51C3B2331CA5B2D3004CE37C /* UIApplication+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AutomaticEvents.h"; sourceTree = "<group>"; };
 		51C3B2341CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+AutomaticEvents.m"; sourceTree = "<group>"; };
 		51C3B2351CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+AutomaticEvents.h"; sourceTree = "<group>"; };
-		51C3B2361CA5B2D3004CE37C /* Mixpanel+AutomaticEventsSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+AutomaticEventsSerialization.m"; sourceTree = "<group>"; };
 		51C3B2371CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+AutomaticEvents.m"; sourceTree = "<group>"; };
 		51C3B2381CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mixpanel+AutomaticEvents.h"; sourceTree = "<group>"; };
 		51C3B2391CA5B2D3004CE37C /* AutomaticEventsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticEventsConstants.h; sourceTree = "<group>"; };
-		51C3B2441CA5B2FF004CE37C /* Mixpanel+AutomaticEventsSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mixpanel+AutomaticEventsSerialization.h"; sourceTree = "<group>"; };
 		51F308791C86881900614A13 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
 		51F3087A1C86881900614A13 /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
 		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
@@ -625,8 +621,6 @@
 				51C3B2321CA5B2D3004CE37C /* UIApplication+AutomaticEvents.m */,
 				51C3B2351CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.h */,
 				51C3B2341CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.m */,
-				51C3B2441CA5B2FF004CE37C /* Mixpanel+AutomaticEventsSerialization.h */,
-				51C3B2361CA5B2D3004CE37C /* Mixpanel+AutomaticEventsSerialization.m */,
 				51C3B2381CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h */,
 				51C3B2371CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.m */,
 				51C3B2391CA5B2D3004CE37C /* AutomaticEventsConstants.h */,
@@ -773,7 +767,6 @@
 				7C170D371A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h in Headers */,
 				7C170D3D1A4A035F00D9E0F2 /* UIImage+MPAverageColor.h in Headers */,
 				7C170CFC1A4A035F00D9E0F2 /* MPLogger.h in Headers */,
-				51C3B2451CA5B2FF004CE37C /* Mixpanel+AutomaticEventsSerialization.h in Headers */,
 				7C170D091A4A035F00D9E0F2 /* MPObjectSerializer.h in Headers */,
 				7C170CF81A4A035F00D9E0F2 /* MPEnumDescription.h in Headers */,
 				7C170D311A4A035F00D9E0F2 /* MPVariant.h in Headers */,
@@ -1006,7 +999,6 @@
 				7C170CEB1A4A035F00D9E0F2 /* MPCGColorRefToNSStringValueTransformer.m in Sources */,
 				51C3B2411CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.m in Sources */,
 				7C170D2B1A4A035F00D9E0F2 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
-				51C3B2401CA5B2D3004CE37C /* Mixpanel+AutomaticEventsSerialization.m in Sources */,
 				7C170D2A1A4A035F00D9E0F2 /* MPUIControlBinding.m in Sources */,
 				7C170D401A4A035F00D9E0F2 /* UIImage+MPImageEffects.m in Sources */,
 				7C170D341A4A035F00D9E0F2 /* MPWebSocket.m in Sources */,

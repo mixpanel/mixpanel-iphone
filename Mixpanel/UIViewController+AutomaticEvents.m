@@ -8,13 +8,13 @@
 
 #import "UIViewController+AutomaticEvents.h"
 #import "Mixpanel+AutomaticEvents.h"
-#import "MPSwizzle.h"
+#import "AutomaticEventsConstants.h"
 
 @implementation UIViewController (AutomaticEvents)
 
 - (void)mp_viewDidAppear:(BOOL)animated {
     if ([self shouldTrackClass:self.class]) {
-        [[Mixpanel sharedAutomatedInstance] trackViewControllerAppeared:self];
+        [[Mixpanel sharedAutomatedInstance] track:kCollectEverythingEventName];
     }
     [self mp_viewDidAppear:animated];
 }
