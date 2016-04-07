@@ -25,15 +25,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
     gSharedAutomatedInstance = instance;
 }
 
-+ (instancetype)internalTracking {
-    static Mixpanel *gMixpanel = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        gMixpanel = [[Mixpanel alloc] initWithToken:@"05b7195383129757cbf5172dbc5f67e1" andFlushInterval:60];
-    });
-    return gMixpanel;
-}
-
 + (void)addSwizzles {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -46,7 +37,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
                                      error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle viewDidAppear: on UIViewController. Details: %@", error);
-            [[self internalTracking] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
             error = NULL;
         }
         
@@ -56,7 +46,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
                                   error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle sendEvent: on UIAppplication. Details: %@", error);
-            [[self internalTracking] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
             error = NULL;
         }
         
@@ -65,7 +54,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
                                   error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle sendAction:to:from:forEvent: on UIAppplication. Details: %@", error);
-            [[self internalTracking] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
             error = NULL;
         }
         
@@ -75,7 +63,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
                                          error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle postNotification: on NSNotificationCenter. Details: %@", error);
-            [[self internalTracking] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
             error = NULL;
         }
 
@@ -84,7 +71,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
                                          error:&error];
         if (error) {
             MixpanelError(@"Failed to swizzle postNotificationName:object:userInfo: on NSNotificationCenter. Details: %@", error);
-            [[self internalTracking] track:@"Error" properties:@{ @"Details": error.localizedDescription, @"Code": @(error.code) }];
             error = NULL;
         }
     });
