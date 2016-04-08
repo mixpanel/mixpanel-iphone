@@ -615,6 +615,7 @@
 		51C3B22F1CA5B2A2004CE37C /* AE */ = {
 			isa = PBXGroup;
 			children = (
+				51C3B2391CA5B2D3004CE37C /* AutomaticEventsConstants.h */,
 				51C3B2311CA5B2D3004CE37C /* UIViewController+AutomaticEvents.h */,
 				51C3B2301CA5B2D3004CE37C /* UIViewController+AutomaticEvents.m */,
 				51C3B2331CA5B2D3004CE37C /* UIApplication+AutomaticEvents.h */,
@@ -623,7 +624,6 @@
 				51C3B2341CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.m */,
 				51C3B2381CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h */,
 				51C3B2371CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.m */,
-				51C3B2391CA5B2D3004CE37C /* AutomaticEventsConstants.h */,
 				51F308791C86881900614A13 /* MPSwizzle.h */,
 				51F3087A1C86881900614A13 /* MPSwizzle.m */,
 			);
