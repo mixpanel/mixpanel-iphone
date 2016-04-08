@@ -6,7 +6,7 @@
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
-#import <Mixpanel/Mixpanel.h>
+#import "Mixpanel.h"
 #import <WatchConnectivity/WatchConnectivity.h>
 
 NS_ASSUME_NONNULL_BEGIN
