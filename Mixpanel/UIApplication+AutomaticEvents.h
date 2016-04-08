@@ -12,8 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIApplication (AutomaticEvents)
 
-- (void)mp_sendEvent:(UIEvent *)event;
-- (BOOL)mp_sendAction:(SEL)action to:(nullable id)to from:(nullable id)from forEvent:(nullable UIEvent *)event;
+- (BOOL)mp_sendAction:(SEL)action
+                   to:(nullable id)to
+                 from:(nullable id)from
+             forEvent:(nullable UIEvent *)event;
 
 @end
 

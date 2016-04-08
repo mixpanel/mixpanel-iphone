@@ -246,7 +246,8 @@ static Mixpanel *sharedInstance = nil;
     
     if (_collectionEnabled) {
         [Mixpanel setSharedAutomatedInstance:self];
-        [Mixpanel addSwizzles];
+    } else {
+        [Mixpanel setSharedAutomatedInstance:nil];
     }
 }
 

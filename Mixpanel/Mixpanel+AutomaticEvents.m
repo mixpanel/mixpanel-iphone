@@ -23,6 +23,7 @@ static Mixpanel *gSharedAutomatedInstance = nil;
 
 + (void)setSharedAutomatedInstance:(Mixpanel *)instance {
     gSharedAutomatedInstance = instance;
+    [self addSwizzles];
 }
 
 + (void)addSwizzles {
@@ -41,14 +42,6 @@ static Mixpanel *gSharedAutomatedInstance = nil;
         }
         
         // Actions & Events
-        [UIApplication mp_swizzleMethod:@selector(sendEvent:)
-                             withMethod:@selector(mp_sendEvent:)
-                                  error:&error];
-        if (error) {
-            MixpanelError(@"Failed to swizzle sendEvent: on UIAppplication. Details: %@", error);
-            error = NULL;
-        }
-        
         [UIApplication mp_swizzleMethod:@selector(sendAction:to:from:forEvent:)
                              withMethod:@selector(mp_sendAction:to:from:forEvent:)
                                   error:&error];

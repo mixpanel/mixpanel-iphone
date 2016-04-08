@@ -13,6 +13,4 @@
 + (instancetype)sharedAutomatedInstance;
 + (void)setSharedAutomatedInstance:(Mixpanel *)instance;
 
-+ (void)addSwizzles;
-
 @end
