@@ -1190,11 +1190,9 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
-    if (info != NULL && [(__bridge NSObject*)info isKindOfClass:[Mixpanel class]]) {
-        @autoreleasepool {
-            Mixpanel *mixpanel = (__bridge Mixpanel *)info;
-            [mixpanel reachabilityChanged:flags];
-        }
+    Mixpanel *mixpanel = (__bridge Mixpanel *)info;
+    if (mixpanel && [mixpanel isKindOfClass:[Mixpanel class]]) {
+        [mixpanel reachabilityChanged:flags];
     } else {
         MixpanelError(@"reachability callback received unexpected info object");
     }
@@ -1205,9 +1203,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     // this should be run in the serial queue. the reason we don't dispatch_async here
     // is because it's only ever called by the reachability callback, which is already
     // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
-    BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
     if (properties) {
+        BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
         properties[@"$wifi"] = wifi ? @YES : @NO;
         self.automaticProperties = [properties copy];
         MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);

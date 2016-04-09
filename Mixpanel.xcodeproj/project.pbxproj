@@ -906,11 +906,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C170CFF1A4A035F00D9E0F2 /* MPNotification.storyboard in Resources */,
-				7C170D391A4A035F00D9E0F2 /* snapshot_config.json in Resources */,
 				7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */,
-				7C170D3A1A4A035F00D9E0F2 /* test_variant.json in Resources */,
+				7C170CFF1A4A035F00D9E0F2 /* MPNotification.storyboard in Resources */,
 				7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */,
+				7C170D391A4A035F00D9E0F2 /* snapshot_config.json in Resources */,
+				7C170D3A1A4A035F00D9E0F2 /* test_variant.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
