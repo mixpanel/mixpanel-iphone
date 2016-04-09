@@ -12,6 +12,8 @@ The Mixpanel library for iOS is an open source project, and we'd love to see you
 Mixpanel supports `CocoaPods` for easy installation.
 To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
 
+`pod 'Mixpanel'`
+
 # Carthage
 
 Mixpanel also supports `Carthage` to package your dependencies as a framework.
