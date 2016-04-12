@@ -204,7 +204,7 @@ static Mixpanel *sharedInstance = nil;
         [self executeCachedVariants];
         [self executeCachedEventBindings];
 #if defined(DEBUG) && !defined(DISABLE_MIXPANEL_AB_DESIGNER)
-        [self connectToABTestDesigner:YES];
+//        [self connectToABTestDesigner:YES];
 #endif
 #endif
 

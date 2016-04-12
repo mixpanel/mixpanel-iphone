@@ -19,6 +19,7 @@
 NSString * const kSessionVariantKey = @"session_variant";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
+@property (strong, nonatomic) UIWindow *window2;
 
 @end
 
@@ -41,6 +42,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
     UIView *_recordingView;
+    UIButton *_bubbleView;
     void (^_connectCallback)();
     void (^_disconnectCallback)();
 }
@@ -218,6 +220,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     MessagingDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
+    [self showConnectedBubble];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -251,6 +254,23 @@ NSString * const kSessionVariantKey = @"session_variant";
             _disconnectCallback();
         }
     }
+}
+
+- (void)showConnectedBubble
+{
+    UIWindow *window2 = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    window2.backgroundColor = [UIColor clearColor];
+    window2.windowLevel = UIWindowLevelAlert;
+    self.window2 = window2;
+    [window2 makeKeyAndVisible];
+//    UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
+    _bubbleView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    _bubbleView.clipsToBounds = true;
+    _bubbleView.alpha = 0.8;
+    _bubbleView.layer.cornerRadius = 20;
+    [_bubbleView setImage:[UIImage imageNamed:@"Icon-72"] forState:UIControlStateNormal];
+    [window2 addSubview:_bubbleView];
+    [window2 bringSubviewToFront:_bubbleView];
 }
 
 - (void)showConnectedView

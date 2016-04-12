@@ -2,9 +2,11 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import <Optimizely/Optimizely.h>
+
 
 // IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"287001c04107218d5e9445feead1f410"
 
 @implementation AppDelegate
 
@@ -44,6 +46,8 @@
         // Initialize the MixpanelAPI object
         self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken launchOptions:launchOptions];
     }
+
+    [Optimizely startOptimizelyWithAPIToken:@"AANOd4UBp9AvebM-JFy-u34rd_qjpx6e~5508651209" launchOptions:launchOptions];
 
     // Override point for customization after application launch.
 
@@ -108,6 +112,14 @@
 #else
     NSLog(@"%@ push registration error: %@", self, err);
 #endif
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    if([Optimizely handleOpenURL:url]) {
+        return YES;
+    }
+
+    return NO;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

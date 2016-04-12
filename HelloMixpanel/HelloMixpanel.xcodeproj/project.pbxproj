@@ -43,6 +43,7 @@
 		05F5F9641965CE300070280C /* MPABTestDesignerClearRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F5F9631965CE300070280C /* MPABTestDesignerClearRequestMessage.m */; };
 		05F5F9671965F5680070280C /* MPABTestDesignerClearResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F5F9661965F5680070280C /* MPABTestDesignerClearResponseMessage.m */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
+		094588C9D2A5A3B5DA7163CA /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A441AF641244CA893593CD /* libPods-HelloMixpanelTests.a */; };
 		1818F43F197EE94800BC1F70 /* MPEventBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1818F43E197EE94800BC1F70 /* MPEventBinding.m */; };
 		1825251B1991473700C034BD /* MPUITableViewBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 1825251A1991473700C034BD /* MPUITableViewBinding.m */; };
 		187939D019A284BF00CC4FBE /* MPUIControlBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939CE19A284BF00CC4FBE /* MPUIControlBinding.m */; };
@@ -117,6 +118,7 @@
 		A7B462EB1910899C00774977 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B462EA1910899C00774977 /* MPWebSocket.m */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
 		C1DF1D0AB4F943AA96313F10 /* libPods-ABTestingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBBED9E8EC134DC598B35DC2 /* libPods-ABTestingTests.a */; };
+		C34D9DE036CD64318260F2EB /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 		C38D512CDEF96F13B2B68D31 /* MPABTestDesignerSnapshotRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D550E7F778DAF17FB284C /* MPABTestDesignerSnapshotRequestMessage.m */; };
 		C38D51675946A46979D18F75 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D565A188445F6488340E6 /* MPUIImageToNSDictionaryValueTransformer.m */; };
 		C38D528942F2355956ED4635 /* MPBOOLToNSNumberValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5E68E9D932B440AB3FB7 /* MPBOOLToNSNumberValueTransformer.m */; };
@@ -512,6 +514,7 @@
 				2808F9921610EFE3005772B7 /* UIKit.framework in Frameworks */,
 				2808F9941610EFE3005772B7 /* Foundation.framework in Frameworks */,
 				2808F9961610EFE3005772B7 /* CoreGraphics.framework in Frameworks */,
+				C34D9DE036CD64318260F2EB /* libPods-HelloMixpanel.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,6 +526,7 @@
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				0563B605194A186900B40489 /* libPods-HelloMixpanelTests.a in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
+				094588C9D2A5A3B5DA7163CA /* libPods-HelloMixpanelTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1002,9 +1006,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C31610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanel" */;
 			buildPhases = (
+				763AE63D82AF070CF8CE39C2 /* Check Pods Manifest.lock */,
 				2808F9891610EFE3005772B7 /* Sources */,
 				2808F98A1610EFE3005772B7 /* Frameworks */,
 				2808F98B1610EFE3005772B7 /* Resources */,
+				779A2BE81368BEEFBCFAB762 /* Embed Pods Frameworks */,
+				3AFC9E868FBF51153B750D58 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1208,6 +1215,21 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
+		3AFC9E868FBF51153B750D58 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel/Pods-HelloMixpanel-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3EEA23EF5B17446994262C49 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1266,6 +1288,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		763AE63D82AF070CF8CE39C2 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		779A2BE81368BEEFBCFAB762 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel/Pods-HelloMixpanel-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9E95958518D549F3A77AB7CA /* Check Pods Manifest.lock */ = {
@@ -1560,6 +1612,7 @@
 /* Begin XCBuildConfiguration section */
 		055FA718194A6B020080A709 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C75D1E9C92EBAB411FCDB9B /* Pods-ABTestingTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1605,6 +1658,7 @@
 		};
 		055FA719194A6B020080A709 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57915FC1D2F8A5607E73B555 /* Pods-ABTestingTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1655,6 +1709,7 @@
 		};
 		055FA71A194A6B020080A709 /* AppStore */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6CEAF55E1BC54F2EC0626D18 /* Pods-ABTestingTests.appstore.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1705,6 +1760,7 @@
 		};
 		187939FF19A2A7F400CC4FBE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EFA77763734E325585C0F2BE /* Pods-EventBindingTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1740,6 +1796,7 @@
 		};
 		18793A0019A2A7F400CC4FBE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A9BF36B1E738F6C0CC6C77F2 /* Pods-EventBindingTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1773,6 +1830,7 @@
 		};
 		18793A0119A2A7F400CC4FBE /* AppStore */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 20E531D1372F46531DF56FC2 /* Pods-EventBindingTests.appstore.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1939,6 +1997,7 @@
 		};
 		2808F9C41610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF297B2686389D0DE61F0CF1 /* Pods-HelloMixpanel.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -1974,6 +2033,7 @@
 		};
 		2808F9C51610EFE4005772B7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FC963492975EFAFD23F9D96 /* Pods-HelloMixpanel.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -2013,6 +2073,7 @@
 		};
 		2808F9C71610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62121D2ECD6FD5229C3CC27A /* Pods-HelloMixpanelTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2050,6 +2111,7 @@
 		};
 		2808F9C81610EFE4005772B7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB9A8700280E12BDF0090EB3 /* Pods-HelloMixpanelTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2146,6 +2208,7 @@
 		};
 		28C2136616376D3300696E4F /* AppStore */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 42C5DFF7007DFFD8C17930A3 /* Pods-HelloMixpanel.appstore.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -2185,6 +2248,7 @@
 		};
 		28C2136716376D3300696E4F /* AppStore */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87E586E7C287C284F35B10F1 /* Pods-HelloMixpanelTests.appstore.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_OBJC_ARC = YES;
