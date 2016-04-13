@@ -750,7 +750,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 #pragma mark - Persistence
 
-- (NSString *)filePathForData:(NSString *)data
+- (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
@@ -759,27 +759,27 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)eventsFilePath
 {
-    return [self filePathForData:@"events"];
+    return [self filePathFor:@"events"];
 }
 
 - (NSString *)peopleFilePath
 {
-    return [self filePathForData:@"people"];
+    return [self filePathFor:@"people"];
 }
 
 - (NSString *)propertiesFilePath
 {
-    return [self filePathForData:@"properties"];
+    return [self filePathFor:@"properties"];
 }
 
 - (NSString *)variantsFilePath
 {
-    return [self filePathForData:@"variants"];
+    return [self filePathFor:@"variants"];
 }
 
 - (NSString *)eventBindingsFilePath
 {
-    return [self filePathForData:@"event_bindings"];
+    return [self filePathFor:@"event_bindings"];
 }
 
 - (void)archive
