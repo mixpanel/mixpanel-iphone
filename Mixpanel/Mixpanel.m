@@ -1337,7 +1337,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (error) {
                 MixpanelError(@"%@ decide check http error: %@", self, error);
                 if (completion) {
-                    completion(nil,nil,nil,nil);
+                    completion(nil, nil, nil, nil);
                 }
                 return;
             }
@@ -1345,14 +1345,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (error) {
                 MixpanelError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                 if (completion) {
-                    completion(nil,nil,nil,nil);
+                    completion(nil, nil, nil, nil);
                 }
                 return;
             }
             if (object[@"error"]) {
                 MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
                 if (completion) {
-                    completion(nil,nil,nil,nil);
+                    completion(nil, nil, nil, nil);
                 }
                 return;
             }
