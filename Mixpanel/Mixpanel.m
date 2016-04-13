@@ -864,8 +864,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     @catch (NSException *exception) {
         MixpanelError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
         unarchivedData = nil;
-    }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        
         NSError *error;
         BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
         if (!removed) {
