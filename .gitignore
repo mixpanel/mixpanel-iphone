@@ -23,4 +23,7 @@ profile
 # AppCode
 .idea
 
+#Carthage
+Carthage/Build
+
 HelloMixpanel/build/
