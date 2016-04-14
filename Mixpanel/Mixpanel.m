@@ -874,9 +874,10 @@ static __unused NSString *MPURLEncode(NSString *s)
     }
     @catch (NSException *exception) {
         MixpanelError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
+        // Reset un archived data
         unarchivedData = nil;
-        
-        NSError *error;
+        // Remove the (possibly) corrupt data from the disk
+        NSError *error = NULL;
         BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
         if (!removed) {
             MixpanelError(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
