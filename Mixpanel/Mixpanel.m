@@ -437,9 +437,9 @@ static __unused NSString *MPURLEncode(NSString *s)
         if ([self.eventsQueue count] > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
-        if ([Mixpanel inBackground]) {
-            [self archiveEvents];
-        }
+        
+        // Always archive
+        [self archiveEvents];
     });
 #if defined(MIXPANEL_APP_EXTENSION)
     [self flush];
