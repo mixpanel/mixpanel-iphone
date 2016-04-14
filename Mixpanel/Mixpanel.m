@@ -2030,9 +2030,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     [self.unidentifiedQueue removeObjectAtIndex:0];
                 }
             }
-            if ([Mixpanel inBackground]) {
-                [strongMixpanel archivePeople];
-            }
+            
+            [strongMixpanel archivePeople];
         });
 #if defined(MIXPANEL_APP_EXTENSION)
         [strongMixpanel flush];
