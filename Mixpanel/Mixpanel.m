@@ -1717,7 +1717,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         UIStoryboard *storyboard;
         if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             storyboard = [UIStoryboard storyboardWithName:@"MPNotification~iphoneportrait" bundle:[NSBundle bundleForClass:Mixpanel.class]];
-        } else if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)  && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        } else if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             storyboard = [UIStoryboard storyboardWithName:@"MPNotification~iphonelandscape" bundle:[NSBundle bundleForClass:Mixpanel.class]];
         } else {
             storyboard = [UIStoryboard storyboardWithName:@"MPNotification~ipad" bundle:[NSBundle bundleForClass:Mixpanel.class]];

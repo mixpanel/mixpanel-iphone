@@ -36,8 +36,8 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     }
     
     NSString *style = object[@"style"];
-    if (![type isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid notif type: %@", type);
+    if (![style isKindOfClass:[NSString class]]) {
+        MixpanelError(@"invalid notif type: %@", style);
         return nil;
     }
 

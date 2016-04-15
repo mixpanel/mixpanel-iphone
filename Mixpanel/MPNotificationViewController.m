@@ -105,19 +105,17 @@
             [self.okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
         }
         
-        if (self.notification.style != nil) {
-            if ([self.notification.style isEqualToString:@"light"]) {
-                self.viewMask.backgroundColor = [UIColor whiteColor];
-                self.titleView.textColor = [UIColor colorWithRed:92/255.0 green:101/255.0 blue:120/255.0 alpha:1];
-                self.bodyView.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
-                self.okayButton.isLight = true;
-                [self.okayButton setTitleColor:[UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1] forState:UIControlStateNormal];
-                self.okayButton.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
-                UIImage *origImage = [UIImage imageNamed:@"MPCloseBtnIpad"];
-                id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
-                self.closeButton.tintColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1];
-            }
+        if ([self.notification.style isEqualToString:@"light"]) {
+            self.viewMask.backgroundColor = [UIColor whiteColor];
+            self.titleView.textColor = [UIColor colorWithRed:92/255.0 green:101/255.0 blue:120/255.0 alpha:1];
+            self.bodyView.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
+            self.okayButton.isLight = YES;
+            [self.okayButton setTitleColor:[UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1] forState:UIControlStateNormal];
+            self.okayButton.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
+            UIImage *origImage = [UIImage imageNamed:@"MPCloseBtn"];
+            id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
+            self.closeButton.tintColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1];
         }
     }
     
@@ -260,17 +258,15 @@
             self.bodyLabel.hidden = YES;
         }
         
-        if (self.notification.style != nil) {
-            if ([self.notification.style isEqualToString:@"light"]) {
-                self.view.backgroundColor = [UIColor whiteColor];
-                self.bodyLabel.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
-                UIImage *origImage = self.imageView.image;
-                id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                self.imageView.image = tintedImage;
-                self.imageView.tintColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
-                self.view.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
-                self.view.layer.borderWidth = 1;
-            }
+        if ([self.notification.style isEqualToString:@"light"]) {
+            self.view.backgroundColor = [UIColor whiteColor];
+            self.bodyLabel.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
+            UIImage *origImage = self.imageView.image;
+            id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            self.imageView.image = tintedImage;
+            self.imageView.tintColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
+            self.view.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
+            self.view.layer.borderWidth = 1;
         }
     }
 
@@ -288,10 +284,8 @@
 }
 
 - (void)initializeMiniNotification {
-    self.backgroundColor = [UIColor blackColor];
+    self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.901f];
     self.view.backgroundColor = self.backgroundColor;
-    UIColor *backgroundColorWithAlphaComponent = [self.backgroundColor colorWithAlphaComponent:0.901f];
-    self.view.backgroundColor = backgroundColorWithAlphaComponent;
 }
 
 - (void)viewWillLayoutSubviews
@@ -312,13 +306,13 @@
     parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
 #endif
 
-    if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         self.view.frame = CGRectMake(15, parentFrame.size.height - MPNotifHeight - 10, parentFrame.size.width - 30, MPNotifHeight);
     } else {
         self.view.frame = CGRectMake(parentFrame.size.width/4, parentFrame.size.height - MPNotifHeight - 10, parentFrame.size.width/2, MPNotifHeight);
     }
-    self.view.clipsToBounds = true;
-    self.view.layer.cornerRadius = 6;
+    self.view.clipsToBounds = YES;
+    self.view.layer.cornerRadius = 6.f;
 
     // Position images
     self.imageView.layer.position = CGPointMake(MPNotifHeight / 2.0f, MPNotifHeight / 2.0f);
