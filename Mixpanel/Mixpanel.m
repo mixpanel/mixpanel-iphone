@@ -1336,15 +1336,24 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
             if (error) {
                 MixpanelError(@"%@ decide check http error: %@", self, error);
+                if (completion) {
+                    completion(nil, nil, nil, nil);
+                }
                 return;
             }
             NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:&error];
             if (error) {
                 MixpanelError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                if (completion) {
+                    completion(nil, nil, nil, nil);
+                }
                 return;
             }
             if (object[@"error"]) {
                 MixpanelDebug(@"%@ decide check api error: %@", self, object[@"error"]);
+                if (completion) {
+                    completion(nil, nil, nil, nil);
+                }
                 return;
             }
 
