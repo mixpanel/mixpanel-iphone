@@ -271,13 +271,13 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return (NSInteger)[self.question.choices count];
+    return (NSInteger)self.question.choices.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPSurveyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPSurveyTableViewCell"];
-    NSString *text = [self labelForValue:(self.question.choices)[(NSUInteger)indexPath.row]];
+    NSString *text = [self labelForValue:self.question.choices[(NSUInteger)indexPath.row]];
     cell.label.text = text;
     cell.selectedLabel.text = text;
     UIColor *strokeColor = [UIColor colorWithWhite:1 alpha:0.5];
@@ -288,12 +288,12 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     cell.customSelectedBackgroundView.fillColor = [self.highlightColor colorWithAlphaComponent:0.3f];
     MPSurveyTableViewCellPosition position;
     if (indexPath.row == 0) {
-        if ([self.question.choices count] == 1) {
+        if (self.question.choices.count == 1) {
             position = MPSurveyTableViewCellPositionSingle;
         } else {
             position = MPSurveyTableViewCellPositionTop;
         }
-    } else if (indexPath.row == (NSInteger)([self.question.choices count] - 1)) {
+    } else if (indexPath.row == (NSInteger)(self.question.choices.count - 1)) {
         position = MPSurveyTableViewCellPositionBottom;
     } else {
         position = MPSurveyTableViewCellPositionMiddle;
@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     MPSurveyTableViewCell *cell = (MPSurveyTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     if (!cell.isChecked) {
         [cell setChecked:YES animatedWithCompletion:^(BOOL finished){
-            id value = (self.question.choices)[(NSUInteger)indexPath.row];
+            id value = self.question.choices[(NSUInteger)indexPath.row];
             __strong id<MPSurveyQuestionViewControllerDelegate> strongDelegate = self.delegate;
             if (strongDelegate != nil) {
                 [strongDelegate questionController:self didReceiveAnswerProperties:@{@"$value": value}];
@@ -383,7 +383,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
             [strongDelegate questionController:self didReceiveAnswerProperties:@{@"$value": textView.text}];
         }
     } else {
-        NSUInteger newLength = [textView.text length] + ([text length] - range.length);
+        NSUInteger newLength = textView.text.length + (text.length - range.length);
         shouldChange = newLength <= 255;
         if (shouldChange) {
             [UIView animateWithDuration:0.3 animations:^{
@@ -408,7 +408,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)keyboardWillShow:(NSNotification *)note
 {
-    NSDictionary* info = [note userInfo];
+    NSDictionary *info = note.userInfo;
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
     CGFloat promptTopSpace, promptAlpha;
@@ -432,7 +432,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)keyboardWillHide:(NSNotification *)note
 {
-    NSDictionary* info = [note userInfo];
+    NSDictionary *info = note.userInfo;
     NSTimeInterval duration = [info[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationOptions curve = [info[UIKeyboardAnimationDurationUserInfoKey] unsignedIntegerValue];
     self.promptTopSpace.constant = 15;

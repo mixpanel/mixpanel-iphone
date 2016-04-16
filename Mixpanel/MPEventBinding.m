@@ -41,7 +41,7 @@
 
 + (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
-    NSMutableDictionary *bindingProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys: @YES, @"$from_binding", nil];
+    NSMutableDictionary *bindingProperties = [NSMutableDictionary dictionaryWithObjectsAndKeys: @YES, @"$from_binding", nil];
     [bindingProperties addEntriesFromDictionary:properties];
     [[Mixpanel sharedInstance] track:event properties:bindingProperties];
 }

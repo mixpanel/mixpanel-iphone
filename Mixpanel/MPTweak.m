@@ -18,10 +18,6 @@
     if ((self = [super init])) {
         _name = name;
         _encoding = encoding;
-        _currentValue = nil;
-        _defaultValue = nil;
-        _minimumValue = nil;
-        _maximumValue = nil;
     }
     return self;
 }

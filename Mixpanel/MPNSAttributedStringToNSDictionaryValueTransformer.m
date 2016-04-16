@@ -26,7 +26,7 @@
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
         if ([attributedString respondsToSelector:@selector(dataFromRange:documentAttributes:error:)]) {
-            data = [attributedString dataFromRange:NSMakeRange(0, [attributedString length])
+            data = [attributedString dataFromRange:NSMakeRange(0, attributedString.length)
                                 documentAttributes:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType}
                                              error:&error];
         }

@@ -18,13 +18,13 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
     }
 
     NSNumber *ID = object[@"id"];
-    if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
+    if (!([ID isKindOfClass:[NSNumber class]] && ID.integerValue > 0)) {
         MixpanelError(@"invalid notif id: %@", ID);
         return nil;
     }
 
     NSNumber *messageID = object[@"message_id"];
-    if (!([messageID isKindOfClass:[NSNumber class]] && [messageID integerValue] > 0)) {
+    if (!([messageID isKindOfClass:[NSNumber class]] && messageID.integerValue > 0)) {
         MixpanelError(@"invalid notif message id: %@", messageID);
         return nil;
     }
@@ -99,8 +99,8 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         }
     }
 
-    return [[MPNotification alloc] initWithID:[ID unsignedIntegerValue]
-                                    messageID:[messageID unsignedIntegerValue]
+    return [[MPNotification alloc] initWithID:ID.unsignedIntegerValue
+                                    messageID:messageID.unsignedIntegerValue
                                          type:type
                                         title:title
                                          body:body
@@ -119,12 +119,12 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                   imageURL:(NSURL *)imageURL
 {
     if (self = [super init]) {
-        if (!(title && title.length > 0)) {
+        if (title.length == 0) {
             MixpanelError(@"Notification title nil or empty: %@", title);
             return nil;
         }
 
-        if (!(body && body.length > 0)) {
+        if (body.length == 0) {
             MixpanelError(@"Notification body nil or empty: %@", body);
             return nil;
         }

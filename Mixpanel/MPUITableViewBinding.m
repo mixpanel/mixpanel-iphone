@@ -21,13 +21,13 @@
 + (MPEventBinding *)bindingWithJSONObject:(NSDictionary *)object
 {
     NSString *path = object[@"path"];
-    if (![path isKindOfClass:[NSString class]] || [path length] < 1) {
+    if (![path isKindOfClass:[NSString class]] || path.length < 1) {
         NSLog(@"must supply a view path to bind by");
         return nil;
     }
 
     NSString *eventName = object[@"event_name"];
-    if (![eventName isKindOfClass:[NSString class]] || [eventName length] < 1 ) {
+    if (![eventName isKindOfClass:[NSString class]] || eventName.length < 1 ) {
         NSLog(@"binding requires an event name");
         return nil;
     }
@@ -39,8 +39,8 @@
     }
 
     return [[MPUITableViewBinding alloc] initWithEventName:eventName
-                                                  onPath:path
-                                            withDelegate:tableDelegate];
+                                                    onPath:path
+                                              withDelegate:tableDelegate];
 }
 
 #pragma clang diagnostic push
@@ -76,7 +76,7 @@
 {
     if (!self.running && self.swizzleClass != nil) {
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
-            NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
+            NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
             // select targets based off path
             if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
                 UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -113,8 +113,8 @@
 - (UITableView *)parentTableView:(UIView *)cell {
     // iterate up the view hierarchy to find the table containing this cell/view
     UIView *aView = cell.superview;
-    while(aView != nil) {
-        if([aView isKindOfClass:[UITableView class]]) {
+    while (aView != nil) {
+        if ([aView isKindOfClass:[UITableView class]]) {
             return (UITableView *)aView;
         }
         aView = aView.superview;

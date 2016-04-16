@@ -66,7 +66,7 @@
             UIControlEvents allEvents = UIControlEventAllTouchEvents | UIControlEventAllEditingEvents;
             for (NSUInteger e = 0; (allEvents >> e) > 0; e++) {
                 UIControlEvents event = allEvents & (0x01 << e);
-                if(event) {
+                if (event) {
                     NSArray *actions = [(UIControl *)(self) actionsForTarget:target forControlEvent:event];
                     NSArray *ignoreActions = @[@"preVerify:forEvent:", @"execute:forEvent:"];
                     for (NSString *action in actions) {
@@ -135,7 +135,7 @@
     UIImage *originalImage = nil;
     if ([self isKindOfClass:[UIButton class]]) {
         originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
-    } else if ([NSStringFromClass([self class]) isEqual:@"UITabBarButton"] && [self.subviews count] > 0 && [self.subviews[0] respondsToSelector:NSSelectorFromString(@"image")]) {
+    } else if ([NSStringFromClass([self class]) isEqual:@"UITabBarButton"] && self.subviews.count > 0 && [self.subviews[0] respondsToSelector:NSSelectorFromString(@"image")]) {
         originalImage = (UIImage *)[self.subviews[0] performSelector:@selector(image)];
     }
     
@@ -150,7 +150,7 @@
         CGContextDrawImage(context, CGRectMake(0,0,8,8), [originalImage CGImage]);
         CGColorSpaceRelease(space);
         CGContextRelease(context);
-        for(int i = 0; i < 32; i++) {
+        for (int i = 0; i < 32; i++) {
             int j = 2*i;
             int k = 2*i + 1;
             data4[i] = (((data32[j] & 0x80000000) >> 24) | ((data32[j] & 0x800000) >> 17) | ((data32[j] & 0x8000) >> 10) | ((data32[j] & 0x80) >> 3) |
@@ -180,7 +180,7 @@
     return text;
 }
         
-static NSString* mp_encryptHelper(id input)
+static NSString *mp_encryptHelper(id input)
 {
     NSString *SALT = @"1l0v3c4a8s4n018cl3d93kxled3kcle3j19384jdo2dk3";
     NSMutableString *encryptedStuff = nil;
@@ -216,8 +216,8 @@ static NSString* mp_encryptHelper(id input)
 {
     NSArray *targetActions = [self mp_targetActions];
     NSMutableArray *encryptedActions = [NSMutableArray array];
-    for (NSUInteger i = 0 ; i < [targetActions count]; i++) {
-        [encryptedActions addObject:mp_encryptHelper(targetActions[i])];
+    for (id targetAction in targetActions) {
+        [encryptedActions addObject:mp_encryptHelper(targetAction)];
     }
     return encryptedActions;
 }

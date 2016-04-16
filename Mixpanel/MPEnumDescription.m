@@ -19,7 +19,7 @@
     if (self) {
         _flagSet = [dictionary[@"flag_set"] boolValue];
         _baseType = [dictionary[@"base_type"] copy];
-        _values = [[NSMutableDictionary alloc] init];
+        _values = [NSMutableDictionary dictionary];
 
         for (NSDictionary *value in dictionary[@"values"]) {
             _values[value[@"value"]] = value[@"display_name"];
@@ -31,7 +31,7 @@
 
 - (NSArray *)allValues
 {
-    return [_values allKeys];
+    return _values.allKeys;
 }
 
 @end
