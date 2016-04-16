@@ -223,6 +223,8 @@
 
 @implementation MPMiniNotificationViewController
 
+static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -307,9 +309,9 @@
 #endif
 
     if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        self.view.frame = CGRectMake(15, parentFrame.size.height - MPNotifHeight - 10, parentFrame.size.width - 30, MPNotifHeight);
+        self.view.frame = CGRectMake(15, parentFrame.size.height - MPNotifHeight - MPMiniNotificationSpacingFromBottom, parentFrame.size.width - 30, MPNotifHeight);
     } else {
-        self.view.frame = CGRectMake(parentFrame.size.width/4, parentFrame.size.height - MPNotifHeight - 10, parentFrame.size.width/2, MPNotifHeight);
+        self.view.frame = CGRectMake(parentFrame.size.width/4, parentFrame.size.height - MPNotifHeight - MPMiniNotificationSpacingFromBottom, parentFrame.size.width/2, MPNotifHeight);
     }
     self.view.clipsToBounds = YES;
     self.view.layer.cornerRadius = 6.f;
