@@ -83,7 +83,6 @@
 		7C170CFC1A4A035F00D9E0F2 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
 		7C170CFD1A4A035F00D9E0F2 /* MPNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C801A4A035F00D9E0F2 /* MPNotification.h */; };
 		7C170CFE1A4A035F00D9E0F2 /* MPNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C811A4A035F00D9E0F2 /* MPNotification.m */; };
-		7C170CFF1A4A035F00D9E0F2 /* MPNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C821A4A035F00D9E0F2 /* MPNotification.storyboard */; };
 		7C170D001A4A035F00D9E0F2 /* MPNotificationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C831A4A035F00D9E0F2 /* MPNotificationViewController.h */; };
 		7C170D011A4A035F00D9E0F2 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C841A4A035F00D9E0F2 /* MPNotificationViewController.m */; };
 		7C170D021A4A035F00D9E0F2 /* MPNSAttributedStringToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C851A4A035F00D9E0F2 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */; };
@@ -157,6 +156,9 @@
 		7C170D4C1A4A05B400D9E0F2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */; };
 		7C170D4E1A4A05BE00D9E0F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */; };
 		7C170D501A4A05DD00D9E0F2 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4F1A4A05DD00D9E0F2 /* libicucore.dylib */; };
+		E1954F951CC559E000B92B19 /* MPNotification~ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */; };
+		E1954F961CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */; };
+		E1954F971CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -233,7 +235,6 @@
 		7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogger.h; sourceTree = "<group>"; };
 		7C170C801A4A035F00D9E0F2 /* MPNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotification.h; sourceTree = "<group>"; };
 		7C170C811A4A035F00D9E0F2 /* MPNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotification.m; sourceTree = "<group>"; };
-		7C170C821A4A035F00D9E0F2 /* MPNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MPNotification.storyboard; sourceTree = "<group>"; };
 		7C170C831A4A035F00D9E0F2 /* MPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationViewController.h; sourceTree = "<group>"; };
 		7C170C841A4A035F00D9E0F2 /* MPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7C170C851A4A035F00D9E0F2 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNSAttributedStringToNSDictionaryValueTransformer.m; sourceTree = "<group>"; };
@@ -307,6 +308,9 @@
 		7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7C170D4F1A4A05DD00D9E0F2 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MPNotification~ipad.storyboard"; sourceTree = "<group>"; };
+		E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MPNotification~iphonelandscape.storyboard"; sourceTree = "<group>"; };
+		E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MPNotification~iphoneportrait.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -462,7 +466,9 @@
 				7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */,
 				7C170C801A4A035F00D9E0F2 /* MPNotification.h */,
 				7C170C811A4A035F00D9E0F2 /* MPNotification.m */,
-				7C170C821A4A035F00D9E0F2 /* MPNotification.storyboard */,
+				E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */,
+				E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */,
+				E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */,
 				7C170C831A4A035F00D9E0F2 /* MPNotificationViewController.h */,
 				7C170C841A4A035F00D9E0F2 /* MPNotificationViewController.m */,
 				7C170C851A4A035F00D9E0F2 /* MPNSAttributedStringToNSDictionaryValueTransformer.m */,
@@ -739,10 +745,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C170CFF1A4A035F00D9E0F2 /* MPNotification.storyboard in Resources */,
 				7C170D391A4A035F00D9E0F2 /* snapshot_config.json in Resources */,
 				7C170CC71A4A035F00D9E0F2 /* Media.xcassets in Resources */,
+				E1954F951CC559E000B92B19 /* MPNotification~ipad.storyboard in Resources */,
+				E1954F971CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard in Resources */,
 				7C170D3A1A4A035F00D9E0F2 /* test_variant.json in Resources */,
+				E1954F961CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard in Resources */,
 				7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
