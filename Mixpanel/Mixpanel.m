@@ -749,18 +749,6 @@ static __unused NSString *MPURLEncode(NSString *s)
 }
 
 #pragma mark - Persistence
-- (uint64_t)remainingFreeSpaceInBytes
-{
-    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    NSError *error = NULL;
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:libraryPath error:&error];
-    if (error) {
-        MixpanelError(@"Unable to fetch file system free space. Details: %@", error.localizedDescription);
-        return UINT64_MAX;
-    }
-    return [attributes[NSFileSystemFreeSize] unsignedLongLongValue];
-}
-
 - (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
