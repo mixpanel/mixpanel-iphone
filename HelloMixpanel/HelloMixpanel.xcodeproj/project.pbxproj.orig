@@ -132,10 +132,13 @@
 		C38D5D5E5DC516B1EA187F0E /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5763B08E8961F9EE473D /* MPABTestDesignerDeviceInfoResponseMessage.m */; };
 		C38D5D9DCA172D6D7A02D1A4 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D5C1843D5E8AE8715E3F4 /* MPABTestDesignerDeviceInfoRequestMessage.m */; };
 		C38D5F1EC13BC9516244A3D1 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = C38D59D48B2ACA126B6EC956 /* MPUIFontToNSDictionaryValueTransformer.m */; };
+<<<<<<< HEAD
 		C805677F6DE74593B72FE043 /* libPods-HelloMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2497EBE08734F3183857AE1 /* libPods-HelloMixpanel.a */; };
 		E150CB771CA1DDD900F8A5C3 /* MPNotification~ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E150CB761CA1DDD900F8A5C3 /* MPNotification~ipad.storyboard */; };
 		E19C089B1CB2DC4700ABB4E7 /* MPNotification~iphoneportrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E19C089A1CB2DC4700ABB4E7 /* MPNotification~iphoneportrait.storyboard */; };
 		E19C089D1CB2E18C00ABB4E7 /* MPNotification~iphonelandscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E19C089C1CB2E18C00ABB4E7 /* MPNotification~iphonelandscape.storyboard */; };
+=======
+>>>>>>> master
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
