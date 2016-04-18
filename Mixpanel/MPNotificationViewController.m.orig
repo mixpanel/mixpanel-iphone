@@ -103,6 +103,7 @@
 
         if (self.notification.callToAction && [self.notification.callToAction length] > 0) {
             [self.okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
+<<<<<<< HEAD
         }
         
         if ([self.notification.style isEqualToString:@"light"]) {
@@ -116,6 +117,8 @@
             id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
             self.closeButton.tintColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1];
+=======
+>>>>>>> master
         }
     }
     
