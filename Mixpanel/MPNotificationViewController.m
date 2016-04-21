@@ -112,7 +112,7 @@
             self.okayButton.isLight = YES;
             [self.okayButton setTitleColor:[UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1] forState:UIControlStateNormal];
             self.okayButton.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
-            UIImage *origImage = [UIImage imageNamed:@"MPCloseBtn"];
+            UIImage *origImage = [self.closeButton imageForState:UIControlStateNormal];
             id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
             self.closeButton.tintColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1];
