@@ -1,5 +1,4 @@
-#import "Mixpanel.h"
-
+@import Mixpanel;
 #import "AppDelegate.h"
 #import "ViewController.h"
 
@@ -55,7 +54,7 @@
 
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
-
+    
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
 

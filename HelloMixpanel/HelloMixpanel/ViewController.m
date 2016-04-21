@@ -1,12 +1,4 @@
-#import "Mixpanel.h"
-
-#import "MPABTestDesignerConnection.h"
-#import "MPABTestDesignerSnapshotRequestMessage.h"
-#import "MPApplicationStateSerializer.h"
-#import "MPNotification.h"
-#import "MPSurvey.h"
-#import "MPTweakInline.h"
-#import "UIColor+MPColor.h"
+@import Mixpanel;
 #import "ViewController.h"
 
 @interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -32,7 +24,7 @@
 {
     [super viewDidLoad];
 
-    self.showNotificationType = MPNotificationTypeTakeover;
+    self.showNotificationType = @"takeover";
     UIScrollView *strongScrollView = _scrollView;
     if (strongScrollView != nil) {
         strongScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -85,7 +77,7 @@
 
 - (IBAction)setNotificationType:(id)sender
 {
-    NSArray *types = @[MPNotificationTypeTakeover, MPNotificationTypeMini];
+    NSArray *types = @[@"takeover", @"mini"];
     self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
 }
 
