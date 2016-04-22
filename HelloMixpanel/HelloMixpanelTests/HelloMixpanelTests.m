@@ -2,7 +2,7 @@
 
 #import <objc/runtime.h>
 #import "HTTPServer.h"
-@import Mixpanel;
+#import "Mixpanel.h"
 #import "MixpanelDummyHTTPConnection.h"
 #import "MixpanelDummyRetryAfterConnection.h"
 #import "MixpanelDummy5XXHTTPConnection.h"
@@ -648,19 +648,19 @@
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
     XCTAssertEqualObjects(self.mixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
-    XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
-    XCTAssertFalse([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
+    XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
+    XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
+    XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
-    XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from no file failed");
-    XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive from no file failed");
-    XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from no file failed");
+    XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"expecting d1 as distinct id as initialised");
+    XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"expecting n1 as distinct id as initialised");
+    XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"default super properties expected to have 1 item");
     XCTAssertNotNil(self.mixpanel.eventsQueue, @"default events queue from no file is nil");
-    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"default events queue from no file not empty");
-    XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id from no file failed");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"default events queue expecting 1 item");
+    XCTAssertNotNil(self.mixpanel.people.distinctId, @"default people distinct id from no file failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from no file is nil");
-    XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from no file not empty");
-    XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
+    XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"default people queue expecting 1 item");
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 1, @"timedEvents expecting 1 item");
     // corrupt file
     NSData *garbage = [@"garbage" dataUsingEncoding:NSUTF8StringEncoding];
     [garbage writeToFile:[self.mixpanel eventsFilePath] atomically:NO];
@@ -1078,6 +1078,7 @@
     NSDictionary *invalid = @{@"id": @3,
                               @"title": @5,
                               @"type": @"takeover",
+                              @"style": @"dark",
                               @"body": @"Hi!",
                               @"cta_url": @"blah blah blah",
                               @"cta": [NSNull null],
@@ -1090,6 +1091,7 @@
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
+                        @"style": @"dark",
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
@@ -1156,6 +1158,7 @@
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
+                        @"style": @"dark",
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
@@ -1208,6 +1211,7 @@
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
+                        @"style": @"dark",
                         @"body": @"body",
                         @"cta": @"cta",
                         @"cta_url": @"maps://",

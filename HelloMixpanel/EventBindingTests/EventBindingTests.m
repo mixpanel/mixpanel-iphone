@@ -8,7 +8,7 @@
 
 #import <OCMock/OCMock.h>
 #import <XCTest/XCTest.h>
-@import Mixpanel;
+#import "Mixpanel.h"
 #import "MPEventBinding.h"
 #import "MPObjectSelector.h"
 #import "MPUIControlBinding.h"

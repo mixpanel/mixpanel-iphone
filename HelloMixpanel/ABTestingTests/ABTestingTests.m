@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "HomeViewController.h"
 #import "HTTPServer.h"
-@import Mixpanel;
+#import "Mixpanel.h"
 #import "MixpanelDummyDecideConnection.h"
 #import "UIView+MPHelpers.h"
 #import "MPObjectSelector.h"
