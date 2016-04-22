@@ -169,6 +169,8 @@
 		7C170D4A1A4A05AF00D9E0F2 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D491A4A05AF00D9E0F2 /* CoreTelephony.framework */; };
 		7C170D4C1A4A05B400D9E0F2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */; };
 		7C170D4E1A4A05BE00D9E0F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */; };
+		E115E0151CCAEDFD0026CFC0 /* Mixpanel+AutomaticEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2381CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h */; };
+		E115E0161CCAEE060026CFC0 /* AutomaticEventsConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2391CA5B2D3004CE37C /* AutomaticEventsConstants.h */; };
 		E1954F951CC559E000B92B19 /* MPNotification~ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */; };
 		E1954F961CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */; };
 		E1954F971CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */; };
@@ -736,6 +738,8 @@
 				513B0BBC1C73CA94008EEE6E /* MPFoundation.h in Headers */,
 				513B0B751C73CA35008EEE6E /* Mixpanel.h in Headers */,
 				513B0BBA1C73CA8E008EEE6E /* NSData+MPBase64.h in Headers */,
+				E115E0161CCAEE060026CFC0 /* AutomaticEventsConstants.h in Headers */,
+				E115E0151CCAEDFD0026CFC0 /* Mixpanel+AutomaticEvents.h in Headers */,
 				513B0BB91C73CA87008EEE6E /* MPLogger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
