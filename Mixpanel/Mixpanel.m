@@ -1142,14 +1142,15 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 #if !defined(DISABLE_MIXPANEL_AB_DESIGNER)
     dispatch_async(dispatch_get_main_queue(), ^{
-        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
-        recognizer.minimumPressDuration = 3;
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
+//        recognizer.minimumPressDuration = 3;
+        recognizer.numberOfTapsRequired = 5;
         recognizer.cancelsTouchesInView = NO;
-#if TARGET_IPHONE_SIMULATOR
+//#if TARGET_IPHONE_SIMULATOR
         recognizer.numberOfTouchesRequired = 2;
-#else
-        recognizer.numberOfTouchesRequired = 4;
-#endif
+//#else
+//        recognizer.numberOfTouchesRequired = 4;
+//#endif
         [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
     });
 #endif
@@ -1821,7 +1822,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)connectGestureRecognized:(id)sender
 {
-    if(!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan )) {
+    if(!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateEnded )) {
         [self connectToABTestDesigner];
     }
 }

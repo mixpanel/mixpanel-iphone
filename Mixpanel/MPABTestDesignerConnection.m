@@ -19,7 +19,7 @@
 NSString * const kSessionVariantKey = @"session_variant";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
-@property (strong, nonatomic) UIWindow *window2;
+@property (strong, nonatomic) UIWindow *bubbleWindow;
 
 @end
 
@@ -42,9 +42,10 @@ NSString * const kSessionVariantKey = @"session_variant";
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
     UIView *_recordingView;
-    UIButton *_bubbleView;
+    UIImageView *_bubbleView;
     void (^_connectCallback)();
     void (^_disconnectCallback)();
+    CGPoint prevPoint;
 }
 
 - (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
@@ -229,6 +230,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
+    [self hideBubbleView];
     _open = NO;
     if (_connected) {
         _connected = NO;
@@ -246,6 +248,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
+    [self hideBubbleView];
     _open = NO;
     if (_connected) {
         _connected = NO;
@@ -258,19 +261,97 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)showConnectedBubble
 {
-    UIWindow *window2 = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    window2.backgroundColor = [UIColor clearColor];
-    window2.windowLevel = UIWindowLevelAlert;
-    self.window2 = window2;
-    [window2 makeKeyAndVisible];
-//    UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
-    _bubbleView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    _bubbleView.clipsToBounds = true;
-    _bubbleView.alpha = 0.8;
-    _bubbleView.layer.cornerRadius = 20;
-    [_bubbleView setImage:[UIImage imageNamed:@"Icon-72"] forState:UIControlStateNormal];
-    [window2 addSubview:_bubbleView];
-    [window2 bringSubviewToFront:_bubbleView];
+    if (!self.bubbleWindow) {
+        self.bubbleWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        self.bubbleWindow.backgroundColor = [UIColor clearColor];
+        self.bubbleWindow.clipsToBounds = true;
+        self.bubbleWindow.layer.cornerRadius = self.bubbleWindow.frame.size.width/2;
+        self.bubbleWindow.windowLevel = UIWindowLevelAlert;
+        self.bubbleWindow.backgroundColor = [UIColor colorWithRed:99/255.0 green:121/255.0 blue:151/255.0 alpha:1];
+        self.bubbleWindow.alpha = 0;
+        [self.bubbleWindow setHidden:NO];
+//        [self.bubbleWindow  makeKeyAndVisible];
+        _bubbleView = [[UIImageView alloc] initWithFrame:self.bubbleWindow.frame];
+        _bubbleView.clipsToBounds = true;
+        _bubbleView.layer.cornerRadius = _bubbleView.frame.size.width/2;
+        _bubbleView.image = [UIImage imageNamed:@"Icon-72"];
+        [self.bubbleWindow addSubview:_bubbleView];
+        UILabel *explanatoryText = [[UILabel alloc] initWithFrame:CGRectMake(15, [UIScreen mainScreen].bounds.size.height/2 - 75, [UIScreen mainScreen].bounds.size.width - 30, 150)];
+        explanatoryText.numberOfLines = 0;
+        explanatoryText.text = @"Welcome to our A/B testing edit mode. If you are not the one trying to connect through the web interface, please force close your app now. Through the web interface you can tap on different UI frames and edit their behavior. Feel free to navigate to other screens you want to edit using your device.";
+        explanatoryText.font = [UIFont fontWithName:@"Avenir Next" size:13.f];
+        explanatoryText.textColor = [UIColor whiteColor];
+        explanatoryText.textAlignment = NSTextAlignmentCenter;
+        [self.bubbleWindow addSubview:explanatoryText];
+
+        UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveMixpanelBubble:)];
+        [self.bubbleWindow addGestureRecognizer:panRecognizer];
+
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapBubble:)];
+        [self.bubbleWindow addGestureRecognizer:tapRecognizer];
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.bubbleWindow.alpha = 1;
+        }];
+    }
+}
+
+- (void)didTapBubble:(UITapGestureRecognizer *)gesture {
+    if (!CGRectEqualToRect(self.bubbleWindow.frame, [UIScreen mainScreen].bounds)) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.bubbleWindow.frame = [UIScreen mainScreen].bounds;
+            _bubbleView.alpha = 0;
+            for (UIGestureRecognizer *g in self.bubbleWindow.gestureRecognizers) {
+                if ([g isKindOfClass:[UIPanGestureRecognizer class]]) {
+                    g.enabled = NO;
+                }
+            }
+        }];
+    } else {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.bubbleWindow.frame = CGRectMake(0, 0, 50, 50);
+            _bubbleView.alpha = 1;
+            for (UIGestureRecognizer *g in self.bubbleWindow.gestureRecognizers) {
+                if ([g isKindOfClass:[UIPanGestureRecognizer class]]) {
+                    g.enabled = YES;
+                }
+            }
+        }];
+    }
+}
+
+- (void)moveMixpanelBubble:(UIPanGestureRecognizer *)gesture
+{
+    CGPoint currPoint = [gesture locationInView:gesture.view];
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan: {
+            prevPoint = currPoint;
+            break;
+        }
+        case UIGestureRecognizerStateEnded: {
+            UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
+            CGPoint velocity = [gesture velocityInView:mainWindow];
+            CGFloat magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
+            CGFloat slideMult = magnitude / 200;
+
+            CGFloat slideFactor = 0.1 * slideMult; // Increase for more slide
+            CGPoint finalPoint = CGPointMake(gesture.view.center.x + (velocity.x * slideFactor),
+                                             gesture.view.center.y + (velocity.y * slideFactor));
+            finalPoint.x = MIN(MAX(finalPoint.x, gesture.view.frame.size.width/2), mainWindow.bounds.size.width - gesture.view.frame.size.width/2);
+            finalPoint.y = MIN(MAX(finalPoint.y, gesture.view.frame.size.height/2), mainWindow.bounds.size.height - gesture.view.frame.size.height/2);
+
+            [UIView animateWithDuration:slideFactor delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                gesture.view.center = finalPoint;
+            } completion:nil];
+            break;
+        }
+        case UIGestureRecognizerStateChanged: {
+            gesture.view.center = CGPointMake(gesture.view.center.x + (currPoint.x - prevPoint.x), gesture.view.center.y + (currPoint.y - prevPoint.y));
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (void)showConnectedView
@@ -282,6 +363,14 @@ NSString * const kSessionVariantKey = @"session_variant";
         [mainWindow addSubview:_recordingView];
         [mainWindow bringSubviewToFront:_recordingView];
     }
+}
+
+- (void)hideBubbleView
+{
+    if (self.bubbleWindow) {
+        [self.bubbleWindow removeFromSuperview];
+    }
+    self.bubbleWindow = nil;
 }
 
 - (void)hideConnectedView

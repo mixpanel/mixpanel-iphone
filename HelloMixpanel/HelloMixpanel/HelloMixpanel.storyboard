@@ -155,14 +155,25 @@
                                     <segue destination="kjf-hr-JMa" kind="embed" id="MmN-CU-xhs"/>
                                 </connections>
                             </containerView>
+                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W2z-VY-Tqo">
+                                <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <items>
+                                    <tabBarItem systemItem="favorites" id="h9w-Mt-1oG"/>
+                                    <tabBarItem systemItem="more" id="gPk-JY-9nj"/>
+                                </items>
+                            </tabBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="W2z-VY-Tqo" secondAttribute="trailing" id="Bsg-ex-1qL"/>
                             <constraint firstAttribute="centerX" secondItem="2M5-rd-zct" secondAttribute="centerX" id="PY3-ia-TaS"/>
                             <constraint firstItem="2M5-rd-zct" firstAttribute="leading" secondItem="ZOq-C4-Zhh" secondAttribute="leading" id="a4g-7i-FuC"/>
                             <constraint firstItem="4FA-CV-aBK" firstAttribute="top" secondItem="5hs-aI-0xd" secondAttribute="bottom" constant="58" id="mg7-i2-MW2"/>
+                            <constraint firstItem="W2z-VY-Tqo" firstAttribute="leading" secondItem="ZOq-C4-Zhh" secondAttribute="leading" id="uye-t8-dd7"/>
                             <constraint firstAttribute="centerY" secondItem="2M5-rd-zct" secondAttribute="centerY" constant="-21.5" id="wDn-ZA-8KM"/>
                             <constraint firstAttribute="centerX" secondItem="4FA-CV-aBK" secondAttribute="centerX" id="xBo-2Z-BXp"/>
+                            <constraint firstItem="Z1q-wK-415" firstAttribute="top" secondItem="W2z-VY-Tqo" secondAttribute="bottom" id="yYJ-CT-GoW"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-view-ZOq-C4-Zhh"/>

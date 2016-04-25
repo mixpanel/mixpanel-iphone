@@ -80,6 +80,7 @@
         // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
         // and identify them once you know their user ID.
         [mixpanel identify:mixpanel.distinctId];
+        [mixpanel createAlias:@"lolz" forDistinctID:mixpanel.distinctId];
     }
 }
 
