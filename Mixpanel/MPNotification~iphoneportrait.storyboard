@@ -108,7 +108,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="10"/>
-                                <state key="normal" image="MPCloseBtn">
+                                <state key="normal" image="MPCloseButton.png">
                                     <color key="titleColor" red="0.6588235294" green="0.70588235290000001" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
@@ -152,10 +152,10 @@
                 </panGestureRecognizer>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y5Y-ul-Xxq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="428.80000000000001" y="288.73333333333335"/>
+            <point key="canvasLocation" x="428" y="288"/>
         </scene>
     </scenes>
     <resources>
-        <image name="MPCloseBtn" width="25" height="25"/>
+        <image name="MPCloseButton.png" width="25" height="25"/>
     </resources>
 </document>
