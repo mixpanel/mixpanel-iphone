@@ -1558,6 +1558,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
+#if !defined(MIXPANEL_APP_EXTENSION)
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
@@ -1568,6 +1569,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
         [presentingViewController presentViewController:controller animated:YES completion:nil];
     }
+#endif
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
@@ -1767,6 +1769,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (BOOL)showTakeoverNotificationWithObject:(MPNotification *)notification
 {
+#if !defined(MIXPANEL_APP_EXTENSION)
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
@@ -1782,6 +1785,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } else {
         return NO;
     }
+#endif
 }
 
 - (BOOL)showMiniNotificationWithObject:(MPNotification *)notification
