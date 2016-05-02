@@ -14,7 +14,6 @@
 #import "MPFoundation.h"
 #import "Mixpanel+AutomaticEvents.h"
 #import "AutomaticEventsConstants.h"
-#import "MPResources.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 
@@ -24,6 +23,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <UIKit/UIDevice.h>
 
+#import "MPResources.h"
 #import "MixpanelExceptionHandler.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
