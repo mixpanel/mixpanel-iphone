@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
@@ -128,7 +127,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="10"/>
-                                <state key="normal" image="MPCloseBtn">
+                                <state key="normal" image="MPCloseButton.png">
                                     <color key="titleColor" red="0.6588235294" green="0.70588235290000001" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
@@ -177,6 +176,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MPCloseBtn" width="25" height="25"/>
+        <image name="MPCloseButton.png" width="25" height="25"/>
     </resources>
 </document>

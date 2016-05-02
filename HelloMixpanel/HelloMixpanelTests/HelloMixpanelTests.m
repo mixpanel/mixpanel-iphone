@@ -2,7 +2,7 @@
 
 #import <objc/runtime.h>
 #import "HTTPServer.h"
-#import "Mixpanel.h"
+@import Mixpanel;
 #import "MixpanelDummyHTTPConnection.h"
 #import "MixpanelDummyRetryAfterConnection.h"
 #import "MixpanelDummy5XXHTTPConnection.h"
