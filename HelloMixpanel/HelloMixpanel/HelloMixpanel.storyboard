@@ -8,7 +8,7 @@
         <!--Mixpanel-->
         <scene sceneID="U7B-9K-Nss">
             <objects>
-                <navigationController title="Mixpanel" definesPresentationContext="YES" id="Uq2-fg-yt9" customClass="TopNavViewController" sceneMemberID="viewController">
+                <navigationController title="Mixpanel" definesPresentationContext="YES" id="Uq2-fg-yt9" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="NbU-pH-Zhz">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.52156865600000002" green="0.58431375029999999" blue="0.7019608021" alpha="1" colorSpace="deviceRGB"/>
@@ -449,7 +449,7 @@
                                         <rect key="frame" x="0.0" y="22" width="320" height="331"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="502" contentMode="center" tableViewCell="T6L-me-3qo" id="AM6-rc-cdB">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="330"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="331"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" tag="510" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3DD-Pi-vPR">

@@ -46,6 +46,8 @@
 
 @interface MPActionButton : UIButton
 
+@property (nonatomic, assign) BOOL isLight;
+
 @end
 
 @interface MPNotificationViewController ()
@@ -69,10 +71,10 @@
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) IBOutlet UILabel *titleView;
 @property (nonatomic, strong) IBOutlet UILabel *bodyView;
-@property (nonatomic, strong) IBOutlet UIButton *okayButton;
+@property (nonatomic, strong) IBOutlet MPActionButton *okayButton;
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
-@property (nonatomic, strong) IBOutlet UIView *imageDragView;
+@property (nonatomic, strong) IBOutlet UIView *viewMask;
 
 @end
 
@@ -102,6 +104,19 @@
         if (self.notification.callToAction.length > 0) {
             [self.okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
         }
+        
+        if ([self.notification.style isEqualToString:@"light"]) {
+            self.viewMask.backgroundColor = [UIColor whiteColor];
+            self.titleView.textColor = [UIColor colorWithRed:92/255.0 green:101/255.0 blue:120/255.0 alpha:1];
+            self.bodyView.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
+            self.okayButton.isLight = YES;
+            [self.okayButton setTitleColor:[UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1] forState:UIControlStateNormal];
+            self.okayButton.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
+            UIImage *origImage = [self.closeButton imageForState:UIControlStateNormal];
+            id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
+            self.closeButton.tintColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1];
+        }
     }
     
     self.backgroundImageView.image = self.backgroundImage;
@@ -110,6 +125,8 @@
     self.imageView.layer.shadowOpacity = 1.0f;
     self.imageView.layer.shadowRadius = 5.0f;
     self.imageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.viewMask.clipsToBounds = YES;
+    self.viewMask.layer.cornerRadius = 6.f;
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
@@ -206,6 +223,8 @@
 
 @implementation MPMiniNotificationViewController
 
+static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -224,12 +243,7 @@
     self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.bodyLabel.numberOfLines = 0;
 
-    if (!self.backgroundColor) {
-        self.backgroundColor = [UIColor mp_applicationPrimaryColor] ?: [UIColor mp_darkEffectColor];
-    }
-
-    UIColor *backgroundColorWithAlphaComponent = [self.backgroundColor colorWithAlphaComponent:0.95f];
-    self.view.backgroundColor = backgroundColorWithAlphaComponent;
+    [self initializeMiniNotification];
 
     if (self.notification != nil) {
         if (self.notification.image != nil) {
@@ -245,15 +259,21 @@
         } else {
             self.bodyLabel.hidden = YES;
         }
+        
+        if ([self.notification.style isEqualToString:@"light"]) {
+            self.view.backgroundColor = [UIColor whiteColor];
+            self.bodyLabel.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
+            UIImage *origImage = self.imageView.image;
+            id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            self.imageView.image = tintedImage;
+            self.imageView.tintColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
+            self.view.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
+            self.view.layer.borderWidth = 1;
+        }
     }
-
-    self.circleLayer = [CircleLayer layer];
-    self.circleLayer.contentsScale = [UIScreen mainScreen].scale;
-    [self.circleLayer setNeedsDisplay];
 
     [self.view addSubview:self.imageView];
     [self.view addSubview:self.bodyLabel];
-    [self.view.layer addSublayer:self.circleLayer];
 
     self.view.frame = CGRectMake(0.0f, 0.0f, 0.0f, 30.0f);
 
@@ -263,6 +283,11 @@
 
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [self.view addGestureRecognizer:pan];
+}
+
+- (void)initializeMiniNotification {
+    self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.901f];
+    self.view.backgroundColor = self.backgroundColor;
 }
 
 - (void)viewWillLayoutSubviews
@@ -283,7 +308,13 @@
     parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
 #endif
 
-    self.view.frame = CGRectMake(0.0f, parentFrame.size.height - MPNotifHeight, parentFrame.size.width, MPNotifHeight * 3.0f);
+    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self.view.frame = CGRectMake(15, parentFrame.size.height - MPNotifHeight - MPMiniNotificationSpacingFromBottom, parentFrame.size.width - 30, MPNotifHeight);
+    } else {
+        self.view.frame = CGRectMake(parentFrame.size.width/4, parentFrame.size.height - MPNotifHeight - MPMiniNotificationSpacingFromBottom, parentFrame.size.width/2, MPNotifHeight);
+    }
+    self.view.clipsToBounds = YES;
+    self.view.layer.cornerRadius = 6.f;
 
     // Position images
     self.imageView.layer.position = CGPointMake(MPNotifHeight / 2.0f, MPNotifHeight / 2.0f);
@@ -516,8 +547,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        self.layer.backgroundColor = [UIColor colorWithRed:43.0f/255.0f green:43.0f/255.0f blue:52.0f/255.0f alpha:1.0f].CGColor;
-        self.layer.cornerRadius = 17.0f;
+        self.layer.cornerRadius = 5.0f;
         self.layer.borderColor = [UIColor whiteColor].CGColor;
         self.layer.borderWidth = 2.0f;
     }
@@ -530,7 +560,11 @@
     if (highlighted) {
         self.layer.borderColor = [UIColor grayColor].CGColor;
     } else {
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
+        if (self.isLight) {
+            self.layer.borderColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1].CGColor;
+        } else {
+            self.layer.borderColor = [UIColor whiteColor].CGColor;
+        }
     }
 
     [super setHighlighted:highlighted];

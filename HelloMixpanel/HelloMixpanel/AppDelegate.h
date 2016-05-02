@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
-
-#import "Mixpanel.h"
+@import Mixpanel;
 
 @class ViewController;
 

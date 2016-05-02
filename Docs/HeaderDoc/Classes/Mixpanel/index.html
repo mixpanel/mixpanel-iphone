@@ -1030,6 +1030,11 @@ registered.
 <a name="HeaderDoc_props"></a>
 <h2 class="h2tight">Properties</h2>
 <dl>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/availableSurveys" target="_top">availableSurveys</a></tt></dt>
+<dd><p>Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
+and pass in <code>survey.ID</code>
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive" target="_top">checkForNotificationsOnActive</a></tt></dt>
 <dd><p>Controls whether to automatically check for notifications for the
 currently identified user when the application becomes active.
@@ -1111,6 +1116,20 @@ effectively having access to such granular location information via the IP Addre
 </p>
 </dd>
 </dl>
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;   name=Mixpanel::availableSurveys -->
+<a name="//apple_ref/occ/instp/Mixpanel/availableSurveys"></a>
+<h3><a name="availableSurveys">availableSurveys</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=start --><!-- begin abstract --><p>Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
+and pass in <code>survey.ID</code>
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=start -->@property (<span class="param">atomic</span>,
+    <span class="param">readonly</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSArray //apple_ref/occ/tdef/NSArray //apple_ref/occ/tag/NSArray //apple_ref/occ/struct/NSArray //apple_ref/occ/intf/NSArray //apple_ref/doc/anysymbol/NSArray" machineGenerated="true" --><span class="type">NSArray</span><!-- /a -->&lt;<span class="template">MPSurvey</span> <span class="template">*</span>&gt; <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/availableSurveys //apple_ref/occ/data/Mixpanel/availableSurveys //apple_ref/occ/data/availableSurveys //apple_ref/occ/clconst/Mixpanel/availableSurveys " machineGenerated="true" --><span class="var">availableSurveys</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=start --><p>If we haven't fetched the surveys yet, this will return nil.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;   name=Mixpanel::checkForNotificationsOnActive -->
 <a name="//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive"></a>
 <h3><a name="checkForNotificationsOnActive">checkForNotificationsOnActive</a></h3>
@@ -1353,7 +1372,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Monday, February 15, 2016
+<p class="hd_timestamp">Last Updated: Friday, April 22, 2016
 </p></div>
 </td></tr></table>
 </body></html>

@@ -6,6 +6,7 @@
 - (UIImage *)mp_snapshotImage;
 - (UIImage *)mp_snapshotForBlur;
 - (int)mp_fingerprintVersion;
+- (NSString *)mp_text;
 
 @end
 

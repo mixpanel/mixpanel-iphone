@@ -12,6 +12,8 @@
 #import "MPLogger.h"
 #import "NSData+MPBase64.h"
 #import "MPFoundation.h"
+#import "Mixpanel+AutomaticEvents.h"
+#import "AutomaticEventsConstants.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 
@@ -36,8 +38,7 @@
 
 #endif
 
-
-#define VERSION @"2.9.6"
+#define VERSION @"2.9.8"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
@@ -58,6 +59,9 @@
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, copy) NSString *distinctId;
+@property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
+@property (nonatomic) AutomaticEventMode validationMode;
+@property (nonatomic) NSUInteger validationEventCount;
 
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSDictionary *superProperties;
@@ -107,8 +111,6 @@
 @implementation Mixpanel
 
 static Mixpanel *sharedInstance;
-
-
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
     static dispatch_once_t onceToken;
@@ -178,7 +180,7 @@ static Mixpanel *sharedInstance;
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         self.taskId = UIBackgroundTaskInvalid;
-        NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, self];
+        NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         self.dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
@@ -238,6 +240,16 @@ static Mixpanel *sharedInstance;
         MixpanelDebug(@"released reachability");
     }
 #endif
+}
+
+- (void)setValidationEnabled:(BOOL)validationEnabled {
+    _validationEnabled = validationEnabled;
+    
+    if (_validationEnabled) {
+        [Mixpanel setSharedAutomatedInstance:self];
+    } else {
+        [Mixpanel setSharedAutomatedInstance:nil];
+    }
 }
 
 #pragma mark - Encoding/decoding utilities
@@ -407,6 +419,11 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelError(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
     }
+    
+    // Safety check
+    BOOL isAutomaticEvent = [event isEqualToString:kAutomaticEventName];
+    if (isAutomaticEvent && !self.isValidationEnabled) return;
+    
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
 
@@ -427,15 +444,32 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (properties) {
             [p addEntriesFromDictionary:properties];
         }
-        NSDictionary *e = @{@"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]};
+        
+        if (self.validationEnabled) {
+            if (self.validationMode == AutomaticEventModeCount) {
+                if (isAutomaticEvent) {
+                    self.validationEventCount++;
+                } else {
+                    if (self.validationEventCount > 0) {
+                        p[@"$__c"] = @(self.validationEventCount);
+                        self.validationEventCount = 0;
+                    }
+                }
+            }
+        }
+        
+        NSDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
         MixpanelDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if (self.eventsQueue.count > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
+        
         if ([Mixpanel inBackground]) {
             [self archiveEvents];
         }
+        // Always archive
+        [self archiveEvents];
     });
 #if defined(MIXPANEL_APP_EXTENSION)
     [self flush];
@@ -745,8 +779,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 }
 
 #pragma mark - Persistence
-
-- (NSString *)filePathForData:(NSString *)data
+- (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
@@ -755,27 +788,27 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)eventsFilePath
 {
-    return [self filePathForData:@"events"];
+    return [self filePathFor:@"events"];
 }
 
 - (NSString *)peopleFilePath
 {
-    return [self filePathForData:@"people"];
+    return [self filePathFor:@"people"];
 }
 
 - (NSString *)propertiesFilePath
 {
-    return [self filePathForData:@"properties"];
+    return [self filePathFor:@"properties"];
 }
 
 - (NSString *)variantsFilePath
 {
-    return [self filePathForData:@"variants"];
+    return [self filePathFor:@"variants"];
 }
 
 - (NSString *)eventBindingsFilePath
 {
-    return [self filePathForData:@"event_bindings"];
+    return [self filePathFor:@"event_bindings"];
 }
 
 - (void)archive
@@ -862,10 +895,10 @@ static __unused NSString *MPURLEncode(NSString *s)
     }
     @catch (NSException *exception) {
         MixpanelError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
+        // Reset un archived data
         unarchivedData = nil;
-    }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        NSError *error;
+        // Remove the (possibly) corrupt data from the disk
+        NSError *error = NULL;
         BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
         if (!removed) {
             MixpanelError(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
@@ -915,7 +948,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<Mixpanel: %p %@>", self, self.apiToken];
+    return [NSString stringWithFormat:@"<Mixpanel: %p %@>", (void *)self, self.apiToken];
 }
 
 - (NSString *)deviceModel
@@ -1145,11 +1178,9 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
-    if (info != NULL && [(__bridge NSObject*)info isKindOfClass:[Mixpanel class]]) {
-        @autoreleasepool {
-            Mixpanel *mixpanel = (__bridge Mixpanel *)info;
-            [mixpanel reachabilityChanged:flags];
-        }
+    Mixpanel *mixpanel = (__bridge Mixpanel *)info;
+    if (mixpanel && [mixpanel isKindOfClass:[Mixpanel class]]) {
+        [mixpanel reachabilityChanged:flags];
     } else {
         MixpanelError(@"reachability callback received unexpected info object");
     }
@@ -1160,9 +1191,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     // this should be run in the serial queue. the reason we don't dispatch_async here
     // is because it's only ever called by the reachability callback, which is already
     // set to run on the serial queue. see SCNetworkReachabilitySetDispatchQueue in init
-    BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
     if (properties) {
+        BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
         properties[@"$wifi"] = @(wifi);
         self.automaticProperties = [properties copy];
         MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
@@ -1342,10 +1373,24 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 }
                 return;
             }
+            
+            NSDictionary *config = object[@"config"];
+            if (config && [config isKindOfClass:NSDictionary.class]) {
+                NSDictionary *validationConfig = config[@"ce"];
+                if (validationConfig && [validationConfig isKindOfClass:NSDictionary.class]) {
+                    self.validationEnabled = [validationConfig[@"enabled"] boolValue];
+                    
+                    NSString *method = validationConfig[@"method"];
+                    if (method && [method isKindOfClass:NSString.class]) {
+                        if ([method isEqualToString:@"count"]) {
+                            self.validationMode = AutomaticEventModeCount;
+                        }
+                    }
+                }
+            }
 
             id rawSurveys = object[@"surveys"];
             NSMutableArray *parsedSurveys = [NSMutableArray array];
-            
             if ([rawSurveys isKindOfClass:[NSArray class]]) {
                 for (id obj in rawSurveys) {
                     MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
@@ -1359,7 +1404,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
             id rawNotifications = object[@"notifications"];
             NSMutableArray *parsedNotifications = [NSMutableArray array];
-
             if ([rawNotifications isKindOfClass:[NSArray class]]) {
                 for (id obj in rawNotifications) {
                     MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
@@ -1713,9 +1757,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPNotification" bundle:[NSBundle bundleForClass:Mixpanel.class]];
+        UIStoryboard *storyboard;
+        if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            storyboard = [UIStoryboard storyboardWithName:@"MPNotification~iphoneportrait" bundle:[NSBundle bundleForClass:Mixpanel.class]];
+        } else if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            storyboard = [UIStoryboard storyboardWithName:@"MPNotification~iphonelandscape" bundle:[NSBundle bundleForClass:Mixpanel.class]];
+        } else {
+            storyboard = [UIStoryboard storyboardWithName:@"MPNotification~ipad" bundle:[NSBundle bundleForClass:Mixpanel.class]];
+        }
         MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
-
         controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
         controller.notification = notification;
         controller.delegate = self;
@@ -1953,7 +2003,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (NSString *)description
 {
     __strong Mixpanel *strongMixpanel = _mixpanel;
-    return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
+    return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", (void *)self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
 - (NSDictionary *)collectAutomaticPeopleProperties
@@ -2016,9 +2066,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     [self.unidentifiedQueue removeObjectAtIndex:0];
                 }
             }
-            if ([Mixpanel inBackground]) {
-                [strongMixpanel archivePeople];
-            }
+            
+            [strongMixpanel archivePeople];
         });
 #if defined(MIXPANEL_APP_EXTENSION)
         [strongMixpanel flush];

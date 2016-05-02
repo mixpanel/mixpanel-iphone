@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
-  s.version      = '2.9.6'
+  s.version      = '2.9.8'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'AppExtension' do |ss|
-    ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/NSData+MPBase64.{m,h}', 'Mixpanel/MPFoundation.h']
+    ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/NSData+MPBase64.{m,h}', 'Mixpanel/MPFoundation.h', 'Mixpanel/Mixpanel+AutomaticEvents.h', 'Mixpanel/AutomaticEventsConstants.h']
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
     ss.frameworks = 'UIKit', 'Foundation', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
