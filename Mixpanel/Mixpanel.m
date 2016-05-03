@@ -162,7 +162,7 @@ static Mixpanel *sharedInstance = nil;
         self.useIPAddressForGeoLocation = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
-        self.decideURL = @"https://decide.mixpanel.com";
+        self.decideURL = @"http://yarden.dev.mixpanel.org";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
 
         self.showNotificationOnActive = YES;

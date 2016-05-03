@@ -35,7 +35,7 @@ NSString * const kSessionVariantKey = @"session_variant";
      */
     BOOL _open;
     BOOL _connected;
-
+    
     NSURL *_url;
     NSMutableDictionary *_session;
     NSDictionary *_typeToMessageClassMap;
@@ -46,6 +46,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     void (^_connectCallback)();
     void (^_disconnectCallback)();
     CGPoint prevPoint;
+    UIDynamicAnimator* animator;
 }
 
 - (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
@@ -53,15 +54,15 @@ NSString * const kSessionVariantKey = @"session_variant";
     self = [super init];
     if (self) {
         _typeToMessageClassMap = @{
-            MPABTestDesignerSnapshotRequestMessageType   : [MPABTestDesignerSnapshotRequestMessage class],
-            MPABTestDesignerChangeRequestMessageType     : [MPABTestDesignerChangeRequestMessage class],
-            MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
-            MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
-            MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
-            MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
-            MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMessage class],
-        };
-
+                                   MPABTestDesignerSnapshotRequestMessageType   : [MPABTestDesignerSnapshotRequestMessage class],
+                                   MPABTestDesignerChangeRequestMessageType     : [MPABTestDesignerChangeRequestMessage class],
+                                   MPABTestDesignerDeviceInfoRequestMessageType : [MPABTestDesignerDeviceInfoRequestMessage class],
+                                   MPABTestDesignerTweakRequestMessageType      : [MPABTestDesignerTweakRequestMessage class],
+                                   MPABTestDesignerClearRequestMessageType      : [MPABTestDesignerClearRequestMessage class],
+                                   MPABTestDesignerDisconnectMessageType        : [MPABTestDesignerDisconnectMessage class],
+                                   MPDesignerEventBindingRequestMessageType     : [MPDesignerEventBindingRequestMessage class],
+                                   };
+        
         _open = NO;
         _connected = NO;
         _sessionEnded = NO;
@@ -69,18 +70,18 @@ NSString * const kSessionVariantKey = @"session_variant";
         _url = url;
         _connectCallback = connectCallback;
         _disconnectCallback = disconnectCallback;
-
+        
         _commandQueue = [[NSOperationQueue alloc] init];
         _commandQueue.maxConcurrentOperationCount = 1;
         _commandQueue.suspended = YES;
-
+        
         if (keepTrying) {
             [self open:YES maxInterval:30 maxRetries:40];
         } else {
             [self open:YES maxInterval:0 maxRetries:0];
         }
     }
-
+    
     return self;
 }
 
@@ -94,9 +95,9 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     static int retries = 0;
     BOOL inRetryLoop = retries > 0;
-
+    
     MessagingDebug(@"In open. initiate = %d, retries = %d, maxRetries = %d, maxInterval = %d, connected = %d", initiate, retries, maxRetries, maxInterval, _connected);
-
+    
     if (self.sessionEnded || _connected || (inRetryLoop && retries >= maxRetries) ) {
         // break out of retry loop if any of the success conditions are met.
         retries = 0;
@@ -142,7 +143,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (void)setSessionObject:(id)object forKey:(NSString *)key
 {
     NSParameterAssert(key != nil);
-
+    
     @synchronized (_session)
     {
         _session[key] = object ?: [NSNull null];
@@ -152,7 +153,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (id)sessionObjectForKey:(NSString *)key
 {
     NSParameterAssert(key != nil);
-
+    
     @synchronized (_session)
     {
         id object = _session[key];
@@ -174,25 +175,25 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message
 {
     MessagingDebug(@"raw message: %@", message);
-
+    
     NSParameterAssert([message isKindOfClass:[NSString class]] || [message isKindOfClass:[NSData class]]);
-
+    
     id <MPABTestDesignerMessage> designerMessage = nil;
-
+    
     NSData *jsonData = [message isKindOfClass:[NSString class]] ? [(NSString *)message dataUsingEncoding:NSUTF8StringEncoding] : message;
-
+    
     NSError *error = nil;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:(NSJSONReadingOptions)0 error:&error];
     if ([jsonObject isKindOfClass:[NSDictionary class]]) {
         NSDictionary *messageDictionary = (NSDictionary *)jsonObject;
         NSString *type = messageDictionary[@"type"];
         NSDictionary *payload = messageDictionary[@"payload"];
-
+        
         designerMessage = [_typeToMessageClassMap[type] messageWithType:type payload:payload];
     } else {
         MessagingDebug(@"Badly formed socket message expected JSON dictionary: %@", error);
     }
-
+    
     return designerMessage;
 }
 
@@ -209,9 +210,9 @@ NSString * const kSessionVariantKey = @"session_variant";
     }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
     MessagingDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
-
+    
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
-
+    
     if (commandOperation) {
         [_commandQueue addOperation:commandOperation];
     }
@@ -244,7 +245,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
     MessagingDebug(@"WebSocket did close with code '%d' reason '%@'.", (int)code, reason);
-
+    
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
@@ -262,7 +263,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (void)showConnectedBubble
 {
     if (!self.bubbleWindow) {
-        self.bubbleWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        self.bubbleWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 20, 50, 50)];
         self.bubbleWindow.backgroundColor = [UIColor clearColor];
         self.bubbleWindow.clipsToBounds = true;
         self.bubbleWindow.layer.cornerRadius = self.bubbleWindow.frame.size.width/2;
@@ -270,52 +271,19 @@ NSString * const kSessionVariantKey = @"session_variant";
         self.bubbleWindow.backgroundColor = [UIColor colorWithRed:99/255.0 green:121/255.0 blue:151/255.0 alpha:1];
         self.bubbleWindow.alpha = 0;
         [self.bubbleWindow setHidden:NO];
-//        [self.bubbleWindow  makeKeyAndVisible];
-        _bubbleView = [[UIImageView alloc] initWithFrame:self.bubbleWindow.frame];
+        _bubbleView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
         _bubbleView.clipsToBounds = true;
         _bubbleView.layer.cornerRadius = _bubbleView.frame.size.width/2;
-        _bubbleView.image = [UIImage imageNamed:@"Icon-72"];
+        _bubbleView.image = [UIImage imageNamed:@"connectivityabtest"];
         [self.bubbleWindow addSubview:_bubbleView];
-        UILabel *explanatoryText = [[UILabel alloc] initWithFrame:CGRectMake(15, [UIScreen mainScreen].bounds.size.height/2 - 75, [UIScreen mainScreen].bounds.size.width - 30, 150)];
-        explanatoryText.numberOfLines = 0;
-        explanatoryText.text = @"Welcome to our A/B testing edit mode. If you are not the one trying to connect through the web interface, please force close your app now. Through the web interface you can tap on different UI frames and edit their behavior. Feel free to navigate to other screens you want to edit using your device.";
-        explanatoryText.font = [UIFont fontWithName:@"Avenir Next" size:13.f];
-        explanatoryText.textColor = [UIColor whiteColor];
-        explanatoryText.textAlignment = NSTextAlignmentCenter;
-        [self.bubbleWindow addSubview:explanatoryText];
-
+        
         UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveMixpanelBubble:)];
         [self.bubbleWindow addGestureRecognizer:panRecognizer];
-
-        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapBubble:)];
-        [self.bubbleWindow addGestureRecognizer:tapRecognizer];
-
+        
+        animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.bubbleWindow];
+        
         [UIView animateWithDuration:0.3 animations:^{
             self.bubbleWindow.alpha = 1;
-        }];
-    }
-}
-
-- (void)didTapBubble:(UITapGestureRecognizer *)gesture {
-    if (!CGRectEqualToRect(self.bubbleWindow.frame, [UIScreen mainScreen].bounds)) {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.bubbleWindow.frame = [UIScreen mainScreen].bounds;
-            _bubbleView.alpha = 0;
-            for (UIGestureRecognizer *g in self.bubbleWindow.gestureRecognizers) {
-                if ([g isKindOfClass:[UIPanGestureRecognizer class]]) {
-                    g.enabled = NO;
-                }
-            }
-        }];
-    } else {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.bubbleWindow.frame = CGRectMake(0, 0, 50, 50);
-            _bubbleView.alpha = 1;
-            for (UIGestureRecognizer *g in self.bubbleWindow.gestureRecognizers) {
-                if ([g isKindOfClass:[UIPanGestureRecognizer class]]) {
-                    g.enabled = YES;
-                }
-            }
         }];
     }
 }
@@ -325,24 +293,31 @@ NSString * const kSessionVariantKey = @"session_variant";
     CGPoint currPoint = [gesture locationInView:gesture.view];
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan: {
+            [self->animator removeAllBehaviors];
             prevPoint = currPoint;
             break;
         }
         case UIGestureRecognizerStateEnded: {
-            UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
+            UIWindow *mainWindow = [UIApplication sharedApplication].keyWindow;
             CGPoint velocity = [gesture velocityInView:mainWindow];
             CGFloat magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-            CGFloat slideMult = magnitude / 200;
-
-            CGFloat slideFactor = 0.1 * slideMult; // Increase for more slide
-            CGPoint finalPoint = CGPointMake(gesture.view.center.x + (velocity.x * slideFactor),
-                                             gesture.view.center.y + (velocity.y * slideFactor));
-            finalPoint.x = MIN(MAX(finalPoint.x, gesture.view.frame.size.width/2), mainWindow.bounds.size.width - gesture.view.frame.size.width/2);
-            finalPoint.y = MIN(MAX(finalPoint.y, gesture.view.frame.size.height/2), mainWindow.bounds.size.height - gesture.view.frame.size.height/2);
-
-            [UIView animateWithDuration:slideFactor delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                gesture.view.center = finalPoint;
-            } completion:nil];
+            
+            UICollisionBehavior* collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[self.bubbleWindow]];
+            UIBezierPath *path = [UIBezierPath bezierPathWithRect:[UIScreen mainScreen].bounds];
+            [collisionBehavior addBoundaryWithIdentifier:@"border" forPath:path];
+            [self->animator addBehavior:collisionBehavior];
+            
+            UIPushBehavior *pushBehavior = [[UIPushBehavior alloc]
+                                            initWithItems:@[self.bubbleWindow]
+                                            mode:UIPushBehaviorModeInstantaneous];
+            pushBehavior.pushDirection = CGVectorMake((velocity.x / 10) , (velocity.y / 10));
+            pushBehavior.magnitude = magnitude / 500;
+            [self->animator addBehavior:pushBehavior];
+            
+            UIDynamicItemBehavior *itemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[self.bubbleWindow]];
+            itemBehavior.resistance = 10;
+            itemBehavior.allowsRotation = NO;
+            [self->animator addBehavior:itemBehavior];
             break;
         }
         case UIGestureRecognizerStateChanged: {

@@ -302,9 +302,6 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-OC3-Xs-814"/>
-                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
