@@ -1286,7 +1286,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
-            [self updateNetworkActivityIndicator:NO];
         }
     });
 }
