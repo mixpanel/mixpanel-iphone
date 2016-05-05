@@ -206,9 +206,6 @@ static Mixpanel *sharedInstance = nil;
 #if !defined(MIXPANEL_APP_EXTENSION)
         [self executeCachedVariants];
         [self executeCachedEventBindings];
-#if defined(DEBUG) && !defined(DISABLE_MIXPANEL_AB_DESIGNER)
-        [self connectToABTestDesigner:YES];
-#endif
 #endif
 
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
