@@ -161,7 +161,6 @@ static Mixpanel *sharedInstance = nil;
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
-        self.showNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
@@ -712,13 +711,9 @@ static __unused NSString *MPURLEncode(NSString *s)
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
-
-        [self updateNetworkActivityIndicator:YES];
         
         NSHTTPURLResponse *urlResponse = nil;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-
-        [self updateNetworkActivityIndicator:NO];
         
         BOOL success = [self handleNetworkResponse:urlResponse withError:error];
         if (error || !success) {
@@ -1100,15 +1095,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
 #else
     return NO;
-#endif
-}
-
-- (void)updateNetworkActivityIndicator:(BOOL)on
-{
-#if !defined(MIXPANEL_APP_EXTENSION)
-    if (_showNetworkActivityIndicator) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = on;
-    }
 #endif
 }
 
