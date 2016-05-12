@@ -14,7 +14,7 @@
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
     NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
     if (messageType) {
-        if (NSStringFromSelector(@selector(track:properties:))) {
+        if ([messageType isEqualToString:NSStringFromSelector(@selector(track:properties:))]) {
             [self track:message[@"event"] properties:message[@"properties"]];
         }
     }
