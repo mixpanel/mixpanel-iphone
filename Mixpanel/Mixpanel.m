@@ -23,6 +23,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <UIKit/UIDevice.h>
 
+#import "MPResources.h"
 #import "MixpanelExceptionHandler.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
@@ -38,7 +39,7 @@
 
 #endif
 
-#define VERSION @"2.9.8"
+#define VERSION @"2.9.9"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
@@ -1543,16 +1544,18 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
+#if !defined(MIXPANEL_APP_EXTENSION)
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MPSurvey" bundle:[NSBundle bundleForClass:Mixpanel.class]];
+        UIStoryboard *storyboard = [MPResources surveyStoryboard];
         MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
         controller.survey = survey;
         controller.delegate = self;
         controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
         [presentingViewController presentViewController:controller animated:YES completion:nil];
     }
+#endif
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
@@ -1754,17 +1757,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (BOOL)showTakeoverNotificationWithObject:(MPNotification *)notification
 {
+#if !defined(MIXPANEL_APP_EXTENSION)
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
-        UIStoryboard *storyboard;
-        if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            storyboard = [UIStoryboard storyboardWithName:@"MPNotification~iphoneportrait" bundle:[NSBundle bundleForClass:Mixpanel.class]];
-        } else if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            storyboard = [UIStoryboard storyboardWithName:@"MPNotification~iphonelandscape" bundle:[NSBundle bundleForClass:Mixpanel.class]];
-        } else {
-            storyboard = [UIStoryboard storyboardWithName:@"MPNotification~ipad" bundle:[NSBundle bundleForClass:Mixpanel.class]];
-        }
+        UIStoryboard *storyboard = [MPResources notificationStoryboard];
         MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
         controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
         controller.notification = notification;
@@ -1776,6 +1773,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } else {
         return NO;
     }
+#endif
 }
 
 - (BOOL)showMiniNotificationWithObject:(MPNotification *)notification
