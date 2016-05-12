@@ -1021,7 +1021,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     return ifa;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^(){
@@ -1047,7 +1046,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     return @"";
 #endif
 }
-#endif
 
 - (NSString *)libVersion
 {
@@ -1139,15 +1137,11 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // cellular info
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
-        [self setCurrentRadio];
-        [notificationCenter addObserver:self
-                               selector:@selector(setCurrentRadio)
-                                   name:CTRadioAccessTechnologyDidChangeNotification
-                                 object:nil];
-    }
-#endif
+    [self setCurrentRadio];
+    [notificationCenter addObserver:self
+                           selector:@selector(setCurrentRadio)
+                               name:CTRadioAccessTechnologyDidChangeNotification
+                             object:nil];
 
     // Application lifecycle events
     [notificationCenter addObserver:self
