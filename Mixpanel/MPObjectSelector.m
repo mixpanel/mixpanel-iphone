@@ -202,8 +202,7 @@
     return self.string;
 }
 
-- (BOOL)isEqual:(id)other
-{
+- (BOOL)isEqual:(id)other {
     if (other == self) {
         return YES;
     } else if (![other isKindOfClass:[MPObjectSelector class]]) {
@@ -213,8 +212,7 @@
     }
 }
 
-- (NSUInteger)hash
-{
+- (NSUInteger)hash {
     return [self.string hash];
 }
 

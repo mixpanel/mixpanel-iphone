@@ -238,8 +238,7 @@
     return self;
 }
 
-- (BOOL)isEqual:(id)other
-{
+- (BOOL)isEqual:(id)other {
     if (other == self) {
         return YES;
     } else if (![other isKindOfClass:[MPEventBinding class]]) {
@@ -249,8 +248,7 @@
     }
 }
 
-- (NSUInteger)hash
-{
+- (NSUInteger)hash {
     return [super hash] ^ self.controlEvent ^ self.verifyEvent;
 }
 

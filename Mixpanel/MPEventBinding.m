@@ -108,8 +108,7 @@
     [aCoder encodeObject:NSStringFromClass(_swizzleClass) forKey:@"swizzleClass"];
 }
 
-- (BOOL)isEqual:(id)other
-{
+- (BOOL)isEqual:(id)other {
     if (other == self) {
         return YES;
     } else if (![other isKindOfClass:[MPEventBinding class]]) {
@@ -119,8 +118,7 @@
     }
 }
 
-- (NSUInteger)hash
-{
+- (NSUInteger)hash {
     return [self.eventName hash] ^ [self.path hash];
 }
 
