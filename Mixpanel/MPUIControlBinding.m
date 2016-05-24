@@ -227,6 +227,8 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:@(_controlEvent) forKey:@"controlEvent"];
     [aCoder encodeObject:@(_verifyEvent) forKey:@"verifyEvent"];
+    [aCoder encodeObject:_appliedTo forKey:@"appliedTo"];
+    [aCoder encodeObject:_verified forKey:@"verified"];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -234,6 +236,8 @@
     if (self = [super initWithCoder:aDecoder]) {
         _controlEvent = [[aDecoder decodeObjectForKey:@"controlEvent"] unsignedIntegerValue];
         _verifyEvent = [[aDecoder decodeObjectForKey:@"verifyEvent"] unsignedIntegerValue];
+        _appliedTo = [aDecoder decodeObjectForKey:@"appliedTo"];
+        _verified = [aDecoder decodeObjectForKey:@"verified"];
     }
     return self;
 }
