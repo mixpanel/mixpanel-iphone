@@ -474,7 +474,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 #endif
 
         [UIView animateWithDuration:duration animations:^{
-            self.view.frame = CGRectMake(0.0f, parentFrame.size.height, parentFrame.size.width, MPNotifHeight * 3.0f);
+            self.view.frame = CGRectMake(self.view.frame.origin.x, parentFrame.size.height, self.view.frame.size.width, self.view.frame.size.height);
         } completion:^(BOOL finished) {
             [self.view removeFromSuperview];
             if (completion) {
