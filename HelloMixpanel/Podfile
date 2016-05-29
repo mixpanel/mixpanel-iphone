@@ -1,13 +1,15 @@
-target :HelloMixpanelTests do
-    link_with 'HelloMixpanelTests'
+target "HelloMixpanelTests" do
     pod 'CocoaHTTPServer', '~> 2.2.1'
 end
 
-target :ABTestingTests do
-    link_with 'ABTestingTests'
+target "ABTestingTests" do
     pod 'CocoaHTTPServer', '~> 2.2.1'
 end
 
-target :EventBindingTests do
-  pod 'OCMock', '~> 3.0'
+target "EventBindingTests" do
+    pod 'OCMock', '~> 3.0'
+end
+
+target "HelloMixpanel_tvOSTests" do
+    pod 'CocoaLumberjack'
 end

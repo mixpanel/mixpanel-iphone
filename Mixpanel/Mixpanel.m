@@ -15,7 +15,7 @@
 #import "Mixpanel+AutomaticEvents.h"
 #import "AutomaticEventsConstants.h"
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
 
 #import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
@@ -41,18 +41,22 @@
 
 #define VERSION @"2.9.9"
 
-#if !defined(MIXPANEL_APP_EXTENSION)
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+@interface Mixpanel () //<UIAlertViewDelegate,
+<MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
+
+#elif defined(MIXPANEL_APP_EXTENSION)
+@interface Mixpanel () <UIAlertViewDelegate>
 
 #else
-@interface Mixpanel () <UIAlertViewDelegate>
+@interface Mixpanel ()
 
 #endif
 {
     NSUInteger _flushInterval;
 }
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 #endif
@@ -150,7 +154,7 @@ static Mixpanel *sharedInstance = nil;
         MixpanelDebug(@"%@ warning empty api token", self);
     }
     if (self = [self init]) {
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -203,7 +207,7 @@ static Mixpanel *sharedInstance = nil;
         [self setUpListeners];
 #endif
         [self unarchive];
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
         [self executeCachedVariants];
         [self executeCachedEventBindings];
 #if defined(DEBUG) && !defined(DISABLE_MIXPANEL_AB_DESIGNER)
@@ -211,9 +215,11 @@ static Mixpanel *sharedInstance = nil;
 #endif
 #endif
 
+#if !defined(MIXPANEL_TVOS_EXTENSION)
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
             [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
         }
+#endif
     }
     return self;
 }
@@ -227,7 +233,7 @@ static Mixpanel *sharedInstance = nil;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
     if (_reachability != NULL) {
         if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
             MixpanelError(@"%@ error unsetting reachability callback", self);
@@ -256,7 +262,11 @@ static Mixpanel *sharedInstance = nil;
 
 static __unused NSString *MPURLEncode(NSString *s)
 {
+#if defined(MIXPANEL_TVOS_EXTENSION)
+    return [s stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+#else
     return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
+#endif
 }
 
 - (NSData *)JSONSerializeObject:(id)obj
@@ -325,11 +335,14 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSData *data = [self JSONSerializeObject:array];
     if (data) {
         b64String = [data mp_base64EncodedString];
+#if defined(MIXPANEL_TVOS_EXTENSION)
+        b64String = [b64String stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+#else
         b64String = CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                (__bridge CFStringRef)b64String,
-                                                                NULL,
-                                                                CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                kCFStringEncodingUTF8));
+                                                                              (__bridge CFStringRef)b64String,
+                                                                              NULL,
+                                                                              CFSTR("!*'();:@&=+$,/?%#[]"),                                                                              kCFStringEncodingUTF8));
+#endif
     }
     return b64String;
 }
@@ -711,13 +724,32 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
-        NSError *error = nil;
 
         [self updateNetworkActivityIndicator:YES];
         
+#if defined(MIXPANEL_TVOS_EXTENSION)
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            [self updateNetworkActivityIndicator:NO];
+            if (error || !responseData) {
+                MixpanelError(@"%@ network failure: %@", self, error);
+                return;
+            }
+            
+            NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            if ([response intValue] == 0) {
+                MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
+            }
+            
+        }] resume];
+        [queue removeObjectsInArray:batch];
+#else
+        NSError *error = nil;
         NSHTTPURLResponse *urlResponse = nil;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-
+        
         [self updateNetworkActivityIndicator:NO];
         
         BOOL success = [self handleNetworkResponse:urlResponse withError:error];
@@ -725,13 +757,14 @@ static __unused NSString *MPURLEncode(NSString *s)
             MixpanelError(@"%@ network failure: %@", self, error);
             break;
         }
-
+        
         NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         if ([response intValue] == 0) {
             MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
         }
-
+        
         [queue removeObjectsInArray:batch];
+#endif
     }
 }
 
@@ -1035,7 +1068,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)currentRadio
 {
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
     NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
     if (!radio) {
         radio = @"None";
@@ -1073,7 +1106,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version_string"];
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
     
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
 #endif
@@ -1092,6 +1125,7 @@ static __unused NSString *MPURLEncode(NSString *s)
                                   @"$screen_width": @((NSInteger)size.width)
                                   }];
     return [p copy];
+    return nil;
 }
 
 + (BOOL)inBackground
@@ -1105,7 +1139,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)updateNetworkActivityIndicator:(BOOL)on
 {
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
     if (_showNetworkActivityIndicator) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = on;
     }
@@ -1118,6 +1152,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)setUpListeners
 {
+#if !defined(MIXPANEL_TVOS_EXTENSION)
     // wifi reachability
     BOOL reachabilityOk = NO;
     if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
@@ -1135,11 +1170,12 @@ static __unused NSString *MPURLEncode(NSString *s)
     if (!reachabilityOk) {
         MixpanelError(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
     }
+#endif
 
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // cellular info
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000 && !defined(MIXPANEL_TVOS_EXTENSION)
     if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
         [self setCurrentRadio];
         [notificationCenter addObserver:self
@@ -1175,7 +1211,7 @@ static __unused NSString *MPURLEncode(NSString *s)
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
 
-#if !defined(DISABLE_MIXPANEL_AB_DESIGNER)
+#if !defined(DISABLE_MIXPANEL_AB_DESIGNER) && !defined(MIXPANEL_TVOS_EXTENSION)
     dispatch_async(dispatch_get_main_queue(), ^{
         UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
         recognizer.minimumPressDuration = 3;
@@ -1189,6 +1225,8 @@ static __unused NSString *MPURLEncode(NSString *s)
     });
 #endif
 }
+
+#if !defined(MIXPANEL_TVOS_EXTENSION)
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
@@ -1214,11 +1252,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
+#endif
+
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application did become active", self);
     [self startFlushTimer];
-
+    
+#if !defined(MIXPANEL_TVOS_EXTENSION)
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive || self.checkForVariantsOnActive) {
         NSDate *start = [NSDate date];
 
@@ -1244,6 +1285,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
         }];
     }
+#endif
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1311,6 +1353,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
+
+#if !defined(MIXPANEL_TVOS_EXTENSION)
 #pragma mark - Decide
 
 + (UIViewController *)topPresentedViewController
@@ -1558,7 +1602,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
 {
-#if !defined(MIXPANEL_APP_EXTENSION)
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
@@ -1569,7 +1612,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
         [presentingViewController presentViewController:controller animated:YES completion:nil];
     }
-#endif
 }
 
 - (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
@@ -1769,7 +1811,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (BOOL)showTakeoverNotificationWithObject:(MPNotification *)notification
 {
-#if !defined(MIXPANEL_APP_EXTENSION)
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
@@ -1785,7 +1826,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } else {
         return NO;
     }
-#endif
 }
 
 - (BOOL)showMiniNotificationWithObject:(MPNotification *)notification
@@ -1993,7 +2033,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
-#endif
+#endif //MIXPANEL_TVOS_EXTENSION
+#endif //MIXPANEL_APP_EXTENSION
 
 @end
 
