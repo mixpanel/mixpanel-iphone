@@ -968,15 +968,14 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (NSString *)deviceModel
 {
     NSString *results = nil;
-    @try {
-        size_t size;
-        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-        char answer[size];
-        sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char answer[size];
+    sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    if (size) {
         results = @(answer);
-    }
-    @catch (NSException *exception) {
-        MixpanelError(@"Failed fetch hw.machine from sysctl. Details: %@", exception);
+    } else {
+        MixpanelError(@"Failed fetch hw.machine from sysctl.");
     }
     return results;
 }
