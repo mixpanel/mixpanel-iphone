@@ -1,9 +1,9 @@
 target "HelloMixpanelTests" do
-    pod 'CocoaHTTPServer', '~> 2.2.1'
+    pod 'CocoaHTTPServer'
 end
 
 target "ABTestingTests" do
-    pod 'CocoaHTTPServer', '~> 2.2.1'
+    pod 'CocoaHTTPServer'
 end
 
 target "EventBindingTests" do
