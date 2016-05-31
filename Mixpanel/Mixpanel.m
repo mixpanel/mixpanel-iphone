@@ -727,25 +727,6 @@ static __unused NSString *MPURLEncode(NSString *s)
 
         [self updateNetworkActivityIndicator:YES];
         
-#if defined(MIXPANEL_TVOS_EXTENSION)
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            [self updateNetworkActivityIndicator:NO];
-            if (error || !responseData) {
-                MixpanelError(@"%@ network failure: %@", self, error);
-                return;
-            }
-            
-            NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            if ([response intValue] == 0) {
-                MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
-            }
-            
-        }] resume];
-        [queue removeObjectsInArray:batch];
-#else
         NSError *error = nil;
         NSHTTPURLResponse *urlResponse = nil;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
@@ -764,7 +745,6 @@ static __unused NSString *MPURLEncode(NSString *s)
         }
         
         [queue removeObjectsInArray:batch];
-#endif
     }
 }
 
