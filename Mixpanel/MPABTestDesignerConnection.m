@@ -19,7 +19,7 @@
 NSString * const kSessionVariantKey = @"session_variant";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
-
+@property (strong, nonatomic) UIWindow *connectivityIndicatorWindow;
 @end
 
 @implementation MPABTestDesignerConnection
@@ -40,7 +40,11 @@ NSString * const kSessionVariantKey = @"session_variant";
     NSDictionary *_typeToMessageClassMap;
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
+    NSTimer *timer;
+    CGFloat counter;
+    CGFloat counterIncrease;
     UIView *_recordingView;
+    CALayer *_indeterminateLayer;
     void (^_connectCallback)();
     void (^_disconnectCallback)();
 }
@@ -199,14 +203,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     if (!_connected) {
         _connected = YES;
-        [self showConnectedView];
+        [self showConnectedView:NO];
         if (_connectCallback) {
             _connectCallback();
         }
     }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
     MessagingDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
-
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
     if (commandOperation) {
@@ -218,6 +221,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     MessagingDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
+    [self showConnectedView:YES];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -253,23 +257,71 @@ NSString * const kSessionVariantKey = @"session_variant";
     }
 }
 
-- (void)showConnectedView
-{
-    if(!_recordingView) {
+- (void)showConnectedView:(BOOL)isLoading {
+    if (!self.connectivityIndicatorWindow) {
         UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
-        _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
-        _recordingView.backgroundColor = [UIColor colorWithRed:4/255.0f green:180/255.0f blue:4/255.0f alpha:1.0];
-        [mainWindow addSubview:_recordingView];
-        [mainWindow bringSubviewToFront:_recordingView];
+        self.connectivityIndicatorWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 4.f)];
+        self.connectivityIndicatorWindow.backgroundColor = [UIColor clearColor];
+        self.connectivityIndicatorWindow.windowLevel = UIWindowLevelAlert;
+        self.connectivityIndicatorWindow.alpha = 0;
+        self.connectivityIndicatorWindow.hidden = NO;
+        
+        _recordingView = [[UIView alloc] initWithFrame:self.connectivityIndicatorWindow.frame];
+        _recordingView.backgroundColor = [UIColor clearColor];
+        _indeterminateLayer = [CALayer layer];
+        _indeterminateLayer.backgroundColor = [UIColor colorWithRed:1/255.0 green:179/255.0 blue:109/255.0 alpha:1.0].CGColor;
+        _indeterminateLayer.frame = CGRectMake(0, 0, 0, 4.0f);
+        [_recordingView.layer addSublayer:_indeterminateLayer];
+        [self.connectivityIndicatorWindow addSubview:_recordingView];
+        [self.connectivityIndicatorWindow bringSubviewToFront:_recordingView];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            self.connectivityIndicatorWindow.alpha = 1;
+        }];
+    }
+    [self animateConnecting:isLoading];
+}
+
+- (void)animateConnecting:(BOOL)isLoading {
+    if (isLoading) {
+        counter = 0.f;
+        counterIncrease = 0.01f;
+        timer = [NSTimer scheduledTimerWithTimeInterval: 0.1f
+                                                 target: self
+                                               selector: @selector(updateTimer)
+                                               userInfo: nil
+                                                repeats: YES];
+    } else {
+        counterIncrease = 0.1f;
     }
 }
 
-- (void)hideConnectedView
-{
-    if (_recordingView) {
+- (void)updateTimer {
+
+    CGFloat newWidth = MIN(counter + (1- sin(counter*M_PI*2+M_PI/2))/8, 0.95f);
+    if (counterIncrease > 0.01f && newWidth >= 0.95f) {
+        newWidth = 1.f;
+    }
+    
+    [UIView animateWithDuration:0.1f animations:^{
+        self->_indeterminateLayer.frame = CGRectMake(0, 0, self->_recordingView.frame.size.width * newWidth, 4.0f);
+    }];
+    
+    counter += counterIncrease;
+    
+    if (counter > 1 && newWidth >= 1.f) {
+        [timer invalidate];
+    }
+}
+
+- (void)hideConnectedView {
+    if (self.connectivityIndicatorWindow) {
+        [_indeterminateLayer removeFromSuperlayer];
         [_recordingView removeFromSuperview];
+        self.connectivityIndicatorWindow.hidden = YES;
     }
     _recordingView = nil;
+    self.connectivityIndicatorWindow = nil;
 }
 
 @end
