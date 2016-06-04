@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -29,10 +29,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9kA-pJ-Sjs" customClass="MPAlphaMaskView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="373"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="374"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="qVI-ia-8Xb" userLabel="Notif Image View">
-                                                <rect key="frame" x="30" y="100" width="260" height="348"/>
+                                                <rect key="frame" x="42.5" y="100" width="235" height="314"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="qVI-ia-8Xb" secondAttribute="height" multiplier="524:700" id="pBc-WE-YA0"/>
                                                 </constraints>
@@ -44,12 +44,12 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="qVI-ia-8Xb" firstAttribute="top" secondItem="9kA-pJ-Sjs" secondAttribute="top" constant="100" id="YGE-Q5-w4s"/>
-                                            <constraint firstItem="qVI-ia-8Xb" firstAttribute="leading" secondItem="9kA-pJ-Sjs" secondAttribute="leading" constant="30" id="go7-Ev-kBr"/>
-                                            <constraint firstAttribute="trailing" secondItem="qVI-ia-8Xb" secondAttribute="trailing" constant="30" id="zi6-js-kTD"/>
+                                            <constraint firstItem="qVI-ia-8Xb" firstAttribute="centerX" secondItem="9kA-pJ-Sjs" secondAttribute="centerX" id="YxL-As-yD8"/>
+                                            <constraint firstAttribute="bottom" secondItem="qVI-ia-8Xb" secondAttribute="bottom" constant="-40" id="ZGZ-uq-lxp"/>
                                         </constraints>
                                     </view>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" verticalCompressionResistancePriority="760" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="rn0-mK-gjY">
-                                        <rect key="frame" x="30" y="383" width="260" height="31"/>
+                                        <rect key="frame" x="30" y="384" width="260" height="30.5"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -75,7 +75,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TG5-A5-Kob">
-                                        <rect key="frame" x="30" y="424" width="260" height="24"/>
+                                        <rect key="frame" x="30" y="424.5" width="260" height="23.5"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
