@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Takeover Notification View Controller-->
@@ -32,19 +31,35 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="373"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="qVI-ia-8Xb" userLabel="Notif Image View">
-                                                <rect key="frame" x="30" y="100" width="260" height="348"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="qVI-ia-8Xb" secondAttribute="height" multiplier="524:700" id="pBc-WE-YA0"/>
-                                                </constraints>
+                                                <rect key="frame" x="30" y="90" width="260" height="299"/>
                                                 <connections>
                                                     <outletCollection property="gestureRecognizers" destination="e9X-a3-SxI" appends="YES" id="yeB-8t-vR4"/>
                                                 </connections>
                                             </imageView>
+                                            <button opaque="NO" contentMode="topRight" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lb5-lc-2fw" userLabel="Button - Close">
+                                                <rect key="frame" x="270" y="30" width="40" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="Txy-9u-vnU"/>
+                                                    <constraint firstAttribute="width" constant="40" id="kkX-ZK-UZf"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <inset key="contentEdgeInsets" minX="14" minY="14" maxX="14" maxY="14"/>
+                                                <state key="normal" image="MPCloseButton.png">
+                                                    <color key="titleColor" red="0.6588235294" green="0.70588235290000001" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="pressedClose" destination="lqs-j7-jxd" eventType="touchUpInside" id="o81-Fm-iDH"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="qVI-ia-8Xb" firstAttribute="top" secondItem="9kA-pJ-Sjs" secondAttribute="top" constant="100" id="YGE-Q5-w4s"/>
+                                            <constraint firstItem="Lb5-lc-2fw" firstAttribute="top" secondItem="9kA-pJ-Sjs" secondAttribute="top" constant="30" id="EFb-aQ-1BL"/>
+                                            <constraint firstAttribute="bottom" secondItem="qVI-ia-8Xb" secondAttribute="bottom" constant="-16" id="QTg-UV-Ctz"/>
                                             <constraint firstItem="qVI-ia-8Xb" firstAttribute="leading" secondItem="9kA-pJ-Sjs" secondAttribute="leading" constant="30" id="go7-Ev-kBr"/>
+                                            <constraint firstItem="qVI-ia-8Xb" firstAttribute="top" secondItem="9kA-pJ-Sjs" secondAttribute="top" constant="90" id="kz7-QG-iZY"/>
+                                            <constraint firstAttribute="trailing" secondItem="Lb5-lc-2fw" secondAttribute="trailing" constant="10" id="rlk-a1-pMk"/>
                                             <constraint firstAttribute="trailing" secondItem="qVI-ia-8Xb" secondAttribute="trailing" constant="30" id="zi6-js-kTD"/>
                                         </constraints>
                                     </view>
@@ -100,31 +115,13 @@
                                     <constraint firstAttribute="trailing" secondItem="9kA-pJ-Sjs" secondAttribute="trailing" id="xsE-uZ-Ys1"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lb5-lc-2fw" userLabel="Button - Close">
-                                <rect key="frame" x="277" y="40" width="23" height="23"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="23" id="Txy-9u-vnU"/>
-                                    <constraint firstAttribute="width" constant="23" id="kkX-ZK-UZf"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="10"/>
-                                <state key="normal" image="MPCloseButton.png">
-                                    <color key="titleColor" red="0.6588235294" green="0.70588235290000001" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="pressedClose" destination="lqs-j7-jxd" eventType="touchUpInside" id="o81-Fm-iDH"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hRV-FA-eBL" firstAttribute="leading" secondItem="f5E-kL-Yd3" secondAttribute="leading" id="45F-yF-V1N"/>
                             <constraint firstItem="dyd-zD-vgA" firstAttribute="width" secondItem="jGT-lI-H6k" secondAttribute="width" id="7Ay-7U-HSD"/>
                             <constraint firstItem="nbF-iO-FwI" firstAttribute="top" secondItem="jGT-lI-H6k" secondAttribute="bottom" id="9cz-mz-iVE"/>
-                            <constraint firstItem="Lb5-lc-2fw" firstAttribute="top" secondItem="ON9-XJ-N8Y" secondAttribute="bottom" constant="20" id="C0h-nz-Oae"/>
                             <constraint firstItem="dyd-zD-vgA" firstAttribute="centerX" secondItem="f5E-kL-Yd3" secondAttribute="centerX" id="E2W-o2-rvw"/>
-                            <constraint firstAttribute="trailing" secondItem="Lb5-lc-2fw" secondAttribute="trailing" constant="20" id="HfP-bK-O2D"/>
                             <constraint firstItem="dyd-zD-vgA" firstAttribute="centerY" secondItem="f5E-kL-Yd3" secondAttribute="centerY" id="JLE-ia-BfR"/>
                             <constraint firstItem="dyd-zD-vgA" firstAttribute="height" secondItem="jGT-lI-H6k" secondAttribute="height" id="KJ9-mN-naB"/>
                             <constraint firstItem="hRV-FA-eBL" firstAttribute="top" secondItem="jGT-lI-H6k" secondAttribute="top" id="YXn-cB-gIT"/>
@@ -152,7 +149,7 @@
                 </panGestureRecognizer>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y5Y-ul-Xxq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="428" y="288"/>
+            <point key="canvasLocation" x="349" y="407"/>
         </scene>
     </scenes>
     <resources>
