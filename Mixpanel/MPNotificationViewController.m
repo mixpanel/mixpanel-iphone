@@ -146,12 +146,10 @@
     return NO;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
-#endif
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
 {
@@ -325,29 +323,10 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
     // Position body label
     CGSize constraintSize = CGSizeMake(self.view.frame.size.width - MPNotifHeight - 12.5f, CGFLOAT_MAX);
-    CGSize sizeToFit;
-    // Use boundingRectWithSize for iOS 7 and above, sizeWithFont otherwise.
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
-        sizeToFit = [self.bodyLabel.text boundingRectWithSize:constraintSize
-                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                               attributes:@{NSFontAttributeName: self.bodyLabel.font}
-                                                  context:nil].size;
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-
-        sizeToFit = [self.bodyLabel.text sizeWithFont:self.bodyLabel.font
-                                constrainedToSize:constraintSize
-                                    lineBreakMode:self.bodyLabel.lineBreakMode];
-
-#pragma clang diagnostic pop
-    }
-#else
-        sizeToFit = [self.bodyLabel.text sizeWithFont:self.bodyLabel.font
-                                constrainedToSize:constraintSize
-                                    lineBreakMode:self.bodyLabel.lineBreakMode];
-#endif
+    CGSize sizeToFit = [self.bodyLabel.text boundingRectWithSize:constraintSize
+                                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                                      attributes:@{NSFontAttributeName: self.bodyLabel.font}
+                                                         context:nil].size;
 
     self.bodyLabel.frame = CGRectMake(MPNotifHeight, (CGFloat)ceil((MPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, (CGFloat)ceil(sizeToFit.width), (CGFloat)ceil(sizeToFit.height));
 }
