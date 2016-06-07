@@ -262,11 +262,7 @@ static Mixpanel *sharedInstance = nil;
 
 static __unused NSString *MPURLEncode(NSString *s)
 {
-#if defined(MIXPANEL_TVOS_EXTENSION)
     return [s stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-#else
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
-#endif
 }
 
 - (NSData *)JSONSerializeObject:(id)obj
@@ -334,15 +330,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSString *b64String = @"";
     NSData *data = [self JSONSerializeObject:array];
     if (data) {
-        b64String = [data mp_base64EncodedString];
-#if defined(MIXPANEL_TVOS_EXTENSION)
-        b64String = [b64String stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-#else
-        b64String = CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                              (__bridge CFStringRef)b64String,
-                                                                              NULL,
-                                                                              CFSTR("!*'();:@&=+$,/?%#[]"),                                                                              kCFStringEncodingUTF8));
-#endif
+        b64String = MPURLEncode([data mp_base64EncodedString]);
     }
     return b64String;
 }
