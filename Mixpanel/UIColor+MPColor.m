@@ -8,8 +8,6 @@
 
 + (UIColor *)mp_applicationPrimaryColor
 {
-    UIColor *color;
-
     // First try and find the color of the UINavigationBar of the top UINavigationController that is showing now.
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     UINavigationController *topNavigationController = nil;
@@ -22,29 +20,17 @@
         }
     } while ((rootViewController = rootViewController.presentedViewController));
 
-    if (topNavigationController) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-        if ([[topNavigationController navigationBar] respondsToSelector:@selector(barTintColor)]) {
-            color = [topNavigationController navigationBar].barTintColor;
-        } else {
-            color = [topNavigationController navigationBar].tintColor;
-        }
-#else
-        color = [topNavigationController navigationBar].tintColor;
-#endif
-    }
+    UIColor *color = [topNavigationController navigationBar].barTintColor;
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
     // Then try and use the UINavigationBar default color for the app
-    if (!color && [[UINavigationBar appearance] respondsToSelector:@selector(barTintColor)]) {
+    if (!color) {
         color = [UINavigationBar appearance].barTintColor;
     }
 
     // Or the UITabBar default color
-    if (!color && [[UITabBar appearance] respondsToSelector:@selector(barTintColor)]) {
+    if (!color) {
         color = [UITabBar appearance].barTintColor;
     }
-#endif
 
     return color;
 }

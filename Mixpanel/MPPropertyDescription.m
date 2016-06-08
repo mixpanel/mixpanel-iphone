@@ -89,10 +89,10 @@
         if (get == nil) {
             NSParameterAssert(dictionary[@"type"] != nil);
             get = @{
-                    @"selector" : _name,
-                    @"result" : @{
-                            @"type" : dictionary[@"type"],
-                            @"name" : @"value"
+                    @"selector": _name,
+                    @"result": @{
+                            @"type": dictionary[@"type"],
+                            @"name": @"value"
                     },
                     @"parameters": @[]
             };
@@ -102,11 +102,11 @@
         if (set == nil && _readonly == NO) {
             NSParameterAssert(dictionary[@"type"] != nil);
             set = @{
-                    @"selector" : [NSString stringWithFormat:@"set%@:", _name.capitalizedString],
-                    @"parameters" : @[
+                    @"selector": [NSString stringWithFormat:@"set%@:", _name.capitalizedString],
+                    @"parameters": @[
                             @{
-                                    @"name" : @"value",
-                                    @"type" : dictionary[@"type"]
+                                    @"name": @"value",
+                                    @"type": dictionary[@"type"]
                             }
                     ]
             };

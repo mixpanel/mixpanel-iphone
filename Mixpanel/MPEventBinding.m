@@ -33,8 +33,8 @@
 + (Class)subclassFromString:(NSString *)bindingType
 {
     NSDictionary *classTypeMap = @{
-                                   [MPUIControlBinding typeName] : [MPUIControlBinding class],
-                                   [MPUITableViewBinding typeName] : [MPUITableViewBinding class]
+                                   [MPUIControlBinding typeName]: [MPUIControlBinding class],
+                                   [MPUITableViewBinding typeName]: [MPUITableViewBinding class]
                                    };
     return[classTypeMap valueForKey:bindingType] ?: [MPUIControlBinding class];
 }

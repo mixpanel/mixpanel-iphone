@@ -81,8 +81,8 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
 - (NSMutableDictionary *)fontDictionaryForFontFamilyName:(NSString *)familyName fontNames:(NSArray *)fontNames
 {
     return [@{
-        @"family" : familyName,
-        @"font_names" : [fontNames mutableCopy]
+        @"family": familyName,
+        @"font_names": [fontNames mutableCopy]
     } mutableCopy];
 }
 

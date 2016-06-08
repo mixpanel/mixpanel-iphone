@@ -6,25 +6,25 @@
 static NSDictionary *MPCATransform3DCreateDictionaryRepresentation(CATransform3D transform)
 {
     return @{
-            @"m11" : @(transform.m11),
-            @"m12" : @(transform.m12),
-            @"m13" : @(transform.m13),
-            @"m14" : @(transform.m14),
+            @"m11": @(transform.m11),
+            @"m12": @(transform.m12),
+            @"m13": @(transform.m13),
+            @"m14": @(transform.m14),
 
-            @"m21" : @(transform.m21),
-            @"m22" : @(transform.m22),
-            @"m23" : @(transform.m23),
-            @"m24" : @(transform.m24),
+            @"m21": @(transform.m21),
+            @"m22": @(transform.m22),
+            @"m23": @(transform.m23),
+            @"m24": @(transform.m24),
 
-            @"m31" : @(transform.m31),
-            @"m32" : @(transform.m32),
-            @"m33" : @(transform.m33),
-            @"m34" : @(transform.m34),
+            @"m31": @(transform.m31),
+            @"m32": @(transform.m32),
+            @"m33": @(transform.m33),
+            @"m34": @(transform.m34),
 
-            @"m41" : @(transform.m41),
-            @"m42" : @(transform.m42),
-            @"m43" : @(transform.m43),
-            @"m44" : @(transform.m44),
+            @"m41": @(transform.m41),
+            @"m42": @(transform.m42),
+            @"m43": @(transform.m43),
+            @"m44": @(transform.m44),
     };
 }
 

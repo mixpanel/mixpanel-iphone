@@ -146,12 +146,10 @@
     return NO;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
-#endif
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
 {
@@ -325,29 +323,10 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
     // Position body label
     CGSize constraintSize = CGSizeMake(self.view.frame.size.width - MPNotifHeight - 12.5f, CGFLOAT_MAX);
-    CGSize sizeToFit;
-    // Use boundingRectWithSize for iOS 7 and above, sizeWithFont otherwise.
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
-        sizeToFit = [self.bodyLabel.text boundingRectWithSize:constraintSize
-                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                               attributes:@{NSFontAttributeName: self.bodyLabel.font}
-                                                  context:nil].size;
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-
-        sizeToFit = [self.bodyLabel.text sizeWithFont:self.bodyLabel.font
-                                constrainedToSize:constraintSize
-                                    lineBreakMode:self.bodyLabel.lineBreakMode];
-
-#pragma clang diagnostic pop
-    }
-#else
-        sizeToFit = [self.bodyLabel.text sizeWithFont:self.bodyLabel.font
-                                constrainedToSize:constraintSize
-                                    lineBreakMode:self.bodyLabel.lineBreakMode];
-#endif
+    CGSize sizeToFit = [self.bodyLabel.text boundingRectWithSize:constraintSize
+                                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                                      attributes:@{NSFontAttributeName: self.bodyLabel.font}
+                                                         context:nil].size;
 
     self.bodyLabel.frame = CGRectMake(MPNotifHeight, (CGFloat)ceil((MPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, (CGFloat)ceil(sizeToFit.width), (CGFloat)ceil(sizeToFit.height));
 }
@@ -470,7 +449,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 #endif
 
         [UIView animateWithDuration:duration animations:^{
-            self.view.frame = CGRectMake(0.0f, parentFrame.size.height, parentFrame.size.width, MPNotifHeight * 3.0f);
+            self.view.frame = CGRectMake(self.view.frame.origin.x, parentFrame.size.height, self.view.frame.size.width, self.view.frame.size.height);
         } completion:^(BOOL finished) {
             [self.view removeFromSuperview];
             if (completion) {

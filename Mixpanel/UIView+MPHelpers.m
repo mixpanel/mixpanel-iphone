@@ -20,28 +20,10 @@
 
 - (UIImage *)mp_snapshotImage
 {
-    CGFloat offsetHeight = 0.0f;
-    
-    //Avoid the status bar on phones running iOS < 7
-    if (NSFoundationVersionNumber < NSFoundationVersionNumber_iOS_7_0 &&
-        ![UIApplication sharedApplication].statusBarHidden) {
-        offsetHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    }
     CGSize size = self.layer.bounds.size;
-    size.height -= offsetHeight;
     UIGraphicsBeginImageContext(size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0.0f, -offsetHeight);
     
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-        [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
-    } else {
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    }
-#else
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-#endif
+    [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

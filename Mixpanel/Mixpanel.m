@@ -955,15 +955,14 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (NSString *)deviceModel
 {
     NSString *results = nil;
-    @try {
-        size_t size;
-        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-        char answer[size];
-        sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char answer[size];
+    sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    if (size) {
         results = @(answer);
-    }
-    @catch (NSException *exception) {
-        MixpanelError(@"Failed fetch hw.machine from sysctl. Details: %@", exception);
+    } else {
+        MixpanelError(@"Failed fetch hw.machine from sysctl.");
     }
     return results;
 }
@@ -1008,7 +1007,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     return ifa;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^{
@@ -1034,7 +1032,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     return @"";
 #endif
 }
-#endif
 
 - (NSString *)libVersion
 {
@@ -1126,15 +1123,11 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // cellular info
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
-        [self setCurrentRadio];
-        [notificationCenter addObserver:self
-                               selector:@selector(setCurrentRadio)
-                                   name:CTRadioAccessTechnologyDidChangeNotification
-                                 object:nil];
-    }
-#endif
+    [self setCurrentRadio];
+    [notificationCenter addObserver:self
+                           selector:@selector(setCurrentRadio)
+                               name:CTRadioAccessTechnologyDidChangeNotification
+                             object:nil];
 
     // Application lifecycle events
     [notificationCenter addObserver:self
@@ -1931,14 +1924,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)markVariantRun:(MPVariant *)variant
 {
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
-    NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
+    NSDictionary *shownVariant = @{@(variant.experimentID).stringValue: @(variant.ID)};
     if (self.people.distinctId) {
         [self.people merge:@{@"$experiments": shownVariant}];
     }
 
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *superProperties = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary: superProperties[@"$experiments"]];
+        NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary:superProperties[@"$experiments"]];
         [shownVariants addEntriesFromDictionary:shownVariant];
         [superProperties addEntriesFromDictionary:@{@"$experiments": [shownVariants copy]}];
         self.superProperties = [superProperties copy];
@@ -1947,7 +1940,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }
     });
 
-    [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
+    [self track:@"$experiment_started" properties:@{@"$experiment_id": @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
 - (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
@@ -2129,7 +2122,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
     // $unset takes an array but addPeopleRecordToQueueWithAction:andProperties takes an NSDictionary
     // so the array is stored under the key "$properties" which the above method expects when action is $unset
-    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:@{@"$properties":properties}];
+    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:@{@"$properties": properties}];
 }
 
 - (void)increment:(NSDictionary *)properties

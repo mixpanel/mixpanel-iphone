@@ -13,8 +13,6 @@
 		511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		511FC3A01C2B74DB00DC4796 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */; };
 		511FC3A11C2B751100DC4796 /* MixpanelWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */; };
-		5123B6561CD81D3D0068B0DF /* MPResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 514733BB1CD7CCDB0098B23A /* MPResources.h */; };
-		5123B6571CD81D410068B0DF /* MPResources.m in Sources */ = {isa = PBXBuildFile; fileRef = 514733BC1CD7CCDB0098B23A /* MPResources.m */; };
 		513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */; };
 		513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */; };
 		513B0B751C73CA35008EEE6E /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -785,7 +783,6 @@
 				513B0BBC1C73CA94008EEE6E /* MPFoundation.h in Headers */,
 				513B0B751C73CA35008EEE6E /* Mixpanel.h in Headers */,
 				513B0BBA1C73CA8E008EEE6E /* NSData+MPBase64.h in Headers */,
-				5123B6561CD81D3D0068B0DF /* MPResources.h in Headers */,
 				E115E0161CCAEE060026CFC0 /* AutomaticEventsConstants.h in Headers */,
 				E115E0151CCAEDFD0026CFC0 /* Mixpanel+AutomaticEvents.h in Headers */,
 				513B0BB91C73CA87008EEE6E /* MPLogger.h in Headers */,
@@ -1001,7 +998,6 @@
 			files = (
 				513B0BBB1C73CA8E008EEE6E /* NSData+MPBase64.m in Sources */,
 				513B0BB81C73CA6D008EEE6E /* Mixpanel.m in Sources */,
-				5123B6571CD81D410068B0DF /* MPResources.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1309,7 +1305,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1340,7 +1336,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -46,7 +46,7 @@
     }
 
     return @{
-            @"objects" : [context allSerializedObjects],
+            @"objects": [context allSerializedObjects],
             @"rootObject": [_objectIdentityProvider identifierForObject:rootObject]
     };
 }
@@ -244,7 +244,7 @@
                                context:context];
 
         NSDictionary *valueDictionary = @{
-                @"value" : (value ?: [NSNull null])
+                @"value": (value ?: [NSNull null])
         };
 
         [values addObject:valueDictionary];
@@ -258,7 +258,7 @@
                                context:context];
 
         NSDictionary *valueDictionary = @{
-            @"value" : (value ?: [NSNull null])
+            @"value": (value ?: [NSNull null])
         };
 
         [values addObject:valueDictionary];
@@ -279,7 +279,7 @@
                                        context:context];
 
                 NSDictionary *valueDictionary = @{
-                    @"where": @{ @"parameters" : parameters },
+                    @"where": @{ @"parameters": parameters },
                     @"value": (value ?: [NSNull null])
                 };
 
