@@ -50,11 +50,13 @@
 #endif
 {
     NSUInteger _flushInterval;
+    BOOL _enableABTestDesigner;
 }
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
+@property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
 #endif
 
 // re-declare internally as readwrite
@@ -86,7 +88,7 @@
 @property (nonatomic, strong) UIViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
-@property (nonatomic, strong) id abtestDesignerConnection;
+@property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
@@ -191,6 +193,7 @@ static Mixpanel *sharedInstance;
 
         self.decideResponseCached = NO;
         self.showSurveyOnActive = YES;
+        self.enableABTestDesigner = YES;
         self.surveys = nil;
         self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
@@ -1163,15 +1166,16 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 #if !defined(DISABLE_MIXPANEL_AB_DESIGNER)
     dispatch_async(dispatch_get_main_queue(), ^{
-        UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(connectGestureRecognized:)];
-        recognizer.minimumPressDuration = 3;
-        recognizer.cancelsTouchesInView = NO;
+        self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                           action:@selector(connectGestureRecognized:)];
+        self.testDesignerGestureRecognizer.minimumPressDuration = 3;
+        self.testDesignerGestureRecognizer.cancelsTouchesInView = NO;
 #if TARGET_IPHONE_SIMULATOR
-        recognizer.numberOfTouchesRequired = 2;
+        self.testDesignerGestureRecognizer.numberOfTouchesRequired = 2;
 #else
-        recognizer.numberOfTouchesRequired = 4;
+        self.testDesignerGestureRecognizer.numberOfTouchesRequired = 4;
 #endif
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizer];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.testDesignerGestureRecognizer];
     });
 #endif
 }
@@ -1854,6 +1858,22 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 }
 
 #pragma mark - Mixpanel A/B Testing (Designer)
+- (void)setEnableABTestDesigner:(BOOL)enableABTestDesigner {
+    _enableABTestDesigner = enableABTestDesigner;
+    
+    self.testDesignerGestureRecognizer.enabled = _enableABTestDesigner;
+    if (_enableABTestDesigner) {
+        // Automatically reconnect if the designer was re-enabled.
+        [self connectToABTestDesigner];
+    } else {
+        // Note that the connection will be closed and cleaned up properly in the dealloc method
+        self.abtestDesignerConnection = nil;
+    }
+}
+
+- (BOOL)enableABTestDesigner {
+    return _enableABTestDesigner;
+}
 
 - (void)connectGestureRecognized:(id)sender
 {
@@ -1869,6 +1889,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)connectToABTestDesigner:(BOOL)reconnect
 {
+    // Ignore the gesture if the AB test designer is disabled.
+    if (!self.enableABTestDesigner) return;
+    
     if ([self.abtestDesignerConnection isKindOfClass:[MPABTestDesignerConnection class]] && ((MPABTestDesignerConnection *)self.abtestDesignerConnection).connected) {
         MixpanelError(@"A/B test designer connection already exists");
         return;
