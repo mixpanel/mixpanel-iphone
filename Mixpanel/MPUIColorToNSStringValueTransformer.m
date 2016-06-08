@@ -17,7 +17,7 @@
 
 - (id)transformedValue:(id)value
 {
-    if (value && [value isKindOfClass:[UIColor class]]) {
+    if ([value isKindOfClass:[UIColor class]]) {
         UIColor *colorValue = (UIColor *)value;
 
         CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(CGColorGetColorSpace(colorValue.CGColor));

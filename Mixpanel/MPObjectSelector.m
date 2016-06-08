@@ -63,7 +63,7 @@
 
         NSMutableArray *filters = [NSMutableArray array];
         MPObjectFilter *filter;
-        while((filter = [self nextFilter])) {
+        while ((filter = [self nextFilter])) {
             [filters addObject:filter];
         }
         self.filters = [filters copy];
@@ -92,13 +92,14 @@
     if (root) {
         views = @[root];
 
-        for (NSUInteger i = 0, n = [_filters count]; i < n; i++) {
-            MPObjectFilter *filter = _filters[i];
+        NSUInteger i = 0, n = _filters.count;
+        for (MPObjectFilter *filter in _filters) {
             filter.nameOnly = (i == n-1 && !finalPredicate);
             views = [filter apply:views];
-            if ([views count] == 0) {
+            if (views.count == 0) {
                 break;
             }
+            i++;
         }
     }
     return views;
@@ -124,8 +125,8 @@
 {
     BOOL isSelected = YES;
     NSArray *views = @[leaf];
-    NSUInteger n = [_filters count], i = n;
-    while(i--) {
+    NSUInteger n = _filters.count, i = n;
+    while (i--) {
         MPObjectFilter *filter = _filters[i];
         filter.nameOnly = (i == n-1 && !finalPredicate);
         if (![filter appliesToAny:views]) {
@@ -133,7 +134,7 @@
             break;
         }
         views = [filter applyReverse:views];
-        if ([views count] == 0) {
+        if (views.count == 0) {
             break;
         }
     }
@@ -191,8 +192,9 @@
 
 - (Class)selectedClass
 {
-    if ([_filters count] > 0) {
-        return NSClassFromString(((MPObjectFilter *)_filters[[_filters count] - 1]).name);
+    MPObjectFilter *filter = _filters.lastObject;
+    if (filter) {
+        return NSClassFromString(filter.name);
     }
     return nil;
 }
@@ -208,7 +210,7 @@
 
 - (instancetype)init
 {
-    if((self = [super init])) {
+    if ((self = [super init])) {
         self.unique = NO;
         self.nameOnly = NO;
     }
@@ -228,10 +230,10 @@
         // Select all children
         for (NSObject *view in views) {
             NSArray *children = [self getChildrenOfObject:view ofType:class];
-            if (_index && [_index unsignedIntegerValue] < [children count]) {
+            if (_index && _index.unsignedIntegerValue < children.count) {
                 // Indexing can only be used for subviews of UIView
                 if ([view isKindOfClass:[UIView class]]) {
-                    children = @[children[[_index unsignedIntegerValue]]];
+                    children = @[children[_index.unsignedIntegerValue]];
                 } else {
                     children = @[];
                 }
@@ -242,7 +244,7 @@
 
     if (!self.nameOnly) {
         // If unique is set and there are more than one, return nothing
-        if(self.unique && [result count] != 1) {
+        if (self.unique && result.count != 1) {
             return @[];
         }
         // Filter any resulting views by predicate
@@ -277,7 +279,7 @@
     return (([self.name isEqualToString:@"*"] || [view isKindOfClass:NSClassFromString(self.name)])
             && (self.nameOnly || (
                 (!self.predicate || [_predicate evaluateWithObject:view])
-                && (!self.index || [self isView:view siblingNumber:[_index integerValue]])
+                && (!self.index || [self isView:view siblingNumber:_index.integerValue])
                 && (!(self.unique) || [self isView:view oneOfNSiblings:1])))
             );
 }
@@ -316,8 +318,8 @@
     for (NSObject *parent in parents) {
         if ([parent isKindOfClass:[UIView class]]) {
             NSArray *siblings = [self getChildrenOfObject:parent ofType:NSClassFromString(_name)];
-            if ((index < 0 || ((NSUInteger)index < [siblings count] && siblings[(NSUInteger)index] == view))
-                && (numSiblings < 0 || [siblings count] == (NSUInteger)numSiblings)) {
+            if ((index < 0 || ((NSUInteger)index < siblings.count && siblings[(NSUInteger)index] == view))
+                && (numSiblings < 0 || siblings.count == (NSUInteger)numSiblings)) {
                 return YES;
             }
         }

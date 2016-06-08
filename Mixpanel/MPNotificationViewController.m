@@ -101,7 +101,7 @@
         self.titleView.text = self.notification.title;
         self.bodyView.text = self.notification.body;
 
-        if (self.notification.callToAction && [self.notification.callToAction length] > 0) {
+        if (self.notification.callToAction.length > 0) {
             [self.okayButton setTitle:self.notification.callToAction forState:UIControlStateNormal];
         }
         
@@ -168,7 +168,7 @@
 - (IBAction)pressedOkay
 {
     id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if (delegate && [delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
         [delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
@@ -176,7 +176,7 @@
 - (IBAction)pressedClose
 {
     id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if (delegate && [delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
         [delegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
@@ -189,7 +189,7 @@
             _touching = YES;
         } else if (gesture.state == UIGestureRecognizerStateChanged) {
             CGPoint translation = [gesture translationInView:self.view];
-            self.imageView.layer.position = CGPointMake(0.3f * (translation.x) + _viewStart.x, 0.3f * (translation.y) + _viewStart.y);
+            self.imageView.layer.position = CGPointMake(0.3f * translation.x + _viewStart.x, 0.3f * translation.y + _viewStart.y);
         }
     }
 
@@ -240,7 +240,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     self.bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.bodyLabel.numberOfLines = 0;
-    
+
     [self initializeMiniNotification];
 
     if (self.notification != nil) {
@@ -334,12 +334,9 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 - (UIView *)getTopView
 {
     UIView *topView = nil;
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    if(window) {
-        for (UIView *subview in window.subviews) {
-            if (!subview.hidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0) {
-                topView = subview;
-            }
+    for (UIView *subview in [UIApplication sharedApplication].keyWindow.subviews) {
+        if (!subview.hidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0) {
+            topView = subview;
         }
     }
     return topView;
@@ -365,7 +362,6 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
     UIView *topView = [self getTopView];
     if (topView) {
-
         CGRect topFrame;
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
@@ -506,7 +502,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    if(self = [super initWithCoder:aDecoder]) {
+    if (self = [super initWithCoder:aDecoder]) {
         _maskLayer = [GradientMaskLayer layer];
         [self.layer setMask:_maskLayer];
         self.opaque = NO;
@@ -627,7 +623,6 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 - (void)drawInContext:(CGContextRef)ctx
 {
-
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     CGFloat components[] = {
         1.0f, 1.0f,

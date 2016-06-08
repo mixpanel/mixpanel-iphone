@@ -48,7 +48,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
 
 - (NSArray *)availableFontFamilies
 {
-    NSMutableDictionary *fontFamilies = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *fontFamilies = [NSMutableDictionary dictionary];
 
     // Get all the font families and font names.
     for (NSString *familyName in [UIFont familyNames]) {
@@ -75,14 +75,14 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
         }
     }
 
-    return [fontFamilies allValues];
+    return fontFamilies.allValues;
 }
 
 - (NSMutableDictionary *)fontDictionaryForFontFamilyName:(NSString *)familyName fontNames:(NSArray *)fontNames
 {
     return [@{
-        @"family" : familyName,
-        @"font_names" : [fontNames mutableCopy]
+        @"family": familyName,
+        @"font_names": [fontNames mutableCopy]
     } mutableCopy];
 }
 

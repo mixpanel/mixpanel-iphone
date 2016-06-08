@@ -55,7 +55,7 @@
 
 - (NSData *)JSONData
 {
-    NSDictionary *jsonObject = @{ @"type" : _type, @"payload" : [_payload copy] };
+    NSDictionary *jsonObject = @{ @"type": _type, @"payload": [_payload copy] };
 
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:(NSJSONWritingOptions)0 error:&error];

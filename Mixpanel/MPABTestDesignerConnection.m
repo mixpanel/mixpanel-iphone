@@ -62,7 +62,7 @@ NSString * const kSessionVariantKey = @"session_variant";
         _open = NO;
         _connected = NO;
         _sessionEnded = NO;
-        _session = [[NSMutableDictionary alloc] init];
+        _session = [NSMutableDictionary dictionary];
         _url = url;
         _connectCallback = connectCallback;
         _disconnectCallback = disconnectCallback;
@@ -121,8 +121,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 - (void)close
 {
     [_webSocket close];
-    for (NSString *key in [_session keyEnumerator]) {
-        id value = [_session valueForKey:key];
+    for (id value in _session.allValues) {
         if ([value conformsToProtocol:@protocol(MPDesignerSessionCollection)]) {
             [value cleanup];
         }
@@ -255,7 +254,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)showConnectedView
 {
-    if(!_recordingView) {
+    if (!_recordingView) {
         UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
         _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
         _recordingView.backgroundColor = [UIColor colorWithRed:4/255.0f green:180/255.0f blue:4/255.0f alpha:1.0];
@@ -266,9 +265,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)hideConnectedView
 {
-    if (_recordingView) {
-        [_recordingView removeFromSuperview];
-    }
+    [_recordingView removeFromSuperview];
     _recordingView = nil;
 }
 

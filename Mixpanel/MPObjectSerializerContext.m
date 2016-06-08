@@ -17,7 +17,7 @@
     if (self) {
         _visitedObjects = [NSMutableSet set];
         _unvisitedObjects = [NSMutableSet setWithObject:object];
-        _serializedObjects = [[NSMutableDictionary alloc] init];
+        _serializedObjects = [NSMutableDictionary dictionary];
     }
 
     return self;
@@ -25,7 +25,7 @@
 
 - (BOOL)hasUnvisitedObjects
 {
-    return [_unvisitedObjects count] > 0;
+    return _unvisitedObjects.count > 0;
 }
 
 - (void)enqueueUnvisitedObject:(NSObject *)object
@@ -63,7 +63,7 @@
 
 - (NSArray *)allSerializedObjects
 {
-    return [_serializedObjects allValues];
+    return _serializedObjects.allValues;
 }
 
 @end

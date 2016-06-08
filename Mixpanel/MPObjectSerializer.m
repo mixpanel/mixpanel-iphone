@@ -46,7 +46,7 @@
     }
 
     return @{
-            @"objects" : [context allSerializedObjects],
+            @"objects": [context allSerializedObjects],
             @"rootObject": [_objectIdentityProvider identifierForObject:rootObject]
     };
 }
@@ -58,7 +58,7 @@
 
     [context addVisitedObject:object];
 
-    NSMutableDictionary *propertyValues = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *propertyValues = [NSMutableDictionary dictionary];
 
     MPClassDescription *classDescription = [self classDescriptionForObject:object];
     if (classDescription) {
@@ -74,7 +74,7 @@
     id delegate;
     SEL delegateSelector = NSSelectorFromString(@"delegate");
 
-    if (classDescription && [[classDescription delegateInfos] count] > 0 && [object respondsToSelector:delegateSelector]) {
+    if ([classDescription delegateInfos].count > 0 && [object respondsToSelector:delegateSelector]) {
         delegate = ((id (*)(id, SEL))[object methodForSelector:delegateSelector])(object, delegateSelector);
         for (MPDelegateInfo *delegateInfo in [classDescription delegateInfos]) {
             if ([delegate respondsToSelector:NSSelectorFromString(delegateInfo.selectorName)]) {
@@ -98,7 +98,7 @@
 
 - (NSArray *)classHierarchyArrayForObject:(NSObject *)object
 {
-    NSMutableArray *classHierarchy = [[NSMutableArray alloc] init];
+    NSMutableArray *classHierarchy = [NSMutableArray array];
 
     Class aClass = [object class];
     while (aClass)
@@ -125,13 +125,13 @@
 
 - (NSArray *)parameterVariationsForPropertySelector:(MPPropertySelectorDescription *)selectorDescription
 {
-    NSAssert([selectorDescription.parameters count] <= 1, @"Currently only support selectors that take 0 to 1 arguments.");
+    NSAssert(selectorDescription.parameters.count <= 1, @"Currently only support selectors that take 0 to 1 arguments.");
 
-    NSMutableArray *variations = [[NSMutableArray alloc] init];
+    NSMutableArray *variations = [NSMutableArray array];
 
     // TODO: write an algorithm that generates all the variations of parameter combinations.
-    if ([selectorDescription.parameters count] > 0) {
-        MPPropertySelectorParameterDescription *parameterDescription = (selectorDescription.parameters)[0];
+    if (selectorDescription.parameters.count > 0) {
+        MPPropertySelectorParameterDescription *parameterDescription = selectorDescription.parameters[0];
         for (id value in [self allValuesForType:parameterDescription.type]) {
             [variations addObject:@[ value ]];
         }
@@ -184,7 +184,7 @@
 
 - (NSInvocation *)invocationForObject:(id)object withSelectorDescription:(MPPropertySelectorDescription *)selectorDescription
 {
-    NSUInteger __unused parameterCount = [selectorDescription.parameters count];
+    NSUInteger __unused parameterCount = selectorDescription.parameters.count;
 
     SEL aSelector = NSSelectorFromString(selectorDescription.selectorName);
     NSAssert(aSelector != nil, @"Expected non-nil selector!");
@@ -193,7 +193,7 @@
     NSInvocation *invocation = nil;
 
     if (methodSignature) {
-        NSAssert([methodSignature numberOfArguments] == (parameterCount + 2), @"Unexpected number of arguments!");
+        NSAssert(methodSignature.numberOfArguments == (parameterCount + 2), @"Unexpected number of arguments!");
 
         invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
         invocation.selector = aSelector;
@@ -214,7 +214,7 @@
         }
         else if ([propertyValue isKindOfClass:[NSArray class]] || [propertyValue isKindOfClass:[NSSet class]])
         {
-            NSMutableArray *arrayOfIdentifiers = [[NSMutableArray alloc] init];
+            NSMutableArray *arrayOfIdentifiers = [NSMutableArray array];
             for (id value in propertyValue) {
                 if ([context isVisitedObject:value] == NO) {
                     [context enqueueUnvisitedObject:value];
@@ -231,8 +231,7 @@
 
 - (id)propertyValueForObject:(NSObject *)object withPropertyDescription:(MPPropertyDescription *)propertyDescription context:(MPObjectSerializerContext *)context
 {
-    NSMutableArray *values = [[NSMutableArray alloc] init];
-
+    NSMutableArray *values = [NSMutableArray array];
 
     MPPropertySelectorDescription *selectorDescription = propertyDescription.getSelectorDescription;
 
@@ -245,7 +244,7 @@
                                context:context];
 
         NSDictionary *valueDictionary = @{
-                @"value" : (value ?: [NSNull null])
+                @"value": (value ?: [NSNull null])
         };
 
         [values addObject:valueDictionary];
@@ -259,7 +258,7 @@
                                context:context];
 
         NSDictionary *valueDictionary = @{
-            @"value" : (value ?: [NSNull null])
+            @"value": (value ?: [NSNull null])
         };
 
         [values addObject:valueDictionary];
@@ -280,7 +279,7 @@
                                        context:context];
 
                 NSDictionary *valueDictionary = @{
-                    @"where": @{ @"parameters" : parameters },
+                    @"where": @{ @"parameters": parameters },
                     @"value": (value ?: [NSNull null])
                 };
 

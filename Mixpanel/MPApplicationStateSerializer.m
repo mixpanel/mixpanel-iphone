@@ -49,7 +49,7 @@
 
 - (UIWindow *)windowAtIndex:(NSUInteger)index
 {
-    NSParameterAssert(index < [_application.windows count]);
+    NSParameterAssert(index < _application.windows.count);
     return _application.windows[index];
 }
 

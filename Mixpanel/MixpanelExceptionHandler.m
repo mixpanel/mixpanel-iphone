@@ -53,10 +53,7 @@ static void mp_handleUncaughtException(NSException *exception) {
     
     // Archive the values for each Mixpanel instance
     for (Mixpanel *instance in handler.mixpanelInstances) {
-        // Since we're storing the instances in a weak table, we need to ensure the pointer hasn't become nil
-        if (instance) {
-            [instance archive];
-        }
+        [instance archive];
     }
     
     MixpanelError(@"Encountered an uncaught exception. All Mixpanel instances were archived.");

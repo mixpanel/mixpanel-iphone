@@ -48,7 +48,7 @@
 
 - (NSArray *)propertyDescriptions
 {
-    NSMutableDictionary *allPropertyDescriptions = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *allPropertyDescriptions = [NSMutableDictionary dictionary];
 
     MPClassDescription *description = self;
     while (description)
@@ -61,7 +61,7 @@
         description = description.superclassDescription;
     }
 
-    return [allPropertyDescriptions allValues];
+    return allPropertyDescriptions.allValues;
 }
 
 - (BOOL)isDescriptionForKindOfClass:(Class)class

@@ -39,12 +39,12 @@ static NSMutableDictionary *imageCache;
 
         NSArray *images = image.images ?: @[ image ];
 
-        NSMutableArray *imageDictionaries = [[NSMutableArray alloc] init];
+        NSMutableArray *imageDictionaries = [NSMutableArray array];
         for (UIImage *frame in images) {
             NSData *imageRep = UIImagePNGRepresentation(frame);
             NSDictionary *imageDictionary = @{
                 @"scale": @(image.scale),
-                @"mime_type" : @"image/png",
+                @"mime_type": @"image/png",
                 @"data": ((imageRep != nil) ? [imageRep mp_base64EncodedString] : [NSNull null])
             };
 
@@ -76,7 +76,7 @@ static NSMutableDictionary *imageCache;
         NSArray *imagesDictionary = dictionaryValue[@"images"];
         UIEdgeInsets capInsets = [[insetsTransformer reverseTransformedValue:dictionaryValue[@"capInsets"]] UIEdgeInsetsValue];
 
-        NSMutableArray *images = [[NSMutableArray alloc] init];
+        NSMutableArray *images = [NSMutableArray array];
         for (NSDictionary *imageDictionary in imagesDictionary) {
             NSNumber *scale = imageDictionary[@"scale"];
             UIImage *image;
@@ -89,9 +89,9 @@ static NSMutableDictionary *imageCache;
                     NSError *error;
                     NSData *imageData = [NSData dataWithContentsOfURL:imageUrl options:(NSDataReadingOptions)0 error:&error];
                     if (!error) {
-                        image = [UIImage imageWithData:imageData scale:fminf(1.0, [scale floatValue])];
+                        image = [UIImage imageWithData:imageData scale:fminf(1.0, scale.floatValue)];
                         @synchronized(imageCache) {
-                            [imageCache setValue:image forKey:imageDictionary[@"url"]];
+                            imageCache[imageDictionary[@"url"]] = image;
                         }
                     }
                 }
@@ -105,7 +105,7 @@ static NSMutableDictionary *imageCache;
                 }
             }
             else if (imageDictionary[@"data"] && imageDictionary[@"data"] != [NSNull null]) {
-                image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, [scale floatValue])];
+                image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, scale.floatValue)];
             }
 
             if (image) {
@@ -115,11 +115,11 @@ static NSMutableDictionary *imageCache;
 
         UIImage *image = nil;
 
-        if ([images count] > 1) {
+        if (images.count > 1) {
             // animated image
             image =  [UIImage animatedImageWithImages:images duration:[dictionaryValue[@"duration"] doubleValue]];
         }
-        else if ([images count] > 0)
+        else if (images.count > 0)
         {
             image = images[0];
         }
