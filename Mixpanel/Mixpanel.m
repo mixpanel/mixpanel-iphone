@@ -97,7 +97,6 @@
 @property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
 @property (nonatomic) NSUInteger networkConsecutiveFailures;
 
-
 @end
 
 @interface MixpanelPeople ()
