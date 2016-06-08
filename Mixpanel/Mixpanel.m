@@ -884,11 +884,17 @@ static __unused NSString *MPURLEncode(NSString *s)
     [self unarchiveEventBindings];
 }
 
-- (id)unarchiveFromFile:(NSString *)filePath asClass:(Class)class
++ (nonnull id)unarchiveOrDefaultFromFile:(NSString *)filePath asClass:(Class)class
+{
+    return [self unarchiveFromFile:filePath asClass:class] ?: [class new];
+}
+
++ (id)unarchiveFromFile:(NSString *)filePath asClass:(Class)class
 {
     id unarchivedData = nil;
     @try {
         unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        // this check is inside the try-catch as the unarchivedData may be a non-NSObject, not responding to `isKindOfClass:` or `respondsToSelector:`
         if (![unarchivedData isKindOfClass:class]) {
             unarchivedData = nil;
         }
@@ -910,17 +916,17 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)unarchiveEvents
 {
-    self.eventsQueue = (NSMutableArray *)[self unarchiveFromFile:[self eventsFilePath] asClass:[NSMutableArray class]] ?: [NSMutableArray array];
+    self.eventsQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSMutableArray class]];
 }
 
 - (void)unarchivePeople
 {
-    self.peopleQueue = (NSMutableArray *)[self unarchiveFromFile:[self peopleFilePath] asClass:[NSMutableArray class]] ?: [NSMutableArray array];
+    self.peopleQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSMutableArray class]];
 }
 
 - (void)unarchiveProperties
 {
-    NSDictionary *properties = (NSDictionary *)[self unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
+    NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
         self.nameTag = properties[@"nameTag"];
@@ -937,12 +943,12 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)unarchiveVariants
 {
-    self.variants = (NSSet *)[self unarchiveFromFile:[self variantsFilePath] asClass:[NSSet class]] ?: [NSSet set];
+    self.variants = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self variantsFilePath] asClass:[NSSet class]];
 }
 
 - (void)unarchiveEventBindings
 {
-    self.eventBindings = (NSSet *)[self unarchiveFromFile:[self eventBindingsFilePath] asClass:[NSSet class]] ?: [NSSet set];
+    self.eventBindings = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self eventBindingsFilePath] asClass:[NSSet class]];
 }
 
 #pragma mark - Application Helpers
