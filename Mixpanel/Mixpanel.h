@@ -233,6 +233,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to enable the visual A/B test designer on mixpanel.com, you will 
+ be unable to edit A/B tests with this disabled, however previously created A/B 
+ tests and their variants will still be delivered.
+ 
+ @discussion
+ Defaults to YES.
+ */
+@property (atomic) BOOL enableABTestDesigner;
+
+/*!
+ @property
 
  @abstract
  Determines the time, in seconds, that a mini notification will remain on
