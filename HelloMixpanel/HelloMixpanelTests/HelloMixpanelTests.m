@@ -12,6 +12,7 @@
 #import "MPSurveyQuestion.h"
 #import "MPSurveyQuestionViewController.h"
 #import "MPSurveyNavigationController.h"
+#import "MPNetwork.h"
 
 #define TEST_TOKEN @"abc123"
 
@@ -30,8 +31,7 @@
 @property (nonatomic, strong) MPSurvey *currentlyShowingSurvey;
 @property (nonatomic, strong) MPNotification *currentlyShowingNotification;
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
-@property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
-@property (nonatomic) NSUInteger networkConsecutiveFailures;
+@property (nonatomic, strong) MPNetwork *network;
 
 - (NSString *)defaultDistinctId;
 - (void)archive;
@@ -218,49 +218,6 @@
 
     XCTAssertTrue([response length] > 0, @"HTTP server response not valid");
     XCTAssertEqual([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"One server request should have been made");
-}
-
-- (void)test5XXResponse
-{
-    [self setupHTTPServer];
-    self.httpServer.connectionClass = [MixpanelDummy5XXHTTPConnection class];
-    self.mixpanel.serverURL = @"http://localhost:31337";
-    
-    [self.mixpanel track:@"Fake Event"];
-    
-    [self.mixpanel flush];
-    [self waitForSerialQueue];
-    
-    [self.mixpanel flush];
-    [self waitForSerialQueue];
-    
-    // Failure count should be 3
-    NSTimeInterval waitTime = self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970];
-    NSLog(@"Delta wait time is %.3f", waitTime);
-    XCTAssert(waitTime >= 120.f, "Network backoff time is less than 2 minutes.");
-    XCTAssert(self.mixpanel.networkConsecutiveFailures == 2, @"Network failures did not equal 2");
-    XCTAssert(self.mixpanel.eventsQueue.count == 1, @"Removed an event from the queue that was not sent");
-}
-
-- (void)testRetryAfterHTTPHeader
-{
-    [self setupHTTPServer];
-    self.httpServer.connectionClass = [MixpanelDummyRetryAfterConnection class];
-    self.mixpanel.serverURL = @"http://localhost:31337";
-    
-    [self.mixpanel track:@"Fake Event"];
-    
-    [self.mixpanel flush];
-    [self waitForSerialQueue];
-    
-    [self.mixpanel flush];
-    [self waitForSerialQueue];
-    
-    // Failure count should be 3
-    NSLog(@"Delta wait time is %.3f", self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970]);
-    NSTimeInterval deltaWaitTime = self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970];
-    XCTAssert(fabs(60 - deltaWaitTime) < 5, @"Mixpanel did not respect 'Retry-After' HTTP header");
-    XCTAssert(self.mixpanel.networkConsecutiveFailures == 0, @"Network failures did not equal 0");
 }
 
 - (void)testFlushEvents
@@ -902,19 +859,6 @@
     [self waitForSerialQueue];
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$set"][@"$transactions"], @[]);
-}
-
-- (void)testDropEvents
-{
-    for (NSInteger i = 0; i < 5005; i++) {
-        [self.mixpanel track:@"rapid_event" properties:@{@"i": @(i)}];
-    }
-    [self waitForSerialQueue];
-    XCTAssertTrue([self.mixpanel.eventsQueue count] == 5000);
-    NSDictionary *e = self.mixpanel.eventsQueue[0];
-    XCTAssertEqualObjects(e[@"properties"][@"i"], @(5));
-    e = [self.mixpanel.eventsQueue lastObject];
-    XCTAssertEqualObjects(e[@"properties"][@"i"], @(5004));
 }
 
 - (void)testDropUnidentifiedPeopleRecords

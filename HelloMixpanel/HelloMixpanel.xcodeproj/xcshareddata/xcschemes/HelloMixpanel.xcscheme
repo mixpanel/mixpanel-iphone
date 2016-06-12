@@ -40,7 +40,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -56,16 +57,6 @@
                   Identifier = "EventBindingTests">
                </Test>
             </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "187939D719A2A7CA00CC4FBE"
-               BuildableName = "EventBinding Tests.xctest"
-               BlueprintName = "EventBinding Tests"
-               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
-            </BuildableReference>
          </TestableReference>
          <TestableReference
             skipped = "NO">

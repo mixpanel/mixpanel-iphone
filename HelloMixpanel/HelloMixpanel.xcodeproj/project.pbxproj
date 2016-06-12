@@ -53,6 +53,7 @@
 		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
 		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
+		51FF03121D0E1D0A00DCD8F0 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51FF03111D0E1D0A00DCD8F0 /* MPNetworkTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A71C6782FD423988AFBE61CC /* libPods-ABTestingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
@@ -293,6 +294,8 @@
 		51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummy5XXHTTPConnection.m; sourceTree = "<group>"; };
 		51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyRetryAfterConnection.h; sourceTree = "<group>"; };
 		51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyRetryAfterConnection.m; sourceTree = "<group>"; };
+		51FF03111D0E1D0A00DCD8F0 /* MPNetworkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetworkTests.m; sourceTree = "<group>"; };
+		51FF03151D0E68C700DCD8F0 /* MPNetworkTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetworkTests.h; sourceTree = "<group>"; };
 		54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanelTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E1876A34B6CEDB6F7F45538 /* Pods-ABTestingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.release.xcconfig"; sourceTree = "<group>"; };
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -492,6 +495,8 @@
 			isa = PBXGroup;
 			children = (
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
+				51FF03151D0E68C700DCD8F0 /* MPNetworkTests.h */,
+				51FF03111D0E1D0A00DCD8F0 /* MPNetworkTests.m */,
 				05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */,
 				05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */,
 				51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */,
@@ -1017,6 +1022,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51FF03121D0E1D0A00DCD8F0 /* MPNetworkTests.m in Sources */,
 				51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */,
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
 				51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */,
@@ -1640,6 +1646,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -1673,6 +1681,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -1805,6 +1815,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
