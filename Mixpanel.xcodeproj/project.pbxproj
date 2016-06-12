@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
+		510D47E51D0D461400F637F4 /* MPPersistence.h in Headers */ = {isa = PBXBuildFile; fileRef = 510D47E31D0D461400F637F4 /* MPPersistence.h */; };
+		510D47E61D0D461400F637F4 /* MPPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D47E41D0D461400F637F4 /* MPPersistence.m */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		511FC35B1C2B74BD00DC4796 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
 		511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -190,6 +192,8 @@
 
 /* Begin PBXFileReference section */
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
+		510D47E31D0D461400F637F4 /* MPPersistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPersistence.h; sourceTree = "<group>"; };
+		510D47E41D0D461400F637F4 /* MPPersistence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPersistence.m; sourceTree = "<group>"; };
 		511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -405,6 +409,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		510D47E21D0D45D700F637F4 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				510D47E31D0D461400F637F4 /* MPPersistence.h */,
+				510D47E41D0D461400F637F4 /* MPPersistence.m */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
 		514733C61CD7D6EC0098B23A /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -734,6 +747,7 @@
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
 				514733BB1CD7CCDB0098B23A /* MPResources.h */,
 				514733BC1CD7CCDB0098B23A /* MPResources.m */,
+				510D47E21D0D45D700F637F4 /* Core */,
 				515B5A1A1CB6FC4000A34060 /* Designer Support */,
 				515B5A161CB6FBAC00A34060 /* Surveys */,
 				515B5A151CB6FBA500A34060 /* Notifications */,
@@ -824,6 +838,7 @@
 				7C170D091A4A035F00D9E0F2 /* MPObjectSerializer.h in Headers */,
 				7C170CF81A4A035F00D9E0F2 /* MPEnumDescription.h in Headers */,
 				7C170D311A4A035F00D9E0F2 /* MPVariant.h in Headers */,
+				510D47E51D0D461400F637F4 /* MPPersistence.h in Headers */,
 				7C170D101A4A035F00D9E0F2 /* MPPropertyDescription.h in Headers */,
 				37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */,
 				513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */,
@@ -1051,6 +1066,7 @@
 				7C170D2F1A4A035F00D9E0F2 /* MPUITableViewBinding.m in Sources */,
 				7C170CCF1A4A035F00D9E0F2 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
 				7C170CFE1A4A035F00D9E0F2 /* MPNotification.m in Sources */,
+				510D47E61D0D461400F637F4 /* MPPersistence.m in Sources */,
 				7C170CFB1A4A035F00D9E0F2 /* MPEventBinding.m in Sources */,
 				7C170CE71A4A035F00D9E0F2 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				7C170CD91A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
