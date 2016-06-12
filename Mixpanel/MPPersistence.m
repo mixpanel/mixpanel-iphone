@@ -27,7 +27,7 @@
 }
 
 #pragma mark - Archive
-- (void)archiveEvents:(NSMutableArray *)events {
+- (void)archiveEventQueue:(NSMutableArray *)events {
     NSString *path = [self pathForEvents];
     MixpanelDebug(@"%@ archiving events data to %@: %@", self.token, path, events);
     if (![MPPersistence archive:events toPath:path]) {
@@ -35,7 +35,7 @@
     }
 }
 
-- (void)archivePeople:(NSMutableArray *)people {
+- (void)archivePeopleQueue:(NSMutableArray *)people {
     NSString *path = [self pathForPeople];
     MixpanelDebug(@"%@ archiving people data to %@: %@", self.token, path, people);
     if (![MPPersistence archive:people toPath:path]) {
@@ -76,19 +76,18 @@
 }
 
 #pragma mark - Unarchive
-- (NSMutableArray *)unarchiveEvents {
+- (NSMutableArray *)unarchiveEventQueue {
     return [MPPersistence unarchiveOrDefaultFromPath:[self pathForEvents]
                                              asClass:[NSMutableArray class]];
 }
 
-- (NSMutableArray *)unarchivePeople {
+- (NSMutableArray *)unarchivePeopleQueue {
     return [MPPersistence unarchiveOrDefaultFromPath:[self pathForPeople]
                                              asClass:[NSMutableArray class]];
 }
-
-- (NSMutableDictionary *)unarchiveProperties {
+- (NSDictionary *)unarchiveProperties {
     return [MPPersistence unarchiveFromPath:[self pathForProperties]
-                                    asClass:[NSMutableDictionary class]];
+                                    asClass:[NSDictionary class]];
 }
 
 - (NSSet *)unarchiveVariants {
@@ -119,7 +118,7 @@
         NSError *error = NULL;
         BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
         if (!removed || error) {
-            // TODO: Handle Failure
+            MixpanelError(@"Failure load file at %@. File was removed. Details: %@", path, error.localizedDescription);
         }
     }
     return nil;

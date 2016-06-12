@@ -13,16 +13,16 @@
 - (instancetype)initWithToken:(NSString *)token;
 
 #pragma mark - Archive
-- (void)archiveEvents:(NSMutableArray *)events;
-- (void)archivePeople:(NSMutableArray *)people;
+- (void)archiveEventQueue:(NSMutableArray *)events;
+- (void)archivePeopleQueue:(NSMutableArray *)people;
 - (void)archiveProperties:(NSMutableDictionary *)properties;
 - (void)archiveVariants:(NSSet *)variants;
 - (void)archiveEventBindings:(NSSet *)eventBindings;
 
 #pragma mark - Unarchive
-- (NSMutableArray *)unarchiveEvents;
-- (NSMutableArray *)unarchivePeople;
-- (NSMutableDictionary *)unarchiveProperties;
+- (NSMutableArray *)unarchiveEventQueue;
+- (NSMutableArray *)unarchivePeopleQueue;
+- (NSDictionary *)unarchiveProperties;
 - (NSSet *)unarchiveVariants;
 - (NSSet *)unarchiveEventBindings;
 

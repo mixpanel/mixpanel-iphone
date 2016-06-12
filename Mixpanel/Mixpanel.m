@@ -24,6 +24,7 @@
 #import <UIKit/UIDevice.h>
 
 #import "MPResources.h"
+#import "MPPersistence.h"
 #import "MixpanelExceptionHandler.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
@@ -62,6 +63,7 @@
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, copy) NSString *distinctId;
+@property (nonatomic, strong) MPPersistence *persistence;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 @property (nonatomic) AutomaticEventMode validationMode;
 @property (nonatomic) NSUInteger validationEventCount;
@@ -156,6 +158,7 @@ static Mixpanel *sharedInstance;
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
+        self.persistence = [[MPPersistence alloc] initWithToken:apiToken];
 #endif
         
         self.networkRequestsAllowedAfterTime = 0;
@@ -389,10 +392,8 @@ static __unused NSString *MPURLEncode(NSString *s)
                 r[@"$distinct_id"] = distinctId;
                 [self.peopleQueue addObject:r];
             }
+            [self.persistence archivePeopleQueue:self.peopleQueue];
             [self.people.unidentifiedQueue removeAllObjects];
-            [self archivePeople];
-        }
-        if ([Mixpanel inBackground]) {
             [self archiveProperties];
         }
     });
@@ -469,11 +470,8 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.eventsQueue removeObjectAtIndex:0];
         }
         
-        if ([Mixpanel inBackground]) {
-            [self archiveEvents];
-        }
         // Always archive
-        [self archiveEvents];
+        [self.persistence archiveEventQueue:self.eventsQueue];
     });
 #if defined(MIXPANEL_APP_EXTENSION)
     [self flush];
@@ -783,70 +781,17 @@ static __unused NSString *MPURLEncode(NSString *s)
 }
 
 #pragma mark - Persistence
-- (NSString *)filePathFor:(NSString *)data
-{
-    NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
-    return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
-            stringByAppendingPathComponent:filename];
-}
-
-- (NSString *)eventsFilePath
-{
-    return [self filePathFor:@"events"];
-}
-
-- (NSString *)peopleFilePath
-{
-    return [self filePathFor:@"people"];
-}
-
-- (NSString *)propertiesFilePath
-{
-    return [self filePathFor:@"properties"];
-}
-
-- (NSString *)variantsFilePath
-{
-    return [self filePathFor:@"variants"];
-}
-
-- (NSString *)eventBindingsFilePath
-{
-    return [self filePathFor:@"event_bindings"];
-}
 
 - (void)archive
 {
-    [self archiveEvents];
-    [self archivePeople];
+    [self.persistence archiveEventQueue:self.eventsQueue];
+    [self.persistence archivePeopleQueue:self.peopleQueue];
+    
     [self archiveProperties];
-    [self archiveVariants];
-    [self archiveEventBindings];
-}
-
-- (void)archiveEvents
-{
-    NSString *filePath = [self eventsFilePath];
-    NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
-    MixpanelDebug(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
-    if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
-        MixpanelError(@"%@ unable to archive events data", self);
-    }
-}
-
-- (void)archivePeople
-{
-    NSString *filePath = [self peopleFilePath];
-    NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
-    MixpanelDebug(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
-    if (![NSKeyedArchiver archiveRootObject:peopleQueueCopy toFile:filePath]) {
-        MixpanelError(@"%@ unable to archive people data", self);
-    }
 }
 
 - (void)archiveProperties
 {
-    NSString *filePath = [self propertiesFilePath];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     [p setValue:self.distinctId forKey:@"distinctId"];
     [p setValue:self.nameTag forKey:@"nameTag"];
@@ -856,80 +801,23 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
-    MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
-    if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
-        MixpanelError(@"%@ unable to archive properties data", self);
-    }
-}
-
-- (void)archiveVariants
-{
-    NSString *filePath = [self variantsFilePath];
-    if (![NSKeyedArchiver archiveRootObject:self.variants toFile:filePath]) {
-        MixpanelError(@"%@ unable to archive variants data", self);
-    }
-}
-
-- (void)archiveEventBindings
-{
-    NSString *filePath = [self eventBindingsFilePath];
-    if (![NSKeyedArchiver archiveRootObject:self.eventBindings toFile:filePath]) {
-        MixpanelError(@"%@ unable to archive tracking events data", self);
-    }
+    [self.persistence archiveProperties:p];
+    
+    [self.persistence archiveVariants:self.variants];
+    [self.persistence archiveEventBindings:self.eventBindings];
 }
 
 - (void)unarchive
 {
-    [self unarchiveEvents];
-    [self unarchivePeople];
+    self.eventsQueue = [self.persistence unarchiveEventQueue];
+    self.peopleQueue = [self.persistence unarchivePeopleQueue];
+    
     [self unarchiveProperties];
-    [self unarchiveVariants];
-    [self unarchiveEventBindings];
-}
-
-+ (nonnull id)unarchiveOrDefaultFromFile:(NSString *)filePath asClass:(Class)class
-{
-    return [self unarchiveFromFile:filePath asClass:class] ?: [class new];
-}
-
-+ (id)unarchiveFromFile:(NSString *)filePath asClass:(Class)class
-{
-    id unarchivedData = nil;
-    @try {
-        unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        // this check is inside the try-catch as the unarchivedData may be a non-NSObject, not responding to `isKindOfClass:` or `respondsToSelector:`
-        if (![unarchivedData isKindOfClass:class]) {
-            unarchivedData = nil;
-        }
-        MixpanelDebug(@"%@ unarchived data from %@: %@", self, filePath, unarchivedData);
-    }
-    @catch (NSException *exception) {
-        MixpanelError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
-        // Reset un archived data
-        unarchivedData = nil;
-        // Remove the (possibly) corrupt data from the disk
-        NSError *error = NULL;
-        BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-        if (!removed) {
-            MixpanelError(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
-        }
-    }
-    return unarchivedData;
-}
-
-- (void)unarchiveEvents
-{
-    self.eventsQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSMutableArray class]];
-}
-
-- (void)unarchivePeople
-{
-    self.peopleQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSMutableArray class]];
 }
 
 - (void)unarchiveProperties
 {
-    NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
+    NSDictionary *properties = [self.persistence unarchiveProperties];
     if (properties) {
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
         self.nameTag = properties[@"nameTag"];
@@ -938,20 +826,11 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ?: [NSMutableSet set];
         self.shownNotifications = properties[@"shownNotifications"] ?: [NSMutableSet set];
-        self.variants = properties[@"variants"] ?: [NSSet set];
-        self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
     }
-}
-
-- (void)unarchiveVariants
-{
-    self.variants = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self variantsFilePath] asClass:[NSSet class]];
-}
-
-- (void)unarchiveEventBindings
-{
-    self.eventBindings = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self eventBindingsFilePath] asClass:[NSSet class]];
+    
+    self.variants = [self.persistence unarchiveVariants];
+    self.eventBindings = [self.persistence unarchiveEventBindings];
 }
 
 #pragma mark - Application Helpers
@@ -2072,22 +1951,24 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 r[action] = [NSDictionary dictionaryWithDictionary:p];
             }
             
+            NSMutableArray *peopleQueue = strongMixpanel.peopleQueue;
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
                 MixpanelDebug(@"%@ queueing people record: %@", self.mixpanel, r);
-                [strongMixpanel.peopleQueue addObject:r];
-                if (strongMixpanel.peopleQueue.count > 500) {
-                    [strongMixpanel.peopleQueue removeObjectAtIndex:0];
+                [peopleQueue addObject:r];
+                if (peopleQueue.count > 500) {
+                    [peopleQueue removeObjectAtIndex:0];
                 }
+                MPPersistence *persistence = strongMixpanel.persistence;
+                [persistence archivePeopleQueue:peopleQueue];
             } else {
                 MixpanelDebug(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
                 [self.unidentifiedQueue addObject:r];
                 if (self.unidentifiedQueue.count > 500) {
                     [self.unidentifiedQueue removeObjectAtIndex:0];
                 }
+                [strongMixpanel archiveProperties];
             }
-            
-            [strongMixpanel archivePeople];
         });
 #if defined(MIXPANEL_APP_EXTENSION)
         [strongMixpanel flush];
