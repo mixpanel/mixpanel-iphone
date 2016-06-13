@@ -1,7 +1,3 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <net/if_dl.h>
@@ -1572,31 +1568,20 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             } else {
                 self.currentlyShowingSurvey = survey;
                 if (showAlert) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-                    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_8_0) {
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
-                        [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                            if (self.currentlyShowingSurvey) {
-                                [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
-                                self.currentlyShowingSurvey = nil;
-                            }
-                        }]];
-                        [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                            if (self.currentlyShowingSurvey) {
-                                [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
-                            }
-                        }]];
-                        [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
-                    } else
-#endif
-                    {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                        message:@"Mind taking a quick survey?"
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"No, Thanks"
-                                                              otherButtonTitles:@"Sure", nil];
-                        [alert show];
-                    }
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                        if (self.currentlyShowingSurvey) {
+                            [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
+                            self.currentlyShowingSurvey = nil;
+                        }
+                    }]];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                        if (self.currentlyShowingSurvey) {
+                            [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
+                        }
+                    }]];
+                    [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
+                    
                 } else {
                     [self presentSurveyWithRootViewController:survey];
                 }
