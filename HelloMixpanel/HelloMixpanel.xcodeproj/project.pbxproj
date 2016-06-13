@@ -53,6 +53,7 @@
 		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
 		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
+		51FF031A1D0E738800DCD8F0 /* MPPersistenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51FF03191D0E738800DCD8F0 /* MPPersistenceTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A71C6782FD423988AFBE61CC /* libPods-ABTestingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
@@ -293,6 +294,7 @@
 		51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummy5XXHTTPConnection.m; sourceTree = "<group>"; };
 		51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyRetryAfterConnection.h; sourceTree = "<group>"; };
 		51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyRetryAfterConnection.m; sourceTree = "<group>"; };
+		51FF03191D0E738800DCD8F0 /* MPPersistenceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPersistenceTests.m; sourceTree = "<group>"; };
 		54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanelTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E1876A34B6CEDB6F7F45538 /* Pods-ABTestingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.release.xcconfig"; sourceTree = "<group>"; };
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -492,6 +494,7 @@
 			isa = PBXGroup;
 			children = (
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
+				51FF03191D0E738800DCD8F0 /* MPPersistenceTests.m */,
 				05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */,
 				05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */,
 				51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */,
@@ -654,7 +657,6 @@
 				2808F9AC1610EFE4005772B7 /* Sources */,
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				2808F9AE1610EFE4005772B7 /* Resources */,
-				2808F9AF1610EFE4005772B7 /* ShellScript */,
 				6AD4F51E62F4794F46EC4F93 /* Embed Pods Frameworks */,
 				7EB546446E7626E6939A1F0F /* Copy Pods Resources */,
 			);
@@ -860,19 +862,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2808F9AF1610EFE4005772B7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
 		66D61E760A16CD4067275921 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1017,6 +1006,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51FF031A1D0E738800DCD8F0 /* MPPersistenceTests.m in Sources */,
 				51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */,
 				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
 				51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */,

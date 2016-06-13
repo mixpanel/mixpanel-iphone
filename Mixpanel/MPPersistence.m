@@ -69,7 +69,7 @@
 
 + (BOOL)archive:(id)object toPath:(NSString *)path {
     if (![NSKeyedArchiver archiveRootObject:object toFile:path]) {
-        // TODO: Handle failure
+        MixpanelError(@"Unable to archive class %@ to path %@", object, path);
         return NO;
     }
     return YES;
@@ -106,14 +106,17 @@
 
 + (id)unarchiveFromPath:(NSString *)path asClass:(Class)class {
     @try {
+        MixpanelDebug(@"Attempting to unarchive %@ Class stored at path: %@", class, path);
         id unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
         // this check is inside the try-catch as the unarchivedData may be a non-NSObject,
         // not responding to `isKindOfClass:` or `respondsToSelector:`
         if ([unarchivedData isKindOfClass:class]) {
+            MixpanelDebug(@"Unarchived %@ Class successfully.", class);
             return unarchivedData;
         }
     }
     @catch (NSException *exception) {
+        MixpanelError(@"Failed to unarchive %@ Class at path: %@. %@-Details: %@", class, path, exception.name, exception.reason);
         // Remove the (possibly) corrupt data from the disk
         NSError *error = NULL;
         BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
