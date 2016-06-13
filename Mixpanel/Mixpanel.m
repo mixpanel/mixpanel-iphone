@@ -80,7 +80,6 @@
 @property (nonatomic) BOOL decideResponseCached;
 
 @property (nonatomic, strong) NSArray *surveys;
-@property (nonatomic, strong) id currentlyShowingSurvey;
 @property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
 
 @property (nonatomic, strong) NSArray *notifications;
@@ -195,7 +194,6 @@ static Mixpanel *sharedInstance;
         self.showSurveyOnActive = YES;
         self.enableABTestDesigner = YES;
         self.surveys = nil;
-        self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
         self.currentlyShowingNotification = nil;
@@ -1536,154 +1534,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } useCache:NO];
 }
 
-#pragma mark - Surveys
-- (BOOL)isSurveyAvailable {
-    return (self.surveys.count > 0);
-}
-
-- (NSArray<MPSurvey *> *)availableSurveys {
-    return self.surveys;
-}
-
-- (void)presentSurveyWithRootViewController:(MPSurvey *)survey
-{
-#if !defined(MIXPANEL_APP_EXTENSION)
-    UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
-
-    if ([[self class] canPresentFromViewController:presentingViewController]) {
-        UIStoryboard *storyboard = [MPResources surveyStoryboard];
-        MPSurveyNavigationController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPSurveyNavigationController"];
-        controller.survey = survey;
-        controller.delegate = self;
-        controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
-        [presentingViewController presentViewController:controller animated:YES completion:nil];
-    }
-#endif
-}
-
-- (void)showSurveyWithObject:(MPSurvey *)survey withAlert:(BOOL)showAlert
-{
-    if (survey) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.currentlyShowingSurvey) {
-                MixpanelError(@"%@ already showing survey: %@", self, self.currentlyShowingSurvey);
-            } else if (self.currentlyShowingNotification) {
-                MixpanelError(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
-            } else {
-                self.currentlyShowingSurvey = survey;
-                if (showAlert) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-                    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_8_0) {
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
-                        [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                            if (self.currentlyShowingSurvey) {
-                                [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
-                                self.currentlyShowingSurvey = nil;
-                            }
-                        }]];
-                        [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                            if (self.currentlyShowingSurvey) {
-                                [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
-                            }
-                        }]];
-                        [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
-                    } else
-#endif
-                    {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                        message:@"Mind taking a quick survey?"
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"No, Thanks"
-                                                              otherButtonTitles:@"Sure", nil];
-                        [alert show];
-                    }
-                } else {
-                    [self presentSurveyWithRootViewController:survey];
-                }
-            }
-        });
-    } else {
-        MixpanelError(@"%@ cannot show nil survey", self);
-    }
-}
-
-- (void)showSurveyWithObject:(MPSurvey *)survey
-{
-    [self showSurveyWithObject:survey withAlert:NO];
-}
-
-- (void)showSurvey
-{
-    [self checkForSurveysWithCompletion:^(NSArray *surveys) {
-        if (surveys.count > 0) {
-            [self showSurveyWithObject:surveys[0]];
-        }
-    }];
-}
-
-- (void)showSurveyWithID:(NSUInteger)ID
-{
-    [self checkForSurveysWithCompletion:^(NSArray *surveys) {
-        for (MPSurvey *survey in surveys) {
-            if (survey.ID == ID) {
-                [self showSurveyWithObject:survey];
-                break;
-            }
-        }
-    }];
-}
-
-- (void)markSurvey:(MPSurvey *)survey shown:(BOOL)shown withAnswerCount:(NSUInteger)count
-{
-    MixpanelDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
-    [_shownSurveyCollections addObject:@(survey.collectionID)];
-    [self.people append:@{@"$surveys": @(survey.ID), @"$collections": @(survey.collectionID)}];
-
-    if (![survey.name isEqualToString:@"$ignore"]) {
-        [self track:@"$show_survey" properties:@{@"survey_id": @(survey.ID),
-                                                 @"collection_id": @(survey.collectionID),
-                                                 @"$survey_shown": @(shown),
-                                                 @"$answer_count": @(count)
-                                                 }];
-    }
-}
-
-- (void)surveyController:(MPSurveyNavigationController *)controller wasDismissedWithAnswers:(NSArray *)answers
-{
-    [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-    self.currentlyShowingSurvey = nil;
-    if ([controller.survey.name isEqualToString:@"$ignore"]) {
-        MixpanelDebug(@"%@ not sending survey %@ result", self, controller.survey);
-    } else {
-        [self markSurvey:controller.survey shown:YES withAnswerCount:answers.count];
-        NSUInteger i = 0;
-        for (id answer in answers) {
-            if (i == 0) {
-                [self.people append:@{@"$answers": answer, @"$responses": @(controller.survey.collectionID)}];
-            } else {
-                [self.people append:@{@"$answers": answer}];
-            }
-            i++;
-        }
-        
-        dispatch_async(_serialQueue, ^{
-            [self flushPeople];
-        });
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (_currentlyShowingSurvey) {
-        if (buttonIndex == 1) {
-            [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
-        } else {
-            [self markSurvey:_currentlyShowingSurvey shown:NO withAnswerCount:0];
-            self.currentlyShowingSurvey = nil;
-        }
-    }
-}
-
 #pragma mark - Mixpanel Notifications
 
 - (void)showNotification
@@ -1736,8 +1586,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.currentlyShowingNotification) {
             MixpanelError(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
-        } else if (self.currentlyShowingSurvey) {
-            MixpanelError(@"%@ already showing survey: %@", self, self.currentlyShowingSurvey);
         } else {
             self.currentlyShowingNotification = notification;
             BOOL shown;
