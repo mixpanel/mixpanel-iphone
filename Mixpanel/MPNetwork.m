@@ -10,6 +10,7 @@
 #import "MPLogger.h"
 #import <UIKit/UIKit.h>
 
+static const NSTimeInterval kDefaultFlushInterval = 60.f;
 static const NSUInteger kBatchSize = 50;
 
 @interface MPNetwork ()
@@ -30,6 +31,7 @@ static const NSUInteger kBatchSize = 50;
     self = [super init];
     if (self) {
         self.serverURL = serverURL;
+        self.flushInterval = kDefaultFlushInterval;
     }
     return self;
 }
@@ -47,7 +49,7 @@ static const NSUInteger kBatchSize = 50;
 #pragma mark - Flush Timer
 - (void)setFlushInterval:(NSTimeInterval)flushInterval {
     NSParameterAssert(flushInterval > 0);
-    self.flushInterval = flushInterval;
+    _flushInterval = flushInterval;
     [self startFlushTimer];
 }
 
@@ -66,7 +68,7 @@ static const NSUInteger kBatchSize = 50;
 
 #pragma mark - Flush
 - (void)flushEventQueue:(NSMutableArray *)events {
-    [self flushQueue:events endpoint:@"/engage/"];
+    [self flushQueue:events endpoint:@"/track/"];
 }
 
 - (void)flushPeopleQueue:(NSMutableArray *)people {

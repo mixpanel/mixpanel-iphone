@@ -75,6 +75,8 @@ static Mixpanel *sharedInstance;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
+        
+        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
 
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
