@@ -738,6 +738,8 @@
 			children = (
 				7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */,
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
+				510D47E71D0D5EEF00F637F4 /* MPNetwork.h */,
+				510D47E81D0D5EEF00F637F4 /* MPNetwork.m */,
 				514733BB1CD7CCDB0098B23A /* MPResources.h */,
 				514733BC1CD7CCDB0098B23A /* MPResources.m */,
 				515B5A1A1CB6FC4000A34060 /* Designer Support */,
@@ -747,8 +749,6 @@
 				515B5A181CB6FC0C00A34060 /* Categories */,
 				5166DCEA1CAF162000920FF1 /* watchOS */,
 				515B5A211CB6FEAE00A34060 /* Exception Handling */,
-				510D47E71D0D5EEF00F637F4 /* MPNetwork.h */,
-				510D47E81D0D5EEF00F637F4 /* MPNetwork.m */,
 			);
 			name = Source;
 			path = Mixpanel;

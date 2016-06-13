@@ -14,8 +14,9 @@
 @property (nonatomic) BOOL shouldManageNetworkActivityIndicator;
 @property (nonatomic) BOOL useIPAddressForGeoLocation;
 
-- (void)setFlushInterval:(NSTimeInterval)flushInterval;
+- (instancetype)initWithServerURL:(NSURL *)serverURL;
 
+- (void)setFlushInterval:(NSTimeInterval)flushInterval;
 - (void)flushEventQueue:(NSArray *)events;
 - (void)flushPeopleQueue:(NSArray *)people;
 
