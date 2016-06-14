@@ -267,7 +267,7 @@ NS_ASSUME_NONNULL_BEGIN
  UINavigationController that is showing when the notification is presented, the 
  UINavigationBar default color for the app or the UITabBar default color.
  */
-@property (nullable, atomic) UIColor *miniNotificationBackgroundColor;
+@property (atomic, strong, nullable) UIColor *miniNotificationBackgroundColor;
 
 /*!
  @property

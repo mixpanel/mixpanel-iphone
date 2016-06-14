@@ -113,7 +113,7 @@
     UIImage *originalImage = nil;
     if ([self isKindOfClass:[UIButton class]]) {
         originalImage = [((UIButton *)self) imageForState:UIControlStateNormal];
-    } else if ([NSStringFromClass([self.superview class]) isEqual:@"UITabBarButton"] && [self respondsToSelector:NSSelectorFromString(@"image")]) {
+    } else if ([NSStringFromClass([self.superview class]) isEqual:@"UITabBarButton"] && [self respondsToSelector:@selector(image)]) {
         originalImage = (UIImage *)[self performSelector:@selector(image)];
     }
     
@@ -142,7 +142,7 @@
 - (NSString *)mp_text
 {
     NSString *text = nil;
-    SEL titleSelector = NSSelectorFromString(@"title");
+    SEL titleSelector = @selector(title);
     if ([self isKindOfClass:[UILabel class]]) {
         text = ((UILabel *)self).text;
     } else if ([self isKindOfClass:[UIButton class]]) {

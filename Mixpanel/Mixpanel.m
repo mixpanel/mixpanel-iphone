@@ -38,11 +38,9 @@
 #define VERSION @"2.9.9"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
-
+@interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 #else
-@interface Mixpanel () <UIAlertViewDelegate>
-
+@interface Mixpanel ()
 #endif
 {
     NSUInteger _flushInterval;
@@ -256,7 +254,7 @@ static Mixpanel *sharedInstance;
 
 static __unused NSString *MPURLEncode(NSString *s)
 {
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
+    return [s stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 
 - (NSData *)JSONSerializeObject:(id)obj
@@ -321,17 +319,11 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)encodeAPIData:(NSArray *)array
 {
-    NSString *b64String = @"";
     NSData *data = [self JSONSerializeObject:array];
     if (data) {
-        b64String = [data mp_base64EncodedString];
-        b64String = CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                (__bridge CFStringRef)b64String,
-                                                                NULL,
-                                                                CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                kCFStringEncodingUTF8));
+        return MPURLEncode([data mp_base64EncodedString]);
     }
-    return b64String;
+    return @"";
 }
 
 #pragma mark - Tracking
@@ -1315,8 +1307,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return NO;
     }
 
-    Class UIAlertControllerClass = NSClassFromString(@"UIAlertController");
-    if (UIAlertControllerClass && [viewController isKindOfClass:UIAlertControllerClass]) {
+    if ([viewController isKindOfClass:UIAlertController.class]) {
         return NO;
     }
 
@@ -1654,18 +1645,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         dispatch_async(_serialQueue, ^{
             [self flushPeople];
         });
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (_currentlyShowingSurvey) {
-        if (buttonIndex == 1) {
-            [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
-        } else {
-            [self markSurvey:_currentlyShowingSurvey shown:NO withAnswerCount:0];
-            self.currentlyShowingSurvey = nil;
-        }
     }
 }
 

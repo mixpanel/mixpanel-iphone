@@ -159,17 +159,15 @@
 
 - (IBAction)pressedOkay
 {
-    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
-        [delegate notificationController:self wasDismissedWithStatus:YES];
+    if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
 - (IBAction)pressedClose
 {
-    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
-        [delegate notificationController:self wasDismissedWithStatus:NO];
+    if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
 
@@ -386,34 +384,26 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
     if (!_isBeingDismissed) {
         _isBeingDismissed = YES;
-
-        CGFloat duration;
-
-        if (animated) {
-            duration = 0.5f;
-        } else {
-            duration = 0.0f;
-        }
-
-        UIView *parentView = self.view.superview;
-        CGRect parentFrame = parentView.frame;
-
-        [UIView animateWithDuration:duration animations:^{
-            self.view.frame = CGRectMake(self.view.frame.origin.x, parentFrame.size.height, self.view.frame.size.width, self.view.frame.size.height);
-        } completion:^(BOOL finished) {
-            [self.view removeFromSuperview];
-            if (completion) {
-                completion();
-            }
-        }];
+        
+        CGFloat duration = animated ? 0.5f : 0.f;
+        CGRect parentFrame = self.view.superview.frame;
+        
+        [UIView animateWithDuration:duration
+                         animations:^{
+                             self.view.frame = CGRectMake(self.view.frame.origin.x, parentFrame.size.height, self.view.frame.size.width, self.view.frame.size.height);
+                         } completion:^(BOOL finished) {
+                             [self.view removeFromSuperview];
+                             if (completion) {
+                                 completion();
+                             }
+                         }];
     }
 }
 
 - (void)didTap:(UITapGestureRecognizer *)gesture
 {
-    id strongDelegate = self.delegate;
-    if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded && strongDelegate != nil) {
-        [strongDelegate notificationController:self wasDismissedWithStatus:YES];
+    if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded) {
+        [self.delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 

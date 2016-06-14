@@ -72,7 +72,7 @@
 
     NSMutableArray *delegateMethods = [NSMutableArray array];
     id delegate;
-    SEL delegateSelector = NSSelectorFromString(@"delegate");
+    SEL delegateSelector = @selector(delegate);
 
     if ([classDescription delegateInfos].count > 0 && [object respondsToSelector:delegateSelector]) {
         delegate = ((id (*)(id, SEL))[object methodForSelector:delegateSelector])(object, delegateSelector);

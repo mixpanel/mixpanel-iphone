@@ -77,11 +77,10 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             MixpanelError(@"invalid notif image URL: %@", imageURLString);
             return nil;
         }
-
-        NSString *escapedUrl = [imageURLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        imageURL = [NSURL URLWithString:escapedUrl];
+        NSString *escapedURLString = [imageURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        imageURL = [NSURL URLWithString:escapedURLString];
         if (imageURL == nil) {
-            MixpanelError(@"invalid notif image URL: %@", imageURLString);
+            MixpanelError(@"invalid notif image URL: %@", escapedURLString);
             return nil;
         }
 
@@ -91,9 +90,12 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             NSString *extension = [imagePath pathExtension];
             imagePath = [[imageName stringByAppendingString:@"@2x"] stringByAppendingPathExtension:extension];
         }
-
-        imagePath = [imagePath stringByAddingPercentEscapesUsingEncoding:NSStringEncodingConversionExternalRepresentation];
-        imageURL = [[NSURL alloc] initWithScheme:imageURL.scheme host:imageURL.host path:imagePath];
+        
+        NSURLComponents *imageURLComponents = [[NSURLComponents alloc] init];
+        imageURLComponents.scheme = imageURL.scheme;
+        imageURLComponents.host = imageURL.host;
+        imageURLComponents.path = imagePath;
+        imageURL = imageURLComponents.URL;
 
         if (imageURL == nil) {
             MixpanelError(@"invalid notif image URL: %@", imageURLString);

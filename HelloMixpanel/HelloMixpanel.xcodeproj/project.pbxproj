@@ -20,7 +20,6 @@
 		055FA715194A6B020080A709 /* ABTestingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 055FA714194A6B020080A709 /* ABTestingTests.m */; };
 		0563B603194A186300B40489 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
-		05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DF0191AE10000AFF3E1 /* MapKit.framework */; };
 		05E98DF3191AE27200AFF3E1 /* test_variant.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E98DF2191AE27200AFF3E1 /* test_variant.json */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
@@ -39,7 +38,6 @@
 		2808F99E1610EFE3005772B7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F99D1610EFE3005772B7 /* main.m */; };
 		2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9A11610EFE3005772B7 /* AppDelegate.m */; };
 		2808F9A51610EFE3005772B7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9A41610EFE3005772B7 /* ViewController.m */; };
-		285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
 		2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541C16548047003DAFFE /* SystemConfiguration.framework */; };
 		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
 		334A929676F998F64CC57B57 /* libPods-EventBindingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */; };
@@ -51,6 +49,8 @@
 		515B59D71CB6C90200A34060 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		515B5A0A1CB6F96700A34060 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; settings = {COMPILER_FLAGS = "-Wnonnull"; }; };
+		515EE7CD1D10D3FE00D035A4 /* MixpanelDummyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */; };
 		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
 		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
@@ -585,12 +585,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 055FA71B194A6B020080A709 /* Build configuration list for PBXNativeTarget "ABTestingTests" */;
 			buildPhases = (
-				AFAC4DD63E5A4C1A92CDE03F /* Check Pods Manifest.lock */,
+				AFAC4DD63E5A4C1A92CDE03F /* [CP] Check Pods Manifest.lock */,
 				055FA70C194A6B010080A709 /* Sources */,
 				055FA70D194A6B010080A709 /* Frameworks */,
 				055FA70E194A6B010080A709 /* Resources */,
-				95B33EA604CD8CEE1FED4D82 /* Embed Pods Frameworks */,
-				122FA7A30875FD90EB66D684 /* Copy Pods Resources */,
+				95B33EA604CD8CEE1FED4D82 /* [CP] Embed Pods Frameworks */,
+				122FA7A30875FD90EB66D684 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -609,12 +609,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 187939FE19A2A7F400CC4FBE /* Build configuration list for PBXNativeTarget "EventBindingTests" */;
 			buildPhases = (
-				7AE244CA14192FCEFC2CCF5C /* Check Pods Manifest.lock */,
+				7AE244CA14192FCEFC2CCF5C /* [CP] Check Pods Manifest.lock */,
 				187939EB19A2A7F400CC4FBE /* Sources */,
 				187939EC19A2A7F400CC4FBE /* Frameworks */,
 				187939ED19A2A7F400CC4FBE /* Resources */,
-				66D61E760A16CD4067275921 /* Embed Pods Frameworks */,
-				CB72B56A2F15DF2B0E8B6B30 /* Copy Pods Resources */,
+				66D61E760A16CD4067275921 /* [CP] Embed Pods Frameworks */,
+				CB72B56A2F15DF2B0E8B6B30 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -650,13 +650,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C61610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanelTests" */;
 			buildPhases = (
-				195A51B1E5797AF49022A1D3 /* Check Pods Manifest.lock */,
+				195A51B1E5797AF49022A1D3 /* [CP] Check Pods Manifest.lock */,
 				2808F9AC1610EFE4005772B7 /* Sources */,
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				2808F9AE1610EFE4005772B7 /* Resources */,
-				2808F9AF1610EFE4005772B7 /* ShellScript */,
-				6AD4F51E62F4794F46EC4F93 /* Embed Pods Frameworks */,
-				7EB546446E7626E6939A1F0F /* Copy Pods Resources */,
+				6AD4F51E62F4794F46EC4F93 /* [CP] Embed Pods Frameworks */,
+				7EB546446E7626E6939A1F0F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -830,14 +829,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		122FA7A30875FD90EB66D684 /* Copy Pods Resources */ = {
+		122FA7A30875FD90EB66D684 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -845,14 +844,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		195A51B1E5797AF49022A1D3 /* Check Pods Manifest.lock */ = {
+		195A51B1E5797AF49022A1D3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -860,27 +859,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2808F9AF1610EFE4005772B7 /* ShellScript */ = {
+		66D61E760A16CD4067275921 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-		66D61E760A16CD4067275921 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -888,14 +874,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6AD4F51E62F4794F46EC4F93 /* Embed Pods Frameworks */ = {
+		6AD4F51E62F4794F46EC4F93 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -903,14 +889,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7AE244CA14192FCEFC2CCF5C /* Check Pods Manifest.lock */ = {
+		7AE244CA14192FCEFC2CCF5C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -918,14 +904,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		7EB546446E7626E6939A1F0F /* Copy Pods Resources */ = {
+		7EB546446E7626E6939A1F0F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -933,14 +919,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		95B33EA604CD8CEE1FED4D82 /* Embed Pods Frameworks */ = {
+		95B33EA604CD8CEE1FED4D82 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -948,14 +934,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AFAC4DD63E5A4C1A92CDE03F /* Check Pods Manifest.lock */ = {
+		AFAC4DD63E5A4C1A92CDE03F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -963,14 +949,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		CB72B56A2F15DF2B0E8B6B30 /* Copy Pods Resources */ = {
+		CB72B56A2F15DF2B0E8B6B30 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1017,10 +1003,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */,
 				51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */,
-				05C13E461818477600848D48 /* MixpanelDummyHTTPConnection.m in Sources */,
+				515EE7CD1D10D3FE00D035A4 /* MixpanelDummyHTTPConnection.m in Sources */,
 				51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */,
-				285EC8351611970A0087AE27 /* HelloMixpanelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1138,28 +1124,17 @@
 			baseConfigurationReference = C58D1582C07E03B5D1382FA1 /* Pods-ABTestingTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(SRCROOT)/../Mixpanel",
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/include/libxml2",
-					"$(SRCROOT)/../Mixpanel/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"\"$(SRCROOT)/../Mixpanel\"",
 				);
 				INFOPLIST_FILE = ABTestingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1182,29 +1157,17 @@
 			baseConfigurationReference = 5E1876A34B6CEDB6F7F45538 /* Pods-ABTestingTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(SRCROOT)/../Mixpanel",
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/include/libxml2",
-					"$(SRCROOT)/../Mixpanel/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"\"$(SRCROOT)/../Mixpanel\"",
 				);
 				INFOPLIST_FILE = ABTestingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1231,29 +1194,17 @@
 			baseConfigurationReference = 1C317EAC26D90021E60C7D33 /* Pods-ABTestingTests.appstore.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(SRCROOT)/../Mixpanel",
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SDKROOT)/usr/include/libxml2",
-					"$(SRCROOT)/../Mixpanel/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"\"$(SRCROOT)/../Mixpanel\"",
 				);
 				INFOPLIST_FILE = ABTestingTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1280,25 +1231,13 @@
 			baseConfigurationReference = 12ACE9D815CE39BD8E48338D /* Pods-EventBindingTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventBindingTests/EventBindingTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -1308,15 +1247,12 @@
 					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
 					"$(SRCROOT)/../Mixpanel/**",
 				);
-				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -1325,22 +1261,9 @@
 			baseConfigurationReference = DBF5334405F4CF8B588D1B94 /* Pods-EventBindingTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventBindingTests/EventBindingTests-Prefix.pch";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -1350,16 +1273,12 @@
 					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
 					"$(SRCROOT)/../Mixpanel/**",
 				);
-				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -1368,22 +1287,9 @@
 			baseConfigurationReference = 2A046480D4A0654188CB9922 /* Pods-EventBindingTests.appstore.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventBindingTests/EventBindingTests-Prefix.pch";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -1393,16 +1299,12 @@
 					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
 					"$(SRCROOT)/../Mixpanel/**",
 				);
-				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = AppStore;
 		};
@@ -1411,6 +1313,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -1480,6 +1383,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -1549,10 +1453,6 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
 				GCC_WARN_PEDANTIC = YES;
@@ -1561,10 +1461,6 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../Mixpanel",
-					"$(inherited)",
-				);
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-Wno-gnu",
@@ -1584,10 +1480,6 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1600,10 +1492,6 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../Mixpanel",
-					"$(inherited)",
-				);
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-Wno-gnu",
@@ -1624,15 +1512,15 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
+				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"\"$(SRCROOT)/../Mixpanel\"/**",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1642,7 +1530,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -1657,15 +1544,15 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
+				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"\"$(SRCROOT)/../Mixpanel\"/**",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1675,7 +1562,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
@@ -1685,6 +1571,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -1749,10 +1636,6 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1765,10 +1648,6 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/../Mixpanel",
-					"$(inherited)",
-				);
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-Wno-gnu",
@@ -1789,15 +1668,15 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
+				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"\"$(SRCROOT)/../Mixpanel\"/**",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1807,7 +1686,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = AppStore;
@@ -1816,25 +1694,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Mixpanel/**";
 				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1846,28 +1712,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Mixpanel/**";
 				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -1875,27 +1726,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Mixpanel/**";
 				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
 		};
