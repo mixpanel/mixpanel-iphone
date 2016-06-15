@@ -40,9 +40,6 @@ NSString * const kSessionVariantKey = @"session_variant";
     NSDictionary *_typeToMessageClassMap;
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
-    NSTimer *timer;
-    CGFloat counter;
-    CGFloat counterIncrease;
     UIView *_recordingView;
     CALayer *_indeterminateLayer;
     void (^_connectCallback)();
@@ -203,7 +200,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     if (!_connected) {
         _connected = YES;
-        [self showConnectedView:NO];
+        [self showConnectedViewWithLoading:NO];
         if (_connectCallback) {
             _connectCallback();
         }
@@ -221,7 +218,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     MessagingDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
-    [self showConnectedView:YES];
+    [self showConnectedViewWithLoading:YES];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -257,7 +254,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     }
 }
 
-- (void)showConnectedView:(BOOL)isLoading {
+- (void)showConnectedViewWithLoading:(BOOL)isLoading {
     if (!self.connectivityIndicatorWindow) {
         UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
         self.connectivityIndicatorWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 4.f)];
@@ -284,33 +281,25 @@ NSString * const kSessionVariantKey = @"session_variant";
 
 - (void)animateConnecting:(BOOL)isLoading {
     if (isLoading) {
-        counter = 0.f;
-        counterIncrease = 0.01f;
-        timer = [NSTimer scheduledTimerWithTimeInterval: 0.1f
-                                                 target: self
-                                               selector: @selector(updateTimer)
-                                               userInfo: nil
-                                                repeats: YES];
+        CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
+        myAnimation.duration = 10.f;
+        myAnimation.fromValue = @0;
+        myAnimation.toValue = @(_connectivityIndicatorWindow.frame.size.width*1.9);
+        myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        myAnimation.fillMode = kCAFillModeForwards;
+        myAnimation.removedOnCompletion = NO;
+        [_indeterminateLayer addAnimation:myAnimation forKey:@"MPConnBarLoadingAnim"];
     } else {
-        counterIncrease = 0.1f;
-    }
-}
-
-- (void)updateTimer {
-
-    CGFloat newWidth = MIN(counter + (1- sin(counter*M_PI*2+M_PI/2))/8, 0.95f);
-    if (counterIncrease > 0.01f && newWidth >= 0.95f) {
-        newWidth = 1.f;
-    }
-    
-    [UIView animateWithDuration:0.1f animations:^{
-        self->_indeterminateLayer.frame = CGRectMake(0, 0, self->_recordingView.frame.size.width * newWidth, 4.0f);
-    }];
-    
-    counter += counterIncrease;
-    
-    if (counter > 1 && newWidth >= 1.f) {
-        [timer invalidate];
+        [NSThread sleepForTimeInterval:2];
+        [_indeterminateLayer removeAnimationForKey:@"MPConnBarLoadingAnim"];
+        CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
+        myAnimation.duration = 1.f;
+        myAnimation.fromValue = @([[_indeterminateLayer.presentationLayer valueForKeyPath: @"bounds.size.width"] floatValue]);
+        myAnimation.toValue = @(_connectivityIndicatorWindow.frame.size.width*2);
+        myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        myAnimation.fillMode = kCAFillModeForwards;
+        myAnimation.removedOnCompletion = NO;
+        [_indeterminateLayer addAnimation:myAnimation forKey:@"MPConnBarFinishLoadingAnim"];
     }
 }
 
@@ -320,7 +309,6 @@ NSString * const kSessionVariantKey = @"session_variant";
         [_recordingView removeFromSuperview];
         self.connectivityIndicatorWindow.hidden = YES;
     }
-    _recordingView = nil;
     self.connectivityIndicatorWindow = nil;
 }
 
