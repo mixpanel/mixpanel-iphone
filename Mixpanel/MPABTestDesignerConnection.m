@@ -17,8 +17,8 @@
 #import "MPSwizzler.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
-static NSString * const MPConnBarLoadingAnim = @"MPConnectivityBarLoadingAnim";
-static NSString * const MPConnBarFinishLoadingAnim = @"MPConnectivityBarFinishLoadingAnim";
+static NSString * const kStartLoadingAnimationKey = @"MPConnectivityBarLoadingAnimation";
+static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLoadingAnimation";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
 @property (strong, nonatomic) UIWindow *connectivityIndicatorWindow;
