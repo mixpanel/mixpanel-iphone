@@ -1,11 +1,7 @@
 #import <XCTest/XCTest.h>
-
 #import <objc/runtime.h>
-#import "HTTPServer.h"
-#import "Mixpanel.h"
-#import "MixpanelDummyHTTPConnection.h"
-#import "MixpanelDummyRetryAfterConnection.h"
-#import "MixpanelDummy5XXHTTPConnection.h"
+#import <Nocilla/Nocilla.h>
+
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 #import "MPSurvey.h"
@@ -14,6 +10,10 @@
 #import "MPSurveyNavigationController.h"
 
 #define TEST_TOKEN @"abc123"
+
+static const NSString *kDefaultServerString = @"https://api.mixpanel.com";
+static const NSString *kDefaultServerTrackString = @"https://api.mixpanel.com/track";
+static const NSString *kDefaultServerEngageString = @"https://api.mixpanel.com/engage";
 
 #pragma mark - Interface Redefinitions
 
@@ -81,7 +81,6 @@
 @interface HelloMixpanelTests : XCTestCase  <MixpanelDelegate>
 
 @property (nonatomic, strong) Mixpanel *mixpanel;
-@property (nonatomic, strong) HTTPServer *httpServer;
 @property (atomic) BOOL mixpanelWillFlush;
 
 @end
@@ -106,8 +105,11 @@
 
 - (void)setUp
 {
-    NSLog(@"starting test setup...");
     [super setUp];
+    
+    NSLog(@"starting test setup...");
+    [[LSNocilla sharedInstance] start];
+    
     self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN launchOptions:nil andFlushInterval:0];
     [self.mixpanel reset];
     self.mixpanelWillFlush = NO;
@@ -119,27 +121,11 @@
 - (void)tearDown
 {
     [super tearDown];
+    
     self.mixpanel = nil;
-}
-
-- (void)setupHTTPServer
-{
-    if (!self.httpServer) {
-        self.httpServer = [[HTTPServer alloc] init];
-        [self.httpServer setConnectionClass:[MixpanelDummyHTTPConnection class]];
-        [self.httpServer setType:@"_http._tcp."];
-        [self.httpServer setPort:31337];
-
-        NSString *webPath = [[NSBundle mainBundle] resourcePath];
-        [self.httpServer setDocumentRoot:webPath];
-
-        NSError *error;
-        if ([self.httpServer start:&error]) {
-            NSLog(@"Started HTTP Server on port %hu", [self.httpServer listeningPort]);
-        } else {
-            NSLog(@"Error starting HTTP Server: %@", error);
-        }
-    }
+    
+    [[LSNocilla sharedInstance] stop];
+    [[LSNocilla sharedInstance] clearStubs];
 }
 
 - (void)waitForSerialQueue
@@ -203,31 +189,35 @@
     return rootViewController;
 }
 
-- (void)testHTTPServer
-{
-    [self setupHTTPServer];
-    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
+- (LSStubRequestDSL *)stubEngage {
+    return stubRequest(@"POST", kDefaultServerEngageString).withBody(@"1");
+}
+
+- (LSStubRequestDSL *)stubTrack {
+    return stubRequest(@"POST", kDefaultServerTrackString).withBody(@"1");
+}
+
+- (void)testHTTPServer {
+    [self stubEngage];
 
     NSString *post = @"Test Data";
-    NSURL *url = [NSURL URLWithString:[@"http://localhost:31337" stringByAppendingString:@"/engage/"]];
+    NSURL *url = [NSURL URLWithString:@"https://api.mixpanel.com/engage"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[post dataUsingEncoding:NSUTF8StringEncoding]];
+    
     NSError *error = nil;
     NSURLResponse *urlResponse = nil;
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
     NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
     XCTAssertTrue([response length] > 0, @"HTTP server response not valid");
-    XCTAssertEqual([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 1, @"One server request should have been made");
 }
 
 - (void)test5XXResponse
 {
-    [self setupHTTPServer];
-    self.httpServer.connectionClass = [MixpanelDummy5XXHTTPConnection class];
-    self.mixpanel.serverURL = @"http://localhost:31337";
+    stubRequest(@"POST", kDefaultServerTrackString).andReturn(503);
     
     [self.mixpanel track:@"Fake Event"];
     
@@ -247,9 +237,7 @@
 
 - (void)testRetryAfterHTTPHeader
 {
-    [self setupHTTPServer];
-    self.httpServer.connectionClass = [MixpanelDummyRetryAfterConnection class];
-    self.mixpanel.serverURL = @"http://localhost:31337";
+    stubRequest(@"POST", kDefaultServerTrackString).withHeader(@"Retry-After", @"60");
     
     [self.mixpanel track:@"Fake Event"];
     
@@ -268,11 +256,7 @@
 
 - (void)testFlushEvents
 {
-    [self setupHTTPServer];
-    self.mixpanel.serverURL = @"http://localhost:31337";
     self.mixpanel.delegate = self;
-    self.mixpanelWillFlush = YES;
-    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
@@ -292,12 +276,10 @@
     [self waitForSerialQueue];
 
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
-    XCTAssertEqual([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 events should have been batched in 2 HTTP requests");
 }
 
 - (void)testFlushPeople
 {
-    [self setupHTTPServer];
     self.mixpanel.serverURL = @"http://localhost:31337";
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
@@ -321,16 +303,13 @@
     [self waitForSerialQueue];
 
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 0, @"people should have been flushed");
-    XCTAssertEqual([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"60 people properties should have been batched in 2 HTTP requests");
 }
 
 - (void)testFlushFailure
 {
-    [self setupHTTPServer];
     self.mixpanel.serverURL = @"http://a.b.c.d"; //invalid
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
-    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
@@ -342,16 +321,12 @@
     [self waitForSerialQueue];
 
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"events should still be in the queue if flush fails");
-    XCTAssertEqual([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 0, @"The request should have failed.");
 }
 
 - (void)testAddingEventsAfterFlush
 {
-    [self setupHTTPServer];
-    self.mixpanel.serverURL = @"http://localhost:31337";
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = YES;
-    int requestCount = [MixpanelDummyHTTPConnection getRequestCount];
 
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=10; i<n; i++) {
@@ -369,7 +344,6 @@
     [self waitForSerialQueue];
 
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 0, @"events should have been flushed");
-    XCTAssertEqual([MixpanelDummyHTTPConnection getRequestCount] - requestCount, 2, @"There should be 2 HTTP requests");
 }
 
 - (void)testIdentify
