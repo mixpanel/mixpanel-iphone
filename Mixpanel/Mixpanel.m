@@ -535,6 +535,13 @@ static __unused NSString *MPURLEncode(NSString *s)
 }
 
 #pragma mark - Network control
+- (void)setServerURL:(NSString *)serverURL
+{
+    _serverURL = serverURL.copy;
+    
+    self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:serverURL]];
+}
+
 - (void)setFlushInterval:(NSUInteger)interval
 {
     [self.network setFlushInterval:interval];
