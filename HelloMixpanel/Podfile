@@ -1,11 +1,3 @@
 target :HelloMixpanelTests do
-    pod 'CocoaHTTPServer', '~> 2.2.1'
-end
-
-target :ABTestingTests do
-    pod 'CocoaHTTPServer', '~> 2.2.1'
-end
-
-target :EventBindingTests do
   pod 'OCMock', '~> 3.0'
 end

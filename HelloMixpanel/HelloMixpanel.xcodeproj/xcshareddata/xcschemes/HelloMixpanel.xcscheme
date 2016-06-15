@@ -53,7 +53,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "EventBindingTests">
+                  Identifier = "MixpanelBaseTests">
                </Test>
             </SkippedTests>
          </TestableReference>

@@ -7,28 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0542371F199BDFD100BE25E7 /* test_decide_response_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 05113949199BD7D4005189D2 /* test_decide_response_2.json */; };
-		05423720199BDFD500BE25E7 /* test_decide_response_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 05113949199BD7D4005189D2 /* test_decide_response_2.json */; };
-		05423721199BDFD800BE25E7 /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
 		05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF419214D3D0076094E /* SecretWhisperViewController.m */; };
 		05438FF819214E210076094E /* SecretTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF719214E210076094E /* SecretTableViewCell.m */; };
 		05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05438FFA192175940076094E /* HelloMixpanel.xcassets */; };
 		0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0545AE29196F5382003DCE7F /* Settings.bundle */; };
-		05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */; };
-		05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
-		055FA715194A6B020080A709 /* ABTestingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 055FA714194A6B020080A709 /* ABTestingTests.m */; };
 		0563B603194A186300B40489 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DF0191AE10000AFF3E1 /* MapKit.framework */; };
 		05E98DF3191AE27200AFF3E1 /* test_variant.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E98DF2191AE27200AFF3E1 /* test_variant.json */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
-		187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9931610EFE3005772B7 /* Foundation.framework */; };
-		187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
-		187939FA19A2A7F400CC4FBE /* EventBindingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939F919A2A7F400CC4FBE /* EventBindingTests.m */; };
-		18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
-		18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
-		18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */; };
 		18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */; };
 		2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2802053F17DEC234000D71F5 /* QuartzCore.framework */; };
 		2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2805EDE517C6B815003A0D72 /* Accelerate.framework */; };
@@ -40,26 +28,29 @@
 		2808F9A51610EFE3005772B7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9A41610EFE3005772B7 /* ViewController.m */; };
 		2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541C16548047003DAFFE /* SystemConfiguration.framework */; };
 		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
-		334A929676F998F64CC57B57 /* libPods-EventBindingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */; };
-		5115A0DA1B4F49C000787217 /* MPCategoryHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */; };
-		5115A0E41B4F4DF700787217 /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E11B4F4DF700787217 /* checkerboard.jpg */; };
-		5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
-		5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		515B59D61CB6C8FD00A34060 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		515B59D71CB6C90200A34060 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		515B5A0A1CB6F96700A34060 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
-		515EE7CD1D10D3FE00D035A4 /* MixpanelDummyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */; };
 		518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
-		51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */; };
-		51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */; };
+		51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E7E1D120D2A001F622D /* MPSurveyTests.m */; };
+		51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E801D120D3E001F622D /* MPNotificationTests.m */; };
+		51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
+		51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E841D120D80001F622D /* MixpanelBaseTests.m */; };
+		51D96E871D121763001F622D /* ABTestingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 055FA714194A6B020080A709 /* ABTestingTests.m */; };
+		51D96E881D121796001F622D /* MPCategoryHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */; };
+		51D96E891D12179A001F622D /* EventBindingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 187939F919A2A7F400CC4FBE /* EventBindingTests.m */; };
+		51D96E8C1D1217D6001F622D /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
+		51D96E8D1D1217D6001F622D /* test_variant.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E98DF2191AE27200AFF3E1 /* test_variant.json */; };
+		51D96E8E1D1217D6001F622D /* test_decide_response_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 05113949199BD7D4005189D2 /* test_decide_response_2.json */; };
+		51D96E8F1D1217E1001F622D /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E11B4F4DF700787217 /* checkerboard.jpg */; };
+		51D96E901D1217E1001F622D /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
+		51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
-		A71C6782FD423988AFBE61CC /* libPods-ABTestingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
 		C9C012A964EF5858FB45E0D0 /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */; };
-		E115E0091CCAD48D0026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
-		E115E00A1CCAD5530026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,13 +63,6 @@
 			remoteInfo = HelloMixpanel;
 		};
 		05513E6B1979B10200508405 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
-			remoteInfo = HelloMixpanel;
-		};
-		055FA716194A6B020080A709 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
 			proxyType = 1;
@@ -127,28 +111,7 @@
 			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
 			remoteInfo = HelloMixpanel;
 		};
-		05AD79CD1970821000D8CBB5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
-			remoteInfo = HelloMixpanel;
-		};
 		05AD79CF1970B8A600D8CBB5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
-			remoteInfo = HelloMixpanel;
-		};
-		05AD79D11970B8AB00D8CBB5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
-			remoteInfo = HelloMixpanel;
-		};
-		05AD79D31970CF3700D8CBB5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
 			proxyType = 1;
@@ -162,21 +125,7 @@
 			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
 			remoteInfo = HelloMixpanel;
 		};
-		187939FC19A2A7F400CC4FBE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
-			remoteInfo = HelloMixpanel;
-		};
 		2808F9B61610EFE4005772B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2808F98C1610EFE3005772B7;
-			remoteInfo = HelloMixpanel;
-		};
-		5115A0DB1B4F49C000787217 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
 			proxyType = 1;
@@ -232,6 +181,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51D96E771D11EF69001F622D /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -242,28 +202,18 @@
 		05438FF719214E210076094E /* SecretTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretTableViewCell.m; sourceTree = "<group>"; };
 		05438FFA192175940076094E /* HelloMixpanel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HelloMixpanel.xcassets; sourceTree = "<group>"; };
 		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Settings.bundle; sourceTree = "<group>"; };
-		05509E4D196E4697007E5C06 /* MixpanelDummyDecideConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MixpanelDummyDecideConnection.h; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.h; sourceTree = "<group>"; };
-		05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MixpanelDummyDecideConnection.m; path = ../HelloMixpanelTests/MixpanelDummyDecideConnection.m; sourceTree = "<group>"; };
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
 		0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HelloMixpanel.storyboard; sourceTree = "<group>"; };
-		055FA710194A6B010080A709 /* ABTestingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ABTestingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		055FA713194A6B020080A709 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		055FA714194A6B020080A709 /* ABTestingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTestingTests.m; sourceTree = "<group>"; };
-		05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyHTTPConnection.h; sourceTree = "<group>"; };
-		05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyHTTPConnection.m; sourceTree = "<group>"; };
 		05C13E5118184DBE00848D48 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		05C13E5318184DC700848D48 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		05E98DF0191AE10000AFF3E1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		05E98DF2191AE27200AFF3E1 /* test_variant.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = test_variant.json; path = ../../Mixpanel/test_variant.json; sourceTree = "<group>"; };
 		05FF819C18452EA20073FBAC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		05FF819D18452EA20073FBAC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		12ACE9D815CE39BD8E48338D /* Pods-EventBindingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventBindingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests.debug.xcconfig"; sourceTree = "<group>"; };
-		187939EF19A2A7F400CC4FBE /* EventBindingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventBindingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
-		18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
 		18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SomeTableViewController.m; sourceTree = "<group>"; };
-		1C317EAC26D90021E60C7D33 /* Pods-ABTestingTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		2802053F17DEC234000D71F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2805EDE517C6B815003A0D72 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		2808F98D1610EFE3005772B7 /* HelloMixpanel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -282,54 +232,30 @@
 		283CEC52171F5E2800ACACB5 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		2892541C16548047003DAFFE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		2892541E16548283003DAFFE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		2A046480D4A0654188CB9922 /* Pods-EventBindingTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventBindingTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests.appstore.xcconfig"; sourceTree = "<group>"; };
-		5115A0D51B4F49C000787217 /* MPCategoryHelpersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MPCategoryHelpersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5115A0D81B4F49C000787217 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCategoryHelpersTests.m; sourceTree = "<group>"; };
 		5115A0E11B4F4DF700787217 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = huge_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Mixpanel.xcodeproj; path = ../Mixpanel.xcodeproj; sourceTree = "<group>"; };
 		518010151D11CEA300C5F3EA /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nocilla.framework; sourceTree = "<group>"; };
-		51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummy5XXHTTPConnection.h; sourceTree = "<group>"; };
-		51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummy5XXHTTPConnection.m; sourceTree = "<group>"; };
-		51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelDummyRetryAfterConnection.h; sourceTree = "<group>"; };
-		51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelDummyRetryAfterConnection.m; sourceTree = "<group>"; };
+		51D96E7B1D120A75001F622D /* Mixpanel_Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel_Testing.h; sourceTree = "<group>"; };
+		51D96E7E1D120D2A001F622D /* MPSurveyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyTests.m; sourceTree = "<group>"; };
+		51D96E801D120D3E001F622D /* MPNotificationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationTests.m; sourceTree = "<group>"; };
+		51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelPeopleTests.m; sourceTree = "<group>"; };
+		51D96E841D120D80001F622D /* MixpanelBaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelBaseTests.m; sourceTree = "<group>"; };
+		51D96E861D120D90001F622D /* MixpanelBaseTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MixpanelBaseTests.h; sourceTree = "<group>"; };
 		54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanelTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5E1876A34B6CEDB6F7F45538 /* Pods-ABTestingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.release.xcconfig"; sourceTree = "<group>"; };
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
 		A7BB224419183EB800EEDCCD /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.release.xcconfig"; sourceTree = "<group>"; };
-		C58D1582C07E03B5D1382FA1 /* Pods-ABTestingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABTestingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests.debug.xcconfig"; sourceTree = "<group>"; };
-		DBF5334405F4CF8B588D1B94 /* Pods-EventBindingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventBindingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests.release.xcconfig"; sourceTree = "<group>"; };
 		DF79C3E955E4F278C2032E3E /* Pods-HelloMixpanelTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABTestingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		055FA70D194A6B010080A709 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E115E0091CCAD48D0026CFC0 /* Mixpanel.framework in Frameworks */,
-				A71C6782FD423988AFBE61CC /* libPods-ABTestingTests.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		187939EC19A2A7F400CC4FBE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E115E00A1CCAD5530026CFC0 /* Mixpanel.framework in Frameworks */,
-				187939F219A2A7F400CC4FBE /* UIKit.framework in Frameworks */,
-				187939F119A2A7F400CC4FBE /* Foundation.framework in Frameworks */,
-				334A929676F998F64CC57B57 /* libPods-EventBindingTests.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2808F98A1610EFE3005772B7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -361,13 +287,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5115A0D21B4F49C000787217 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -380,37 +299,6 @@
 				05438FF719214E210076094E /* SecretTableViewCell.m */,
 			);
 			name = SecretWhisper;
-			sourceTree = "<group>";
-		};
-		055FA711194A6B020080A709 /* ABTestingTests */ = {
-			isa = PBXGroup;
-			children = (
-				055FA714194A6B020080A709 /* ABTestingTests.m */,
-				05509E4D196E4697007E5C06 /* MixpanelDummyDecideConnection.h */,
-				05509E4E196E4697007E5C06 /* MixpanelDummyDecideConnection.m */,
-				055FA712194A6B020080A709 /* Supporting Files */,
-			);
-			path = ABTestingTests;
-			sourceTree = "<group>";
-		};
-		055FA712194A6B020080A709 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				18B0ED161A1D6E310014F3B3 /* checkerboard.jpg */,
-				05509E50196E47EE007E5C06 /* test_decide_response.json */,
-				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
-				055FA713194A6B020080A709 /* Info.plist */,
-				05113949199BD7D4005189D2 /* test_decide_response_2.json */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		187939F319A2A7F400CC4FBE /* EventBindingTests */ = {
-			isa = PBXGroup;
-			children = (
-				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
-			);
-			path = EventBindingTests;
 			sourceTree = "<group>";
 		};
 		2808F9821610EFE3005772B7 = {
@@ -432,9 +320,6 @@
 			children = (
 				2808F98D1610EFE3005772B7 /* HelloMixpanel.app */,
 				2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */,
-				055FA710194A6B010080A709 /* ABTestingTests.xctest */,
-				187939EF19A2A7F400CC4FBE /* EventBindingTests.xctest */,
-				5115A0D51B4F49C000787217 /* MPCategoryHelpersTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -475,7 +360,6 @@
 				8673E0F319C3B7090099AB66 /* MPTimingViewController.h */,
 				8673E0F419C3B7090099AB66 /* MPTimingViewController.m */,
 				2808F9981610EFE3005772B7 /* Supporting Files */,
-				2808F9901610EFE3005772B7 /* Frameworks */,
 			);
 			path = HelloMixpanel;
 			sourceTree = "<group>";
@@ -483,6 +367,7 @@
 		2808F9981610EFE3005772B7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2808F9901610EFE3005772B7 /* Frameworks */,
 				05438FFA192175940076094E /* HelloMixpanel.xcassets */,
 				0545AE29196F5382003DCE7F /* Settings.bundle */,
 				2808F9991610EFE3005772B7 /* HelloMixpanel-Info.plist */,
@@ -494,13 +379,14 @@
 		2808F9B81610EFE4005772B7 /* HelloMixpanelTests */ = {
 			isa = PBXGroup;
 			children = (
+				51D96E921D1219AE001F622D /* Helpers */,
+				055FA714194A6B020080A709 /* ABTestingTests.m */,
+				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
+				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
-				05C13E441818477600848D48 /* MixpanelDummyHTTPConnection.h */,
-				05C13E451818477600848D48 /* MixpanelDummyHTTPConnection.m */,
-				51D221041C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.h */,
-				51D221051C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m */,
-				51D221071C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.h */,
-				51D221081C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m */,
+				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
+				51D96E7E1D120D2A001F622D /* MPSurveyTests.m */,
+				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
 				2808F9B91610EFE4005772B7 /* Supporting Files */,
 			);
 			path = HelloMixpanelTests;
@@ -509,28 +395,8 @@
 		2808F9B91610EFE4005772B7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				518010151D11CEA300C5F3EA /* Nocilla.framework */,
-				2808F9BA1610EFE4005772B7 /* HelloMixpanelTests-Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		5115A0D61B4F49C000787217 /* MPCategoryHelpersTests */ = {
-			isa = PBXGroup;
-			children = (
-				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
-				5115A0D71B4F49C000787217 /* Supporting Files */,
-			);
-			path = MPCategoryHelpersTests;
-			sourceTree = "<group>";
-		};
-		5115A0D71B4F49C000787217 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				5115A0E11B4F4DF700787217 /* checkerboard.jpg */,
-				5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */,
-				5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */,
-				5115A0D81B4F49C000787217 /* Info.plist */,
+				51D96E971D122274001F622D /* Frameworks */,
+				51D96E961D122258001F622D /* Resources */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -538,10 +404,7 @@
 		515B59FB1CB6F69900A34060 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				055FA711194A6B020080A709 /* ABTestingTests */,
-				187939F319A2A7F400CC4FBE /* EventBindingTests */,
 				2808F9B81610EFE4005772B7 /* HelloMixpanelTests */,
-				5115A0D61B4F49C000787217 /* MPCategoryHelpersTests */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -556,15 +419,41 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		51D96E921D1219AE001F622D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				51D96E7B1D120A75001F622D /* Mixpanel_Testing.h */,
+				51D96E861D120D90001F622D /* MixpanelBaseTests.h */,
+				51D96E841D120D80001F622D /* MixpanelBaseTests.m */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		51D96E961D122258001F622D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				05509E50196E47EE007E5C06 /* test_decide_response.json */,
+				05E98DF2191AE27200AFF3E1 /* test_variant.json */,
+				05113949199BD7D4005189D2 /* test_decide_response_2.json */,
+				2808F9BA1610EFE4005772B7 /* HelloMixpanelTests-Info.plist */,
+				5115A0E11B4F4DF700787217 /* checkerboard.jpg */,
+				5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */,
+				5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		51D96E971D122274001F622D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				518010151D11CEA300C5F3EA /* Nocilla.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		62E64CCC887FFDAED5235F29 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C58D1582C07E03B5D1382FA1 /* Pods-ABTestingTests.debug.xcconfig */,
-				5E1876A34B6CEDB6F7F45538 /* Pods-ABTestingTests.release.xcconfig */,
-				1C317EAC26D90021E60C7D33 /* Pods-ABTestingTests.appstore.xcconfig */,
-				12ACE9D815CE39BD8E48338D /* Pods-EventBindingTests.debug.xcconfig */,
-				DBF5334405F4CF8B588D1B94 /* Pods-EventBindingTests.release.xcconfig */,
-				2A046480D4A0654188CB9922 /* Pods-EventBindingTests.appstore.xcconfig */,
 				DF79C3E955E4F278C2032E3E /* Pods-HelloMixpanelTests.debug.xcconfig */,
 				BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */,
 				E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */,
@@ -585,51 +474,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		055FA70F194A6B010080A709 /* ABTestingTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 055FA71B194A6B020080A709 /* Build configuration list for PBXNativeTarget "ABTestingTests" */;
-			buildPhases = (
-				AFAC4DD63E5A4C1A92CDE03F /* [CP] Check Pods Manifest.lock */,
-				055FA70C194A6B010080A709 /* Sources */,
-				055FA70D194A6B010080A709 /* Frameworks */,
-				055FA70E194A6B010080A709 /* Resources */,
-				95B33EA604CD8CEE1FED4D82 /* [CP] Embed Pods Frameworks */,
-				122FA7A30875FD90EB66D684 /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				055FA717194A6B020080A709 /* PBXTargetDependency */,
-				05AD79CE1970821000D8CBB5 /* PBXTargetDependency */,
-				05AD79D21970B8AB00D8CBB5 /* PBXTargetDependency */,
-				05AD79D41970CF3700D8CBB5 /* PBXTargetDependency */,
-			);
-			name = ABTestingTests;
-			productName = ABTestingTests;
-			productReference = 055FA710194A6B010080A709 /* ABTestingTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		187939EE19A2A7F400CC4FBE /* EventBindingTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 187939FE19A2A7F400CC4FBE /* Build configuration list for PBXNativeTarget "EventBindingTests" */;
-			buildPhases = (
-				7AE244CA14192FCEFC2CCF5C /* [CP] Check Pods Manifest.lock */,
-				187939EB19A2A7F400CC4FBE /* Sources */,
-				187939EC19A2A7F400CC4FBE /* Frameworks */,
-				187939ED19A2A7F400CC4FBE /* Resources */,
-				66D61E760A16CD4067275921 /* [CP] Embed Pods Frameworks */,
-				CB72B56A2F15DF2B0E8B6B30 /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				187939FD19A2A7F400CC4FBE /* PBXTargetDependency */,
-			);
-			name = EventBindingTests;
-			productName = EventBindingTests;
-			productReference = 187939EF19A2A7F400CC4FBE /* EventBindingTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		2808F98C1610EFE3005772B7 /* HelloMixpanel */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C31610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanel" */;
@@ -656,8 +500,9 @@
 			buildPhases = (
 				195A51B1E5797AF49022A1D3 /* [CP] Check Pods Manifest.lock */,
 				2808F9AC1610EFE4005772B7 /* Sources */,
+				51D96E8B1D1217C5001F622D /* Resources */,
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
-				2808F9AE1610EFE4005772B7 /* Resources */,
+				51D96E771D11EF69001F622D /* Copy Frameworks */,
 				6AD4F51E62F4794F46EC4F93 /* [CP] Embed Pods Frameworks */,
 				7EB546446E7626E6939A1F0F /* [CP] Copy Pods Resources */,
 			);
@@ -681,24 +526,6 @@
 			productReference = 2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		5115A0D41B4F49C000787217 /* MPCategoryHelpersTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5115A0DD1B4F49C000787217 /* Build configuration list for PBXNativeTarget "MPCategoryHelpersTests" */;
-			buildPhases = (
-				5115A0D11B4F49C000787217 /* Sources */,
-				5115A0D21B4F49C000787217 /* Frameworks */,
-				5115A0D31B4F49C000787217 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				5115A0DC1B4F49C000787217 /* PBXTargetDependency */,
-			);
-			name = MPCategoryHelpersTests;
-			productName = MPCategoryHelpersTests;
-			productReference = 5115A0D51B4F49C000787217 /* MPCategoryHelpersTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -709,21 +536,10 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
-					055FA70F194A6B010080A709 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 2808F98C1610EFE3005772B7;
-					};
-					187939EE19A2A7F400CC4FBE = {
-						TestTargetID = 2808F98C1610EFE3005772B7;
-					};
 					2808F98C1610EFE3005772B7 = {
 						DevelopmentTeam = 9AEE6NMN4R;
 					};
 					2808F9B01610EFE4005772B7 = {
-						TestTargetID = 2808F98C1610EFE3005772B7;
-					};
-					5115A0D41B4F49C000787217 = {
-						CreatedOnToolsVersion = 6.4;
 						TestTargetID = 2808F98C1610EFE3005772B7;
 					};
 				};
@@ -749,9 +565,6 @@
 			targets = (
 				2808F98C1610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B01610EFE4005772B7 /* HelloMixpanelTests */,
-				055FA70F194A6B010080A709 /* ABTestingTests */,
-				187939EE19A2A7F400CC4FBE /* EventBindingTests */,
-				5115A0D41B4F49C000787217 /* MPCategoryHelpersTests */,
 			);
 		};
 /* End PBXProject section */
@@ -781,73 +594,33 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		055FA70E194A6B010080A709 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05423721199BDFD800BE25E7 /* test_decide_response.json in Resources */,
-				18B0ED181A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
-				05423720199BDFD500BE25E7 /* test_decide_response_2.json in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		187939ED19A2A7F400CC4FBE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				18B0ED191A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2808F98B1610EFE3005772B7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */,
 				05E98DF3191AE27200AFF3E1 /* test_variant.json in Resources */,
-				0542371F199BDFD100BE25E7 /* test_decide_response_2.json in Resources */,
 				05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */,
-				18B0ED171A1D6E310014F3B3 /* checkerboard.jpg in Resources */,
-				05509E52196E77CF007E5C06 /* test_decide_response.json in Resources */,
 				0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2808F9AE1610EFE4005772B7 /* Resources */ = {
+		51D96E8B1D1217C5001F622D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5115A0D31B4F49C000787217 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5115A0E41B4F4DF700787217 /* checkerboard.jpg in Resources */,
-				5115A0E61B4F4DF700787217 /* small_checkerboard.jpg in Resources */,
-				5115A0E51B4F4DF700787217 /* huge_checkerboard.jpg in Resources */,
+				51D96E8F1D1217E1001F622D /* checkerboard.jpg in Resources */,
+				51D96E901D1217E1001F622D /* huge_checkerboard.jpg in Resources */,
+				51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */,
+				51D96E8C1D1217D6001F622D /* test_decide_response.json in Resources */,
+				51D96E8D1D1217D6001F622D /* test_variant.json in Resources */,
+				51D96E8E1D1217D6001F622D /* test_decide_response_2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		122FA7A30875FD90EB66D684 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		195A51B1E5797AF49022A1D3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -861,21 +634,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		66D61E760A16CD4067275921 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6AD4F51E62F4794F46EC4F93 /* [CP] Embed Pods Frameworks */ = {
@@ -893,21 +651,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7AE244CA14192FCEFC2CCF5C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		7EB546446E7626E6939A1F0F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -923,71 +666,9 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		95B33EA604CD8CEE1FED4D82 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ABTestingTests/Pods-ABTestingTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AFAC4DD63E5A4C1A92CDE03F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		CB72B56A2F15DF2B0E8B6B30 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EventBindingTests/Pods-EventBindingTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		055FA70C194A6B010080A709 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05509E4F196E4697007E5C06 /* MixpanelDummyDecideConnection.m in Sources */,
-				055FA715194A6B020080A709 /* ABTestingTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		187939EB19A2A7F400CC4FBE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				187939FA19A2A7F400CC4FBE /* EventBindingTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2808F9891610EFE3005772B7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1007,18 +688,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */,
+				51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */,
+				51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */,
+				51D96E871D121763001F622D /* ABTestingTests.m in Sources */,
 				515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */,
-				51D221061C599301003ECFB3 /* MixpanelDummy5XXHTTPConnection.m in Sources */,
-				515EE7CD1D10D3FE00D035A4 /* MixpanelDummyHTTPConnection.m in Sources */,
-				51D221091C5993C0003ECFB3 /* MixpanelDummyRetryAfterConnection.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5115A0D11B4F49C000787217 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5115A0DA1B4F49C000787217 /* MPCategoryHelpersTests.m in Sources */,
+				51D96E881D121796001F622D /* MPCategoryHelpersTests.m in Sources */,
+				51D96E891D12179A001F622D /* EventBindingTests.m in Sources */,
+				51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1034,11 +711,6 @@
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 05513E6B1979B10200508405 /* PBXContainerItemProxy */;
-		};
-		055FA717194A6B020080A709 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
-			targetProxy = 055FA716194A6B020080A709 /* PBXContainerItemProxy */;
 		};
 		057264C6194913C500738CDC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1070,45 +742,20 @@
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 05AD79CB1970820F00D8CBB5 /* PBXContainerItemProxy */;
 		};
-		05AD79CE1970821000D8CBB5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
-			targetProxy = 05AD79CD1970821000D8CBB5 /* PBXContainerItemProxy */;
-		};
 		05AD79D01970B8A600D8CBB5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 05AD79CF1970B8A600D8CBB5 /* PBXContainerItemProxy */;
-		};
-		05AD79D21970B8AB00D8CBB5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
-			targetProxy = 05AD79D11970B8AB00D8CBB5 /* PBXContainerItemProxy */;
-		};
-		05AD79D41970CF3700D8CBB5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
-			targetProxy = 05AD79D31970CF3700D8CBB5 /* PBXContainerItemProxy */;
 		};
 		05AD79D61970D05700D8CBB5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 05AD79D51970D05700D8CBB5 /* PBXContainerItemProxy */;
 		};
-		187939FD19A2A7F400CC4FBE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
-			targetProxy = 187939FC19A2A7F400CC4FBE /* PBXContainerItemProxy */;
-		};
 		2808F9B71610EFE4005772B7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 2808F9B61610EFE4005772B7 /* PBXContainerItemProxy */;
-		};
-		5115A0DC1B4F49C000787217 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
-			targetProxy = 5115A0DB1B4F49C000787217 /* PBXContainerItemProxy */;
 		};
 		515B5A091CB6F96100A34060 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1123,195 +770,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		055FA718194A6B020080A709 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C58D1582C07E03B5D1382FA1 /* Pods-ABTestingTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
-					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"\"$(SRCROOT)/../Mixpanel\"",
-				);
-				INFOPLIST_FILE = ABTestingTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel",
-				);
-				METAL_ENABLE_DEBUG_INFO = YES;
-				OTHER_CFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "Mixpanel.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				USER_HEADER_SEARCH_PATHS = "";
-			};
-			name = Debug;
-		};
-		055FA719194A6B020080A709 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5E1876A34B6CEDB6F7F45538 /* Pods-ABTestingTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
-					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"\"$(SRCROOT)/../Mixpanel\"",
-				);
-				INFOPLIST_FILE = ABTestingTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel",
-				);
-				METAL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Mixpanel.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				USER_HEADER_SEARCH_PATHS = "";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		055FA71A194A6B020080A709 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C317EAC26D90021E60C7D33 /* Pods-ABTestingTests.appstore.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
-					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"\"$(SRCROOT)/../Mixpanel\"",
-				);
-				INFOPLIST_FILE = ABTestingTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel",
-				);
-				METAL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Mixpanel.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				USER_HEADER_SEARCH_PATHS = "";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = AppStore;
-		};
-		187939FF19A2A7F400CC4FBE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 12ACE9D815CE39BD8E48338D /* Pods-EventBindingTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EventBindingTests/EventBindingTests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
-					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"$(SRCROOT)/../Mixpanel/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Debug;
-		};
-		18793A0019A2A7F400CC4FBE /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DBF5334405F4CF8B588D1B94 /* Pods-EventBindingTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EventBindingTests/EventBindingTests-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
-					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"$(SRCROOT)/../Mixpanel/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Release;
-		};
-		18793A0119A2A7F400CC4FBE /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2A046480D4A0654188CB9922 /* Pods-EventBindingTests.appstore.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "EventBindingTests/EventBindingTests-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaAsyncSocket\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
-					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"$(SRCROOT)/../Mixpanel/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../Mixpanel",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = AppStore;
-		};
 		2808F9C11610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1532,6 +990,7 @@
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
@@ -1568,6 +1027,7 @@
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
@@ -1696,6 +1156,7 @@
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
@@ -1706,75 +1167,9 @@
 			};
 			name = AppStore;
 		};
-		5115A0DE1B4F49C000787217 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Mixpanel/**";
-				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-			};
-			name = Debug;
-		};
-		5115A0DF1B4F49C000787217 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Mixpanel/**";
-				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-			};
-			name = Release;
-		};
-		5115A0E01B4F49C000787217 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Mixpanel/**";
-				INFOPLIST_FILE = MPCategoryHelpersTests/Info.plist;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
-			};
-			name = AppStore;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		055FA71B194A6B020080A709 /* Build configuration list for PBXNativeTarget "ABTestingTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				055FA718194A6B020080A709 /* Debug */,
-				055FA719194A6B020080A709 /* Release */,
-				055FA71A194A6B020080A709 /* AppStore */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		187939FE19A2A7F400CC4FBE /* Build configuration list for PBXNativeTarget "EventBindingTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				187939FF19A2A7F400CC4FBE /* Debug */,
-				18793A0019A2A7F400CC4FBE /* Release */,
-				18793A0119A2A7F400CC4FBE /* AppStore */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1801,16 +1196,6 @@
 				2808F9C71610EFE4005772B7 /* Debug */,
 				2808F9C81610EFE4005772B7 /* Release */,
 				28C2136716376D3300696E4F /* AppStore */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		5115A0DD1B4F49C000787217 /* Build configuration list for PBXNativeTarget "MPCategoryHelpersTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5115A0DE1B4F49C000787217 /* Debug */,
-				5115A0DF1B4F49C000787217 /* Release */,
-				5115A0E01B4F49C000787217 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

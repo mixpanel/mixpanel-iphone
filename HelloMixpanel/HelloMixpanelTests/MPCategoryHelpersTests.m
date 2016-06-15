@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Amanda Canyon. All rights reserved.
 //
 
-
 #import "UIView+MPHelpers.h"
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
@@ -17,8 +16,7 @@
 
 @implementation MPCategoryHelpersTests
 
-- (void)testExistence
-{
+- (void)testExistence {
     UIView *v1 = [[UIView alloc] init];
     
 #pragma clang diagnostic push
@@ -33,8 +31,7 @@
 #pragma clang diagnostic pop
 }
 
-- (void)testFingerprinting
-{
+- (void)testFingerprinting {
     NSString *format;
     UIView *v1 = [[UIView alloc] init];
     UILabel *l1 = [[UILabel alloc] initWithFrame:CGRectMake(1, 2, 3, 4)];
@@ -70,8 +67,7 @@
     XCTAssertThrowsSpecificNamed([[NSPredicate predicateWithFormat:format] evaluateWithObject:b1], NSException, @"NSUnknownKeyException");
 }
 
-- (void)testImageFingerprint
-{
+- (void)testImageFingerprint {
     UIButton *b1 = [[UIButton alloc] init];
     UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"huge_checkerboard" withExtension:@"jpg"]]];
     XCTAssert(image);
@@ -86,6 +82,5 @@
     XCTAssertEqualObjects([b1 performSelector:@selector(mp_varC)], [b2 performSelector:@selector(mp_varC)]);
 #pragma clang diagnostic pop
 }
-
 
 @end

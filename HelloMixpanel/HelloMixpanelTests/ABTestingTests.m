@@ -7,41 +7,14 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "MixpanelBaseTests.h"
+#import "Mixpanel_Testing.h"
 #import "HomeViewController.h"
-#import "HTTPServer.h"
-#import <Mixpanel/Mixpanel.h>
-#import "MixpanelDummyDecideConnection.h"
 #import "UIView+MPHelpers.h"
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 #import "MPValueTransformers.h"
-#import "MPVariant.h"
 #import "NSData+MPBase64.h"
-
-#define TEST_TOKEN @"abc123"
-
-#pragma mark - Interface Redefinitions
-
-@interface Mixpanel (Test)
-
-@property (nonatomic, assign) dispatch_queue_t serialQueue;
-
-@property (atomic, copy) NSString *decideURL;
-@property (nonatomic, strong) NSSet *variants;
-@property (nonatomic, retain) NSMutableArray *eventsQueue;
-@property (atomic, strong) NSDictionary *superProperties;
-
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
-- (void)markVariantRun:(MPVariant *)variant;
-
-@end
-
-@interface MPVariantAction (Test)
-
-+ (BOOL)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects;
-
-@end
 
 #pragma mark - Test Classes for swizzling
 
@@ -78,6 +51,7 @@
 @interface C : B
 
 @end
+
 @implementation C
 
 - (void)incrementCount
@@ -87,96 +61,34 @@
 
 @end
 
-/*
- This is to let the tests run in XCode 5, as the XCode 5
- version of XCTest does not support asynchonous tests and
- will not compile unless we define these symbols
- */
-#if !__has_include("XCTest/XCTestCase+AsynchronousTesting.h")
-@interface XCTestExpectation
-
-- (void)fulfill;
+@interface ABTestingTests : MixpanelBaseTests
 
 @end
-
-@interface XCTestCase (Test)
-
-- (void)waitForExpectationsWithTimeout:(NSTimeInterval)timeout handler:(id)handlerOrNil;
-- (XCTestExpectation *)expectationWithDescription:(NSString *)description;
-
-@end
-#endif
-
-@interface ABTestingTests : XCTestCase
-
-@property (nonatomic, strong) Mixpanel *mixpanel;
-@property (nonatomic, strong) HTTPServer *httpServer;
-
-@end
-
-#pragma mark - Tests
 
 @implementation ABTestingTests
 
-#pragma mark Helper Methods
-
 - (void)setUp {
     [super setUp];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:TEST_TOKEN andFlushInterval:0];
+    
     self.mixpanel.checkForNotificationsOnActive = NO;
     self.mixpanel.checkForSurveysOnActive = NO;
     self.mixpanel.checkForVariantsOnActive = NO;
-    self.mixpanel.decideURL = @"http://localhost:31338";
 }
 
-- (void)tearDown {
-    [super tearDown];
-    if(self.httpServer) {
-        [self.httpServer stop:NO];
-        self.httpServer = nil;
-    }
-    self.mixpanel = nil;
-}
-
-- (void)setupHTTPServer
-{
-    if (!self.httpServer) {
-        self.httpServer = [[HTTPServer alloc] init];
-        [self.httpServer setConnectionClass:[MixpanelDummyDecideConnection class]];
-        [self.httpServer setType:@"_http._tcp."];
-        [self.httpServer setPort:31338];
-
-        NSString *webPath = [[NSBundle mainBundle] resourcePath];
-        [self.httpServer setDocumentRoot:webPath];
-
-        NSError *error;
-        if ([self.httpServer start:&error]) {
-            NSLog(@"Started HTTP Server on port %hu", [self.httpServer listeningPort]);
-        } else {
-            NSLog(@"Error starting HTTP Server: %@", error);
-        }
-    }
-}
-
-- (UIViewController *)topViewController {
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    while (rootViewController.presentedViewController) {
-        rootViewController = rootViewController.presentedViewController;
-    }
-    return rootViewController;
-}
-
-- (void)waitForSerialQueue
-{
-    NSLog(@"starting wait for serial queue...");
-    dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
-    NSLog(@"finished wait for serial queue");
+#pragma mark - Helpers
+- (void)stubDecide:(NSString *)path {
+    NSURL *responseURL = [[NSBundle bundleForClass:self.class] URLForResource:path
+                                                                withExtension:@"json"];
+    stubRequest(@"GET", @"^https://decide\\.mixpanel\\.com/decide(.*?)".regex)
+    .withHeader(@"Accept-Encoding", @"gzip")
+    .andReturn(200)
+    .withBody([NSData dataWithContentsOfURL:responseURL]);
 }
 
 #pragma mark - Invocation and Swizzling
 /*
  Test that invocations for various objects work. This includes the parsing and
- deserializing of the selectors and arguments from JSON, apllying to the objects
+ deserializing of the selectors and arguments from JSON, applying to the objects
  and checking that the change was successfully applied.
 */
 - (void)testInvocation
@@ -192,7 +104,7 @@
     UIImageView *urlImageView = [[UIImageView alloc] init];
     XCTAssertNil(urlImageView.image, @"Image should not be set");
     [MPVariantAction executeSelector:@selector(setImage:)
-                            withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":[[[NSBundle mainBundle] URLForResource:@"checkerboard" withExtension:@"jpg"] absoluteString]}]}, @"UIImage"]]
+                            withArgs:@[@[@{@"images":@[@{@"scale":@1.0, @"mime_type": @"image/png",@"dimensions":@{@"Height": @10.0, @"Width": @10.0}, @"url":[[[NSBundle bundleForClass:self.class] URLForResource:@"checkerboard" withExtension:@"jpg"] absoluteString]}]}, @"UIImage"]]
                            onObjects:@[urlImageView]];
     XCTAssertNotNil(urlImageView.image, @"Image should be set");
     XCTAssertEqual(CGImageGetWidth(imageView.image.CGImage), 1.0f, @"Image should be 1px wide");
@@ -384,60 +296,55 @@
 
 #pragma mark - Decide
 
-- (void)testDecideVariants
-{
-    [self setupHTTPServer];
-    int requestCount = [MixpanelDummyDecideConnection getRequestCount];
+- (void)testDecideVariants {
+    [self stubDecide:@"test_decide_response"];
+    
     [self.mixpanel identify:@"ABC"];
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expect = [self expectationWithDescription:@"wait for variants to be executed"];
-        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
-            XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
-            for (MPVariant *variant in variants) {
-                [variant execute];
-            }
-            [expect fulfill];
-        }];
-        [self waitForExpectationsWithTimeout:0.1 handler:nil];
-
-        // Test that calling again uses the cache (no extra requests to decide).
-        [self.mixpanel checkForDecideResponseWithCompletion:nil];
-        [self waitForSerialQueue];
-
-        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide should have been queried once");
-        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
-
-        // Test that we make another request if useCache is off
-        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
-            XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
-        } useCache:NO];
-        [self waitForSerialQueue];
-        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 2, @"Decide should have been queried again");
-
-        [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
-
-        __block BOOL completionCalled = NO;
-        [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
-            completionCalled = YES;
-            XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
-        } useCache:NO];
-        [self waitForSerialQueue];
-        XCTAssert(completionCalled, @"completion block should have been called");
-        XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 3, @"Decide should have been queried again");
-
-        // Reset to default decide response
-        [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response" withExtension:@"json"]];
-    }
+    
+    XCTestExpectation *expect = [self expectationWithDescription:@"wait for variants to be executed"];
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+        XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
+        for (MPVariant *variant in variants) {
+            [variant execute];
+        }
+        [expect fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    
+    // Test that calling again uses the cache (no extra requests to decide).
+    [self.mixpanel checkForDecideResponseWithCompletion:nil];
+    [self waitForSerialQueue];
+    
+    XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+    
+    // Test that we make another request if useCache is off
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+        XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
+    } useCache:NO];
+    [self waitForSerialQueue];
+    
+    [self stubDecide:@"test_decide_response_2"];
+    
+    __block BOOL completionCalled = NO;
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+        completionCalled = YES;
+        XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
+    } useCache:NO];
+    [self waitForSerialQueue];
+    XCTAssert(completionCalled, @"completion block should have been called");
+    
+    // Reset to default decide response
+    [self stubDecide:@"test_decide_response"];
 }
 
 - (void)testRunExperimentFromDecide
 {
+    [self stubDecide:@"test_decide_response"];
     // This view should be modified by the variant returned from decide.
     UIButton *button = [[UIButton alloc] init];
     button.backgroundColor = [UIColor blackColor];
     [[self topViewController].view addSubview:button];
 
-    [self setupHTTPServer];
     [self.mixpanel identify:@"ABC"];
     [self.mixpanel joinExperiments];
     [self waitForSerialQueue];
@@ -448,7 +355,8 @@
     XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[0] * 255), 255, @"Button background should be red");
 
     // Returning a new variant for the same experiment from decide should override the old one
-    [MixpanelDummyDecideConnection setDecideResponseURL:[[NSBundle mainBundle] URLForResource:@"test_decide_response_2" withExtension:@"json"]];
+    [self stubDecide:@"test_decide_response_2"];
+    
     __block BOOL lastCall = NO;
     [self.mixpanel joinExperimentsWithCallback:^{
         XCTAssert(lastCall, @"callback should run after variants have been processed");
@@ -463,10 +371,9 @@
     lastCall = YES;
 }
 
-- (void)testVariantsTracked
-{
-    [self setupHTTPServer];
-    int requestCount = [MixpanelDummyDecideConnection getRequestCount];
+- (void)testVariantsTracked {
+    [self stubDecide:@"test_decide_response"];
+    
     [self.mixpanel identify:@"DEF"];
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         for (MPVariant *variant in variants) {
@@ -478,7 +385,6 @@
     if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
         XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            XCTAssertEqual([MixpanelDummyDecideConnection getRequestCount], requestCount + 1, @"Decide not queried");
             XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
             XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
             XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
