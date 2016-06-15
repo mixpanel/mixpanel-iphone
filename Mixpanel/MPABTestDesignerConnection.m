@@ -17,13 +17,14 @@
 #import "MPSwizzler.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
+static NSString * const MPConnBarLoadingAnim = @"MPConnectivityBarLoadingAnim";
+static NSString * const MPConnBarFinishLoadingAnim = @"MPConnectivityBarFinishLoadingAnim";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
 @property (strong, nonatomic) UIWindow *connectivityIndicatorWindow;
 @end
 
 @implementation MPABTestDesignerConnection
-
 {
     /* The difference between _open and _connected is that open
      is set when the socket is open, and _connected is set when
@@ -284,21 +285,21 @@ NSString * const kSessionVariantKey = @"session_variant";
         CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
         myAnimation.duration = 10.f;
         myAnimation.fromValue = @0;
-        myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width*1.9f);
+        myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width * 1.9f);
         myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
         myAnimation.fillMode = kCAFillModeForwards;
         myAnimation.removedOnCompletion = NO;
-        [_indeterminateLayer addAnimation:myAnimation forKey:@"MPConnBarLoadingAnim"];
+        [_indeterminateLayer addAnimation:myAnimation forKey:MPConnBarLoadingAnim];
     } else {
-        [_indeterminateLayer removeAnimationForKey:@"MPConnBarLoadingAnim"];
+        [_indeterminateLayer removeAnimationForKey:MPConnBarLoadingAnim];
         CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
         myAnimation.duration = 1.f;
         myAnimation.fromValue = @([[_indeterminateLayer.presentationLayer valueForKeyPath: @"bounds.size.width"] floatValue]);
-        myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width*2.f);
+        myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width * 2.f);
         myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
         myAnimation.fillMode = kCAFillModeForwards;
         myAnimation.removedOnCompletion = NO;
-        [_indeterminateLayer addAnimation:myAnimation forKey:@"MPConnBarFinishLoadingAnim"];
+        [_indeterminateLayer addAnimation:myAnimation forKey:MPConnBarFinishLoadingAnim];
     }
 }
 
