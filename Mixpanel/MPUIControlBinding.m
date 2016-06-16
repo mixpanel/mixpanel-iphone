@@ -245,7 +245,7 @@
 - (BOOL)isEqual:(id)other {
     if (other == self) {
         return YES;
-    } else if (![other isKindOfClass:[MPEventBinding class]]) {
+    } else if (![other isKindOfClass:[MPUIControlBinding class]]) {
         return NO;
     } else {
         return [super isEqual:other] && self.controlEvent == ((MPUIControlBinding *)other).controlEvent && self.verifyEvent == ((MPUIControlBinding *)other).verifyEvent;

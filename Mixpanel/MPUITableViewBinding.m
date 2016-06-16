@@ -122,18 +122,4 @@
     return nil; // this view is not within a tableView
 }
 
-- (BOOL)isEqual:(id)other {
-    if (other == self) {
-        return YES;
-    } else if (![other isKindOfClass:[MPUITableViewBinding class]]) {
-        return NO;
-    } else {
-        return [super isEqual:other];
-    }
-}
-
-- (NSUInteger)hash {
-    return [super hash];
-}
-
 @end
