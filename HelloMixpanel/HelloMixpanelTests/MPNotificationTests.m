@@ -6,8 +6,9 @@
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
-#import "MixpanelBaseTests.h"
 #import <Nocilla/Nocilla.h>
+#import "MixpanelBaseTests.h"
+#import "MixpanelPrivate.h"
 #import "MPNotification.h"
 #import "MPNotificationViewController.h"
 

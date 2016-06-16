@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Mixpanel_Testing.h"
+#import "Mixpanel.h"
 
 @interface MixpanelBaseTests : XCTestCase  <MixpanelDelegate>
 

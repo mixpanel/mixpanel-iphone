@@ -7,9 +7,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <Nocilla/Nocilla.h>
 #import "MixpanelBaseTests.h"
-#import "Mixpanel_Testing.h"
-#import "HomeViewController.h"
+#import "MixpanelPrivate.h"
 #import "UIView+MPHelpers.h"
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
@@ -58,6 +58,14 @@
 {
     self.count += 2;
 }
+
+@end
+
+@interface MPVariantAction (Test)
+
++ (BOOL)executeSelector:(SEL)selector
+               withArgs:(NSArray *)args
+              onObjects:(NSArray *)objects;
 
 @end
 

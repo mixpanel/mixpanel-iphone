@@ -7,6 +7,7 @@
 //
 
 #import "MixpanelBaseTests.h"
+#import "MixpanelPrivate.h"
 #import "MixpanelPeoplePrivate.h"
 
 @interface MixpanelPeopleTests : MixpanelBaseTests

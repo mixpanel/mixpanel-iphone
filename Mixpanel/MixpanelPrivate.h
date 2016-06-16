@@ -96,5 +96,21 @@
 - (NSString *)IFA;
 
 - (void)archivePeople;
+- (NSString *)defaultDistinctId;
+- (void)archive;
+- (NSString *)eventsFilePath;
+- (NSString *)peopleFilePath;
+- (NSString *)propertiesFilePath;
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
+- (void)showNotificationWithObject:(MPNotification *)notification;
+
+- (NSData *)JSONSerializeObject:(id)obj;
+- (NSString *)encodeAPIData:(NSArray *)array;
+
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
+- (void)markVariantRun:(MPVariant *)variant;
+
 
 @end
+

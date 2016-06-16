@@ -7,6 +7,7 @@
 //
 
 #import "MixpanelBaseTests.h"
+#import "MixpanelPrivate.h"
 #import "MPSurvey.h"
 #import "MPSurveyQuestion.h"
 #import "MPSurveyNavigationController.h"

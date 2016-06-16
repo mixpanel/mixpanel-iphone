@@ -1,10 +1,6 @@
 #import "MixpanelBaseTests.h"
-#import "MPNotification.h"
-#import "MPNotificationViewController.h"
-#import "MPSurvey.h"
-#import "MPSurveyQuestion.h"
-#import "MPSurveyQuestionViewController.h"
-#import "MPSurveyNavigationController.h"
+#import "Mixpanel_Testing.h"
+#import "MixpanelPrivate.h"
 #import "MixpanelPeoplePrivate.h"
 
 @interface HelloMixpanelTests : MixpanelBaseTests

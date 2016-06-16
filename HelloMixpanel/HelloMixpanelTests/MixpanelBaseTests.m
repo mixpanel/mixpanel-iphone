@@ -6,7 +6,10 @@
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
+#import <Nocilla/Nocilla.h>
 #import "MixpanelBaseTests.h"
+#import "Mixpanel_Testing.h"
+#import "MixpanelPrivate.h"
 
 @implementation MixpanelBaseTests
 
