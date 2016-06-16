@@ -52,6 +52,19 @@
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
 		C9C012A964EF5858FB45E0D0 /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */; };
 		E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
+		E123C48D1D1354EC0015B425 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E123C48C1D1354EC0015B425 /* main.m */; };
+		E123C4901D1354EC0015B425 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E123C48F1D1354EC0015B425 /* AppDelegate.m */; };
+		E123C4931D1354EC0015B425 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E123C4921D1354EC0015B425 /* ViewController.m */; };
+		E123C4961D1354EC0015B425 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E123C4941D1354EC0015B425 /* Main.storyboard */; };
+		E123C4981D1354EC0015B425 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E123C4971D1354EC0015B425 /* Assets.xcassets */; };
+		E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E841D120D80001F622D /* MixpanelBaseTests.m */; };
+		E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
+		E12C04A41D135952007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
+		E12C04A51D135952007D2086 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E12C04A91D135A8B007D2086 /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
+		E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
+		E12C04AF1D135F17007D2086 /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E2045FE14FB7248150CA7113 /* libPods-HelloMixpanel_tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24ACB1E17599254B3B668E12 /* libPods-HelloMixpanel_tvOSTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +180,27 @@
 			remoteGlobalIDString = 7C170C291A4A02F500D9E0F2;
 			remoteInfo = Mixpanel;
 		};
+		E123C4831D1353D10015B425 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E1C2BEB61CFD6A010052172F;
+			remoteInfo = Mixpanel_tvOS;
+		};
+		E123C49F1D1354EC0015B425 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E123C4881D1354EC0015B425;
+			remoteInfo = HelloMixpanel_tvOS;
+		};
+		E12C04A61D135952007D2086 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E1C2BE0A1CFD6A010052172F;
+			remoteInfo = Mixpanel_tvOS;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -188,6 +222,28 @@
 			dstSubfolderSpec = 10;
 			files = (
 				51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E12C04A81D135952007D2086 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E12C04A51D135952007D2086 /* Mixpanel.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E12C04AE1D135F01007D2086 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E12C04AF1D135F17007D2086 /* Nocilla.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -214,6 +270,7 @@
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
 		18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SomeTableViewController.m; sourceTree = "<group>"; };
+		24ACB1E17599254B3B668E12 /* libPods-HelloMixpanel_tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanel_tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2802053F17DEC234000D71F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2805EDE517C6B815003A0D72 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		2808F98D1610EFE3005772B7 /* HelloMixpanel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -248,9 +305,22 @@
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
+		86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		936971DC65F55B41A8EE46CD /* Pods-HelloMixpanel_tvOSTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		A7BB224419183EB800EEDCCD /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.release.xcconfig"; sourceTree = "<group>"; };
+		DF71948F06B2043405B77258 /* Pods-HelloMixpanel_tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		DF79C3E955E4F278C2032E3E /* Pods-HelloMixpanelTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E123C4891D1354EC0015B425 /* HelloMixpanel_tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanel_tvOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E123C48C1D1354EC0015B425 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E123C48E1D1354EC0015B425 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E123C48F1D1354EC0015B425 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E123C4911D1354EC0015B425 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		E123C4921D1354EC0015B425 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		E123C4951D1354EC0015B425 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E123C4971D1354EC0015B425 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E123C4991D1354EC0015B425 /* HelloMixpanel_tvOS-info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HelloMixpanel_tvOS-info.plist"; sourceTree = "<group>"; };
+		E123C49E1D1354EC0015B425 /* HelloMixpanel_tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelloMixpanel_tvOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABTestingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -287,6 +357,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E123C4861D1354EC0015B425 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E12C04A41D135952007D2086 /* Mixpanel.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E123C49B1D1354EC0015B425 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */,
+				E12C04A91D135A8B007D2086 /* Nocilla.framework in Frameworks */,
+				E2045FE14FB7248150CA7113 /* libPods-HelloMixpanel_tvOSTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -306,6 +394,7 @@
 			children = (
 				515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */,
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
+				E123C48A1D1354EC0015B425 /* HelloMixpanel_tvOS */,
 				515B59FB1CB6F69900A34060 /* Tests */,
 				2808F98E1610EFE3005772B7 /* Products */,
 				62E64CCC887FFDAED5235F29 /* Pods */,
@@ -320,6 +409,8 @@
 			children = (
 				2808F98D1610EFE3005772B7 /* HelloMixpanel.app */,
 				2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */,
+				E123C4891D1354EC0015B425 /* HelloMixpanel_tvOS.app */,
+				E123C49E1D1354EC0015B425 /* HelloMixpanel_tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -415,6 +506,7 @@
 				515B5A031CB6F95200A34060 /* Mixpanel.framework */,
 				515B5A051CB6F95200A34060 /* Mixpanel.framework */,
 				515B5A071CB6F95200A34060 /* MixpanelAppExtension.framework */,
+				E123C4841D1353D10015B425 /* Mixpanel.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -457,6 +549,9 @@
 				DF79C3E955E4F278C2032E3E /* Pods-HelloMixpanelTests.debug.xcconfig */,
 				BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */,
 				E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */,
+				86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */,
+				DF71948F06B2043405B77258 /* Pods-HelloMixpanel_tvOSTests.release.xcconfig */,
+				936971DC65F55B41A8EE46CD /* Pods-HelloMixpanel_tvOSTests.appstore.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -467,8 +562,32 @@
 				F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */,
 				83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */,
 				54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */,
+				24ACB1E17599254B3B668E12 /* libPods-HelloMixpanel_tvOSTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E123C48A1D1354EC0015B425 /* HelloMixpanel_tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				E123C48E1D1354EC0015B425 /* AppDelegate.h */,
+				E123C48F1D1354EC0015B425 /* AppDelegate.m */,
+				E123C4911D1354EC0015B425 /* ViewController.h */,
+				E123C4921D1354EC0015B425 /* ViewController.m */,
+				E123C4941D1354EC0015B425 /* Main.storyboard */,
+				E123C4971D1354EC0015B425 /* Assets.xcassets */,
+				E123C4991D1354EC0015B425 /* HelloMixpanel_tvOS-info.plist */,
+				E123C48B1D1354EC0015B425 /* Supporting Files */,
+			);
+			path = HelloMixpanel_tvOS;
+			sourceTree = "<group>";
+		};
+		E123C48B1D1354EC0015B425 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E123C48C1D1354EC0015B425 /* main.m */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -498,13 +617,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C61610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanelTests" */;
 			buildPhases = (
-				195A51B1E5797AF49022A1D3 /* [CP] Check Pods Manifest.lock */,
+				AD48B0E1D0FDE02B32D8F942 /* 📦 Check Pods Manifest.lock */,
 				2808F9AC1610EFE4005772B7 /* Sources */,
 				51D96E8B1D1217C5001F622D /* Resources */,
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				51D96E771D11EF69001F622D /* Copy Frameworks */,
-				6AD4F51E62F4794F46EC4F93 /* [CP] Embed Pods Frameworks */,
-				7EB546446E7626E6939A1F0F /* [CP] Copy Pods Resources */,
+				11FBA527AAB4DE301A04BDD0 /* 📦 Embed Pods Frameworks */,
+				97D8318B565052717E5E5717 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -526,6 +645,47 @@
 			productReference = 2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E123C4881D1354EC0015B425 /* HelloMixpanel_tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E123C4A51D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOS" */;
+			buildPhases = (
+				E123C4851D1354EC0015B425 /* Sources */,
+				E123C4861D1354EC0015B425 /* Frameworks */,
+				E123C4871D1354EC0015B425 /* Resources */,
+				E12C04A81D135952007D2086 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E12C04A71D135952007D2086 /* PBXTargetDependency */,
+			);
+			name = HelloMixpanel_tvOS;
+			productName = HelloMixpanel_tvOS;
+			productReference = E123C4891D1354EC0015B425 /* HelloMixpanel_tvOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E123C49D1D1354EC0015B425 /* HelloMixpanel_tvOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E123C4A91D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOSTests" */;
+			buildPhases = (
+				222471ECB08A5E0572E0D631 /* 📦 Check Pods Manifest.lock */,
+				E123C49A1D1354EC0015B425 /* Sources */,
+				E123C49B1D1354EC0015B425 /* Frameworks */,
+				E12C04AE1D135F01007D2086 /* Copy Frameworks */,
+				E123C49C1D1354EC0015B425 /* Resources */,
+				768564EFBBB1CF00026F3472 /* 📦 Embed Pods Frameworks */,
+				6EDEBFE516C45FD65271D88E /* 📦 Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E123C4A01D1354EC0015B425 /* PBXTargetDependency */,
+			);
+			name = HelloMixpanel_tvOSTests;
+			productName = HelloMixpanel_tvOSTests;
+			productReference = E123C49E1D1354EC0015B425 /* HelloMixpanel_tvOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -542,6 +702,13 @@
 					2808F9B01610EFE4005772B7 = {
 						TestTargetID = 2808F98C1610EFE3005772B7;
 					};
+					E123C4881D1354EC0015B425 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					E123C49D1D1354EC0015B425 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = E123C4881D1354EC0015B425;
+					};
 				};
 			};
 			buildConfigurationList = 2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */;
@@ -551,6 +718,7 @@
 			knownRegions = (
 				en,
 				English,
+				Base,
 			);
 			mainGroup = 2808F9821610EFE3005772B7;
 			productRefGroup = 2808F98E1610EFE3005772B7 /* Products */;
@@ -565,6 +733,8 @@
 			targets = (
 				2808F98C1610EFE3005772B7 /* HelloMixpanel */,
 				2808F9B01610EFE4005772B7 /* HelloMixpanelTests */,
+				E123C4881D1354EC0015B425 /* HelloMixpanel_tvOS */,
+				E123C49D1D1354EC0015B425 /* HelloMixpanel_tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -589,6 +759,13 @@
 			fileType = wrapper.framework;
 			path = MixpanelAppExtension.framework;
 			remoteRef = 515B5A061CB6F95200A34060 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E123C4841D1353D10015B425 /* Mixpanel.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Mixpanel.framework;
+			remoteRef = E123C4831D1353D10015B425 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -618,32 +795,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E123C4871D1354EC0015B425 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E123C4981D1354EC0015B425 /* Assets.xcassets in Resources */,
+				E123C4961D1354EC0015B425 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E123C49C1D1354EC0015B425 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		195A51B1E5797AF49022A1D3 /* [CP] Check Pods Manifest.lock */ = {
+		11FBA527AAB4DE301A04BDD0 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		6AD4F51E62F4794F46EC4F93 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -651,19 +829,79 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7EB546446E7626E6939A1F0F /* [CP] Copy Pods Resources */ = {
+		222471ECB08A5E0572E0D631 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6EDEBFE516C45FD65271D88E /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		768564EFBBB1CF00026F3472 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		97D8318B565052717E5E5717 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AD48B0E1D0FDE02B32D8F942 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -696,6 +934,25 @@
 				51D96E881D121796001F622D /* MPCategoryHelpersTests.m in Sources */,
 				51D96E891D12179A001F622D /* EventBindingTests.m in Sources */,
 				51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E123C4851D1354EC0015B425 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E123C4931D1354EC0015B425 /* ViewController.m in Sources */,
+				E123C4901D1354EC0015B425 /* AppDelegate.m in Sources */,
+				E123C48D1D1354EC0015B425 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E123C49A1D1354EC0015B425 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */,
+				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -767,7 +1024,28 @@
 			name = Mixpanel;
 			targetProxy = 515B5A0C1CB6F96700A34060 /* PBXContainerItemProxy */;
 		};
+		E123C4A01D1354EC0015B425 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E123C4881D1354EC0015B425 /* HelloMixpanel_tvOS */;
+			targetProxy = E123C49F1D1354EC0015B425 /* PBXContainerItemProxy */;
+		};
+		E12C04A71D135952007D2086 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Mixpanel_tvOS;
+			targetProxy = E12C04A61D135952007D2086 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E123C4941D1354EC0015B425 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E123C4951D1354EC0015B425 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2808F9C11610EFE4005772B7 /* Debug */ = {
@@ -929,6 +1207,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -960,6 +1240,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1126,6 +1408,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.hellomixpanel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = AppStore;
@@ -1167,6 +1451,225 @@
 			};
 			name = AppStore;
 		};
+		E123C4A61D1354EC0015B425 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HelloMixpanel_tvOS/HelloMixpanel_tvOS-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../Mixpanel",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		E123C4A71D1354EC0015B425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HelloMixpanel_tvOS/HelloMixpanel_tvOS-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../Mixpanel",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E123C4A81D1354EC0015B425 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HelloMixpanel_tvOS/HelloMixpanel_tvOS-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../Mixpanel",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
+		E123C4AA1D1354EC0015B425 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HelloMixpanelTests",
+					"\"$(SRCROOT)/../Mixpanel\"",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"MIXPANEL_TVOS_EXTENSION=1",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Mixpanel\"",
+				);
+				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Debug;
+		};
+		E123C4AB1D1354EC0015B425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF71948F06B2043405B77258 /* Pods-HelloMixpanel_tvOSTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HelloMixpanelTests",
+					"\"$(SRCROOT)/../Mixpanel\"",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Mixpanel\"",
+				);
+				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E123C4AC1D1354EC0015B425 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 936971DC65F55B41A8EE46CD /* Pods-HelloMixpanel_tvOSTests.appstore.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HelloMixpanelTests",
+					"\"$(SRCROOT)/../Mixpanel\"",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Mixpanel\"",
+				);
+				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1196,6 +1699,26 @@
 				2808F9C71610EFE4005772B7 /* Debug */,
 				2808F9C81610EFE4005772B7 /* Release */,
 				28C2136716376D3300696E4F /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E123C4A51D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E123C4A61D1354EC0015B425 /* Debug */,
+				E123C4A71D1354EC0015B425 /* Release */,
+				E123C4A81D1354EC0015B425 /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E123C4A91D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E123C4AA1D1354EC0015B425 /* Debug */,
+				E123C4AB1D1354EC0015B425 /* Release */,
+				E123C4AC1D1354EC0015B425 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

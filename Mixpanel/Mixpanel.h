@@ -679,7 +679,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)libVersion;
 
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
 #pragma mark - Mixpanel Surveys
 
 /*!

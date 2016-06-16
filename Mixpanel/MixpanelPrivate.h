@@ -9,9 +9,14 @@
 #import "Mixpanel.h"
 #import "MPSurveyNavigationController.h"
 #import "MPNotificationViewController.h"
+#import "Mixpanel+AutomaticEvents.h"
+#import "AutomaticEventsConstants.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
+#import "MixpanelExceptionHandler.h"
+#endif
 
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
 #import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -19,7 +24,6 @@
 #import <UIKit/UIDevice.h>
 
 #import "MPResources.h"
-#import "MixpanelExceptionHandler.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
 #import "MPDesignerEventBindingMessage.h"
@@ -31,12 +35,9 @@
 #import "MPSwizzler.h"
 #import "MPVariant.h"
 #import "MPWebSocket.h"
-#import "Mixpanel+AutomaticEvents.h"
-#import "AutomaticEventsConstants.h"
-
 #endif
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
 @interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 #else
 @interface Mixpanel ()
@@ -46,18 +47,19 @@
     BOOL _enableABTestDesigner;
 }
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
+@property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
+@property (nonatomic) AutomaticEventMode validationMode;
+@property (nonatomic) NSUInteger validationEventCount;
+@property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 #endif
 
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, copy) NSString *distinctId;
-@property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
-@property (nonatomic) AutomaticEventMode validationMode;
-@property (nonatomic) NSUInteger validationEventCount;
 
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSDictionary *superProperties;
@@ -71,7 +73,6 @@
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
-
 @property (nonatomic, strong) NSArray *surveys;
 @property (nonatomic, strong) id currentlyShowingSurvey;
 @property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
@@ -81,9 +82,9 @@
 @property (nonatomic, strong) UIViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
-@property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
+
 
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
@@ -101,16 +102,17 @@
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
-- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
-- (void)showNotificationWithObject:(MPNotification *)notification;
 
 - (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)encodeAPIData:(NSArray *)array;
 
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
+- (void)showNotificationWithObject:(MPNotification *)notification;
+- (void)markVariantRun:(MPVariant *)variant;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
-- (void)markVariantRun:(MPVariant *)variant;
-
+#endif
 
 @end
 
