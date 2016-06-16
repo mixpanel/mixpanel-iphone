@@ -289,17 +289,17 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
         myAnimation.fillMode = kCAFillModeForwards;
         myAnimation.removedOnCompletion = NO;
-        [_indeterminateLayer addAnimation:myAnimation forKey:MPConnBarLoadingAnim];
+        [_indeterminateLayer addAnimation:myAnimation forKey:kStartLoadingAnimationKey];
     } else {
-        [_indeterminateLayer removeAnimationForKey:MPConnBarLoadingAnim];
+        [_indeterminateLayer removeAnimationForKey:kStartLoadingAnimationKey];
         CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
-        myAnimation.duration = 1.f;
+        myAnimation.duration = 0.4f;
         myAnimation.fromValue = @([[_indeterminateLayer.presentationLayer valueForKeyPath: @"bounds.size.width"] floatValue]);
         myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width * 2.f);
-        myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
         myAnimation.fillMode = kCAFillModeForwards;
         myAnimation.removedOnCompletion = NO;
-        [_indeterminateLayer addAnimation:myAnimation forKey:MPConnBarFinishLoadingAnim];
+        [_indeterminateLayer addAnimation:myAnimation forKey:kFinishLoadingAnimationKey];
     }
 }
 
