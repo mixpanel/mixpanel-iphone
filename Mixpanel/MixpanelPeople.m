@@ -26,7 +26,7 @@
 
 - (NSString *)description
 {
-    __strong Mixpanel *strongMixpanel = _mixpanel;
+    __strong Mixpanel *strongMixpanel = self.mixpanel;
     return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", (void *)self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
@@ -38,7 +38,7 @@
     NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
     p[@"$ios_app_version"] = infoDictionary[@"CFBundleVersion"];
     p[@"$ios_app_release"] = infoDictionary[@"CFBundleShortVersionString"];
-    __strong Mixpanel *strongMixpanel = _mixpanel;
+    __strong Mixpanel *strongMixpanel = self.mixpanel;
     p[@"$ios_device_model"] = [strongMixpanel deviceModel];
     p[@"$ios_ifa"] = [strongMixpanel IFA];
     return [p copy];
@@ -47,7 +47,7 @@
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
-    __strong Mixpanel *strongMixpanel = _mixpanel;
+    __strong Mixpanel *strongMixpanel = self.mixpanel;
     if (strongMixpanel) {
         properties = [properties copy];
         BOOL ignore_time = self.ignoreTime;

@@ -5,6 +5,7 @@
 #import "MPSurveyQuestion.h"
 #import "MPSurveyQuestionViewController.h"
 #import "MPSurveyNavigationController.h"
+#import "MixpanelPeoplePrivate.h"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
 

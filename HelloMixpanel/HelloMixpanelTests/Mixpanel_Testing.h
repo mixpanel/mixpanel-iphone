@@ -64,13 +64,6 @@ static inline LSStubRequestDSL *stubTrack() {
 
 @end
 
-@interface MixpanelPeople (Test)
-
-@property (nonatomic, retain) NSMutableArray *unidentifiedQueue;
-@property (nonatomic, copy) NSMutableArray *distinctId;
-
-@end
-
 @interface MPVariantAction (Test)
 
 + (BOOL)executeSelector:(SEL)selector
