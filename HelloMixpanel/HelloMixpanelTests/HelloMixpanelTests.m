@@ -120,6 +120,27 @@
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 0, @"events should have been flushed");
 }
 
+- (void)testDropEvents {
+    self.mixpanel.delegate = self;
+    self.mixpanelWillFlush = NO;
+    
+    NSMutableArray *events = [NSMutableArray array];
+    for (NSInteger i = 0; i < 5000; i++) {
+        [events addObject:@{@"i": @(i)}];
+    }
+    self.mixpanel.eventsQueue = events;
+    [self waitForSerialQueue];
+    XCTAssertTrue([self.mixpanel.eventsQueue count] == 5000);
+    
+    for (NSInteger i = 0; i < 5; i++) {
+        [self.mixpanel track:@"event" properties:@{ @"i": @(5000 + i) }];
+    }
+    [self waitForSerialQueue];
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    XCTAssertTrue([self.mixpanel.eventsQueue count] == 5000);
+    XCTAssertEqualObjects(e[@"properties"][@"i"], @(5004));
+}
+
 - (void)testIdentify {
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *distinctId = @"d1";
