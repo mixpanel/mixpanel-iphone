@@ -1445,7 +1445,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if ([rawEventBindings isKindOfClass:[NSArray class]]) {
                 for (id obj in rawEventBindings) {
                     MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
-                    [binder execute];
                     if (binder) {
                         [parsedEventBindings addObject:binder];
                     }
