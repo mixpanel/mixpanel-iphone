@@ -14,8 +14,7 @@
 #import "MPObjectSelector.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
-
-#define TEST_TOKEN @"xxxxxxxxxxxxxxxxxxxxxxx"
+#import "Mixpanel_Testing.h"
 
 # pragma mark - The stub object for recording method calls
 @interface MixpanelStub : NSObject
@@ -24,71 +23,43 @@
 
 - (void)track:(NSString *)event;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
-- (void)resetCalls;
 
 @end
 
 @implementation MixpanelStub
 
-- (instancetype)init
-{
+- (instancetype)init {
     if (self = [super init]) {
         _calls = [NSMutableArray array];
     }
     return self;
 }
 
-- (void)track:(NSString *)event
-{
-    [self.calls addObject:@{@"event": event}];
+- (void)track:(NSString *)event {
+    [self.calls addObject:@{ @"event": event}];
 }
 
-- (void)track:(NSString *)event properties:(NSDictionary *)properties
-{
-    [self.calls addObject:@{@"event": event, @"properties": properties}];
-}
-
-- (void)resetCalls
-{
-    self.calls = [NSMutableArray array];
+- (void)track:(NSString *)event properties:(NSDictionary *)properties {
+    [self.calls addObject:@{ @"event": event, @"properties": properties }];
 }
 
 @end
 
-@interface UIImage ()
-
-- (int)mp_fingerprintVersion;
+@interface TableController : UITableViewController
 
 @end
 
-@interface TableController : UITableViewController<UITableViewDelegate,UITableViewDataSource>
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-
-@end
 @implementation TableController
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        self.tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStylePlain];
-        self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        [self.tableView reloadData];
-    }
-    return self;
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"selected something");
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [[UITableViewCell alloc] init];
 }
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 5;
 }
 
@@ -103,55 +74,55 @@
 
 @implementation EventBindingTests
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
 
-    [Mixpanel sharedInstanceWithToken:TEST_TOKEN];
-    _mixpanelStub = [[MixpanelStub alloc] init];
+    [Mixpanel sharedInstanceWithToken:kTestToken];
+    
     _mockMixpanelClass = OCMPartialMock([Mixpanel sharedInstance]);
-    OCMStub([_mockMixpanelClass track:[OCMArg any]]).andCall(_mixpanelStub, @selector(track:));
-    OCMStub([_mockMixpanelClass track:[OCMArg any] properties:[OCMArg any]]).andCall(_mixpanelStub, @selector(track:properties:));
+    _mixpanelStub = [[MixpanelStub alloc] init];
+    
+    OCMStub([_mockMixpanelClass track:[OCMArg any]])
+    .andCall(_mixpanelStub, @selector(track:));
+    
+    OCMStub([_mockMixpanelClass track:[OCMArg any] properties:[OCMArg any]])
+    .andCall(_mixpanelStub, @selector(track:properties:));
 }
 
-- (void)tearDown
-{
-    [self.mockMixpanelClass stopMocking];
-    self.mixpanelStub = nil;
-    self.mockMixpanelClass = nil;
-
+- (void)tearDown {
     [super tearDown];
+    
+    [self.mockMixpanelClass stopMocking];
+    self.mockMixpanelClass = nil;
+    
+    self.mixpanelStub = nil;
 }
 
-- (void)testMixpanelMock
-{
-    XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0,
+- (void)testMixpanelMock {
+    XCTAssertEqual(self.mixpanelStub.calls.count, 0UL,
                    @"Mixpanel track should not have been called.");
 
     [[Mixpanel sharedInstance] track:@"SOMETHING"];
-    XCTAssertEqual((int)[[self.mixpanelStub calls] count], 1,
+    
+    XCTAssertEqual(self.mixpanelStub.calls.count, 1UL,
                    @"Mixpanel track should have been called once.");
-    XCTAssertEqual([self.mixpanelStub calls][0][@"event"],
-                   @"SOMETHING", @"Mixpanel track should have been called with the event name");
+    XCTAssertEqualObjects(self.mixpanelStub.calls.firstObject[@"event"],
+                          @"SOMETHING", @"Mixpanel track should have been called with the event name");
 }
 
-- (void)testUIControlBindings
-{
+- (void)testUIControlBindings {
     /*
          nc__vc__v1___v2___c1
                   \    \...c3
                    \__c2
     */
-
     NSString *c1_path = @"/UIViewController/UIView/UIView/UIControl";
     NSString *c2_path = @"/UIViewController/UIView/UIControl";
-    NSDictionary *eventParams = @{
-                                  @"event_type": @"ui_control",
-                                  @"event_name": @"ui control",
-                                  @"path": c1_path,
-                                  @"control_event": @64 // touchUpInside
-                                  };
-
+    
+    NSDictionary *eventParams = @{ @"event_type": @"ui_control",
+                                   @"event_name": @"ui control",
+                                   @"path": c1_path,
+                                   @"control_event": @64 /* touchUpInside */ };
 
     // Create elements in window
     UIViewController *vc = [[UIViewController alloc] init];
@@ -186,12 +157,12 @@
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 1, @"A track call should have been fired");
 
     // test that event doesnt fire for other UIControl
-    [self.mixpanelStub resetCalls];
+    self.mixpanelStub = [[MixpanelStub alloc] init];
     [c2 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"Should not have fired event for c2");
 
     // test `didMoveToWindow`
-    [self.mixpanelStub resetCalls];
+    self.mixpanelStub = [[MixpanelStub alloc] init];
     UIControl *c3 = [[UIControl alloc] init];
     [v2 addSubview:c3];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"Mixpanel track should not have been called.");
@@ -199,21 +170,20 @@
     [c3 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 1, @"A track call should have been fired");
 
-
     /*
          nc__vc__v1___v2___c1
                   \...c3
                    \__c2
      */
     // test moving element to different path
-    [self.mixpanelStub resetCalls];
+    self.mixpanelStub = [[MixpanelStub alloc] init];
     [v1 addSubview:c3];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"Mixpanel track should not have been called.");
     [c3 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"A track call should not have been fired");
 
     // test `stop` with c1
-    [self.mixpanelStub resetCalls];
+    self.mixpanelStub = [[MixpanelStub alloc] init];
     [binding stop];
     XCTAssertEqual([binding running], NO, @"Binding should NOT be running");
     [c1 sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -224,7 +194,6 @@
     [c1 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"didMoveToWindow should have been unSwizzled");
 
-
     // Test archive
     NSData* archive = [NSKeyedArchiver archivedDataWithRootObject:binding];
     MPUIControlBinding* unarchivedBinding = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
@@ -234,15 +203,12 @@
     XCTAssertTrue([binding.path.string isEqualToString:unarchivedBinding.path.string], @"Binding should have correct serialized properties after archive");
     XCTAssertEqual(binding.controlEvent, unarchivedBinding.controlEvent, @"Binding should have correct serialized properties after archive");
     XCTAssertEqual(binding.verifyEvent, unarchivedBinding.verifyEvent, @"Binding should have correct serialized properties after archive");
-
 }
 
-- (void)testUITableViewBindings
-{
+- (void)testUITableViewBindings {
     /*
          nc__vc__tv
      */
-
     NSString *tv_path = @"/UIViewController/UITableView";
     NSDictionary *eventParams = @{
                                   @"event_type": @"ui_table_view",
@@ -250,7 +216,6 @@
                                   @"table_delegate": @"TableController",
                                   @"path": tv_path
                                   };
-
 
     // Create elements in window
     TableController *vc = [[TableController alloc] init];
@@ -276,7 +241,7 @@
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 1, @"One track call should be fired");
 
     // test stop binding
-    [self.mixpanelStub resetCalls];
+    self.mixpanelStub = [[MixpanelStub alloc] init];
     [binding stop];
     XCTAssertEqual([binding running], NO, @"Binding should NOT be running");
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"No track calls should be fired");
@@ -293,11 +258,9 @@
     XCTAssertEqual(binding.class, unarchivedBinding.class, @"Binding should have correct serialized properties after archive");
     XCTAssertTrue([binding.name isEqualToString:unarchivedBinding.name], @"Binding should have correct serialized properties after archive");
     XCTAssertTrue([binding.path.string isEqualToString:unarchivedBinding.path.string], @"Binding should have correct serialized properties after archive");
-
 }
 
-- (void)testFingerprinting
-{
+- (void)testFingerprinting {
     NSString *format;
     /*
      Selector matching is already tested pretty well in ABTestingTests.
@@ -313,7 +276,6 @@
     // Assert that we have versioning available and we are at least at v1
     XCTAssert([b1 respondsToSelector:NSSelectorFromString(@"mp_fingerprintVersion")]);
     XCTAssert((int)[b1 performSelector:@selector(mp_fingerprintVersion)] >= 1);
-
 
     // Test a versioned predicate where the first clause passes and the second would fail
     format = @"(mp_fingerprintVersion >= 1 AND true == true) OR 1 = 2";
@@ -331,23 +293,22 @@
     XCTAssertFalse([[MPObjectSelector objectSelectorWithString:([NSString stringWithFormat:@"/UIButton[%@]", format])] isLeafSelected:b1 fromRoot:v1], @"Selector should have selected object matching predicate");
 }
 
-- (void)testInvalidEventBindings
-{
+- (void)testInvalidEventBindings {
     // This event binding references a class (NoSuchController) that
     // doesn't exist. Running the binding should have no effect.
     NSString *badData = @"YnBsaXN0MDDUAQIDBAUGIiNYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0\
-b3ASAAGGoKgHCBUWFxgZGlUkbnVsbNYJCgsMDQ4PEBESExRSSURUcGF0aFYkY2xh\
-c3NUbmFtZVlldmVudE5hbWVSJDCAAoAEgAeAA4AFgAYQAF8QJDg3QUMyRDU2LTc4\
-OEUtNEYyNS05MEE0LTc4MDVCQUFENkYwOF8QHS9VSVZpZXdDb250cm9sbGVyL1VJ\
-VGFibGVWaWV3XXVpIHRhYmxlIHZpZXdfEBBOb1N1Y2hDb250cm9sbGVy0hscHR5a\
-JGNsYXNzbmFtZVgkY2xhc3Nlc18QFE1QVUlUYWJsZVZpZXdCaW5kaW5nox8gIV8Q\
-FE1QVUlUYWJsZVZpZXdCaW5kaW5nXk1QRXZlbnRCaW5kaW5nWE5TT2JqZWN0XxAP\
-TlNLZXllZEFyY2hpdmVy0SQlVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBTAFYA\
-WwBiAGcAcQB0AHYAeAB6AHwAfgCAAIIAqQDJANcA6gDvAPoBAwEaAR4BNQFEAU0B\
-XwFiAWcAAAAAAAACAQAAAAAAAAAmAAAAAAAAAAAAAAAAAAABaQ==";
-    MPUIControlBinding *badBinding = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSData alloc] initWithBase64EncodedString:badData options:0]];
-    [badBinding execute]; // This should have no effect, and should not raise.
+    b3ASAAGGoKgHCBUWFxgZGlUkbnVsbNYJCgsMDQ4PEBESExRSSURUcGF0aFYkY2xh\
+    c3NUbmFtZVlldmVudE5hbWVSJDCAAoAEgAeAA4AFgAYQAF8QJDg3QUMyRDU2LTc4\
+    OEUtNEYyNS05MEE0LTc4MDVCQUFENkYwOF8QHS9VSVZpZXdDb250cm9sbGVyL1VJ\
+    VGFibGVWaWV3XXVpIHRhYmxlIHZpZXdfEBBOb1N1Y2hDb250cm9sbGVy0hscHR5a\
+    JGNsYXNzbmFtZVgkY2xhc3Nlc18QFE1QVUlUYWJsZVZpZXdCaW5kaW5nox8gIV8Q\
+    FE1QVUlUYWJsZVZpZXdCaW5kaW5nXk1QRXZlbnRCaW5kaW5nWE5TT2JqZWN0XxAP\
+    TlNLZXllZEFyY2hpdmVy0SQlVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBTAFYA\
+    WwBiAGcAcQB0AHYAeAB6AHwAfgCAAIIAqQDJANcA6gDvAPoBAwEaAR4BNQFEAU0B\
+    XwFiAWcAAAAAAAACAQAAAAAAAAAmAAAAAAAAAAAAAAAAAAABaQ==";
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:badData options:0];
+    MPUIControlBinding *badBinding = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    XCTAssertNoThrow([badBinding execute], @"Executing an invalid event binding caused a crash.");
 }
-
 
 @end
