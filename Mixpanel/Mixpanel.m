@@ -113,7 +113,7 @@ static Mixpanel *sharedInstance;
         [self setUpListeners];
 #endif
         [self unarchive];
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
 #endif
@@ -137,7 +137,7 @@ static Mixpanel *sharedInstance;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
     if (_reachability != NULL) {
         if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
             MixpanelError(@"%@ error unsetting reachability callback", self);
@@ -152,7 +152,7 @@ static Mixpanel *sharedInstance;
 #endif
 }
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 - (void)setValidationEnabled:(BOOL)validationEnabled {
     _validationEnabled = validationEnabled;
     
@@ -326,7 +326,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         event = @"mp_event";
     }
     
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
     // Safety check
     BOOL isAutomaticEvent = [event isEqualToString:kAutomaticEventName];
     if (isAutomaticEvent && !self.isValidationEnabled) return;
@@ -353,7 +353,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [p addEntriesFromDictionary:properties];
         }
         
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
         if (self.validationEnabled) {
             if (self.validationMode == AutomaticEventModeCount) {
                 if (isAutomaticEvent) {
@@ -620,23 +620,34 @@ static __unused NSString *MPURLEncode(NSString *s)
         [self updateNetworkActivityIndicator:YES];
         
 #if defined(MIXPANEL_TVOS_EXTENSION)
+        __block BOOL didFail = NO;
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         NSURLSession *session = [NSURLSession sharedSession];
         [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                   NSURLResponse *urlResponse,
                                                                   NSError *error) {
             [self updateNetworkActivityIndicator:NO];
-            if (error || !responseData) {
+            
+            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
+            if (error || !success) {
                 MixpanelError(@"%@ network failure: %@", self, error);
-                return;
+                didFail = YES;
+            }
+            else {
+                NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                if ([response intValue] == 0) {
+                    MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
+                }
             }
             
-            NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            if ([response intValue] == 0) {
-                MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
-            }
-            
+            dispatch_semaphore_signal(semaphore);
         }] resume];
-        [queue removeObjectsInArray:batch];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        if (didFail) {
+            break;
+        }
 #else
         NSError *error = nil;
         NSHTTPURLResponse *urlResponse = nil;
@@ -654,9 +665,8 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (response.intValue == 0) {
             MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
         }
-
-        [queue removeObjectsInArray:batch];
 #endif
+        [queue removeObjectsInArray:batch];
     }
 }
 
@@ -955,7 +965,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)currentRadio
 {
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
     NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
     if (!radio) {
         radio = @"None";
@@ -992,7 +1002,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version_string"];
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
     
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
 #endif
@@ -1024,7 +1034,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)updateNetworkActivityIndicator:(BOOL)on
 {
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
     if (_showNetworkActivityIndicator) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = on;
     }

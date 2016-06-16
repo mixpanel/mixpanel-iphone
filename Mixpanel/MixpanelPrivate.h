@@ -16,7 +16,7 @@
 #import "MixpanelExceptionHandler.h"
 #endif
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 #import <CommonCrypto/CommonDigest.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -37,7 +37,7 @@
 #import "MPWebSocket.h"
 #endif
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 @interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 #else
 @interface Mixpanel ()
@@ -47,7 +47,7 @@
     BOOL _enableABTestDesigner;
 }
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
@@ -106,7 +106,7 @@
 - (NSData *)JSONSerializeObject:(id)obj;
 - (NSString *)encodeAPIData:(NSArray *)array;
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
 - (void)showNotificationWithObject:(MPNotification *)notification;
 - (void)markVariantRun:(MPVariant *)variant;

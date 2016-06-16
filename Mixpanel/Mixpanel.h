@@ -2,6 +2,8 @@
 #import <UIKit/UIKit.h>
 #import <Mixpanel/MixpanelPeople.h>
 
+#define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
+
 #if defined(MIXPANEL_WATCH_EXTENSION)
 #import <WatchConnectivity/WatchConnectivity.h>
 #endif
@@ -679,7 +681,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)libVersion;
 
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
 #pragma mark - Mixpanel Surveys
 
 /*!
