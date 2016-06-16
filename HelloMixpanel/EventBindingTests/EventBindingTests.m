@@ -8,7 +8,8 @@
 
 #import <OCMock/OCMock.h>
 #import <XCTest/XCTest.h>
-#import <Mixpanel/Mixpanel.h>
+#import <Foundation/Foundation.h>
+#import "Mixpanel.h"
 #import "MPEventBinding.h"
 #import "MPObjectSelector.h"
 #import "MPUIControlBinding.h"
@@ -19,7 +20,8 @@
 # pragma mark - The stub object for recording method calls
 @interface MixpanelStub : NSObject
 
-@property (nonatomic) NSMutableArray *calls;
+@property (nonatomic, strong) NSMutableArray *calls;
+
 - (void)track:(NSString *)event;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 - (void)resetCalls;
@@ -50,6 +52,12 @@
 {
     self.calls = [NSMutableArray array];
 }
+
+@end
+
+@interface UIImage ()
+
+- (int)mp_fingerprintVersion;
 
 @end
 
@@ -88,7 +96,7 @@
 
 @interface EventBindingTests : XCTestCase
 
-@property (nonatomic) MixpanelStub *mixpanelStub;
+@property (nonatomic, strong) MixpanelStub *mixpanelStub;
 @property (nonatomic) id mockMixpanelClass;
 
 @end
@@ -165,7 +173,7 @@
     XCTAssertEqual([selector selectFromRoot:rootViewController][0], c2, @"c2 should be selected by path");
 
     // Create binding and check state
-    MPUIControlBinding *binding = [MPEventBinding bindngWithJSONObject:eventParams];
+    MPUIControlBinding *binding = [MPEventBinding bindingWithJSONObject:eventParams];
     [binding execute];
     XCTAssertEqual([binding class], [MPUIControlBinding class], @"Binding type should be a UIControl binding");
     XCTAssertEqual([binding running], YES, @"Binding should be running");
@@ -256,7 +264,7 @@
     XCTAssertEqual([selector selectFromRoot:rootViewController][0], tv, @"va should be selected by path");
 
     // Create binding and check state
-    MPEventBinding *binding = [MPEventBinding bindngWithJSONObject:eventParams];
+    MPEventBinding *binding = [MPEventBinding bindingWithJSONObject:eventParams];
     [binding execute];
     XCTAssertEqual([binding class], [MPUITableViewBinding class], @"Binding type should be a UIControl binding");
     XCTAssertEqual([binding running], YES, @"Binding should be running");
@@ -304,7 +312,7 @@
 
     // Assert that we have versioning available and we are at least at v1
     XCTAssert([b1 respondsToSelector:NSSelectorFromString(@"mp_fingerprintVersion")]);
-    XCTAssert([b1 performSelector:NSSelectorFromString(@"mp_fingerprintVersion")] >= 1);
+    XCTAssert((int)[b1 performSelector:@selector(mp_fingerprintVersion)] >= 1);
 
 
     // Test a versioned predicate where the first clause passes and the second would fail

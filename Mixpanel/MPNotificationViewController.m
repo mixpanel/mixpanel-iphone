@@ -1,7 +1,3 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import "UIView+MPHelpers.h"
@@ -156,28 +152,22 @@
     return UIStatusBarAnimationFade;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
-#else
-- (NSUInteger)supportedInterfaceOrientations
-#endif
 {
     return UIInterfaceOrientationMaskAll;
 }
 
 - (IBAction)pressedOkay
 {
-    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
-        [delegate notificationController:self wasDismissedWithStatus:YES];
+    if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 
 - (IBAction)pressedClose
 {
-    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
-        [delegate notificationController:self wasDismissedWithStatus:NO];
+    if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithStatus:)]) {
+        [self.delegate notificationController:self wasDismissedWithStatus:NO];
     }
 }
 
@@ -291,20 +281,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 - (void)viewWillLayoutSubviews
 {
     UIView *parentView = self.view.superview;
-    CGRect parentFrame;
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
-    parentFrame = parentView.frame;
-#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
-        parentFrame = parentView.frame;
-    } else {
-        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-        parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
-    }
-#else
-    double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-    parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
-#endif
+    CGRect parentFrame = parentView.frame;
 
     if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         self.view.frame = CGRectMake(15, parentFrame.size.height - MPNotifHeight - MPMiniNotificationSpacingFromBottom, parentFrame.size.width - 30, MPNotifHeight);
@@ -362,22 +339,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
     UIView *topView = [self getTopView];
     if (topView) {
-        CGRect topFrame;
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
-        topFrame = topView.frame;
-#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-        if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
-            topFrame = topView.frame;
-        } else {
-            double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-            topFrame = CGRectApplyAffineTransform(topView.frame, CGAffineTransformMakeRotation((float)angle));
-        }
-#else
-        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-        topFrame = CGRectApplyAffineTransform(topView.frame, CGAffineTransformMakeRotation((float)angle));
-#endif
-
+        CGRect topFrame = topView.frame;
         [topView addSubview:self.view];
 
         _canPan = NO;
@@ -422,48 +384,26 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
     if (!_isBeingDismissed) {
         _isBeingDismissed = YES;
-
-        CGFloat duration;
-
-        if (animated) {
-            duration = 0.5f;
-        } else {
-            duration = 0.0f;
-        }
-
-        UIView *parentView = self.view.superview;
-        CGRect parentFrame;
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
-        parentFrame = parentView.frame;
-#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-        if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)]) {
-            parentFrame = parentView.frame;
-        } else {
-            double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-            parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
-        }
-#else
-        double angle = [self angleForInterfaceOrientation:[self interfaceOrientation]];
-        parentFrame = CGRectApplyAffineTransform(parentView.frame, CGAffineTransformMakeRotation((float)angle));
-#endif
-
-        [UIView animateWithDuration:duration animations:^{
-            self.view.frame = CGRectMake(self.view.frame.origin.x, parentFrame.size.height, self.view.frame.size.width, self.view.frame.size.height);
-        } completion:^(BOOL finished) {
-            [self.view removeFromSuperview];
-            if (completion) {
-                completion();
-            }
-        }];
+        
+        CGFloat duration = animated ? 0.5f : 0.f;
+        CGRect parentFrame = self.view.superview.frame;
+        
+        [UIView animateWithDuration:duration
+                         animations:^{
+                             self.view.frame = CGRectMake(self.view.frame.origin.x, parentFrame.size.height, self.view.frame.size.width, self.view.frame.size.height);
+                         } completion:^(BOOL finished) {
+                             [self.view removeFromSuperview];
+                             if (completion) {
+                                 completion();
+                             }
+                         }];
     }
 }
 
 - (void)didTap:(UITapGestureRecognizer *)gesture
 {
-    id strongDelegate = self.delegate;
-    if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded && strongDelegate != nil) {
-        [strongDelegate notificationController:self wasDismissedWithStatus:YES];
+    if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded) {
+        [self.delegate notificationController:self wasDismissedWithStatus:YES];
     }
 }
 

@@ -22,14 +22,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
 
 - (MPObjectSerializerConfig *)configuration
 {
-    NSDictionary *config =
-#if 1
-    [self payloadObjectForKey:@"config"];
-#else
-    [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"snapshot_config" withExtension:@"json"]]
-                                    options:0 error:nil];
-#endif
-
+    NSDictionary *config = [self payloadObjectForKey:@"config"];
     return config ? [[MPObjectSerializerConfig alloc] initWithDictionary:config] : nil;
 }
 

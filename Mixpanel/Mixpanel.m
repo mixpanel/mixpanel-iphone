@@ -1,7 +1,3 @@
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag on this file.
-#endif
-
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <net/if_dl.h>
@@ -42,11 +38,9 @@
 #define VERSION @"2.9.9"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
-@interface Mixpanel () <UIAlertViewDelegate, MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
-
+@interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 #else
-@interface Mixpanel () <UIAlertViewDelegate>
-
+@interface Mixpanel ()
 #endif
 {
     NSUInteger _flushInterval;
@@ -260,7 +254,7 @@ static Mixpanel *sharedInstance;
 
 static __unused NSString *MPURLEncode(NSString *s)
 {
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)s, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
+    return [s stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 
 - (NSData *)JSONSerializeObject:(id)obj
@@ -325,17 +319,11 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)encodeAPIData:(NSArray *)array
 {
-    NSString *b64String = @"";
     NSData *data = [self JSONSerializeObject:array];
     if (data) {
-        b64String = [data mp_base64EncodedString];
-        b64String = CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                (__bridge CFStringRef)b64String,
-                                                                NULL,
-                                                                CFSTR("!*'();:@&=+$,/?%#[]"),
-                                                                kCFStringEncodingUTF8));
+        return MPURLEncode([data mp_base64EncodedString]);
     }
-    return b64String;
+    return @"";
 }
 
 #pragma mark - Tracking
@@ -1319,8 +1307,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return NO;
     }
 
-    Class UIAlertControllerClass = NSClassFromString(@"UIAlertController");
-    if (UIAlertControllerClass && [viewController isKindOfClass:UIAlertControllerClass]) {
+    if ([viewController isKindOfClass:UIAlertController.class]) {
         return NO;
     }
 
@@ -1572,31 +1559,20 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             } else {
                 self.currentlyShowingSurvey = survey;
                 if (showAlert) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-                    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_8_0) {
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
-                        [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                            if (self.currentlyShowingSurvey) {
-                                [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
-                                self.currentlyShowingSurvey = nil;
-                            }
-                        }]];
-                        [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                            if (self.currentlyShowingSurvey) {
-                                [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
-                            }
-                        }]];
-                        [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
-                    } else
-#endif
-                    {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We'd love your feedback!"
-                                                                        message:@"Mind taking a quick survey?"
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"No, Thanks"
-                                                              otherButtonTitles:@"Sure", nil];
-                        [alert show];
-                    }
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We'd love your feedback!" message:@"Mind taking a quick survey?" preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"No, Thanks" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                        if (self.currentlyShowingSurvey) {
+                            [self markSurvey:self.currentlyShowingSurvey shown:NO withAnswerCount:0];
+                            self.currentlyShowingSurvey = nil;
+                        }
+                    }]];
+                    [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                        if (self.currentlyShowingSurvey) {
+                            [self presentSurveyWithRootViewController:self.currentlyShowingSurvey];
+                        }
+                    }]];
+                    [[Mixpanel topPresentedViewController] presentViewController:alert animated:YES completion:nil];
+                    
                 } else {
                     [self presentSurveyWithRootViewController:survey];
                 }
@@ -1669,18 +1645,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         dispatch_async(_serialQueue, ^{
             [self flushPeople];
         });
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (_currentlyShowingSurvey) {
-        if (buttonIndex == 1) {
-            [self presentSurveyWithRootViewController:_currentlyShowingSurvey];
-        } else {
-            [self markSurvey:_currentlyShowingSurvey shown:NO withAnswerCount:0];
-            self.currentlyShowingSurvey = nil;
-        }
     }
 }
 
