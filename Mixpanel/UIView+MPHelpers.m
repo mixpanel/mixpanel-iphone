@@ -2,20 +2,17 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "UIView+MPHelpers.h"
-#import "MPFoundation.h"
 
 // NB If you add any more fingerprint methods, increment this.
 #define MP_FINGERPRINT_VERSION 1
 
 @implementation UIView (MPHelpers)
 
-- (int)mp_fingerprintVersion
-{
+- (int)mp_fingerprintVersion {
     return MP_FINGERPRINT_VERSION;
 }
 
-- (UIImage *)mp_snapshotImage
-{
+- (UIImage *)mp_snapshotImage {
     CGSize size = self.layer.bounds.size;
     UIGraphicsBeginImageContext(size);
     
@@ -27,17 +24,14 @@
     return image;
 }
 
-- (UIImage *)mp_snapshotForBlur
-{
+- (UIImage *)mp_snapshotForBlur {
     UIImage *image = [self mp_snapshotImage];
     // hack, helps with colors when blurring
     NSData *imageData = UIImageJPEGRepresentation(image, 1); // convert to jpeg
     return [UIImage imageWithData:imageData];
 }
 
-// mp_targetActions
-- (NSArray *)mp_targetActions
-{
+- (NSArray *)mp_targetActions {
     NSMutableArray *targetActions = [NSMutableArray array];
     if ([self isKindOfClass:[UIControl class]]) {
         for (id target in [(UIControl *)(self) allTargets]) {

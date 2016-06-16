@@ -16,11 +16,7 @@
 - (NSString *)mp_viewId;
 - (NSString *)mp_controllerVariable;
 
-- (NSString *)mp_varA;
-- (NSString *)mp_varB;
 - (NSString *)mp_varC;
-- (NSArray *)mp_varSetD;
-- (NSString *)mp_varE;
 
 @end
 
@@ -29,6 +25,23 @@
 @end
 
 @implementation MPCategoryHelpersTests
+
+- (void)testControllerVariableNil {
+    UIView *v1 = [[UIView alloc] init];
+    
+    NSString *v2 = [v1 mp_controllerVariable];
+    XCTAssertNil(v2);
+}
+
+- (void)testControllerVariableDefault {
+    UIViewController *v1 = [[UIViewController alloc] init];
+    
+    UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
+    [v1.view addSubview:b];
+    
+    NSString *v2 = [b mp_controllerVariable];
+    XCTAssertNil(v2);
+}
 
 - (void)testExistence {
     UIView *v1 = [[UIView alloc] init];
@@ -101,7 +114,28 @@
                                  NSException, @"NSUnknownKeyException");
 }
 
-- (void)testImageFingerprint {
+- (void)testTextCategoryLabel {
+    UILabel *l = [[UILabel alloc] init];
+    l.text = @"asdf";
+    XCTAssertEqualObjects([l mp_text], @"asdf");
+}
+
+- (void)testTextCategoryButton {
+    UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
+    [b setTitle:@"asdf" forState:UIControlStateNormal];
+    XCTAssertEqualObjects([b mp_text], @"asdf");
+}
+
+- (void)testImageFingerprintTabBarButton {
+    UITabBar *tabBar = [[UITabBar alloc] init];
+    tabBar.items = @[ [[UITabBarItem alloc] initWithTitle:@"Checker"
+                                                    image:[MPCategoryHelpersTests imageNamed:@"checkerboard"]
+                                                      tag:0]  ];
+    id /* UITabBarSwappableImageView */ v = tabBar.subviews.firstObject.subviews.firstObject;
+    XCTAssertEqualObjects([v mp_imageFingerprint], @"8fHx8R8fHx/x8fHxHx8fH/Hx8fEfHx8f8fHx8R8fHx8=");
+}
+
+- (void)testImageFingerprintButton {
     UIButton *b1 = [[UIButton alloc] init];
     UIImage *image = [MPCategoryHelpersTests imageNamed:@"huge_checkerboard"];
     XCTAssert(image);
@@ -113,6 +147,7 @@
     [b2 setImage:image forState:UIControlStateNormal];
     
     XCTAssertEqualObjects([b1 mp_imageFingerprint], [b2 mp_imageFingerprint]);
+    XCTAssertEqualObjects([b1 mp_varC], [b2 mp_varC]);
 }
 
 + (UIImage *)imageNamed:(NSString *)name {
