@@ -206,16 +206,14 @@
     XCTAssertTrue([topVC isKindOfClass:[MPSurveyNavigationController class]], @"Survey was not presented");
     
     // Clean up
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            self.mixpanel.currentlyShowingSurvey = nil;
-            [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
-                [expectation fulfill];
-            }];
-        });
-        [self waitForExpectationsWithTimeout:10 handler:nil];
-    }
+    XCTestExpectation *expectation = [self expectationWithDescription:@"survey closed"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        self.mixpanel.currentlyShowingSurvey = nil;
+        [(MPSurveyNavigationController *)topVC.presentingViewController dismissViewControllerAnimated:NO completion:^{
+            [expectation fulfill];
+        }];
+    });
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 @end

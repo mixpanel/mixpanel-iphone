@@ -119,20 +119,18 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"$campaign_delivery", @"last event should be campaign delivery");
     
-    // Clean up
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            self.mixpanel.currentlyShowingNotification = nil;
-            self.mixpanel.notificationViewController = nil;
-            if([topVC isKindOfClass:[MPNotificationViewController class]]) {
-                [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^void{
-                    [expectation fulfill];
-                }];
-            }
-        });
-        [self waitForExpectationsWithTimeout:self.mixpanel.miniNotificationPresentationTime * 2 handler:nil];
-    }
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        self.mixpanel.currentlyShowingNotification = nil;
+        self.mixpanel.notificationViewController = nil;
+        if([topVC isKindOfClass:[MPNotificationViewController class]]) {
+            [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^void{
+                [expectation fulfill];
+            }];
+        }
+    });
+    [self waitForExpectationsWithTimeout:self.mixpanel.miniNotificationPresentationTime * 2 handler:nil];
 }
 
 - (void)testNoShowNotificationOnAlertController {

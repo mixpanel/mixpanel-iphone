@@ -149,16 +149,14 @@
     [label2 setText:@"Old Text 2"];
     [[self topViewController].view addSubview:label2];
 
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
-            XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
-            [expect fulfill];
-        });
-        [self waitForExpectationsWithTimeout:0.1 handler:nil];
-        [variant stop];
-    }
+    XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssertEqualObjects(label.text, @"New Text", @"Label text should be set");
+        XCTAssertEqualObjects(label2.text, @"New Text", @"Label2 text should be set");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    [variant stop];
 }
 
 - (void)testStopVariant
@@ -179,16 +177,14 @@
     UILabel *label2 = [[UILabel alloc] init];
     [label2 setText:@"Old Text 2"];
     [[self topViewController].view addSubview:label2];
-
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            XCTAssertEqualObjects(label.text, @"Old Text", @"Label text should be reverted");
-            XCTAssertEqualObjects(label2.text, @"Old Text 2", @"Label2 text should never have changed, as it was added after the variant was stopped");
-            [expect fulfill];
-        });
-        [self waitForExpectationsWithTimeout:0.5 handler:nil];
-    }
+    
+    XCTestExpectation *expect = [self expectationWithDescription:@"Text Updated"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssertEqualObjects(label.text, @"Old Text", @"Label text should be reverted");
+        XCTAssertEqualObjects(label2.text, @"Old Text 2", @"Label2 text should never have changed, as it was added after the variant was stopped");
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:0.5 handler:nil];
 }
 
 - (void)testSwizzle
@@ -382,23 +378,22 @@
         }
     }];
     [self waitForSerialQueue];
-    if ([self respondsToSelector:@selector(expectationWithDescription:)]) {
-        XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
-            XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
-            XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
-
-            XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
-            for (NSDictionary *event in self.mixpanel.eventsQueue) {
-                XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
-                XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
-            }
-
-            [expect fulfill];
-        });
-        [self waitForExpectationsWithTimeout:2 handler:nil];
-    }
+    
+    XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
+        XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
+        XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
+        
+        XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
+        for (NSDictionary *event in self.mixpanel.eventsQueue) {
+            XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
+            XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
+        }
+        
+        [expect fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
 #pragma mark - Object selection
