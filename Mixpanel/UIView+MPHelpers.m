@@ -20,28 +20,10 @@
 
 - (UIImage *)mp_snapshotImage
 {
-    CGFloat offsetHeight = 0.0f;
-    
-    //Avoid the status bar on phones running iOS < 7
-    if (NSFoundationVersionNumber < NSFoundationVersionNumber_iOS_7_0 &&
-        ![UIApplication sharedApplication].statusBarHidden) {
-        offsetHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    }
     CGSize size = self.layer.bounds.size;
-    size.height -= offsetHeight;
     UIGraphicsBeginImageContext(size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0.0f, -offsetHeight);
     
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-        [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
-    } else {
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    }
-#else
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-#endif
+    [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -66,7 +48,7 @@
             UIControlEvents allEvents = UIControlEventAllTouchEvents | UIControlEventAllEditingEvents;
             for (NSUInteger e = 0; (allEvents >> e) > 0; e++) {
                 UIControlEvents event = allEvents & (0x01 << e);
-                if(event) {
+                if (event) {
                     NSArray *actions = [(UIControl *)(self) actionsForTarget:target forControlEvent:event];
                     NSArray *ignoreActions = @[@"preVerify:forEvent:", @"execute:forEvent:"];
                     for (NSString *action in actions) {
@@ -150,7 +132,7 @@
         CGContextDrawImage(context, CGRectMake(0,0,8,8), [originalImage CGImage]);
         CGColorSpaceRelease(space);
         CGContextRelease(context);
-        for(int i = 0; i < 32; i++) {
+        for (int i = 0; i < 32; i++) {
             int j = 2*i;
             int k = 2*i + 1;
             data4[i] = (((data32[j] & 0x80000000) >> 24) | ((data32[j] & 0x800000) >> 17) | ((data32[j] & 0x8000) >> 10) | ((data32[j] & 0x80) >> 3) |
@@ -180,7 +162,7 @@
     return text;
 }
         
-static NSString* mp_encryptHelper(id input)
+static NSString *mp_encryptHelper(id input)
 {
     NSString *SALT = @"1l0v3c4a8s4n018cl3d93kxled3kcle3j19384jdo2dk3";
     NSMutableString *encryptedStuff = nil;
@@ -216,8 +198,8 @@ static NSString* mp_encryptHelper(id input)
 {
     NSArray *targetActions = [self mp_targetActions];
     NSMutableArray *encryptedActions = [NSMutableArray array];
-    for (NSUInteger i = 0 ; i < [targetActions count]; i++) {
-        [encryptedActions addObject:mp_encryptHelper(targetActions[i])];
+    for (id targetAction in targetActions) {
+        [encryptedActions addObject:mp_encryptHelper(targetAction)];
     }
     return encryptedActions;
 }

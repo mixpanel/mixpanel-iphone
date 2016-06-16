@@ -79,13 +79,13 @@
 + (MPVariant *)variantWithJSONObject:(NSDictionary *)object {
 
     NSNumber *ID = object[@"id"];
-    if (!([ID isKindOfClass:[NSNumber class]] && [ID integerValue] > 0)) {
+    if (!([ID isKindOfClass:[NSNumber class]] && ID.integerValue > 0)) {
         MixpanelError(@"invalid variant id: %@", ID);
         return nil;
     }
 
     NSNumber *experimentID = object[@"experiment_id"];
-    if (!([experimentID isKindOfClass:[NSNumber class]] && [experimentID integerValue] > 0)) {
+    if (!([experimentID isKindOfClass:[NSNumber class]] && experimentID.integerValue > 0)) {
         MixpanelError(@"invalid experiment id: %@", experimentID);
         return nil;
     }
@@ -102,8 +102,8 @@
         return nil;
     }
 
-    return [[MPVariant alloc] initWithID:[ID unsignedIntegerValue]
-                            experimentID:[experimentID unsignedIntegerValue]
+    return [[MPVariant alloc] initWithID:ID.unsignedIntegerValue
+                            experimentID:experimentID.unsignedIntegerValue
                                  actions:actions
                                   tweaks:tweaks];
 }
@@ -115,7 +115,7 @@
 
 - (instancetype)initWithID:(NSUInteger)ID experimentID:(NSUInteger)experimentID actions:(NSArray *)actions tweaks:(NSArray *)tweaks
 {
-    if(self = [super init]) {
+    if (self = [super init]) {
         self.ID = ID;
         self.experimentID = experimentID;
         self.actions = [NSMutableOrderedSet orderedSet];
@@ -163,7 +163,7 @@
 - (void)addActionFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec
 {
     MPVariantAction *action = [MPVariantAction actionWithJSONObject:object];
-    if(action) {
+    if (action) {
         // Remove any action already in use for this name
         [self.actions removeObject:action];
         [self.actions addObject:action];
@@ -176,7 +176,7 @@
 - (void)removeActionWithName:(NSString *)name
 {
     for (MPVariantAction *action in self.actions) {
-        if([action.name isEqualToString:name]) {
+        if ([action.name isEqualToString:name]) {
             [action stop];
             [self.actions removeObject:action];
             break;
@@ -196,7 +196,7 @@
 - (void)addTweakFromJSONObject:(NSDictionary *)object andExecute:(BOOL)exec
 {
     MPVariantTweak *tweak = [MPVariantTweak tweakWithJSONObject:object];
-    if(tweak) {
+    if (tweak) {
         [self.tweaks addObject:tweak];
         if (exec) {
             [tweak execute];
@@ -358,7 +358,7 @@ static NSMapTable *originalCache;
         self.cacheOriginal = cacheOriginal;
 
         if (!name) {
-            name = [[NSUUID UUID] UUIDString];
+            name = [NSUUID UUID].UUIDString;
         }
         self.name = name;
 
@@ -425,10 +425,10 @@ static NSMapTable *originalCache;
         }
 
         NSArray *invocations = [[self class] executeSelector:self.selector
-                                                  withArgs:self.args
-                                                    onPath:self.path
-                                                  fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
-                                                    toLeaf:view];
+                                                    withArgs:self.args
+                                                      onPath:self.path
+                                                    fromRoot:[UIApplication sharedApplication].keyWindow.rootViewController
+                                                      toLeaf:view];
 
         for (NSInvocation *invocation in invocations) {
             [self.appliedTo addObject:invocation.target];
@@ -464,7 +464,7 @@ static NSMapTable *originalCache;
 
     if (self.original) {
         // Undo the changes with the original values specified in the action
-        [[self class] executeSelector:self.selector withArgs:self.original onObjects:[self.appliedTo allObjects]];
+        [[self class] executeSelector:self.selector withArgs:self.original onObjects:self.appliedTo.allObjects];
     } else if (self.cacheOriginal) {
         // Or undo them from the local cache of original images
         [self restoreCachedImage];
@@ -477,7 +477,7 @@ static NSMapTable *originalCache;
 {
     NSEnumerator *selectorEnum = [gettersForSetters keyEnumerator];
     SEL selector = nil, cacheSelector = nil;
-    while((selector = (SEL)((__bridge void *)[selectorEnum nextObject]))) {
+    while ((selector = (SEL)((__bridge void *)[selectorEnum nextObject]))) {
         if (selector == self.selector) {
             cacheSelector = (SEL)(__bridge void *)[gettersForSetters objectForKey:MAPTABLE_ID(selector)];
             break;
@@ -487,7 +487,7 @@ static NSMapTable *originalCache;
         NSArray *cacheInvocations = [[self class] executeSelector:cacheSelector
                                                          withArgs:self.args
                                                            onPath:self.path
-                                                         fromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController
+                                                         fromRoot:[UIApplication sharedApplication].keyWindow.rootViewController
                                                            toLeaf:view];
         for (NSInvocation *invocation in cacheInvocations) {
             if (![originalCache objectForKey:invocation.target]) {
@@ -506,13 +506,13 @@ static NSMapTable *originalCache;
 
 - (void)restoreCachedImage
 {
-    for (NSObject *o in [self.appliedTo allObjects]) {
+    for (NSObject *o in self.appliedTo.allObjects) {
         id originalImage = [originalCache objectForKey:o];
         if (originalImage) {
             NSMutableArray *originalArgs = [self.args mutableCopy];
-            NSUInteger n = [originalArgs count];
-            for (NSUInteger i = 0; i < n; i++) {
-                if ([originalArgs[i] isKindOfClass:[NSArray class]] && [originalArgs[i][1] isEqual:@"UIImage"]) {
+            for (NSUInteger i = 0, n = originalArgs.count; i < n; i++) {
+                id originalArg = originalArgs[i];
+                if ([originalArg isKindOfClass:[NSArray class]] && [originalArg[1] isEqual:@"UIImage"]) {
                     originalArgs[i] = @[originalImage, @"UIImage"];
                     break;
                 }
@@ -525,12 +525,12 @@ static NSMapTable *originalCache;
 
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"Action: Change %@ on %@ matching %@ from %@ to %@", NSStringFromSelector(self.selector), NSStringFromClass(self.class), self.path.string, self.original ?: (self.cacheOriginal ? @"Cached Original" : nil) , self.args];
+    return [NSString stringWithFormat:@"Action: Change %@ on %@ matching %@ from %@ to %@", NSStringFromSelector(self.selector), NSStringFromClass(self.class), self.path.string, self.original ?: (self.cacheOriginal ? @"Cached Original" : nil), self.args];
 }
 
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onPath:(MPObjectSelector *)path fromRoot:(NSObject *)root toLeaf:(NSObject *)leaf
 {
-    if (leaf){
+    if (leaf) {
         if ([path isLeafSelected:leaf fromRoot:root]) {
             return [self executeSelector:selector withArgs:args onObjects:@[leaf]];
         } else {
@@ -544,49 +544,46 @@ static NSMapTable *originalCache;
 + (NSArray *)executeSelector:(SEL)selector withArgs:(NSArray *)args onObjects:(NSArray *)objects
 {
     NSMutableArray *invocations = [NSMutableArray array];
-    if (objects && [objects count] > 0) {
-        for (NSObject *o in objects) {
-            NSMethodSignature *signature = [o methodSignatureForSelector:selector];
-            if (signature != nil) {
-                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-                [invocation retainArguments];
-                NSUInteger requiredArgs = [signature numberOfArguments] - 2;
-                if ([args count] >= requiredArgs) {
-                    [invocation setSelector:selector];
-                    for (NSUInteger i = 0; i < requiredArgs; i++) {
-
-                        NSArray *argTuple = args[i];
-                        // Ensure we only send strings to the transform method
-                        if (![argTuple[1] isKindOfClass:[NSString class]]) continue;
-                        
-                        id arg = transformValue(argTuple[0], argTuple[1]);
-
-                        // Unpack NSValues to their base types.
-                        if ([arg isKindOfClass:[NSValue class]]) {
-                            const char *ctype = [(NSValue *)arg objCType];
-                            NSUInteger size;
-                            NSGetSizeAndAlignment(ctype, &size, nil);
-                            void *buf = malloc(size);
-                            [(NSValue *)arg getValue:buf];
-                            [invocation setArgument:buf atIndex:(int)(i+2)];
-                            free(buf);
-                        } else {
-                            [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
-                        }
+    for (NSObject *o in objects) {
+        NSMethodSignature *signature = [o methodSignatureForSelector:selector];
+        if (signature != nil) {
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+            [invocation retainArguments];
+            NSUInteger requiredArgs = signature.numberOfArguments - 2;
+            if (args.count >= requiredArgs) {
+                [invocation setSelector:selector];
+                for (NSUInteger i = 0; i < requiredArgs; i++) {
+                    NSArray *argTuple = args[i];
+                    // Ensure we only send strings to the transform method
+                    if (![argTuple[1] isKindOfClass:[NSString class]]) continue;
+                    
+                    id arg = transformValue(argTuple[0], argTuple[1]);
+                    
+                    // Unpack NSValues to their base types.
+                    if ([arg isKindOfClass:[NSValue class]]) {
+                        const char *ctype = [(NSValue *)arg objCType];
+                        NSUInteger size;
+                        NSGetSizeAndAlignment(ctype, &size, nil);
+                        void *buf = malloc(size);
+                        [(NSValue *)arg getValue:buf];
+                        [invocation setArgument:buf atIndex:(int)(i+2)];
+                        free(buf);
+                    } else {
+                        [invocation setArgument:(void *)&arg atIndex:(int)(i+2)];
                     }
-                    @try {
-                        [invocation invokeWithTarget:o];
-                    }
-                    @catch (NSException *exception) {
-                        MixpanelError(@"Exception during invocation: %@", exception);
-                    }
-                    [invocations addObject:invocation];
-                } else {
-                    MixpanelError(@"Not enough args");
                 }
+                @try {
+                    [invocation invokeWithTarget:o];
+                }
+                @catch (NSException *exception) {
+                    MixpanelError(@"Exception during invocation: %@", exception);
+                }
+                [invocations addObject:invocation];
             } else {
-                MixpanelError(@"No method found for %@", NSStringFromSelector(selector));
+                MixpanelError(@"Not enough args");
             }
+        } else {
+            MixpanelError(@"No method found for %@", NSStringFromSelector(selector));
         }
     }
     return [invocations copy];
@@ -656,8 +653,8 @@ static NSMapTable *originalCache;
 }
 
 - (instancetype)initWithName:(NSString *)name
-          encoding:(NSString *)encoding
-             value:(MPTweakValue)value
+                    encoding:(NSString *)encoding
+                       value:(MPTweakValue)value
 {
     if ((self = [super init])) {
         self.name = name;
@@ -735,7 +732,7 @@ static NSMapTable *originalCache;
 
 - (NSUInteger)hash
 {
-    return [self.name hash];
+    return self.name.hash;
 }
 
 @end

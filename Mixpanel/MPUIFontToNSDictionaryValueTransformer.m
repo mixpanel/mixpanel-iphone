@@ -5,9 +5,6 @@
 
 @implementation MPUIFontToNSDictionaryValueTransformer
 
-{
-
-}
 + (Class)transformedValueClass
 {
     return [NSDictionary class];

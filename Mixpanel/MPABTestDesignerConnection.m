@@ -64,7 +64,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         _open = NO;
         _connected = NO;
         _sessionEnded = NO;
-        _session = [[NSMutableDictionary alloc] init];
+        _session = [NSMutableDictionary dictionary];
         _url = url;
         _connectCallback = connectCallback;
         _disconnectCallback = disconnectCallback;
@@ -123,8 +123,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 - (void)close
 {
     [_webSocket close];
-    for (NSString *key in [_session keyEnumerator]) {
-        id value = [_session valueForKey:key];
+    for (id value in _session.allValues) {
         if ([value conformsToProtocol:@protocol(MPDesignerSessionCollection)]) {
             [value cleanup];
         }

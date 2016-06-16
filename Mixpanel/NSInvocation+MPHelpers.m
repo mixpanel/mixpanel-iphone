@@ -61,19 +61,19 @@ static void *MPAllocBufferForObjCType(const char *objCType)
         MPObjCNumericTypes arg;
         switch (argumentType[0])
         {
-            case _C_CHR:      arg._chr      = [numberArgument charValue];                break;
-            case _C_UCHR:     arg._uchr     = [numberArgument unsignedCharValue];        break;
-            case _C_SHT:      arg._sht      = [numberArgument shortValue];               break;
-            case _C_USHT:     arg._usht     = [numberArgument unsignedShortValue];       break;
-            case _C_INT:      arg._int      = [numberArgument intValue];                 break;
-            case _C_UINT:     arg._uint     = [numberArgument unsignedIntValue];         break;
-            case _C_LNG:      arg._lng      = [numberArgument longValue];                break;
-            case _C_ULNG:     arg._ulng     = [numberArgument unsignedLongValue];        break;
-            case _C_LNG_LNG:  arg._lng_lng  = [numberArgument longLongValue];            break;
-            case _C_ULNG_LNG: arg._ulng_lng = [numberArgument unsignedLongLongValue];    break;
-            case _C_FLT:      arg._flt      = [numberArgument floatValue];               break;
-            case _C_DBL:      arg._dbl      = [numberArgument doubleValue];              break;
-            case _C_BOOL:     arg._bool     = [numberArgument boolValue];                break;
+            case _C_CHR:      arg._chr      = numberArgument.charValue;                break;
+            case _C_UCHR:     arg._uchr     = numberArgument.unsignedCharValue;        break;
+            case _C_SHT:      arg._sht      = numberArgument.shortValue;               break;
+            case _C_USHT:     arg._usht     = numberArgument.unsignedShortValue;       break;
+            case _C_INT:      arg._int      = numberArgument.intValue;                 break;
+            case _C_UINT:     arg._uint     = numberArgument.unsignedIntValue;         break;
+            case _C_LNG:      arg._lng      = numberArgument.longValue;                break;
+            case _C_ULNG:     arg._ulng     = numberArgument.unsignedLongValue;        break;
+            case _C_LNG_LNG:  arg._lng_lng  = numberArgument.longLongValue;            break;
+            case _C_ULNG_LNG: arg._ulng_lng = numberArgument.unsignedLongLongValue;    break;
+            case _C_FLT:      arg._flt      = numberArgument.floatValue;               break;
+            case _C_DBL:      arg._dbl      = numberArgument.doubleValue;              break;
+            case _C_BOOL:     arg._bool     = numberArgument.boolValue;                break;
             default:
                 NSAssert(NO, @"Currently unsupported argument type!");
         }
@@ -84,9 +84,9 @@ static void *MPAllocBufferForObjCType(const char *objCType)
     {
         NSValue *valueArgument = argumentValue;
 
-        NSAssert2(strcmp([valueArgument objCType], argumentType) == 0, @"Objective-C type mismatch (%s != %s)!", [valueArgument objCType], argumentType);
+        NSAssert2(strcmp(valueArgument.objCType, argumentType) == 0, @"Objective-C type mismatch (%s != %s)!", valueArgument.objCType, argumentType);
 
-        void *buffer = MPAllocBufferForObjCType([valueArgument objCType]);
+        void *buffer = MPAllocBufferForObjCType(valueArgument.objCType);
 
         [valueArgument getValue:buffer];
 
@@ -115,11 +115,13 @@ static void *MPAllocBufferForObjCType(const char *objCType)
 
 - (void)mp_setArgumentsFromArray:(NSArray *)argumentArray
 {
-    NSParameterAssert([argumentArray count] == ([self.methodSignature numberOfArguments] - 2));
+    NSParameterAssert(argumentArray.count == (self.methodSignature.numberOfArguments - 2));
 
-    for (NSUInteger i = 0; i < [argumentArray count]; ++i) {
+    NSUInteger i = 0;
+    for (id argument in argumentArray) {
         NSUInteger argumentIndex = 2 + i;
-        [self mp_setArgument:argumentArray[i] atIndex:argumentIndex];
+        [self mp_setArgument:argument atIndex:argumentIndex];
+        ++i;
     }
 }
 
@@ -129,7 +131,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
 
     NSMethodSignature *methodSignature = self.methodSignature;
 
-    const char *objCType = [methodSignature methodReturnType];
+    const char *objCType = methodSignature.methodReturnType;
     void *buffer = MPAllocBufferForObjCType(objCType);
 
     [self getReturnValue:buffer];

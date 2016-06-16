@@ -34,10 +34,8 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         }
     }
 
-    if (self.bindings) {
-        for (MPEventBinding *oldBinding in self.bindings) {
-            [oldBinding stop];
-        }
+    for (MPEventBinding *oldBinding in self.bindings) {
+        [oldBinding stop];
     }
     self.bindings = newBindings;
     for (MPEventBinding *newBinding in self.bindings) {
@@ -47,10 +45,8 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
 - (void)cleanup
 {
-    if (self.bindings) {
-        for (MPEventBinding *oldBinding in self.bindings) {
-            [oldBinding stop];
-        }
+    for (MPEventBinding *oldBinding in self.bindings) {
+        [oldBinding stop];
     }
     self.bindings = nil;
 }
@@ -71,8 +67,8 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
         MPABTestDesignerConnection *conn = weak_connection;
 
         dispatch_sync(dispatch_get_main_queue(), ^{
-            NSLog(@"Loading event bindings:\n%@",[self payload][@"events"]);
             NSArray *payload = [self payload][@"events"];
+            NSLog(@"Loading event bindings:\n%@", payload);
             MPEventBindingCollection *bindingCollection = [conn sessionObjectForKey:@"event_bindings"];
             if (!bindingCollection) {
                 bindingCollection = [[MPEventBindingCollection alloc] init];

@@ -111,7 +111,7 @@
 
 @implementation Mixpanel
 
-static Mixpanel *sharedInstance = nil;
+static Mixpanel *sharedInstance;
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
     static dispatch_once_t onceToken;
@@ -143,10 +143,10 @@ static Mixpanel *sharedInstance = nil;
 
 - (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval
 {
-    if (apiToken == nil) {
-        apiToken = @"";
-    }
-    if ([apiToken length] == 0) {
+    if (apiToken.length == 0) {
+        if (apiToken == nil) {
+            apiToken = @"";
+        }
         MixpanelDebug(@"%@ warning empty api token", self);
     }
     if (self = [self init]) {
@@ -208,8 +208,9 @@ static Mixpanel *sharedInstance = nil;
         [self executeCachedEventBindings];
 #endif
 
-        if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-            [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
+        NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (remoteNotification) {
+            [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
     }
     return self;
@@ -337,7 +338,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     for (id __unused k in properties) {
         NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
-        // would be convenient to do: id v = [properties objectForKey:k]; but
+        // would be convenient to do: id v = properties[k]; but
         // when the NSAssert's are stripped out in release, it becomes an
         // unused variable error. also, note that @YES and @NO pass as
         // instances of NSNumber class.
@@ -369,7 +370,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)identify:(NSString *)distinctId
 {
-    if (distinctId == nil || distinctId.length == 0) {
+    if (distinctId.length == 0) {
         MixpanelDebug(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
@@ -377,7 +378,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
         self.people.distinctId = distinctId;
-        if ([self.people.unidentifiedQueue count] > 0) {
+        if (self.people.unidentifiedQueue.count > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
                 r[@"$distinct_id"] = distinctId;
                 [self.peopleQueue addObject:r];
@@ -393,11 +394,11 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
 {
-    if (!alias || [alias length] == 0) {
+    if (alias.length == 0) {
         MixpanelError(@"%@ create alias called with empty alias: %@", self, alias);
         return;
     }
-    if (!distinctID || [distinctID length] == 0) {
+    if (distinctID.length == 0) {
         MixpanelError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
@@ -412,7 +413,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
-    if (event == nil || [event length] == 0) {
+    if (event.length == 0) {
         MixpanelError(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
     }
@@ -428,20 +429,15 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSNumber *epochSeconds = @(round(epochInterval));
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[event];
-        NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        [p addEntriesFromDictionary:self.automaticProperties];
+        NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:self.automaticProperties];
         p[@"token"] = self.apiToken;
         p[@"time"] = epochSeconds;
         if (eventStartTime) {
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
-        if (self.nameTag) {
-            p[@"mp_name_tag"] = self.nameTag;
-        }
-        if (self.distinctId) {
-            p[@"distinct_id"] = self.distinctId;
-        }
+        p[@"mp_name_tag"] = self.nameTag;
+        p[@"distinct_id"] = self.distinctId;
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];
@@ -463,7 +459,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
         MixpanelDebug(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
-        if ([self.eventsQueue count] > 5000) {
+        if (self.eventsQueue.count > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
         
@@ -483,10 +479,12 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     MixpanelDebug(@"%@ tracking push payload %@", self, userInfo);
 
-    if (userInfo && userInfo[@"mp"]) {
-        NSDictionary *mpPayload = userInfo[@"mp"];
+    id rawMp = userInfo[@"mp"];
+    if (rawMp) {
+        
+        NSDictionary *mpPayload = [rawMp isKindOfClass:[NSDictionary class]] ? rawMp : nil;
 
-        if ([mpPayload isKindOfClass:[NSDictionary class]] && mpPayload[@"m"] && mpPayload[@"c"]) {
+        if (mpPayload[@"m"] && mpPayload[@"c"]) {
             [self track:event properties:@{@"campaign_id": mpPayload[@"c"],
                                            @"message_id": mpPayload[@"m"],
                                            @"message_type": @"push"}];
@@ -543,9 +541,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        if (tmp[propertyName] != nil) {
-            [tmp removeObjectForKey:propertyName];
-        }
+        tmp[propertyName] = nil;
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
         if ([Mixpanel inBackground]) {
             [self archiveProperties];
@@ -572,7 +568,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
     
-    if (event == nil || [event length] == 0) {
+    if (event.length == 0) {
         MixpanelError(@"Mixpanel cannot time an empty event");
         return;
     }
@@ -646,8 +642,8 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (self.timer) {
             [self.timer invalidate];
             MixpanelDebug(@"%@ stopped flush timer: %@", self, self.timer);
+            self.timer = nil;
         }
-        self.timer = nil;
     });
 }
 
@@ -700,13 +696,13 @@ static __unused NSString *MPURLEncode(NSString *s)
         return;
     }
     
-    while ([queue count] > 0) {
-        NSUInteger batchSize = ([queue count] > 50) ? 50 : [queue count];
+    while (queue.count > 0) {
+        NSUInteger batchSize = MIN(queue.count, 50);
         NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
 
         NSString *requestData = [self encodeAPIData:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
+        MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
         NSError *error = nil;
 
@@ -724,7 +720,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         }
 
         NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        if ([response intValue] == 0) {
+        if (response.intValue == 0) {
             MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
         }
 
@@ -737,7 +733,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSURL *URL = [NSURL URLWithString:[self.serverURL stringByAppendingString:endpoint]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    [request setHTTPMethod:@"POST"];
+    request.HTTPMethod = @"POST";
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     MixpanelDebug(@"%@ http request: %@?%@", self, URL, body);
     return request;
@@ -885,11 +881,20 @@ static __unused NSString *MPURLEncode(NSString *s)
     [self unarchiveEventBindings];
 }
 
-- (id)unarchiveFromFile:(NSString *)filePath
++ (nonnull id)unarchiveOrDefaultFromFile:(NSString *)filePath asClass:(Class)class
+{
+    return [self unarchiveFromFile:filePath asClass:class] ?: [class new];
+}
+
++ (id)unarchiveFromFile:(NSString *)filePath asClass:(Class)class
 {
     id unarchivedData = nil;
     @try {
         unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        // this check is inside the try-catch as the unarchivedData may be a non-NSObject, not responding to `isKindOfClass:` or `respondsToSelector:`
+        if (![unarchivedData isKindOfClass:class]) {
+            unarchivedData = nil;
+        }
         MixpanelDebug(@"%@ unarchived data from %@: %@", self, filePath, unarchivedData);
     }
     @catch (NSException *exception) {
@@ -908,51 +913,39 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)unarchiveEvents
 {
-    self.eventsQueue = (NSMutableArray *)[self unarchiveFromFile:[self eventsFilePath]];
-    if (!self.eventsQueue) {
-        self.eventsQueue = [NSMutableArray array];
-    }
+    self.eventsQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSMutableArray class]];
 }
 
 - (void)unarchivePeople
 {
-    self.peopleQueue = (NSMutableArray *)[self unarchiveFromFile:[self peopleFilePath]];
-    if (!self.peopleQueue) {
-        self.peopleQueue = [NSMutableArray array];
-    }
+    self.peopleQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSMutableArray class]];
 }
 
 - (void)unarchiveProperties
 {
-    NSDictionary *properties = (NSDictionary *)[self unarchiveFromFile:[self propertiesFilePath]];
+    NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
-        self.distinctId = properties[@"distinctId"] ? properties[@"distinctId"] : [self defaultDistinctId];
+        self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
         self.nameTag = properties[@"nameTag"];
-        self.superProperties = properties[@"superProperties"] ? properties[@"superProperties"] : [NSMutableDictionary dictionary];
+        self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
-        self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ? properties[@"peopleUnidentifiedQueue"] : [NSMutableArray array];
-        self.shownSurveyCollections = properties[@"shownSurveyCollections"] ? properties[@"shownSurveyCollections"] : [NSMutableSet set];
-        self.shownNotifications = properties[@"shownNotifications"] ? properties[@"shownNotifications"] : [NSMutableSet set];
-        self.variants = properties[@"variants"] ? properties[@"variants"] : [NSSet set];
-        self.eventBindings = properties[@"event_bindings"] ? properties[@"event_bindings"] : [NSSet set];
-        self.timedEvents = properties[@"timedEvents"] ? properties[@"timedEvents"] : [NSMutableDictionary dictionary];
+        self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
+        self.shownSurveyCollections = properties[@"shownSurveyCollections"] ?: [NSMutableSet set];
+        self.shownNotifications = properties[@"shownNotifications"] ?: [NSMutableSet set];
+        self.variants = properties[@"variants"] ?: [NSSet set];
+        self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
+        self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
     }
 }
 
 - (void)unarchiveVariants
 {
-    self.variants = (NSSet *)[self unarchiveFromFile:[self variantsFilePath]];
-    if (!self.variants) {
-        self.variants = [NSSet set];
-    }
+    self.variants = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self variantsFilePath] asClass:[NSSet class]];
 }
 
 - (void)unarchiveEventBindings
 {
-    self.eventBindings = (NSSet *)[self unarchiveFromFile:[self eventBindingsFilePath]];
-    if (!self.eventBindings || ![self.eventBindings isKindOfClass:[NSSet class]]) {
-        self.eventBindings = [NSSet set];
-    }
+    self.eventBindings = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self eventBindingsFilePath] asClass:[NSSet class]];
 }
 
 #pragma mark - Application Helpers
@@ -965,15 +958,14 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (NSString *)deviceModel
 {
     NSString *results = nil;
-    @try {
-        size_t size;
-        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-        char answer[size];
-        sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char answer[size];
+    sysctlbyname("hw.machine", answer, &size, NULL, 0);
+    if (size) {
         results = @(answer);
-    }
-    @catch (NSException *exception) {
-        MixpanelError(@"Failed fetch hw.machine from sysctl. Details: %@", exception);
+    } else {
+        MixpanelError(@"Failed fetch hw.machine from sysctl.");
     }
     return results;
 }
@@ -992,7 +984,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [screenBoundsInvocation invokeWithTarget:device];
             CGRect screenBounds;
             [screenBoundsInvocation getReturnValue:(void *)&screenBounds];
-            if (screenBounds.size.width == 136.0f){
+            if (screenBounds.size.width == 136.0f) {
                 model = @"Apple Watch 38mm";
             } else if (screenBounds.size.width == 156.0f) {
                 model = @"Apple Watch 42mm";
@@ -1018,10 +1010,9 @@ static __unused NSString *MPURLEncode(NSString *s)
     return ifa;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 - (void)setCurrentRadio
 {
-    dispatch_async(self.serialQueue, ^(){
+    dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
         if (properties) {
             properties[@"$radio"] = [self currentRadio];
@@ -1044,7 +1035,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     return @"";
 #endif
 }
-#endif
 
 - (NSString *)libVersion
 {
@@ -1136,15 +1126,11 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // cellular info
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-    if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
-        [self setCurrentRadio];
-        [notificationCenter addObserver:self
-                               selector:@selector(setCurrentRadio)
-                                   name:CTRadioAccessTechnologyDidChangeNotification
-                                 object:nil];
-    }
-#endif
+    [self setCurrentRadio];
+    [notificationCenter addObserver:self
+                           selector:@selector(setCurrentRadio)
+                               name:CTRadioAccessTechnologyDidChangeNotification
+                             object:nil];
 
     // Application lifecycle events
     [notificationCenter addObserver:self
@@ -1205,7 +1191,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
     if (properties) {
         BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
-        properties[@"$wifi"] = wifi ? @YES : @NO;
+        properties[@"$wifi"] = @(wifi);
         self.automaticProperties = [properties copy];
         MixpanelDebug(@"%@ reachability changed, wifi=%d", self, wifi);
     }
@@ -1220,9 +1206,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSDate *start = [NSDate date];
 
         [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
-            if (self.showNotificationOnActive && notifications && [notifications count] > 0) {
+            if (self.showNotificationOnActive && notifications.count > 0) {
                 [self showNotificationWithObject:notifications[0]];
-            } else if (self.showSurveyOnActive && surveys && [surveys count] > 0) {
+            } else if (self.showSurveyOnActive && surveys.count > 0) {
                 [self showSurveyWithObject:surveys[0] withAlert:([start timeIntervalSinceNow] < -2.0)];
             }
 
@@ -1238,7 +1224,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     [binding execute];
                 }
             });
-
         }];
     }
 }
@@ -1302,8 +1287,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                                @"al_nav_in": @"$al_nav_in",
                                @"al_ref_back_out": @"$al_ref_back_out"
                                };
-    NSDictionary *userInfo = [notification userInfo];
-    if (userInfo && userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
+    NSDictionary *userInfo = notification.userInfo;
+    if (userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
         [self track:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
     }
 }
@@ -1350,7 +1335,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
         if (!useCache || !self.decideResponseCached) {
             MixpanelDebug(@"%@ decide cache not found, starting network request", self);
-            NSString *distinctId = self.people.distinctId ? self.people.distinctId : self.distinctId;
+            NSString *distinctId = self.people.distinctId ?: self.distinctId;
             NSData *peoplePropertiesJSON = [NSJSONSerialization dataWithJSONObject:self.people.automaticPeopleProperties options:(NSJSONWritingOptions)0 error:nil];
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&properties=%@%@",
                                 self.apiToken,
@@ -1401,9 +1386,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 }
             }
 
-            NSArray *rawSurveys = object[@"surveys"];
+            id rawSurveys = object[@"surveys"];
             NSMutableArray *parsedSurveys = [NSMutableArray array];
-            if (rawSurveys && [rawSurveys isKindOfClass:[NSArray class]]) {
+            if ([rawSurveys isKindOfClass:[NSArray class]]) {
                 for (id obj in rawSurveys) {
                     MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
                     if (survey) {
@@ -1414,9 +1399,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                MixpanelDebug(@"%@ survey check response format error: %@", self, object);
             }
 
-            NSArray *rawNotifications = object[@"notifications"];
+            id rawNotifications = object[@"notifications"];
             NSMutableArray *parsedNotifications = [NSMutableArray array];
-            if (rawNotifications && [rawNotifications isKindOfClass:[NSArray class]]) {
+            if ([rawNotifications isKindOfClass:[NSArray class]]) {
                 for (id obj in rawNotifications) {
                     MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
                     if (notification) {
@@ -1427,9 +1412,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 MixpanelDebug(@"%@ in-app notifs check response format error: %@", self, object);
             }
 
-            NSArray *rawVariants = object[@"variants"];
+            id rawVariants = object[@"variants"];
             NSMutableSet *parsedVariants = [NSMutableSet set];
-            if (rawVariants && [rawVariants isKindOfClass:[NSArray class]]) {
+            if ([rawVariants isKindOfClass:[NSArray class]]) {
                 for (id obj in rawVariants) {
                     MPVariant *variant = [MPVariant variantWithJSONObject:obj];
                     if (variant) {
@@ -1461,9 +1446,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
             [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
 
-            NSArray *rawEventBindings = object[@"event_bindings"];
+            id rawEventBindings = object[@"event_bindings"];
             NSMutableSet *parsedEventBindings = [NSMutableSet set];
-            if (rawEventBindings && [rawEventBindings isKindOfClass:[NSArray class]]) {
+            if ([rawEventBindings isKindOfClass:[NSArray class]]) {
                 for (id obj in rawEventBindings) {
                     MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
                     [binder execute];
@@ -1497,19 +1482,19 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             MixpanelDebug(@"%@ decide cache found, skipping network request", self);
         }
 
-        NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop){
-            return [self.shownSurveyCollections member:@(((MPSurvey *)obj).collectionID)] == nil;
+        NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(MPSurvey *obj, NSUInteger idx, BOOL *stop) {
+            return [self.shownSurveyCollections member:@(obj.collectionID)] == nil;
         }]];
 
-        NSArray *unseenNotifications = [self.notifications objectsAtIndexes:[self.notifications indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            return [self.shownNotifications member:@(((MPNotification *)obj).ID)] == nil;
+        NSArray *unseenNotifications = [self.notifications objectsAtIndexes:[self.notifications indexesOfObjectsPassingTest:^BOOL(MPNotification *obj, NSUInteger idx, BOOL *stop) {
+            return [self.shownNotifications member:@(obj.ID)] == nil;
         }]];
 
-        MixpanelDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)[unseenSurveys count], (unsigned long)[self.surveys count], unseenSurveys);
-        MixpanelDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)[unseenNotifications count],
-                      (unsigned long)[self.notifications count], unseenNotifications);
-        MixpanelDebug(@"%@ decide check found %lu variants: %@", self, (unsigned long)[self.variants count], self.variants);
-        MixpanelDebug(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)[self.eventBindings count], self.eventBindings);
+        MixpanelDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)unseenSurveys.count, (unsigned long)self.surveys.count, unseenSurveys);
+        MixpanelDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
+                      (unsigned long)self.notifications.count, unseenNotifications);
+        MixpanelDebug(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
+        MixpanelDebug(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
 
         if (completion) {
             completion(unseenSurveys, unseenNotifications, newVariants, newEventBindings);
@@ -1622,8 +1607,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)showSurvey
 {
-    [self checkForSurveysWithCompletion:^(NSArray *surveys){
-        if ([surveys count] > 0) {
+    [self checkForSurveysWithCompletion:^(NSArray *surveys) {
+        if (surveys.count > 0) {
             [self showSurveyWithObject:surveys[0]];
         }
     }];
@@ -1631,7 +1616,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)showSurveyWithID:(NSUInteger)ID
 {
-    [self checkForSurveysWithCompletion:^(NSArray *surveys){
+    [self checkForSurveysWithCompletion:^(NSArray *surveys) {
         for (MPSurvey *survey in surveys) {
             if (survey.ID == ID) {
                 [self showSurveyWithObject:survey];
@@ -1663,13 +1648,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if ([controller.survey.name isEqualToString:@"$ignore"]) {
         MixpanelDebug(@"%@ not sending survey %@ result", self, controller.survey);
     } else {
-        [self markSurvey:controller.survey shown:YES withAnswerCount:[answers count]];
-        for (NSUInteger i = 0, n = [answers count]; i < n; i++) {
+        [self markSurvey:controller.survey shown:YES withAnswerCount:answers.count];
+        NSUInteger i = 0;
+        for (id answer in answers) {
             if (i == 0) {
-                [self.people append:@{@"$answers": answers[i], @"$responses": @(controller.survey.collectionID)}];
+                [self.people append:@{@"$answers": answer, @"$responses": @(controller.survey.collectionID)}];
             } else {
-                [self.people append:@{@"$answers": answers[i]}];
+                [self.people append:@{@"$answers": answer}];
             }
+            i++;
         }
         
         dispatch_async(_serialQueue, ^{
@@ -1695,7 +1682,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)showNotification
 {
     [self checkForNotificationsWithCompletion:^(NSArray *notifications) {
-        if ([notifications count] > 0) {
+        if (notifications.count > 0) {
             [self showNotificationWithObject:notifications[0]];
         }
     }];
@@ -1796,7 +1783,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [controller showWithAnimation];
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    dispatch_after(popTime, dispatch_get_main_queue(), ^{
         [self notificationController:controller wasDismissedWithStatus:NO];
     });
     return YES;
@@ -1808,7 +1795,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return;
     }
 
-    void (^completionBlock)()  = ^void(){
+    void (^completionBlock)() = ^void() {
         self.currentlyShowingNotification = nil;
         self.notificationViewController = nil;
     };
@@ -1867,7 +1854,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)connectGestureRecognized:(id)sender
 {
-    if(!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan )) {
+    if (!sender || ([sender isKindOfClass:[UIGestureRecognizer class]] && ((UIGestureRecognizer *)sender).state == UIGestureRecognizerStateBegan)) {
         [self connectToABTestDesigner];
     }
 }
@@ -1881,51 +1868,51 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     if ([self.abtestDesignerConnection isKindOfClass:[MPABTestDesignerConnection class]] && ((MPABTestDesignerConnection *)self.abtestDesignerConnection).connected) {
         MixpanelError(@"A/B test designer connection already exists");
-    } else {
-        static NSUInteger oldInterval;
-        NSString *designerURLString = [NSString stringWithFormat:@"%@/connect?key=%@&type=device", self.switchboardURL, self.apiToken];
-        NSURL *designerURL = [NSURL URLWithString:designerURLString];
-        __weak Mixpanel *weakSelf = self;
-        void (^connectCallback)(void) = ^{
-            __strong Mixpanel *strongSelf = weakSelf;
-            oldInterval = strongSelf.flushInterval;
-            strongSelf.flushInterval = 1;
-            [UIApplication sharedApplication].idleTimerDisabled = YES;
-            if (strongSelf) {
-                for (MPVariant *variant in self.variants) {
-                    [variant stop];
-                }
-                for (MPEventBinding *binding in self.eventBindings) {
-                    [binding stop];
-                }
-                MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
-                void (^block)(id, SEL, NSString*, id) = ^(id obj, SEL sel, NSString *event_name, id params) {
-                    MPDesignerTrackMessage *message = [MPDesignerTrackMessage messageWithPayload:@{@"event_name": event_name}];
-                    [connection sendMessage:message];
-                };
-
-                [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
-            }
-        };
-        void (^disconnectCallback)(void) = ^{
-            __strong Mixpanel *strongSelf = weakSelf;
-            strongSelf.flushInterval = oldInterval;
-            [UIApplication sharedApplication].idleTimerDisabled = NO;
-            if (strongSelf) {
-                for (MPVariant *variant in self.variants) {
-                    [variant execute];
-                }
-                for (MPEventBinding *binding in self.eventBindings) {
-                    [binding execute];
-                }
-                [MPSwizzler unswizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] named:@"track_properties"];
-            }
-        };
-        self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
-                                                                             keepTrying:reconnect
-                                                                        connectCallback:connectCallback
-                                                                        disconnectCallback:disconnectCallback];
+        return;
     }
+    static NSUInteger oldInterval;
+    NSString *designerURLString = [NSString stringWithFormat:@"%@/connect?key=%@&type=device", self.switchboardURL, self.apiToken];
+    NSURL *designerURL = [NSURL URLWithString:designerURLString];
+    __weak Mixpanel *weakSelf = self;
+    void (^connectCallback)(void) = ^{
+        __strong Mixpanel *strongSelf = weakSelf;
+        oldInterval = strongSelf.flushInterval;
+        strongSelf.flushInterval = 1;
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        if (strongSelf) {
+            for (MPVariant *variant in self.variants) {
+                [variant stop];
+            }
+            for (MPEventBinding *binding in self.eventBindings) {
+                [binding stop];
+            }
+            MPABTestDesignerConnection *connection = strongSelf.abtestDesignerConnection;
+            void (^block)(id, SEL, NSString*, id) = ^(id obj, SEL sel, NSString *event_name, id params) {
+                MPDesignerTrackMessage *message = [MPDesignerTrackMessage messageWithPayload:@{@"event_name": event_name}];
+                [connection sendMessage:message];
+            };
+            
+            [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
+        }
+    };
+    void (^disconnectCallback)(void) = ^{
+        __strong Mixpanel *strongSelf = weakSelf;
+        strongSelf.flushInterval = oldInterval;
+        [UIApplication sharedApplication].idleTimerDisabled = NO;
+        if (strongSelf) {
+            for (MPVariant *variant in self.variants) {
+                [variant execute];
+            }
+            for (MPEventBinding *binding in self.eventBindings) {
+                [binding execute];
+            }
+            [MPSwizzler unswizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] named:@"track_properties"];
+        }
+    };
+    self.abtestDesignerConnection = [[MPABTestDesignerConnection alloc] initWithURL:designerURL
+                                                                         keepTrying:reconnect
+                                                                    connectCallback:connectCallback
+                                                                 disconnectCallback:disconnectCallback];
 }
 
 #pragma mark - Mixpanel A/B Testing (Experiment)
@@ -1940,14 +1927,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)markVariantRun:(MPVariant *)variant
 {
     MixpanelDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
-    NSDictionary *shownVariant = @{[@(variant.experimentID) stringValue]: @(variant.ID)};
+    NSDictionary *shownVariant = @{@(variant.experimentID).stringValue: @(variant.ID)};
     if (self.people.distinctId) {
         [self.people merge:@{@"$experiments": shownVariant}];
     }
 
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *superProperties = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
-        NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary: superProperties[@"$experiments"]];
+        NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary:superProperties[@"$experiments"]];
         [shownVariants addEntriesFromDictionary:shownVariant];
         [superProperties addEntriesFromDictionary:@{@"$experiments": [shownVariants copy]}];
         self.superProperties = [superProperties copy];
@@ -1956,7 +1943,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }
     });
 
-    [self track:@"$experiment_started" properties:@{@"$experiment_id" : @(variant.experimentID), @"$variant_id": @(variant.ID)}];
+    [self track:@"$experiment_started" properties:@{@"$experiment_id": @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
 - (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
@@ -2015,15 +2002,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (NSDictionary *)collectAutomaticPeopleProperties
 {
-    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:@{@"$ios_version": [UIDevice currentDevice].systemVersion,
+                                                                             @"$ios_lib_version": VERSION,
+                                                                             }];
+    NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
+    p[@"$ios_app_version"] = infoDictionary[@"CFBundleVersion"];
+    p[@"$ios_app_release"] = infoDictionary[@"CFBundleShortVersionString"];
     __strong Mixpanel *strongMixpanel = _mixpanel;
-    [p setValue:[strongMixpanel deviceModel] forKey:@"$ios_device_model"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$ios_app_version"];
-    [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$ios_app_release"];
-    [p setValue:[strongMixpanel IFA] forKey:@"$ios_ifa"];
-    [p addEntriesFromDictionary:@{@"$ios_version": [[UIDevice currentDevice] systemVersion],
-                                 @"$ios_lib_version": VERSION,
-                                  }];
+    p[@"$ios_device_model"] = [strongMixpanel deviceModel];
+    p[@"$ios_ifa"] = [strongMixpanel IFA];
     return [p copy];
 }
 
@@ -2063,13 +2050,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 r[@"$distinct_id"] = self.distinctId;
                 MixpanelDebug(@"%@ queueing people record: %@", self.mixpanel, r);
                 [strongMixpanel.peopleQueue addObject:r];
-                if ([strongMixpanel.peopleQueue count] > 500) {
+                if (strongMixpanel.peopleQueue.count > 500) {
                     [strongMixpanel.peopleQueue removeObjectAtIndex:0];
                 }
             } else {
                 MixpanelDebug(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
                 [self.unidentifiedQueue addObject:r];
-                if ([self.unidentifiedQueue count] > 500) {
+                if (self.unidentifiedQueue.count > 500) {
                     [self.unidentifiedQueue removeObjectAtIndex:0];
                 }
             }
@@ -2086,7 +2073,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)addPushDeviceToken:(NSData *)deviceToken
 {
-    const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
+    const unsigned char *buffer = (const unsigned char *)deviceToken.bytes;
     if (!buffer) {
         return;
     }
@@ -2138,13 +2125,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
     // $unset takes an array but addPeopleRecordToQueueWithAction:andProperties takes an NSDictionary
     // so the array is stored under the key "$properties" which the above method expects when action is $unset
-    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:@{@"$properties":properties}];
+    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:@{@"$properties": properties}];
 }
 
 - (void)increment:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    for (id __unused v in [properties allValues]) {
+    for (id __unused v in properties.allValues) {
         NSAssert([v isKindOfClass:[NSNumber class]],
                  @"%@ increment property values should be NSNumber. found: %@", self, v);
     }
@@ -2171,7 +2158,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)union:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    for (id __unused v in [properties allValues]) {
+    for (id __unused v in properties.allValues) {
         NSAssert([v isKindOfClass:[NSArray class]],
                  @"%@ union property values should be NSArray. found: %@", self, v);
     }

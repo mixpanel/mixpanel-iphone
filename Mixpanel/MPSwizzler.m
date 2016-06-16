@@ -41,7 +41,7 @@ static void mp_swizzledMethod_2(id self, SEL _cmd)
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
-        while((block = [blocks nextObject])) {
+        while ((block = [blocks nextObject])) {
             block(self, _cmd);
         }
     }
@@ -56,7 +56,7 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
-        while((block = [blocks nextObject])) {
+        while ((block = [blocks nextObject])) {
             block(self, _cmd, arg);
         }
     }
@@ -71,7 +71,7 @@ static void mp_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2)
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
-        while((block = [blocks nextObject])) {
+        while ((block = [blocks nextObject])) {
             block(self, _cmd, arg, arg2);
         }
     }
@@ -91,7 +91,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
 {
     NSEnumerator *en = [swizzles objectEnumerator];
     MPSwizzle *swizzle;
-    while((swizzle = (MPSwizzle *)[en nextObject])) {
+    while ((swizzle = (MPSwizzle *)[en nextObject])) {
         MixpanelError(@"%@", swizzle);
     }
 }
@@ -199,7 +199,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
         if (aName) {
             [swizzle.blocks removeObjectForKey:aName];
         }
-        if (!aName || [swizzle.blocks count] == 0) {
+        if (!aName || swizzle.blocks.count == 0) {
             method_setImplementation(aMethod, swizzle.originalMethod);
             [self removeSwizzleForMethod:aMethod];
         }
