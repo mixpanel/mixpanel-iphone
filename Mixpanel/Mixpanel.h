@@ -4,10 +4,6 @@
 
 #define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
 
-#if defined(MIXPANEL_WATCH_EXTENSION)
-#import <WatchConnectivity/WatchConnectivity.h>
-#endif
-
 @class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;
 
