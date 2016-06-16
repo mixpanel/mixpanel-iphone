@@ -14,7 +14,7 @@
 #import "MPObjectSelector.h"
 #import "MPUIControlBinding.h"
 #import "MPUITableViewBinding.h"
-#import "Mixpanel_Testing.h"
+#import "TestConstants.h"
 
 # pragma mark - The stub object for recording method calls
 @interface MixpanelStub : NSObject

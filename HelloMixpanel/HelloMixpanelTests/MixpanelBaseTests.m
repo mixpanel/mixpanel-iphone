@@ -8,7 +8,7 @@
 
 #import <Nocilla/Nocilla.h>
 #import "MixpanelBaseTests.h"
-#import "Mixpanel_Testing.h"
+#import "TestConstants.h"
 #import "MixpanelPrivate.h"
 
 @implementation MixpanelBaseTests

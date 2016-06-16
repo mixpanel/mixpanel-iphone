@@ -1,5 +1,12 @@
+//
+//  HelloMixpanelTests.m
+//  Mixpanel
+//
+//  Copyright © 2016 Mixpanel. All rights reserved.
+//
+
 #import "MixpanelBaseTests.h"
-#import "Mixpanel_Testing.h"
+#import "TestConstants.h"
 #import "MixpanelPrivate.h"
 #import "MixpanelPeoplePrivate.h"
 
