@@ -204,6 +204,20 @@
     return self.string;
 }
 
+- (BOOL)isEqual:(id)other {
+    if (other == self) {
+        return YES;
+    } else if (![other isKindOfClass:[MPObjectSelector class]]) {
+        return NO;
+    } else {
+        return [self.string isEqual:((MPObjectSelector *)other).string];
+    }
+}
+
+- (NSUInteger)hash {
+    return [self.string hash];
+}
+
 @end
 
 @implementation MPObjectFilter

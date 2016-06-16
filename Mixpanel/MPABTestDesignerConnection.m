@@ -17,13 +17,14 @@
 #import "MPSwizzler.h"
 
 NSString * const kSessionVariantKey = @"session_variant";
+static NSString * const kStartLoadingAnimationKey = @"MPConnectivityBarLoadingAnimation";
+static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLoadingAnimation";
 
 @interface MPABTestDesignerConnection () <MPWebSocketDelegate>
-
+@property (strong, nonatomic) UIWindow *connectivityIndicatorWindow;
 @end
 
 @implementation MPABTestDesignerConnection
-
 {
     /* The difference between _open and _connected is that open
      is set when the socket is open, and _connected is set when
@@ -41,6 +42,7 @@ NSString * const kSessionVariantKey = @"session_variant";
     MPWebSocket *_webSocket;
     NSOperationQueue *_commandQueue;
     UIView *_recordingView;
+    CALayer *_indeterminateLayer;
     void (^_connectCallback)();
     void (^_disconnectCallback)();
 }
@@ -198,14 +200,13 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     if (!_connected) {
         _connected = YES;
-        [self showConnectedView];
+        [self showConnectedViewWithLoading:NO];
         if (_connectCallback) {
             _connectCallback();
         }
     }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
     MessagingDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
-
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
     if (commandOperation) {
@@ -217,6 +218,7 @@ NSString * const kSessionVariantKey = @"session_variant";
 {
     MessagingDebug(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
+    [self showConnectedViewWithLoading:YES];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
@@ -252,21 +254,61 @@ NSString * const kSessionVariantKey = @"session_variant";
     }
 }
 
-- (void)showConnectedView
-{
-    if (!_recordingView) {
+- (void)showConnectedViewWithLoading:(BOOL)isLoading {
+    if (!self.connectivityIndicatorWindow) {
         UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
-        _recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 1.0)];
-        _recordingView.backgroundColor = [UIColor colorWithRed:4/255.0f green:180/255.0f blue:4/255.0f alpha:1.0];
-        [mainWindow addSubview:_recordingView];
-        [mainWindow bringSubviewToFront:_recordingView];
+        self.connectivityIndicatorWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 4.f)];
+        self.connectivityIndicatorWindow.backgroundColor = [UIColor clearColor];
+        self.connectivityIndicatorWindow.windowLevel = UIWindowLevelAlert;
+        self.connectivityIndicatorWindow.alpha = 0;
+        self.connectivityIndicatorWindow.hidden = NO;
+        
+        _recordingView = [[UIView alloc] initWithFrame:self.connectivityIndicatorWindow.frame];
+        _recordingView.backgroundColor = [UIColor clearColor];
+        _indeterminateLayer = [CALayer layer];
+        _indeterminateLayer.backgroundColor = [UIColor colorWithRed:1/255.0 green:179/255.0 blue:109/255.0 alpha:1.0].CGColor;
+        _indeterminateLayer.frame = CGRectMake(0, 0, 0, 4.0f);
+        [_recordingView.layer addSublayer:_indeterminateLayer];
+        [self.connectivityIndicatorWindow addSubview:_recordingView];
+        [self.connectivityIndicatorWindow bringSubviewToFront:_recordingView];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            self.connectivityIndicatorWindow.alpha = 1;
+        }];
+    }
+    [self animateConnecting:isLoading];
+}
+
+- (void)animateConnecting:(BOOL)isLoading {
+    if (isLoading) {
+        CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
+        myAnimation.duration = 10.f;
+        myAnimation.fromValue = @0;
+        myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width * 1.9f);
+        myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        myAnimation.fillMode = kCAFillModeForwards;
+        myAnimation.removedOnCompletion = NO;
+        [_indeterminateLayer addAnimation:myAnimation forKey:kStartLoadingAnimationKey];
+    } else {
+        [_indeterminateLayer removeAnimationForKey:kStartLoadingAnimationKey];
+        CABasicAnimation* myAnimation = [CABasicAnimation animationWithKeyPath:@"bounds.size.width"];
+        myAnimation.duration = 0.4f;
+        myAnimation.fromValue = @([[_indeterminateLayer.presentationLayer valueForKeyPath: @"bounds.size.width"] floatValue]);
+        myAnimation.toValue = @(_connectivityIndicatorWindow.bounds.size.width * 2.f);
+        myAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        myAnimation.fillMode = kCAFillModeForwards;
+        myAnimation.removedOnCompletion = NO;
+        [_indeterminateLayer addAnimation:myAnimation forKey:kFinishLoadingAnimationKey];
     }
 }
 
-- (void)hideConnectedView
-{
-    [_recordingView removeFromSuperview];
-    _recordingView = nil;
+- (void)hideConnectedView {
+    if (self.connectivityIndicatorWindow) {
+        [_indeterminateLayer removeFromSuperlayer];
+        [_recordingView removeFromSuperview];
+        self.connectivityIndicatorWindow.hidden = YES;
+    }
+    self.connectivityIndicatorWindow = nil;
 }
 
 @end

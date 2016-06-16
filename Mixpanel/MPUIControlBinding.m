@@ -104,6 +104,10 @@
 
 - (void)execute
 {
+    if (!self.appliedTo) {
+        [self resetAppliedTo];
+    }
+    
     if (!self.running) {
         void (^executeBlock)(id, SEL) = ^(id view, SEL command) {
             NSArray *objects;
@@ -236,6 +240,20 @@
         _verifyEvent = [[aDecoder decodeObjectForKey:@"verifyEvent"] unsignedIntegerValue];
     }
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if (other == self) {
+        return YES;
+    } else if (![other isKindOfClass:[MPUIControlBinding class]]) {
+        return NO;
+    } else {
+        return [super isEqual:other] && self.controlEvent == ((MPUIControlBinding *)other).controlEvent && self.verifyEvent == ((MPUIControlBinding *)other).verifyEvent;
+    }
+}
+
+- (NSUInteger)hash {
+    return [super hash] ^ self.controlEvent ^ self.verifyEvent;
 }
 
 @end
