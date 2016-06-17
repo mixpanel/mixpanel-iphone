@@ -94,6 +94,9 @@ static Mixpanel *sharedInstance;
         self.enableABTestDesigner = YES;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
+        
+        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
+        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
 
 #if !defined(MIXPANEL_APP_EXTENSION)
         [self setUpListeners];
@@ -110,8 +113,6 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
-        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
-        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
     }
     return self;
 }
@@ -212,9 +213,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.people.unidentifiedQueue removeAllObjects];
             [self archivePeople];
         }
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -293,9 +292,6 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.eventsQueue removeObjectAtIndex:0];
         }
         
-        if ([Mixpanel inBackground]) {
-            [self archiveEvents];
-        }
         // Always archive
         [self archiveEvents];
     });
