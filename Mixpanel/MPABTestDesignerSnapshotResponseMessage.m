@@ -3,6 +3,7 @@
 
 #import <CommonCrypto/CommonDigest.h>
 #import "MPABTestDesignerSnapshotResponseMessage.h"
+#import "NSData+MPBase64.h"
 
 @implementation MPABTestDesignerSnapshotResponseMessage
 
@@ -18,7 +19,7 @@
     if (screenshot) {
         NSData *jpegSnapshotImageData = UIImageJPEGRepresentation(screenshot, 0.5);
         if (jpegSnapshotImageData) {
-            payloadObject = [jpegSnapshotImageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+            payloadObject = [jpegSnapshotImageData mp_base64EncodedString];
             imageHash = [self getImageHash:jpegSnapshotImageData];
         }
     }
@@ -31,8 +32,8 @@
 - (UIImage *)screenshot
 {
     NSString *base64Image = [self payloadObjectForKey:@"screenshot"];
-    NSData *imageData = [[NSData alloc] initWithBase64EncodedString:base64Image
-                                                            options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    NSData *imageData = [NSData mp_dataFromBase64String:base64Image];
+
     return imageData ? [UIImage imageWithData:imageData] : nil;
 }
 

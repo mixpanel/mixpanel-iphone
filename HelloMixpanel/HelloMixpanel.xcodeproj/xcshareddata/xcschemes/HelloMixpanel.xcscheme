@@ -54,39 +54,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "EventBindingTests">
+                  Identifier = "MixpanelBaseTests">
                </Test>
             </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "187939EE19A2A7F400CC4FBE"
-               BuildableName = "EventBindingTests.xctest"
-               BlueprintName = "EventBindingTests"
-               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "055FA70F194A6B010080A709"
-               BuildableName = "ABTestingTests.xctest"
-               BlueprintName = "ABTestingTests"
-               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5115A0D41B4F49C000787217"
-               BuildableName = "MPCategoryHelpersTests.xctest"
-               BlueprintName = "MPCategoryHelpersTests"
-               ReferencedContainer = "container:HelloMixpanel.xcodeproj">
-            </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
