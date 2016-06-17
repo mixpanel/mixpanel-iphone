@@ -7,19 +7,11 @@
 //
 
 #import "MPNetwork.h"
+#import "MPNetworkPrivate.h"
 #import "MPLogger.h"
 #import <UIKit/UIKit.h>
 
 static const NSUInteger kBatchSize = 50;
-
-@interface MPNetwork ()
-
-@property (nonatomic, strong) NSURL *serverURL;
-
-@property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
-@property (nonatomic) NSUInteger consecutiveFailures;
-
-@end
 
 @implementation MPNetwork
 

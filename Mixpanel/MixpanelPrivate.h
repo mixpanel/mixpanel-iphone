@@ -86,11 +86,8 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
-
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
-@property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
-@property (nonatomic) NSUInteger networkConsecutiveFailures;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
 
