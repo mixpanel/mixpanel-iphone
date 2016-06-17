@@ -66,7 +66,7 @@ static Mixpanel *sharedInstance;
         
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
-        _flushInterval = flushInterval;
+        self.flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
@@ -74,8 +74,6 @@ static Mixpanel *sharedInstance;
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
-        
-        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
 
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
@@ -450,6 +448,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)setFlushInterval:(NSUInteger)interval
 {
     @synchronized (self) {
+        _flushInterval = interval;
         [self.network setFlushInterval:interval];
     }
 }
