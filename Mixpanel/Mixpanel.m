@@ -82,15 +82,9 @@ static Mixpanel *sharedInstance;
         self.checkForVariantsOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
-        self.miniNotificationBackgroundColor = nil;
         self.decideResponseCached = NO;
-        self.surveys = nil;
-        self.currentlyShowingSurvey = nil;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
-        self.currentlyShowingNotification = nil;
-        self.notifications = nil;
-        self.variants = nil;
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];

@@ -221,19 +221,6 @@
 		E1C2BE8F1CFD6A010052172F /* UIColor+MPColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CBE1A4A035F00D9E0F2 /* UIColor+MPColor.h */; };
 		E1C2BE911CFD6A010052172F /* MPAbstractABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */; };
 		E1C2BE9D1CFD6A010052172F /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
-		E1C2BEA11CFD6A010052172F /* MPArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733C81CD7D6EC0098B23A /* MPArrowLeft@2x.png */; };
-		E1C2BEA21CFD6A010052172F /* MPDismissKeyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733D01CD7D6EC0098B23A /* MPDismissKeyboard.png */; };
-		E1C2BEA41CFD6A010052172F /* MPArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733CA1CD7D6EC0098B23A /* MPArrowRight@2x.png */; };
-		E1C2BEA51CFD6A010052172F /* snapshot_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C170CBC1A4A035F00D9E0F2 /* snapshot_config.json */; };
-		E1C2BEA61CFD6A010052172F /* MPCloseButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733CD1CD7D6EC0098B23A /* MPCloseButton.png */; };
-		E1C2BEA71CFD6A010052172F /* MPCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733CB1CD7D6EC0098B23A /* MPCheckmark.png */; };
-		E1C2BEA81CFD6A010052172F /* test_variant.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C170CBD1A4A035F00D9E0F2 /* test_variant.json */; };
-		E1C2BEA91CFD6A010052172F /* MPCloseButton@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733CF1CD7D6EC0098B23A /* MPCloseButton@3x.png */; };
-		E1C2BEAA1CFD6A010052172F /* MPCloseButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733CE1CD7D6EC0098B23A /* MPCloseButton@2x.png */; };
-		E1C2BEAB1CFD6A010052172F /* MPDismissKeyboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733D11CD7D6EC0098B23A /* MPDismissKeyboard@2x.png */; };
-		E1C2BEAC1CFD6A010052172F /* MPArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733C91CD7D6EC0098B23A /* MPArrowRight.png */; };
-		E1C2BEAE1CFD6A010052172F /* MPArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733C71CD7D6EC0098B23A /* MPArrowLeft.png */; };
-		E1C2BEAF1CFD6A010052172F /* MPCheckmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 514733CC1CD7D6EC0098B23A /* MPCheckmark@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1115,19 +1102,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1C2BEA11CFD6A010052172F /* MPArrowLeft@2x.png in Resources */,
-				E1C2BEA21CFD6A010052172F /* MPDismissKeyboard.png in Resources */,
-				E1C2BEA41CFD6A010052172F /* MPArrowRight@2x.png in Resources */,
-				E1C2BEA51CFD6A010052172F /* snapshot_config.json in Resources */,
-				E1C2BEA61CFD6A010052172F /* MPCloseButton.png in Resources */,
-				E1C2BEA71CFD6A010052172F /* MPCheckmark.png in Resources */,
-				E1C2BEA81CFD6A010052172F /* test_variant.json in Resources */,
-				E1C2BEA91CFD6A010052172F /* MPCloseButton@3x.png in Resources */,
-				E1C2BEAA1CFD6A010052172F /* MPCloseButton@2x.png in Resources */,
-				E1C2BEAB1CFD6A010052172F /* MPDismissKeyboard@2x.png in Resources */,
-				E1C2BEAC1CFD6A010052172F /* MPArrowRight.png in Resources */,
-				E1C2BEAE1CFD6A010052172F /* MPArrowLeft.png in Resources */,
-				E1C2BEAF1CFD6A010052172F /* MPCheckmark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

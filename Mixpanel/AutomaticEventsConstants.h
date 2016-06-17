@@ -1,4 +1,3 @@
-
 //
 //  AutomaticEventsConstants.h
 //  Mixpanel
