@@ -1,3 +1,11 @@
+def shared_pods
+    pod 'OCMock', '~> 3.0'
+end
+
 target :HelloMixpanelTests do
-  pod 'OCMock', '~> 3.0'
+  shared_pods
+end
+
+target :HelloMixpanel_tvOSTests do
+  shared_pods
 end

@@ -320,6 +320,7 @@
     XCTAssertNoThrow([self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"v"],  @"property type should be allowed");
 }
 
+#if !defined(MIXPANEL_TVOS_EXTENSION)
 - (void)testTrackLaunchOptions {
     NSDictionary *launchOptions = @{ UIApplicationLaunchOptionsRemoteNotificationKey: @{
                                              @"mp": @{
@@ -340,6 +341,7 @@
     XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
     XCTAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
 }
+#endif
 
 - (void)testTrackPushNotification {
     [self.mixpanel trackPushNotification:@{ @"mp": @{
@@ -575,8 +577,10 @@
     XCTAssertNil(p[@"$duration"], @"Tracking the same event should require a second call to timeEvent.");
 }
 
+#if !defined(MIXPANEL_TVOS_EXTENSION)
 - (void)testTelephonyInfoInitialized {
     XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
 }
+#endif
 
 @end

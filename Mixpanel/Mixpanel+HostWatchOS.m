@@ -24,17 +24,4 @@
     return [message objectForKey:@"$mp_message_type"];
 }
 
-#pragma mark - Lifecycle
-- (void)session:(WCSession *)session activationDidCompleteWithState:(WCSessionActivationState)activationState error:(NSError *)error {
-    
-}
-
-- (void)sessionDidBecomeInactive:(WCSession *)session {
-    
-}
-
-- (void)sessionDidDeactivate:(WCSession *)session {
-    
-}
-
 @end

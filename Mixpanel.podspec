@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
   s.requires_arc = true
   s.default_subspec = 'Mixpanel'
-  s.platforms = { :ios => '7.0', :watchos => '2.0' }
+  s.platforms = { :ios => '7.0', :watchos => '2.0', :tvos => '9.0' }
 
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
-    ss.platform = :ios
+    ss.platform = { :ios, :tvos }
   end
 
   s.subspec 'MixpanelHostWatchOS' do |ss|
