@@ -16,7 +16,6 @@
 
 - (instancetype)initWithServerURL:(NSURL *)serverURL;
 
-- (void)setFlushInterval:(NSTimeInterval)flushInterval;
 - (void)flushEventQueue:(NSArray *)events;
 - (void)flushPeopleQueue:(NSArray *)people;
 

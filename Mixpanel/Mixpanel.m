@@ -62,11 +62,8 @@ static Mixpanel *sharedInstance;
 #if !defined(MIXPANEL_TVOS_EXTENSION)
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
-#endif
-        
-        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
-        self.flushInterval = flushInterval;
+        _flushInterval = flushInterval;
         self.flushOnBackground = YES;
         self.showNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
@@ -80,9 +77,6 @@ static Mixpanel *sharedInstance;
         self.checkForVariantsOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
-        self.decideResponseCached = NO;
-        self.shownSurveyCollections = [NSMutableSet set];
-        self.shownNotifications = [NSMutableSet set];
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -115,7 +109,9 @@ static Mixpanel *sharedInstance;
         if (remoteNotification) {
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
-#endif
+        
+        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
+        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
     }
     return self;
 }
@@ -441,20 +437,46 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)setServerURL:(NSString *)serverURL
 {
     _serverURL = serverURL.copy;
-    
     self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:serverURL]];
+}
+
+- (NSUInteger)flushInterval {
+    return _flushInterval;
 }
 
 - (void)setFlushInterval:(NSUInteger)interval
 {
     @synchronized (self) {
         _flushInterval = interval;
-        [self.network setFlushInterval:interval];
     }
+    [self flush];
+    [self startFlushTimer];
 }
 
-- (NSUInteger)flushInterval {
-    return _flushInterval;
+- (void)startFlushTimer
+{
+    [self stopFlushTimer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.flushInterval > 0) {
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
+                                                          target:self
+                                                        selector:@selector(flush)
+                                                        userInfo:nil
+                                                         repeats:YES];
+            MixpanelDebug(@"%@ started flush timer: %@", self, self.timer);
+        }
+    });
+}
+
+- (void)stopFlushTimer
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.timer) {
+            [self.timer invalidate];
+            MixpanelDebug(@"%@ stopped flush timer: %@", self, self.timer);
+            self.timer = nil;
+        }
+    });
 }
 
 - (void)flush

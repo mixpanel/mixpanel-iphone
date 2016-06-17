@@ -1311,6 +1311,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MIXPANEL_DEBUG = 1;
+				MIXPANEL_ERROR = 1;
 				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1342,6 +1344,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				MODULEMAP_FILE = Mixpanel/module.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",

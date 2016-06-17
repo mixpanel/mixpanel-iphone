@@ -10,15 +10,11 @@
 #import "MPLogger.h"
 #import <UIKit/UIKit.h>
 
-static const NSTimeInterval kDefaultFlushInterval = 60.f;
 static const NSUInteger kBatchSize = 50;
 
 @interface MPNetwork ()
 
 @property (nonatomic, strong) NSURL *serverURL;
-
-@property (nonatomic) NSTimeInterval flushInterval;
-@property (nonatomic, strong) NSTimer *flushTimer;
 
 @property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
 @property (nonatomic) NSUInteger consecutiveFailures;
@@ -31,39 +27,11 @@ static const NSUInteger kBatchSize = 50;
     self = [super init];
     if (self) {
         self.serverURL = serverURL;
-        self.flushInterval = kDefaultFlushInterval;
+        self.enabled = YES;
+        self.shouldManageNetworkActivityIndicator = YES;
+        self.useIPAddressForGeoLocation = YES;
     }
     return self;
-}
-
-- (void)setEnabled:(BOOL)enabled {
-    _enabled = enabled;
-    
-    if (enabled) {
-        [self startFlushTimer];
-    } else {
-        [self stopFlushTimer];
-    }
-}
-
-#pragma mark - Flush Timer
-- (void)setFlushInterval:(NSTimeInterval)flushInterval {
-    NSParameterAssert(flushInterval > 0);
-    _flushInterval = flushInterval;
-    [self startFlushTimer];
-}
-
-- (void)startFlushTimer {
-    [self stopFlushTimer];
-    self.flushTimer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
-                                                       target:self
-                                                     selector:@selector(flushEventQueue:)
-                                                     userInfo:nil
-                                                      repeats:YES];
-}
-
-- (void)stopFlushTimer {
-    [self.flushTimer invalidate];
 }
 
 #pragma mark - Flush
@@ -80,6 +48,8 @@ static const NSUInteger kBatchSize = 50;
         MixpanelDebug(@"Attempted to flush to %@, when we still have a timeout. Ignoring flush.", endpoint);
         return;
     }
+    
+    if (!self.enabled) return;
     
     while (queue.count > 0) {
         NSUInteger batchSize = MIN(queue.count, kBatchSize);

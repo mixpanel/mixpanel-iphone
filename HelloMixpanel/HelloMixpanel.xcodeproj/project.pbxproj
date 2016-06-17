@@ -1646,6 +1646,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -1679,6 +1681,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
@@ -1811,6 +1815,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7A108436-5589-4C4A-B278-F0AE7A0C91F1";
