@@ -326,6 +326,7 @@
     } useCache:NO];
     [self waitForSerialQueue];
     
+    [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
     
     __block BOOL completionCalled = NO;
@@ -358,6 +359,7 @@
     XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[0] * 255), 255, @"Button background should be red");
 
     // Returning a new variant for the same experiment from decide should override the old one
+    [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
     
     __block BOOL lastCall = NO;
