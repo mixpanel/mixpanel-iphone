@@ -10,7 +10,6 @@
 #import "MixpanelPeoplePrivate.h"
 
 #import "MPLogger.h"
-#import "NSData+MPBase64.h"
 #import "MPFoundation.h"
 
 

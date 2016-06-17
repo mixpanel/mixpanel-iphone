@@ -54,7 +54,7 @@ static const NSUInteger kBatchSize = 50;
 }
 
 - (void)startFlushTimer {
-    [self.flushTimer stopFlushTimer];
+    [self stopFlushTimer];
     self.flushTimer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
                                                        target:self
                                                      selector:@selector(flushEventQueue:)
