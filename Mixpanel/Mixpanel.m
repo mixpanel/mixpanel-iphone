@@ -63,9 +63,7 @@ static Mixpanel *sharedInstance;
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
 #endif
-        
         self.networkRequestsAllowedAfterTime = 0;
-        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
@@ -115,7 +113,7 @@ static Mixpanel *sharedInstance;
         if (remoteNotification) {
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
-        
+#endif
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
     }
