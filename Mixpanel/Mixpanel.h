@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion
  Setting a flush interval of 0 will turn off the flush timer.
  */
-@property (nonatomic) NSUInteger flushInterval;
+@property (atomic) NSUInteger flushInterval;
 
 /*!
  @property

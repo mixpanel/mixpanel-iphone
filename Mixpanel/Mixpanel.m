@@ -449,7 +449,13 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)setFlushInterval:(NSUInteger)interval
 {
-    [self.network setFlushInterval:interval];
+    @synchronized (self) {
+        [self.network setFlushInterval:interval];
+    }
+}
+
+- (NSUInteger)flushInterval {
+    return _flushInterval;
 }
 
 - (void)flush
