@@ -1277,6 +1277,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1314,6 +1316,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1445,6 +1449,8 @@
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
 				);
+				MIXPANEL_DEBUG = "";
+				MIXPANEL_ERROR = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";

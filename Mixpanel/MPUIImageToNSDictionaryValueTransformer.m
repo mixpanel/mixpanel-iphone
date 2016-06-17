@@ -3,7 +3,6 @@
 
 #import <ImageIO/ImageIO.h>
 #import "MPValueTransformers.h"
-#import "NSData+MPBase64.h"
 
 @implementation MPUIImageToNSDictionaryValueTransformer
 
@@ -41,12 +40,11 @@ static NSMutableDictionary *imageCache;
 
         NSMutableArray *imageDictionaries = [NSMutableArray array];
         for (UIImage *frame in images) {
-            NSData *imageRep = UIImagePNGRepresentation(frame);
-            NSDictionary *imageDictionary = @{
-                @"scale": @(image.scale),
-                @"mime_type": @"image/png",
-                @"data": ((imageRep != nil) ? [imageRep mp_base64EncodedString] : [NSNull null])
-            };
+            NSData *imageData = UIImagePNGRepresentation(frame);
+            NSString *imageDataString = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+            NSDictionary *imageDictionary = @{ @"scale": @(image.scale),
+                                               @"mime_type": @"image/png",
+                                               @"data": (imageData != nil ? imageDataString : [NSNull null]) };
 
             [imageDictionaries addObject:imageDictionary];
         }
@@ -105,7 +103,9 @@ static NSMutableDictionary *imageCache;
                 }
             }
             else if (imageDictionary[@"data"] && imageDictionary[@"data"] != [NSNull null]) {
-                image = [UIImage imageWithData:[NSData mp_dataFromBase64String:imageDictionary[@"data"]] scale:fminf(1.0, scale.floatValue)];
+                NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageDictionary[@"data"]
+                                                                        options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                image = [UIImage imageWithData:imageData scale:fminf(1.0, scale.floatValue)];
             }
 
             if (image) {
