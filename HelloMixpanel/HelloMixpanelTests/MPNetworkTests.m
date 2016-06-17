@@ -158,6 +158,14 @@
     XCTAssert([base64 isEqualToString:@"W3sibmFtZSI6InRlc3QifV0="], @"Base64 encoding failed.");
 }
 
+- (void)testDateEncodingFromJSON {
+    NSDate *fixedDate = [NSDate dateWithTimeIntervalSince1970:1400000000];
+    NSArray *a = @[ @{ @"event": @"an event", @"properties": @{ @"eventdate": fixedDate } } ];
+    NSString *json = [[NSString alloc] initWithData:[MPNetwork encodeArrayAsJSONData:a]
+                                           encoding:NSUTF8StringEncoding];
+    XCTAssert([json rangeOfString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""].location != NSNotFound);
+}
+
 //
 // Encoding arrays to JSON strings should match our expectations
 //

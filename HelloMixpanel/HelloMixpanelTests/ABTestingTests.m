@@ -14,7 +14,6 @@
 #import "MPObjectSelector.h"
 #import "MPSwizzler.h"
 #import "MPValueTransformers.h"
-#import "NSData+MPBase64.h"
 
 #pragma mark - Test Classes for swizzling
 
@@ -516,7 +515,9 @@
 
     // Serialize and deserialize a UIImage
     NSString *imageString = @"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=";
-    UIImage *image = [[UIImage alloc] initWithData:[NSData mp_dataFromBase64String:imageString]];
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:imageString
+                                                       options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    UIImage *image = [[UIImage alloc] initWithData:data];
     NSDictionary *imgDict = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] transformedValue:image];
     XCTAssertNotEqual(imgDict[@"images"][0][@"data"], [NSNull null], @"base64 representations should exist");
     image = [[[MPUIImageToNSDictionaryValueTransformer alloc] init] reverseTransformedValue:imgDict];

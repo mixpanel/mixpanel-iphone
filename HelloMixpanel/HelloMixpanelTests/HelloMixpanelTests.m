@@ -231,14 +231,6 @@
     XCTAssertEqualObjects(props[@"$app_version"], @"override", @"reserved property override failed");
 }
 
-- (void)testDateEncodingFromJSON {
-    NSDate *fixedDate = [NSDate dateWithTimeIntervalSince1970:1400000000];
-    NSArray *a = @[ @{ @"event": @"an event", @"properties": @{ @"eventdate": fixedDate } } ];
-    NSString *json = [[NSString alloc] initWithData:[self.mixpanel JSONSerializeObject:a]
-                                           encoding:NSUTF8StringEncoding];
-    XCTAssert([json rangeOfString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""].location != NSNotFound);
-}
-
 - (void)testTrackWithCustomDistinctIdAndToken {
     NSDictionary *p = @{ @"token": @"t1", @"distinct_id": @"d1" };
     [self.mixpanel track:@"e1" properties:p];
