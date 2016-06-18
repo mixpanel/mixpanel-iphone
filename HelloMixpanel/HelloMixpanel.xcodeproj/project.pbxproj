@@ -34,6 +34,8 @@
 		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
 		517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
+		517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
+		517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
 		518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
 		51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E7E1D120D2A001F622D /* MPSurveyTests.m */; };
@@ -957,6 +959,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */,
+				517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */,
 				E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */,
 				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
 			);
@@ -1603,6 +1607,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TV_OS_TEST = 1;
 			};
 			name = Debug;
 		};
@@ -1640,6 +1645,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TV_OS_TEST = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1678,6 +1684,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TV_OS_TEST = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
