@@ -8,6 +8,7 @@
 
 #import "MPNetwork.h"
 #import "MPLogger.h"
+#import "Mixpanel.h"
 #import <UIKit/UIKit.h>
 
 static const NSUInteger kBatchSize = 50;
@@ -59,24 +60,36 @@ static const NSUInteger kBatchSize = 50;
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
         NSURLRequest *request = [self requestForEndpoint:endpoint withBody:postBody];
-        NSError *error = nil;
         
         [self updateNetworkActivityIndicator:YES];
         
-        NSHTTPURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        __block BOOL didFail = NO;
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            [self updateNetworkActivityIndicator:NO];
+            
+            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
+            if (error || !success) {
+                MixpanelError(@"%@ network failure: %@", self, error);
+                didFail = YES;
+            } else {
+                NSString *response = [[NSString alloc] initWithData:responseData
+                                                           encoding:NSUTF8StringEncoding];
+                if ([response intValue] == 0) {
+                    MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
+                }
+            }
+            
+            dispatch_semaphore_signal(semaphore);
+        }] resume];
         
-        [self updateNetworkActivityIndicator:NO];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         
-        BOOL success = [self handleNetworkResponse:urlResponse withError:error];
-        if (error || !success) {
-            MixpanelError(@"%@ network failure: %@", self, error);
+        if (didFail) {
             break;
-        }
-        
-        NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        if (response.intValue == 0) {
-            MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
         }
         
         [queue removeObjectsInArray:batch];
@@ -169,7 +182,7 @@ static const NSUInteger kBatchSize = 50;
 }
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !MIXPANEL_LIMITED_SUPPORT
     if (self.shouldManageNetworkActivityIndicator) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
     }
