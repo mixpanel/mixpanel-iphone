@@ -935,7 +935,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application did become active", self);
-    self.network.enabled = YES;
+    [self startFlushTimer];
 
 #if !defined(MIXPANEL_TVOS_EXTENSION)
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive || self.checkForVariantsOnActive) {
@@ -968,7 +968,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ application will resign active", self);
-    self.network.enabled = NO;
+    [self stopFlushTimer];
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
