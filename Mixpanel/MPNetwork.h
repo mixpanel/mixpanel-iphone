@@ -10,7 +10,6 @@
 
 @interface MPNetwork : NSObject
 
-@property (nonatomic) BOOL enabled;
 @property (nonatomic) BOOL shouldManageNetworkActivityIndicator;
 @property (nonatomic) BOOL useIPAddressForGeoLocation;
 

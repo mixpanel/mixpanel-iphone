@@ -50,22 +50,6 @@
 
 #pragma mark - Enabled
 //
-// Disabling MPNetwork should render the flush timer in valid
-//
-- (void)testDisabledAndFlush {
-    self.network.enabled = NO;
-    XCTAssert(!self.network.flushTimer.isValid, @"Disabling MPNetwork should render the timer invalid.");
-}
-
-//
-// Disabling MPNetwork should render the flush timer in valid
-//
-- (void)testEnabledAndFlush {
-    self.network.enabled = YES;
-    XCTAssert(self.network.flushTimer.isValid, @"Disabling MPNetwork should render the timer invalid.");
-}
-
-//
 // Updating the networking activity indicator should work if we are managing it
 //
 - (void)testNetworkActivityManagementEnabled {
@@ -87,46 +71,6 @@
     [self.network updateNetworkActivityIndicator:!currentState];
     XCTAssert([UIApplication sharedApplication].isNetworkActivityIndicatorVisible == currentState,
               @"Updating the network activity indicator had an effect, even though we are not managing it.");
-}
-
-#pragma mark - Flush
-
-#pragma mark Interval
-//
-// Custom flush intervals should be supported and setting them should restart the flush timer
-//
-- (void)testCustomFlushInterval {
-    static const NSTimeInterval kCustomFlushInterval = 33.f;
-    
-    [self.network setFlushInterval:kCustomFlushInterval];
-    XCTAssertEqualWithAccuracy(self.network.flushInterval, kCustomFlushInterval,
-                               0.01f, @"Setting the flush interval did not update MPNetwork.");
-    XCTAssertEqualWithAccuracy(self.network.flushTimer.timeInterval, kCustomFlushInterval,
-                               0.01f, @"Setting the flush interval did not update the timeInterval "
-                               "of the timer.");
-    XCTAssert(self.network.flushTimer.isValid, @"Setting the flush interval did not start the flush timer.");
-}
-
-//
-// Flush timer should have a default value of sixty seconds
-//
-- (void)testDefaultFlushInterval {
-    static const NSTimeInterval kDefaultFlushInterval = 60.f;
-    
-    XCTAssertEqualWithAccuracy(self.network.flushInterval, kDefaultFlushInterval,
-                               0.01f, @"Flush interval was initialized to the wrong default value");
-}
-
-#pragma mark Timer
-//
-// Starting and Stopping the flush timer
-//
-- (void)testFlushTimer {
-    [self.network stopFlushTimer];
-    XCTAssert(!self.network.flushTimer.isValid, @"Calling stopFlushTimer should render the timer invalid.");
-    
-    [self.network startFlushTimer];
-    XCTAssert(self.network.flushTimer.isValid, @"Calling startFlushTimer should render the timer valid.");
 }
 
 #pragma mark Queue

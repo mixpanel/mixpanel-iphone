@@ -27,7 +27,6 @@ static const NSUInteger kBatchSize = 50;
     self = [super init];
     if (self) {
         self.serverURL = serverURL;
-        self.enabled = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
     }
@@ -48,8 +47,6 @@ static const NSUInteger kBatchSize = 50;
         MixpanelDebug(@"Attempted to flush to %@, when we still have a timeout. Ignoring flush.", endpoint);
         return;
     }
-    
-    if (!self.enabled) return;
     
     while (queue.count > 0) {
         NSUInteger batchSize = MIN(queue.count, kBatchSize);

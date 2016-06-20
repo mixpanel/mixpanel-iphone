@@ -20,9 +20,6 @@
 
 @property (nonatomic, strong) NSURL *serverURL;
 
-@property (nonatomic) NSTimeInterval flushInterval;
-@property (nonatomic, strong) NSTimer *flushTimer;
-
 @property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
 @property (nonatomic) NSUInteger consecutiveFailures;
 
@@ -36,8 +33,5 @@
 + (NSString *)encodeArrayForAPI:(NSArray *)array;
 + (NSData *)encodeArrayAsJSONData:(NSArray *)array;
 + (NSString *)encodeJSONDataAsBase64:(NSData *)data;
-
-- (void)startFlushTimer;
-- (void)stopFlushTimer;
 
 @end
