@@ -585,8 +585,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
-    NSString *trackedIntegrationKey = [NSString stringWithFormat:@"tracked_integration_%@", self.apiToken];
-    [p setValue:@(self.trackedIntegration) forKey:trackedIntegrationKey];
+    [p setValue:@(self.trackedIntegration) forKey:@"tracked_integration"];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         MixpanelError(@"%@ unable to archive properties data", self);
@@ -672,8 +671,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
-        NSString *trackedIntegrationKey = [NSString stringWithFormat:@"tracked_integration_%@", self.apiToken];
-        self.trackedIntegration = properties[trackedIntegrationKey] ?: NO;
+        self.trackedIntegration = properties[@"tracked_integration"] ?: NO;
     }
 }
 
