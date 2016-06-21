@@ -50,6 +50,23 @@
 
 #pragma mark - Enabled
 //
+// Disabling MPNetwork should render the flush timer in valid
+//
+- (void)testDisabledAndFlush {
+    self.network.enabled = NO;
+    XCTAssert(!self.network.flushTimer.isValid, @"Disabling MPNetwork should render the timer invalid.");
+}
+
+//
+// Disabling MPNetwork should render the flush timer in valid
+//
+- (void)testEnabledAndFlush {
+    self.network.enabled = YES;
+    XCTAssert(self.network.flushTimer.isValid, @"Disabling MPNetwork should render the timer invalid.");
+}
+
+#if TARGET_OS_IOS
+//
 // Updating the networking activity indicator should work if we are managing it
 //
 - (void)testNetworkActivityManagementEnabled {
@@ -72,6 +89,7 @@
     XCTAssert([UIApplication sharedApplication].isNetworkActivityIndicatorVisible == currentState,
               @"Updating the network activity indicator had an effect, even though we are not managing it.");
 }
+#endif
 
 #pragma mark Queue
 //

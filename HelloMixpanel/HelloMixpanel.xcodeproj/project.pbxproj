@@ -34,6 +34,8 @@
 		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
 		517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
+		517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
+		517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
 		518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
 		51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E7E1D120D2A001F622D /* MPSurveyTests.m */; };
@@ -622,13 +624,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C61610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanelTests" */;
 			buildPhases = (
-				AD48B0E1D0FDE02B32D8F942 /* 📦 Check Pods Manifest.lock */,
+				AD48B0E1D0FDE02B32D8F942 /* [CP] Check Pods Manifest.lock */,
 				2808F9AC1610EFE4005772B7 /* Sources */,
 				51D96E8B1D1217C5001F622D /* Resources */,
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				51D96E771D11EF69001F622D /* Copy Frameworks */,
-				11FBA527AAB4DE301A04BDD0 /* 📦 Embed Pods Frameworks */,
-				97D8318B565052717E5E5717 /* 📦 Copy Pods Resources */,
+				11FBA527AAB4DE301A04BDD0 /* [CP] Embed Pods Frameworks */,
+				97D8318B565052717E5E5717 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -673,13 +675,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E123C4A91D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOSTests" */;
 			buildPhases = (
-				222471ECB08A5E0572E0D631 /* 📦 Check Pods Manifest.lock */,
+				222471ECB08A5E0572E0D631 /* [CP] Check Pods Manifest.lock */,
 				E123C49A1D1354EC0015B425 /* Sources */,
 				E123C49B1D1354EC0015B425 /* Frameworks */,
 				E12C04AE1D135F01007D2086 /* Copy Frameworks */,
 				E123C49C1D1354EC0015B425 /* Resources */,
-				768564EFBBB1CF00026F3472 /* 📦 Embed Pods Frameworks */,
-				6EDEBFE516C45FD65271D88E /* 📦 Copy Pods Resources */,
+				768564EFBBB1CF00026F3472 /* [CP] Embed Pods Frameworks */,
+				6EDEBFE516C45FD65271D88E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -819,14 +821,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		11FBA527AAB4DE301A04BDD0 /* 📦 Embed Pods Frameworks */ = {
+		11FBA527AAB4DE301A04BDD0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -834,14 +836,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		222471ECB08A5E0572E0D631 /* 📦 Check Pods Manifest.lock */ = {
+		222471ECB08A5E0572E0D631 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -849,14 +851,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		6EDEBFE516C45FD65271D88E /* 📦 Copy Pods Resources */ = {
+		6EDEBFE516C45FD65271D88E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -864,14 +866,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		768564EFBBB1CF00026F3472 /* 📦 Embed Pods Frameworks */ = {
+		768564EFBBB1CF00026F3472 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -879,14 +881,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		97D8318B565052717E5E5717 /* 📦 Copy Pods Resources */ = {
+		97D8318B565052717E5E5717 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -894,14 +896,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AD48B0E1D0FDE02B32D8F942 /* 📦 Check Pods Manifest.lock */ = {
+		AD48B0E1D0FDE02B32D8F942 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -957,6 +959,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */,
+				517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */,
 				E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */,
 				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
 			);
@@ -1603,6 +1607,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TV_OS_TEST = 1;
 			};
 			name = Debug;
 		};
@@ -1640,6 +1645,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TV_OS_TEST = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1678,6 +1684,7 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel_tvOS.app/HelloMixpanel_tvOS";
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TV_OS_TEST = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
