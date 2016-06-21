@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
-  s.version      = '3.0.0'
+  s.version      = '3.0.0-RC1'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
@@ -8,7 +8,9 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
   s.requires_arc = true
   s.default_subspec = 'Mixpanel'
-  s.platforms = { :ios => '8.0', :watchos => '2.0', :tvos => '9.0' }
+  s.ios.deployment_target = '8.0'
+  s.tvos.deployment_target = '9.0'
+  s.watchos.deployment_target = '2.0'
 
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
@@ -16,7 +18,8 @@ Pod::Spec.new do |s|
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
-    ss.platform = { :ios, :tvos }
+    ss.ios.deployment_target = '8.0'
+    ss.tvos.deployment_target = '8.0'
   end
 
   s.subspec 'MixpanelHostWatchOS' do |ss|
@@ -25,13 +28,13 @@ Pod::Spec.new do |s|
     ss.resources   = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'WatchConnectivity', 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
-    ss.platform = :ios
+    ss.ios.deployment_target = '8.0'
   end
 
   s.subspec 'WatchOS' do |ss|
     ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/MPLogger.h']
     ss.frameworks = 'WatchConnectivity', 'Foundation'
-    ss.platform = :watchos
+    ss.watchos.deployment_target = '2.0'
   end
 
   s.subspec 'AppExtension' do |ss|
@@ -39,6 +42,6 @@ Pod::Spec.new do |s|
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
     ss.frameworks = 'UIKit', 'Foundation', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
-    ss.platform = :ios
+    ss.ios.deployment_target = '8.0'
   end
 end
