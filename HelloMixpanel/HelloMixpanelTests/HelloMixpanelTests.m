@@ -9,6 +9,7 @@
 #import "TestConstants.h"
 #import "MixpanelPrivate.h"
 #import "MixpanelPeoplePrivate.h"
+#import "MPNetworkPrivate.h"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
 
@@ -29,10 +30,10 @@
     [self waitForSerialQueue];
     
     // Failure count should be 3
-    NSTimeInterval waitTime = self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval waitTime = self.mixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
     NSLog(@"Delta wait time is %.3f", waitTime);
     XCTAssert(waitTime >= 120.f, "Network backoff time is less than 2 minutes.");
-    XCTAssert(self.mixpanel.networkConsecutiveFailures == 2, @"Network failures did not equal 2");
+    XCTAssert(self.mixpanel.network.consecutiveFailures == 2, @"Network failures did not equal 2");
     XCTAssert(self.mixpanel.eventsQueue.count == 1, @"Removed an event from the queue that was not sent");
 }
 
@@ -48,10 +49,10 @@
     [self waitForSerialQueue];
     
     // Failure count should be 3
-    NSLog(@"Delta wait time is %.3f", self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970]);
-    NSTimeInterval deltaWaitTime = self.mixpanel.networkRequestsAllowedAfterTime - [[NSDate date] timeIntervalSince1970];
+    NSLog(@"Delta wait time is %.3f", self.mixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970]);
+    NSTimeInterval deltaWaitTime = self.mixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
     XCTAssert(fabs(60 - deltaWaitTime) < 5, @"Mixpanel did not respect 'Retry-After' HTTP header");
-    XCTAssert(self.mixpanel.networkConsecutiveFailures == 0, @"Network failures did not equal 0");
+    XCTAssert(self.mixpanel.network.consecutiveFailures == 0, @"Network failures did not equal 0");
 }
 
 - (void)testFlushEvents {
@@ -229,14 +230,6 @@
     XCTAssertEqualObjects(props[@"number"], @3);
     XCTAssertEqualObjects(props[@"date"], now);
     XCTAssertEqualObjects(props[@"$app_version"], @"override", @"reserved property override failed");
-}
-
-- (void)testDateEncodingFromJSON {
-    NSDate *fixedDate = [NSDate dateWithTimeIntervalSince1970:1400000000];
-    NSArray *a = @[ @{ @"event": @"an event", @"properties": @{ @"eventdate": fixedDate } } ];
-    NSString *json = [[NSString alloc] initWithData:[self.mixpanel JSONSerializeObject:a]
-                                           encoding:NSUTF8StringEncoding];
-    XCTAssert([json rangeOfString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""].location != NSNotFound);
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken {

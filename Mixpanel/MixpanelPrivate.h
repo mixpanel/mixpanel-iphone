@@ -11,6 +11,7 @@
 #import "MPNotificationViewController.h"
 #import "Mixpanel+AutomaticEvents.h"
 #import "AutomaticEventsConstants.h"
+#import "MPNetwork.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
 #import "MixpanelExceptionHandler.h"
@@ -59,6 +60,7 @@
 
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
+@property (atomic, strong) MPNetwork *network;
 @property (atomic, copy) NSString *distinctId;
 
 @property (nonatomic, copy) NSString *apiToken;
@@ -69,7 +71,6 @@
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic) dispatch_queue_t serialQueue;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
@@ -85,11 +86,8 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
-
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
-@property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
-@property (nonatomic) NSUInteger networkConsecutiveFailures;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
 
@@ -102,9 +100,6 @@
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
-
-- (NSData *)JSONSerializeObject:(id)obj;
-- (NSString *)encodeAPIData:(NSArray *)array;
 
 #if !MIXPANEL_LIMITED_SUPPORT
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey;

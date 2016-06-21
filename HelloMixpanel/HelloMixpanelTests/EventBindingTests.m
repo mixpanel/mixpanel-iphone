@@ -23,6 +23,7 @@
 
 - (void)track:(NSString *)event;
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
+- (void)resetCalls;
 
 @end
 
@@ -41,6 +42,10 @@
 
 - (void)track:(NSString *)event properties:(NSDictionary *)properties {
     [self.calls addObject:@{ @"event": event, @"properties": properties }];
+}
+
+- (void)resetCalls {
+    [self.calls removeAllObjects];
 }
 
 @end
@@ -157,12 +162,11 @@
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 1, @"A track call should have been fired");
 
     // test that event doesnt fire for other UIControl
-    self.mixpanelStub = [[MixpanelStub alloc] init];
+    [self.mixpanelStub resetCalls];
     [c2 sendActionsForControlEvents:UIControlEventTouchUpInside];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"Should not have fired event for c2");
 
     // test `didMoveToWindow`
-    self.mixpanelStub = [[MixpanelStub alloc] init];
     UIControl *c3 = [[UIControl alloc] init];
     [v2 addSubview:c3];
     XCTAssertEqual((int)[[self.mixpanelStub calls] count], 0, @"Mixpanel track should not have been called.");

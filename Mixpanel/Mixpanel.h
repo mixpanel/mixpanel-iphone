@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  Useful if you need to proxy Mixpanel requests. Defaults to
  https://api.mixpanel.com.
  */
-@property (atomic, copy) NSString *serverURL;
+@property (nonatomic, copy) NSString *serverURL;
 
 /*!
  @property

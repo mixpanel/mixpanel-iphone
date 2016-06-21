@@ -42,7 +42,6 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <Security/SecRandom.h>
 #import "MPLogger.h"
-#import "NSData+MPBase64.h"
 
 #if OS_OBJECT_USE_OBJC_RETAIN_RELEASE
 #define mp_dispatch_retain(x)
@@ -138,7 +137,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 - (NSString *)stringBySHA1ThenBase64Encoding
 {
-    return [newSHA1(self.bytes, self.length) mp_base64EncodedString];
+    return [newSHA1(self.bytes, self.length) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
 @end
@@ -148,7 +147,7 @@ static NSData *newSHA1(const char *bytes, size_t length) {
 
 - (NSString *)stringBySHA1ThenBase64Encoding
 {
-    return [newSHA1(self.UTF8String, self.length) mp_base64EncodedString];
+    return [newSHA1(self.UTF8String, self.length) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
 @end
@@ -522,7 +521,7 @@ static __strong NSData *CRLFCRLF;
 
     NSMutableData *keyBytes = [[NSMutableData alloc] initWithLength:16];
     SecRandomCopyBytes(kSecRandomDefault, keyBytes.length, keyBytes.mutableBytes);
-    _secKey = [keyBytes mp_base64EncodedString];
+    _secKey = [keyBytes base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     assert(_secKey.length == 24);
 
     CFHTTPMessageSetHeaderFieldValue(request, CFSTR("Upgrade"), CFSTR("websocket"));

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
+		510D47E91D0D5EEF00F637F4 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 510D47E71D0D5EEF00F637F4 /* MPNetwork.h */; };
+		510D47EA1D0D5EEF00F637F4 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 510D47E71D0D5EEF00F637F4 /* MPNetwork.h */; };
+		510D47EC1D0D5EEF00F637F4 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D47E81D0D5EEF00F637F4 /* MPNetwork.m */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		511FC35B1C2B74BD00DC4796 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
 		511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -18,8 +21,6 @@
 		513B0B751C73CA35008EEE6E /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		513B0BB81C73CA6D008EEE6E /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */; };
 		513B0BB91C73CA87008EEE6E /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
-		513B0BBA1C73CA8E008EEE6E /* NSData+MPBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CB81A4A035F00D9E0F2 /* NSData+MPBase64.h */; };
-		513B0BBB1C73CA8E008EEE6E /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CB91A4A035F00D9E0F2 /* NSData+MPBase64.m */; };
 		513B0BBC1C73CA94008EEE6E /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		513B0BBD1C73CBA0008EEE6E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513B0BBE1C73CBA4008EEE6E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
@@ -42,6 +43,9 @@
 		5166DCE91CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5166DCE71CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m */; };
 		5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
 		5177CFC81C5032B600271843 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
+		517ABB6A1D14AD6F00FF8061 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
+		517ABB6B1D14AD6F00FF8061 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
+		517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
 		519AD7A41CB706A6005411A5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A31CB706A6005411A5 /* Security.framework */; };
 		519AD7A61CB706A9005411A5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A51CB706A9005411A5 /* CFNetwork.framework */; };
 		519C548C1D131E6500407F56 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -168,8 +172,6 @@
 		7C170D321A4A035F00D9E0F2 /* MPVariant.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CB51A4A035F00D9E0F2 /* MPVariant.m */; };
 		7C170D331A4A035F00D9E0F2 /* MPWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CB61A4A035F00D9E0F2 /* MPWebSocket.h */; };
 		7C170D341A4A035F00D9E0F2 /* MPWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CB71A4A035F00D9E0F2 /* MPWebSocket.m */; };
-		7C170D351A4A035F00D9E0F2 /* NSData+MPBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CB81A4A035F00D9E0F2 /* NSData+MPBase64.h */; };
-		7C170D361A4A035F00D9E0F2 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CB91A4A035F00D9E0F2 /* NSData+MPBase64.m */; };
 		7C170D371A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CBA1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h */; };
 		7C170D381A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CBB1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m */; };
 		7C170D391A4A035F00D9E0F2 /* snapshot_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C170CBC1A4A035F00D9E0F2 /* snapshot_config.json */; };
@@ -201,7 +203,7 @@
 		E1C2BE271CFD6A010052172F /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CC11A4A035F00D9E0F2 /* UIImage+MPAverageColor.m */; };
 		E1C2BE2F1CFD6A010052172F /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		E1C2BE4B1CFD6A010052172F /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CC31A4A035F00D9E0F2 /* UIImage+MPImageEffects.m */; };
-		E1C2BE4D1CFD6A010052172F /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CB91A4A035F00D9E0F2 /* NSData+MPBase64.m */; };
+		E1C2BE4D1CFD6A010052172F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E1C2BE551CFD6A010052172F /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A221CB6FF8600A34060 /* libicucore.tbd */; };
 		E1C2BE561CFD6A010052172F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A51CB706A9005411A5 /* CFNetwork.framework */; };
 		E1C2BE571CFD6A010052172F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A31CB706A6005411A5 /* Security.framework */; };
@@ -217,7 +219,7 @@
 		E1C2BE7A1CFD6A010052172F /* UIImage+MPAverageColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CC01A4A035F00D9E0F2 /* UIImage+MPAverageColor.h */; };
 		E1C2BE7B1CFD6A010052172F /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
 		E1C2BE801CFD6A010052172F /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
-		E1C2BE871CFD6A010052172F /* NSData+MPBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CB81A4A035F00D9E0F2 /* NSData+MPBase64.h */; };
+		E1C2BE871CFD6A010052172F /* (null) in Headers */ = {isa = PBXBuildFile; };
 		E1C2BE8F1CFD6A010052172F /* UIColor+MPColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CBE1A4A035F00D9E0F2 /* UIColor+MPColor.h */; };
 		E1C2BE911CFD6A010052172F /* MPAbstractABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */; };
 		E1C2BE9D1CFD6A010052172F /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
@@ -225,6 +227,8 @@
 
 /* Begin PBXFileReference section */
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
+		510D47E71D0D5EEF00F637F4 /* MPNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetwork.h; sourceTree = "<group>"; };
+		510D47E81D0D5EEF00F637F4 /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
 		511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +256,9 @@
 		5166DCE71CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mixpanel+HostWatchOS.m"; sourceTree = "<group>"; };
 		5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelExceptionHandler.h; sourceTree = "<group>"; };
 		5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
+		517ABB681D14AD6F00FF8061 /* MPNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetwork.h; sourceTree = "<group>"; };
+		517ABB691D14AD6F00FF8061 /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
+		517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPNetworkPrivate.h; sourceTree = "<group>"; };
 		519AD7A31CB706A6005411A5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		519AD7A51CB706A9005411A5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		519C548A1D131E6500407F56 /* MixpanelPeople.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelPeople.h; sourceTree = "<group>"; };
@@ -379,8 +386,6 @@
 		7C170CB51A4A035F00D9E0F2 /* MPVariant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPVariant.m; sourceTree = "<group>"; };
 		7C170CB61A4A035F00D9E0F2 /* MPWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPWebSocket.h; sourceTree = "<group>"; };
 		7C170CB71A4A035F00D9E0F2 /* MPWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPWebSocket.m; sourceTree = "<group>"; };
-		7C170CB81A4A035F00D9E0F2 /* NSData+MPBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MPBase64.h"; sourceTree = "<group>"; };
-		7C170CB91A4A035F00D9E0F2 /* NSData+MPBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MPBase64.m"; sourceTree = "<group>"; };
 		7C170CBA1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+MPHelpers.h"; sourceTree = "<group>"; };
 		7C170CBB1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+MPHelpers.m"; sourceTree = "<group>"; };
 		7C170CBC1A4A035F00D9E0F2 /* snapshot_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = snapshot_config.json; path = Mixpanel/snapshot_config.json; sourceTree = "<group>"; };
@@ -565,8 +570,6 @@
 		515B5A181CB6FC0C00A34060 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				7C170CB81A4A035F00D9E0F2 /* NSData+MPBase64.h */,
-				7C170CB91A4A035F00D9E0F2 /* NSData+MPBase64.m */,
 				7C170CBA1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h */,
 				7C170CBB1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m */,
 				7C170CBE1A4A035F00D9E0F2 /* UIColor+MPColor.h */,
@@ -793,12 +796,15 @@
 		7C170C461A4A035F00D9E0F2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				519C54901D131EC800407F56 /* MixpanelPrivate.h */,
 				7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */,
+				519C54901D131EC800407F56 /* MixpanelPrivate.h */,
 				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
 				519C54931D131F4F00407F56 /* MixpanelPeoplePrivate.h */,
 				519C548A1D131E6500407F56 /* MixpanelPeople.h */,
 				519C548B1D131E6500407F56 /* MixpanelPeople.m */,
+				517ABB681D14AD6F00FF8061 /* MPNetwork.h */,
+				517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */,
+				517ABB691D14AD6F00FF8061 /* MPNetwork.m */,
 				514733BB1CD7CCDB0098B23A /* MPResources.h */,
 				514733BC1CD7CCDB0098B23A /* MPResources.m */,
 				515B5A1A1CB6FC4000A34060 /* Designer Support */,
@@ -858,7 +864,7 @@
 				519C54921D131EC900407F56 /* MixpanelPrivate.h in Headers */,
 				513B0BBC1C73CA94008EEE6E /* MPFoundation.h in Headers */,
 				513B0B751C73CA35008EEE6E /* Mixpanel.h in Headers */,
-				513B0BBA1C73CA8E008EEE6E /* NSData+MPBase64.h in Headers */,
+				510D47EA1D0D5EEF00F637F4 /* MPNetwork.h in Headers */,
 				E115E0161CCAEE060026CFC0 /* AutomaticEventsConstants.h in Headers */,
 				E115E0151CCAEDFD0026CFC0 /* Mixpanel+AutomaticEvents.h in Headers */,
 				519C548D1D131E6500407F56 /* MixpanelPeople.h in Headers */,
@@ -889,6 +895,7 @@
 				7C170D261A4A035F00D9E0F2 /* MPTypeDescription.h in Headers */,
 				7C170D291A4A035F00D9E0F2 /* MPUIControlBinding.h in Headers */,
 				7C170D191A4A035F00D9E0F2 /* MPSurveyQuestion.h in Headers */,
+				517ABB6A1D14AD6F00FF8061 /* MPNetwork.h in Headers */,
 				7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */,
 				51F308831C86881900614A13 /* MPSwizzle.h in Headers */,
 				7C170D171A4A035F00D9E0F2 /* MPSurveyNavigationController.h in Headers */,
@@ -907,11 +914,11 @@
 				513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */,
 				7C170CCC1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.h in Headers */,
 				7C170D2E1A4A035F00D9E0F2 /* MPUITableViewBinding.h in Headers */,
+				510D47E91D0D5EEF00F637F4 /* MPNetwork.h in Headers */,
 				7C170CCE1A4A035F00D9E0F2 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
 				51C3B2421CA5B2D3004CE37C /* Mixpanel+AutomaticEvents.h in Headers */,
 				519C54911D131EC900407F56 /* MixpanelPrivate.h in Headers */,
 				7C170D001A4A035F00D9E0F2 /* MPNotificationViewController.h in Headers */,
-				7C170D351A4A035F00D9E0F2 /* NSData+MPBase64.h in Headers */,
 				7C170CDF1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				7C170CE11A4A035F00D9E0F2 /* MPABTestDesignerTweakRequestMessage.h in Headers */,
 				7C170CD41A4A035F00D9E0F2 /* MPABTestDesignerConnection.h in Headers */,
@@ -950,7 +957,7 @@
 				E1C2BE7A1CFD6A010052172F /* UIImage+MPAverageColor.h in Headers */,
 				E1C2BE7B1CFD6A010052172F /* MPLogger.h in Headers */,
 				E1C2BE801CFD6A010052172F /* MPFoundation.h in Headers */,
-				E1C2BE871CFD6A010052172F /* NSData+MPBase64.h in Headers */,
+				E1C2BE871CFD6A010052172F /* (null) in Headers */,
 				E1C2BE8F1CFD6A010052172F /* UIColor+MPColor.h in Headers */,
 				E1C2BE911CFD6A010052172F /* MPAbstractABTestDesignerMessage.h in Headers */,
 				E1C2BE9D1CFD6A010052172F /* MixpanelExceptionHandler.h in Headers */,
@@ -1120,7 +1127,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				513B0BBB1C73CA8E008EEE6E /* NSData+MPBase64.m in Sources */,
+				510D47EC1D0D5EEF00F637F4 /* MPNetwork.m in Sources */,
 				513B0BB81C73CA6D008EEE6E /* Mixpanel.m in Sources */,
 				519C548F1D131E6500407F56 /* MixpanelPeople.m in Sources */,
 			);
@@ -1181,6 +1188,7 @@
 				7C170CE71A4A035F00D9E0F2 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				7C170CD91A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				7C170D131A4A035F00D9E0F2 /* MPSequenceGenerator.m in Sources */,
+				517ABB6B1D14AD6F00FF8061 /* MPNetwork.m in Sources */,
 				5166DCE91CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m in Sources */,
 				7C170D2C1A4A035F00D9E0F2 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				7C170D181A4A035F00D9E0F2 /* MPSurveyNavigationController.m in Sources */,
@@ -1196,7 +1204,6 @@
 				7C170D2A1A4A035F00D9E0F2 /* MPUIControlBinding.m in Sources */,
 				7C170D401A4A035F00D9E0F2 /* UIImage+MPImageEffects.m in Sources */,
 				7C170D341A4A035F00D9E0F2 /* MPWebSocket.m in Sources */,
-				7C170D361A4A035F00D9E0F2 /* NSData+MPBase64.m in Sources */,
 				7C170D201A4A035F00D9E0F2 /* MPTweak.m in Sources */,
 				7C170CEA1A4A035F00D9E0F2 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
 				7C170D0E1A4A035F00D9E0F2 /* MPObjectSerializerContext.m in Sources */,
@@ -1214,10 +1221,11 @@
 				E1C2BE151CFD6A010052172F /* UIColor+MPColor.m in Sources */,
 				E1C2BE261CFD6A010052172F /* Mixpanel.m in Sources */,
 				E1C2BE271CFD6A010052172F /* UIImage+MPAverageColor.m in Sources */,
+				517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */,
 				E1C2BE2F1CFD6A010052172F /* MixpanelExceptionHandler.m in Sources */,
 				E1C2BE4B1CFD6A010052172F /* UIImage+MPImageEffects.m in Sources */,
 				E123C47F1D1342150015B425 /* MixpanelPeople.m in Sources */,
-				E1C2BE4D1CFD6A010052172F /* NSData+MPBase64.m in Sources */,
+				E1C2BE4D1CFD6A010052172F /* (null) in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

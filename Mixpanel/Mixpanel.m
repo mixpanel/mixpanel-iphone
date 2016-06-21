@@ -10,7 +10,6 @@
 #import "MixpanelPeoplePrivate.h"
 
 #import "MPLogger.h"
-#import "NSData+MPBase64.h"
 #import "MPFoundation.h"
 
 
@@ -65,8 +64,6 @@ static Mixpanel *sharedInstance;
 #endif
 #endif
         
-        self.networkRequestsAllowedAfterTime = 0;
-        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
@@ -82,9 +79,6 @@ static Mixpanel *sharedInstance;
         self.checkForVariantsOnActive = YES;
         self.checkForSurveysOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
-        self.decideResponseCached = NO;
-        self.shownSurveyCollections = [NSMutableSet set];
-        self.shownNotifications = [NSMutableSet set];
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -94,14 +88,15 @@ static Mixpanel *sharedInstance;
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         self.timedEvents = [NSMutableDictionary dictionary];
 
         self.showSurveyOnActive = YES;
         self.enableABTestDesigner = YES;
+        self.shownSurveyCollections = [NSMutableSet set];
+        self.shownNotifications = [NSMutableSet set];
+        
+        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
+        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
 
 #if !defined(MIXPANEL_APP_EXTENSION)
         [self setUpListeners];
@@ -112,7 +107,7 @@ static Mixpanel *sharedInstance;
         [self executeCachedEventBindings];
 #endif
 
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !defined(MIXPANEL_TVOS_EXTENSION) && !defined(MIXPANEL_APP_EXTENSION)
         NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (remoteNotification) {
             [self trackPushNotification:remoteNotification event:@"$app_open"];
@@ -159,79 +154,9 @@ static Mixpanel *sharedInstance;
 #endif
 
 #pragma mark - Encoding/decoding utilities
-
 static __unused NSString *MPURLEncode(NSString *s)
 {
     return [s stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-}
-
-- (NSData *)JSONSerializeObject:(id)obj
-{
-    id coercedObj = [self JSONSerializableObjectForObject:obj];
-    NSError *error = nil;
-    NSData *data = nil;
-    @try {
-        data = [NSJSONSerialization dataWithJSONObject:coercedObj options:(NSJSONWritingOptions)0 error:&error];
-    }
-    @catch (NSException *exception) {
-        MixpanelError(@"%@ exception encoding api data: %@", self, exception);
-    }
-    if (error) {
-        MixpanelError(@"%@ error encoding api data: %@", self, error);
-    }
-    return data;
-}
-
-- (id)JSONSerializableObjectForObject:(id)obj
-{
-    // valid json types
-    if ([obj isKindOfClass:[NSString class]] ||
-        [obj isKindOfClass:[NSNumber class]] ||
-        [obj isKindOfClass:[NSNull class]]) {
-        return obj;
-    }
-    // recurse on containers
-    if ([obj isKindOfClass:[NSArray class]]) {
-        NSMutableArray *a = [NSMutableArray array];
-        for (id i in obj) {
-            [a addObject:[self JSONSerializableObjectForObject:i]];
-        }
-        return [NSArray arrayWithArray:a];
-    }
-    if ([obj isKindOfClass:[NSDictionary class]]) {
-        NSMutableDictionary *d = [NSMutableDictionary dictionary];
-        for (id key in obj) {
-            NSString *stringKey;
-            if (![key isKindOfClass:[NSString class]]) {
-                stringKey = [key description];
-                MixpanelDebug(@"%@ warning: property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
-            } else {
-                stringKey = [NSString stringWithString:key];
-            }
-            id v = [self JSONSerializableObjectForObject:obj[key]];
-            d[stringKey] = v;
-        }
-        return [NSDictionary dictionaryWithDictionary:d];
-    }
-    // some common cases
-    if ([obj isKindOfClass:[NSDate class]]) {
-        return [self.dateFormatter stringFromDate:obj];
-    } else if ([obj isKindOfClass:[NSURL class]]) {
-        return [obj absoluteString];
-    }
-    // default to sending the object's description
-    NSString *s = [obj description];
-    MixpanelDebug(@"%@ warning: property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
-    return s;
-}
-
-- (NSString *)encodeAPIData:(NSArray *)array
-{
-    NSData *data = [self JSONSerializeObject:array];
-    if (data) {
-        return MPURLEncode([data mp_base64EncodedString]);
-    }
-    return @"";
 }
 
 #pragma mark - Tracking
@@ -288,9 +213,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.people.unidentifiedQueue removeAllObjects];
             [self archivePeople];
         }
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -369,9 +292,6 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.eventsQueue removeObjectAtIndex:0];
         }
         
-        if ([Mixpanel inBackground]) {
-            [self archiveEvents];
-        }
         // Always archive
         [self archiveEvents];
     });
@@ -510,17 +430,19 @@ static __unused NSString *MPURLEncode(NSString *s)
 }
 
 #pragma mark - Network control
-
-- (NSUInteger)flushInterval
+- (void)setServerURL:(NSString *)serverURL
 {
-    @synchronized(self) {
-        return _flushInterval;
-    }
+    _serverURL = serverURL.copy;
+    self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:serverURL]];
+}
+
+- (NSUInteger)flushInterval {
+    return _flushInterval;
 }
 
 - (void)setFlushInterval:(NSUInteger)interval
 {
-    @synchronized(self) {
+    @synchronized (self) {
         _flushInterval = interval;
     }
     [self flush];
@@ -570,9 +492,9 @@ static __unused NSString *MPURLEncode(NSString *s)
                 return;
             }
         }
-
-        [self flushEvents];
-        [self flushPeople];
+        
+        [self.network flushEventQueue:self.eventsQueue];
+        [self.network flushPeopleQueue:self.peopleQueue];
         [self archive];
         
         if (handler) {
@@ -581,135 +503,6 @@ static __unused NSString *MPURLEncode(NSString *s)
 
         MixpanelDebug(@"%@ flush complete", self);
     });
-}
-
-- (void)flushEvents
-{
-    [self flushQueue:_eventsQueue
-            endpoint:@"/track/"];
-}
-
-- (void)flushPeople
-{
-    [self flushQueue:_peopleQueue
-            endpoint:@"/engage/"];
-}
-
-- (void)flushQueue:(NSMutableArray *)queue endpoint:(NSString *)endpoint
-{
-    if ([[NSDate date] timeIntervalSince1970] < self.networkRequestsAllowedAfterTime) {
-        MixpanelDebug(@"Attempted to flush to %@, when we still have a timeout. Ignoring flush.", endpoint);
-        return;
-    }
-    
-    while (queue.count > 0) {
-        NSUInteger batchSize = MIN(queue.count, 50);
-        NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
-
-        NSString *requestData = [self encodeAPIData:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
-        NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
-
-        [self updateNetworkActivityIndicator:YES];
-        
-#if defined(MIXPANEL_TVOS_EXTENSION)
-        __block BOOL didFail = NO;
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                  NSURLResponse *urlResponse,
-                                                                  NSError *error) {
-            [self updateNetworkActivityIndicator:NO];
-            
-            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
-            if (error || !success) {
-                MixpanelError(@"%@ network failure: %@", self, error);
-                didFail = YES;
-            }
-            else {
-                NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                if ([response intValue] == 0) {
-                    MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
-                }
-            }
-            
-            dispatch_semaphore_signal(semaphore);
-        }] resume];
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        if (didFail) {
-            break;
-        }
-#else
-        NSError *error = nil;
-        NSHTTPURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-
-        [self updateNetworkActivityIndicator:NO];
-        
-        BOOL success = [self handleNetworkResponse:urlResponse withError:error];
-        if (error || !success) {
-            MixpanelError(@"%@ network failure: %@", self, error);
-            break;
-        }
-
-        NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-        if (response.intValue == 0) {
-            MixpanelError(@"%@ %@ api rejected some items", self, endpoint);
-        }
-#endif
-        [queue removeObjectsInArray:batch];
-    }
-}
-
-- (NSURLRequest *)apiRequestWithEndpoint:(NSString *)endpoint andBody:(NSString *)body
-{
-    NSURL *URL = [NSURL URLWithString:[self.serverURL stringByAppendingString:endpoint]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    request.HTTPMethod = @"POST";
-    [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    MixpanelDebug(@"%@ http request: %@?%@", self, URL, body);
-    return request;
-}
-
-- (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error
-{
-    BOOL success = NO;
-    NSTimeInterval retryTime = [response.allHeaderFields[@"Retry-After"] doubleValue];
-    
-    MixpanelDebug(@"HTTP Response: %@", response.allHeaderFields);
-    MixpanelDebug(@"HTTP Error: %@", error.localizedDescription);
-    
-    BOOL was5XX = (500 <= response.statusCode && response.statusCode <= 599) || (error != nil);
-    if (was5XX) {
-        self.networkConsecutiveFailures++;
-    } else {
-        success = YES;
-        self.networkConsecutiveFailures = 0;
-    }
-    
-    MixpanelDebug(@"Consecutive network failures: %lu", self.networkConsecutiveFailures);
-    
-    if (self.networkConsecutiveFailures > 1) {
-        // Exponential backoff
-        retryTime = MAX(retryTime, [self retryBackOffTimeWithConsecutiveFailures:self.networkConsecutiveFailures]);
-    }
-    
-    NSDate *retryDate = [NSDate dateWithTimeIntervalSinceNow:retryTime];
-    self.networkRequestsAllowedAfterTime = [retryDate timeIntervalSince1970];
-    
-    MixpanelDebug(@"Retry backoff time: %.2f - %@", retryTime, retryDate);
-    
-    return success;
-}
-
-- (NSTimeInterval)retryBackOffTimeWithConsecutiveFailures:(NSUInteger)failureCount
-{
-    NSTimeInterval time = pow(2.0, failureCount - 1) * 60 + arc4random_uniform(30);
-    return MIN(MAX(60, time), 600);
 }
 
 #pragma mark - Persistence
@@ -1026,15 +819,6 @@ static __unused NSString *MPURLEncode(NSString *s)
 #endif
 }
 
-- (void)updateNetworkActivityIndicator:(BOOL)on
-{
-#if !MIXPANEL_LIMITED_SUPPORT
-    if (_showNetworkActivityIndicator) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = on;
-    }
-#endif
-}
-
 #if !defined(MIXPANEL_APP_EXTENSION)
 
 #pragma mark - UIApplication Events
@@ -1213,7 +997,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
-            [self updateNetworkActivityIndicator:NO];
+            [self.network updateNetworkActivityIndicator:NO];
         }
     });
 }
@@ -1591,7 +1375,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }
         
         dispatch_async(_serialQueue, ^{
-            [self flushPeople];
+            [self.network flushPeopleQueue:self.peopleQueue];
         });
     }
 }
