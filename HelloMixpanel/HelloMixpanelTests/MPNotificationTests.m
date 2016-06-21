@@ -191,13 +191,17 @@
 - (void)testVisualNotifications {
     //This is run on an iPhone 5S and an iPhone 6S Plus Simulator
     [[LSNocilla sharedInstance] stop];
-
-    [((UINavigationController *)[self topViewController]) presentViewController:[UIViewController new] animated:NO completion:nil];
     
-    if ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
-        [((MPNotificationViewController *)[self topViewController]) hideWithAnimation:NO completion:nil];
+    while ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+
+        [((MPNotificationViewController *)[self topViewController]) hideWithAnimation:NO completion:^{
+            [expectation fulfill];
+        }];
+        [self waitForExpectationsWithTimeout:2 handler:nil];
     }
     [XCUIDevice sharedDevice].orientation = UIDeviceOrientationPortrait;
+    [((UINavigationController *)[self topViewController]) presentViewController:[UIViewController new] animated:NO completion:nil];
 
     NSArray *inAppImages = @[@{@"image_url": @"https://images.mxpnl.com/960173/cbcdaf35d399ee84e44c4217f26055ff.jpg",
                                @"title": @"color grid",
