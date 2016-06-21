@@ -20,8 +20,6 @@ Pod::Spec.new do |s|
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
-    ss.tvos.deployment_target = '9.0'
-    ss.osx.deployment_target = ''
   end
 
   s.subspec 'MixpanelHostWatchOS' do |ss|
@@ -31,9 +29,6 @@ Pod::Spec.new do |s|
     ss.frameworks = 'WatchConnectivity', 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = ''
-    ss.tvos.deployment_target = ''
-    ss.watchos.deployment_target = ''
   end
 
   s.subspec 'tvOS' do |ss|
@@ -42,18 +37,12 @@ Pod::Spec.new do |s|
     ss.resources   = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
-    ss.ios.deployment_target = ''
     ss.tvos.deployment_target = '9.0'
-    ss.osx.deployment_target = ''
-    ss.watchos.deployment_target = ''
   end
 
   s.subspec 'WatchOS' do |ss|
     ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/MPLogger.h']
     ss.frameworks = 'WatchConnectivity', 'Foundation'
-    ss.ios.deployment_target = ''
-    ss.osx.deployment_target = ''
-    ss.tvos.deployment_target = ''
     ss.watchos.deployment_target = '2.0'
   end
 
@@ -63,8 +52,5 @@ Pod::Spec.new do |s|
     ss.frameworks = 'UIKit', 'Foundation', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = ''
-    ss.tvos.deployment_target = ''
-    ss.watchos.deployment_target = ''
   end
 end
