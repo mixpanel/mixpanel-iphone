@@ -114,7 +114,6 @@ static Mixpanel *sharedInstance;
         }
 #endif
 
-#if defined(DEBUG)
         dispatch_async(self.serialQueue, ^{
             BOOL integrationTracked = [[NSUserDefaults standardUserDefaults] boolForKey:@"tracked_integration"];
             
@@ -125,7 +124,6 @@ static Mixpanel *sharedInstance;
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
         });
-#endif
     }
     return self;
 }
