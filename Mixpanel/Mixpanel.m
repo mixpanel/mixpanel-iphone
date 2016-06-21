@@ -114,6 +114,7 @@ static Mixpanel *sharedInstance;
         }
 #endif
 
+#if defined(DEBUG)
         dispatch_async(self.serialQueue, ^{
             BOOL integrationTracked = [[NSUserDefaults standardUserDefaults] boolForKey:@"tracked_integration"];
             
@@ -121,8 +122,10 @@ static Mixpanel *sharedInstance;
                 [self.eventsQueue addObject:@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"lib": @"iphone", @"distinct_id": self.apiToken}}];
                 [self.network flushEventQueue:self.eventsQueue];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tracked_integration"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
         });
+#endif
     }
     return self;
 }
