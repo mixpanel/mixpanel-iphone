@@ -19,8 +19,7 @@
     // HTTP Stubs
     [[LSNocilla sharedInstance] start];
     
-    self.mixpanelWillFlush = NO;
-    
+    self.mixpanelWillFlush = NO;    
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
