@@ -19,10 +19,12 @@
 
 #if !MIXPANEL_LIMITED_SUPPORT
 #import <CommonCrypto/CommonDigest.h>
+
+#if TARGET_OS_IPHONE
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
-#import <UIKit/UIDevice.h>
+#endif
 
 #import "MPResources.h"
 #import "MPABTestDesignerConnection.h"
