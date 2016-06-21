@@ -113,6 +113,10 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
+
+        dispatch_async(self.serialQueue, ^{
+            [self.network flushEventQueue:[NSMutableArray arrayWithArray:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"lib": @"iphone", @"distinct_id": self.apiToken}}]]];
+        });
     }
     return self;
 }
