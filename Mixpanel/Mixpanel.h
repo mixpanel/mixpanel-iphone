@@ -4,7 +4,7 @@
 
 #define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
 
-@class    MixpanelPeople, MPSurvey;
+@class    MixpanelPeople, MPSurvey, MPNotification;
 @protocol MixpanelDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -174,6 +174,18 @@ NS_ASSUME_NONNULL_BEGIN
  If we haven't fetched the surveys yet, this will return nil.
  */
 @property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys;
+
+/*!
+ @property
+ 
+ @abstract
+ Returns a list of available notifications. You can then call <code>showNotificationWithID:</code>
+ and pass in <code>notification.ID</code>
+ 
+ @discussion
+ If we haven't fetched the notifications yet, this will return nil.
+ */
+@property (atomic, readonly) NSArray<MPNotification *> *availableNotifications;
 
 /*!
  @property
@@ -629,6 +641,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @method
+ 
+ @abstract
+ Checks for updates.
+ 
+ @discussion
+ Checks for updates for surveys, in-app notifications and variants ("tweaks"). This is useful
+ if you want to manually initialize Mixpanel, instead of relying on the provided library code
+ to check for updates when the app is being activated.
+ */
+- (void)checkForUpdatesWithCompletion:(void (^)(NSArray<MPSurvey *> *surveys, NSArray<MPNotification *> *notifications, NSSet *variants))completion;
+
+/*!
+ @method
 
  @abstract
  Writes current project info, including distinct ID, super properties and pending event
@@ -707,6 +732,38 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showSurvey;
 
 #pragma mark - Mixpanel Notifications
+
+/*!
+ @method
+ 
+ @abstract
+ Tracks a notification.
+ 
+ @discussion
+ Sends an event to Mixpanel that includes the automatic properties associated
+ with the given notifications. In most cases this is not required, unless you're
+ not showing notifications using the library-provided views and activites.
+ 
+ @param notification The notification to track
+ @param event The name to use when the event is tracked.
+ */
+- (void)trackNotification:(MPNotification *)notification event:(NSString *) event;
+
+
+/*!
+ @method
+ 
+ @abstract
+ Marks a notification as seen.
+ 
+ @discussion
+ Tells MixPanel that you have handled a notification in cases where you are manually
+ dealing with your notifications. Note: If you do not acknowledge the notification you 
+ will receive it again each time you call getAvailableNotifications.
+ 
+ @param notification The notification to mark as shown.
+ */
+- (void)markNotificationShown:(MPNotification *)notification;
 
 /*!
  @method

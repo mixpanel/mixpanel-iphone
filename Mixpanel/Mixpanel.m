@@ -1257,6 +1257,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } useCache:NO];
 }
 
+- (void)checkForUpdatesWithCompletion:(void (^)(NSArray<MPSurvey *> *surveys, NSArray<MPNotification *> *notifications, NSSet *variants))completion
+{
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+        if (completion) {
+            completion(surveys, notifications, variants);
+        }
+    }];
+}
+
 #pragma mark - Surveys
 - (BOOL)isSurveyAvailable {
     return (self.surveys.count > 0);
@@ -1264,6 +1273,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (NSArray<MPSurvey *> *)availableSurveys {
     return self.surveys;
+}
+
+- (NSArray<MPNotification *> *)availableNotifications {
+    return self.notifications;
 }
 
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey
