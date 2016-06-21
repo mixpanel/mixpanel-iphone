@@ -115,7 +115,13 @@ static Mixpanel *sharedInstance;
 #endif
 
         dispatch_async(self.serialQueue, ^{
-            [self.network flushEventQueue:[NSMutableArray arrayWithArray:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"lib": @"iphone", @"distinct_id": self.apiToken}}]]];
+            BOOL integrationTracked = [[NSUserDefaults standardUserDefaults] boolForKey:@"tracked_integration"];
+            
+            if (!integrationTracked) {
+                [self.eventsQueue addObject:@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"lib": @"iphone", @"distinct_id": self.apiToken}}];
+                [self.network flushEventQueue:self.eventsQueue];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tracked_integration"];
+            }
         });
     }
     return self;
