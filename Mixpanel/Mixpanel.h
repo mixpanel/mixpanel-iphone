@@ -2,6 +2,10 @@
 #import <UIKit/UIKit.h>
 #import <Mixpanel/MixpanelPeople.h>
 
+#if TARGET_OS_TV
+    #define MIXPANEL_TVOS_EXTENSION 1
+#endif
+
 #define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
 
 @class    MixpanelPeople, MPSurvey;
