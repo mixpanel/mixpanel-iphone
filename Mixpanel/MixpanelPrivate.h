@@ -72,6 +72,7 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
+@property (nonatomic) BOOL trackedIntegration;
 
 @property (nonatomic) BOOL decideResponseCached;
 @property (nonatomic, strong) NSArray *surveys;

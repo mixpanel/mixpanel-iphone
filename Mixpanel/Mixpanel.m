@@ -113,17 +113,12 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
-        
-        dispatch_async(self.serialQueue, ^{
-            BOOL integrationTracked = [[NSUserDefaults standardUserDefaults] boolForKey:@"tracked_integration"];
-            
-            if (!integrationTracked) {
+        if (!self.trackedIntegration) {
+            dispatch_async(self.serialQueue, ^{
                 [self.eventsQueue addObject:@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone_objc", @"lib": @"iphone_objc", @"distinct_id": self.apiToken}}];
                 [self.network flushEventQueue:self.eventsQueue];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"tracked_integration"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-        });
+            });
+        }
     }
     return self;
 }
@@ -590,6 +585,8 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
+    NSString *trackedIntegrationKey = [NSString stringWithFormat:@"tracked_integration_%@", self.apiToken];
+    [p setValue:@(self.trackedIntegration) forKey:trackedIntegrationKey];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         MixpanelError(@"%@ unable to archive properties data", self);
@@ -675,6 +672,8 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
+        NSString *trackedIntegrationKey = [NSString stringWithFormat:@"tracked_integration_%@", self.apiToken];
+        self.trackedIntegration = properties[trackedIntegrationKey] ?: NO;
     }
 }
 
