@@ -20,6 +20,7 @@
     [[LSNocilla sharedInstance] start];
     
     self.mixpanelWillFlush = NO;
+    self.recordMode = NO;
     
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil

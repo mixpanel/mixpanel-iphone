@@ -109,7 +109,7 @@
             [self.okayButton setTitleColor:[UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1] forState:UIControlStateNormal];
             self.okayButton.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
             UIImage *origImage = [self.closeButton imageForState:UIControlStateNormal];
-            id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
             self.closeButton.tintColor = [UIColor colorWithRed:217/255.0 green:217/255.0 blue:217/255.0 alpha:1];
         }
@@ -252,7 +252,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
             self.view.backgroundColor = [UIColor whiteColor];
             self.bodyLabel.textColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
             UIImage *origImage = self.imageView.image;
-            id tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImage *tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.imageView.image = tintedImage;
             self.imageView.tintColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1];
             self.view.layer.borderColor = [UIColor colorWithRed:218/255.0 green:223/255.0 blue:232/255.0 alpha:1].CGColor;
@@ -564,15 +564,15 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 - (void)drawInContext:(CGContextRef)ctx
 {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-    CGFloat components[] = {
+
+    CGFloat components[] = { //[Grayscale, Alpha] for each component
         1.0f, 1.0f,
         1.0f, 1.0f,
-        1.0f, 0.9f,
+        1.0f, 0.0f,
         1.0f, 0.0f};
 
-    CGFloat locations[] = {0.0f, 0.7f, 0.8f, 1.0f};
-
-    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 7);
+    CGFloat locations[] = {0.0f, 0.4f, 0.9f, 1.0f};
+    CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 4);
     CGContextDrawLinearGradient(ctx, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(5.0f, self.bounds.size.height), (CGGradientDrawingOptions)0);
 
 

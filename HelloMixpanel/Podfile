@@ -1,9 +1,12 @@
+use_frameworks!
+
 def shared_pods
     pod 'OCMock', '~> 3.0'
 end
 
 target :HelloMixpanelTests do
   shared_pods
+  pod 'FBSnapshotTestCase'
 end
 
 target :HelloMixpanel_tvOSTests do

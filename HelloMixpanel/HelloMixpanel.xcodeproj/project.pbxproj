@@ -28,6 +28,7 @@
 		2808F9A51610EFE3005772B7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9A41610EFE3005772B7 /* ViewController.m */; };
 		2892541D16548047003DAFFE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541C16548047003DAFFE /* SystemConfiguration.framework */; };
 		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
+		48324589F27775A10F52DA8E /* Pods_HelloMixpanel_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8943B032B4AB174C4AD3BBDF /* Pods_HelloMixpanel_tvOSTests.framework */; };
 		515B59D61CB6C8FD00A34060 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		515B59D71CB6C90200A34060 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		515B5A0A1CB6F96700A34060 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
@@ -50,7 +51,6 @@
 		51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
-		C9C012A964EF5858FB45E0D0 /* libPods-HelloMixpanelTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */; };
 		E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		E123C48D1D1354EC0015B425 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E123C48C1D1354EC0015B425 /* main.m */; };
 		E123C4901D1354EC0015B425 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E123C48F1D1354EC0015B425 /* AppDelegate.m */; };
@@ -64,7 +64,7 @@
 		E12C04A91D135A8B007D2086 /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
 		E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
 		E12C04AF1D135F17007D2086 /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E2045FE14FB7248150CA7113 /* libPods-HelloMixpanel_tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24ACB1E17599254B3B668E12 /* libPods-HelloMixpanel_tvOSTests.a */; };
+		EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -270,7 +270,6 @@
 		187939F919A2A7F400CC4FBE /* EventBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBindingTests.m; sourceTree = "<group>"; };
 		18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeTableViewController.h; sourceTree = "<group>"; };
 		18FCCF82199BD9CA00D6E474 /* SomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SomeTableViewController.m; sourceTree = "<group>"; };
-		24ACB1E17599254B3B668E12 /* libPods-HelloMixpanel_tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanel_tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2802053F17DEC234000D71F5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2805EDE517C6B815003A0D72 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		2808F98D1610EFE3005772B7 /* HelloMixpanel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -301,11 +300,12 @@
 		51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelPeopleTests.m; sourceTree = "<group>"; };
 		51D96E841D120D80001F622D /* MixpanelBaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelBaseTests.m; sourceTree = "<group>"; };
 		51D96E861D120D90001F622D /* MixpanelBaseTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MixpanelBaseTests.h; sourceTree = "<group>"; };
-		54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HelloMixpanelTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloMixpanelTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
 		86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8943B032B4AB174C4AD3BBDF /* Pods_HelloMixpanel_tvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloMixpanel_tvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		936971DC65F55B41A8EE46CD /* Pods-HelloMixpanel_tvOSTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		A7BB224419183EB800EEDCCD /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -353,7 +353,7 @@
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
 				518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
-				C9C012A964EF5858FB45E0D0 /* libPods-HelloMixpanelTests.a in Frameworks */,
+				EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +371,7 @@
 			files = (
 				E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */,
 				E12C04A91D135A8B007D2086 /* Nocilla.framework in Frameworks */,
-				E2045FE14FB7248150CA7113 /* libPods-HelloMixpanel_tvOSTests.a in Frameworks */,
+				48324589F27775A10F52DA8E /* Pods_HelloMixpanel_tvOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,8 +561,8 @@
 			children = (
 				F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */,
 				83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */,
-				54804EDCB923F6CC7EF1F17A /* libPods-HelloMixpanelTests.a */,
-				24ACB1E17599254B3B668E12 /* libPods-HelloMixpanel_tvOSTests.a */,
+				70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */,
+				8943B032B4AB174C4AD3BBDF /* Pods_HelloMixpanel_tvOSTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -617,13 +617,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2808F9C61610EFE4005772B7 /* Build configuration list for PBXNativeTarget "HelloMixpanelTests" */;
 			buildPhases = (
-				AD48B0E1D0FDE02B32D8F942 /* 📦 Check Pods Manifest.lock */,
+				AD48B0E1D0FDE02B32D8F942 /* [CP] Check Pods Manifest.lock */,
 				2808F9AC1610EFE4005772B7 /* Sources */,
 				51D96E8B1D1217C5001F622D /* Resources */,
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				51D96E771D11EF69001F622D /* Copy Frameworks */,
-				11FBA527AAB4DE301A04BDD0 /* 📦 Embed Pods Frameworks */,
-				97D8318B565052717E5E5717 /* 📦 Copy Pods Resources */,
+				11FBA527AAB4DE301A04BDD0 /* [CP] Embed Pods Frameworks */,
+				97D8318B565052717E5E5717 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -668,13 +668,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E123C4A91D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOSTests" */;
 			buildPhases = (
-				222471ECB08A5E0572E0D631 /* 📦 Check Pods Manifest.lock */,
+				222471ECB08A5E0572E0D631 /* [CP] Check Pods Manifest.lock */,
 				E123C49A1D1354EC0015B425 /* Sources */,
 				E123C49B1D1354EC0015B425 /* Frameworks */,
 				E12C04AE1D135F01007D2086 /* Copy Frameworks */,
 				E123C49C1D1354EC0015B425 /* Resources */,
-				768564EFBBB1CF00026F3472 /* 📦 Embed Pods Frameworks */,
-				6EDEBFE516C45FD65271D88E /* 📦 Copy Pods Resources */,
+				768564EFBBB1CF00026F3472 /* [CP] Embed Pods Frameworks */,
+				6EDEBFE516C45FD65271D88E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -814,14 +814,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		11FBA527AAB4DE301A04BDD0 /* 📦 Embed Pods Frameworks */ = {
+		11FBA527AAB4DE301A04BDD0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -829,14 +829,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		222471ECB08A5E0572E0D631 /* 📦 Check Pods Manifest.lock */ = {
+		222471ECB08A5E0572E0D631 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -844,14 +844,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		6EDEBFE516C45FD65271D88E /* 📦 Copy Pods Resources */ = {
+		6EDEBFE516C45FD65271D88E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -859,14 +859,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		768564EFBBB1CF00026F3472 /* 📦 Embed Pods Frameworks */ = {
+		768564EFBBB1CF00026F3472 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -874,14 +874,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		97D8318B565052717E5E5717 /* 📦 Copy Pods Resources */ = {
+		97D8318B565052717E5E5717 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -889,14 +889,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AD48B0E1D0FDE02B32D8F942 /* 📦 Check Pods Manifest.lock */ = {
+		AD48B0E1D0FDE02B32D8F942 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1260,6 +1260,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/HelloMixpanelTests",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"FB_REFERENCE_IMAGE_DIR=\\\"$(SOURCE_ROOT)/$(PROJECT_NAME)Tests/ReferenceImages\\\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

@@ -188,4 +188,80 @@
     XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification wasn't presented");
 }
 
+- (void)testVisualNotifications {
+    //This is run on an iPhone 5S and an iPhone 6S Plus Simulator
+    [[LSNocilla sharedInstance] stop];
+
+    [((UINavigationController *)[self topViewController]) presentViewController:[UIViewController new] animated:NO completion:nil];
+    
+    if ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
+        [((MPNotificationViewController *)[self topViewController]) hideWithAnimation:NO completion:nil];
+    }
+    [XCUIDevice sharedDevice].orientation = UIDeviceOrientationPortrait;
+
+    NSArray *inAppImages = @[@{@"image_url": @"https://images.mxpnl.com/960173/cbcdaf35d399ee84e44c4217f26055ff.jpg",
+                               @"title": @"color grid",
+                               @"body": @"check how much is showing",
+                               @"cta": @"Done"},
+                            @{@"image_url": @"https://images.mxpnl.com/960173/87c3912791f1df168d2900f1397caed1.jpg",
+                               @"title": @"Hello this is a test. The number of characters max",
+                               @"body": @"This is the subject line when there are a maximum number of characters inside of an in-app",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/e8043acf3dc21ac5604b0956aae99e45.jpg",
+                               @"title": @"Unicode Char Maximum Testing.. 你好 مرحبا שלום こんにちは",
+                               @"body": @"More unicode testing happening. 你好 مرحبا שלום こんにちは Здравствуйте สวัสดี Χαίρετε नमस्ते హలో",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/780c655459f5b718bc008019edf626c2.jpg",
+                               @"title": @"Very Wide Short Image",
+                               @"body": @"A",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/c56e0cc7894e7d95d3d8b97aac739bba.png",
+                               @"title": @"Very Tall Thin Image",
+                               @"body": @"This is the subject line when there are a maximum number of characters inside of an in-app",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/8b60e0ddcf61d34622edcd9214062f86.png",
+                               @"title": @"A",
+                               @"body": @"A",
+                               @"cta": @"Submit"}
+                             ];
+    NSArray *orientations = @[@"Portrait", @"Landscape"];
+    //load notification
+    NSMutableDictionary *o = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              @3, @"id",
+                              @1, @"message_id",
+                              @"takeover", @"type",
+                              @"dark", @"style",
+                              @"maps://", @"cta_url",
+                              nil];
+
+    for (NSString *orientation in orientations) {
+        for (NSUInteger i=0; i<[inAppImages count]; i++) {
+            
+            [o addEntriesFromDictionary:inAppImages[i]];
+            MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+            [self.mixpanel showNotificationWithObject:notif];
+            
+            [self waitForAsyncQueue];
+            if ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
+                MPNotificationViewController* topViewController = (MPNotificationViewController *)[self topViewController];
+                NSString *snapshotName = [NSString stringWithFormat:@"MPNotification-%lu-%@", (unsigned long)i, orientation];
+                FBSnapshotVerifyView(topViewController.view, snapshotName);
+                XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+                [topViewController hideWithAnimation:NO completion:^{
+                    [expectation fulfill];
+                }];
+                [self waitForExpectationsWithTimeout:2 handler:nil];
+                self.mixpanel.currentlyShowingNotification = nil;
+                self.mixpanel.notificationViewController = nil;
+                
+            } else {
+                XCTAssertTrue(NO, @"Couldn't load notification");
+            }
+        }
+        XCUIDevice *device = [XCUIDevice sharedDevice];
+        device.orientation = UIDeviceOrientationLandscapeLeft;
+    }
+}
+
+
 @end

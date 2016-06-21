@@ -8,8 +8,9 @@
 
 #import <XCTest/XCTest.h>
 #import "Mixpanel.h"
+#import <FBSnapshotTestCase/FBSnapshotTestCase.h>
 
-@interface MixpanelBaseTests : XCTestCase  <MixpanelDelegate>
+@interface MixpanelBaseTests : FBSnapshotTestCase  <MixpanelDelegate>
 
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (atomic) BOOL mixpanelWillFlush;
