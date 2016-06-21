@@ -187,9 +187,9 @@
     XCTAssert(self.network.consecutiveFailures == 2);
     
     NSTimeInterval backOffDuration = self.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
-    XCTAssertGreaterThan(backOffDuration, 120, @"Requests should back off between 120s and 150s with two "
+    XCTAssertGreaterThan(backOffDuration, 118, @"Requests should back off between 120s and 150s with two "
                          "consecutive failures.");
-    XCTAssertLessThanOrEqual(backOffDuration, 150, @"Requests should back off between 120s and 150s with two "
+    XCTAssertLessThanOrEqual(backOffDuration, 152, @"Requests should back off between 120s and 150s with two "
                              "consecutive failures.");
     
     // Create a third failure to check the back off time
@@ -197,9 +197,9 @@
     XCTAssert(self.network.consecutiveFailures == 3);
     
     backOffDuration = self.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
-    XCTAssertGreaterThan(backOffDuration, 240, @"Requests should back off between 240s and 270s with three "
+    XCTAssertGreaterThan(backOffDuration, 238, @"Requests should back off between 240s and 270s with three "
                          "consecutive failures.");
-    XCTAssertLessThanOrEqual(backOffDuration, 270, @"Requests should back off between 240s and 270s with three "
+    XCTAssertLessThanOrEqual(backOffDuration, 272, @"Requests should back off between 240s and 270s with three "
                              "consecutive failures.");
 }
 
