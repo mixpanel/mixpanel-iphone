@@ -13,7 +13,7 @@
 #import "MPFoundation.h"
 
 
-#define VERSION @"2.9.9"
+#define VERSION @"3.0.0"
 
 @implementation Mixpanel
 
