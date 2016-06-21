@@ -32,7 +32,7 @@
     XCTAssertNil([MPNotification notificationWithJSONObject:invalid]);
     
     // valid
-    NSDictionary *o = @{@"id": @3,
+    NSDictionary *notifDict = @{@"id": @3,
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
@@ -42,7 +42,7 @@
                         @"cta_url": @"maps://",
                         @"image_url": @"http://mixpanel.com/coolimage.png"};
     
-    XCTAssertNotNil([MPNotification notificationWithJSONObject:o]);
+    XCTAssertNotNil([MPNotification notificationWithJSONObject:notifDict]);
     
     // nil
     XCTAssertNil([MPNotification notificationWithJSONObject:nil]);
@@ -53,53 +53,53 @@
     // garbage keys
     XCTAssertNil([MPNotification notificationWithJSONObject:@{@"gar": @"bage"}]);
     
-    NSMutableDictionary *m;
+    NSMutableDictionary *testDict;
     
     // invalid id
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"id"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"id"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid title
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"title"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"title"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid body
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"body"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"body"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid cta
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"cta"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"cta"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid cta_url
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"cta_url"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"cta_url"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid image_urls
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"image_url"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid image_urls item
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @[@NO];
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"image_url"] = @[@NO];
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // an image with a space in the URL should be % encoded
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @"https://test.com/animagewithaspace init.jpg";
-    XCTAssertNotNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"image_url"] = @"https://test.com/animagewithaspace init.jpg";
+    XCTAssertNotNil([MPNotification notificationWithJSONObject:testDict]);
 }
 
 - (void)testNoDoubleShowNotification {
     [[LSNocilla sharedInstance] stop];
     
-    NSDictionary *o = @{@"id": @3,
+    NSDictionary *notifDict = @{@"id": @3,
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
@@ -108,7 +108,7 @@
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
                         @"image_url": @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
-    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];
     
@@ -151,7 +151,7 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
     }
     
-    NSDictionary *o = @{@"id": @3,
+    NSDictionary *notifDict = @{@"id": @3,
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
@@ -160,7 +160,7 @@
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
                         @"image_url": @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
-    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
     [self.mixpanel showNotificationWithObject:notif];
     
     //wait for notifs to be shown from main queue
@@ -226,7 +226,7 @@
                              ];
     NSArray *orientations = @[@"Portrait", @"Landscape"];
     //load notification
-    NSMutableDictionary *o = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+    NSMutableDictionary *notifDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @3, @"id",
                               @1, @"message_id",
                               @"takeover", @"type",
@@ -237,8 +237,8 @@
     for (NSString *orientation in orientations) {
         for (NSUInteger i=0; i<[inAppImages count]; i++) {
             
-            [o addEntriesFromDictionary:inAppImages[i]];
-            MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+            [notifDict addEntriesFromDictionary:inAppImages[i]];
+            MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
             [self.mixpanel showNotificationWithObject:notif];
             
             [self waitForAsyncQueue];
