@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
+  s.osx.deployment_target = ''
 
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
@@ -19,7 +20,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
-    ss.tvos.deployment_target = '8.0'
+    ss.tvos.deployment_target = '9.0'
   end
 
   s.subspec 'MixpanelHostWatchOS' do |ss|
