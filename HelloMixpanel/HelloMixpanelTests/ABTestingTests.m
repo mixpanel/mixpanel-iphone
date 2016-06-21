@@ -326,6 +326,7 @@
     } useCache:NO];
     [self waitForSerialQueue];
     
+    [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
     
     __block BOOL completionCalled = NO;
@@ -358,6 +359,7 @@
     XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[0] * 255), 255, @"Button background should be red");
 
     // Returning a new variant for the same experiment from decide should override the old one
+    [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
     
     __block BOOL lastCall = NO;
@@ -368,7 +370,7 @@
 
     XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
-    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && variant.running && variant.finished;}] count], 1u, @"Variant 2 should be running but marked as finished.");
+    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && !variant.running && variant.finished;}] count], 1u, @"Variant 2 should be stopped but marked as finished.");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 3 && variant.running;}] count], 1u, @"We should be running variant 3");
     XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[2] * 255), 255, @"Button background should be blue");
     lastCall = YES;

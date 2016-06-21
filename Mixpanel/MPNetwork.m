@@ -7,20 +7,12 @@
 //
 
 #import "MPNetwork.h"
+#import "MPNetworkPrivate.h"
 #import "MPLogger.h"
 #import "Mixpanel.h"
 #import <UIKit/UIKit.h>
 
 static const NSUInteger kBatchSize = 50;
-
-@interface MPNetwork ()
-
-@property (nonatomic, strong) NSURL *serverURL;
-
-@property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
-@property (nonatomic) NSUInteger consecutiveFailures;
-
-@end
 
 @implementation MPNetwork
 
@@ -141,12 +133,10 @@ static const NSUInteger kBatchSize = 50;
 }
 
 + (NSData *)encodeArrayAsJSONData:(NSArray *)array {
-    if (![NSJSONSerialization isValidJSONObject:array]) return nil;
-    
     NSError *error = NULL;
     NSData *data = nil;
     @try {
-        data = [NSJSONSerialization dataWithJSONObject:array
+        data = [NSJSONSerialization dataWithJSONObject:[self convertFoundationTypesToJSON:array]
                                                options:(NSJSONWritingOptions)0
                                                  error:&error];
     }
@@ -163,6 +153,59 @@ static const NSUInteger kBatchSize = 50;
 
 + (NSString *)encodeJSONDataAsBase64:(NSData *)data {
     return [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+}
+
++ (id)convertFoundationTypesToJSON:(id)obj {
+    // valid json types
+    if ([obj isKindOfClass:NSString.class] || [obj isKindOfClass:NSNumber.class] || [obj isKindOfClass:NSNull.class]) {
+        return obj;
+    }
+    
+    if ([obj isKindOfClass:NSDate.class]) {
+        return [[self dateFormatter] stringFromDate:obj];
+    } else if ([obj isKindOfClass:NSURL.class]) {
+        return [obj absoluteString];
+    }
+    
+    // recurse on containers
+    if ([obj isKindOfClass:NSArray.class]) {
+        NSMutableArray *a = [NSMutableArray array];
+        for (id i in obj) {
+            [a addObject:[self convertFoundationTypesToJSON:i]];
+        }
+        return [NSArray arrayWithArray:a];
+    }
+    
+    if ([obj isKindOfClass:NSDictionary.class]) {
+        NSMutableDictionary *d = [NSMutableDictionary dictionary];
+        for (id key in obj) {
+            NSString *stringKey = key;
+            if (![key isKindOfClass:[NSString class]]) {
+                stringKey = [key description];
+                MixpanelDebug(@"%@ warning: property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
+            }
+            id v = [self convertFoundationTypesToJSON:obj[key]];
+            d[stringKey] = v;
+        }
+        return [NSDictionary dictionaryWithDictionary:d];
+    }
+    
+    // default to sending the object's description
+    NSString *s = [obj description];
+    MixpanelDebug(@"%@ warning: property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
+    return s;
+}
+
++ (NSDateFormatter *)dateFormatter {
+    static NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    });
+    return formatter;
 }
 
 + (NSTimeInterval)calculateBackOffTimeFromFailures:(NSUInteger)failureCount {

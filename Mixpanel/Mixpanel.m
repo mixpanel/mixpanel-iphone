@@ -63,7 +63,7 @@ static Mixpanel *sharedInstance;
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
 #endif
-        self.networkRequestsAllowedAfterTime = 0;
+        
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.flushOnBackground = YES;
@@ -88,16 +88,15 @@ static Mixpanel *sharedInstance;
         self.taskId = UIBackgroundTaskInvalid;
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        [_dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         self.timedEvents = [NSMutableDictionary dictionary];
 
         self.showSurveyOnActive = YES;
         self.enableABTestDesigner = YES;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
+        
+        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
+        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
 
 #if !defined(MIXPANEL_APP_EXTENSION)
         [self setUpListeners];
@@ -114,8 +113,6 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
-        self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
-        self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
     }
     return self;
 }
@@ -216,9 +213,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.people.unidentifiedQueue removeAllObjects];
             [self archivePeople];
         }
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -297,9 +292,6 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.eventsQueue removeObjectAtIndex:0];
         }
         
-        if ([Mixpanel inBackground]) {
-            [self archiveEvents];
-        }
         // Always archive
         [self archiveEvents];
     });

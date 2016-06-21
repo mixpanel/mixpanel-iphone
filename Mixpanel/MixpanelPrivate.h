@@ -71,7 +71,6 @@
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic) dispatch_queue_t serialQueue;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
@@ -87,11 +86,8 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
-
 @property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
-@property (nonatomic) NSTimeInterval networkRequestsAllowedAfterTime;
-@property (nonatomic) NSUInteger networkConsecutiveFailures;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
 

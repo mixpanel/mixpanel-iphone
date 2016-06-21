@@ -45,7 +45,7 @@
 		5177CFC81C5032B600271843 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		517ABB6A1D14AD6F00FF8061 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
 		517ABB6B1D14AD6F00FF8061 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
-		517ABB751D14C9A700FF8061 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
+		517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
 		519AD7A41CB706A6005411A5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A31CB706A6005411A5 /* Security.framework */; };
 		519AD7A61CB706A9005411A5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A51CB706A9005411A5 /* CFNetwork.framework */; };
 		519C548C1D131E6500407F56 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -258,6 +258,7 @@
 		5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelExceptionHandler.m; sourceTree = "<group>"; };
 		517ABB681D14AD6F00FF8061 /* MPNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetwork.h; sourceTree = "<group>"; };
 		517ABB691D14AD6F00FF8061 /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
+		517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPNetworkPrivate.h; sourceTree = "<group>"; };
 		519AD7A31CB706A6005411A5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		519AD7A51CB706A9005411A5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		519C548A1D131E6500407F56 /* MixpanelPeople.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelPeople.h; sourceTree = "<group>"; };
@@ -802,6 +803,7 @@
 				519C548A1D131E6500407F56 /* MixpanelPeople.h */,
 				519C548B1D131E6500407F56 /* MixpanelPeople.m */,
 				517ABB681D14AD6F00FF8061 /* MPNetwork.h */,
+				517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */,
 				517ABB691D14AD6F00FF8061 /* MPNetwork.m */,
 				514733BB1CD7CCDB0098B23A /* MPResources.h */,
 				514733BC1CD7CCDB0098B23A /* MPResources.m */,
@@ -1219,7 +1221,7 @@
 				E1C2BE151CFD6A010052172F /* UIColor+MPColor.m in Sources */,
 				E1C2BE261CFD6A010052172F /* Mixpanel.m in Sources */,
 				E1C2BE271CFD6A010052172F /* UIImage+MPAverageColor.m in Sources */,
-				517ABB751D14C9A700FF8061 /* MPNetwork.m in Sources */,
+				517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */,
 				E1C2BE2F1CFD6A010052172F /* MixpanelExceptionHandler.m in Sources */,
 				E1C2BE4B1CFD6A010052172F /* UIImage+MPImageEffects.m in Sources */,
 				E123C47F1D1342150015B425 /* MixpanelPeople.m in Sources */,

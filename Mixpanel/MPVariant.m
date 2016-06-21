@@ -229,6 +229,7 @@
 }
 
 - (void)finish {
+    [self stop];
     _finished = YES;
 }
 
