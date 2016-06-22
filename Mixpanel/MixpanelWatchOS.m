@@ -83,7 +83,7 @@ static MixpanelWatchOS *sharedInstance = nil;
 }
 
 + (NSDictionary *)collectAutomaticProperties {
-    NSMutableDictionary *mutableProperties = [NSMutableDictionary dictionaryWithCapacity:3];
+    NSMutableDictionary *mutableProperties = [NSMutableDictionary dictionaryWithCapacity:5];
     
     WKInterfaceDevice *device = [WKInterfaceDevice currentDevice];
     mutableProperties[@"$os"] = [device systemName];
