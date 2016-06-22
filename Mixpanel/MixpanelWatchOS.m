@@ -58,7 +58,7 @@ static MixpanelWatchOS *sharedInstance = nil;
     }
     
     NSMutableDictionary *mutableProperties = [properties mutableCopy];
-    [mutableProperties addEntriesFromDictionary:[self collectAutomaticProperties]];
+    [mutableProperties addEntriesFromDictionary:[MixpanelWatchOS collectAutomaticProperties]];
     
     [self sendMessage:NSStringFromSelector(@selector(track:properties:))
        withParameters:@{ @"event": event, @"properties": [mutableProperties copy] }];
@@ -82,18 +82,22 @@ static MixpanelWatchOS *sharedInstance = nil;
     }
 }
 
-- (NSDictionary *)collectAutomaticProperties {
++ (NSDictionary *)collectAutomaticProperties {
     NSMutableDictionary *mutableProperties = [NSMutableDictionary dictionaryWithCapacity:3];
     
     WKInterfaceDevice *device = [WKInterfaceDevice currentDevice];
     mutableProperties[@"$os"] = [device systemName];
     mutableProperties[@"$os_version"] = [device systemVersion];
-    mutableProperties[@"$watch_model"] = [self watchModel];
+    mutableProperties[@"$watch_model"] = [MixpanelWatchOS watchModel];
+    
+    CGSize screenSize = device.screenBounds.size;
+    mutableProperties[@"$screen_width"] = @(screenSize.width);
+    mutableProperties[@"$screen_height"] = @(screenSize.height);
     
     return [mutableProperties copy];
 }
 
-- (NSString *)watchModel {
++ (NSString *)watchModel {
     static const CGFloat kAppleWatchScreenWidthSmall = 136.f;
     static const CGFloat kAppleWatchScreenWidthLarge = 152.f;
     
