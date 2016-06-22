@@ -7,17 +7,20 @@
 //
 
 #import "Mixpanel+HostWatchOS.h"
+#import "MixpanelPrivate.h"
 
 @implementation Mixpanel (HostWatchOS)
 
-/** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message {
-    NSString *messageType = [Mixpanel messageTypeForWatchSessionMessage:message];
-    if (messageType) {
-        if ([messageType isEqualToString:NSStringFromSelector(@selector(track:properties:))]) {
-            [self track:message[@"event"] properties:message[@"properties"]];
-        }
+    if ([Mixpanel isMixpanelWatchMessage:message]) {
+        [self track:message[@"event"] properties:message[@"properties"]];
     }
+}
+
+#pragma mark - Static Helpers
++ (BOOL)isMixpanelWatchMessage:(NSDictionary<NSString *, id> *)message {
+    NSString *type = [Mixpanel messageTypeForWatchSessionMessage:message];
+    return [type isEqualToString:NSStringFromSelector(@selector(track:properties:))];
 }
 
 + (NSString *)messageTypeForWatchSessionMessage:(NSDictionary<NSString *, id> *)message {

@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
     ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
     ss.exclude_files = 'Mixpanel/MixpanelWatchOS.{m,h}'
     ss.resources   = ['Mixpanel/**/*.{png,storyboard}']
-    ss.frameworks = 'WatchConnectivity', 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
+    ss.frameworks = 'WatchConnectivity', 'WatchKit', 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
   end

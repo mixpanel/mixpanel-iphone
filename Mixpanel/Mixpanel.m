@@ -806,8 +806,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
 #endif
-    
-    [p setValue:[self watchModel] forKey:@"$watch_model"];
 
     [p addEntriesFromDictionary:@{
                                   @"mp_lib": @"iphone",
