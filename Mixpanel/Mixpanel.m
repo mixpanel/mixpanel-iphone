@@ -676,7 +676,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
-        self.trackedIntegration = properties[@"tracked_integration"] ?: NO;
+        self.trackedIntegration = [properties[@"tracked_integration"] boolValue] ?: NO;
     }
 }
 
