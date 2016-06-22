@@ -573,7 +573,7 @@
 - (void)testNetworkingWithStress {
     self.mixpanelWillFlush = NO;
     stubTrack().andReturn(503);
-    for (int i=1; i<=500; i++) {
+    for (NSInteger i = 1; i <= 500; i++) {
         [self.mixpanel track:@"Track Call"];
     }
     [self flushAndWaitForSerialQueue];
