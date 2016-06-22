@@ -570,6 +570,21 @@
     XCTAssertNil(p[@"$duration"], @"Tracking the same event should require a second call to timeEvent.");
 }
 
+- (void)testNetworkingWithStress {
+    self.mixpanelWillFlush = NO;
+    stubTrack().andReturn(503);
+    for (NSInteger i = 1; i <= 500; i++) {
+        [self.mixpanel track:@"Track Call"];
+    }
+    [self flushAndWaitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 500, @"none supposed to be flushed");
+    [[LSNocilla sharedInstance] clearStubs];
+    stubTrack().andReturn(200);
+    self.mixpanel.network.requestsDisabledUntilTime = 0;
+    [self flushAndWaitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"supposed to all be flushed");
+}
+
 #if !defined(MIXPANEL_TVOS_EXTENSION)
 - (void)testTelephonyInfoInitialized {
     XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
