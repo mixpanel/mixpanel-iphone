@@ -32,9 +32,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'tvOS' do |ss|
-    ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
-    ss.exclude_files = 'Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/Mixpanel+HostWatchOS.{m,h}'
-    ss.resources   = ['Mixpanel/**/*.{png,storyboard}']
+    ss.source_files  = 'Mixpanel/NSInvocation+MPHelpers.{m,h}', 'Mixpanel/UIColor+MPColor.{m,h}', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/UIImage+MPAverageColor.{m,h}', 'MPNetwork.{m,h}', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/UIImage+MPImageEffects.{m,h}', 'Mixpanel/MixpanelPeople.{m,h}'
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.tvos.deployment_target = '9.0'

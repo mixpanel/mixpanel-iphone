@@ -203,7 +203,6 @@
 		E1C2BE271CFD6A010052172F /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CC11A4A035F00D9E0F2 /* UIImage+MPAverageColor.m */; };
 		E1C2BE2F1CFD6A010052172F /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		E1C2BE4B1CFD6A010052172F /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CC31A4A035F00D9E0F2 /* UIImage+MPImageEffects.m */; };
-		E1C2BE4D1CFD6A010052172F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E1C2BE551CFD6A010052172F /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A221CB6FF8600A34060 /* libicucore.tbd */; };
 		E1C2BE561CFD6A010052172F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A51CB706A9005411A5 /* CFNetwork.framework */; };
 		E1C2BE571CFD6A010052172F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A31CB706A6005411A5 /* Security.framework */; };
@@ -1224,7 +1223,6 @@
 				E1C2BE2F1CFD6A010052172F /* MixpanelExceptionHandler.m in Sources */,
 				E1C2BE4B1CFD6A010052172F /* UIImage+MPImageEffects.m in Sources */,
 				E123C47F1D1342150015B425 /* MixpanelPeople.m in Sources */,
-				E1C2BE4D1CFD6A010052172F /* (null) in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
