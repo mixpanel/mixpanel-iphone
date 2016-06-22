@@ -32,7 +32,7 @@
     XCTAssertNil([MPNotification notificationWithJSONObject:invalid]);
     
     // valid
-    NSDictionary *o = @{@"id": @3,
+    NSDictionary *notifDict = @{@"id": @3,
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
@@ -42,7 +42,7 @@
                         @"cta_url": @"maps://",
                         @"image_url": @"http://mixpanel.com/coolimage.png"};
     
-    XCTAssertNotNil([MPNotification notificationWithJSONObject:o]);
+    XCTAssertNotNil([MPNotification notificationWithJSONObject:notifDict]);
     
     // nil
     XCTAssertNil([MPNotification notificationWithJSONObject:nil]);
@@ -53,53 +53,53 @@
     // garbage keys
     XCTAssertNil([MPNotification notificationWithJSONObject:@{@"gar": @"bage"}]);
     
-    NSMutableDictionary *m;
+    NSMutableDictionary *testDict;
     
     // invalid id
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"id"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"id"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid title
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"title"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"title"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid body
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"body"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"body"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid cta
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"cta"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"cta"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid cta_url
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"cta_url"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"cta_url"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid image_urls
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @NO;
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"image_url"] = @NO;
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // invalid image_urls item
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @[@NO];
-    XCTAssertNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"image_url"] = @[@NO];
+    XCTAssertNil([MPNotification notificationWithJSONObject:testDict]);
     
     // an image with a space in the URL should be % encoded
-    m = [NSMutableDictionary dictionaryWithDictionary:o];
-    m[@"image_url"] = @"https://test.com/animagewithaspace init.jpg";
-    XCTAssertNotNil([MPNotification notificationWithJSONObject:m]);
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    testDict[@"image_url"] = @"https://test.com/animagewithaspace init.jpg";
+    XCTAssertNotNil([MPNotification notificationWithJSONObject:testDict]);
 }
 
 - (void)testNoDoubleShowNotification {
     [[LSNocilla sharedInstance] stop];
     
-    NSDictionary *o = @{@"id": @3,
+    NSDictionary *notifDict = @{@"id": @3,
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
@@ -108,7 +108,7 @@
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
                         @"image_url": @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
-    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];
     
@@ -151,7 +151,7 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
     }
     
-    NSDictionary *o = @{@"id": @3,
+    NSDictionary *notifDict = @{@"id": @3,
                         @"message_id": @1,
                         @"title": @"title",
                         @"type": @"takeover",
@@ -160,7 +160,7 @@
                         @"cta": @"cta",
                         @"cta_url": @"maps://",
                         @"image_url": @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png"};
-    MPNotification *notif = [MPNotification notificationWithJSONObject:o];
+    MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
     [self.mixpanel showNotificationWithObject:notif];
     
     //wait for notifs to be shown from main queue
@@ -187,5 +187,85 @@
     topVC = [self topViewController];
     XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification wasn't presented");
 }
+
+- (void)testVisualNotifications {
+    //This is run on an iPhone 5S and an iPhone 6S Plus Simulator
+    [[LSNocilla sharedInstance] stop];
+    
+    while ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
+        XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+
+        [((MPNotificationViewController *)[self topViewController]) hideWithAnimation:NO completion:^{
+            [expectation fulfill];
+        }];
+        [self waitForExpectationsWithTimeout:2 handler:nil];
+    }
+    [XCUIDevice sharedDevice].orientation = UIDeviceOrientationPortrait;
+    [((UINavigationController *)[self topViewController]) presentViewController:[UIViewController new] animated:NO completion:nil];
+
+    NSArray *inAppImages = @[@{@"image_url": @"https://images.mxpnl.com/960173/cbcdaf35d399ee84e44c4217f26055ff.jpg",
+                               @"title": @"color grid",
+                               @"body": @"check how much is showing",
+                               @"cta": @"Done"},
+                            @{@"image_url": @"https://images.mxpnl.com/960173/87c3912791f1df168d2900f1397caed1.jpg",
+                               @"title": @"Hello this is a test. The number of characters max",
+                               @"body": @"This is the subject line when there are a maximum number of characters inside of an in-app",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/e8043acf3dc21ac5604b0956aae99e45.jpg",
+                               @"title": @"Unicode Char Maximum Testing.. 你好 مرحبا שלום こんにちは",
+                               @"body": @"More unicode testing happening. 你好 مرحبا שלום こんにちは Здравствуйте สวัสดี Χαίρετε नमस्ते హలో",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/780c655459f5b718bc008019edf626c2.jpg",
+                               @"title": @"Very Wide Short Image",
+                               @"body": @"A",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/c56e0cc7894e7d95d3d8b97aac739bba.png",
+                               @"title": @"Very Tall Thin Image",
+                               @"body": @"This is the subject line when there are a maximum number of characters inside of an in-app",
+                               @"cta": @"Submit"},
+                             @{@"image_url": @"https://images.mxpnl.com/960173/8b60e0ddcf61d34622edcd9214062f86.png",
+                               @"title": @"A",
+                               @"body": @"A",
+                               @"cta": @"Submit"}
+                             ];
+    NSArray *orientations = @[@"Portrait", @"Landscape"];
+    //load notification
+    NSMutableDictionary *notifDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              @3, @"id",
+                              @1, @"message_id",
+                              @"takeover", @"type",
+                              @"dark", @"style",
+                              @"maps://", @"cta_url",
+                              nil];
+
+    for (NSString *orientation in orientations) {
+        for (NSUInteger i=0; i<[inAppImages count]; i++) {
+            
+            [notifDict addEntriesFromDictionary:inAppImages[i]];
+            MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
+            [self.mixpanel showNotificationWithObject:notif];
+            
+            [self waitForAsyncQueue];
+            if ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
+                MPNotificationViewController* topViewController = (MPNotificationViewController *)[self topViewController];
+                NSString *snapshotName = [NSString stringWithFormat:@"MPNotification-%lu-%@", (unsigned long)i, orientation];
+                FBSnapshotVerifyView(topViewController.view, snapshotName);
+                XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
+                [topViewController hideWithAnimation:NO completion:^{
+                    [expectation fulfill];
+                }];
+                [self waitForExpectationsWithTimeout:2 handler:nil];
+                self.mixpanel.currentlyShowingNotification = nil;
+                self.mixpanel.notificationViewController = nil;
+                
+            } else {
+                XCTAssertTrue(NO, @"Couldn't load notification");
+            }
+        }
+        XCUIDevice *device = [XCUIDevice sharedDevice];
+        device.orientation = UIDeviceOrientationLandscapeLeft;
+    }
+}
+
 
 @end
