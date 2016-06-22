@@ -515,8 +515,13 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
+#if !defined(MIXPANEL_TVOS_EXTENSION)
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
+#else
+    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
+            stringByAppendingPathComponent:filename];
+#endif
 }
 
 - (NSString *)eventsFilePath
