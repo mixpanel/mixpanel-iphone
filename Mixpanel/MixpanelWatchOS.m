@@ -7,6 +7,7 @@
 //
 
 #import "MixpanelWatchOS.h"
+#import <WatchKit/WatchKit.h>
 #import "MPLogger.h"
 
 @interface MixpanelWatchOS ()
@@ -56,8 +57,11 @@ static MixpanelWatchOS *sharedInstance = nil;
         properties = @{};
     }
     
+    NSMutableDictionary *mutableProperties = [properties mutableCopy];
+    [mutableProperties addEntriesFromDictionary:[MixpanelWatchOS collectAutomaticProperties]];
+    
     [self sendMessage:NSStringFromSelector(@selector(track:properties:))
-       withParameters:@{ @"event": event, @"properties": properties }];
+       withParameters:@{ @"event": event, @"properties": [mutableProperties copy] }];
 }
 
 - (void)sendMessage:(NSString *)type withParameters:(nullable NSDictionary *)parameters {
@@ -76,6 +80,35 @@ static MixpanelWatchOS *sharedInstance = nil;
     } else {
         MixpanelDebug(@"Host session is unreachable from watchOS.");
     }
+}
+
++ (NSDictionary *)collectAutomaticProperties {
+    NSMutableDictionary *mutableProperties = [NSMutableDictionary dictionaryWithCapacity:5];
+    
+    WKInterfaceDevice *device = [WKInterfaceDevice currentDevice];
+    mutableProperties[@"$os"] = [device systemName];
+    mutableProperties[@"$os_version"] = [device systemVersion];
+    mutableProperties[@"$watch_model"] = [MixpanelWatchOS watchModel];
+    
+    CGSize screenSize = device.screenBounds.size;
+    mutableProperties[@"$screen_width"] = @(screenSize.width);
+    mutableProperties[@"$screen_height"] = @(screenSize.height);
+    
+    return [mutableProperties copy];
+}
+
++ (NSString *)watchModel {
+    static const CGFloat kAppleWatchScreenWidthSmall = 136.f;
+    static const CGFloat kAppleWatchScreenWidthLarge = 152.f;
+    
+    CGFloat screenWidth = [WKInterfaceDevice currentDevice].screenBounds.size.width;
+    if (screenWidth <= kAppleWatchScreenWidthSmall) {
+        return @"Apple Watch 38mm";
+    } else if (screenWidth <= kAppleWatchScreenWidthLarge) {
+        return @"Apple Watch 42mm";
+    }
+    
+    return @"Apple Watch";
 }
 
 @end
