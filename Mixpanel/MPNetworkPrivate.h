@@ -15,4 +15,7 @@
 @property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
 @property (nonatomic) NSUInteger consecutiveFailures;
 
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint withBody:(NSString *)body;
++ (NSString *)encodeArrayForAPI:(NSArray *)array;
+
 @end

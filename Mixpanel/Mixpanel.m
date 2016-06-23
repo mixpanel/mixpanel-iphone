@@ -8,6 +8,7 @@
 #import "MixpanelPrivate.h"
 #import "MixpanelPeople.h"
 #import "MixpanelPeoplePrivate.h"
+#import "MPNetworkPrivate.h"
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
@@ -113,12 +114,6 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
-        if (!self.trackedIntegration) {
-            dispatch_async(self.serialQueue, ^{
-                [self.eventsQueue addObject:@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone_objc", @"lib": @"iphone_objc", @"distinct_id": self.apiToken}}];
-                [self.network flushEventQueue:self.eventsQueue];
-            });
-        }
     }
     return self;
 }
@@ -590,7 +585,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
-    [p setValue:@(self.trackedIntegration) forKey:@"tracked_integration"];
     MixpanelDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         MixpanelError(@"%@ unable to archive properties data", self);
@@ -676,7 +670,6 @@ static __unused NSString *MPURLEncode(NSString *s)
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
-        self.trackedIntegration = [properties[@"tracked_integration"] boolValue] ?: NO;
     }
 }
 
@@ -977,7 +970,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MixpanelDebug(@"%@ did enter background", self);
-
     __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         MixpanelDebug(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
         [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
@@ -985,19 +977,42 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }];
     self.taskId = backgroundTask;
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
-
+    
+    dispatch_group_t bgGroup = dispatch_group_create();
+    NSString *trackedKey = [NSString stringWithFormat:@"MPTracked:%@", self.apiToken];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:trackedKey]) {
+        dispatch_group_enter(bgGroup);
+        NSString *requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"distinct_id": self.apiToken}}]];
+        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
+        NSURLRequest *request = [self.network requestForEndpoint:@"/track/" withBody:postBody];
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            if (!error) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:trackedKey];
+            }
+            dispatch_group_leave(bgGroup);
+        }] resume];
+    }
+    
     if (self.flushOnBackground) {
         [self flush];
     }
-
+    
+    dispatch_group_enter(bgGroup);
     dispatch_async(_serialQueue, ^{
         [self archive];
+        self.decideResponseCached = NO;
+        dispatch_group_leave(bgGroup);
+    });
+    
+    dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
         MixpanelDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
-        self.decideResponseCached = NO;
     });
 }
 
