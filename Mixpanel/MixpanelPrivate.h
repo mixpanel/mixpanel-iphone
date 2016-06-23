@@ -7,10 +7,6 @@
 //
 
 #import "Mixpanel.h"
-#import "MPSurveyNavigationController.h"
-#import "MPNotificationViewController.h"
-#import "Mixpanel+AutomaticEvents.h"
-#import "AutomaticEventsConstants.h"
 #import "MPNetwork.h"
 
 #if !defined(MIXPANEL_APP_EXTENSION)
@@ -24,6 +20,9 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+
+#import "Mixpanel+AutomaticEvents.h"
+#import "AutomaticEventsConstants.h"
 #endif
 
 #import "MPResources.h"
