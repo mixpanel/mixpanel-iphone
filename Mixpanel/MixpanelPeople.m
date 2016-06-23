@@ -39,8 +39,8 @@
     p[@"$ios_app_version"] = infoDictionary[@"CFBundleVersion"];
     p[@"$ios_app_release"] = infoDictionary[@"CFBundleShortVersionString"];
     __strong Mixpanel *strongMixpanel = self.mixpanel;
-    p[@"$ios_device_model"] = [strongMixpanel deviceModel];
-    p[@"$ios_ifa"] = [strongMixpanel IFA];
+    [p setValue:[strongMixpanel deviceModel] forKey:@"$ios_device_model"];
+    [p setValue:[strongMixpanel IFA] forKey:@"$ios_ifa"];
     return [p copy];
 }
 
