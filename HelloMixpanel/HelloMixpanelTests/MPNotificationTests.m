@@ -189,7 +189,7 @@
 }
 
 - (void)testVisualNotifications {
-    //This is run on an iPhone 5S and an iPhone 6S Plus Simulator
+    //This is run on an iPhone 5S and an iPhone 6S Plus Simulator, and an iPad Pro simulator
     [[LSNocilla sharedInstance] stop];
     
     while ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
@@ -228,7 +228,12 @@
                                @"body": @"A",
                                @"cta": @"Submit"}
                              ];
+
     NSArray *orientations = @[@"Portrait", @"Landscape"];
+    
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        orientations = @[@"Portrait-iPad", @"Landscape-iPad"];
+    }
     //load notification
     NSMutableDictionary *notifDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @3, @"id",

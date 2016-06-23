@@ -8,6 +8,7 @@
 #import "MixpanelPrivate.h"
 #import "MixpanelPeople.h"
 #import "MixpanelPeoplePrivate.h"
+#import "MPNetworkPrivate.h"
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
@@ -113,12 +114,6 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
-        if (!self.trackedIntegration) {
-            dispatch_async(self.serialQueue, ^{
-                [self.eventsQueue addObject:@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone_objc", @"lib": @"iphone_objc", @"distinct_id": self.apiToken}}];
-                [self.network flushEventQueue:self.eventsQueue];
-            });
-        }
     }
     return self;
 }
@@ -985,7 +980,21 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }];
     self.taskId = backgroundTask;
     MixpanelDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
-
+    
+    if (!self.trackedIntegration) {
+        NSString* requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"distinct_id": self.apiToken}}]];
+        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
+        NSURLRequest *request = [self.network requestForEndpoint:@"/track/" withBody:postBody];
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            if (!error) {
+                self.trackedIntegration = YES;
+            }
+        }] resume];
+    }
+    
     if (self.flushOnBackground) {
         [self flush];
     }
