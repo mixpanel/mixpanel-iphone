@@ -264,7 +264,9 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
-        p[@"mp_name_tag"] = self.nameTag;
+        if (self.nameTag) {
+            p[@"mp_name_tag"] = self.nameTag;
+        }
         p[@"distinct_id"] = self.distinctId;
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
