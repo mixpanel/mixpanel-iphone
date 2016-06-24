@@ -43,11 +43,13 @@
         p[@"$ios_app_release"] = infoDictionary[@"CFBundleShortVersionString"];
     }
     __strong Mixpanel *strongMixpanel = self.mixpanel;
-    if ([strongMixpanel deviceModel]) {
-        p[@"$ios_device_model"] = [strongMixpanel deviceModel];
+    NSString *deviceModel = [strongMixpanel deviceModel];
+    if (deviceModel) {
+        p[@"$ios_device_model"] = deviceModel;
     }
-    if ([strongMixpanel IFA]) {
-        p[@"$ios_ifa"] = [strongMixpanel IFA];
+    NSString *ifa = [strongMixpanel IFA];
+    if (ifa) {
+        p[@"$ios_ifa"] = ifa;
     }
     return [p copy];
 }
