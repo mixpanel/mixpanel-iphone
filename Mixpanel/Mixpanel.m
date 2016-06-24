@@ -267,7 +267,9 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (self.nameTag) {
             p[@"mp_name_tag"] = self.nameTag;
         }
-        p[@"distinct_id"] = self.distinctId;
+        if (self.distinctId) {
+            p[@"distinct_id"] = self.distinctId;
+        }
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];

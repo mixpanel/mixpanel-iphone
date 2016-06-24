@@ -89,7 +89,9 @@ static NSMutableDictionary *imageCache;
                     if (!error) {
                         image = [UIImage imageWithData:imageData scale:fminf(1.0, scale.floatValue)];
                         @synchronized(imageCache) {
-                            imageCache[imageDictionary[@"url"]] = image;
+                            if (image) {
+                                imageCache[imageDictionary[@"url"]] = image;
+                            }
                         }
                     }
                 }
