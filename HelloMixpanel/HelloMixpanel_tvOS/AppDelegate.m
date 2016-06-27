@@ -21,9 +21,6 @@
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
     
-    // Name a user in Mixpanel Streams
-    self.mixpanel.nameTag = @"Walter Sobchak";
-    
     // Start timing the session, then we'll have a duration when the user leaves the app
     [self.mixpanel timeEvent:@"Session"];
     

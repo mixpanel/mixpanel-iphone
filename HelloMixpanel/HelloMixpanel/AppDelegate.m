@@ -58,9 +58,6 @@
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
 
-    // Name a user in Mixpanel Streams
-    self.mixpanel.nameTag = @"Walter Sobchak";
-
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];

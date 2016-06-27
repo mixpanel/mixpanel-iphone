@@ -264,9 +264,6 @@ static __unused NSString *MPURLEncode(NSString *s)
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
-        if (self.nameTag) {
-            p[@"mp_name_tag"] = self.nameTag;
-        }
         if (self.distinctId) {
             p[@"distinct_id"] = self.distinctId;
         }
@@ -418,7 +415,6 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     dispatch_async(self.serialQueue, ^{
         self.distinctId = [self defaultDistinctId];
-        self.nameTag = nil;
         self.superProperties = [NSMutableDictionary dictionary];
         self.people.distinctId = nil;
         self.people.unidentifiedQueue = [NSMutableArray array];
@@ -582,7 +578,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSString *filePath = [self propertiesFilePath];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     [p setValue:self.distinctId forKey:@"distinctId"];
-    [p setValue:self.nameTag forKey:@"nameTag"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
@@ -665,7 +660,6 @@ static __unused NSString *MPURLEncode(NSString *s)
     NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
-        self.nameTag = properties[@"nameTag"];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];

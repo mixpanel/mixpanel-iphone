@@ -394,7 +394,6 @@
 - (void)testReset {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel track:@"e1"];
-    [self.mixpanel setNameTag:@"n1"];
     
     NSDictionary *p = @{ @"p1": @"a" };
     [self.mixpanel registerSuperProperties:p];
@@ -404,7 +403,6 @@
     [self.mixpanel reset];
     [self waitForSerialQueue];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"distinct id failed to reset");
-    XCTAssertNil(self.mixpanel.nameTag, @"name tag failed to reset");
     XCTAssertNil(self.mixpanel.people.distinctId, @"people distinct id failed to reset");
     XCTAssertTrue([self.mixpanel currentSuperProperties].count == 0, @"super properties failed to reset");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset");
@@ -415,7 +413,6 @@
                                    andFlushInterval:60];
     [self waitForSerialQueue];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"distinct id failed to reset after archive");
-    XCTAssertNil(self.mixpanel.nameTag, @"name tag failed to reset after archive");
     XCTAssertNil(self.mixpanel.people.distinctId, @"people distinct id failed to reset after archive");
     XCTAssertTrue([self.mixpanel currentSuperProperties].count == 0, @"super properties failed to reset after archive");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset after archive");
@@ -428,7 +425,6 @@
                                       launchOptions:nil
                                    andFlushInterval:60];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id archive failed");
-    XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties archive failed");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"default events queue archive failed");
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id archive failed");
@@ -436,7 +432,6 @@
     
     NSDictionary *p = @{@"p1": @"a"};
     [self.mixpanel identify:@"d1"];
-    self.mixpanel.nameTag = @"n1";
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
     [self.mixpanel.people set:p];
@@ -449,7 +444,6 @@
                                    andFlushInterval:60];
     [self waitForSerialQueue];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
-    XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"custom name tag archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"e1", @"event was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
@@ -465,7 +459,6 @@
                                       launchOptions:nil
                                    andFlushInterval:60];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"expecting d1 as distinct id as initialised");
-    XCTAssertEqualObjects(self.mixpanel.nameTag, @"n1", @"expecting n1 as distinct id as initialised");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"default super properties expected to have 1 item");
     XCTAssertNotNil(self.mixpanel.eventsQueue, @"default events queue from no file is nil");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"default events queue expecting 1 item");
@@ -488,7 +481,6 @@
                                    andFlushInterval:60];
     [self waitForSerialQueue];
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from garbage failed");
-    XCTAssertNil(self.mixpanel.nameTag, @"default name tag archive from garbage failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"default super properties from garbage failed");
     XCTAssertNotNil(self.mixpanel.eventsQueue, @"default events queue from garbage is nil");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"default events queue from garbage not empty");
