@@ -18,6 +18,25 @@
 
 @implementation MPNotificationTests
 
+
+- (void)testMalformedImageURL {
+    NSDictionary *info = @{ @"id": @3,
+                            @"message_id": @1,
+                            @"title": @"title",
+                            @"type": @"takeover",
+                            @"style": @"dark",
+                            @"body": @"body",
+                            @"cta": @"cta",
+                            @"cta_url": @"maps://",
+                            // This is an invalid image URL that was generated for in-apps in the
+                            // wild and caused a crash.
+                            @"image_url": @"1466606494290.684919.uwp5.png" };
+    XCTAssertNoThrow([MPNotification notificationWithJSONObject:info]);
+    
+    MPNotification *notification = [MPNotification notificationWithJSONObject:info];
+    XCTAssertEqualObjects(notification.imageURL.absoluteString, @"1466606494290.684919.uwp5.png");
+}
+
 - (void)testParseNotification {
     // invalid bad title
     NSDictionary *invalid = @{@"id": @3,
