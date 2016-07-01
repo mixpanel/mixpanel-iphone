@@ -74,14 +74,6 @@ NS_ASSUME_NONNULL_BEGIN
  @property
 
  @abstract
- Current user's name in Mixpanel Streams.
- */
-@property (nullable, atomic, copy) NSString *nameTag;
-
-/*!
- @property
-
- @abstract
  The base URL used for Mixpanel API requests.
 
  @discussion
@@ -778,6 +770,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)joinExperimentsWithCallback:(nullable void (^)())experimentsLoadedCallback;
 
 #endif
+
+#pragma mark - Deprecated
+/*!
+ @property
+ 
+ @abstract
+ Current user's name in Mixpanel Streams.
+ */
+@property (nullable, atomic, copy) NSString *nameTag __deprecated; // Deprecated in v3.0.1
 
 @end
 
