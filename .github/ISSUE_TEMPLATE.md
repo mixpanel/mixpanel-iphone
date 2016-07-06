@@ -1,4 +1,4 @@
-**Integration Method:** Cocoapods / Carthage / Manual
+**Integration Method:** CocoaPods / Carthage / Manual
 **Xcode Version:** 
 **Library Version:** 
 **Platform:** iOS / watchOS / tvOS
