@@ -48,9 +48,8 @@ static const NSUInteger kBatchSize = 50;
         NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
-        NSURLRequest *request = [self requestForEndpoint:endpoint
-                                            byHTTPMethod:@"POST"
-                                                 andBody:postBody];
+        NSURLRequest *request = [self buildPostRequestForEndpoint:MPNetworkEndpointTrack
+                                                          andBody:postBody];
         [self updateNetworkActivityIndicator:YES];
         
         __block BOOL didFail = NO;
@@ -135,20 +134,30 @@ static const NSUInteger kBatchSize = 50;
     return @[ itemVersion, itemLib, itemToken, itemDistinctID, itemProperties ];
 }
 
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
-                        byHTTPMethod:(NSString *)method
++ (NSString *)pathForEndpoint:(MPNetworkEndpoint)endpoint {
+    static NSDictionary *endPointToPath = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        endPointToPath = @{ @(MPNetworkEndpointTrack): @"/track/",
+                            @(MPNetworkEndpointEngage): @"/engage/",
+                            @(MPNetworkEndpointDecide): @"/decide" };
+    });
+    NSNumber *key = @(endpoint);
+    return endPointToPath[key];
+}
+
+- (NSURLRequest *)buildGetRequestForEndpoint:(MPNetworkEndpoint)endpoint
                       withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems {
-    return [self requestForEndpoint:endpoint
-                       byHTTPMethod:method
+    return [self requestForEndpoint:[MPNetwork pathForEndpoint:endpoint]
+                       byHTTPMethod:@"GET"
                      withQueryItems:queryItems
                             andBody:nil];
 }
 
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
-                        byHTTPMethod:(NSString *)method
-                             andBody:(NSString *)body {
-    return [self requestForEndpoint:endpoint
-                       byHTTPMethod:method
+- (NSURLRequest *)buildPostRequestForEndpoint:(MPNetworkEndpoint)endpoint
+                                      andBody:(NSString *)body {
+    return [self requestForEndpoint:[MPNetwork pathForEndpoint:endpoint]
+                       byHTTPMethod:@"POST"
                      withQueryItems:nil
                             andBody:body];
 }

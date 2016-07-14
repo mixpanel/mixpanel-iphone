@@ -975,9 +975,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         dispatch_group_enter(bgGroup);
         NSString *requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"distinct_id": self.apiToken}}]];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        NSURLRequest *request = [self.network requestForEndpoint:@"/track/"
-                                                    byHTTPMethod:@"POST"
-                                                         andBody:postBody];
+        NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack andBody:postBody];
         NSURLSession *session = [NSURLSession sharedSession];
         [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                   NSURLResponse *urlResponse,
@@ -1091,9 +1089,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             
             
             // Build a network request from the URL
-            NSURLRequest *request = [self.network requestForEndpoint:@"/decide"
-                                                        byHTTPMethod:@"GET"
-                                                      withQueryItems:queryItems];
+            NSURLRequest *request = [self.network buildGetRequestForEndpoint:MPNetworkEndpointDecide
+                                                              withQueryItems:queryItems];
             
             // Send the network request
             NSError *error = nil;

@@ -36,9 +36,7 @@
 #pragma mark - Request Creation
 - (void)testRequestForTrackEndpoint {
     NSString *body = @"track test body";
-    NSURLRequest *request = [self.network requestForEndpoint:@"/track/"
-                                                byHTTPMethod:@"POST"
-                                                     andBody:body];
+    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack andBody:body];
     XCTAssertEqualObjects(request.URL, [NSURL URLWithString:@"http://localhost:31337/track/"]);
     XCTAssert([request.HTTPMethod isEqualToString:@"POST"]);
     XCTAssertEqualObjects(request.HTTPBody, [body dataUsingEncoding:NSUTF8StringEncoding]);
@@ -47,9 +45,7 @@
 
 - (void)testRequestForPeopleEndpoint {
     NSString *body = @"engage test body";
-    NSURLRequest *request = [self.network requestForEndpoint:@"/engage/"
-                                                byHTTPMethod:@"POST"
-                                                     andBody:body];
+    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage andBody:body];
     XCTAssertEqualObjects(request.URL, [NSURL URLWithString:@"http://localhost:31337/engage/"]);
     XCTAssert([request.HTTPMethod isEqualToString:@"POST"]);
     XCTAssertEqualObjects(request.HTTPBody, [body dataUsingEncoding:NSUTF8StringEncoding]);
@@ -64,10 +60,9 @@
                                                      andToken:@"deadc0de"];
     XCTAssertEqual(items.count, (unsigned long)5, @"returned the wrong number of query items.");
     
-    NSURLRequest *request = [self.network requestForEndpoint:@"/track/"
-                                                byHTTPMethod:@"POST"
-                                              withQueryItems:items];
-    XCTAssertEqualObjects(request.URL.absoluteString, @"http://localhost:31337/track/?version=1&lib=iphone&token=deadc0de&distinct_id=1234&properties=%7B%22bool%22:true,%22test%22:%224%22%7D", @"incorrect URL for the query items.");
+    NSURLRequest *request = [self.network buildGetRequestForEndpoint:MPNetworkEndpointDecide
+                                                      withQueryItems:items];
+    XCTAssertEqualObjects(request.URL.absoluteString, @"http://localhost:31337/decide?version=1&lib=iphone&token=deadc0de&distinct_id=1234&properties=%7B%22bool%22:true,%22test%22:%224%22%7D", @"incorrect URL for the query items.");
 }
 
 #if TARGET_OS_IOS

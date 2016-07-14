@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
+    MPNetworkEndpointTrack,
+    MPNetworkEndpointEngage,
+    MPNetworkEndpointDecide
+};
+
 @interface MPNetwork : NSObject
 
 @property (nonatomic) BOOL shouldManageNetworkActivityIndicator;
@@ -20,12 +26,10 @@
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
-                        byHTTPMethod:(NSString *)method
-                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems;
+- (NSURLRequest *)buildGetRequestForEndpoint:(MPNetworkEndpoint)endpoint
+                              withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems;
 
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
-                        byHTTPMethod:(NSString *)method
-                             andBody:(NSString *)body;
+- (NSURLRequest *)buildPostRequestForEndpoint:(MPNetworkEndpoint)endpoint
+                                      andBody:(NSString *)body;
 
 @end
