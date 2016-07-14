@@ -31,13 +31,13 @@
 		48324589F27775A10F52DA8E /* Pods_HelloMixpanel_tvOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8943B032B4AB174C4AD3BBDF /* Pods_HelloMixpanel_tvOSTests.framework */; };
 		515B59D61CB6C8FD00A34060 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		515B59D71CB6C90200A34060 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
-		515B5A0A1CB6F96700A34060 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
-		515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
 		517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
 		517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
 		517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
 		518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
+		51AF3D3C1D380D31002E8325 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
+		51AF3D3D1D380D31002E8325 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E7E1D120D2A001F622D /* MPSurveyTests.m */; };
 		51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E801D120D3E001F622D /* MPNotificationTests.m */; };
@@ -169,14 +169,14 @@
 			remoteGlobalIDString = 513B0BB61C73CA35008EEE6E;
 			remoteInfo = MixpanelAppExtension;
 		};
-		515B5A081CB6F96100A34060 /* PBXContainerItemProxy */ = {
+		51AF3D3A1D380D2A002E8325 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 7C170C291A4A02F500D9E0F2;
 			remoteInfo = Mixpanel;
 		};
-		515B5A0C1CB6F96700A34060 /* PBXContainerItemProxy */ = {
+		51AF3D3E1D380D31002E8325 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
 			proxyType = 1;
@@ -207,13 +207,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		515B5A0E1CB6F96700A34060 /* Embed Frameworks */ = {
+		51AF3D401D380D31002E8325 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				515B5A0B1CB6F96700A34060 /* Mixpanel.framework in Embed Frameworks */,
+				51AF3D3D1D380D31002E8325 /* Mixpanel.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,7 +345,7 @@
 				515B59D61CB6C8FD00A34060 /* CFNetwork.framework in Frameworks */,
 				05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */,
 				A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */,
-				515B5A0A1CB6F96700A34060 /* Mixpanel.framework in Frameworks */,
+				51AF3D3C1D380D31002E8325 /* Mixpanel.framework in Frameworks */,
 				2802054017DEC234000D71F5 /* QuartzCore.framework in Frameworks */,
 				2805EDE617C6B815003A0D72 /* Accelerate.framework in Frameworks */,
 				2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */,
@@ -627,13 +627,13 @@
 				2808F9891610EFE3005772B7 /* Sources */,
 				2808F98A1610EFE3005772B7 /* Frameworks */,
 				2808F98B1610EFE3005772B7 /* Resources */,
-				515B5A0E1CB6F96700A34060 /* Embed Frameworks */,
+				51AF3D401D380D31002E8325 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				515B5A091CB6F96100A34060 /* PBXTargetDependency */,
-				515B5A0D1CB6F96700A34060 /* PBXTargetDependency */,
+				51AF3D3B1D380D2A002E8325 /* PBXTargetDependency */,
+				51AF3D3F1D380D31002E8325 /* PBXTargetDependency */,
 			);
 			name = HelloMixpanel;
 			productName = HelloMixpanel;
@@ -1044,15 +1044,15 @@
 			target = 2808F98C1610EFE3005772B7 /* HelloMixpanel */;
 			targetProxy = 2808F9B61610EFE4005772B7 /* PBXContainerItemProxy */;
 		};
-		515B5A091CB6F96100A34060 /* PBXTargetDependency */ = {
+		51AF3D3B1D380D2A002E8325 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Mixpanel;
-			targetProxy = 515B5A081CB6F96100A34060 /* PBXContainerItemProxy */;
+			targetProxy = 51AF3D3A1D380D2A002E8325 /* PBXContainerItemProxy */;
 		};
-		515B5A0D1CB6F96700A34060 /* PBXTargetDependency */ = {
+		51AF3D3F1D380D31002E8325 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Mixpanel;
-			targetProxy = 515B5A0C1CB6F96700A34060 /* PBXContainerItemProxy */;
+			targetProxy = 51AF3D3E1D380D31002E8325 /* PBXContainerItemProxy */;
 		};
 		E123C4A01D1354EC0015B425 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -38,7 +38,7 @@
     if (window && !CGRectEqualToRect(window.frame, CGRectZero)) {
         UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, window.screen.scale);
         if ([window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO] == NO) {
-            MixpanelError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
+            MPLogError(@"Unable to get complete screenshot for window at index: %d.", (int)index);
         }
         image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

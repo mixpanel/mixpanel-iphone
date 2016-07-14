@@ -38,7 +38,7 @@ static void *MPAllocBufferForObjCType(const char *objCType)
 
     int result = posix_memalign(&buffer, MAX(sizeof(void *), alignment), size);
     if (result != 0) {
-        MixpanelError(@"Error allocating aligned memory: %s", strerror(result));
+        MPLogError(@"Error allocating aligned memory: %s", strerror(result));
     }
 
     if (buffer) {

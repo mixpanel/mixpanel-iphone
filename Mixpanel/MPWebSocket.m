@@ -457,7 +457,7 @@ static __strong NSData *CRLFCRLF;
     NSInteger responseCode = CFHTTPMessageGetResponseStatusCode(_receivedHTTPHeaders);
 
     if (responseCode >= 400) {
-        MixpanelError(@"Request failed with response code %d", responseCode);
+        MPLogError(@"Request failed with response code %d", responseCode);
         [self _failWithError:[NSError errorWithDomain:MPWebSocketErrorDomain code:2132 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"received bad response code from server %ld", (long)responseCode]}]];
         return;
 
@@ -503,7 +503,7 @@ static __strong NSData *CRLFCRLF;
         CFHTTPMessageAppendBytes(websocket->_receivedHTTPHeaders, (const UInt8 *)data.bytes, (CFIndex)data.length);
 
         if (CFHTTPMessageIsHeaderComplete(websocket->_receivedHTTPHeaders)) {
-            MessagingDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
+            MPLogDebug(@"Finished reading headers %@", CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(websocket->_receivedHTTPHeaders)));
             [websocket _HTTPHeadersDidFinish];
         } else {
             [websocket _readHTTPHeader];
@@ -513,7 +513,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MessagingDebug(@"Connected");
+    MPLogDebug(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
 
     // Set host first so it defaults
@@ -580,7 +580,7 @@ static __strong NSData *CRLFCRLF;
 
 #if DEBUG
         [SSLOptions setValue:@NO forKey:(__bridge id)kCFStreamSSLValidatesCertificateChain];
-        MessagingDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
+        MPLogDebug(@"SocketRocket: In debug mode.  Allowing connection to any root cert");
 #endif
 
         [_outputStream setProperty:SSLOptions
@@ -635,7 +635,7 @@ static __strong NSData *CRLFCRLF;
 
         self.readyState = MPWebSocketStateClosing;
 
-        MessagingDebug(@"Closing with code %d reason %@", code, reason);
+        MPLogDebug(@"Closing with code %d reason %@", code, reason);
 
         if (wasConnecting) {
             [self _disconnect];
@@ -690,7 +690,7 @@ static __strong NSData *CRLFCRLF;
 
             self.readyState = MPWebSocketStateClosed;
 
-            MixpanelError(@"Failing with error %@", error.localizedDescription);
+            MPLogError(@"Failing with error %@", error.localizedDescription);
 
             [self _disconnect];
             [self _scheduleCleanup];
@@ -744,7 +744,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)_handleMessage:(id)message
 {
-    MessagingDebug(@"Received message");
+    MPLogDebug(@"Received message");
     [self _performDelegateBlock:^{
         [self.delegate webSocket:self didReceiveMessage:message];
     }];
@@ -790,7 +790,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
     size_t dataSize = data.length;
     __block uint16_t closeCode = 0;
 
-    MessagingDebug(@"Received close frame");
+    MPLogDebug(@"Received close frame");
 
     if (dataSize == 1) {
         // TODO handle error
@@ -827,7 +827,7 @@ static inline BOOL closeCodeIsValid(int closeCode) {
 - (void)_disconnect;
 {
     [self assertOnWorkQueue];
-    MessagingDebug(@"Trying to disconnect");
+    MPLogDebug(@"Trying to disconnect");
     _closeWhenFinishedWriting = YES;
     [self _pumpWriting];
 }
@@ -1442,7 +1442,7 @@ static const size_t MPFrameHeaderOverhead = 32;
     dispatch_async(_workQueue, ^{
         switch (eventCode) {
             case NSStreamEventOpenCompleted: {
-                MessagingDebug(@"NSStreamEventOpenCompleted %@", aStream);
+                MPLogDebug(@"NSStreamEventOpenCompleted %@", aStream);
                 if (self.readyState >= MPWebSocketStateClosing) {
                     return;
                 }
@@ -1457,7 +1457,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventErrorOccurred: {
-                MessagingDebug(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
+                MPLogDebug(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
                 /// TODO specify error better!
                 [self _failWithError:aStream.streamError];
                 self->_readBufferOffset = 0;
@@ -1467,7 +1467,7 @@ static const size_t MPFrameHeaderOverhead = 32;
 
             case NSStreamEventEndEncountered: {
                 [self _pumpScanner];
-                MessagingDebug(@"NSStreamEventEndEncountered %@", aStream);
+                MPLogDebug(@"NSStreamEventEndEncountered %@", aStream);
                 if (aStream.streamError) {
                     [self _failWithError:aStream.streamError];
                 } else {
@@ -1491,7 +1491,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasBytesAvailable: {
-                MessagingDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
+                MPLogDebug(@"NSStreamEventHasBytesAvailable %@", aStream);
                 const int bufferSize = 2048;
                 uint8_t buffer[bufferSize];
 
@@ -1513,13 +1513,13 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventHasSpaceAvailable: {
-                MessagingDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
+                MPLogDebug(@"NSStreamEventHasSpaceAvailable %@", aStream);
                 [self _pumpWriting];
                 break;
             }
 
             default:
-                MessagingDebug(@"(default)  %@", aStream);
+                MPLogDebug(@"(default)  %@", aStream);
                 break;
         }
     });

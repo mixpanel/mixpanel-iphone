@@ -31,7 +31,7 @@
                     @"data": [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
             };
         } else {
-            MixpanelError(@"Failed to convert NSAttributedString to HTML: %@", error);
+            MPLogError(@"Failed to convert NSAttributedString to HTML: %@", error);
         }
     }
 
@@ -53,7 +53,7 @@
                                                                          documentAttributes:NULL
                                                                                       error:&error];
             if (attributedString == nil) {
-                MixpanelError(@"Failed to convert HTML to NSAttributed string: %@", error);
+                MPLogError(@"Failed to convert HTML to NSAttributed string: %@", error);
             }
 
             return attributedString;

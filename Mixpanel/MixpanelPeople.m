@@ -88,13 +88,13 @@
             
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
-                MixpanelDebug(@"%@ queueing people record: %@", self.mixpanel, r);
+                MPLogDebug(@"%@ queueing people record: %@", self.mixpanel, r);
                 [strongMixpanel.peopleQueue addObject:r];
                 if (strongMixpanel.peopleQueue.count > 500) {
                     [strongMixpanel.peopleQueue removeObjectAtIndex:0];
                 }
             } else {
-                MixpanelDebug(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
+                MPLogDebug(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
                 [self.unidentifiedQueue addObject:r];
                 if (self.unidentifiedQueue.count > 500) {
                     [self.unidentifiedQueue removeObjectAtIndex:0];

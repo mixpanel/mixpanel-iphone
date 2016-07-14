@@ -239,7 +239,7 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
     } else if ([value isKindOfClass:[NSNull class]]) {
         label = @"None";
     } else {
-        MixpanelError(@"%@ unexpected value for survey choice: %@", self, value);
+        MPLogError(@"%@ unexpected value for survey choice: %@", self, value);
         label = [value description];
     }
     return label;

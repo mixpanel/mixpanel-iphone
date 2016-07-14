@@ -31,7 +31,7 @@ static MixpanelWatchOS *sharedInstance = nil;
 
 + (instancetype)sharedInstance {
     if (sharedInstance == nil) {
-        MixpanelDebug(@"warning sharedInstance called before sharedInstanceWithSession:");
+        MPLogDebug(@"warning sharedInstance called before sharedInstanceWithSession:");
     }
     return sharedInstance;
 }
@@ -75,10 +75,10 @@ static MixpanelWatchOS *sharedInstance = nil;
         [self.session sendMessage:message
                      replyHandler:nil
                      errorHandler:^(NSError * _Nonnull error) {
-                         MixpanelError(@"Error sending track: message to host application. Details: %@", [error localizedDescription]);
+                         MPLogError(@"Error sending track: message to host application. Details: %@", [error localizedDescription]);
                      }];
     } else {
-        MixpanelDebug(@"Host session is unreachable from watchOS.");
+        MPLogDebug(@"Host session is unreachable from watchOS.");
     }
 }
 

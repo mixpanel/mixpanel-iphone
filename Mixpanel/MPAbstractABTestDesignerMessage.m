@@ -60,7 +60,7 @@
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:(NSJSONWritingOptions)0 error:&error];
     if (jsonData == nil && error) {
-        MixpanelError(@"Failed to serialize test designer message: %@", error);
+        MPLogError(@"Failed to serialize test designer message: %@", error);
     }
 
     return jsonData;

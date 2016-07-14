@@ -150,7 +150,7 @@
                 controller.view.translatesAutoresizingMaskIntoConstraints = NO; // we contrain with auto layout in constrainQuestionView:
                 _questionControllers[index] = controller;
             } else {
-                MixpanelError(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
+                MPLogError(@"no view controller for storyboard identifier: %@", storyboardIdentifier);
             }
         }
     }
@@ -299,7 +299,7 @@
         [self loadQuestion:index - 1];
         [self loadQuestion:index + 1];
     } else {
-        MixpanelError(@"attempt to navigate to invalid question index");
+        MPLogError(@"attempt to navigate to invalid question index");
     }
 }
 

@@ -147,15 +147,15 @@
 {
     // Check pre-conditions.
     if (self.size.width < 1 || self.size.height < 1) {
-        MixpanelError(@"*** error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
+        MPLogError(@"*** error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
         return nil;
     }
     if (!self.CGImage) {
-        MixpanelError(@"*** error: image must be backed by a CGImage: %@", self);
+        MPLogError(@"*** error: image must be backed by a CGImage: %@", self);
         return nil;
     }
     if (maskImage && !maskImage.CGImage) {
-        MixpanelError(@"*** error: maskImage must be backed by a CGImage: %@", maskImage);
+        MPLogError(@"*** error: maskImage must be backed by a CGImage: %@", maskImage);
         return nil;
     }
 
