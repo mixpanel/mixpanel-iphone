@@ -15,7 +15,24 @@
 @property (nonatomic) NSTimeInterval requestsDisabledUntilTime;
 @property (nonatomic) NSUInteger consecutiveFailures;
 
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint withBody:(NSString *)body;
+- (BOOL)handleNetworkResponse:(NSHTTPURLResponse *)response withError:(NSError *)error;
+
++ (NSTimeInterval)calculateBackOffTimeFromFailures:(NSUInteger)failureCount;
++ (NSTimeInterval)parseRetryAfterTime:(NSHTTPURLResponse *)response;
++ (BOOL)parseHTTPFailure:(NSHTTPURLResponse *)response withError:(NSError *)error;
+
 + (NSString *)encodeArrayForAPI:(NSArray *)array;
++ (NSData *)encodeArrayAsJSONData:(NSArray *)array;
++ (NSString *)encodeJSONDataAsBase64:(NSData *)data;
+
++ (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
+                                              withDistinctID:(NSString *)distinctID
+                                                    andToken:(NSString *)token;
+
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                             andBody:(NSString *)body;
+
 
 @end

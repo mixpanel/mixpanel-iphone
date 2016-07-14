@@ -20,4 +20,12 @@
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems;
+
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                             andBody:(NSString *)body;
+
 @end

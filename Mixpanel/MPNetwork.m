@@ -48,8 +48,9 @@ static const NSUInteger kBatchSize = 50;
         NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         MixpanelDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
-        NSURLRequest *request = [self requestForEndpoint:endpoint withBody:postBody];
-        
+        NSURLRequest *request = [self requestForEndpoint:endpoint
+                                            byHTTPMethod:@"POST"
+                                                 andBody:postBody];
         [self updateNetworkActivityIndicator:YES];
         
         __block BOOL didFail = NO;
@@ -115,16 +116,62 @@ static const NSUInteger kBatchSize = 50;
 }
 
 #pragma mark - Helpers
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint withBody:(NSString *)body {
-    NSURL *URL = [self.serverURL URLByAppendingPathComponent:endpoint];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
++ (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
+                                              withDistinctID:(NSString *)distinctID
+                                                    andToken:(NSString *)token {
+    NSURLQueryItem *itemVersion = [NSURLQueryItem queryItemWithName:@"version" value:@"1"];
+    NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
+    NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
+    NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
+    
+    // Convert properties dictionary to a string
+    NSData *propertiesData = [NSJSONSerialization dataWithJSONObject:properties
+                                                             options:0
+                                                               error:NULL];
+    NSString *propertiesString = [[NSString alloc] initWithData:propertiesData
+                                                       encoding:NSUTF8StringEncoding];
+    NSURLQueryItem *itemProperties = [NSURLQueryItem queryItemWithName:@"properties" value:propertiesString];
+    
+    return @[ itemVersion, itemLib, itemToken, itemDistinctID, itemProperties ];
+}
+
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems {
+    return [self requestForEndpoint:endpoint
+                       byHTTPMethod:method
+                     withQueryItems:queryItems
+                            andBody:nil];
+}
+
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                             andBody:(NSString *)body {
+    return [self requestForEndpoint:endpoint
+                       byHTTPMethod:method
+                     withQueryItems:nil
+                            andBody:body];
+}
+
+- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
+                        byHTTPMethod:(NSString *)method
+                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                             andBody:(NSString *)body {
+    // Build URL from path and query items
+    NSURLComponents *components = [NSURLComponents componentsWithURL:self.serverURL
+                                             resolvingAgainstBaseURL:YES];
+    components.path = endpoint;
+    components.queryItems = queryItems;
+
+    // Build request from URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    [request setHTTPMethod:@"POST"];
+    [request setHTTPMethod:method];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     
     MixpanelDebug(@"%@ http request: %@?%@", self, URL, body);
     
-    return request;
+    return [request copy];
 }
 
 + (NSString *)encodeArrayForAPI:(NSArray *)array {
