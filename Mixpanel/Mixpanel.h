@@ -211,6 +211,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) BOOL showNotificationOnActive;
 
+@property (nonatomic, copy, nullable) void (^didFinishNotification)(BOOL, NSUInteger);
+
 /*!
  @property
  
