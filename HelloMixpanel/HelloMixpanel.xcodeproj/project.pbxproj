@@ -297,7 +297,6 @@
 		5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = huge_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Mixpanel.xcodeproj; path = ../Mixpanel.xcodeproj; sourceTree = "<group>"; };
-		517ABB6C1D14ADCD00FF8061 /* MPNetworkTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetworkTests.h; sourceTree = "<group>"; };
 		517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetworkTests.m; sourceTree = "<group>"; };
 		518010151D11CEA300C5F3EA /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nocilla.framework; sourceTree = "<group>"; };
 		51D96E7B1D120A75001F622D /* TestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestConstants.h; sourceTree = "<group>"; };
@@ -490,7 +489,6 @@
 				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
 				51D96E7E1D120D2A001F622D /* MPSurveyTests.m */,
 				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
-				517ABB6C1D14ADCD00FF8061 /* MPNetworkTests.h */,
 				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
 				2808F9B91610EFE4005772B7 /* Supporting Files */,
 			);
