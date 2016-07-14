@@ -513,7 +513,7 @@ static __strong NSData *CRLFCRLF;
 
 - (void)didConnect
 {
-    MPLogDebug(@"Connected");
+    MPLogInfo(@"Connected");
     CFHTTPMessageRef request = CFHTTPMessageCreateRequest(NULL, CFSTR("GET"), (__bridge CFURLRef)_url, kCFHTTPVersion1_1);
 
     // Set host first so it defaults
@@ -1457,7 +1457,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             case NSStreamEventErrorOccurred: {
-                MPLogDebug(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
+                MPLogError(@"NSStreamEventErrorOccurred %@ %@", aStream, [[aStream streamError] copy]);
                 /// TODO specify error better!
                 [self _failWithError:aStream.streamError];
                 self->_readBufferOffset = 0;
@@ -1519,7 +1519,7 @@ static const size_t MPFrameHeaderOverhead = 32;
             }
 
             default:
-                MPLogDebug(@"(default)  %@", aStream);
+                MPLogDebug(@"(default) %@", aStream);
                 break;
         }
     });

@@ -43,7 +43,7 @@ static Mixpanel *sharedInstance;
 + (Mixpanel *)sharedInstance
 {
     if (sharedInstance == nil) {
-        MPLogDebug(@"warning sharedInstance called before sharedInstanceWithToken:");
+        MPLogWarning(@"sharedInstance called before sharedInstanceWithToken:");
     }
     return sharedInstance;
 }
@@ -54,7 +54,7 @@ static Mixpanel *sharedInstance;
         if (apiToken == nil) {
             apiToken = @"";
         }
-        MPLogDebug(@"%@ warning empty api token", self);
+        MPLogWarning(@"%@ empty api token", self);
     }
     if (self = [self init]) {
 #if !defined(MIXPANEL_APP_EXTENSION)
@@ -64,10 +64,7 @@ static Mixpanel *sharedInstance;
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
 #endif
-        
         MPSetLoggingEnabled(YES);
-        MPLogInfo(@"Test %d", 42);
-        NSLog(@"Test %d", 52);
         
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
@@ -141,7 +138,6 @@ static Mixpanel *sharedInstance;
         }
         CFRelease(_reachability);
         _reachability = NULL;
-        MPLogDebug(@"released reachability");
     }
 #endif
 }
@@ -193,7 +189,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
     if (!distinctId) {
-        MPLogDebug(@"%@ error getting device identifier: falling back to uuid", self);
+        MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
     }
     return distinctId;
@@ -203,7 +199,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)identify:(NSString *)distinctId
 {
     if (distinctId.length == 0) {
-        MPLogDebug(@"%@ cannot identify blank distinct id: %@", self, distinctId);
+        MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
     
@@ -244,7 +240,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
     if (event.length == 0) {
-        MPLogError(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
+        MPLogWarning(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
     }
     
@@ -292,7 +288,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 #endif
         
         NSDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
-        MPLogDebug(@"%@ queueing event: %@", self, e);
+        MPLogInfo(@"%@ queueing event: %@", self, e);
         [self.eventsQueue addObject:e];
         if (self.eventsQueue.count > 5000) {
             [self.eventsQueue removeObjectAtIndex:0];
@@ -309,7 +305,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
-    MPLogDebug(@"%@ tracking push payload %@", self, userInfo);
+    MPLogInfo(@"%@ tracking push payload %@", self, userInfo);
 
     id rawMp = userInfo[@"mp"];
     if (rawMp) {
@@ -321,7 +317,7 @@ static __unused NSString *MPURLEncode(NSString *s)
                                            @"message_id": mpPayload[@"m"],
                                            @"message_type": @"push"}];
         } else {
-            MPLogError(@"%@ malformed mixpanel push payload %@", self, mpPayload);
+            MPLogInfo(@"%@ malformed mixpanel push payload %@", self, mpPayload);
         }
     }
 }
@@ -464,7 +460,7 @@ static __unused NSString *MPURLEncode(NSString *s)
                                                         selector:@selector(flush)
                                                         userInfo:nil
                                                          repeats:YES];
-            MPLogDebug(@"%@ started flush timer: %@", self, self.timer);
+            MPLogInfo(@"%@ started flush timer: %@", self, self.timer);
         }
     });
 }
@@ -474,7 +470,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.timer) {
             [self.timer invalidate];
-            MPLogDebug(@"%@ stopped flush timer: %@", self, self.timer);
+            MPLogInfo(@"%@ stopped flush timer: %@", self, self.timer);
             self.timer = nil;
         }
     });
@@ -488,12 +484,12 @@ static __unused NSString *MPURLEncode(NSString *s)
 - (void)flushWithCompletion:(void (^)())handler
 {
     dispatch_async(self.serialQueue, ^{
-        MPLogDebug(@"%@ flush starting", self);
+        MPLogInfo(@"%@ flush starting", self);
 
         __strong id<MixpanelDelegate> strongDelegate = self.delegate;
         if (strongDelegate && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
             if (![strongDelegate mixpanelWillFlush:self]) {
-                MPLogDebug(@"%@ flush deferred by delegate", self);
+                MPLogInfo(@"%@ flush deferred by delegate", self);
                 return;
             }
         }
@@ -506,7 +502,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             dispatch_async(dispatch_get_main_queue(), handler);
         }
 
-        MPLogDebug(@"%@ flush complete", self);
+        MPLogInfo(@"%@ flush complete", self);
     });
 }
 
@@ -561,7 +557,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     NSString *filePath = [self eventsFilePath];
     NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
-    MPLogDebug(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
+    MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
     if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
         MPLogError(@"%@ unable to archive events data", self);
     }
@@ -571,7 +567,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     NSString *filePath = [self peopleFilePath];
     NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
-    MPLogDebug(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
+    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
     if (![NSKeyedArchiver archiveRootObject:peopleQueueCopy toFile:filePath]) {
         MPLogError(@"%@ unable to archive people data", self);
     }
@@ -588,7 +584,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
-    MPLogDebug(@"%@ archiving properties data to %@: %@", self, filePath, p);
+    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
         MPLogError(@"%@ unable to archive properties data", self);
     }
@@ -633,7 +629,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (![unarchivedData isKindOfClass:class]) {
             unarchivedData = nil;
         }
-        MPLogDebug(@"%@ unarchived data from %@: %@", self, filePath, unarchivedData);
+        MPLogInfo(@"%@ unarchived data from %@: %@", self, filePath, unarchivedData);
     }
     @catch (NSException *exception) {
         MPLogError(@"%@ unable to unarchive data in %@, starting fresh", self, filePath);
@@ -643,7 +639,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSError *error = NULL;
         BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
         if (!removed) {
-            MPLogError(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
+            MPLogWarning(@"%@ unable to remove archived file at %@ - %@", self, filePath, error);
         }
     }
     return unarchivedData;
@@ -689,7 +685,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<Mixpanel: %p %@>", (void *)self, self.apiToken];
+    return [NSString stringWithFormat:@"<Mixpanel: %p - Token: %@>", (void *)self, self.apiToken];
 }
 
 - (NSString *)deviceModel
@@ -841,15 +837,11 @@ static __unused NSString *MPURLEncode(NSString *s)
         if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
             if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
                 reachabilityOk = YES;
-                MPLogDebug(@"%@ successfully set up reachability callback", self);
             } else {
                 // cleanup callback if setting dispatch queue failed
                 SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
             }
         }
-    }
-    if (!reachabilityOk) {
-        MPLogError(@"%@ failed to set up reachability callback: %s", self, SCErrorString(SCError()));
     }
     
     // cellular info
@@ -909,8 +901,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     Mixpanel *mixpanel = (__bridge Mixpanel *)info;
     if (mixpanel && [mixpanel isKindOfClass:[Mixpanel class]]) {
         [mixpanel reachabilityChanged:flags];
-    } else {
-        MPLogError(@"reachability callback received unexpected info object");
     }
 }
 
@@ -924,7 +914,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         BOOL wifi = (flags & kSCNetworkReachabilityFlagsReachable) && !(flags & kSCNetworkReachabilityFlagsIsWWAN);
         properties[@"$wifi"] = @(wifi);
         self.automaticProperties = [properties copy];
-        MPLogDebug(@"%@ reachability changed, wifi=%d", self, wifi);
+        MPLogInfo(@"%@ reachability changed, wifi=%d", self, wifi);
     }
 }
 
@@ -932,7 +922,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    MPLogDebug(@"%@ application did become active", self);
+    MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
 
 #if !defined(MIXPANEL_TVOS_EXTENSION)
@@ -965,20 +955,20 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
-    MPLogDebug(@"%@ application will resign active", self);
+    MPLogInfo(@"%@ application will resign active", self);
     [self stopFlushTimer];
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
-    MPLogDebug(@"%@ did enter background", self);
+    MPLogInfo(@"%@ did enter background", self);
     __block UIBackgroundTaskIdentifier backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        MPLogDebug(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
+        MPLogInfo(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
         [[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
         self.taskId = UIBackgroundTaskInvalid;
     }];
     self.taskId = backgroundTask;
-    MPLogDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
+    MPLogInfo(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
     
     dispatch_group_t bgGroup = dispatch_group_create();
     NSString *trackedKey = [NSString stringWithFormat:@"MPTracked:%@", self.apiToken];
@@ -1010,7 +1000,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     });
     
     dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
-        MPLogDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
+        MPLogInfo(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
@@ -1020,7 +1010,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
-    MPLogDebug(@"%@ will enter foreground", self);
+    MPLogInfo(@"%@ will enter foreground", self);
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
@@ -1032,7 +1022,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-    MPLogDebug(@"%@ application will terminate", self);
+    MPLogInfo(@"%@ application will terminate", self);
     dispatch_async(_serialQueue, ^{
        [self archive];
     });
@@ -1085,13 +1075,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache
 {
     dispatch_async(self.serialQueue, ^{
-        MPLogDebug(@"%@ decide check started", self);
-
         NSMutableSet *newVariants = [NSMutableSet set];
         NSMutableSet *newEventBindings = [NSMutableSet set];
 
         if (!useCache || !self.decideResponseCached) {
-            MPLogDebug(@"%@ decide cache not found, starting network request", self);
+            MPLogInfo(@"%@ decide cache not found, starting network request", self);
             NSString *distinctId = self.people.distinctId ?: self.distinctId;
             NSData *peoplePropertiesJSON = [NSJSONSerialization dataWithJSONObject:self.people.automaticPeopleProperties options:(NSJSONWritingOptions)0 error:nil];
             NSString *params = [NSString stringWithFormat:@"version=1&lib=iphone&token=%@&properties=%@%@",
@@ -1121,7 +1109,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 return;
             }
             if (object[@"error"]) {
-                MPLogDebug(@"%@ decide check api error: %@", self, object[@"error"]);
+                MPLogError(@"%@ decide check api error: %@", self, object[@"error"]);
                 if (completion) {
                     completion(nil, nil, nil, nil);
                 }
@@ -1153,7 +1141,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     }
                 }
             } else {
-               MPLogDebug(@"%@ survey check response format error: %@", self, object);
+               MPLogError(@"%@ survey check response format error: %@", self, object);
             }
 
             id rawNotifications = object[@"notifications"];
@@ -1166,7 +1154,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     }
                 }
             } else {
-                MPLogDebug(@"%@ in-app notifs check response format error: %@", self, object);
+                MPLogError(@"%@ in-app notifs check response format error: %@", self, object);
             }
 
             id rawVariants = object[@"variants"];
@@ -1179,7 +1167,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     }
                 }
             } else {
-                MPLogDebug(@"%@ variants check response format error: %@", self, object);
+                MPLogError(@"%@ variants check response format error: %@", self, object);
             }
 
             // Variants that are already running (may or may not have been marked as finished).
@@ -1235,7 +1223,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
             self.decideResponseCached = YES;
         } else {
-            MPLogDebug(@"%@ decide cache found, skipping network request", self);
+            MPLogInfo(@"%@ decide cache found, skipping network request", self);
         }
 
         NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(MPSurvey *obj, NSUInteger idx, BOOL *stop) {
@@ -1246,11 +1234,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             return [self.shownNotifications member:@(obj.ID)] == nil;
         }]];
 
-        MPLogDebug(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)unseenSurveys.count, (unsigned long)self.surveys.count, unseenSurveys);
-        MPLogDebug(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
+        MPLogInfo(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)unseenSurveys.count, (unsigned long)self.surveys.count, unseenSurveys);
+        MPLogInfo(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
                       (unsigned long)self.notifications.count, unseenNotifications);
-        MPLogDebug(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
-        MPLogDebug(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
+        MPLogInfo(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
+        MPLogInfo(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
 
         if (completion) {
             completion(unseenSurveys, unseenNotifications, newVariants, newEventBindings);
@@ -1313,9 +1301,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if (survey) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.currentlyShowingSurvey) {
-                MPLogError(@"%@ already showing survey: %@", self, self.currentlyShowingSurvey);
+                MPLogWarning(@"%@ already showing survey: %@", self, self.currentlyShowingSurvey);
             } else if (self.currentlyShowingNotification) {
-                MPLogError(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
+                MPLogWarning(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
             } else {
                 self.currentlyShowingSurvey = survey;
                 if (showAlert) {
@@ -1371,7 +1359,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)markSurvey:(MPSurvey *)survey shown:(BOOL)shown withAnswerCount:(NSUInteger)count
 {
-    MPLogDebug(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
+    MPLogInfo(@"%@ marking survey shown: %@, %@", self, @(survey.collectionID), _shownSurveyCollections);
     [_shownSurveyCollections addObject:@(survey.collectionID)];
     [self.people append:@{@"$surveys": @(survey.ID), @"$collections": @(survey.collectionID)}];
 
@@ -1389,7 +1377,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     self.currentlyShowingSurvey = nil;
     if ([controller.survey.name isEqualToString:@"$ignore"]) {
-        MPLogDebug(@"%@ not sending survey %@ result", self, controller.survey);
+        MPLogInfo(@"%@ not sending survey %@ result, since survey is marked $ignore.", self, controller.survey);
     } else {
         [self markSurvey:controller.survey shown:YES withAnswerCount:answers.count];
         NSUInteger i = 0;
@@ -1459,9 +1447,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.currentlyShowingNotification) {
-            MPLogError(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
+            MPLogWarning(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
         } else if (self.currentlyShowingSurvey) {
-            MPLogError(@"%@ already showing survey: %@", self, self.currentlyShowingSurvey);
+            MPLogWarning(@"%@ already showing survey: %@", self, self.currentlyShowingSurvey);
         } else {
             self.currentlyShowingNotification = notification;
             BOOL shown;
@@ -1532,7 +1520,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if (status && controller.notification.callToActionURL) {
         [controller hideWithAnimation:YES completion:^{
             NSURL *URL = controller.notification.callToActionURL;
-            MPLogDebug(@"%@ opening URL %@", self, URL);
+            MPLogInfo(@"%@ opening URL %@", self, URL);
 
             if (![[UIApplication sharedApplication] openURL:URL]) {
                 MPLogError(@"Mixpanel failed to open given URL: %@", URL);
@@ -1554,13 +1542,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                                        @"message_type": @"inapp",
                                        @"message_subtype": notification.type}];
     } else {
-        MPLogDebug(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), event);
+        MPLogInfo(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), event);
     }
 }
 
 - (void)markNotificationShown:(MPNotification *)notification
 {
-    MPLogDebug(@"%@ marking notification shown: %@, %@", self, @(notification.ID), _shownNotifications);
+    MPLogInfo(@"%@ marking notification shown: %@, %@", self, @(notification.ID), _shownNotifications);
 
     [_shownNotifications addObject:@(notification.ID)];
 
@@ -1577,6 +1565,22 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self.people append:properties];
 
     [self trackNotification:notification event:@"$campaign_delivery"];
+}
+
+#pragma mark - Logging
+- (void)setEnableLogging:(BOOL)enableLogging {
+    gLoggingEnabled = enableLogging;
+    
+    if (gLoggingEnabled) {
+        asl_add_log_file(NULL, STDERR_FILENO);
+        asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
+    } else {
+        asl_remove_log_file(NULL, STDERR_FILENO);
+    }
+}
+
+- (BOOL)enableLogging {
+    return gLoggingEnabled;
 }
 
 #pragma mark - Mixpanel A/B Testing (Designer)
@@ -1615,7 +1619,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if (!self.enableABTestDesigner) return;
     
     if ([self.abtestDesignerConnection isKindOfClass:[MPABTestDesignerConnection class]] && ((MPABTestDesignerConnection *)self.abtestDesignerConnection).connected) {
-        MPLogError(@"A/B test designer connection already exists");
+        MPLogWarning(@"A/B test designer connection already exists");
         return;
     }
     static NSUInteger oldInterval;
@@ -1674,7 +1678,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)markVariantRun:(MPVariant *)variant
 {
-    MPLogDebug(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
+    MPLogInfo(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     NSDictionary *shownVariant = @{@(variant.experimentID).stringValue: @(variant.ID)};
     if (self.people.distinctId) {
         [self.people merge:@{@"$experiments": shownVariant}];

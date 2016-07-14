@@ -171,7 +171,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message
 {
-    MPLogDebug(@"raw message: %@", message);
+    MPLogInfo(@"raw message: %@", message);
 
     NSParameterAssert([message isKindOfClass:[NSString class]] || [message isKindOfClass:[NSData class]]);
 
@@ -188,7 +188,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
         designerMessage = [_typeToMessageClassMap[type] messageWithType:type payload:payload];
     } else {
-        MPLogDebug(@"Badly formed socket message expected JSON dictionary: %@", error);
+        MPLogWarning(@"Badly formed socket message expected JSON dictionary: %@", error);
     }
 
     return designerMessage;
@@ -206,7 +206,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         }
     }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
-    MPLogDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
+    MPLogInfo(@"WebSocket received message: %@", [designerMessage debugDescription]);
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
     if (commandOperation) {
@@ -216,14 +216,14 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
-    MPLogDebug(@"WebSocket %@ did open.", webSocket);
+    MPLogInfo(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
     [self showConnectedViewWithLoading:YES];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
 {
-    MPLogDebug(@"WebSocket did fail with error: %@", error);
+    MPLogError(@"WebSocket did fail with error: %@", error);
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];

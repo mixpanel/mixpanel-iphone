@@ -68,7 +68,7 @@ static const NSUInteger kBatchSize = 50;
                 NSString *response = [[NSString alloc] initWithData:responseData
                                                            encoding:NSUTF8StringEncoding];
                 if ([response intValue] == 0) {
-                    MPLogError(@"%@ %@ api rejected some items", self, endpoint);
+                    MPLogInfo(@"%@ %@ api rejected some items", self, endpoint);
                 }
             }
             
@@ -182,7 +182,7 @@ static const NSUInteger kBatchSize = 50;
             NSString *stringKey = key;
             if (![key isKindOfClass:[NSString class]]) {
                 stringKey = [key description];
-                MPLogDebug(@"%@ warning: property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
+                MPLogWarning(@"%@ property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
             }
             id v = [self convertFoundationTypesToJSON:obj[key]];
             d[stringKey] = v;
@@ -192,7 +192,7 @@ static const NSUInteger kBatchSize = 50;
     
     // default to sending the object's description
     NSString *s = [obj description];
-    MPLogDebug(@"%@ warning: property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
+    MPLogWarning(@"%@ property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
     return s;
 }
 

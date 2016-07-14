@@ -31,7 +31,7 @@ static MixpanelWatchOS *sharedInstance = nil;
 
 + (instancetype)sharedInstance {
     if (sharedInstance == nil) {
-        MPLogDebug(@"warning sharedInstance called before sharedInstanceWithSession:");
+        MPLogWarning(@"warning sharedInstance called before sharedInstanceWithSession:");
     }
     return sharedInstance;
 }
