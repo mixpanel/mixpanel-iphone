@@ -80,25 +80,25 @@
 
     NSNumber *ID = object[@"id"];
     if (!([ID isKindOfClass:[NSNumber class]] && ID.integerValue > 0)) {
-        MixpanelError(@"invalid variant id: %@", ID);
+        MPLogError(@"invalid variant id: %@", ID);
         return nil;
     }
 
     NSNumber *experimentID = object[@"experiment_id"];
     if (!([experimentID isKindOfClass:[NSNumber class]] && experimentID.integerValue > 0)) {
-        MixpanelError(@"invalid experiment id: %@", experimentID);
+        MPLogError(@"invalid experiment id: %@", experimentID);
         return nil;
     }
 
     NSArray *actions = object[@"actions"];
     if (![actions isKindOfClass:[NSArray class]]) {
-        MixpanelError(@"variant requires an array of actions");
+        MPLogError(@"variant requires an array of actions");
         return nil;
     }
 
     NSArray *tweaks = object[@"tweaks"];
     if (![tweaks isKindOfClass:[NSArray class]]) {
-        MixpanelError(@"variant requires an array of tweaks");
+        MPLogError(@"variant requires an array of tweaks");
         return nil;
     }
 
@@ -299,19 +299,19 @@ static NSMapTable *originalCache;
     // Required parameters
     MPObjectSelector *path = [MPObjectSelector objectSelectorWithString:object[@"path"]];
     if (!path) {
-        MixpanelError(@"invalid action path: %@", object[@"path"]);
+        MPLogError(@"invalid action path: %@", object[@"path"]);
         return nil;
     }
 
     SEL selector = NSSelectorFromString(object[@"selector"]);
     if (selector == (SEL)0) {
-        MixpanelError(@"invalid action selector: %@", object[@"selector"]);
+        MPLogError(@"invalid action selector: %@", object[@"selector"]);
         return nil;
     }
 
     NSArray *args = object[@"args"];
     if (![args isKindOfClass:[NSArray class]]) {
-        MixpanelError(@"invalid action arguments: %@", args);
+        MPLogError(@"invalid action arguments: %@", args);
         return nil;
     }
 
@@ -577,14 +577,14 @@ static NSMapTable *originalCache;
                     [invocation invokeWithTarget:o];
                 }
                 @catch (NSException *exception) {
-                    MixpanelError(@"Exception during invocation: %@", exception);
+                    MPLogError(@"Exception during invocation: %@", exception);
                 }
                 [invocations addObject:invocation];
             } else {
-                MixpanelError(@"Not enough args");
+                MPLogError(@"Not enough args");
             }
         } else {
-            MixpanelError(@"No method found for %@", NSStringFromSelector(selector));
+            MPLogError(@"No method found for %@", NSStringFromSelector(selector));
         }
     }
     return [invocations copy];
@@ -625,19 +625,19 @@ static NSMapTable *originalCache;
     // Required parameters
     NSString *name = object[@"name"];
     if (![name isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid name: %@", name);
+        MPLogError(@"invalid name: %@", name);
         return nil;
     }
 
     NSString *encoding = object[@"encoding"];
     if (![encoding isKindOfClass:[NSString class]]) {
-        MixpanelError(@"invalid encoding: %@", encoding);
+        MPLogError(@"invalid encoding: %@", encoding);
         return nil;
     }
 
     MPTweakValue value = object[@"value"];
     if (value == nil) {
-        MixpanelError(@"invalid value: %@", value);
+        MPLogError(@"invalid value: %@", value);
         return nil;
     }
 

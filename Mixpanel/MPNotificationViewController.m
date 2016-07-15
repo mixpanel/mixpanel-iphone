@@ -90,7 +90,7 @@
             if (image) {
                 self.imageView.image = image;
             } else {
-                MixpanelError(@"image failed to load from data: %@", self.notification.image);
+                MPLogError(@"image failed to load from data: %@", self.notification.image);
             }
         }
 

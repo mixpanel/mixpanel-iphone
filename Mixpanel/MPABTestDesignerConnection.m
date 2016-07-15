@@ -94,7 +94,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
     static int retries = 0;
     BOOL inRetryLoop = retries > 0;
 
-    MessagingDebug(@"In open. initiate = %d, retries = %d, maxRetries = %d, maxInterval = %d, connected = %d", initiate, retries, maxRetries, maxInterval, _connected);
+    MPLogDebug(@"In open. initiate = %d, retries = %d, maxRetries = %d, maxInterval = %d, connected = %d", initiate, retries, maxRetries, maxInterval, _connected);
 
     if (self.sessionEnded || _connected || (inRetryLoop && retries >= maxRetries) ) {
         // break out of retry loop if any of the success conditions are met.
@@ -103,7 +103,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         // If we are initiating a new connection, or we are already in a
         // retry loop (but not both). Then open a socket.
         if (!_open) {
-            MessagingDebug(@"Attempting to open WebSocket to: %@, try %d/%d ", _url, retries, maxRetries);
+            MPLogDebug(@"Attempting to open WebSocket to: %@, try %d/%d ", _url, retries, maxRetries);
             _open = YES;
             _webSocket = [[MPWebSocket alloc] initWithURL:_url];
             _webSocket.delegate = self;
@@ -161,17 +161,17 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 - (void)sendMessage:(id<MPABTestDesignerMessage>)message
 {
     if (_connected) {
-        MessagingDebug(@"Sending message: %@", [message debugDescription]);
+        MPLogDebug(@"Sending message: %@", [message debugDescription]);
         NSString *jsonString = [[NSString alloc] initWithData:[message JSONData] encoding:NSUTF8StringEncoding];
         [_webSocket send:jsonString];
     } else {
-        MessagingDebug(@"Not sending message as we are not connected: %@", [message debugDescription]);
+        MPLogDebug(@"Not sending message as we are not connected: %@", [message debugDescription]);
     }
 }
 
 - (id <MPABTestDesignerMessage>)designerMessageForMessage:(id)message
 {
-    MessagingDebug(@"raw message: %@", message);
+    MPLogInfo(@"raw message: %@", message);
 
     NSParameterAssert([message isKindOfClass:[NSString class]] || [message isKindOfClass:[NSData class]]);
 
@@ -188,7 +188,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
         designerMessage = [_typeToMessageClassMap[type] messageWithType:type payload:payload];
     } else {
-        MessagingDebug(@"Badly formed socket message expected JSON dictionary: %@", error);
+        MPLogWarning(@"Badly formed socket message expected JSON dictionary: %@", error);
     }
 
     return designerMessage;
@@ -206,7 +206,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
         }
     }
     id<MPABTestDesignerMessage> designerMessage = [self designerMessageForMessage:message];
-    MessagingDebug(@"WebSocket received message: %@", [designerMessage debugDescription]);
+    MPLogInfo(@"WebSocket received message: %@", [designerMessage debugDescription]);
     NSOperation *commandOperation = [designerMessage responseCommandWithConnection:self];
 
     if (commandOperation) {
@@ -216,14 +216,14 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (void)webSocketDidOpen:(MPWebSocket *)webSocket
 {
-    MessagingDebug(@"WebSocket %@ did open.", webSocket);
+    MPLogInfo(@"WebSocket %@ did open.", webSocket);
     _commandQueue.suspended = NO;
     [self showConnectedViewWithLoading:YES];
 }
 
 - (void)webSocket:(MPWebSocket *)webSocket didFailWithError:(NSError *)error
 {
-    MessagingDebug(@"WebSocket did fail with error: %@", error);
+    MPLogError(@"WebSocket did fail with error: %@", error);
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];
     [self hideConnectedView];
@@ -239,7 +239,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (void)webSocket:(MPWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    MessagingDebug(@"WebSocket did close with code '%d' reason '%@'.", (int)code, reason);
+    MPLogDebug(@"WebSocket did close with code '%d' reason '%@'.", (int)code, reason);
 
     _commandQueue.suspended = YES;
     [_commandQueue cancelAllOperations];

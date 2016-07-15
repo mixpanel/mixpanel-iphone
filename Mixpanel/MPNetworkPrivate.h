@@ -29,10 +29,10 @@
                                               withDistinctID:(NSString *)distinctID
                                                     andToken:(NSString *)token;
 
-- (NSURLRequest *)requestForEndpoint:(NSString *)endpoint
-                        byHTTPMethod:(NSString *)method
-                      withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
-                             andBody:(NSString *)body;
+- (NSURLRequest *)buildRequestForEndpoint:(NSString *)endpoint
+                             byHTTPMethod:(NSString *)method
+                           withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
+                                  andBody:(NSString *)body;
 
 
 @end

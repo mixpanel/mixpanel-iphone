@@ -241,6 +241,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  @property
+ 
+ @abstract
+ Controls whether to enable the run time debug logging at all levels. Note that the
+ Mixpanel SDK uses Apple System Logging to forward log messages to `STDERR`, this also
+ means that mixpanel logs are segmented by log level. Settings this to `YES` will enable 
+ Mixpanel logging at the following levels:
+ 
+   * Error - Something has failed 
+   * Warning - Something is amiss and might fail if not corrected
+   * Info - The lowest priority that is normally logged, purely informational in nature
+   * Debug - Information useful only to developers, and normally not logged.
+ 
+ 
+ @discussion
+ Defaults to NO.
+ */
+@property (atomic) BOOL enableLogging;
+
+/*!
+ @property
 
  @abstract
  Determines the time, in seconds, that a mini notification will remain on

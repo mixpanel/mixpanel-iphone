@@ -56,7 +56,7 @@ static void mp_handleUncaughtException(NSException *exception) {
         [instance archive];
     }
     
-    MixpanelError(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
+    MPLogError(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
     
     if (handler.defaultExceptionHandler) {
         // Ensure the existing handler gets called once we're finished
