@@ -1562,6 +1562,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self trackNotification:notification event:@"$campaign_delivery"];
 }
 
+#pragma mark - Network Indicator
+- (void)setShowNetworkActivityIndicator:(BOOL)showNetworkActivityIndicator {
+    self.network.shouldManageNetworkActivityIndicator = showNetworkActivityIndicator;
+}
+
+- (BOOL)showNetworkActivityIndicator {
+    return self.network.shouldManageNetworkActivityIndicator;
+}
+
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging {
     gLoggingEnabled = enableLogging;

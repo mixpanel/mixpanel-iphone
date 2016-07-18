@@ -16,8 +16,8 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 
 @interface MPNetwork : NSObject
 
-@property (nonatomic) BOOL shouldManageNetworkActivityIndicator;
-@property (nonatomic) BOOL useIPAddressForGeoLocation;
+@property (atomic) BOOL shouldManageNetworkActivityIndicator;
+@property (atomic) BOOL useIPAddressForGeoLocation;
 
 - (instancetype)initWithServerURL:(NSURL *)serverURL;
 
