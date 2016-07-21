@@ -142,8 +142,7 @@
     for (NSUInteger i = 0; i < deviceToken.length; i++) {
         [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
     }
-    NSArray *tokens = @[[NSString stringWithString:hex]];
-    NSDictionary *properties = @{@"$ios_devices": tokens};
+    NSDictionary *properties = @{@"$ios_devices": [NSString stringWithString:hex]};
     [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
