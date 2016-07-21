@@ -132,6 +132,11 @@
     [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
 }
 
+- (void)removeSinglePushDeviceToken:(NSDictionary *)properties
+{
+    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
+}
+
 - (void)set:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
@@ -203,6 +208,13 @@
                  @"%@ union property values should be NSArray. found: %@", self, v);
     }
     [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
+}
+
+- (void)remove:(NSDictionary *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    [Mixpanel assertPropertyTypes:properties];
+    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
 - (void)merge:(NSDictionary *)properties
