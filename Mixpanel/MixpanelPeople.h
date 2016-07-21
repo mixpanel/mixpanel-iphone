@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
  This will remove the provided push token saved to this people profile. This is useful
  in conjunction with a call to `reset`, or when a user is logging out.
  */
-- (void)removeSinglePushDeviceToken:(NSString *)deviceToken;
+- (void)removeSinglePushDeviceToken:(NSData *)deviceToken;
 
 /*!
  @method
