@@ -132,12 +132,18 @@
     [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
 }
 
-- (void)removeSinglePushDeviceToken:(NSString *)deviceToken
+- (void)removeSinglePushDeviceToken:(NSData *)deviceToken
 {
-    if(deviceToken == nil) {
+    const unsigned char *buffer = (const unsigned char *)deviceToken.bytes;
+    if (!buffer) {
         return;
     }
-    NSDictionary *properties = @{ @"$ios_devices": deviceToken };
+    NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
+    for (NSUInteger i = 0; i < deviceToken.length; i++) {
+        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
+    }
+    NSArray *tokens = @[[NSString stringWithString:hex]];
+    NSDictionary *properties = @{@"$ios_devices": tokens};
     [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
