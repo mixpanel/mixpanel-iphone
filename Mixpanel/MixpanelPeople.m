@@ -132,8 +132,12 @@
     [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
 }
 
-- (void)removeSinglePushDeviceToken:(NSDictionary *)properties
+- (void)removeSinglePushDeviceToken:(NSString *)deviceToken
 {
+    if(deviceToken == nil) {
+        return;
+    }
+    NSDictionary *properties = @{ @"$ios_devices": deviceToken };
     [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
