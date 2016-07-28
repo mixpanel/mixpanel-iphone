@@ -109,9 +109,7 @@
     }
 }
 
-#pragma mark - Public API
-
-- (void)addPushDeviceToken:(NSData *)deviceToken
+- (void)pushDeviceTokenToString:(NSData *)deviceToken
 {
     const unsigned char *buffer = (const unsigned char *)deviceToken.bytes;
     if (!buffer) {
@@ -121,8 +119,14 @@
     for (NSUInteger i = 0; i < deviceToken.length; i++) {
         [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
     }
-    NSArray *tokens = @[[NSString stringWithString:hex]];
-    NSDictionary *properties = @{@"$ios_devices": tokens};
+    return [NSString stringWithString:hex];
+}
+
+#pragma mark - Public API
+
+- (void)addPushDeviceToken:(NSData *)deviceToken
+{
+    NSDictionary *properties = @{@"$ios_devices": @[pushDeviceTokenToString(deviceToken)]};
     [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
 }
 
@@ -134,15 +138,7 @@
 
 - (void)removeSinglePushDeviceToken:(NSData *)deviceToken
 {
-    const unsigned char *buffer = (const unsigned char *)deviceToken.bytes;
-    if (!buffer) {
-        return;
-    }
-    NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
-    for (NSUInteger i = 0; i < deviceToken.length; i++) {
-        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
-    }
-    NSDictionary *properties = @{@"$ios_devices": [NSString stringWithString:hex]};
+    NSDictionary *properties = @{@"$ios_devices": pushDeviceTokenToString(deviceToken)};
     [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
