@@ -9,6 +9,8 @@
 
 The Mixpanel library for iOS is an open source project, and we'd love to see your contributions! We'd also love for you to come and work with us! Check out http://boards.greenhouse.io/mixpanel/jobs/25226#.U_4JXEhORKU for details.
 
+If you are using Swift, we recommend our **[Swift Library](https://github.com/mixpanel/mixpanel-swift)** (currently supports the tracking and people API).
+
 # Painless Installation (CocoaPods)
 
 Mixpanel supports `CocoaPods` for easy installation.
