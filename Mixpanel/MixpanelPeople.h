@@ -89,6 +89,18 @@ NS_ASSUME_NONNULL_BEGIN
  @method
  
  @abstract
+ Unregister a specific device token from the ability to receive push notifications.
+ 
+ @discussion
+ This will remove the provided push token saved to this people profile. This is useful
+ in conjunction with a call to `reset`, or when a user is logging out.
+ */
+- (void)removeSinglePushDeviceToken:(NSData *)deviceToken;
+
+/*!
+ @method
+ 
+ @abstract
  Set properties on the current user in Mixpanel People.
  
  @discussion
@@ -219,6 +231,22 @@ NS_ASSUME_NONNULL_BEGIN
  @param properties      mapping of list property names to lists to union
  */
 - (void)union:(NSDictionary *)properties;
+
+/*!
+ @method
+ 
+ @abstract
+ Remove list properties.
+ 
+ @discussion
+ Property keys must be <code>NSString</code> objects and values must be
+ <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+ <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+ <code>NSURL</code> objects.
+ 
+ @param properties      mapping of list property names to values to remove
+ */
+- (void)remove:(NSDictionary *)properties;
 
 /*!
  @method

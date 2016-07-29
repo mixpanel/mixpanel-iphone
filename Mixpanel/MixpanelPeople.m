@@ -109,9 +109,7 @@
     }
 }
 
-#pragma mark - Public API
-
-- (void)addPushDeviceToken:(NSData *)deviceToken
++ (void)pushDeviceTokenToString:(NSData *)deviceToken
 {
     const unsigned char *buffer = (const unsigned char *)deviceToken.bytes;
     if (!buffer) {
@@ -121,8 +119,14 @@
     for (NSUInteger i = 0; i < deviceToken.length; i++) {
         [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
     }
-    NSArray *tokens = @[[NSString stringWithString:hex]];
-    NSDictionary *properties = @{@"$ios_devices": tokens};
+    return [hex copy];
+}
+
+#pragma mark - Public API
+
+- (void)addPushDeviceToken:(NSData *)deviceToken
+{
+    NSDictionary *properties = @{@"$ios_devices": @[pushDeviceTokenToString(deviceToken)]};
     [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
 }
 
@@ -130,6 +134,12 @@
 {
     NSDictionary *properties = @{ @"$properties": @[@"$ios_devices"] };
     [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
+}
+
+- (void)removeSinglePushDeviceToken:(NSData *)deviceToken
+{
+    NSDictionary *properties = @{@"$ios_devices": pushDeviceTokenToString(deviceToken)};
+    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
 - (void)set:(NSDictionary *)properties
@@ -203,6 +213,13 @@
                  @"%@ union property values should be NSArray. found: %@", self, v);
     }
     [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
+}
+
+- (void)remove:(NSDictionary *)properties
+{
+    NSAssert(properties != nil, @"properties must not be nil");
+    [Mixpanel assertPropertyTypes:properties];
+    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
 - (void)merge:(NSDictionary *)properties
