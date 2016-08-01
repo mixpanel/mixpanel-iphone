@@ -46,7 +46,9 @@
 #endif
 {
     NSUInteger _flushInterval;
-    BOOL _enableABTestDesigner;
+    BOOL _enableVisualABTestAndCodeless;
+    BOOL _showNetworkActivityIndicator;
+    BOOL _useIPAddressForGeoLocation;
 }
 
 #if !MIXPANEL_LIMITED_SUPPORT
