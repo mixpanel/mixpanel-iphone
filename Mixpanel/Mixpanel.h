@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion
  Defaults to YES.
  */
-@property (atomic) BOOL showNetworkActivityIndicator;
+@property (atomic) BOOL shouldManageNetworkActivityIndicator;
 
 /*!
  @property
@@ -230,14 +230,14 @@ NS_ASSUME_NONNULL_BEGIN
  @property
  
  @abstract
- Controls whether to enable the visual A/B test designer on mixpanel.com, you will 
- be unable to edit A/B tests with this disabled, however previously created A/B 
- tests and their variants will still be delivered.
+ Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com. 
+ You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
+ created A/B tests and codeless events will still be delivered.
  
  @discussion
  Defaults to YES.
  */
-@property (atomic) BOOL enableABTestDesigner;
+@property (atomic) BOOL enableVisualABTestAndCodeless;
 
 /*!
  @property

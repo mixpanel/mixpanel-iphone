@@ -68,9 +68,9 @@ static Mixpanel *sharedInstance;
         
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
-        self.flushOnBackground = YES;
-        self.showNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
+        self.shouldManageNetworkActivityIndicator = YES;
+        self.flushOnBackground = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
         self.decideURL = @"https://decide.mixpanel.com";
@@ -93,7 +93,7 @@ static Mixpanel *sharedInstance;
         self.timedEvents = [NSMutableDictionary dictionary];
 
         self.showSurveyOnActive = YES;
-        self.enableABTestDesigner = YES;
+        self.enableVisualABTestAndCodeless = YES;
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
         
@@ -153,6 +153,22 @@ static Mixpanel *sharedInstance;
     }
 }
 #endif
+
+- (BOOL)shouldManageNetworkActivityIndicator {
+    return self.network.shouldManageNetworkActivityIndicator;
+}
+
+- (void)setShouldManageNetworkActivityIndicator:(BOOL)shouldManageNetworkActivityIndicator {
+    self.network.shouldManageNetworkActivityIndicator = shouldManageNetworkActivityIndicator;
+}
+
+- (BOOL)useIPAddressForGeoLocation {
+    return self.network.useIPAddressForGeoLocation;
+}
+
+- (void)setUseIPAddressForGeoLocation:(BOOL)useIPAddressForGeoLocation {
+    self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
+}
 
 #pragma mark - Tracking
 + (void)assertPropertyTypes:(NSDictionary *)properties
@@ -728,9 +744,13 @@ static Mixpanel *sharedInstance;
     if (ASIdentifierManagerClass) {
         SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
         id sharedManager = ((id (*)(id, SEL))[ASIdentifierManagerClass methodForSelector:sharedManagerSelector])(ASIdentifierManagerClass, sharedManagerSelector);
-        SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
-        NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
-        ifa = [uuid UUIDString];
+        SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
+        BOOL isTrackingEnabled = ((BOOL (*)(id, SEL))[sharedManager methodForSelector:advertisingTrackingEnabledSelector])(sharedManager, advertisingTrackingEnabledSelector);
+        if (isTrackingEnabled) {
+            SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+            NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
+            ifa = [uuid UUIDString];
+        }
     }
 #endif
     return ifa;
@@ -871,7 +891,12 @@ static Mixpanel *sharedInstance;
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
 
-#if !defined(DISABLE_MIXPANEL_AB_DESIGNER) && !defined(MIXPANEL_TVOS_EXTENSION)
+    [self initializeGestureRecognizer];
+
+}
+
+- (void) initializeGestureRecognizer {
+#if !defined(MIXPANEL_TVOS_EXTENSION)
     dispatch_async(dispatch_get_main_queue(), ^{
         self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                            action:@selector(connectGestureRecognized:)];
@@ -1083,140 +1108,149 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                                                               withQueryItems:queryItems];
             
             // Send the network request
-            NSError *error = nil;
-            NSURLResponse *urlResponse = nil;
-            NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-            if (error) {
-                MPLogError(@"%@ decide check http error: %@", self, error);
-                if (completion) {
-                    completion(nil, nil, nil, nil);
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSession *session = [NSURLSession sharedSession];
+            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                      NSURLResponse *urlResponse,
+                                                                      NSError *error) {
+
+                if (error) {
+                    MPLogError(@"%@ decide check http error: %@", self, error);
+                    if (completion) {
+                        completion(nil, nil, nil, nil);
+                    }
+                    return;
                 }
-                return;
-            }
-            
-            // Handle network response
-            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)0 error:&error];
-            if (error) {
-                MPLogError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                if (completion) {
-                    completion(nil, nil, nil, nil);
+
+                // Handle network response
+                NSDictionary *object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
+                if (error) {
+                    MPLogError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+                    if (completion) {
+                        completion(nil, nil, nil, nil);
+                    }
+                    return;
                 }
-                return;
-            }
-            if (object[@"error"]) {
-                MPLogError(@"%@ decide check api error: %@", self, object[@"error"]);
-                if (completion) {
-                    completion(nil, nil, nil, nil);
+                if (object[@"error"]) {
+                    MPLogError(@"%@ decide check api error: %@", self, object[@"error"]);
+                    if (completion) {
+                        completion(nil, nil, nil, nil);
+                    }
+                    return;
                 }
-                return;
-            }
-            
-            NSDictionary *config = object[@"config"];
-            if (config && [config isKindOfClass:NSDictionary.class]) {
-                NSDictionary *validationConfig = config[@"ce"];
-                if (validationConfig && [validationConfig isKindOfClass:NSDictionary.class]) {
-                    self.validationEnabled = [validationConfig[@"enabled"] boolValue];
-                    
-                    NSString *method = validationConfig[@"method"];
-                    if (method && [method isKindOfClass:NSString.class]) {
-                        if ([method isEqualToString:@"count"]) {
-                            self.validationMode = AutomaticEventModeCount;
+
+                NSDictionary *config = object[@"config"];
+                if (config && [config isKindOfClass:NSDictionary.class]) {
+                    NSDictionary *validationConfig = config[@"ce"];
+                    if (validationConfig && [validationConfig isKindOfClass:NSDictionary.class]) {
+                        self.validationEnabled = [validationConfig[@"enabled"] boolValue];
+
+                        NSString *method = validationConfig[@"method"];
+                        if (method && [method isKindOfClass:NSString.class]) {
+                            if ([method isEqualToString:@"count"]) {
+                                self.validationMode = AutomaticEventModeCount;
+                            }
                         }
                     }
                 }
-            }
 
-            id rawSurveys = object[@"surveys"];
-            NSMutableArray *parsedSurveys = [NSMutableArray array];
-            if ([rawSurveys isKindOfClass:[NSArray class]]) {
-                for (id obj in rawSurveys) {
-                    MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
-                    if (survey) {
-                        [parsedSurveys addObject:survey];
+                id rawSurveys = object[@"surveys"];
+                NSMutableArray *parsedSurveys = [NSMutableArray array];
+                if ([rawSurveys isKindOfClass:[NSArray class]]) {
+                    for (id obj in rawSurveys) {
+                        MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
+                        if (survey) {
+                            [parsedSurveys addObject:survey];
+                        }
                     }
+                } else {
+                    MPLogError(@"%@ survey check response format error: %@", self, object);
                 }
-            } else {
-               MPLogError(@"%@ survey check response format error: %@", self, object);
-            }
 
-            id rawNotifications = object[@"notifications"];
-            NSMutableArray *parsedNotifications = [NSMutableArray array];
-            if ([rawNotifications isKindOfClass:[NSArray class]]) {
-                for (id obj in rawNotifications) {
-                    MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
-                    if (notification) {
-                        [parsedNotifications addObject:notification];
+                id rawNotifications = object[@"notifications"];
+                NSMutableArray *parsedNotifications = [NSMutableArray array];
+                if ([rawNotifications isKindOfClass:[NSArray class]]) {
+                    for (id obj in rawNotifications) {
+                        MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
+                        if (notification) {
+                            [parsedNotifications addObject:notification];
+                        }
                     }
+                } else {
+                    MPLogError(@"%@ in-app notifs check response format error: %@", self, object);
                 }
-            } else {
-                MPLogError(@"%@ in-app notifs check response format error: %@", self, object);
-            }
 
-            id rawVariants = object[@"variants"];
-            NSMutableSet *parsedVariants = [NSMutableSet set];
-            if ([rawVariants isKindOfClass:[NSArray class]]) {
-                for (id obj in rawVariants) {
-                    MPVariant *variant = [MPVariant variantWithJSONObject:obj];
-                    if (variant) {
-                        [parsedVariants addObject:variant];
+                id rawVariants = object[@"variants"];
+                NSMutableSet *parsedVariants = [NSMutableSet set];
+                if ([rawVariants isKindOfClass:[NSArray class]]) {
+                    for (id obj in rawVariants) {
+                        MPVariant *variant = [MPVariant variantWithJSONObject:obj];
+                        if (variant) {
+                            [parsedVariants addObject:variant];
+                        }
                     }
+                } else {
+                    MPLogError(@"%@ variants check response format error: %@", self, object);
                 }
-            } else {
-                MPLogError(@"%@ variants check response format error: %@", self, object);
-            }
 
-            // Variants that are already running (may or may not have been marked as finished).
-            NSSet *runningVariants = [NSSet setWithSet:[self.variants objectsPassingTest:^BOOL(MPVariant *var, BOOL *stop) { return var.running; }]];
-            // Variants that are marked as finished, (may or may not be running still).
-            NSSet *finishedVariants = [NSSet setWithSet:[self.variants objectsPassingTest:^BOOL(MPVariant *var, BOOL *stop) { return var.finished; }]];
-            // Variants that are running that should be marked finished.
-            NSMutableSet *toFinishVariants = [NSMutableSet setWithSet:runningVariants];
-            [toFinishVariants minusSet:parsedVariants];
-            // New variants that we just saw that are not already running.
-            newVariants = [NSMutableSet setWithSet:parsedVariants];
-            [newVariants minusSet:runningVariants];
-            // Running variants that were marked finished, but have now started again.
-            NSMutableSet *restartVariants = [NSMutableSet setWithSet:parsedVariants];
-            [restartVariants intersectSet:runningVariants];
-            [restartVariants intersectSet:finishedVariants];
-            // All variants that we still care about (stopped are thrown out)
-            NSMutableSet *allVariants = [NSMutableSet setWithSet:newVariants];
-            [allVariants unionSet:runningVariants];
+                // Variants that are already running (may or may not have been marked as finished).
+                NSSet *runningVariants = [NSSet setWithSet:[self.variants objectsPassingTest:^BOOL(MPVariant *var, BOOL *stop) { return var.running; }]];
+                // Variants that are marked as finished, (may or may not be running still).
+                NSSet *finishedVariants = [NSSet setWithSet:[self.variants objectsPassingTest:^BOOL(MPVariant *var, BOOL *stop) { return var.finished; }]];
+                // Variants that are running that should be marked finished.
+                NSMutableSet *toFinishVariants = [NSMutableSet setWithSet:runningVariants];
+                [toFinishVariants minusSet:parsedVariants];
+                // New variants that we just saw that are not already running.
+                [newVariants unionSet:parsedVariants];
+                [newVariants minusSet:runningVariants];
+                // Running variants that were marked finished, but have now started again.
+                NSMutableSet *restartVariants = [NSMutableSet setWithSet:parsedVariants];
+                [restartVariants intersectSet:runningVariants];
+                [restartVariants intersectSet:finishedVariants];
+                // All variants that we still care about (stopped are thrown out)
+                NSMutableSet *allVariants = [NSMutableSet setWithSet:newVariants];
+                [allVariants unionSet:runningVariants];
 
-            [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
-            [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
+                [restartVariants makeObjectsPerformSelector:NSSelectorFromString(@"restart")];
+                [toFinishVariants makeObjectsPerformSelector:NSSelectorFromString(@"finish")];
 
-            id rawEventBindings = object[@"event_bindings"];
-            NSMutableSet *parsedEventBindings = [NSMutableSet set];
-            if ([rawEventBindings isKindOfClass:[NSArray class]]) {
-                for (id obj in rawEventBindings) {
-                    MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
-                    if (binder) {
-                        [parsedEventBindings addObject:binder];
+                id rawEventBindings = object[@"event_bindings"];
+                NSMutableSet *parsedEventBindings = [NSMutableSet set];
+                if ([rawEventBindings isKindOfClass:[NSArray class]]) {
+                    for (id obj in rawEventBindings) {
+                        MPEventBinding *binder = [MPEventBinding bindingWithJSONObject:obj];
+                        if (binder) {
+                            [parsedEventBindings addObject:binder];
+                        }
                     }
+                } else {
+                    MPLogDebug(@"%@ mp tracking events check response format error: %@", self, object);
                 }
-            } else {
-                MPLogDebug(@"%@ mp tracking events check response format error: %@", self, object);
-            }
 
-            // Finished bindings are those which should no longer be run.
-            NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
-            [finishedEventBindings minusSet:parsedEventBindings];
-            [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
+                // Finished bindings are those which should no longer be run.
+                NSMutableSet *finishedEventBindings = [NSMutableSet setWithSet:self.eventBindings];
+                [finishedEventBindings minusSet:parsedEventBindings];
+                [finishedEventBindings makeObjectsPerformSelector:NSSelectorFromString(@"stop")];
 
-            // New bindings are those we are running for the first time.
-            [newEventBindings unionSet:parsedEventBindings];
-            [newEventBindings minusSet:self.eventBindings];
+                // New bindings are those we are running for the first time.
+                [newEventBindings unionSet:parsedEventBindings];
+                [newEventBindings minusSet:self.eventBindings];
+                
+                NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
+                [allEventBindings unionSet:newEventBindings];
+                
+                self.surveys = [NSArray arrayWithArray:parsedSurveys];
+                self.notifications = [NSArray arrayWithArray:parsedNotifications];
+                self.variants = [allVariants copy];
+                self.eventBindings = [allEventBindings copy];
+                
+                self.decideResponseCached = YES;
 
-            NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
-            [allEventBindings unionSet:newEventBindings];
+                dispatch_semaphore_signal(semaphore);
+            }] resume];
+            
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
-            self.surveys = [NSArray arrayWithArray:parsedSurveys];
-            self.notifications = [NSArray arrayWithArray:parsedNotifications];
-            self.variants = [allVariants copy];
-            self.eventBindings = [allEventBindings copy];
-
-            self.decideResponseCached = YES;
         } else {
             MPLogInfo(@"%@ decide cache found, skipping network request", self);
         }
@@ -1578,22 +1612,20 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     return gLoggingEnabled;
 }
 
-#pragma mark - Mixpanel A/B Testing (Designer)
-- (void)setEnableABTestDesigner:(BOOL)enableABTestDesigner {
-    _enableABTestDesigner = enableABTestDesigner;
-    
-    self.testDesignerGestureRecognizer.enabled = _enableABTestDesigner;
-    if (_enableABTestDesigner) {
-        // Automatically reconnect if the designer was re-enabled.
-        [self connectToABTestDesigner];
-    } else {
+#pragma mark - Mixpanel A/B Testing and Codeless (Designer)
+- (void)setEnableVisualABTestAndCodeless:(BOOL)enableVisualABTestAndCodeless {
+    _enableVisualABTestAndCodeless = enableVisualABTestAndCodeless;
+
+    self.testDesignerGestureRecognizer.enabled = _enableVisualABTestAndCodeless;
+    if (!_enableVisualABTestAndCodeless) {
         // Note that the connection will be closed and cleaned up properly in the dealloc method
+        [self.abtestDesignerConnection close];
         self.abtestDesignerConnection = nil;
     }
 }
 
-- (BOOL)enableABTestDesigner {
-    return _enableABTestDesigner;
+- (BOOL)enableVisualABTestAndCodeless {
+    return _enableVisualABTestAndCodeless;
 }
 
 - (void)connectGestureRecognized:(id)sender
@@ -1611,7 +1643,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)connectToABTestDesigner:(BOOL)reconnect
 {
     // Ignore the gesture if the AB test designer is disabled.
-    if (!self.enableABTestDesigner) return;
+    if (!self.enableVisualABTestAndCodeless) return;
     
     if ([self.abtestDesignerConnection isKindOfClass:[MPABTestDesignerConnection class]] && ((MPABTestDesignerConnection *)self.abtestDesignerConnection).connected) {
         MPLogWarning(@"A/B test designer connection already exists");

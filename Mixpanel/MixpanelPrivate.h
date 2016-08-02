@@ -46,7 +46,7 @@
 #endif
 {
     NSUInteger _flushInterval;
-    BOOL _enableABTestDesigner;
+    BOOL _enableVisualABTestAndCodeless;
 }
 
 #if !MIXPANEL_LIMITED_SUPPORT
