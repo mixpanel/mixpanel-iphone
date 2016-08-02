@@ -86,7 +86,7 @@
 - (void)stubDecide:(NSString *)path {
     NSURL *responseURL = [[NSBundle bundleForClass:self.class] URLForResource:path
                                                                 withExtension:@"json"];
-    stubRequest(@"GET", @"^https://decide\\.mixpanel\\.com/decide(.*?)".regex)
+    stubRequest(@"GET", @"https://api.mixpanel.com/decide(.*?)".regex)
     .withHeader(@"Accept-Encoding", @"gzip")
     .andReturn(200)
     .withBody([NSData dataWithContentsOfURL:responseURL]);

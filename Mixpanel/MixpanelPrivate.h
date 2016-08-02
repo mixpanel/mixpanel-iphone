@@ -87,7 +87,6 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
-@property (atomic, copy) NSString *decideURL;
 @property (atomic, copy) NSString *switchboardURL;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;

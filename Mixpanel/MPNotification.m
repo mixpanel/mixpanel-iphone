@@ -78,6 +78,13 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
 
+        NSString *escapedURLString = [imageURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        imageURL = [NSURL URLWithString:escapedURLString];
+        if (imageURL == nil) {
+            MPLogError(@"invalid notif image URL: %@", escapedURLString);
+            return nil;
+        }
+
         NSString *imagePath = imageURL.path;
         if ([type isEqualToString:MPNotificationTypeTakeover]) {
             NSString *imageName = [imagePath stringByDeletingPathExtension];

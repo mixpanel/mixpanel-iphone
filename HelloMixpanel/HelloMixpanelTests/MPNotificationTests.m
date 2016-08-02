@@ -34,7 +34,7 @@
     XCTAssertNoThrow([MPNotification notificationWithJSONObject:info]);
     
     MPNotification *notification = [MPNotification notificationWithJSONObject:info];
-    XCTAssertEqualObjects(notification.imageURL.absoluteString, @"1466606494290.684919.uwp5.png");
+    XCTAssertEqualObjects(notification.imageURL.absoluteString, @"1466606494290.684919.uwp5@2x.png");
 }
 
 - (void)testParseNotification {
@@ -208,7 +208,7 @@
 }
 
 - (void)testVisualNotifications {
-    //This is run on an iPhone 5S and an iPhone 6S Plus Simulator, and an iPad Pro simulator
+    //This is run on an iPhone 5S Simulator, an iPhone 6S Plus Simulator, and an iPad Pro Simulator
     [[LSNocilla sharedInstance] stop];
     
     while ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
