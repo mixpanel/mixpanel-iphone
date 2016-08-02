@@ -47,7 +47,6 @@
 {
     NSUInteger _flushInterval;
     BOOL _enableVisualABTestAndCodeless;
-    BOOL _useIPAddressForGeoLocation;
 }
 
 #if !MIXPANEL_LIMITED_SUPPORT

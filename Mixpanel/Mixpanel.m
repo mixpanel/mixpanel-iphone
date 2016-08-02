@@ -68,7 +68,7 @@ static Mixpanel *sharedInstance;
         
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
-        _useIPAddressForGeoLocation = YES;
+        self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
 
@@ -163,14 +163,11 @@ static Mixpanel *sharedInstance;
 }
 
 - (BOOL)useIPAddressForGeoLocation {
-    return _useIPAddressForGeoLocation;
+    return self.network.useIPAddressForGeoLocation;
 }
 
 - (void)setUseIPAddressForGeoLocation:(BOOL)useIPAddressForGeoLocation {
-    _useIPAddressForGeoLocation = useIPAddressForGeoLocation;
-    if (self.network) {
-        self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
-    }
+    self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
 }
 
 #pragma mark - Tracking
