@@ -68,8 +68,8 @@ static Mixpanel *sharedInstance;
         
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
-        _showNetworkActivityIndicator = YES;
         _useIPAddressForGeoLocation = YES;
+        self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
@@ -154,15 +154,12 @@ static Mixpanel *sharedInstance;
 }
 #endif
 
-- (BOOL)showNetworkActivityIndicator {
-    return _showNetworkActivityIndicator;
+- (BOOL)shouldManageNetworkActivityIndicator {
+    return self.network.shouldManageNetworkActivityIndicator;
 }
 
-- (void)setShowNetworkActivityIndicator:(BOOL)showNetworkActivityIndicator {
-    _showNetworkActivityIndicator = showNetworkActivityIndicator;
-    if (self.network) {
-        self.network.showNetworkActivityIndicator = showNetworkActivityIndicator;
-    }
+- (void)setShouldManageNetworkActivityIndicator:(BOOL)shouldManageNetworkActivityIndicator {
+    self.network.shouldManageNetworkActivityIndicator = shouldManageNetworkActivityIndicator;
 }
 
 - (BOOL)useIPAddressForGeoLocation {
@@ -897,9 +894,7 @@ static Mixpanel *sharedInstance;
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
 
-    if (self.enableVisualABTestAndCodeless) {
-        [self initializeGestureRecognizer];
-    }
+    [self initializeGestureRecognizer];
 
 }
 

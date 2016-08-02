@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion
  Defaults to YES.
  */
-@property (atomic) BOOL showNetworkActivityIndicator;
+@property (atomic) BOOL shouldManageNetworkActivityIndicator;
 
 /*!
  @property

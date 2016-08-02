@@ -47,7 +47,6 @@
 {
     NSUInteger _flushInterval;
     BOOL _enableVisualABTestAndCodeless;
-    BOOL _showNetworkActivityIndicator;
     BOOL _useIPAddressForGeoLocation;
 }
 

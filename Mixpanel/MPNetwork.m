@@ -20,7 +20,7 @@ static const NSUInteger kBatchSize = 50;
     self = [super init];
     if (self) {
         self.serverURL = serverURL;
-        self.showNetworkActivityIndicator = YES;
+        self.shouldManageNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
     }
     return self;
@@ -279,7 +279,7 @@ static const NSUInteger kBatchSize = 50;
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
 #if !MIXPANEL_LIMITED_SUPPORT
-    if (self.showNetworkActivityIndicator) {
+    if (self.shouldManageNetworkActivityIndicator) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
     }
 #endif
