@@ -92,7 +92,11 @@ static Mixpanel *sharedInstance;
         self.timedEvents = [NSMutableDictionary dictionary];
 
         self.showSurveyOnActive = YES;
+#if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
+        self.enableVisualABTestAndCodeless = NO;
+#else
         self.enableVisualABTestAndCodeless = YES;
+#endif
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
         
