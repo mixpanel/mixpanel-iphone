@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}'
     ss.exclude_files = 'Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/Mixpanel+HostWatchOS.{m,h}'
-    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
+    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h, 'Mixpanel/MPLogger.h'
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
