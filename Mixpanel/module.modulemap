@@ -16,6 +16,4 @@ framework module Mixpanel {
         header "Mixpanel+HostWatchOS.h"
         export *
     }
-
-    header "asl.h"
 }
