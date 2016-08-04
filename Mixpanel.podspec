@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}'
     ss.exclude_files = 'Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/Mixpanel+HostWatchOS.{m,h}'
-    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
+    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'tvOS' do |ss|
     ss.source_files  = 'Mixpanel/NSInvocation+MPHelpers.{m,h}', 'Mixpanel/UIColor+MPColor.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/UIImage+MPAverageColor.{m,h}', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/UIImage+MPImageEffects.{m,h}', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPFoundation.h'
-    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
+    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h',  'Mixpanel/MPLogger.h'
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' =>  '$(inherited) MIXPANEL_TVOS_EXTENSION' }
     ss.libraries = 'icucore'
@@ -50,7 +50,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'AppExtension' do |ss|
     ss.source_files  = ['Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeople.{h,m}', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetwork.{h,m}', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h', 'Mixpanel/MPFoundation.h', 'Mixpanel/Mixpanel+AutomaticEvents.h', 'Mixpanel/AutomaticEventsConstants.h']
-    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
+    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
     ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_APP_EXTENSION'}
     ss.frameworks = 'UIKit', 'Foundation', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
