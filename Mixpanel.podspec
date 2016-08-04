@@ -44,6 +44,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'WatchOS' do |ss|
     ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/MPLogger.h']
+    ss.private_header_files = 'Mixpanel/MPLogger.h'
     ss.frameworks = 'WatchConnectivity', 'Foundation'
     ss.watchos.deployment_target = '2.0'
   end
