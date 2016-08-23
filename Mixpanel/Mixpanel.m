@@ -347,9 +347,7 @@ static Mixpanel *sharedInstance;
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         [tmp addEntriesFromDictionary:properties];
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -371,9 +369,7 @@ static Mixpanel *sharedInstance;
             }
         }
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -383,9 +379,7 @@ static Mixpanel *sharedInstance;
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         tmp[propertyName] = nil;
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -393,9 +387,7 @@ static Mixpanel *sharedInstance;
 {
     dispatch_async(self.serialQueue, ^{
         self.superProperties = @{};
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+        [self archiveProperties];
     });
 }
 
@@ -570,9 +562,14 @@ static Mixpanel *sharedInstance;
     NSString *filePath = [self eventsFilePath];
     NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
     MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
-    if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
-        MPLogError(@"%@ unable to archive events data", self);
+    @try {
+        if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
+            MPLogError(@"%@ unable to archive events data", self);
+        }
+    } @catch (NSException* exception) {
+        NSAssert(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
     }
+
 }
 
 - (void)archivePeople
@@ -1122,6 +1119,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     if (completion) {
                         completion(nil, nil, nil, nil);
                     }
+                    dispatch_semaphore_signal(semaphore);
                     return;
                 }
 
@@ -1132,6 +1130,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     if (completion) {
                         completion(nil, nil, nil, nil);
                     }
+                    dispatch_semaphore_signal(semaphore);
                     return;
                 }
                 if (object[@"error"]) {
@@ -1139,6 +1138,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     if (completion) {
                         completion(nil, nil, nil, nil);
                     }
+                    dispatch_semaphore_signal(semaphore);
                     return;
                 }
 
