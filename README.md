@@ -29,11 +29,11 @@ To help users stay up to date with the latests version of our iOS SDK, we always
 
 ##Step 1: Clone the SDK
 
-Git clone the latest version of "mixpanel-iphone" to your local machine using the following code in your terminal (replace X.X.X below with the latest version number):
+Git clone the latest version of "mixpanel-iphone" to your local machine using the following code in your terminal:
 
 ```
 git clone https://github.com/mixpanel/mixpanel-iphone.git
-git checkout tags/vX.X.X
+git checkout tags/v3.0.2
 ```
 
 If you don't have git installed, get it [here](http://git-scm.com/downloads).
