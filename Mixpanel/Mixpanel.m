@@ -562,14 +562,9 @@ static Mixpanel *sharedInstance;
     NSString *filePath = [self eventsFilePath];
     NSMutableArray *eventsQueueCopy = [NSMutableArray arrayWithArray:[self.eventsQueue copy]];
     MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
-    @try {
-        if (![NSKeyedArchiver archiveRootObject:eventsQueueCopy toFile:filePath]) {
-            MPLogError(@"%@ unable to archive events data", self);
-        }
-    } @catch (NSException* exception) {
-        NSAssert(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
+    if (![self archiveObject:eventsQueueCopy withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive event data", self);
     }
-
 }
 
 - (void)archivePeople
@@ -577,7 +572,7 @@ static Mixpanel *sharedInstance;
     NSString *filePath = [self peopleFilePath];
     NSMutableArray *peopleQueueCopy = [NSMutableArray arrayWithArray:[self.peopleQueue copy]];
     MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
-    if (![NSKeyedArchiver archiveRootObject:peopleQueueCopy toFile:filePath]) {
+    if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive people data", self);
     }
 }
@@ -594,7 +589,7 @@ static Mixpanel *sharedInstance;
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
     MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
-    if (![NSKeyedArchiver archiveRootObject:p toFile:filePath]) {
+    if (![self archiveObject:p withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive properties data", self);
     }
 }
@@ -602,7 +597,7 @@ static Mixpanel *sharedInstance;
 - (void)archiveVariants
 {
     NSString *filePath = [self variantsFilePath];
-    if (![NSKeyedArchiver archiveRootObject:self.variants toFile:filePath]) {
+    if (![self archiveObject:self.variants withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive variants data", self);
     }
 }
@@ -610,9 +605,21 @@ static Mixpanel *sharedInstance;
 - (void)archiveEventBindings
 {
     NSString *filePath = [self eventBindingsFilePath];
-    if (![NSKeyedArchiver archiveRootObject:self.eventBindings toFile:filePath]) {
+    if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive tracking events data", self);
     }
+}
+
+- (BOOL)archiveObject:(id)object withFilePath:(NSString *)filePath {
+    @try {
+        if (![NSKeyedArchiver archiveRootObject:object toFile:filePath]) {
+            return @NO;
+        }
+    } @catch (NSException* exception) {
+        NSAssert(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
+        return @NO;
+    }
+    return @YES;
 }
 
 - (void)unarchive
