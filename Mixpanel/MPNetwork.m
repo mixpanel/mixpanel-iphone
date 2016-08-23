@@ -37,7 +37,7 @@ static const NSUInteger kBatchSize = 50;
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(MPNetworkEndpoint)endpoint {
     if ([[NSDate date] timeIntervalSince1970] < self.requestsDisabledUntilTime) {
-        MPLogDebug(@"Attempted to flush to %@, when we still have a timeout. Ignoring flush.", endpoint);
+        MPLogDebug(@"Attempted to flush to %lu, when we still have a timeout. Ignoring flush.", endpoint);
         return;
     }
     
@@ -47,7 +47,7 @@ static const NSUInteger kBatchSize = 50;
         
         NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        MPLogDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
+        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
         NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint andBody:postBody];
         
         [self updateNetworkActivityIndicator:YES];
@@ -68,7 +68,7 @@ static const NSUInteger kBatchSize = 50;
                 NSString *response = [[NSString alloc] initWithData:responseData
                                                            encoding:NSUTF8StringEncoding];
                 if ([response intValue] == 0) {
-                    MPLogInfo(@"%@ %@ api rejected some items", self, endpoint);
+                    MPLogInfo(@"%@ %lu api rejected some items", self, endpoint);
                 }
             }
             
