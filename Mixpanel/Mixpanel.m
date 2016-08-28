@@ -847,12 +847,11 @@ static Mixpanel *sharedInstance;
 
 #if !defined(MIXPANEL_TVOS_EXTENSION)
     // wifi reachability
-    BOOL reachabilityOk = NO;
     if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
         SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
         if (SCNetworkReachabilitySetCallback(_reachability, MixpanelReachabilityCallback, &context)) {
             if (SCNetworkReachabilitySetDispatchQueue(_reachability, self.serialQueue)) {
-                reachabilityOk = YES;
+                // success, nothing to do
             } else {
                 // cleanup callback if setting dispatch queue failed
                 SCNetworkReachabilitySetCallback(_reachability, NULL, NULL);
