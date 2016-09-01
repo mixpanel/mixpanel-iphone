@@ -208,7 +208,7 @@
 }
 
 - (void)testVisualNotifications {
-    //This is run on an iPhone 5S Simulator, an iPhone 6S Plus Simulator, and an iPad Pro Simulator
+    //This is run on an iPhone 5S Simulator, an iPhone 6S Plus Simulator, and an iPad Pro 9.7in Simulator
     [[LSNocilla sharedInstance] stop];
     
     while ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
@@ -268,7 +268,7 @@
             [notifDict addEntriesFromDictionary:inAppImages[i]];
             MPNotification *notif = [MPNotification notificationWithJSONObject:notifDict];
             [self.mixpanel showNotificationWithObject:notif];
-            
+
             [self waitForAsyncQueue];
             if ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
                 MPNotificationViewController* topViewController = (MPNotificationViewController *)[self topViewController];

@@ -619,7 +619,23 @@ static Mixpanel *sharedInstance;
         NSAssert(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
         return @NO;
     }
+
+    [self addSkipBackupAttributeToItemAtPath:filePath];
     return @YES;
+}
+
+- (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString
+{
+    NSURL *URL = [NSURL fileURLWithPath: filePathString];
+    assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
+
+    NSError *error = nil;
+    BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if (!success) {
+        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+    }
+    return success;
 }
 
 - (void)unarchive
