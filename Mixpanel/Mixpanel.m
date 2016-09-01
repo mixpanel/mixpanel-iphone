@@ -613,15 +613,15 @@ static Mixpanel *sharedInstance;
 - (BOOL)archiveObject:(id)object withFilePath:(NSString *)filePath {
     @try {
         if (![NSKeyedArchiver archiveRootObject:object toFile:filePath]) {
-            return @NO;
+            return NO;
         }
     } @catch (NSException* exception) {
         NSAssert(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
-        return @NO;
+        return NO;
     }
 
     [self addSkipBackupAttributeToItemAtPath:filePath];
-    return @YES;
+    return YES;
 }
 
 - (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString
