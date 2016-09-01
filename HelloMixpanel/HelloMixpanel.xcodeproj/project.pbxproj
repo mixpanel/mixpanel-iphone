@@ -35,10 +35,8 @@
 		517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
 		517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
 		517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
-		518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
 		51AF3D3C1D380D31002E8325 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		51AF3D3D1D380D31002E8325 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E7E1D120D2A001F622D /* MPSurveyTests.m */; };
 		51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E801D120D3E001F622D /* MPNotificationTests.m */; };
 		51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
@@ -64,9 +62,7 @@
 		E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
 		E12C04A41D135952007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
 		E12C04A51D135952007D2086 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E12C04A91D135A8B007D2086 /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; };
 		E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
-		E12C04AF1D135F17007D2086 /* Nocilla.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 518010151D11CEA300C5F3EA /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -224,7 +220,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				51D96E781D11EF7D001F622D /* Nocilla.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,7 +241,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E12C04AF1D135F17007D2086 /* Nocilla.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,7 +356,6 @@
 			files = (
 				E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */,
 				0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */,
-				518010161D11CEA300C5F3EA /* Nocilla.framework in Frameworks */,
 				0563B603194A186300B40489 /* UIKit.framework in Frameworks */,
 				EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */,
 			);
@@ -381,7 +374,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */,
-				E12C04A91D135A8B007D2086 /* Nocilla.framework in Frameworks */,
 				48324589F27775A10F52DA8E /* Pods_HelloMixpanel_tvOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
