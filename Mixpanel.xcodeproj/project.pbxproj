@@ -224,6 +224,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Mixpanel/app_extension_module.modulemap; sourceTree = "<group>"; };
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
 		511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchOS.m; sourceTree = "<group>"; };
 		511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchOS.h; sourceTree = "<group>"; };
@@ -782,6 +783,7 @@
 				7C170CBC1A4A035F00D9E0F2 /* snapshot_config.json */,
 				7C170CBD1A4A035F00D9E0F2 /* test_variant.json */,
 				51FF9AB71C2B77B4004B0028 /* module.modulemap */,
+				24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */,
 				5166DCDF1CAF0D2C00920FF1 /* watchos.modulemap */,
 				E1C2C0BA1CFDD53B0052172F /* tvos.modulemap */,
 				7C170C2E1A4A02F500D9E0F2 /* Info.plist */,
@@ -1317,8 +1319,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MODULEMAP_FILE = Mixpanel/module.modulemap;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
+				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1344,8 +1346,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MODULEMAP_FILE = Mixpanel/module.modulemap;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
+				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel.extension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
