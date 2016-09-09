@@ -1443,7 +1443,6 @@
 		7C170C411A4A02F500D9E0F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "";
@@ -1465,7 +1464,6 @@
 		7C170C421A4A02F500D9E0F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
