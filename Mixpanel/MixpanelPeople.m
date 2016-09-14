@@ -138,7 +138,7 @@
 
 - (void)removePushDeviceToken:(NSData *)deviceToken
 {
-    NSDictionary *properties = @{@"$ios_devices": @[[MixpanelPeople pushDeviceTokenToString:deviceToken]]};
+    NSDictionary *properties = @{@"$ios_devices": [MixpanelPeople pushDeviceTokenToString:deviceToken]};
     [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 
