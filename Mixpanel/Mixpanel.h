@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <Mixpanel/MixpanelPeople.h>
+
+#import "MixpanelPeople.h"
 
 #if TARGET_OS_TV
     #define MIXPANEL_TVOS_EXTENSION 1
