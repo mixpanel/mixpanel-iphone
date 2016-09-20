@@ -1321,7 +1321,7 @@
 				);
 				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel.extension;
-				PRODUCT_NAME = MixpanelAppExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1348,7 +1348,7 @@
 				);
 				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel.extension;
-				PRODUCT_NAME = MixpanelAppExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
