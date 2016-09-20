@@ -233,7 +233,7 @@
 		513243431D1B473100CBA9AA /* WatchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS2.2.sdk/System/Library/Frameworks/WatchKit.framework; sourceTree = DEVELOPER_DIR; };
 		513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPHelpers.h"; sourceTree = "<group>"; };
 		513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPHelpers.m"; sourceTree = "<group>"; };
-		513B0BB61C73CA35008EEE6E /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		513B0BB61C73CA35008EEE6E /* MixpanelAppExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MixpanelAppExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		513B0BFB1C73D5DA008EEE6E /* Mixpanel-AppExtension-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-AppExtension-Info.plist"; sourceTree = "<group>"; };
 		514733BB1CD7CCDB0098B23A /* MPResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPResources.h; sourceTree = "<group>"; };
 		514733BC1CD7CCDB0098B23A /* MPResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPResources.m; sourceTree = "<group>"; };
@@ -758,7 +758,7 @@
 			children = (
 				7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */,
 				511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */,
-				513B0BB61C73CA35008EEE6E /* Mixpanel.framework */,
+				513B0BB61C73CA35008EEE6E /* MixpanelAppExtension.framework */,
 				E1C2BEB61CFD6A010052172F /* Mixpanel.framework */,
 			);
 			name = Products;
@@ -999,7 +999,7 @@
 			);
 			name = MixpanelAppExtension;
 			productName = MixpanelFramework;
-			productReference = 513B0BB61C73CA35008EEE6E /* Mixpanel.framework */;
+			productReference = 513B0BB61C73CA35008EEE6E /* MixpanelAppExtension.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7C170C291A4A02F500D9E0F2 /* Mixpanel */ = {
@@ -1321,7 +1321,7 @@
 				);
 				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel.extension;
-				PRODUCT_NAME = Mixpanel;
+				PRODUCT_NAME = MixpanelAppExtension;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1348,7 +1348,7 @@
 				);
 				MODULEMAP_FILE = Mixpanel/app_extension_module.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel.extension;
-				PRODUCT_NAME = Mixpanel;
+				PRODUCT_NAME = MixpanelAppExtension;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
