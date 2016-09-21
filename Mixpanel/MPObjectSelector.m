@@ -385,7 +385,8 @@
         // NB. For UIViews, only add subviews, nothing else.
         // The ordering of this result is critical to being able to
         // apply the index filter.
-        for (NSObject *child in [(UIView *)obj subviews]) {
+        NSArray *subviews = [[(UIView *)obj subviews] copy];
+        for (NSObject *child in subviews) {
             if (!class || [child isKindOfClass:class]) {
                 [children addObject:child];
             }
