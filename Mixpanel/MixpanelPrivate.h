@@ -14,7 +14,6 @@
 #endif
 
 #if !MIXPANEL_LIMITED_SUPPORT
-#import <CommonCrypto/CommonDigest.h>
 
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTCarrier.h>

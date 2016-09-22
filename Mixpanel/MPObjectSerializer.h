@@ -11,7 +11,7 @@
 @interface MPObjectSerializer : NSObject
 
 /*!
- @param     An array of MPClassDescription instances.
+ An array of MPClassDescription instances.
  */
 - (instancetype)initWithConfiguration:(MPObjectSerializerConfig *)configuration objectIdentityProvider:(MPObjectIdentityProvider *)objectIdentityProvider;
 
