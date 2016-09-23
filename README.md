@@ -53,7 +53,7 @@ Git clone the latest version of "mixpanel-iphone" to your local machine using th
 
 ```
 git clone https://github.com/mixpanel/mixpanel-iphone.git
-git checkout tags/v3.0.3
+git checkout tags/v3.0.4
 ```
 
 If you don't have git installed, get it [here](http://git-scm.com/downloads).
