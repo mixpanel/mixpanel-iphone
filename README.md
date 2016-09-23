@@ -20,16 +20,13 @@ To Install, see our **[full documentation »](https://mixpanel.com/help/referenc
 
 ### iOS: 
 `pod 'Mixpanel'`
-
 ### tvOS:
 `pod 'Mixpanel/tvOS'`
-
 ### watchOS:
 #### Host:
-`'Mixpanel/MixpanelHostWatchOS'`
+`pod 'Mixpanel/MixpanelHostWatchOS'`
 #### Watch:
 `pod 'Mixpanel/WatchOS'`
-
 ### App Extension:
 `pod 'Mixpanel/AppExtension'`
 
