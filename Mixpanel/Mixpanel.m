@@ -1115,6 +1115,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     dispatch_async(self.serialQueue, ^{
         NSMutableSet *newVariants = [NSMutableSet set];
         NSMutableSet *newEventBindings = [NSMutableSet set];
+        __block BOOL hadError = NO;
 
         if (!useCache || !self.decideResponseCached) {
             // Build a proper URL from our parameters
@@ -1136,9 +1137,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
                 if (error) {
                     MPLogError(@"%@ decide check http error: %@", self, error);
-                    if (completion) {
-                        completion(nil, nil, nil, nil);
-                    }
+                    hadError = YES;
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
@@ -1147,17 +1146,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 NSDictionary *object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
                 if (error) {
                     MPLogError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
-                    if (completion) {
-                        completion(nil, nil, nil, nil);
-                    }
+                    hadError = YES;
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
                 if (object[@"error"]) {
                     MPLogError(@"%@ decide check api error: %@", self, object[@"error"]);
-                    if (completion) {
-                        completion(nil, nil, nil, nil);
-                    }
+                    hadError = YES;
                     dispatch_semaphore_signal(semaphore);
                     return;
                 }
@@ -1278,22 +1273,28 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             MPLogInfo(@"%@ decide cache found, skipping network request", self);
         }
 
-        NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(MPSurvey *obj, NSUInteger idx, BOOL *stop) {
-            return [self.shownSurveyCollections member:@(obj.collectionID)] == nil;
-        }]];
+        if (hadError) {
+            if (completion) {
+                completion(nil, nil, nil, nil);
+            }
+        } else {
+            NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(MPSurvey *obj, NSUInteger idx, BOOL *stop) {
+                return [self.shownSurveyCollections member:@(obj.collectionID)] == nil;
+            }]];
 
-        NSArray *unseenNotifications = [self.notifications objectsAtIndexes:[self.notifications indexesOfObjectsPassingTest:^BOOL(MPNotification *obj, NSUInteger idx, BOOL *stop) {
-            return [self.shownNotifications member:@(obj.ID)] == nil;
-        }]];
+            NSArray *unseenNotifications = [self.notifications objectsAtIndexes:[self.notifications indexesOfObjectsPassingTest:^BOOL(MPNotification *obj, NSUInteger idx, BOOL *stop) {
+                return [self.shownNotifications member:@(obj.ID)] == nil;
+            }]];
 
-        MPLogInfo(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)unseenSurveys.count, (unsigned long)self.surveys.count, unseenSurveys);
-        MPLogInfo(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
+            MPLogInfo(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)unseenSurveys.count, (unsigned long)self.surveys.count, unseenSurveys);
+            MPLogInfo(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
                       (unsigned long)self.notifications.count, unseenNotifications);
-        MPLogInfo(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
-        MPLogInfo(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
+            MPLogInfo(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
+            MPLogInfo(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
 
-        if (completion) {
-            completion(unseenSurveys, unseenNotifications, newVariants, newEventBindings);
+            if (completion) {
+                completion(unseenSurveys, unseenNotifications, newVariants, newEventBindings);
+            }
         }
     });
 }
