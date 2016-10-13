@@ -1258,7 +1258,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				TARGETED_DEVICE_FAMILY = 4;
-				VALID_ARCHS = armv7k;
+				VALID_ARCHS = "armv7k i386";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -1290,7 +1290,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				TARGETED_DEVICE_FAMILY = 4;
-				VALID_ARCHS = armv7k;
+				VALID_ARCHS = "armv7k i386";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;

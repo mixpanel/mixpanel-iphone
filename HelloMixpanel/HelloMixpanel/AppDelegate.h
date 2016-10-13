@@ -3,7 +3,7 @@
 
 @class ViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, MixpanelDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, WCSessionDelegate, MixpanelDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
