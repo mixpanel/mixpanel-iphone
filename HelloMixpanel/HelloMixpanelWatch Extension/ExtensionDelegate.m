@@ -20,6 +20,8 @@
 
     // Initialize the MixpanelAPI object
     self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:nil];
+
+    [self.mixpanel registerSuperProperties:@{@"super watch" : @1}];
 }
 
 - (void)applicationDidBecomeActive {

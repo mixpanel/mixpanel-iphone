@@ -38,7 +38,7 @@
 }
 
 - (IBAction)tappedTrackButton {
-    [[Mixpanel sharedInstance] track:@"tapped button"];
+    [[Mixpanel sharedInstance] track:@"tapped button" properties:@{@"tracking" : @[@1, @2]}];
 }
 
 static NSString *const timeEventName = @"time something";
