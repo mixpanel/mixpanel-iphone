@@ -233,6 +233,9 @@ static Mixpanel *sharedInstance;
         }
         [self archiveProperties];
     });
+#if defined(MIXPANEL_WATCH_EXTENSION)
+    [self flush];
+#endif
 }
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID

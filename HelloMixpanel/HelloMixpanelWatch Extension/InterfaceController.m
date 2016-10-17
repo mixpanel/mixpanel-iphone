@@ -54,6 +54,12 @@ static NSString *const timeEventName = @"time something";
     self.currentlyTiming = !self.currentlyTiming;
 }
 
+- (IBAction)tappedIdentifyButton {
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel.people set:@{@"watch": [[WKInterfaceDevice currentDevice] name]}];
+    [mixpanel identify:mixpanel.distinctId];
+}
+
 @end
 
 

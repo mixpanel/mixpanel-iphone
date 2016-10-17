@@ -24,6 +24,13 @@
                                 <action selector="tappedTimeButton" destination="AgC-eL-Hgc" id="XTd-cA-DbS"/>
                             </connections>
                         </button>
+                        <button width="1" alignment="left" title="Identify User" id="y7K-vG-PsT">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="tappedIdentifyButton" destination="AgC-eL-Hgc" id="Bml-x1-lVd"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="timeSomethingButton" destination="8N8-W4-FSb" id="KAK-7x-DMF"/>
