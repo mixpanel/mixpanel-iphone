@@ -15,6 +15,7 @@
 
 #if defined(MIXPANEL_WATCH_EXTENSION)
 #import "MixpanelWatchProperties.h"
+#import <WatchKit/WatchKit.h>
 #endif
 
 #define VERSION @"3.0.4"
@@ -865,7 +866,9 @@ static Mixpanel *sharedInstance;
 
 + (BOOL)inBackground
 {
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
+#if defined(MIXPANEL_WATCH_EXTENSION)
+    return [WKExtension sharedExtension].applicationState == WKApplicationStateBackground;
+#elif !defined(MIXPANEL_APP_EXTENSION)
     return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
 #else
     return NO;
