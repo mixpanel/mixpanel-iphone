@@ -58,6 +58,11 @@
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 #endif
 
+#if !defined(MIXPANEL_WATCH_EXTENSION)
+@property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
+@property (nonatomic, strong) UIViewController *notificationViewController;
+#endif
+
 // re-declare internally as readwrite
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, strong) MPNetwork *network;
@@ -69,7 +74,6 @@
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSMutableArray *eventsQueue;
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
-@property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
@@ -80,7 +84,6 @@
 
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) id currentlyShowingNotification;
-@property (nonatomic, strong) UIViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
 @property (nonatomic, strong) NSSet *variants;

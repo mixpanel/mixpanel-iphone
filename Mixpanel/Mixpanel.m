@@ -13,6 +13,9 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
+#if defined(MIXPANEL_WATCH_EXTENSION)
+#import "MixpanelWatchProperties.h"
+#endif
 
 #define VERSION @"3.0.4"
 
@@ -60,7 +63,7 @@ static Mixpanel *sharedInstance;
 #if !defined(MIXPANEL_APP_EXTENSION)
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !defined(MIXPANEL_TVOS_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
 #endif
@@ -86,7 +89,9 @@ static Mixpanel *sharedInstance;
         self.automaticProperties = [self collectAutomaticProperties];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
+#if !defined(MIXPANEL_WATCH_EXTENSION)
         self.taskId = UIBackgroundTaskInvalid;
+#endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         self.timedEvents = [NSMutableDictionary dictionary];
@@ -103,16 +108,14 @@ static Mixpanel *sharedInstance;
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
         [self setUpListeners];
 #endif
         [self unarchive];
 #if !MIXPANEL_LIMITED_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
-#endif
 
-#if !defined(MIXPANEL_TVOS_EXTENSION) && !defined(MIXPANEL_APP_EXTENSION)
         NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (remoteNotification) {
             [self trackPushNotification:remoteNotification event:@"$app_open"];
@@ -197,9 +200,11 @@ static Mixpanel *sharedInstance;
 {
     NSString *distinctId = [self IFA];
 
+#if !defined(MIXPANEL_WATCH_EXTENSION)
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
+#endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
@@ -309,7 +314,7 @@ static Mixpanel *sharedInstance;
         // Always archive
         [self archiveEvents];
     });
-#if defined(MIXPANEL_APP_EXTENSION)
+#if defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION)
     [self flush];
 #endif
 }
@@ -818,9 +823,11 @@ static Mixpanel *sharedInstance;
 - (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    UIDevice *device = [UIDevice currentDevice];
     NSString *deviceModel = [self deviceModel];
+#if !defined(MIXPANEL_WATCH_EXTENSION)
+    UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
+#endif
 
     // Use setValue semantics to avoid adding keys where value can be nil.
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
@@ -838,26 +845,31 @@ static Mixpanel *sharedInstance;
                                   @"mp_lib": @"iphone",
                                   @"$lib_version": [self libVersion],
                                   @"$manufacturer": @"Apple",
+#if !defined(MIXPANEL_WATCH_EXTENSION)
                                   @"$os": [device systemName],
                                   @"$os_version": [device systemVersion],
+                                  @"$screen_height": @((NSInteger)size.height),
+                                  @"$screen_width": @((NSInteger)size.width),
+#endif
                                   @"$model": deviceModel,
                                   @"mp_device_model": deviceModel, //legacy
-                                  @"$screen_height": @((NSInteger)size.height),
-                                  @"$screen_width": @((NSInteger)size.width)
                                   }];
+#if defined(MIXPANEL_WATCH_EXTENSION)
+    [p addEntriesFromDictionary:[MixpanelWatchProperties collectAutomaticProperties]];
+#endif
     return [p copy];
 }
 
 + (BOOL)inBackground
 {
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
     return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
 #else
     return NO;
 #endif
 }
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
 
 #pragma mark - UIApplication Events
 
@@ -932,7 +944,7 @@ static Mixpanel *sharedInstance;
 #endif
 }
 
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !defined(MIXPANEL_TVOS_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
@@ -1081,6 +1093,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 #if !defined(MIXPANEL_TVOS_EXTENSION)
 #pragma mark - Decide
 
+#if !defined(MIXPANEL_WATCH_EXTENSION)
 + (UIViewController *)topPresentedViewController
 {
     UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -1104,6 +1117,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     return YES;
 }
+#endif
 
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion
 {

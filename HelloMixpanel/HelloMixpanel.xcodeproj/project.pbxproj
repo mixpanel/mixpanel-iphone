@@ -64,6 +64,8 @@
 		E12C04A51D135952007D2086 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
 		EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */; };
+		F058D0851DB1527900B19E59 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; };
+		F058D0861DB1527900B19E59 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F0E7329F1DAEF81000CB4C13 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E7329D1DAEF81000CB4C13 /* Interface.storyboard */; };
 		F0E732A11DAEF81000CB4C13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E732A01DAEF81000CB4C13 /* Assets.xcassets */; };
 		F0E732A81DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -208,7 +210,14 @@
 			remoteGlobalIDString = E1C2BE0A1CFD6A010052172F;
 			remoteInfo = Mixpanel_tvOS;
 		};
-		F0D80A5D1DAF02EC008508FA /* PBXContainerItemProxy */ = {
+		F058D0821DB1527000B19E59 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 511FC3101C2B74BD00DC4796;
+			remoteInfo = Mixpanel_watchOS;
+		};
+		F058D0871DB1527900B19E59 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
 			proxyType = 1;
@@ -272,6 +281,17 @@
 			files = (
 			);
 			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F058D0891DB1527900B19E59 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F058D0861DB1527900B19E59 /* Mixpanel.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F0E732C61DAEF81100CB4C13 /* Embed App Extensions */ = {
@@ -447,6 +467,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F058D0851DB1527900B19E59 /* Mixpanel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -849,11 +870,13 @@
 				F0E732A31DAEF81000CB4C13 /* Sources */,
 				F0E732A41DAEF81000CB4C13 /* Frameworks */,
 				F0E732A51DAEF81000CB4C13 /* Resources */,
+				F058D0891DB1527900B19E59 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F0D80A5E1DAF02EC008508FA /* PBXTargetDependency */,
+				F058D0831DB1527000B19E59 /* PBXTargetDependency */,
+				F058D0881DB1527900B19E59 /* PBXTargetDependency */,
 			);
 			name = "HelloMixpanelWatch Extension";
 			productName = "HelloMixpanelWatch Extension";
@@ -1254,10 +1277,15 @@
 			name = Mixpanel_tvOS;
 			targetProxy = E12C04A61D135952007D2086 /* PBXContainerItemProxy */;
 		};
-		F0D80A5E1DAF02EC008508FA /* PBXTargetDependency */ = {
+		F058D0831DB1527000B19E59 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Mixpanel_watchOS;
-			targetProxy = F0D80A5D1DAF02EC008508FA /* PBXContainerItemProxy */;
+			targetProxy = F058D0821DB1527000B19E59 /* PBXContainerItemProxy */;
+		};
+		F058D0881DB1527900B19E59 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Mixpanel_watchOS;
+			targetProxy = F058D0871DB1527900B19E59 /* PBXContainerItemProxy */;
 		};
 		F0E732AA1DAEF81000CB4C13 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2069,6 +2097,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = E8FVX7QLET;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2104,6 +2133,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = E8FVX7QLET;
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -2136,6 +2166,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = E8FVX7QLET;
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;

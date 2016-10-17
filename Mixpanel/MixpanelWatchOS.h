@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <WatchConnectivity/WatchConnectivity.h>
 
+#import "Mixpanel.h"
+#import "MixpanelPeople.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MixpanelWatchOS : NSObject

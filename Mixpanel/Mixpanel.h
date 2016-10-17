@@ -7,7 +7,11 @@
     #define MIXPANEL_TVOS_EXTENSION 1
 #endif
 
-#define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION))
+#if TARGET_OS_WATCH
+    #define MIXPANEL_WATCH_EXTENSION 1
+#endif
+
+#define MIXPANEL_LIMITED_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 
 @class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;

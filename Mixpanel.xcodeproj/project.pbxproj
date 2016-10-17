@@ -221,6 +221,16 @@
 		E1C2BE801CFD6A010052172F /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		E1C2BE8F1CFD6A010052172F /* UIColor+MPColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CBE1A4A035F00D9E0F2 /* UIColor+MPColor.h */; };
 		E1C2BE9D1CFD6A010052172F /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
+		F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */; };
+		F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */; };
+		F0FA7A6B1DB014AF00AA8006 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */; };
+		F0FA7A6E1DB020C100AA8006 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
+		F0FA7A6F1DB020D300AA8006 /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
+		F0FA7A701DB020DF00AA8006 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
+		F0FA7A721DB020F400AA8006 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
+		F0FA7A731DB020FB00AA8006 /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C548B1D131E6500407F56 /* MixpanelPeople.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -409,6 +419,8 @@
 		E1C2BE061CFD616A0052172F /* Mixpanel-tvOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mixpanel-tvOS-Info.plist"; sourceTree = "<group>"; };
 		E1C2BEB61CFD6A010052172F /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1C2C0BA1CFDD53B0052172F /* tvos.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = tvos.modulemap; path = Mixpanel/tvos.modulemap; sourceTree = "<group>"; };
+		F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchProperties.h; sourceTree = "<group>"; };
+		F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchProperties.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -720,6 +732,8 @@
 				5166DCE71CAF15FF00920FF1 /* Mixpanel+HostWatchOS.m */,
 				511FC30A1C2B739B00DC4796 /* MixpanelWatchOS.h */,
 				511FC3091C2B739B00DC4796 /* MixpanelWatchOS.m */,
+				F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */,
+				F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */,
 			);
 			name = watchOS;
 			sourceTree = "<group>";
@@ -854,6 +868,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */,
+				F0FA7A6E1DB020C100AA8006 /* MPNetwork.h in Headers */,
+				F0FA7A701DB020DF00AA8006 /* MixpanelPeople.h in Headers */,
+				F0FA7A6B1DB014AF00AA8006 /* Mixpanel.h in Headers */,
+				F0FA7A6F1DB020D300AA8006 /* MixpanelExceptionHandler.h in Headers */,
 				51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */,
 				511FC35D1C2B74BD00DC4796 /* MixpanelWatchOS.h in Headers */,
 			);
@@ -1119,7 +1138,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */,
+				F0FA7A721DB020F400AA8006 /* MixpanelExceptionHandler.m in Sources */,
 				511FC3A11C2B751100DC4796 /* MixpanelWatchOS.m in Sources */,
+				F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */,
+				F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */,
+				F0FA7A731DB020FB00AA8006 /* MixpanelPeople.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1241,6 +1265,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "Mixpanel-watchOS-Info.plist";
 				INSTALL_PATH = "@rpath";
@@ -1250,7 +1275,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MIXPANEL_WATCH_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/watchos.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
 				PRODUCT_NAME = Mixpanel;
@@ -1282,7 +1306,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MIXPANEL_WATCH_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/watchos.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.Mixpanel;
 				PRODUCT_NAME = Mixpanel;
@@ -1510,7 +1533,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MIXPANEL_TVOS_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/tvos.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1550,7 +1572,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Mixpanel",
 				);
-				MIXPANEL_TVOS_EXTENSION = YES;
 				MODULEMAP_FILE = Mixpanel/tvos.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
