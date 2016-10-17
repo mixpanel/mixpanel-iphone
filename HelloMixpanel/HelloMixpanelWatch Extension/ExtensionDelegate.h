@@ -8,6 +8,10 @@
 
 #import <WatchKit/WatchKit.h>
 
-@interface ExtensionDelegate : NSObject <WKExtensionDelegate, WCSessionDelegate>
+@class Mixpanel;
+
+@interface ExtensionDelegate : NSObject <WKExtensionDelegate>
+
+@property (strong, nonatomic) Mixpanel *mixpanel;
 
 @end

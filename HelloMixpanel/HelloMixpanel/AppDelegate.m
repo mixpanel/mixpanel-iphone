@@ -58,12 +58,6 @@
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
 
-    if ([WCSession isSupported]) {
-        WCSession *wcsession = [WCSession defaultSession];
-        wcsession.delegate = self;
-        [wcsession activateSession];
-    }
-
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
@@ -182,28 +176,6 @@
     });
 
     NSLog(@"%@ dispatched background task %lu", self, (unsigned long)self.bgTask);
-}
-
-#pragma mark - WCSessionDelegate
-
-- (void)session:(WCSession *)session activationDidCompleteWithState:(WCSessionActivationState)activationState error:(NSError *)error {
-
-}
-
-- (void)sessionDidBecomeInactive:(WCSession *)session {
-
-}
-
-- (void)sessionDidDeactivate:(WCSession *)session {
-
-}
-
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *,id> *)message {
-    [[Mixpanel sharedInstance] session:session didReceiveMessage:message];
-}
-
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *,id> *)message replyHandler:(nonnull void (^)(NSDictionary<NSString *,id> * _Nonnull))replyHandler {
-    [[Mixpanel sharedInstance] session:session didReceiveMessage:message];
 }
 
 @end

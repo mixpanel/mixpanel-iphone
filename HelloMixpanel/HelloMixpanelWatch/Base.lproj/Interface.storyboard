@@ -17,7 +17,17 @@
                                 <action selector="tappedTrackButton" destination="AgC-eL-Hgc" id="RKf-eK-qbb"/>
                             </connections>
                         </button>
+                        <button width="1" alignment="left" title="Time Something" id="8N8-W4-FSb">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="tappedTimeButton" destination="AgC-eL-Hgc" id="XTd-cA-DbS"/>
+                            </connections>
+                        </button>
                     </items>
+                    <connections>
+                        <outlet property="timeSomethingButton" destination="8N8-W4-FSb" id="KAK-7x-DMF"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="220" y="345"/>

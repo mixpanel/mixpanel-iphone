@@ -13,6 +13,9 @@
 
 @interface InterfaceController()
 
+@property (unsafe_unretained, nonatomic) IBOutlet WKInterfaceButton *timeSomethingButton;
+@property (assign, nonatomic) BOOL currentlyTiming;
+
 @end
 
 
@@ -35,7 +38,20 @@
 }
 
 - (IBAction)tappedTrackButton {
-    [[MixpanelWatchOS sharedInstance] track:@"tapped button"];
+    [[Mixpanel sharedInstance] track:@"tapped button"];
+}
+
+static NSString *const timeEventName = @"time something";
+- (IBAction)tappedTimeButton {
+    if (!self.currentlyTiming) {
+        [[Mixpanel sharedInstance] timeEvent:timeEventName];
+        [self.timeSomethingButton setTitle:@"Finish Timing"];
+    } else {
+        [[Mixpanel sharedInstance] track:timeEventName];
+        [self.timeSomethingButton setTitle:@"Time Something"];
+    }
+
+    self.currentlyTiming = !self.currentlyTiming;
 }
 
 @end

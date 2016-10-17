@@ -10,16 +10,16 @@
 
 #import "ExtensionDelegate.h"
 
+// IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
+#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+
 @implementation ExtensionDelegate
 
 - (void)applicationDidFinishLaunching {
     // Perform any final initialization of your application.
-    if ([WCSession isSupported]) {
-        WCSession *wcsession = [WCSession defaultSession];
-        wcsession.delegate = self;
-        [wcsession activateSession];
-        [MixpanelWatchOS sharedInstanceWithSession:wcsession];
-    }
+
+    // Initialize the MixpanelAPI object
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:nil];
 }
 
 - (void)applicationDidBecomeActive {
@@ -56,12 +56,6 @@
             [task setTaskCompleted];
         }
     }
-}
-
-#pragma mark - WCSessionDelegate
-
-- (void)session:(WCSession *)session activationDidCompleteWithState:(WCSessionActivationState)activationState error:(NSError *)error {
-
 }
 
 @end
