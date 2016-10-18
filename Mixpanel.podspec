@@ -10,6 +10,9 @@ Pod::Spec.new do |s|
   s.default_subspec = 'Mixpanel'
   s.ios.deployment_target = '8.0'
   s.tvos.deployment_target = '9.0'
+  s.watchos.source_files = 'Mixpanel/MixpanelWatchProperties.{m,h}', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MPLogger.h',  'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
+  s.watchos.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
+  s.watchos.frameworks = 'WatchKit', 'Foundation'
   s.watchos.deployment_target = '2.0'
   s.osx.deployment_target = ''
 
@@ -29,13 +32,6 @@ Pod::Spec.new do |s|
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.tvos.deployment_target = '9.0'
-  end
-
-  s.subspec 'WatchOS' do |ss|
-    ss.source_files = 'Mixpanel/MixpanelWatchProperties.{m,h}', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MPLogger.h',  'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
-    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
-    ss.frameworks = 'WatchKit', 'Foundation'
-    ss.watchos.deployment_target = '2.0'
   end
 
   s.subspec 'AppExtension' do |ss|
