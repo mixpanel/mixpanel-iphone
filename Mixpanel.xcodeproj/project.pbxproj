@@ -217,6 +217,7 @@
 		E1C2BE9D1CFD6A010052172F /* MixpanelExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5177CFC51C5032B600271843 /* MixpanelExceptionHandler.h */; };
 		F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */; };
 		F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */; };
+		F0F179F61DB6CA12003DFD43 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
 		F0FA7A6B1DB014AF00AA8006 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */; };
 		F0FA7A6E1DB020C100AA8006 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
@@ -856,6 +857,7 @@
 				F0FA7A6E1DB020C100AA8006 /* MPNetwork.h in Headers */,
 				F0FA7A701DB020DF00AA8006 /* MixpanelPeople.h in Headers */,
 				F0FA7A6B1DB014AF00AA8006 /* Mixpanel.h in Headers */,
+				F0F179F61DB6CA12003DFD43 /* MPLogger.h in Headers */,
 				F0FA7A6F1DB020D300AA8006 /* MixpanelExceptionHandler.h in Headers */,
 				51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */,
 			);

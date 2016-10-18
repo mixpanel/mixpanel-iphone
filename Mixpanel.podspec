@@ -15,20 +15,10 @@ Pod::Spec.new do |s|
 
   s.subspec 'Mixpanel' do |ss|
     ss.source_files  = 'Mixpanel/**/*.{m,h}'
-    ss.exclude_files = 'Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/Mixpanel+HostWatchOS.{m,h}'
+    ss.exclude_files = 'Mixpanel/MixpanelWatchProperties.{m,h}'
     ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
     ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
-    ss.libraries = 'icucore'
-    ss.ios.deployment_target = '8.0'
-  end
-
-  s.subspec 'MixpanelHostWatchOS' do |ss|
-    ss.source_files  = 'Mixpanel/**/*.{m,h}', 'Mixpanel/**/*.swift'
-    ss.exclude_files = 'Mixpanel/MixpanelWatchOS.{m,h}'
-    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
-    ss.resources   = ['Mixpanel/**/*.{png,storyboard}']
-    ss.frameworks = 'WatchConnectivity', 'WatchKit', 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
   end
@@ -37,15 +27,14 @@ Pod::Spec.new do |s|
     ss.source_files  = 'Mixpanel/NSInvocation+MPHelpers.{m,h}', 'Mixpanel/UIColor+MPColor.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/UIImage+MPAverageColor.{m,h}', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/UIImage+MPImageEffects.{m,h}', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MPLogger.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPFoundation.h'
     ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h',  'Mixpanel/MPLogger.h'
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'Accelerate', 'CoreGraphics', 'QuartzCore'
-    ss.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' =>  '$(inherited) MIXPANEL_TVOS_EXTENSION' }
     ss.libraries = 'icucore'
     ss.tvos.deployment_target = '9.0'
   end
 
   s.subspec 'WatchOS' do |ss|
-    ss.source_files = ['Mixpanel/MixpanelWatchOS.{m,h}', 'Mixpanel/MPLogger.h']
-    ss.private_header_files = 'Mixpanel/MPLogger.h'
-    ss.frameworks = 'WatchConnectivity', 'Foundation'
+    ss.source_files = 'Mixpanel/MixpanelWatchProperties.{m,h}', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MPLogger.h',  'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
+    ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
+    ss.frameworks = 'WatchKit', 'Foundation'
     ss.watchos.deployment_target = '2.0'
   end
 
