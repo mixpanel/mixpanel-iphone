@@ -9,21 +9,24 @@
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !MIXPANEL_NO_EXCEPTION_HANDLING
 #import "MixpanelExceptionHandler.h"
 #endif
 
-#if !MIXPANEL_LIMITED_SUPPORT
-
 #if TARGET_OS_IPHONE
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#endif
 
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 #import "Mixpanel+AutomaticEvents.h"
 #import "AutomaticEventsConstants.h"
 #endif
+#endif
 
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 #import "MPResources.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
@@ -38,7 +41,7 @@
 #import "MPWebSocket.h"
 #endif
 
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 @interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 #else
 @interface Mixpanel ()
@@ -48,11 +51,17 @@
     BOOL _enableVisualABTestAndCodeless;
 }
 
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
+#endif
+
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 @property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
+#endif
+
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 @property (nonatomic) AutomaticEventMode validationMode;
 @property (nonatomic) NSUInteger validationEventCount;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
@@ -103,7 +112,7 @@
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
 
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 - (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
 - (void)showNotificationWithObject:(MPNotification *)notification;
 - (void)markVariantRun:(MPVariant *)variant;

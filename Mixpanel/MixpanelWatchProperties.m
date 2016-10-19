@@ -11,7 +11,7 @@
 
 @implementation MixpanelWatchProperties
 
-+ (NSDictionary *)collectAutomaticProperties {
++ (NSDictionary *)collectDeviceProperties {
     NSMutableDictionary *mutableProperties = [NSMutableDictionary dictionaryWithCapacity:5];
 
     WKInterfaceDevice *device = [WKInterfaceDevice currentDevice];
@@ -38,6 +38,10 @@
     }
 
     return @"Apple Watch";
+}
+
++ (NSString *)systemVersion {
+    return [WKInterfaceDevice currentDevice].systemVersion;
 }
 
 @end

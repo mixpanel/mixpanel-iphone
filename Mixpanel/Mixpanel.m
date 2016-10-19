@@ -18,6 +18,8 @@
 #import <WatchKit/WatchKit.h>
 #endif
 
+#define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+
 #define VERSION @"3.0.4"
 
 @implementation Mixpanel
@@ -61,10 +63,10 @@ static Mixpanel *sharedInstance;
         MPLogWarning(@"%@ empty api token", self);
     }
     if (self = [self init]) {
-#if !defined(MIXPANEL_APP_EXTENSION)
+#if !MIXPANEL_NO_EXCEPTION_HANDLING
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
-#if !defined(MIXPANEL_TVOS_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
 #endif
@@ -109,11 +111,9 @@ static Mixpanel *sharedInstance;
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
         [self setUpListeners];
-#endif
         [self unarchive];
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
 
@@ -135,7 +135,7 @@ static Mixpanel *sharedInstance;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
     if (_reachability != NULL) {
         if (!SCNetworkReachabilitySetCallback(_reachability, NULL, NULL)) {
             MPLogError(@"%@ error unsetting reachability callback", self);
@@ -149,7 +149,7 @@ static Mixpanel *sharedInstance;
 #endif
 }
 
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 - (void)setValidationEnabled:(BOOL)validationEnabled {
     _validationEnabled = validationEnabled;
     
@@ -234,7 +234,7 @@ static Mixpanel *sharedInstance;
         }
         [self archiveProperties];
     });
-#if defined(MIXPANEL_WATCH_EXTENSION)
+#if MIXPANEL_FLUSH_IMMEDIATELY
     [self flush];
 #endif
 }
@@ -265,7 +265,7 @@ static Mixpanel *sharedInstance;
         event = @"mp_event";
     }
     
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
     // Safety check
     BOOL isAutomaticEvent = [event isEqualToString:kAutomaticEventName];
     if (isAutomaticEvent && !self.isValidationEnabled) return;
@@ -293,7 +293,7 @@ static Mixpanel *sharedInstance;
             [p addEntriesFromDictionary:properties];
         }
         
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         if (self.validationEnabled) {
             if (self.validationMode == AutomaticEventModeCount) {
                 if (isAutomaticEvent) {
@@ -318,7 +318,7 @@ static Mixpanel *sharedInstance;
         // Always archive
         [self archiveEvents];
     });
-#if defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION)
+#if MIXPANEL_FLUSH_IMMEDIATELY
     [self flush];
 #endif
 }
@@ -801,7 +801,7 @@ static Mixpanel *sharedInstance;
 
 - (NSString *)currentRadio
 {
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
     NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
     if (!radio) {
         radio = @"None";
@@ -824,14 +824,26 @@ static Mixpanel *sharedInstance;
     return VERSION;
 }
 
+- (NSDictionary *)collectDeviceProperties
+{
+#if defined(MIXPANEL_WATCH_EXTENSION)
+    return [MixpanelWatchProperties collectDeviceProperties];
+#else
+    UIDevice *device = [UIDevice currentDevice];
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    return @{
+             @"$os": [device systemName],
+             @"$os_version": [device systemVersion],
+             @"$screen_height": @((NSInteger)size.height),
+             @"$screen_width": @((NSInteger)size.width),
+             };
+#endif
+}
+
 - (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     NSString *deviceModel = [self deviceModel];
-#if !defined(MIXPANEL_WATCH_EXTENSION)
-    UIDevice *device = [UIDevice currentDevice];
-    CGSize size = [UIScreen mainScreen].bounds.size;
-#endif
 
     // Use setValue semantics to avoid adding keys where value can be nil.
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
@@ -840,7 +852,7 @@ static Mixpanel *sharedInstance;
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version_string"];
     [p setValue:[self IFA] forKey:@"$ios_ifa"];
     
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
     CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
     [p setValue:carrier.carrierName forKey:@"$carrier"];
 #endif
@@ -849,41 +861,27 @@ static Mixpanel *sharedInstance;
                                   @"mp_lib": @"iphone",
                                   @"$lib_version": [self libVersion],
                                   @"$manufacturer": @"Apple",
-#if !defined(MIXPANEL_WATCH_EXTENSION)
-                                  @"$os": [device systemName],
-                                  @"$os_version": [device systemVersion],
-                                  @"$screen_height": @((NSInteger)size.height),
-                                  @"$screen_width": @((NSInteger)size.width),
-#endif
                                   @"$model": deviceModel,
                                   @"mp_device_model": deviceModel, //legacy
                                   }];
-#if defined(MIXPANEL_WATCH_EXTENSION)
-    [p addEntriesFromDictionary:[MixpanelWatchProperties collectAutomaticProperties]];
-#endif
+    [p addEntriesFromDictionary:[self collectDeviceProperties]];
     return [p copy];
 }
 
 + (BOOL)inBackground
 {
-#if defined(MIXPANEL_WATCH_EXTENSION)
-    return [WKExtension sharedExtension].applicationState == WKApplicationStateBackground;
-#elif !defined(MIXPANEL_APP_EXTENSION)
+#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
     return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
 #else
     return NO;
 #endif
 }
 
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
-
 #pragma mark - UIApplication Events
 
 - (void)setUpListeners
 {
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
     // wifi reachability
     if ((_reachability = SCNetworkReachabilityCreateWithName(NULL, "api.mixpanel.com")) != NULL) {
         SCNetworkReachabilityContext context = {0, (__bridge void*)self, NULL, NULL, NULL};
@@ -897,12 +895,15 @@ static Mixpanel *sharedInstance;
     
     // cellular info
     [self setCurrentRadio];
-    [notificationCenter addObserver:self
+    [[NSNotificationCenter defaultCenter] addObserver:self
                            selector:@selector(setCurrentRadio)
                                name:CTRadioAccessTechnologyDidChangeNotification
                              object:nil];
-#endif
-    
+#endif // MIXPANEL_NO_REACHABILITY_SUPPORT
+
+#if !MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
     // Application lifecycle events
     [notificationCenter addObserver:self
                            selector:@selector(applicationWillTerminate:)
@@ -928,13 +929,13 @@ static Mixpanel *sharedInstance;
                            selector:@selector(appLinksNotificationRaised:)
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
+#endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
 
     [self initializeGestureRecognizer];
-
 }
 
 - (void) initializeGestureRecognizer {
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
     dispatch_async(dispatch_get_main_queue(), ^{
         self.testDesignerGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                            action:@selector(connectGestureRecognized:)];
@@ -947,10 +948,10 @@ static Mixpanel *sharedInstance;
 #endif
         [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.testDesignerGestureRecognizer];
     });
-#endif
+#endif // MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 }
 
-#if !defined(MIXPANEL_TVOS_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
 
 static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void *info)
 {
@@ -974,14 +975,16 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
-#endif
+#endif // MIXPANEL_NO_REACHABILITY_SUPPORT
+
+#if !MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
 
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive || self.checkForVariantsOnActive) {
         NSDate *start = [NSDate date];
 
@@ -1006,7 +1009,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             });
         }];
     }
-#endif
+#endif // MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1096,10 +1099,28 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
+
+#pragma mark - Logging
+- (void)setEnableLogging:(BOOL)enableLogging {
+    gLoggingEnabled = enableLogging;
+
+    if (gLoggingEnabled) {
+        asl_add_log_file(NULL, STDERR_FILENO);
+        asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
+    } else {
+        asl_remove_log_file(NULL, STDERR_FILENO);
+    }
+}
+
+- (BOOL)enableLogging {
+    return gLoggingEnabled;
+}
+
+#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
+
 #pragma mark - Decide
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
 + (UIViewController *)topPresentedViewController
 {
     UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -1123,7 +1144,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     return YES;
 }
-#endif
 
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion
 {
@@ -1640,22 +1660,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self trackNotification:notification event:@"$campaign_delivery"];
 }
 
-#pragma mark - Logging
-- (void)setEnableLogging:(BOOL)enableLogging {
-    gLoggingEnabled = enableLogging;
-    
-    if (gLoggingEnabled) {
-        asl_add_log_file(NULL, STDERR_FILENO);
-        asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
-    } else {
-        asl_remove_log_file(NULL, STDERR_FILENO);
-    }
-}
-
-- (BOOL)enableLogging {
-    return gLoggingEnabled;
-}
-
 #pragma mark - Mixpanel A/B Testing and Codeless (Designer)
 - (void)setEnableVisualABTestAndCodeless:(BOOL)enableVisualABTestAndCodeless {
     _enableVisualABTestAndCodeless = enableVisualABTestAndCodeless;
@@ -1800,7 +1804,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
-#endif //MIXPANEL_TVOS_EXTENSION
-#endif //MIXPANEL_APP_EXTENSION
+#endif // MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
 
 @end

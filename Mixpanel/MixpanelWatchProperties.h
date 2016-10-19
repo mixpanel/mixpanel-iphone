@@ -10,6 +10,7 @@
 
 @interface MixpanelWatchProperties : NSObject
 
-+ (NSDictionary *)collectAutomaticProperties;
++ (NSDictionary *)collectDeviceProperties;
++ (NSString *)systemVersion;
 
 @end

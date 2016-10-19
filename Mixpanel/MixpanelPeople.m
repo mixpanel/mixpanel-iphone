@@ -13,7 +13,7 @@
 #import "MPLogger.h"
 
 #if defined(MIXPANEL_WATCH_EXTENSION)
-#import <WatchKit/WatchKit.h>
+#import "MixpanelWatchProperties.h"
 #endif
 
 @implementation MixpanelPeople
@@ -34,15 +34,18 @@
     return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", (void *)self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
+- (NSString *)deviceSystemVersion {
+#if defined(MIXPANEL_WATCH_EXTENSION)
+    return [MixpanelWatchProperties systemVersion];
+#else
+    return [UIDevice currentDevice].systemVersion;
+#endif
+}
+
 - (NSDictionary *)collectAutomaticPeopleProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                             @"$ios_version":
-#if defined(MIXPANEL_WATCH_EXTENSION)
-                                                                             [WKInterfaceDevice currentDevice].systemVersion,
-#else
-                                                                             [UIDevice currentDevice].systemVersion,
-#endif
+                                                                             @"$ios_version": [self deviceSystemVersion],
                                                                              @"$ios_lib_version": [Mixpanel libVersion],
                                                                              }];
     NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
@@ -113,7 +116,7 @@
 
             [strongMixpanel archivePeople];
         });
-#if defined(MIXPANEL_APP_EXTENSION)
+#if MIXPANEL_FLUSH_IMMEDIATELY
         [strongMixpanel flush];
 #endif
     }
