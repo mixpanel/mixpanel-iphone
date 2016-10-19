@@ -917,7 +917,6 @@
 					};
 					F0E732A61DAEF81000CB4C13 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = E8FVX7QLET;
 						ProvisioningStyle = Automatic;
 					};
 				};
