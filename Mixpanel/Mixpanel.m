@@ -19,6 +19,7 @@
 #endif
 
 #define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+#define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 
 #define VERSION @"3.0.4"
 
@@ -870,7 +871,7 @@ static Mixpanel *sharedInstance;
 
 + (BOOL)inBackground
 {
-#if !defined(MIXPANEL_APP_EXTENSION) && !defined(MIXPANEL_WATCH_EXTENSION)
+#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
     return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
 #else
     return NO;
