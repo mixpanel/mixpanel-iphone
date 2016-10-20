@@ -23,10 +23,7 @@ To Install, see our **[full documentation »](https://mixpanel.com/help/referenc
 #### tvOS:
 `pod 'Mixpanel/tvOS'`
 #### watchOS:
-##### Host:
-`pod 'Mixpanel/MixpanelHostWatchOS'`
-##### Watch:
-`pod 'Mixpanel/WatchOS'`
+`pod 'Mixpanel'`
 #### App Extension:
 `pod 'Mixpanel/AppExtension'`
 
@@ -47,16 +44,15 @@ Run `carthage update` to build the framework and drag the built `Mixpanel.framew
 
 To help users stay up to date with the latests version of our iOS SDK, we always recommend integrating our SDK via CocoaPods, which simplifies version updates and dependency management. However, there are cases where users can't use CocoaPods. Not to worry, just follow these manual installation steps and you'll be all set.
 
-### Step 1: Clone the SDK
+### Step 1: Add as a Submodule
 
-Git clone the latest version of "mixpanel-iphone" to your local machine using the following code in your terminal:
+Add Mixpanel as a submodule to your local git repo like so:
 
 ```
-git clone https://github.com/mixpanel/mixpanel-iphone.git
-git checkout tags/v3.0.4
+git submodule add git@github.com:mixpanel/mixpanel-iphone.git
 ```
 
-If you don't have git installed, get it [here](http://git-scm.com/downloads).
+Now the Mixpanel project and its files should be in your project folder!
 
 ### Step 2: Add the SDK to your app!
 

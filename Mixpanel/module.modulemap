@@ -11,9 +11,4 @@ framework module Mixpanel {
         header "MPTweakStore.h"
         export *
     }
-    
-    module WatchOS {
-        header "Mixpanel+HostWatchOS.h"
-        export *
-    }
 }

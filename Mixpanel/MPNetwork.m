@@ -12,6 +12,8 @@
 #import "Mixpanel.h"
 #import <UIKit/UIKit.h>
 
+#define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+
 static const NSUInteger kBatchSize = 50;
 
 @implementation MPNetwork
@@ -278,7 +280,7 @@ static const NSUInteger kBatchSize = 50;
 }
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
-#if !MIXPANEL_LIMITED_SUPPORT
+#if !MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR
     if (self.shouldManageNetworkActivityIndicator) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
     }
