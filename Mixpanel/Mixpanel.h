@@ -65,9 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 
  @discussion
  A distinct ID is a string that uniquely identifies one of your users.
- Typically, this is the user ID from your database. By default, we'll use a
- hash of the MAC address of the device. To change the current distinct ID,
- use the <code>identify:</code> method.
+ Typically, this is the user ID from your database. By default, we'll use
+ the device's advertisingIdentifier UUIDString, if that is not available
+ we'll use the device's identifierForVendor UUIDString, and finally if that
+ is not available we will generate a new random UUIDString. To change the
+ current distinct ID, use the <code>identify:</code> method.
  */
 @property (atomic, readonly, copy) NSString *distinctId;
 
