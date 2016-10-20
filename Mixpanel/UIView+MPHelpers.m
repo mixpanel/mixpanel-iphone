@@ -2,6 +2,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "UIView+MPHelpers.h"
+#import "MPLogger.h"
 
 // NB If you add any more fingerprint methods, increment this.
 #define MP_FINGERPRINT_VERSION 1
@@ -13,12 +14,17 @@
 }
 
 - (UIImage *)mp_snapshotImage {
+    UIImage *image = nil;
     CGSize size = self.layer.bounds.size;
     UIGraphicsBeginImageContext(size);
-    
-    [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+
+    @try {
+        [self drawViewHierarchyInRect:CGRectMake(0.0f, 0.0f, size.width, size.height) afterScreenUpdates:YES];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+    } @catch (NSException *exception) {
+        MPLogError(@"exception getting snapshot image %@ for view %@", exception, self);
+    }
+
     UIGraphicsEndImageContext();
     
     return image;
