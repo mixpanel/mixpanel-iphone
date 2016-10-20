@@ -169,9 +169,9 @@ static const NSUInteger kBatchSize = 50;
                            withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                   andBody:(NSString *)body {
     // Build URL from path and query items
-    NSURLComponents *components = [NSURLComponents componentsWithURL:self.serverURL
+    NSURL *urlWithEndpoint = [self.serverURL URLByAppendingPathComponent:endpoint];
+    NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
                                              resolvingAgainstBaseURL:YES];
-    components.path = [components.path stringByAppendingPathComponent:endpoint];
     components.queryItems = queryItems;
 
     // Build request from URL
