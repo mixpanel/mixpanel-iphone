@@ -927,6 +927,9 @@ static Mixpanel *sharedInstance;
 #else
         self.testDesignerGestureRecognizer.numberOfTouchesRequired = 4;
 #endif
+        // because this is in a dispatch_async, if the user sets enableVisualABTestAndCodeless in the first run
+        // loop then this is initialized after that is set so we have to check here
+        self.testDesignerGestureRecognizer.enabled = self.enableVisualABTestAndCodeless;
         [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.testDesignerGestureRecognizer];
     });
 #endif
