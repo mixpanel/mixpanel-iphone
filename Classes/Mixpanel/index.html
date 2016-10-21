@@ -1232,9 +1232,11 @@ below for more information.
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start --><p>A distinct ID is a string that uniquely identifies one of your users.
-Typically, this is the user ID from your database. By default, we'll use a
-hash of the MAC address of the device. To change the current distinct ID,
-use the <code>identify:</code> method.
+Typically, this is the user ID from your database. By default, we'll use
+the device's advertisingIdentifier UUIDString, if that is not available
+we'll use the device's identifierForVendor UUIDString, and finally if that
+is not available we will generate a new random UUIDString. To change the
+current distinct ID, use the <code>identify:</code> method.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/enableLogging;   name=Mixpanel::enableLogging -->
 <a name="//apple_ref/occ/instp/Mixpanel/enableLogging"></a>
@@ -1427,7 +1429,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Wednesday, August 03, 2016
+<p class="hd_timestamp">Last Updated: Friday, October 21, 2016
 </p></div>
 </td></tr></table>
 </body></html>
