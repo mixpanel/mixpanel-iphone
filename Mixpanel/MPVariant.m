@@ -372,7 +372,12 @@ static NSMapTable *originalCache;
         self.swizzleClass = swizzleClass;
 
         if (!swizzleSelector) {
-            swizzleSelector = NSSelectorFromString(@"didMoveToWindow");
+            if ([self.swizzleClass isSubclassOfClass:[UITableViewCell class]] ||
+                [self.path pathContainsObjectOfClass:[UITableViewCell class]]) {
+                swizzleSelector = NSSelectorFromString(@"layoutSubviews");
+            } else {
+                swizzleSelector = NSSelectorFromString(@"didMoveToWindow");
+            }
         }
         self.swizzleSelector = swizzleSelector;
 
