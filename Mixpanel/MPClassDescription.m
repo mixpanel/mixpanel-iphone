@@ -64,9 +64,9 @@
     return allPropertyDescriptions.allValues;
 }
 
-- (BOOL)isDescriptionForKindOfClass:(Class)class
+- (BOOL)isDescriptionForKindOfClass:(Class)aClass
 {
-    return [self.name isEqualToString:NSStringFromClass(class)] && [self.superclassDescription isDescriptionForKindOfClass:[class superclass]];
+    return [self.name isEqualToString:NSStringFromClass(aClass)] && [self.superclassDescription isDescriptionForKindOfClass:[aClass superclass]];
 }
 
 - (NSString *)debugDescription
