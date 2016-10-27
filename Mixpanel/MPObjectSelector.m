@@ -198,6 +198,15 @@
     return nil;
 }
 
+- (BOOL)pathContainsObjectOfClass:(Class)klass {
+    for (MPObjectFilter *filter in _filters) {
+        if ([NSClassFromString(filter.name) isSubclassOfClass:klass]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (NSString *)description
 {
     return self.string;

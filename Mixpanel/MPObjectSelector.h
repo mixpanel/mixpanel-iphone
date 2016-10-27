@@ -22,6 +22,7 @@
 - (BOOL)fuzzyIsLeafSelected:(id)leaf fromRoot:(id)root;
 
 - (Class)selectedClass;
+- (BOOL)pathContainsObjectOfClass:(Class)klass;
 - (NSString *)description;
 
 @end
