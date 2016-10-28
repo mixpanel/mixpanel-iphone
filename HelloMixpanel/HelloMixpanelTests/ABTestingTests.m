@@ -312,7 +312,7 @@
         }
         [expect fulfill];
     }];
-    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     // Test that calling again uses the cache (no extra requests to decide).
     [self.mixpanel checkForDecideResponseWithCompletion:nil];
