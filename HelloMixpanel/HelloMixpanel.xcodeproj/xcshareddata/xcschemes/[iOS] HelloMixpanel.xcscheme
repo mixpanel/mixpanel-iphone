@@ -54,6 +54,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "MPNotificationTests/testVisualNotifications">
+               </Test>
+               <Test
                   Identifier = "MixpanelBaseTests">
                </Test>
             </SkippedTests>
