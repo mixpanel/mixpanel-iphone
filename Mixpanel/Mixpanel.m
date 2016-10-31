@@ -210,6 +210,11 @@ static Mixpanel *sharedInstance;
 
 + (void)assertPropertyTypesInDictionary:(NSDictionary *)properties depth:(NSUInteger)depth
 {
+    if([properties count] > 1000) {
+        MPLogWarning(@"You have an NSArray in your properties that is bigger than 1000 in size. \
+                     Generally this is not recommended and due to its size, we will not check type validity on all its elements");
+        return;
+    }
     for (id key in properties) {
         id value = properties[key];
         NSAssert([key isKindOfClass:[NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [key class], key);
