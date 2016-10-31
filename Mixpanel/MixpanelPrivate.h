@@ -100,7 +100,7 @@
 
 @property (atomic, copy) NSString *switchboardURL;
 
-+ (void)assertPropertyTypes:(NSDictionary *)properties;
++ (void)assertPropertyTypesInDictionary:(NSDictionary *)properties;
 
 - (NSString *)deviceModel;
 - (NSString *)IFA;
