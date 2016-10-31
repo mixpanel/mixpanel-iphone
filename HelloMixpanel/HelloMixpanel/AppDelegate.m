@@ -3,7 +3,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"31d21875ed77138c10231644e48c5d6e"
 
 @implementation AppDelegate
 
@@ -57,6 +57,13 @@
     
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
+
+    NSMutableArray *lol = [[NSMutableArray alloc] init];
+    for(int i=0;i<1001;i++) {
+        [lol addObject:@[@"meh",@"hehe"]];
+    }
+    [self.mixpanel track:@"test load" properties:@{@"test key": lol}];
+
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
