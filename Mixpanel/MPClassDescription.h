@@ -12,7 +12,7 @@
 
 - (instancetype)initWithSuperclassDescription:(MPClassDescription *)superclassDescription dictionary:(NSDictionary *)dictionary;
 
-- (BOOL)isDescriptionForKindOfClass:(Class)class;
+- (BOOL)isDescriptionForKindOfClass:(Class)aClass;
 
 @end
 
