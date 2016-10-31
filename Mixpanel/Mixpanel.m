@@ -211,7 +211,7 @@ static Mixpanel *sharedInstance;
 + (void)assertPropertyTypesInDictionary:(NSDictionary *)properties depth:(NSUInteger)depth
 {
     if([properties count] > 1000) {
-        MPLogWarning(@"You have an NSArray in your properties that is bigger than 1000 in size. \
+        MPLogWarning(@"You have an NSDictionary in your properties that is bigger than 1000 in size. \
                      Generally this is not recommended and due to its size, we will not check type validity on all its elements");
         return;
     }
