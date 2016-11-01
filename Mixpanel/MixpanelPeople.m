@@ -158,7 +158,7 @@
 - (void)set:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
     [self addPeopleRecordToQueueWithAction:@"$set" andProperties:properties];
 }
 
@@ -175,7 +175,7 @@
 - (void)setOnce:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
     [self addPeopleRecordToQueueWithAction:@"$set_once" andProperties:properties];
 }
 
@@ -214,7 +214,7 @@
 - (void)append:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
     [self addPeopleRecordToQueueWithAction:@"$append" andProperties:properties];
 }
 
@@ -231,7 +231,7 @@
 - (void)remove:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
     [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
 }
 

@@ -179,22 +179,39 @@ static Mixpanel *sharedInstance;
 }
 
 #pragma mark - Tracking
-+ (void)assertPropertyTypes:(NSDictionary *)properties
++ (void)assertPropertyType:(id)propertyValue
 {
-    for (id __unused k in properties) {
-        NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
-        // would be convenient to do: id v = properties[k]; but
-        // when the NSAssert's are stripped out in release, it becomes an
-        // unused variable error. also, note that @YES and @NO pass as
-        // instances of NSNumber class.
-        NSAssert([properties[k] isKindOfClass:[NSString class]] ||
-                 [properties[k] isKindOfClass:[NSNumber class]] ||
-                 [properties[k] isKindOfClass:[NSNull class]] ||
-                 [properties[k] isKindOfClass:[NSArray class]] ||
-                 [properties[k] isKindOfClass:[NSDictionary class]] ||
-                 [properties[k] isKindOfClass:[NSDate class]] ||
-                 [properties[k] isKindOfClass:[NSURL class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [properties[k] class], properties[k]);
+    // Note that @YES and @NO pass as instances of NSNumber class.
+    NSAssert([propertyValue isKindOfClass:[NSString class]] ||
+             [propertyValue isKindOfClass:[NSNumber class]] ||
+             [propertyValue isKindOfClass:[NSNull class]] ||
+             [propertyValue isKindOfClass:[NSArray class]] ||
+             [propertyValue isKindOfClass:[NSDictionary class]] ||
+             [propertyValue isKindOfClass:[NSDate class]] ||
+             [propertyValue isKindOfClass:[NSURL class]],
+             @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [propertyValue class], propertyValue);
+    
+    if ([propertyValue isKindOfClass:[NSDictionary class]]) {
+        [Mixpanel assertPropertyTypesInDictionary:propertyValue];
+    } else if ([propertyValue isKindOfClass:[NSArray class]]) {
+        [Mixpanel assertPropertyTypesInArray:propertyValue];
+    }
+}
+
++ (void)assertPropertyTypesInDictionary:(NSDictionary *)properties
+{
+    for (id key in properties) {
+        id value = properties[key];
+        NSAssert([key isKindOfClass:[NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [key class], key);
+        
+        [Mixpanel assertPropertyType:value];
+    }
+}
+
++ (void)assertPropertyTypesInArray:(NSArray *)arrayOfProperties
+{
+    for (id value in arrayOfProperties) {
+        [Mixpanel assertPropertyType:value];
     }
 }
 
@@ -273,7 +290,7 @@ static Mixpanel *sharedInstance;
 #endif
     
     properties = [properties copy];
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
 
     NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
     NSNumber *epochSeconds = @(round(epochInterval));
@@ -352,7 +369,7 @@ static Mixpanel *sharedInstance;
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
     properties = [properties copy];
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         [tmp addEntriesFromDictionary:properties];
@@ -369,7 +386,7 @@ static Mixpanel *sharedInstance;
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue
 {
     properties = [properties copy];
-    [Mixpanel assertPropertyTypes:properties];
+    [Mixpanel assertPropertyTypesInDictionary:properties];
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         for (NSString *key in properties) {
