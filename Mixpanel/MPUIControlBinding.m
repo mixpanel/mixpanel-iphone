@@ -78,7 +78,7 @@
         if (verifyEvent == 0) {
             if (controlEvent & UIControlEventAllTouchEvents) {
                 verifyEvent = UIControlEventTouchDown;
-            } else if (controlEvent & UIControlEventAllTouchEvents) {
+            } else if (controlEvent & UIControlEventAllEditingEvents) {
                 verifyEvent = UIControlEventEditingDidBegin;
             }
         }
