@@ -372,8 +372,16 @@ static NSMapTable *originalCache;
         self.swizzleClass = swizzleClass;
 
         if (!swizzleSelector) {
-            if ([self.swizzleClass isSubclassOfClass:[UITableViewCell class]] ||
-                [self.path pathContainsObjectOfClass:[UITableViewCell class]]) {
+            BOOL shouldUseLayoutSubviews = NO;
+            NSArray *classesToUseLayoutSubviews = @[[UITableViewCell class], [UINavigationBar class]];
+            for (Class klass in classesToUseLayoutSubviews) {
+                if ([self.swizzleClass isSubclassOfClass:klass] ||
+                    [self.path pathContainsObjectOfClass:klass]) {
+                    shouldUseLayoutSubviews = YES;
+                    break;
+                }
+            }
+            if (shouldUseLayoutSubviews) {
                 swizzleSelector = NSSelectorFromString(@"layoutSubviews");
             } else {
                 swizzleSelector = NSSelectorFromString(@"didMoveToWindow");
