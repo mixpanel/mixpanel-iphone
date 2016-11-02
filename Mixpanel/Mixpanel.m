@@ -199,7 +199,7 @@ static Mixpanel *sharedInstance;
 #ifdef DEBUG
     if (depth == 3) {
         MPLogWarning(@"Your properties are overly nested, specifically 3 or more levels deep. \
-                     Generally this is not recommended and due to its complexity.");
+                     Generally this is not recommended due to its complexity.");
     }
     if ([propertyValue isKindOfClass:[NSDictionary class]]) {
         [Mixpanel assertPropertyTypesInDictionary:propertyValue depth:depth+1];
@@ -213,7 +213,7 @@ static Mixpanel *sharedInstance;
 {
     if([properties count] > 1000) {
         MPLogWarning(@"You have an NSDictionary in your properties that is bigger than 1000 in size. \
-                     Generally this is not recommended and due to its size.");
+                     Generally this is not recommended due to its size.");
     }
     for (id key in properties) {
         id value = properties[key];
@@ -226,7 +226,7 @@ static Mixpanel *sharedInstance;
 {
     if([arrayOfProperties count] > 1000) {
         MPLogWarning(@"You have an NSArray in your properties that is bigger than 1000 in size. \
-                     Generally this is not recommended and due to its size.");
+                     Generally this is not recommended due to its size.");
     }
     for (id value in arrayOfProperties) {
         [Mixpanel assertPropertyType:value depth:depth];
