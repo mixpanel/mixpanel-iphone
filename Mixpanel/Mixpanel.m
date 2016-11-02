@@ -181,20 +181,55 @@ static Mixpanel *sharedInstance;
 #pragma mark - Tracking
 + (void)assertPropertyTypes:(NSDictionary *)properties
 {
-    for (id __unused k in properties) {
-        NSAssert([k isKindOfClass: [NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [k class], k);
-        // would be convenient to do: id v = properties[k]; but
-        // when the NSAssert's are stripped out in release, it becomes an
-        // unused variable error. also, note that @YES and @NO pass as
-        // instances of NSNumber class.
-        NSAssert([properties[k] isKindOfClass:[NSString class]] ||
-                 [properties[k] isKindOfClass:[NSNumber class]] ||
-                 [properties[k] isKindOfClass:[NSNull class]] ||
-                 [properties[k] isKindOfClass:[NSArray class]] ||
-                 [properties[k] isKindOfClass:[NSDictionary class]] ||
-                 [properties[k] isKindOfClass:[NSDate class]] ||
-                 [properties[k] isKindOfClass:[NSURL class]],
-                 @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [properties[k] class], properties[k]);
+    [Mixpanel assertPropertyTypesInDictionary:properties depth:0];
+}
+
++ (void)assertPropertyType:(id)propertyValue depth:(NSUInteger)depth
+{
+    // Note that @YES and @NO pass as instances of NSNumber class.
+    NSAssert([propertyValue isKindOfClass:[NSString class]] ||
+             [propertyValue isKindOfClass:[NSNumber class]] ||
+             [propertyValue isKindOfClass:[NSNull class]] ||
+             [propertyValue isKindOfClass:[NSArray class]] ||
+             [propertyValue isKindOfClass:[NSDictionary class]] ||
+             [propertyValue isKindOfClass:[NSDate class]] ||
+             [propertyValue isKindOfClass:[NSURL class]],
+             @"%@ property values must be NSString, NSNumber, NSNull, NSArray, NSDictionary, NSDate or NSURL. got: %@ %@", self, [propertyValue class], propertyValue);
+
+#ifdef DEBUG
+    if (depth == 3) {
+        MPLogWarning(@"Your properties are overly nested, specifically 3 or more levels deep. \
+                     Generally this is not recommended due to its complexity.");
+    }
+    if ([propertyValue isKindOfClass:[NSDictionary class]]) {
+        [Mixpanel assertPropertyTypesInDictionary:propertyValue depth:depth+1];
+    } else if ([propertyValue isKindOfClass:[NSArray class]]) {
+        [Mixpanel assertPropertyTypesInArray:propertyValue depth:depth+1];
+    }
+#endif
+}
+
++ (void)assertPropertyTypesInDictionary:(NSDictionary *)properties depth:(NSUInteger)depth
+{
+    if([properties count] > 1000) {
+        MPLogWarning(@"You have an NSDictionary in your properties that is bigger than 1000 in size. \
+                     Generally this is not recommended due to its size.");
+    }
+    for (id key in properties) {
+        id value = properties[key];
+        NSAssert([key isKindOfClass:[NSString class]], @"%@ property keys must be NSString. got: %@ %@", self, [key class], key);
+        [Mixpanel assertPropertyType:value depth:depth];
+    }
+}
+
++ (void)assertPropertyTypesInArray:(NSArray *)arrayOfProperties depth:(NSUInteger)depth
+{
+    if([arrayOfProperties count] > 1000) {
+        MPLogWarning(@"You have an NSArray in your properties that is bigger than 1000 in size. \
+                     Generally this is not recommended due to its size.");
+    }
+    for (id value in arrayOfProperties) {
+        [Mixpanel assertPropertyType:value depth:depth];
     }
 }
 
