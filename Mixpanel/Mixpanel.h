@@ -314,14 +314,13 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
- Initializes and returns a singleton instance of the API.
+ Returns (and creates, if needed) a singleton instance of the API.
 
  @discussion
- If you are only going to send data to a single Mixpanel project from your app,
- as is the common case, then this is the easiest way to use the API. This
- method will set up a singleton instance of the <code>Mixpanel</code> class for
- you using the given project token. When you want to make calls to Mixpanel
- elsewhere in your code, you can use <code>sharedInstance</code>.
+ This method will return a singleton instance of the <code>Mixpanel</code> class for
+ you using the given project token. If an instance does not exist, this method will create
+ one using <code>initWithToken:launchOptions:andFlushInterval:</code>. If you only have one
+ instance in your project, you can use <code>sharedInstance</code> to retrieve it.
 
  <pre>
  [Mixpanel sharedInstance] track:@"Something Happened"]];
@@ -358,11 +357,13 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
- Returns the previously instantiated singleton instance of the API.
+ Returns a previously instantiated singleton instance of the API.
 
  @discussion
- The API must be initialized with <code>sharedInstanceWithToken:</code> before
- calling this class method.
+ The API must be initialized with <code>sharedInstanceWithToken:</code> or
+ <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
+ This method will return <code>nil</code> if there are multiple Mixpanel instances created; use
+ <code>sharedInstanceWithToken:</code> instead.
  */
 + (Mixpanel *)sharedInstance;
 
@@ -373,10 +374,7 @@ NS_ASSUME_NONNULL_BEGIN
  Initializes an instance of the API with the given project token.
 
  @discussion
- Returns the a new API object. This allows you to create more than one instance
- of the API object, which is convenient if you'd like to send data to more than
- one Mixpanel project from a single app. If you only need to send data to one
- project, consider using <code>sharedInstanceWithToken:</code>.
+ Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
  @param launchOptions   optional app delegate launchOptions
