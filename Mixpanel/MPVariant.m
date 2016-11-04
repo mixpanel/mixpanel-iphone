@@ -587,6 +587,10 @@ static NSMapTable *originalCache;
                     }
                 }
                 @try {
+                    // This check is done to avoid moving and resizing UI components that you are not allowed to change.
+                    if ([NSStringFromSelector(selector) isEqualToString:@"setFrame:"] && ![o isKindOfClass:[UINavigationBar class]]) {
+                        ((UIView *)o).translatesAutoresizingMaskIntoConstraints = YES;
+                    }
                     [invocation invokeWithTarget:o];
                 }
                 @catch (NSException *exception) {
