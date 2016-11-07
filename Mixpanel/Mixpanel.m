@@ -29,8 +29,8 @@ static NSMutableDictionary *instances;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
-    if (instances && [instances objectForKey:apiToken]) {
-        return [instances objectForKey:apiToken];
+    if (instances[apiToken]) {
+        return instances[apiToken];
     }
 
 #if defined(DEBUG)
@@ -39,7 +39,7 @@ static NSMutableDictionary *instances;
     const NSUInteger flushInterval = 60;
 #endif
 
-    return [[super alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
+    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
@@ -49,7 +49,7 @@ static NSMutableDictionary *instances;
 
 + (Mixpanel *)sharedInstance
 {
-    if (!instances || instances.count == 0) {
+    if (instances.count == 0) {
         MPLogWarning(@"sharedInstance called before creating a Mixpanel instance");
         return nil;
     }
@@ -59,7 +59,7 @@ static NSMutableDictionary *instances;
         return nil;
     }
 
-    return [instances objectForKey:[[instances keyEnumerator] nextObject]];
+    return [[instances allValues] firstObject];
 }
 
 - (instancetype)init
@@ -70,9 +70,10 @@ static NSMutableDictionary *instances;
         self.timedEvents = [NSMutableDictionary dictionary];
         self.shownSurveyCollections = [NSMutableSet set];
         self.shownNotifications = [NSMutableSet set];
-        if (!instances) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
             instances = [NSMutableDictionary dictionary];
-        }
+        });
     }
 
     return self;
@@ -142,7 +143,7 @@ static NSMutableDictionary *instances;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
-        [instances setObject:self forKey:apiToken];
+        instances[apiToken] = self;
     }
     return self;
 }
