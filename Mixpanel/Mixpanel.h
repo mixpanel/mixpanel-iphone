@@ -362,8 +362,9 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion
  The API must be initialized with <code>sharedInstanceWithToken:</code> or
  <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
- This method will return <code>nil</code> if there are multiple Mixpanel instances created; use
- <code>sharedInstanceWithToken:</code> instead.
+ This method will return <code>nil</code> if there are no instances created. If there is more than 
+ one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code> 
+ or <code>initWithToken:launchOptions:andFlushInterval:</code>.
  */
 + (Mixpanel *)sharedInstance;
 

@@ -26,6 +26,7 @@
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;
+static NSString *defaultProjectToken;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
@@ -55,14 +56,13 @@ static NSMutableDictionary *instances;
     }
 
     if (instances.count > 1) {
-        MPLogWarning(@"sharedInstance can only be called when you have one Mixpanel instance");
-        return nil;
+        MPLogWarning([NSString stringWithFormat:@"sharedInstance called with multiple mixpanel instances. Using (the first) token %@", defaultProjectToken]);
     }
 
-    return [[instances allValues] firstObject];
+    return instances[defaultProjectToken];
 }
 
-- (instancetype)init
+- (instancetype)init:(NSString *)apiToken
 {
     if (self = [super init]) {
         self.eventsQueue = [NSMutableArray array];
@@ -73,6 +73,7 @@ static NSMutableDictionary *instances;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             instances = [NSMutableDictionary dictionary];
+            defaultProjectToken = apiToken;
         });
     }
 
@@ -87,7 +88,7 @@ static NSMutableDictionary *instances;
         }
         MPLogWarning(@"%@ empty api token", self);
     }
-    if (self = [self init]) {
+    if (self = [self init:apiToken]) {
 #if !MIXPANEL_NO_EXCEPTION_HANDLING
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
