@@ -25,21 +25,21 @@
 
 @implementation Mixpanel
 
-static Mixpanel *sharedInstance;
+static NSMutableDictionary *instances;
+
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
+    if (instances[apiToken]) {
+        return instances[apiToken];
+    }
+
 #if defined(DEBUG)
-        const NSUInteger flushInterval = 1;
+    const NSUInteger flushInterval = 1;
 #else
-        const NSUInteger flushInterval = 60;
+    const NSUInteger flushInterval = 60;
 #endif
-        
-        sharedInstance = [[super alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
-    });
-    return sharedInstance;
+
+    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
@@ -49,10 +49,34 @@ static Mixpanel *sharedInstance;
 
 + (Mixpanel *)sharedInstance
 {
-    if (sharedInstance == nil) {
-        MPLogWarning(@"sharedInstance called before sharedInstanceWithToken:");
+    if (instances.count == 0) {
+        MPLogWarning(@"sharedInstance called before creating a Mixpanel instance");
+        return nil;
     }
-    return sharedInstance;
+
+    if (instances.count > 1) {
+        MPLogWarning(@"sharedInstance can only be called when you have one Mixpanel instance");
+        return nil;
+    }
+
+    return [[instances allValues] firstObject];
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.eventsQueue = [NSMutableArray array];
+        self.peopleQueue = [NSMutableArray array];
+        self.timedEvents = [NSMutableDictionary dictionary];
+        self.shownSurveyCollections = [NSMutableSet set];
+        self.shownNotifications = [NSMutableSet set];
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            instances = [NSMutableDictionary dictionary];
+        });
+    }
+
+    return self;
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval
@@ -72,7 +96,7 @@ static Mixpanel *sharedInstance;
 #endif
 #endif
         MPSetLoggingEnabled(YES);
-        
+
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.useIPAddressForGeoLocation = YES;
@@ -91,14 +115,12 @@ static Mixpanel *sharedInstance;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
-        self.eventsQueue = [NSMutableArray array];
-        self.peopleQueue = [NSMutableArray array];
+
 #if !defined(MIXPANEL_WATCH_EXTENSION)
         self.taskId = UIBackgroundTaskInvalid;
 #endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        self.timedEvents = [NSMutableDictionary dictionary];
 
         self.showSurveyOnActive = YES;
 #if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
@@ -106,8 +128,6 @@ static Mixpanel *sharedInstance;
 #else
         self.enableVisualABTestAndCodeless = YES;
 #endif
-        self.shownSurveyCollections = [NSMutableSet set];
-        self.shownNotifications = [NSMutableSet set];
         
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL]];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
@@ -123,6 +143,7 @@ static Mixpanel *sharedInstance;
             [self trackPushNotification:remoteNotification event:@"$app_open"];
         }
 #endif
+        instances[apiToken] = self;
     }
     return self;
 }
