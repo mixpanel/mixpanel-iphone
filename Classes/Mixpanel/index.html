@@ -350,11 +350,11 @@ unless the existing value is equal to defaultValue.
 <dd><p>Clears all stored properties and distinct IDs. Useful if your app's user logs out.
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/clm/Mixpanel/sharedInstance" target="_top">+sharedInstance</a></tt></dt>
-<dd><p>Returns the previously instantiated singleton instance of the API.
+<dd><p>Returns a previously instantiated singleton instance of the API.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:" target="_top">+sharedInstanceWithToken:</a></tt></dt>
-<dd><p>Initializes and returns a singleton instance of the API.
+<dd><p>Returns (and creates, if needed) a singleton instance of the API.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:launchOptions:" target="_top">+sharedInstanceWithToken:launchOptions:</a></tt></dt>
@@ -619,10 +619,7 @@ launchOptions to the above method as nil.
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:;name=start --><p>Returns the a new API object. This allows you to create more than one instance
-of the API object, which is convenient if you'd like to send data to more than
-one Mixpanel project from a single app. If you only need to send data to one
-project, consider using <code>sharedInstanceWithToken:</code>.
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:;name=start --><p>Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;   name=Mixpanel::joinExperiments -->
@@ -745,20 +742,23 @@ unless the existing value is equal to defaultValue.
 <hr class="betweenAPIEntries"><!-- headerDoc=clm;  uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;   name=Mixpanel::sharedInstance -->
 <a name="//apple_ref/occ/clm/Mixpanel/sharedInstance"></a>
 <h3><a name="sharedInstance">sharedInstance</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=start --><!-- begin abstract --><p>Returns the previously instantiated singleton instance of the API.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=start --><!-- begin abstract --><p>Returns a previously instantiated singleton instance of the API.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=end --></p>
 <div class='declaration_indent'>
 <pre><!-- headerDoc=declaration;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=start -->+ (<!-- a logicalPath="//apple_ref/occ/cl/Mixpanel //apple_ref/occ/tdef/Mixpanel //apple_ref/occ/tag/Mixpanel //apple_ref/occ/struct/Mixpanel //apple_ref/occ/intf/Mixpanel //apple_ref/doc/anysymbol/Mixpanel" machineGenerated="true" --><span class="type">Mixpanel</span><!-- /a --> <span class="type">*</span>)<!-- a logicalPath="//apple_ref/occ/econst/sharedInstance //apple_ref/occ/data/Mixpanel/sharedInstance //apple_ref/occ/data/sharedInstance //apple_ref/occ/clconst/Mixpanel/sharedInstance " machineGenerated="true" --><span class="var">sharedInstance</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=start --><p>The API must be initialized with <code>sharedInstanceWithToken:</code> before
-calling this class method.
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=start --><p>The API must be initialized with <code>sharedInstanceWithToken:</code> or
+<code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
+This method will return <code>nil</code> if there are no instances created. If there is more than 
+one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code> 
+or <code>initWithToken:launchOptions:andFlushInterval:</code>.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=clm;  uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;   name=Mixpanel::sharedInstanceWithToken: -->
 <a name="//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:"></a>
 <h3><a name="sharedInstanceWithToken:">sharedInstanceWithToken:</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;name=start --><!-- begin abstract --><p>Initializes and returns a singleton instance of the API.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;name=start --><!-- begin abstract --><p>Returns (and creates, if needed) a singleton instance of the API.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;name=end --></p>
 <div class='declaration_indent'>
@@ -773,11 +773,10 @@ calling this class method.
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;name=start --><p>If you are only going to send data to a single Mixpanel project from your app,
-as is the common case, then this is the easiest way to use the API. This
-method will set up a singleton instance of the <code>Mixpanel</code> class for
-you using the given project token. When you want to make calls to Mixpanel
-elsewhere in your code, you can use <code>sharedInstance</code>.
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;name=start --><p>This method will return a singleton instance of the <code>Mixpanel</code> class for
+you using the given project token. If an instance does not exist, this method will create
+one using <code>initWithToken:launchOptions:andFlushInterval:</code>. If you only have one
+instance in your project, you can use <code>sharedInstance</code> to retrieve it.
 </p>
  <pre>
  [Mixpanel sharedInstance] track:@"Something Happened"]];
@@ -1429,7 +1428,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Friday, October 21, 2016
+<p class="hd_timestamp">Last Updated: Tuesday, November 08, 2016
 </p></div>
 </td></tr></table>
 </body></html>
