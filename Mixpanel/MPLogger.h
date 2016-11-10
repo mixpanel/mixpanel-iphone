@@ -10,9 +10,6 @@
 #import <asl.h>
 
 static bool gLoggingEnabled = NO;
-static inline void MPSetLoggingEnabled(BOOL enabled) {
-    gLoggingEnabled = enabled;
-}
 
 #define __MP_MAKE_LOG_FUNCTION(LEVEL, NAME) \
 static inline void NAME(NSString *format, ...) { \
