@@ -56,7 +56,9 @@ static const NSUInteger kBatchSize = 50;
         
         __block BOOL didFail = NO;
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+        sessionConfig.timeoutIntervalForRequest = 5.0;
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
         [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                   NSURLResponse *urlResponse,
                                                                   NSError *error) {
