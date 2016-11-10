@@ -18,7 +18,7 @@ static const NSUInteger kBatchSize = 50;
 
 @implementation MPNetwork
 
-+ (NSURLSession *)sharedSession {
++ (NSURLSession *)sharedURLSession {
     static NSURLSession *sharedSession = nil;
     @synchronized(self) {
         if (sharedSession == nil) {
@@ -68,7 +68,7 @@ static const NSUInteger kBatchSize = 50;
         
         __block BOOL didFail = NO;
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        [[[MPNetwork sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+        [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                   NSURLResponse *urlResponse,
                                                                   NSError *error) {
             [self updateNetworkActivityIndicator:NO];
