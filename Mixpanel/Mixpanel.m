@@ -96,8 +96,6 @@ static NSString *defaultProjectToken;
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
 #endif
-        MPSetLoggingEnabled(YES);
-
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
         self.useIPAddressForGeoLocation = YES;
