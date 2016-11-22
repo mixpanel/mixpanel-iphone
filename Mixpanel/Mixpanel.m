@@ -1095,8 +1095,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSString *requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"distinct_id": self.apiToken}}]];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack andBody:postBody];
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+        [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                   NSURLResponse *urlResponse,
                                                                   NSError *error) {
             if (!error) {
@@ -1229,8 +1228,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             
             // Send the network request
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            NSURLSession *session = [NSURLSession sharedSession];
-            [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+            [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                       NSURLResponse *urlResponse,
                                                                       NSError *error) {
 

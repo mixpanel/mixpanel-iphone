@@ -18,6 +18,18 @@ static const NSUInteger kBatchSize = 50;
 
 @implementation MPNetwork
 
++ (NSURLSession *)sharedURLSession {
+    static NSURLSession *sharedSession = nil;
+    @synchronized(self) {
+        if (sharedSession == nil) {
+            NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+            sessionConfig.timeoutIntervalForRequest = 7.0;
+            sharedSession = [NSURLSession sessionWithConfiguration:sessionConfig];
+        }
+    }
+    return sharedSession;
+}
+
 - (instancetype)initWithServerURL:(NSURL *)serverURL {
     self = [super init];
     if (self) {
@@ -56,8 +68,7 @@ static const NSUInteger kBatchSize = 50;
         
         __block BOOL didFail = NO;
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSession *session = [NSURLSession sharedSession];
-        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+        [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
                                                                   NSURLResponse *urlResponse,
                                                                   NSError *error) {
             [self updateNetworkActivityIndicator:NO];

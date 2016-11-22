@@ -34,5 +34,6 @@
                            withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                   andBody:(NSString *)body;
 
++ (NSURLSession *)sharedURLSession;
 
 @end
