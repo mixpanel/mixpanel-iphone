@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 #import "MixpanelPeople.h"
 
@@ -11,11 +10,21 @@
     #define MIXPANEL_WATCH_EXTENSION 1
 #endif
 
+#if TARGET_OS_MAC
+    #define MIXPANEL_MAC_OS 1
+#endif
+
+#if !MIXPANEL_MAC_OS
+#import <UIKit/UIKit.h>
+#endif
+
+
 #define MIXPANEL_NO_EXCEPTION_HANDLING (defined(MIXPANEL_APP_EXTENSION))
 #define MIXPANEL_FLUSH_IMMEDIATELY (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
-#define MIXPANEL_NO_REACHABILITY_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
-#define MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
-#define MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+#define MIXPANEL_NO_REACHABILITY_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION) || defined(MIXPANEL_MAC_OS))
+#define MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION) || defined(MIXPANEL_MAC_OS))
+#define MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION) || defined(MIXPANEL_MAC_OS))
+#define MIXPANEL_NO_BACKGROUND_TASK (defined(MIXPANEL_WATCH_EXTENSION) || defined(MIXPANEL_MAC_OS))
 
 @class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;
@@ -282,6 +291,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) CGFloat miniNotificationPresentationTime;
 
+#if TARGET_OS_IOS
 /*!
  @property
  
@@ -294,7 +304,7 @@ NS_ASSUME_NONNULL_BEGIN
  UINavigationBar default color for the app or the UITabBar default color.
  */
 @property (atomic, strong, nullable) UIColor *miniNotificationBackgroundColor;
-
+#endif
 /*!
  @property
 

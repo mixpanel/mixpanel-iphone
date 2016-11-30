@@ -15,3 +15,12 @@ target :HelloMixpanel_tvOSTests do
   platform :tvos, '9.0'
   shared_pods
 end
+
+target :HelloMixpanel_macOSTests do
+    platform :osx, '10.10'
+    shared_pods
+end
+
+target :HelloMixpanel_macOS do
+    pod 'Mixpanel/macOS', :path => '../'
+end

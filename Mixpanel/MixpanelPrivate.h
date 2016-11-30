@@ -67,7 +67,7 @@
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 #endif
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !MIXPANEL_NO_BACKGROUND_TASK
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
 #endif
