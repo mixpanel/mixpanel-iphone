@@ -4,6 +4,8 @@
 
 @protocol MPSurveyQuestionViewControllerDelegate;
 
+MIXPANEL_SURVEYS_DEPRECATED
+
 @interface MPSurveyQuestionViewController : UIViewController
 
 @property (nonatomic, weak) id<MPSurveyQuestionViewControllerDelegate> delegate;

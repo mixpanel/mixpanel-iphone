@@ -26,7 +26,7 @@
 #endif
 #endif
 
-#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #import "MPResources.h"
 #import "MPABTestDesignerConnection.h"
 #import "UIView+MPHelpers.h"
@@ -41,7 +41,7 @@
 #import "MPWebSocket.h"
 #endif
 
-#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 @interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
 #else
 @interface Mixpanel ()
@@ -56,7 +56,7 @@
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 #endif
 
-#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 @property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
 @property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
 #endif
@@ -87,9 +87,9 @@
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
-@property (nonatomic, strong) NSArray *surveys;
-@property (nonatomic, strong) id currentlyShowingSurvey;
-@property (nonatomic, strong) NSMutableSet *shownSurveyCollections;
+@property (nonatomic, strong) NSArray *surveys MIXPANEL_SURVEYS_DEPRECATED;
+@property (nonatomic, strong) id currentlyShowingSurvey MIXPANEL_SURVEYS_DEPRECATED;
+@property (nonatomic, strong) NSMutableSet *shownSurveyCollections MIXPANEL_SURVEYS_DEPRECATED;
 
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) id currentlyShowingNotification;
@@ -112,8 +112,8 @@
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
 
-#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
-- (void)presentSurveyWithRootViewController:(MPSurvey *)survey;
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+- (void)presentSurveyWithRootViewController:(MPSurvey *)survey MIXPANEL_SURVEYS_DEPRECATED;
 - (void)showNotificationWithObject:(MPNotification *)notification;
 - (void)markVariantRun:(MPVariant *)variant;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;

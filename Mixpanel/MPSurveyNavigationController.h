@@ -5,6 +5,8 @@
 
 @protocol MPSurveyNavigationControllerDelegate;
 
+MIXPANEL_SURVEYS_DEPRECATED
+
 @interface MPSurveyNavigationController : UIViewController
 
 @property (nonatomic, strong) MPSurvey *survey;

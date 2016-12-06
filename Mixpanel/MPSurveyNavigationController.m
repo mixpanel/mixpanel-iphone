@@ -36,6 +36,7 @@
 
 - (void)viewDidLoad
 {
+    MIXPANEL_SURVEYS_DEPRECATED_LOG
     [super viewDidLoad];
     self.view.image = [_backgroundImage mp_applyDarkEffect];
 
