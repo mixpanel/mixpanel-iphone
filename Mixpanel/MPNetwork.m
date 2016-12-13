@@ -135,7 +135,7 @@ static const NSUInteger kBatchSize = 50;
     NSURLQueryItem *itemLib = [NSURLQueryItem queryItemWithName:@"lib" value:@"iphone"];
     NSURLQueryItem *itemToken = [NSURLQueryItem queryItemWithName:@"token" value:token];
     NSURLQueryItem *itemDistinctID = [NSURLQueryItem queryItemWithName:@"distinct_id" value:distinctID];
-    
+
     // Convert properties dictionary to a string
     NSData *propertiesData = [NSJSONSerialization dataWithJSONObject:properties
                                                              options:0
@@ -184,6 +184,9 @@ static const NSUInteger kBatchSize = 50;
     NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
                                              resolvingAgainstBaseURL:YES];
     components.queryItems = queryItems;
+
+    // NSURLComponents/NSURLQueryItem doesn't encode + as %2B, and then the + is interpreted as a space on servers
+    components.percentEncodedQuery = [components.percentEncodedQuery stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
 
     // Build request from URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
