@@ -67,7 +67,6 @@ static NSString *MPSurveyQuestionTypeText = @"text";
 
 - (instancetype)initWithID:(NSUInteger)ID type:(NSString *)type andPrompt:(NSString *)prompt
 {
-    MIXPANEL_SURVEYS_DEPRECATED_LOG
     if (self = [super init]) {
         BOOL valid = NO;
         _ID = ID;

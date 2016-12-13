@@ -61,7 +61,6 @@
 
 - (instancetype)initWithID:(NSUInteger)ID name:(NSString *)name collectionID:(NSUInteger)collectionID andQuestions:(NSArray *)questions
 {
-    MIXPANEL_SURVEYS_DEPRECATED_LOG
     if (self = [super init]) {
         BOOL valid = YES;
         if (name.length == 0) {

@@ -12,12 +12,6 @@
 #endif
 
 #define MIXPANEL_SURVEYS_DEPRECATED DEPRECATED_MSG_ATTRIBUTE("Mixpanel surveys are deprecated as of release 3.0.8")
-#define MIXPANEL_SURVEYS_DEPRECATED_LOG do { \
-        static dispatch_once_t _surveys_deprecated_onceToken; \
-        dispatch_once(&_surveys_deprecated_onceToken, ^{ \
-            NSLog(@"Using %@. Mixpanel surveys are deprecated as of release 3.0.8", [self class]); \
-        }); \
-    } while (0);
 
 #define MIXPANEL_NO_EXCEPTION_HANDLING (defined(MIXPANEL_APP_EXTENSION))
 #define MIXPANEL_FLUSH_IMMEDIATELY (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))

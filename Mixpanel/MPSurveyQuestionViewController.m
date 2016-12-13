@@ -63,7 +63,6 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 
 - (void)viewDidLoad
 {
-    MIXPANEL_SURVEYS_DEPRECATED_LOG
     [super viewDidLoad];
     _prompt.text = self.question.prompt;
 }
