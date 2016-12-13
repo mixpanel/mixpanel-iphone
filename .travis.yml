@@ -26,6 +26,7 @@ script:
 - xcodebuild -workspace "HelloMixpanel/HelloMixpanel.xcworkspace" -scheme "[iOS] HelloMixpanel" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c
 
 # Run `pod lib lint` if specified
+# allow warnings while surveys are deprecated but not yet removed. disallow them again later
 - if [ $POD_LINT == "YES" ]; then
     pod lib lint --allow-warnings;
   fi
