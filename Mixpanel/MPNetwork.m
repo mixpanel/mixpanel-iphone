@@ -10,9 +10,11 @@
 #import "MPNetworkPrivate.h"
 #import "MPLogger.h"
 #import "Mixpanel.h"
+#if !MIXPANEL_MAC_OS
 #import <UIKit/UIKit.h>
+#endif 
 
-#define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+#define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION) || defined(MIXPANEL_MAC_OS))
 
 static const NSUInteger kBatchSize = 50;
 

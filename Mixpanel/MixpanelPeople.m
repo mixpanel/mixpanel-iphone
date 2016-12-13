@@ -37,6 +37,9 @@
 - (NSString *)deviceSystemVersion {
 #if defined(MIXPANEL_WATCH_EXTENSION)
     return [MixpanelWatchProperties systemVersion];
+#elif defined(MIXPANEL_MAC_OS)
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    return [NSString stringWithFormat:@"%ld.%ld.%ld", version.majorVersion, version.minorVersion, version.patchVersion];
 #else
     return [UIDevice currentDevice].systemVersion;
 #endif

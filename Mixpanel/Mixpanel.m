@@ -18,8 +18,10 @@
 #import <WatchKit/WatchKit.h>
 #endif
 
+#import <CoreGraphics/CoreGraphics.h>
+
 #define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
-#define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+#define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION) || defined(MIXPANEL_MAC_OS))
 
 #define VERSION @"3.0.7"
 
@@ -115,7 +117,7 @@ static NSString *defaultProjectToken;
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !MIXPANEL_NO_BACKGROUND_TASK
         self.taskId = UIBackgroundTaskInvalid;
 #endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
@@ -257,14 +259,26 @@ static NSString *defaultProjectToken;
 {
     NSString *distinctId = [self IFA];
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !MIXPANEL_NO_BACKGROUND_TASK
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    }
+#elif MIXPANEL_MAC_OS
+    if (!distinctId) {
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+#define MIXPANEL_DISTINCT_ID_USER_DEFAULTS_KEY @"mixpanel_distinct_id"
+        distinctId = [userDefaults objectForKey:MIXPANEL_DISTINCT_ID_USER_DEFAULTS_KEY];
+        if (distinctId == nil){
+            distinctId = [[NSProcessInfo processInfo] globallyUniqueString];
+            [userDefaults setObject:distinctId forKey:MIXPANEL_DISTINCT_ID_USER_DEFAULTS_KEY];
+            [userDefaults synchronize];
+        }
     }
 #endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
         distinctId = [[NSUUID UUID] UUIDString];
+        
     }
     return distinctId;
 }
@@ -884,6 +898,13 @@ static NSString *defaultProjectToken;
 {
 #if defined(MIXPANEL_WATCH_EXTENSION)
     return [MixpanelWatchProperties collectDeviceProperties];
+#elif defined(MIXPANEL_MAC_OS)
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    NSString* versionStr = [NSString stringWithFormat:@"%ld.%ld.%ld", version.majorVersion, version.minorVersion, version.patchVersion];
+    return @{
+             @"$os": [[NSProcessInfo processInfo] operatingSystemVersionString],
+             @"$os_version": versionStr,
+             };
 #else
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
@@ -960,6 +981,17 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
+#if MIXPANEL_MAC_OS
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillTerminate:)
+                               name:NSApplicationWillTerminateNotification
+                             object:nil];
+    
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationDidBecomeActive:)
+                               name:NSApplicationDidBecomeActiveNotification
+                             object:nil];
+#else
     // Application lifecycle events
     [notificationCenter addObserver:self
                            selector:@selector(applicationWillTerminate:)
@@ -981,10 +1013,12 @@ static NSString *defaultProjectToken;
                            selector:@selector(applicationWillEnterForeground:)
                                name:UIApplicationWillEnterForegroundNotification
                              object:nil];
+#endif
     [notificationCenter addObserver:self
                            selector:@selector(appLinksNotificationRaised:)
                                name:@"com.parse.bolts.measurement_event"
                              object:nil];
+    
 #endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
 
     [self initializeGestureRecognizer];
@@ -1077,6 +1111,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self stopFlushTimer];
 }
 
+#if !MIXPANEL_NO_BACKGROUND_TASK
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
@@ -1136,7 +1171,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }
     });
 }
-
+#endif
+    
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will terminate", self);

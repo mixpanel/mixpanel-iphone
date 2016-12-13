@@ -2,7 +2,9 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import <objc/runtime.h>
+#if !TARGET_OS_MAC
 #import <UIKit/UIKit.h>
+#endif
 #import "MPLogger.h"
 #import "NSInvocation+MPHelpers.h"
 
@@ -22,7 +24,7 @@ typedef union {
     _Bool                   _bool;
 } MPObjCNumericTypes;
 
-static void MPFree(void *p)
+void MPFree(void *p)
 {
     if (p) {
         free(p);
