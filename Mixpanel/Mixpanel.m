@@ -772,6 +772,7 @@ static NSString *defaultProjectToken;
     NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
+        self.alias = properties[@"alias"];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
