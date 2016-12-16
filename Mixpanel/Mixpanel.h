@@ -135,6 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
  @property
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Controls whether to automatically check for surveys for the
  currently identified user when the application becomes active.
 
@@ -145,10 +146,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) BOOL checkForSurveysOnActive MIXPANEL_SURVEYS_DEPRECATED;
 
-/*!DEPRECATED_MSG_ATTRIBUTE
+/*!
  @property
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Controls whether to automatically show a survey for the
  currently identified user when the application becomes active.
 
@@ -164,6 +166,7 @@ NS_ASSUME_NONNULL_BEGIN
  @property
  
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Determines whether a valid survey is available to show to the user.
  
  @discussion
@@ -176,6 +179,7 @@ NS_ASSUME_NONNULL_BEGIN
  @property
  
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
  and pass in <code>survey.ID</code>
  
@@ -712,6 +716,7 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Shows the survey with the given name.
 
  @discussion
@@ -724,6 +729,7 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Show a survey if one is available.
 
  @discussion
