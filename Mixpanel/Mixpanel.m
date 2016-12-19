@@ -311,12 +311,12 @@ static NSString *defaultProjectToken;
         return;
     }
     if (![alias isEqualToString:distinctID]) {
-        [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
-        [self flush];
         dispatch_async(self.serialQueue, ^{
             self.alias = alias;
             [self archiveProperties];
         });
+        [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+        [self flush];
     } else {
         MPLogWarning(@"alias: %@ matches distinctID: %@ - skipping api call.", alias, distinctID);
     }
