@@ -577,6 +577,35 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"supposed to all be flushed");
 }
 
+- (void)testConcurrentTracking {
+    self.mixpanelWillFlush = NO;
+    stubTrack().andReturn(503);
+    dispatch_queue_t concurrentQueue = dispatch_queue_create("test_concurrent_queue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t trackGroup = dispatch_group_create();
+    for (int i = 0; i < 500; i++) {
+        dispatch_group_async(trackGroup, concurrentQueue, ^{
+            [self.mixpanel track:[NSString stringWithFormat:@"%d", i]];
+        });
+    }
+    dispatch_group_wait(trackGroup, DISPATCH_TIME_FOREVER);
+    [self flushAndWaitForSerialQueue];
+    for (int i = 0; i < 500; i++) {
+        BOOL found = NO;
+        for (NSDictionary *event in self.mixpanel.eventsQueue) {
+            if ([event[@"event"] intValue] == i) {
+                found = YES;
+                break;
+            }
+        }
+        XCTAssertTrue(found, @"event that was tracked not found in eventsQueue");
+    }
+    [[LSNocilla sharedInstance] clearStubs];
+    stubTrack().andReturn(200);
+    self.mixpanel.network.requestsDisabledUntilTime = 0;
+    [self flushAndWaitForSerialQueue];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"supposed to all be flushed");
+}
+
 #if !defined(MIXPANEL_TVOS_EXTENSION)
 - (void)testTelephonyInfoInitialized {
     XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
