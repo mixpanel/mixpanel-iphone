@@ -17,7 +17,7 @@ NSString *const MPABTestDesignerClearRequestMessageType = @"clear_request";
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:MPABTestDesignerClearRequestMessageType];
+    return [(MPABTestDesignerClearRequestMessage *)[self alloc] initWithType:MPABTestDesignerClearRequestMessageType];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection

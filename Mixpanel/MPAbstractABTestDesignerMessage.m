@@ -18,7 +18,7 @@
 
 + (instancetype)messageWithType:(NSString *)type payload:(NSDictionary *)payload
 {
-    return [[self alloc] initWithType:type payload:payload];
+    return [(MPAbstractABTestDesignerMessage *)[self alloc] initWithType:type payload:payload];
 }
 
 - (instancetype)initWithType:(NSString *)type

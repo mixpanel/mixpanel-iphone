@@ -12,7 +12,7 @@
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"clear_response"];
+    return [(MPABTestDesignerClearResponseMessage *)[self alloc] initWithType:@"clear_response"];
 }
 
 - (void)setStatus:(NSString *)status

@@ -12,7 +12,7 @@
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"event_binding_response"];
+    return [(MPDesignerEventBindingResponseMessage *)[self alloc] initWithType:@"event_binding_response"];
 }
 
 - (void)setStatus:(NSString *)status

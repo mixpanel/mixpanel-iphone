@@ -7,7 +7,7 @@
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"change_response"];
+    return [(MPABTestDesignerChangeResponseMessage *)[self alloc] initWithType:@"change_response"];
 }
 
 - (void)setStatus:(NSString *)status

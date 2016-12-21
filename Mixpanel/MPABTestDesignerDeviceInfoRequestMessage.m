@@ -14,7 +14,7 @@ NSString *const MPABTestDesignerDeviceInfoRequestMessageType = @"device_info_req
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:MPABTestDesignerDeviceInfoRequestMessageType];
+    return [(MPABTestDesignerDeviceInfoRequestMessage *)[self alloc] initWithType:MPABTestDesignerDeviceInfoRequestMessageType];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection

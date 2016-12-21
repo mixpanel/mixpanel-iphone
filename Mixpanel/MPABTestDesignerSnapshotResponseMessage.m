@@ -8,7 +8,7 @@
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"snapshot_response"];
+    return [(MPABTestDesignerSnapshotResponseMessage *)[self alloc] initWithType:@"snapshot_response"];
 }
 
 - (void)setScreenshot:(UIImage *)screenshot

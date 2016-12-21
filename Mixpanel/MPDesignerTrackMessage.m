@@ -16,12 +16,12 @@
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"track_message"];
+    return [(MPDesignerTrackMessage *)[self alloc] initWithType:@"track_message"];
 }
 
 + (instancetype)messageWithPayload:(NSDictionary *)payload
 {
-    return[[self alloc] initWithType:@"track_message" andPayload:payload];
+    return [(MPDesignerTrackMessage *)[self alloc] initWithType:@"track_message" andPayload:payload];
 }
 
 - (instancetype)initWithType:(NSString *)type

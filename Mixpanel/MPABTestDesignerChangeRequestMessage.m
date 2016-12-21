@@ -13,7 +13,7 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:MPABTestDesignerChangeRequestMessageType];
+    return [(MPABTestDesignerChangeRequestMessage *)[self alloc] initWithType:MPABTestDesignerChangeRequestMessageType];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection
