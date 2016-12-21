@@ -57,7 +57,7 @@ NSString *const MPDesignerEventBindingRequestMessageType = @"event_binding_reque
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"event_binding_request"];
+    return [(MPDesignerEventBindingRequestMessage *)[self alloc] initWithType:@"event_binding_request"];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection

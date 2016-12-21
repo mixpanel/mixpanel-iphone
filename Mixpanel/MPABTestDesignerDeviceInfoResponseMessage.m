@@ -8,7 +8,7 @@
 + (instancetype)message
 {
     // TODO: provide a payload
-    return [[self alloc] initWithType:@"device_info_response"];
+    return [(MPABTestDesignerDeviceInfoResponseMessage *)[self alloc] initWithType:@"device_info_response"];
 }
 
 - (NSString *)systemName

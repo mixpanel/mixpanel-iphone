@@ -16,7 +16,7 @@ NSString *const MPABTestDesignerDisconnectMessageType = @"disconnect";
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:MPABTestDesignerDisconnectMessageType];
+    return [(MPABTestDesignerDisconnectMessage *)[self alloc] initWithType:MPABTestDesignerDisconnectMessageType];
 }
 
 - (NSOperation *)responseCommandWithConnection:(MPABTestDesignerConnection *)connection

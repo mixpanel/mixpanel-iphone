@@ -12,7 +12,7 @@
 
 + (instancetype)message
 {
-    return [[self alloc] initWithType:@"tweak_response"];
+    return [(MPABTestDesignerTweakResponseMessage *)[self alloc] initWithType:@"tweak_response"];
 }
 
 - (void)setStatus:(NSString *)status
