@@ -1,5 +1,9 @@
 #import <Foundation/Foundation.h>
 
+#import "Mixpanel.h"
+
+MIXPANEL_SURVEYS_DEPRECATED
+
 @interface MPSurvey : NSObject
 
 @property (nonatomic, readonly) NSUInteger ID;

@@ -11,11 +11,13 @@
     #define MIXPANEL_WATCH_EXTENSION 1
 #endif
 
+#define MIXPANEL_SURVEYS_DEPRECATED DEPRECATED_MSG_ATTRIBUTE("Mixpanel surveys are deprecated as of release 3.0.8")
+
 #define MIXPANEL_NO_EXCEPTION_HANDLING (defined(MIXPANEL_APP_EXTENSION))
 #define MIXPANEL_FLUSH_IMMEDIATELY (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 #define MIXPANEL_NO_REACHABILITY_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 #define MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
-#define MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
+#define MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 
 @class    MixpanelPeople, MPSurvey;
 @protocol MixpanelDelegate;
@@ -133,6 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
  @property
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Controls whether to automatically check for surveys for the
  currently identified user when the application becomes active.
 
@@ -141,12 +144,13 @@ NS_ASSUME_NONNULL_BEGIN
  <code>applicationDidBecomeActive</code> to retrieve a list of valid surveys
  for the currently identified user.
  */
-@property (atomic) BOOL checkForSurveysOnActive;
+@property (atomic) BOOL checkForSurveysOnActive MIXPANEL_SURVEYS_DEPRECATED;
 
 /*!
  @property
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Controls whether to automatically show a survey for the
  currently identified user when the application becomes active.
 
@@ -156,31 +160,33 @@ NS_ASSUME_NONNULL_BEGIN
  survey check retrieves at least 1 valid survey for the currently
  identified user.
  */
-@property (atomic) BOOL showSurveyOnActive;
+@property (atomic) BOOL showSurveyOnActive MIXPANEL_SURVEYS_DEPRECATED;
 
 /*!
  @property
  
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Determines whether a valid survey is available to show to the user.
  
  @discussion
  If we haven't fetched the surveys yet, this will return NO. Otherwise
  it will return yes if there is at least one survey available.
  */
-@property (atomic, readonly) BOOL isSurveyAvailable;
+@property (atomic, readonly) BOOL isSurveyAvailable MIXPANEL_SURVEYS_DEPRECATED;
 
 /*!
  @property
  
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
  and pass in <code>survey.ID</code>
  
  @discussion
  If we haven't fetched the surveys yet, this will return nil.
  */
-@property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys;
+@property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys MIXPANEL_SURVEYS_DEPRECATED;
 
 /*!
  @property
@@ -703,25 +709,27 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)libVersion;
 
 
-#if !MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Surveys
 
 /*!
  @method
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Shows the survey with the given name.
 
  @discussion
  This method allows you to explicitly show a named survey at the time of your choosing.
 
  */
-- (void)showSurveyWithID:(NSUInteger)ID;
+- (void)showSurveyWithID:(NSUInteger)ID MIXPANEL_SURVEYS_DEPRECATED;
 
 /*!
  @method
 
  @abstract
+ Mixpanel surveys are deprecated as of release 3.0.8
  Show a survey if one is available.
 
  @discussion
@@ -730,7 +738,7 @@ NS_ASSUME_NONNULL_BEGIN
  setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
 
  */
-- (void)showSurvey;
+- (void)showSurvey MIXPANEL_SURVEYS_DEPRECATED;
 
 #pragma mark - Mixpanel Notifications
 
@@ -799,7 +807,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)joinExperimentsWithCallback:(nullable void (^)())experimentsLoadedCallback;
 
-#endif // MIXPANEL_NO_SURVEY_NOTIFICATION_AB_TEST_SUPPORT
+#endif // MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 
 #pragma mark - Deprecated
 /*!
