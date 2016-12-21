@@ -332,6 +332,11 @@ and People record queues to disk.
 <dd><p>Join any experiments (A/B tests) that are available for the current user.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED" target="_top">-MIXPANEL_SURVEYS_DEPRECATED</a></tt></dt>
+<dd><p>Mixpanel surveys are deprecated as of release 3.0.8
+Show a survey if one is available.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/registerSuperProperties:" target="_top">-registerSuperProperties:</a></tt></dt>
 <dd><p>Registers super properties, overwriting ones that have already been set.
 </p>
@@ -374,12 +379,9 @@ and then returns it.
 <dd><p>Shows a notification with the given type if one is available.
 </p>
 </dd>
-<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/showSurvey" target="_top">-showSurvey</a></tt></dt>
-<dd><p>Show a survey if one is available.
-</p>
-</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/showSurveyWithID:" target="_top">-showSurveyWithID:</a></tt></dt>
-<dd><p>Shows the survey with the given name.
+<dd><p>Mixpanel surveys are deprecated as of release 3.0.8
+Shows the survey with the given name.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/timeEvent:" target="_top">-timeEvent:</a></tt></dt>
@@ -651,6 +653,22 @@ and join, any experiments are newly available for the current user.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=start --><p>Same as joinExperiments but will fire the given callback after all experiments
 have been loaded and applied.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/joinExperimentsWithCallback:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;   name=Mixpanel::MIXPANEL_SURVEYS_DEPRECATED -->
+<a name="//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED"></a>
+<h3><a name="MIXPANEL_SURVEYS_DEPRECATED">MIXPANEL_SURVEYS_DEPRECATED</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=start --><!-- begin abstract --><p>Mixpanel surveys are deprecated as of release 3.0.8
+Show a survey if one is available.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<span class="param">showSurvey</span> <!-- a logicalPath="//apple_ref/occ/econst/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/clconst/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED " machineGenerated="true" --><span class="var">MIXPANEL_SURVEYS_DEPRECATED</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=start --><p>This method allows you to display the first available survey targeted to the currently
+identified user at the time of your choosing. You would typically pair this with
+setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
+</p>
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/registerSuperProperties:;   name=Mixpanel::registerSuperProperties: -->
 <a name="//apple_ref/occ/instm/Mixpanel/registerSuperProperties:"></a>
 <h3><a name="registerSuperProperties:">registerSuperProperties:</a></h3>
@@ -751,8 +769,8 @@ unless the existing value is equal to defaultValue.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=start --><p>The API must be initialized with <code>sharedInstanceWithToken:</code> or
 <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
-This method will return <code>nil</code> if there are no instances created. If there is more than 
-one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code> 
+This method will return <code>nil</code> if there are no instances created. If there is more than
+one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code>
 or <code>initWithToken:launchOptions:andFlushInterval:</code>.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/clm/Mixpanel/sharedInstance;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=clm;  uid=//apple_ref/occ/clm/Mixpanel/sharedInstanceWithToken:;   name=Mixpanel::sharedInstanceWithToken: -->
@@ -861,29 +879,15 @@ information created by push notifications.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=start --><p>You do not need to call this method on the main thread.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showNotificationWithType:;name=end --><!-- end discussion -->
-<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/showSurvey;   name=Mixpanel::showSurvey -->
-<a name="//apple_ref/occ/instm/Mixpanel/showSurvey"></a>
-<h3><a name="showSurvey">showSurvey</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showSurvey;name=start --><!-- begin abstract --><p>Show a survey if one is available.
-</p>
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showSurvey;name=end --></p>
-<div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showSurvey;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/showSurvey //apple_ref/occ/data/Mixpanel/showSurvey //apple_ref/occ/data/showSurvey //apple_ref/occ/clconst/Mixpanel/showSurvey " machineGenerated="true" --><span class="var">showSurvey</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showSurvey;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showSurvey;name=start --><p>This method allows you to display the first available survey targeted to the currently
-identified user at the time of your choosing. You would typically pair this with
-setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
-</p>
-<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showSurvey;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;   name=Mixpanel::showSurveyWithID: -->
 <a name="//apple_ref/occ/instm/Mixpanel/showSurveyWithID:"></a>
 <h3><a name="showSurveyWithID:">showSurveyWithID:</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=start --><!-- begin abstract --><p>Shows the survey with the given name.
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=start --><!-- begin abstract --><p>Mixpanel surveys are deprecated as of release 3.0.8
+Shows the survey with the given name.
 </p>
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=end --></p>
 <div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/showSurveyWithID //apple_ref/occ/clm/Mixpanel/showSurveyWithID //apple_ref/occ/intfcm/Mixpanel/showSurveyWithID //apple_ref/occ/intfm/Mixpanel/showSurveyWithID //apple_ref/occ/func/showSurveyWithID //apple_ref/occ/ftmplt/Mixpanel/showSurveyWithID //apple_ref/occ/defn/showSurveyWithID //apple_ref/occ/macro/showSurveyWithID //apple_ref/doc/anysymbol/showSurveyWithID" machineGenerated="true" --><span class="function">showSurveyWithID</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/intf/NSUInteger //apple_ref/doc/anysymbol/NSUInteger" machineGenerated="true" --><span class="type">NSUInteger</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/ID //apple_ref/occ/data/Mixpanel/ID //apple_ref/occ/data/ID //apple_ref/occ/clconst/Mixpanel/ID " machineGenerated="true" --><span class="var">ID</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=end --></pre>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/showSurveyWithID //apple_ref/occ/clm/Mixpanel/showSurveyWithID //apple_ref/occ/intfcm/Mixpanel/showSurveyWithID //apple_ref/occ/intfm/Mixpanel/showSurveyWithID //apple_ref/occ/func/showSurveyWithID //apple_ref/occ/ftmplt/Mixpanel/showSurveyWithID //apple_ref/occ/defn/showSurveyWithID //apple_ref/occ/macro/showSurveyWithID //apple_ref/doc/anysymbol/showSurveyWithID" machineGenerated="true" --><span class="function">showSurveyWithID</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/intf/NSUInteger //apple_ref/doc/anysymbol/NSUInteger" machineGenerated="true" --><span class="type">NSUInteger</span><!-- /a -->)<span class="param">ID</span> <!-- a logicalPath="//apple_ref/occ/econst/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/clconst/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED " machineGenerated="true" --><span class="var">MIXPANEL_SURVEYS_DEPRECATED</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/showSurveyWithID:;name=start --><p>This method allows you to explicitly show a named survey at the time of your choosing.
@@ -1032,18 +1036,8 @@ registered.
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/__deprecated" target="_top">__deprecated</a></tt></dt>
 <dd><p>Current user's name in Mixpanel Streams.
 </dd>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/availableSurveys" target="_top">availableSurveys</a></tt></dt>
-<dd><p>Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
-and pass in <code>survey.ID</code>
-</p>
-</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive" target="_top">checkForNotificationsOnActive</a></tt></dt>
 <dd><p>Controls whether to automatically check for notifications for the
-currently identified user when the application becomes active.
-</p>
-</dd>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive" target="_top">checkForSurveysOnActive</a></tt></dt>
-<dd><p>Controls whether to automatically check for surveys for the
 currently identified user when the application becomes active.
 </p>
 </dd>
@@ -1064,10 +1058,10 @@ over Mixpanel network activity.
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/enableLogging" target="_top">enableLogging</a></tt></dt>
 <dd><p>Controls whether to enable the run time debug logging at all levels. Note that the
 Mixpanel SDK uses Apple System Logging to forward log messages to `STDERR`, this also
-means that mixpanel logs are segmented by log level. Settings this to `YES` will enable 
+means that mixpanel logs are segmented by log level. Settings this to `YES` will enable
 Mixpanel logging at the following levels:
 </p>
-<p>* Error - Something has failed 
+<p>* Error - Something has failed
 * Warning - Something is amiss and might fail if not corrected
 * Info - The lowest priority that is normally logged, purely informational in nature
 * Debug - Information useful only to developers, and normally not logged.
@@ -1075,7 +1069,7 @@ Mixpanel logging at the following levels:
 
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/enableVisualABTestAndCodeless" target="_top">enableVisualABTestAndCodeless</a></tt></dt>
-<dd><p>Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com. 
+<dd><p>Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com.
 You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
 created A/B tests and codeless events will still be delivered.
 </p>
@@ -1089,10 +1083,6 @@ created A/B tests and codeless events will still be delivered.
 enters the background.
 </p>
 </dd>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/isSurveyAvailable" target="_top">isSurveyAvailable</a></tt></dt>
-<dd><p>Determines whether a valid survey is available to show to the user.
-</p>
-</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor" target="_top">miniNotificationBackgroundColor</a></tt></dt>
 <dd><p>If set, determines the background color of mini notifications.
 </p>
@@ -1100,6 +1090,29 @@ enters the background.
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime" target="_top">miniNotificationPresentationTime</a></tt></dt>
 <dd><p>Determines the time, in seconds, that a mini notification will remain on
 the screen before automatically hiding itself.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED" target="_top">MIXPANEL_SURVEYS_DEPRECATED</a></tt></dt>
+<dd><p>Mixpanel surveys are deprecated as of release 3.0.8
+Controls whether to automatically check for surveys for the
+currently identified user when the application becomes active.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0" target="_top">MIXPANEL_SURVEYS_DEPRECATED</a></tt></dt>
+<dd><p>Mixpanel surveys are deprecated as of release 3.0.8
+Controls whether to automatically show a survey for the
+currently identified user when the application becomes active.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1" target="_top">MIXPANEL_SURVEYS_DEPRECATED</a></tt></dt>
+<dd><p>Mixpanel surveys are deprecated as of release 3.0.8
+Determines whether a valid survey is available to show to the user.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2" target="_top">MIXPANEL_SURVEYS_DEPRECATED</a></tt></dt>
+<dd><p>Mixpanel surveys are deprecated as of release 3.0.8
+Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
+and pass in <code>survey.ID</code>
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/people" target="_top">people</a></tt></dt>
@@ -1120,13 +1133,8 @@ data to the Mixpanel servers.
 for the currently identified user when the application becomes active.
 </p>
 </dd>
-<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/showSurveyOnActive" target="_top">showSurveyOnActive</a></tt></dt>
-<dd><p>Controls whether to automatically show a survey for the
-currently identified user when the application becomes active.
-</p>
-</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation" target="_top">useIPAddressForGeoLocation</a></tt></dt>
-<dd><p>Controls whether to automatically send the client IP Address as part of 
+<dd><p>Controls whether to automatically send the client IP Address as part of
 event tracking. With an IP address, geo-location is possible down to neighborhoods
 within a city, although the Mixpanel Dashboard will just show you city level location
 specificity. For privacy reasons, you may be in a situation where you need to forego
@@ -1144,20 +1152,6 @@ effectively having access to such granular location information via the IP Addre
     <span class="param">atomic</span>,
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/cl/nameTag //apple_ref/occ/tdef/nameTag //apple_ref/occ/tag/nameTag //apple_ref/occ/struct/nameTag //apple_ref/occ/intf/nameTag //apple_ref/doc/anysymbol/nameTag" machineGenerated="true" --><span class="type">nameTag</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/__deprecated //apple_ref/occ/data/Mixpanel/__deprecated //apple_ref/occ/data/__deprecated //apple_ref/occ/clconst/Mixpanel/__deprecated " machineGenerated="true" --><span class="var">__deprecated</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/__deprecated;name=end --></pre>
 </div>
-<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;   name=Mixpanel::availableSurveys -->
-<a name="//apple_ref/occ/instp/Mixpanel/availableSurveys"></a>
-<h3><a name="availableSurveys">availableSurveys</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=start --><!-- begin abstract --><p>Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
-and pass in <code>survey.ID</code>
-</p>
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=end --></p>
-<div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=start -->@property (<span class="param">atomic</span>,
-    <span class="param">readonly</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSArray //apple_ref/occ/tdef/NSArray //apple_ref/occ/tag/NSArray //apple_ref/occ/struct/NSArray //apple_ref/occ/intf/NSArray //apple_ref/doc/anysymbol/NSArray" machineGenerated="true" --><span class="type">NSArray</span><!-- /a -->&lt;<span class="template">MPSurvey</span> <span class="template">*</span>&gt; <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/availableSurveys //apple_ref/occ/data/Mixpanel/availableSurveys //apple_ref/occ/data/availableSurveys //apple_ref/occ/clconst/Mixpanel/availableSurveys " machineGenerated="true" --><span class="var">availableSurveys</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=start --><p>If we haven't fetched the surveys yet, this will return nil.
-<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/availableSurveys;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;   name=Mixpanel::checkForNotificationsOnActive -->
 <a name="//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive"></a>
 <h3><a name="checkForNotificationsOnActive">checkForNotificationsOnActive</a></h3>
@@ -1173,21 +1167,6 @@ currently identified user when the application becomes active.
 <code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
 for the currently identified user.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;name=end --><!-- end discussion -->
-<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;   name=Mixpanel::checkForSurveysOnActive -->
-<a name="//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive"></a>
-<h3><a name="checkForSurveysOnActive">checkForSurveysOnActive</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=start --><!-- begin abstract --><p>Controls whether to automatically check for surveys for the
-currently identified user when the application becomes active.
-</p>
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --></p>
-<div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/checkForSurveysOnActive //apple_ref/occ/data/Mixpanel/checkForSurveysOnActive //apple_ref/occ/data/checkForSurveysOnActive //apple_ref/occ/clconst/Mixpanel/checkForSurveysOnActive " machineGenerated="true" --><span class="var">checkForSurveysOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=start --><p>Defaults to YES. Will fire a network request on
-<code>applicationDidBecomeActive</code> to retrieve a list of valid surveys
-for the currently identified user.
-<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/checkForSurveysOnActive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive;   name=Mixpanel::checkForVariantsOnActive -->
 <a name="//apple_ref/occ/instp/Mixpanel/checkForVariantsOnActive"></a>
 <h3><a name="checkForVariantsOnActive">checkForVariantsOnActive</a></h3>
@@ -1242,10 +1221,10 @@ current distinct ID, use the <code>identify:</code> method.
 <h3><a name="enableLogging">enableLogging</a></h3>
 <hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/enableLogging;name=start --><!-- begin abstract --><p>Controls whether to enable the run time debug logging at all levels. Note that the
 Mixpanel SDK uses Apple System Logging to forward log messages to `STDERR`, this also
-means that mixpanel logs are segmented by log level. Settings this to `YES` will enable 
+means that mixpanel logs are segmented by log level. Settings this to `YES` will enable
 Mixpanel logging at the following levels:
 </p>
-<p>* Error - Something has failed 
+<p>* Error - Something has failed
 * Warning - Something is amiss and might fail if not corrected
 * Info - The lowest priority that is normally logged, purely informational in nature
 * Debug - Information useful only to developers, and normally not logged.
@@ -1261,7 +1240,7 @@ Mixpanel logging at the following levels:
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/enableVisualABTestAndCodeless;   name=Mixpanel::enableVisualABTestAndCodeless -->
 <a name="//apple_ref/occ/instp/Mixpanel/enableVisualABTestAndCodeless"></a>
 <h3><a name="enableVisualABTestAndCodeless">enableVisualABTestAndCodeless</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/enableVisualABTestAndCodeless;name=start --><!-- begin abstract --><p>Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com. 
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/enableVisualABTestAndCodeless;name=start --><!-- begin abstract --><p>Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com.
 You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
 created A/B tests and codeless events will still be delivered.
 </p>
@@ -1298,20 +1277,6 @@ enters the background.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
 task support was introduced, and later.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --><!-- end discussion -->
-<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;   name=Mixpanel::isSurveyAvailable -->
-<a name="//apple_ref/occ/instp/Mixpanel/isSurveyAvailable"></a>
-<h3><a name="isSurveyAvailable">isSurveyAvailable</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=start --><!-- begin abstract --><p>Determines whether a valid survey is available to show to the user.
-</p>
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=end --></p>
-<div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=start -->@property (<span class="param">atomic</span>,
-    <span class="param">readonly</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/isSurveyAvailable //apple_ref/occ/data/Mixpanel/isSurveyAvailable //apple_ref/occ/data/isSurveyAvailable //apple_ref/occ/clconst/Mixpanel/isSurveyAvailable " machineGenerated="true" --><span class="var">isSurveyAvailable</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=start --><p>If we haven't fetched the surveys yet, this will return NO. Otherwise
-it will return yes if there is at least one survey available.
-<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/isSurveyAvailable;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;   name=Mixpanel::miniNotificationBackgroundColor -->
 <a name="//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor"></a>
 <h3><a name="miniNotificationBackgroundColor">miniNotificationBackgroundColor</a></h3>
@@ -1324,8 +1289,8 @@ it will return yes if there is at least one survey available.
     <span class="param">nullable</span>) <!-- a logicalPath="//apple_ref/occ/cl/UIColor //apple_ref/occ/tdef/UIColor //apple_ref/occ/tag/UIColor //apple_ref/occ/struct/UIColor //apple_ref/occ/intf/UIColor //apple_ref/doc/anysymbol/UIColor" machineGenerated="true" --><span class="type">UIColor</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/miniNotificationBackgroundColor //apple_ref/occ/data/Mixpanel/miniNotificationBackgroundColor //apple_ref/occ/data/miniNotificationBackgroundColor //apple_ref/occ/clconst/Mixpanel/miniNotificationBackgroundColor " machineGenerated="true" --><span class="var">miniNotificationBackgroundColor</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=start --><p>If this isn't set, we default to either the color of the UINavigationBar of the top 
-UINavigationController that is showing when the notification is presented, the 
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=start --><p>If this isn't set, we default to either the color of the UINavigationBar of the top
+UINavigationController that is showing when the notification is presented, the
 UINavigationBar default color for the app or the UITabBar default color.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationBackgroundColor;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;   name=Mixpanel::miniNotificationPresentationTime -->
@@ -1341,6 +1306,69 @@ the screen before automatically hiding itself.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=start --><p>Defaults to 6.0.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;   name=Mixpanel::MIXPANEL_SURVEYS_DEPRECATED -->
+<a name="//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED"></a>
+<h3><a name="MIXPANEL_SURVEYS_DEPRECATED">MIXPANEL_SURVEYS_DEPRECATED</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=start --><!-- begin abstract --><p>Mixpanel surveys are deprecated as of release 3.0.8
+Controls whether to automatically check for surveys for the
+currently identified user when the application becomes active.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/cl/checkForSurveysOnActive //apple_ref/occ/tdef/checkForSurveysOnActive //apple_ref/occ/tag/checkForSurveysOnActive //apple_ref/occ/struct/checkForSurveysOnActive //apple_ref/occ/intf/checkForSurveysOnActive //apple_ref/doc/anysymbol/checkForSurveysOnActive" machineGenerated="true" --><span class="type">checkForSurveysOnActive</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/clconst/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED " machineGenerated="true" --><span class="var">MIXPANEL_SURVEYS_DEPRECATED</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=start --><p>Defaults to YES. Will fire a network request on
+<code>applicationDidBecomeActive</code> to retrieve a list of valid surveys
+for the currently identified user.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;   name=Mixpanel::MIXPANEL_SURVEYS_DEPRECATED -->
+<a name="//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0"></a>
+<h3><a name="MIXPANEL_SURVEYS_DEPRECATED">MIXPANEL_SURVEYS_DEPRECATED</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;name=start --><!-- begin abstract --><p>Mixpanel surveys are deprecated as of release 3.0.8
+Controls whether to automatically show a survey for the
+currently identified user when the application becomes active.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/cl/showSurveyOnActive //apple_ref/occ/tdef/showSurveyOnActive //apple_ref/occ/tag/showSurveyOnActive //apple_ref/occ/struct/showSurveyOnActive //apple_ref/occ/intf/showSurveyOnActive //apple_ref/doc/anysymbol/showSurveyOnActive" machineGenerated="true" --><span class="type">showSurveyOnActive</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/clconst/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED " machineGenerated="true" --><span class="var">MIXPANEL_SURVEYS_DEPRECATED</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;name=start --><p>Defaults to YES. This will only show a survey if
+<code>checkForSurveysOnActive</code> is also set to YES, and the
+survey check retrieves at least 1 valid survey for the currently
+identified user.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_0;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;   name=Mixpanel::MIXPANEL_SURVEYS_DEPRECATED -->
+<a name="//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1"></a>
+<h3><a name="MIXPANEL_SURVEYS_DEPRECATED">MIXPANEL_SURVEYS_DEPRECATED</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;name=start --><!-- begin abstract --><p>Mixpanel surveys are deprecated as of release 3.0.8
+Determines whether a valid survey is available to show to the user.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;name=start -->@property (<span class="param">atomic</span>,
+    <span class="param">readonly</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/cl/isSurveyAvailable //apple_ref/occ/tdef/isSurveyAvailable //apple_ref/occ/tag/isSurveyAvailable //apple_ref/occ/struct/isSurveyAvailable //apple_ref/occ/intf/isSurveyAvailable //apple_ref/doc/anysymbol/isSurveyAvailable" machineGenerated="true" --><span class="type">isSurveyAvailable</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/clconst/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED " machineGenerated="true" --><span class="var">MIXPANEL_SURVEYS_DEPRECATED</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;name=start --><p>If we haven't fetched the surveys yet, this will return NO. Otherwise
+it will return yes if there is at least one survey available.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_1;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;   name=Mixpanel::MIXPANEL_SURVEYS_DEPRECATED -->
+<a name="//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2"></a>
+<h3><a name="MIXPANEL_SURVEYS_DEPRECATED">MIXPANEL_SURVEYS_DEPRECATED</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;name=start --><!-- begin abstract --><p>Mixpanel surveys are deprecated as of release 3.0.8
+Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
+and pass in <code>survey.ID</code>
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;name=start -->@property (<span class="param">atomic</span>,
+    <span class="param">readonly</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSArray //apple_ref/occ/tdef/NSArray //apple_ref/occ/tag/NSArray //apple_ref/occ/struct/NSArray //apple_ref/occ/intf/NSArray //apple_ref/doc/anysymbol/NSArray" machineGenerated="true" --><span class="type">NSArray</span><!-- /a -->&lt;<span class="template">MPSurvey</span> <span class="template">*</span>&gt; <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/cl/availableSurveys //apple_ref/occ/tdef/availableSurveys //apple_ref/occ/tag/availableSurveys //apple_ref/occ/struct/availableSurveys //apple_ref/occ/intf/availableSurveys //apple_ref/doc/anysymbol/availableSurveys" machineGenerated="true" --><span class="type">availableSurveys</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/data/MIXPANEL_SURVEYS_DEPRECATED //apple_ref/occ/clconst/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED " machineGenerated="true" --><span class="var">MIXPANEL_SURVEYS_DEPRECATED</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;name=start --><p>If we haven't fetched the surveys yet, this will return nil.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/MIXPANEL_SURVEYS_DEPRECATED_DONTLINK_2;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/people;   name=Mixpanel::people -->
 <a name="//apple_ref/occ/instp/Mixpanel/people"></a>
 <h3><a name="people">people</a></h3>
@@ -1395,26 +1423,10 @@ for the currently identified user when the application becomes active.
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showNotificationOnActive;name=end --><!-- end discussion -->
-<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;   name=Mixpanel::showSurveyOnActive -->
-<a name="//apple_ref/occ/instp/Mixpanel/showSurveyOnActive"></a>
-<h3><a name="showSurveyOnActive">showSurveyOnActive</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=start --><!-- begin abstract --><p>Controls whether to automatically show a survey for the
-currently identified user when the application becomes active.
-</p>
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --></p>
-<div class='declaration_indent'>
-<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/showSurveyOnActive //apple_ref/occ/data/Mixpanel/showSurveyOnActive //apple_ref/occ/data/showSurveyOnActive //apple_ref/occ/clconst/Mixpanel/showSurveyOnActive " machineGenerated="true" --><span class="var">showSurveyOnActive</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=start --><p>Defaults to YES. This will only show a survey if
-<code>checkForSurveysOnActive</code> is also set to YES, and the
-survey check retrieves at least 1 valid survey for the currently
-identified user.
-<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/showSurveyOnActive;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;   name=Mixpanel::useIPAddressForGeoLocation -->
 <a name="//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation"></a>
 <h3><a name="useIPAddressForGeoLocation">useIPAddressForGeoLocation</a></h3>
-<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><!-- begin abstract --><p>Controls whether to automatically send the client IP Address as part of 
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><!-- begin abstract --><p>Controls whether to automatically send the client IP Address as part of
 event tracking. With an IP address, geo-location is possible down to neighborhoods
 within a city, although the Mixpanel Dashboard will just show you city level location
 specificity. For privacy reasons, you may be in a situation where you need to forego
@@ -1428,7 +1440,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Tuesday, November 08, 2016
+<p class="hd_timestamp">Last Updated: Wednesday, December 21, 2016
 </p></div>
 </td></tr></table>
 </body></html>
