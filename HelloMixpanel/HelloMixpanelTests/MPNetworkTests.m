@@ -23,7 +23,7 @@
     [super setUp];
     
     NSURL *serverURL = [NSURL URLWithString:@"http://localhost:31337"];
-    self.network = [[MPNetwork alloc] initWithServerURL:serverURL];
+    self.network = [[MPNetwork alloc] initWithServerURL:serverURL mixpanel:nil];
 }
 
 - (void)tearDown {

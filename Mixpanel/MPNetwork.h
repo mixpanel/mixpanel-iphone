@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class Mixpanel;
+
 typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointTrack,
     MPNetworkEndpointEngage,
@@ -19,7 +21,7 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 @property (nonatomic) BOOL shouldManageNetworkActivityIndicator;
 @property (nonatomic) BOOL useIPAddressForGeoLocation;
 
-- (instancetype)initWithServerURL:(NSURL *)serverURL;
+- (instancetype)initWithServerURL:(NSURL *)serverURL mixpanel:(Mixpanel *)mixpanel;
 
 - (void)flushEventQueue:(NSArray *)events;
 - (void)flushPeopleQueue:(NSArray *)people;

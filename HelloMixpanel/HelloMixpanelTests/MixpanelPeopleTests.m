@@ -21,7 +21,7 @@
     for (NSInteger i = 0; i < 505; i++) {
         [self.mixpanel.people set:@"i" to:@(i)];
     }
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 500);
     
     NSDictionary *r = self.mixpanel.people.unidentifiedQueue.firstObject;
@@ -36,7 +36,7 @@
     for (NSInteger i = 0; i < 505; i++) {
         [self.mixpanel.people set:@"i" to:@(i)];
     }
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 500);
     
     NSDictionary *r = self.mixpanel.peopleQueue.firstObject;
@@ -59,7 +59,7 @@
     [self.mixpanel identify:@"d1"];
     NSData *token = [@"0123456789abcdef" dataUsingEncoding:NSUTF8StringEncoding];
     [self.mixpanel.people addPushDeviceToken:token];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
     
     NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$union"];
@@ -75,7 +75,7 @@
     [self.mixpanel identify:@"d1"];
     NSDictionary *p = @{ @"p1": @"a" };
     [self.mixpanel.people set:p];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     p = self.mixpanel.peopleQueue.lastObject[@"$set"];
     XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
@@ -86,7 +86,7 @@
     [self.mixpanel identify:@"d1"];
     NSDictionary *p = @{@"p1": @"a"};
     [self.mixpanel.people setOnce:p];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     p = self.mixpanel.peopleQueue.lastObject[@"$set_once"];
     XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
@@ -97,7 +97,7 @@
     [self.mixpanel identify:@"d1"];
     NSDictionary *p = @{@"$ios_app_version": @"override"};
     [self.mixpanel.people set:p];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     p = self.mixpanel.peopleQueue.lastObject[@"$set"];
     XCTAssertEqualObjects(p[@"$ios_app_version"], @"override", @"reserved property override failed");
@@ -107,7 +107,7 @@
 - (void)testPeopleSetTo {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$set"];
     XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
@@ -118,7 +118,7 @@
     [self.mixpanel identify:@"d1"];
     NSDictionary *p = @{ @"p1": @3 };
     [self.mixpanel.people increment:p];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     p = self.mixpanel.peopleQueue.lastObject[@"$add"];
     XCTAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
@@ -129,7 +129,7 @@
 {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people increment:@"p1" by:@3];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$add"];
     XCTAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
@@ -140,7 +140,7 @@
 {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people deleteUser];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$delete"];
     XCTAssertTrue(p.count == 0, @"incorrect people properties: %@", p);
@@ -150,7 +150,7 @@
 - (void)testPeopleTrackChargeDecimal {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people trackCharge:@25.34];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25.34);
@@ -169,7 +169,7 @@
 - (void)testPeopleTrackChargeZero {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people trackCharge:@0];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @0);
@@ -180,7 +180,7 @@
     [self.mixpanel identify:@"d1"];
     NSDictionary *p = [self allPropertyTypes];
     [self.mixpanel.people trackCharge:@25 withProperties:@{@"$time": p[@"date"]}];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25);
@@ -190,7 +190,7 @@
 - (void)testPeopleTrackChargeWithProperties {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people trackCharge:@25 withProperties:@{@"p1": @"a"}];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25);
@@ -200,7 +200,7 @@
 - (void)testPeopleTrackCharge {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people trackCharge:@25];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25);
@@ -210,7 +210,7 @@
 - (void)testPeopleClearCharges {
     [self.mixpanel identify:@"d1"];
     [self.mixpanel.people clearCharges];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
     XCTAssertEqualObjects(r[@"$set"][@"$transactions"], @[]);

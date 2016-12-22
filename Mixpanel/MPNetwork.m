@@ -30,12 +30,13 @@ static const NSUInteger kBatchSize = 50;
     return sharedSession;
 }
 
-- (instancetype)initWithServerURL:(NSURL *)serverURL {
+- (instancetype)initWithServerURL:(NSURL *)serverURL mixpanel:(Mixpanel *)mixpanel {
     self = [super init];
     if (self) {
         self.serverURL = serverURL;
         self.shouldManageNetworkActivityIndicator = YES;
         self.useIPAddressForGeoLocation = YES;
+        self.mixpanel = mixpanel;
     }
     return self;
 }
@@ -54,14 +55,20 @@ static const NSUInteger kBatchSize = 50;
         MPLogDebug(@"Attempted to flush to %lu, when we still have a timeout. Ignoring flush.", endpoint);
         return;
     }
+
+    NSMutableArray *queueCopyForFlushing;
+
+    @synchronized (self.mixpanel) {
+        queueCopyForFlushing = [queue mutableCopy];
+    }
     
-    while (queue.count > 0) {
-        NSUInteger batchSize = MIN(queue.count, kBatchSize);
-        NSArray *batch = [queue subarrayWithRange:NSMakeRange(0, batchSize)];
+    while (queueCopyForFlushing.count > 0) {
+        NSUInteger batchSize = MIN(queueCopyForFlushing.count, kBatchSize);
+        NSArray *batch = [queueCopyForFlushing subarrayWithRange:NSMakeRange(0, batchSize)];
         
         NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queue);
+        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queueCopyForFlushing);
         NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint andBody:postBody];
         
         [self updateNetworkActivityIndicator:YES];
@@ -93,8 +100,11 @@ static const NSUInteger kBatchSize = 50;
         if (didFail) {
             break;
         }
-        
-        [queue removeObjectsInArray:batch];
+
+        @synchronized (self.mixpanel) {
+            [queueCopyForFlushing removeObjectsInArray:batch];
+            [queue removeObjectsInArray:batch];
+        }
     }
 }
 

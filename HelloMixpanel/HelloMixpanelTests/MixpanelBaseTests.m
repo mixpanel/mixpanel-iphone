@@ -23,7 +23,7 @@
                                       launchOptions:nil
                                    andFlushInterval:60];
     [self.mixpanel reset];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
 }
 
 - (void)tearDown {
@@ -42,13 +42,15 @@
 }
 
 #pragma mark - Test Helpers
-- (void)flushAndWaitForSerialQueue {
+- (void)flushAndWaitForMixpanelQueues {
     [self.mixpanel flush];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
 }
 
-- (void)waitForSerialQueue {
-    dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
+- (void)waitForMixpanelQueues {
+    dispatch_sync(self.mixpanel.serialQueue, ^{
+        dispatch_sync(self.mixpanel.networkQueue, ^{ return; });
+    });
 }
 
 - (void)waitForAsyncQueue {
