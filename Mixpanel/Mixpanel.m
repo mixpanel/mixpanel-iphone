@@ -21,8 +21,6 @@
 #define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 #define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 
-#define VERSION @"3.0.8"
-
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;
@@ -877,7 +875,7 @@ static NSString *defaultProjectToken;
 
 + (NSString *)libVersion
 {
-    return VERSION;
+    return [[NSBundle bundleForClass:[Mixpanel class]] infoDictionary][(NSString *)kCFBundleVersionKey];
 }
 
 - (NSDictionary *)collectDeviceProperties
