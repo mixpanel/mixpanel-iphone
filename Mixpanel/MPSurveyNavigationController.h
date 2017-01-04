@@ -17,6 +17,9 @@ MIXPANEL_SURVEYS_DEPRECATED
 
 @protocol MPSurveyNavigationControllerDelegate <NSObject>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 - (void)surveyController:(MPSurveyNavigationController *)controller wasDismissedWithAnswers:(NSArray *)answers;
+#pragma clang diagnostic pop
 
 @end
