@@ -488,14 +488,10 @@ static NSString *defaultProjectToken;
 
 - (void)reset
 {
-    // TODO: maybe flush here as otherwise events could be lost?
+    [self flush];
     dispatch_async(self.serialQueue, ^{
         // wait for all current network requests to finish before resetting
-        dispatch_semaphore_t networkWaitSemaphore = dispatch_semaphore_create(0);
-        dispatch_async(self.networkQueue, ^{
-            dispatch_semaphore_signal(networkWaitSemaphore);
-        });
-        dispatch_semaphore_wait(networkWaitSemaphore, DISPATCH_TIME_FOREVER);
+        dispatch_sync(self.networkQueue, ^{ return; });
 
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
@@ -649,64 +645,60 @@ static NSString *defaultProjectToken;
 
 - (void)archiveEvents
 {
+    NSString *filePath = [self eventsFilePath];
+    NSMutableArray *eventsQueueCopy;
     @synchronized (self) {
-        NSString *filePath = [self eventsFilePath];
-        NSMutableArray *eventsQueueCopy = [self.eventsQueue mutableCopy];
-        MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
-        if (![self archiveObject:eventsQueueCopy withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive event data", self);
-        }
+        eventsQueueCopy = [self.eventsQueue mutableCopy];
+    }
+    MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
+    if (![self archiveObject:eventsQueueCopy withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive event data", self);
     }
 }
 
 - (void)archivePeople
 {
+    NSString *filePath = [self peopleFilePath];
+    NSMutableArray *peopleQueueCopy;
     @synchronized (self) {
-        NSString *filePath = [self peopleFilePath];
-        NSMutableArray *peopleQueueCopy = [self.peopleQueue mutableCopy];
-        MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
-        if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive people data", self);
-        }
+        peopleQueueCopy = [self.peopleQueue mutableCopy];
+    }
+    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
+    if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive people data", self);
     }
 }
 
 - (void)archiveProperties
 {
-    @synchronized (self) {
-        NSString *filePath = [self propertiesFilePath];
-        NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        [p setValue:self.distinctId forKey:@"distinctId"];
-        [p setValue:self.superProperties forKey:@"superProperties"];
-        [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-        [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-        [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
-        [p setValue:self.shownNotifications forKey:@"shownNotifications"];
-        [p setValue:self.timedEvents forKey:@"timedEvents"];
-        MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
-        if (![self archiveObject:p withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive properties data", self);
-        }
+    NSString *filePath = [self propertiesFilePath];
+    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    [p setValue:self.distinctId forKey:@"distinctId"];
+    [p setValue:self.superProperties forKey:@"superProperties"];
+    [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
+    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+    [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
+    [p setValue:self.shownNotifications forKey:@"shownNotifications"];
+    [p setValue:self.timedEvents forKey:@"timedEvents"];
+    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
+    if (![self archiveObject:p withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive properties data", self);
     }
 }
 
 - (void)archiveVariants
 {
-    @synchronized (self) {
-        NSString *filePath = [self variantsFilePath];
-        if (![self archiveObject:self.variants withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive variants data", self);
-        }
+    NSString *filePath = [self variantsFilePath];
+    if (![self archiveObject:self.variants withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive variants data", self);
     }
 }
 
 - (void)archiveEventBindings
 {
-    @synchronized (self) {
-        NSString *filePath = [self eventBindingsFilePath];
-        if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive tracking events data", self);
-        }
+    NSString *filePath = [self eventBindingsFilePath];
+    if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive tracking events data", self);
     }
 }
 

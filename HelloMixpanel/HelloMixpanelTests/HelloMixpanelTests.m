@@ -151,6 +151,9 @@
 }
 
 - (void)testIdentify {
+    // stub needed because reset flushes
+    stubTrack();
+    stubEngage();
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *distinctId = @"d1";
         // try this for IFA, ODIN and nil
@@ -396,6 +399,9 @@
 }
 
 - (void)testReset {
+    // stub needed because reset flushes
+    stubTrack();
+    stubEngage();
     [self.mixpanel identify:@"d1"];
     [self.mixpanel track:@"e1"];
     
