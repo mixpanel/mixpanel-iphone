@@ -25,7 +25,7 @@ To Install, see our **[full documentation »](https://mixpanel.com/help/referenc
 #### watchOS:
 `pod 'Mixpanel'`
 #### App Extension:
-`pod 'Mixpanel/AppExtension'`
+`pod 'Mixpanel-AppExtension'`
 
 ## Carthage
 
