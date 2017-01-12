@@ -282,9 +282,11 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         // identify only changes the distinct id if it doesn't match either the existing or the alias;
         // if it's new, blow away the alias as well.
-        if (![distinctId isEqualToString:self.distinctId] && ![distinctId isEqualToString:self.alias]) {
-            self.alias = nil;
-            self.distinctId = distinctId;
+        if (![distinctId isEqualToString:self.alias]) {
+            if (![distinctId isEqualToString:self.distinctId]) {
+                self.alias = nil;
+                self.distinctId = distinctId;
+            }
             self.people.distinctId = distinctId;
         }
         if (self.people.unidentifiedQueue.count > 0) {
