@@ -22,8 +22,12 @@
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
+    // stub track and engage temporarily because reset flushes. unstub after
+    stubTrack();
+    stubEngage();
     [self.mixpanel reset];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
+    [[LSNocilla sharedInstance] clearStubs];
 }
 
 - (void)tearDown {
@@ -42,13 +46,15 @@
 }
 
 #pragma mark - Test Helpers
-- (void)flushAndWaitForSerialQueue {
+- (void)flushAndWaitForMixpanelQueues {
     [self.mixpanel flush];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
 }
 
-- (void)waitForSerialQueue {
-    dispatch_sync(self.mixpanel.serialQueue, ^{ return; });
+- (void)waitForMixpanelQueues {
+    dispatch_sync(self.mixpanel.serialQueue, ^{
+        dispatch_sync(self.mixpanel.networkQueue, ^{ return; });
+    });
 }
 
 - (void)waitForAsyncQueue {

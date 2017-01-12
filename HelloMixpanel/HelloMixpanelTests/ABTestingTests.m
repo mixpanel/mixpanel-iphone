@@ -316,7 +316,7 @@
     
     // Test that calling again uses the cache (no extra requests to decide).
     [self.mixpanel checkForDecideResponseWithCompletion:nil];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
     
@@ -324,7 +324,7 @@
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
     } useCache:NO];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
@@ -334,7 +334,7 @@
         completionCalled = YES;
         XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
     } useCache:NO];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     XCTAssert(completionCalled, @"completion block should have been called");
     
     // Reset to default decide response
@@ -351,7 +351,7 @@
 
     [self.mixpanel identify:@"ABC"];
     [self.mixpanel joinExperiments];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
 
     XCTAssertEqual([self.mixpanel.variants count], 2u, @"Should have 2 variants");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
@@ -366,7 +366,7 @@
     [self.mixpanel joinExperimentsWithCallback:^{
         XCTAssert(lastCall, @"callback should run after variants have been processed");
     }];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
 
     XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
@@ -386,7 +386,7 @@
             [self.mixpanel markVariantRun:variant];
         }
     }];
-    [self waitForSerialQueue];
+    [self waitForMixpanelQueues];
     
     XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
