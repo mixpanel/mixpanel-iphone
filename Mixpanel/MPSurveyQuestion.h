@@ -14,12 +14,18 @@ MIXPANEL_SURVEYS_DEPRECATED
 
 @end
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 @interface MPSurveyMultipleChoiceQuestion : MPSurveyQuestion
+#pragma clang diagnostic pop
 
 @property (nonatomic, readonly, strong) NSArray *choices;
 
 @end
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 @interface MPSurveyTextQuestion : MPSurveyQuestion
+#pragma clang diagnostic pop
 
 @end
