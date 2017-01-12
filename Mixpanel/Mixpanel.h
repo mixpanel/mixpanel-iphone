@@ -74,14 +74,27 @@ NS_ASSUME_NONNULL_BEGIN
  The distinct ID of the current user.
 
  @discussion
- A distinct ID is a string that uniquely identifies one of your users.
- Typically, this is the user ID from your database. By default, we'll use
- the device's advertisingIdentifier UUIDString, if that is not available
+ A distinct ID is a string that uniquely identifies one of your users. By default, 
+ we'll use the device's advertisingIdentifier UUIDString, if that is not available
  we'll use the device's identifierForVendor UUIDString, and finally if that
  is not available we will generate a new random UUIDString. To change the
  current distinct ID, use the <code>identify:</code> method.
  */
 @property (atomic, readonly, copy) NSString *distinctId;
+
+/*!
+ @property
+ 
+ @abstract
+ The alias of the current user.
+ 
+ @discussion
+ An alias is another string that uniquely identifies one of your users. Typically, 
+ this is the user ID from your database. By using an alias you can link pre- and
+ post-sign up activity as well as cross-platform activity under one distinct ID.
+ To set the alias use the <code>createAlias:forDistinctID:</code> method.
+ */
+@property (atomic, readonly, copy) NSString *alias;
 
 /*!
  @property

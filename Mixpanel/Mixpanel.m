@@ -280,11 +280,16 @@ static NSString *defaultProjectToken;
     }
     
     dispatch_async(self.serialQueue, ^{
-        self.distinctId = distinctId;
-        self.people.distinctId = distinctId;
+        // identify only changes the distinct id if it doesn't match either the existing or the alias;
+        // if it's new, blow away the alias as well.
+        if (![distinctId isEqualToString:self.distinctId] && ![distinctId isEqualToString:self.alias]) {
+            self.alias = nil;
+            self.distinctId = distinctId;
+            self.people.distinctId = distinctId;
+        }
         if (self.people.unidentifiedQueue.count > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"$distinct_id"] = distinctId;
+                r[@"$distinct_id"] = self.distinctId;
                 @synchronized (self) {
                     [self.peopleQueue addObject:r];
                 }
@@ -309,8 +314,16 @@ static NSString *defaultProjectToken;
         MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
-    [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
-    [self flush];
+    if (![alias isEqualToString:distinctID]) {
+        dispatch_async(self.serialQueue, ^{
+            self.alias = alias;
+            [self archiveProperties];
+        });
+        [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+        [self flush];
+    } else {
+        MPLogWarning(@"alias: %@ matches distinctID: %@ - skipping api call.", alias, distinctID);
+    }
 }
 
 - (void)track:(NSString *)event
@@ -496,6 +509,7 @@ static NSString *defaultProjectToken;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.people.distinctId = nil;
+        self.alias = nil;
         self.people.unidentifiedQueue = [NSMutableArray array];
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
@@ -674,6 +688,7 @@ static NSString *defaultProjectToken;
     NSString *filePath = [self propertiesFilePath];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
     [p setValue:self.distinctId forKey:@"distinctId"];
+    [p setValue:self.alias forKey:@"alias"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
@@ -784,6 +799,7 @@ static NSString *defaultProjectToken;
     NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
         self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
+        self.alias = properties[@"alias"];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
