@@ -1711,7 +1711,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         self.currentlyShowingNotification = nil;
         self.notificationViewController = nil;
     };
-
+	
+	if ([self.currentlyShowingNotification isKindOfClass:MPNotification.class] && self.didFinishNotification) {
+		MPNotification *notification = self.currentlyShowingNotification;
+		self.didFinishNotification(status, notification.ID);
+	}
+	
     if (status && controller.notification.callToActionURL) {
         [controller hideWithAnimation:YES completion:^{
             NSURL *URL = controller.notification.callToActionURL;
