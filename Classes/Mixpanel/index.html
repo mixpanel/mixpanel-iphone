@@ -1036,6 +1036,10 @@ registered.
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/__deprecated" target="_top">__deprecated</a></tt></dt>
 <dd><p>Current user's name in Mixpanel Streams.
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/alias" target="_top">alias</a></tt></dt>
+<dd><p>The alias of the current user.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive" target="_top">checkForNotificationsOnActive</a></tt></dt>
 <dd><p>Controls whether to automatically check for notifications for the
 currently identified user when the application becomes active.
@@ -1152,6 +1156,23 @@ effectively having access to such granular location information via the IP Addre
     <span class="param">atomic</span>,
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/cl/nameTag //apple_ref/occ/tdef/nameTag //apple_ref/occ/tag/nameTag //apple_ref/occ/struct/nameTag //apple_ref/occ/intf/nameTag //apple_ref/doc/anysymbol/nameTag" machineGenerated="true" --><span class="type">nameTag</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/__deprecated //apple_ref/occ/data/Mixpanel/__deprecated //apple_ref/occ/data/__deprecated //apple_ref/occ/clconst/Mixpanel/__deprecated " machineGenerated="true" --><span class="var">__deprecated</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/__deprecated;name=end --></pre>
 </div>
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/alias;   name=Mixpanel::alias -->
+<a name="//apple_ref/occ/instp/Mixpanel/alias"></a>
+<h3><a name="alias">alias</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/alias;name=start --><!-- begin abstract --><p>The alias of the current user.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/alias;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/alias;name=start -->@property (<span class="param">atomic</span>,
+    <span class="param">readonly</span>,
+    <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/alias //apple_ref/occ/data/Mixpanel/alias //apple_ref/occ/data/alias //apple_ref/occ/clconst/Mixpanel/alias " machineGenerated="true" --><span class="var">alias</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/alias;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/alias;name=start --><p>An alias is another string that uniquely identifies one of your users. Typically,
+this is the user ID from your database. By using an alias you can link pre- and
+post-sign up activity as well as cross-platform activity under one distinct ID.
+To set the alias use the <code>createAlias:forDistinctID:</code> method.
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/alias;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive;   name=Mixpanel::checkForNotificationsOnActive -->
 <a name="//apple_ref/occ/instp/Mixpanel/checkForNotificationsOnActive"></a>
 <h3><a name="checkForNotificationsOnActive">checkForNotificationsOnActive</a></h3>
@@ -1209,9 +1230,8 @@ below for more information.
     <span class="param">copy</span>) <!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/occ/econst/distinctId //apple_ref/occ/data/Mixpanel/distinctId //apple_ref/occ/data/distinctId //apple_ref/occ/clconst/Mixpanel/distinctId " machineGenerated="true" --><span class="var">distinctId</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start --><p>A distinct ID is a string that uniquely identifies one of your users.
-Typically, this is the user ID from your database. By default, we'll use
-the device's advertisingIdentifier UUIDString, if that is not available
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/distinctId;name=start --><p>A distinct ID is a string that uniquely identifies one of your users. By default,
+we'll use the device's advertisingIdentifier UUIDString, if that is not available
 we'll use the device's identifierForVendor UUIDString, and finally if that
 is not available we will generate a new random UUIDString. To change the
 current distinct ID, use the <code>identify:</code> method.
@@ -1440,7 +1460,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Wednesday, December 21, 2016
+<p class="hd_timestamp">Last Updated: Thursday, January 12, 2017
 </p></div>
 </td></tr></table>
 </body></html>
