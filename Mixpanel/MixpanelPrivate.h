@@ -34,6 +34,8 @@
 #import "MPDesignerSessionCollection.h"
 #import "MPEventBinding.h"
 #import "MPNotification.h"
+#import "MPTakeoverNotification.h"
+#import "MPMiniNotification.h"
 #import "MPNotificationViewController.h"
 #import "MPSurveyNavigationController.h"
 #import "MPSwizzler.h"
