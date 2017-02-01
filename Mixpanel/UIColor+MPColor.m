@@ -2,8 +2,7 @@
 
 @implementation UIColor (MPColor)
 
-+ (UIColor *)mp_applicationPrimaryColor
-{
++ (UIColor *)mp_applicationPrimaryColor {
     // First try and find the color of the UINavigationBar of the top UINavigationController that is showing now.
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     UINavigationController *topNavigationController = nil;
@@ -31,23 +30,23 @@
     return color;
 }
 
-+ (UIColor *)mp_lightEffectColor
-{
++ (UIColor *)mp_lightEffectColor {
     return [UIColor colorWithWhite:1.0f alpha:0.3f];
 }
 
-+ (UIColor *)mp_extraLightEffectColor
-{
++ (UIColor *)mp_extraLightEffectColor {
     return [UIColor colorWithWhite:0.97f alpha:0.82f];
 }
 
-+ (UIColor *)mp_darkEffectColor
-{
++ (UIColor *)mp_darkEffectColor {
     return [UIColor colorWithWhite:0.11f alpha:0.73f];
 }
 
-- (UIColor *)colorWithSaturationComponent:(CGFloat) saturation
-{
++ (UIColor *)mp_colorFromRGB:(NSUInteger)rgbValue {
+    return [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0];
+}
+
+- (UIColor *)colorWithSaturationComponent:(CGFloat) saturation {
     UIColor *newColor;
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a]) {

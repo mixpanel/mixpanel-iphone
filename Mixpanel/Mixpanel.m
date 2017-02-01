@@ -1701,12 +1701,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^{
-        [self notificationController:controller wasDissmissedWithCtaUrl:nil];
+        [self notificationController:controller wasDismissedWithCtaUrl:nil];
     });
     return YES;
 }
 
-- (void)notificationController:(MPNotificationViewController *)controller wasDissmissedWithCtaUrl:(NSURL *)ctaUrl
+- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithCtaUrl:(NSURL *)ctaUrl
 {
     if (controller == nil || self.currentlyShowingNotification != controller.notification) {
         return;

@@ -75,6 +75,9 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
                 return nil;
             }
             imageURL = imageURLComponents.URL;
+        } else {
+            [MPNotification logNotificationError:@"image url" withValue:imageURLString];
+            return nil;
         }
         
         _jsonDescription = object;

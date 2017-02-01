@@ -128,7 +128,7 @@
                                 <constraint firstAttribute="bottom" secondItem="1LO-WG-GYz" secondAttribute="bottom" id="bAv-w0-aqb"/>
                                 <constraint firstAttribute="trailing" secondItem="Xaf-4Z-Id4" secondAttribute="trailing" id="f8S-wW-TJE"/>
                                 <constraint firstAttribute="height" constant="40" id="lQK-tN-2HH"/>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="264" id="yLR-7A-bWT"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="yLR-7A-bWT"/>
                             </constraints>
                         </view>
                     </subviews>

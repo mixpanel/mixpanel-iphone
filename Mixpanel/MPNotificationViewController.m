@@ -106,17 +106,17 @@
         if (notification.title && notification.body) {
             self.titleLabel.text = notification.title;
             self.bodyLabel.text = notification.body;
-            self.titleLabel.textColor = UIColorFromRGB(notification.titleColor);
-            self.bodyLabel.textColor = UIColorFromRGB(notification.bodyColor);
+            self.titleLabel.textColor = [UIColor mp_colorFromRGB:notification.titleColor];
+            self.bodyLabel.textColor = [UIColor mp_colorFromRGB:notification.bodyColor];
         } else {
-            [[NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
-            [[NSLayoutConstraint constraintWithItem:_bodyLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
+            [[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
+            [[NSLayoutConstraint constraintWithItem:self.bodyLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
         }
 
         UIImage *originalImage = self.closeButton.imageView.image;
         UIImage *tintedImage = [originalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [self.closeButton setImage:tintedImage forState:UIControlStateNormal];
-        self.closeButton.tintColor = UIColorFromRGB(notification.closeButtonColor);
+        self.closeButton.tintColor = [UIColor mp_colorFromRGB:notification.closeButtonColor];
 
         if (!notification.shouldFadeImage) {
             self.bottomImageSpacing.constant = 30;
@@ -128,10 +128,10 @@
         if (notification.buttons.count == 2) {
             [self setUpButtonView:self.secondButton withData:notification.buttons[1] forIndex:1];
         } else {
-            [[NSLayoutConstraint constraintWithItem:_secondButtonContainer attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
+            [[NSLayoutConstraint constraintWithItem:self.secondButtonContainer attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
         }
         
-        self.viewMask.backgroundColor = UIColorFromRGB(notification.backgroundColor);
+        self.viewMask.backgroundColor = [UIColor mp_colorFromRGB:notification.backgroundColor];
         self.viewMask.clipsToBounds = YES;
         self.viewMask.layer.cornerRadius = 6.f;
     }
@@ -141,16 +141,16 @@
     [buttonView setTitle:notificationButton.text forState:UIControlStateNormal];
     buttonView.layer.cornerRadius = 5.0f;
     buttonView.layer.borderWidth = 2.0f;
-    UIColor *textColor = UIColorFromRGB(notificationButton.textColor);
+    UIColor *textColor = [UIColor mp_colorFromRGB:notificationButton.textColor];
     [buttonView setTitleColor:textColor forState:UIControlStateNormal];
     [buttonView setTag:index];
-    UIColor *borderColor = UIColorFromRGB(notificationButton.borderColor);
+    UIColor *borderColor = [UIColor mp_colorFromRGB:notificationButton.borderColor];
     [buttonView.layer setBorderColor:borderColor.CGColor];
     [buttonView addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)buttonTapped:(UIButton *)button {
-    [self.delegate notificationController:self wasDissmissedWithCtaUrl:((MPTakeoverNotification *)self.notification).buttons[button.tag].ctaUrl];
+    [self.delegate notificationController:self wasDismissedWithCtaUrl:((MPTakeoverNotification *)self.notification).buttons[button.tag].ctaUrl];
 }
 
 - (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
@@ -180,8 +180,8 @@
 
 - (IBAction)tappedClose:(UITapGestureRecognizer *)gesture
 {
-    if ([self.delegate respondsToSelector:@selector(notificationController:wasDissmissedWithCtaUrl:)]) {
-        [self.delegate notificationController:self wasDissmissedWithCtaUrl:nil];
+    if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithCtaUrl:)]) {
+        [self.delegate notificationController:self wasDismissedWithCtaUrl:nil];
     }
 }
 
@@ -241,27 +241,27 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     self.imageView.layer.masksToBounds = YES;
 
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.bodyLabel.textColor = UIColorFromRGB(notification.bodyColor);
+    self.bodyLabel.textColor = [UIColor mp_colorFromRGB:notification.bodyColor];
     self.bodyLabel.backgroundColor = [UIColor clearColor];
     self.bodyLabel.font = [UIFont systemFontOfSize:14.0f];
     self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.bodyLabel.numberOfLines = 0;
 
-    self.view.backgroundColor = UIColorFromRGB(notification.backgroundColor);
+    self.view.backgroundColor = [UIColor mp_colorFromRGB:notification.backgroundColor];
 
-    if (self.notification != nil) {
-        if (self.notification.image != nil) {
+    if (notification != nil) {
+        if (notification.image != nil) {
             self.imageView.image = [UIImage imageWithData:notification.image scale:2.0f];
             UIImage *originalImage = [UIImage imageWithData:notification.image scale:2.0f];
             UIImage *tintedImage = [originalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.imageView setImage:tintedImage];
-            self.imageView.tintColor = UIColorFromRGB(notification.imageTintColor);
+            self.imageView.tintColor = [UIColor mp_colorFromRGB:notification.imageTintColor];
             self.imageView.hidden = NO;
         } else {
             self.imageView.hidden = YES;
         }
 
-        if (self.notification.body != nil) {
+        if (notification.body != nil) {
             self.bodyLabel.text = notification.body;
             self.bodyLabel.hidden = NO;
         } else {
@@ -407,7 +407,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 - (void)didTap:(UITapGestureRecognizer *)gesture
 {
     if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded) {
-        [self.delegate notificationController:self wasDissmissedWithCtaUrl:((MPMiniNotification *)self.notification).ctaUrl];
+        [self.delegate notificationController:self wasDismissedWithCtaUrl:((MPMiniNotification *)self.notification).ctaUrl];
     }
 }
 
@@ -430,7 +430,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
         } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
             id strongDelegate = self.delegate;
             if (self.view.layer.position.y > _position.y + MPNotifHeight / 2.0f && strongDelegate != nil) {
-                [strongDelegate notificationController:self wasDissmissedWithCtaUrl:nil];
+                [strongDelegate notificationController:self wasDismissedWithCtaUrl:nil];
             } else {
                 [UIView animateWithDuration:0.2f animations:^{
                     self.view.layer.position = self->_position;
@@ -449,7 +449,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     if (self = [super initWithCoder:aDecoder]) {
         _maskLayer = [GradientMaskLayer layer];
         [self.layer setMask:_maskLayer];
-        [_maskLayer setColors:@[(id)[UIColor blackColor].CGColor,(id) [UIColor blackColor].CGColor,(id) [UIColor clearColor].CGColor,(id) [UIColor clearColor].CGColor]];
+        [_maskLayer setColors:@[[UIColor blackColor], [UIColor blackColor], [UIColor clearColor],[UIColor clearColor]]];
         [_maskLayer setLocations:@[@0, @0.4, @0.9, @1]];
         [_maskLayer setStartPoint:CGPointMake(0, 0)];
         [_maskLayer setEndPoint:CGPointMake(0, 1)];
