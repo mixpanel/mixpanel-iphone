@@ -143,6 +143,7 @@
     [buttonView setTag:index];
     UIColor *borderColor = [UIColor mp_colorFromRGB:notificationButton.borderColor];
     [buttonView.layer setBorderColor:borderColor.CGColor];
+    [buttonView setBackgroundColor:[UIColor mp_colorFromRGB:notificationButton.backgroundColor]];
     [buttonView addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
 }
 
