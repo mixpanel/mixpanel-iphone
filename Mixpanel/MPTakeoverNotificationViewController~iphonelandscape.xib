@@ -15,7 +15,7 @@
                 <outlet property="firstButton" destination="S0D-AI-bOn" id="cJL-S7-ojA"/>
                 <outlet property="imageView" destination="Xo2-Nk-9Zp" id="2Ej-J7-06l"/>
                 <outlet property="secondButton" destination="vqY-sU-wji" id="oRT-Bg-qfz"/>
-                <outlet property="secondButtonContainer" destination="rrl-bH-xtC" id="cKT-es-ASo"/>
+                <outlet property="secondButtonContainer" destination="rrl-bH-xtC" id="xrn-Tm-dWA"/>
                 <outlet property="titleLabel" destination="uU8-iL-VPd" id="itp-44-ocF"/>
                 <outlet property="view" destination="Kbr-Uz-bG2" id="tbF-sy-8j3"/>
                 <outlet property="viewMask" destination="qEo-cT-dUY" id="Bhk-RK-fcv"/>
@@ -23,7 +23,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="Kbr-Uz-bG2">
-            <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="niR-bW-Ce4" userLabel="Bg Image View"/>
@@ -32,15 +32,13 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qEo-cT-dUY" userLabel="Bg Mask">
                     <subviews>
-                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n85-3o-MhK">
-                            <frame key="frameInset" minX="20" minY="20" width="313" height="335"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n85-3o-MhK">
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pId-RE-RjE" customClass="MPAlphaMaskView">
+                                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pId-RE-RjE" customClass="MPAlphaMaskView">
+                                    <frame key="frameInset" minX="42" width="200" height="280"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="Xo2-Nk-9Zp" userLabel="Notif Image View">
-                                            <connections>
-                                                <outletCollection property="gestureRecognizers" destination="7Vm-ow-q1t" appends="YES" id="XGr-VG-7HN"/>
-                                            </connections>
+                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xo2-Nk-9Zp" userLabel="Notif Image View">
+                                            <frame key="frameInset" width="200" height="280"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -84,8 +82,7 @@
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q6u-Gu-7TB">
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S0D-AI-bOn">
-                                            <frame key="frameInset" width="1000" height="1000"/>
+                                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S0D-AI-bOn">
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                             <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
@@ -97,11 +94,9 @@
                                                 <color key="titleColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                         </button>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrl-bH-xtC">
-                                            <frame key="frameInset" width="1000" height="1000"/>
+                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rrl-bH-xtC">
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vqY-sU-wji">
-                                                    <frame key="frameInset" width="1000" height="1000"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vqY-sU-wji">
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                                     <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
@@ -157,11 +152,11 @@
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.78000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="uOA-rR-CAL" firstAttribute="centerY" secondItem="qEo-cT-dUY" secondAttribute="centerY" id="5lz-Zs-SvT"/>
-                        <constraint firstItem="dcY-wi-XbP" firstAttribute="leading" secondItem="n85-3o-MhK" secondAttribute="trailing" constant="-10" id="8Gn-aU-2DM"/>
+                        <constraint firstItem="dcY-wi-XbP" firstAttribute="leading" secondItem="n85-3o-MhK" secondAttribute="trailing" constant="-20" id="8Gn-aU-2DM"/>
                         <constraint firstItem="n85-3o-MhK" firstAttribute="leading" secondItem="qEo-cT-dUY" secondAttribute="leading" constant="20" id="9nq-wv-KDH"/>
-                        <constraint firstAttribute="trailing" secondItem="uOA-rR-CAL" secondAttribute="trailing" constant="10" id="K6z-Ou-gqS"/>
+                        <constraint firstAttribute="trailing" secondItem="uOA-rR-CAL" secondAttribute="trailing" id="K6z-Ou-gqS"/>
                         <constraint firstItem="dcY-wi-XbP" firstAttribute="centerY" secondItem="qEo-cT-dUY" secondAttribute="centerY" id="KYy-q2-0BU"/>
-                        <constraint firstItem="uOA-rR-CAL" firstAttribute="leading" secondItem="dcY-wi-XbP" secondAttribute="trailing" constant="-10" id="YaH-R8-nJl"/>
+                        <constraint firstItem="uOA-rR-CAL" firstAttribute="leading" secondItem="dcY-wi-XbP" secondAttribute="trailing" id="YaH-R8-nJl"/>
                         <constraint firstAttribute="bottom" secondItem="n85-3o-MhK" secondAttribute="bottom" constant="20" id="jwh-3l-Omz"/>
                         <constraint firstItem="n85-3o-MhK" firstAttribute="top" secondItem="qEo-cT-dUY" secondAttribute="top" constant="20" id="qk6-fz-TKL"/>
                         <constraint firstItem="dcY-wi-XbP" firstAttribute="centerX" secondItem="qEo-cT-dUY" secondAttribute="centerX" id="wcQ-QK-Rzd"/>
@@ -201,11 +196,6 @@
                 <constraint firstItem="WAp-k0-Mff" firstAttribute="top" secondItem="Kbr-Uz-bG2" secondAttribute="top" id="xFO-wK-7Xl"/>
             </constraints>
         </view>
-        <panGestureRecognizer minimumNumberOfTouches="1" id="7Vm-ow-q1t">
-            <connections>
-                <action selector="didPan:" destination="-1" id="g8V-DQ-8G7"/>
-            </connections>
-        </panGestureRecognizer>
     </objects>
     <resources>
         <image name="MPCloseButton.png" width="25" height="25"/>

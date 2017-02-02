@@ -57,10 +57,7 @@
 
 @end
 
-@interface MPTakeoverNotificationViewController () {
-    CGPoint _viewStart;
-    BOOL _touching;
-}
+@interface MPTakeoverNotificationViewController ()
 
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
@@ -182,29 +179,6 @@
 {
     if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithCtaUrl:)]) {
         [self.delegate notificationController:self wasDismissedWithCtaUrl:nil];
-    }
-}
-
-- (IBAction)didPan:(UIPanGestureRecognizer *)gesture
-{
-    if (gesture.numberOfTouches == 1) {
-        if (gesture.state == UIGestureRecognizerStateBegan) {
-            _viewStart = self.imageView.layer.position;
-            _touching = YES;
-        } else if (gesture.state == UIGestureRecognizerStateChanged) {
-            CGPoint translation = [gesture translationInView:self.view];
-            self.imageView.layer.position = CGPointMake(0.3f * translation.x + _viewStart.x, 0.3f * translation.y + _viewStart.y);
-        }
-    }
-
-    if (_touching && (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled)) {
-        _touching = NO;
-        CGPoint viewEnd = self.imageView.layer.position;
-        CGPoint viewDistance = CGPointMake(viewEnd.x - _viewStart.x, viewEnd.y - _viewStart.y);
-        CGFloat distance = (CGFloat)sqrt(viewDistance.x * viewDistance.x + viewDistance.y * viewDistance.y);
-        [UIView animateWithDuration:(distance / 500.0f) delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.imageView.layer.position = self->_viewStart;
-        } completion:nil];
     }
 }
 

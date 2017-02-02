@@ -18,7 +18,7 @@
                 <outlet property="firstButton" destination="Uud-dR-diT" id="IYU-je-0I6"/>
                 <outlet property="imageView" destination="oJa-eQ-3o2" id="ySr-U6-We0"/>
                 <outlet property="secondButton" destination="isu-29-YtI" id="fu7-Bb-ZMN"/>
-                <outlet property="secondButtonContainer" destination="vew-gZ-q3O" id="tf6-4q-N3x"/>
+                <outlet property="secondButtonContainer" destination="vew-gZ-q3O" id="xm2-UL-erc"/>
                 <outlet property="titleLabel" destination="hG6-Nx-B8K" id="NOj-QA-kD0"/>
                 <outlet property="view" destination="LSp-1n-nEk" id="0y8-z6-NHw"/>
                 <outlet property="viewMask" destination="Bjs-uh-0cZ" id="5g3-vh-10K"/>
@@ -39,11 +39,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="4nX-Eu-PlQ" customClass="MPAlphaMaskView">
                                     <subviews>
-                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="oJa-eQ-3o2" userLabel="Notif Image View">
-                                            <connections>
-                                                <outletCollection property="gestureRecognizers" destination="7sE-9V-9CY" appends="YES" id="wJw-4C-hVi"/>
-                                            </connections>
-                                        </imageView>
+                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="oJa-eQ-3o2" userLabel="Notif Image View"/>
                                     </subviews>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
@@ -104,10 +100,10 @@
                             <size key="shadowOffset" width="0.0" height="1"/>
                         </label>
                         <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OqR-XN-72p">
-                            <frame key="frameInset" width="1000" height="1000"/>
+                            <frame key="frameInset" minX="5" minY="725" width="264" height="50"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uud-dR-diT">
-                                    <frame key="frameInset" width="1000" height="1000"/>
+                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uud-dR-diT">
+                                    <frame key="frameInset" width="128" height="50"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                     <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
@@ -119,11 +115,11 @@
                                         <color key="titleColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                 </button>
-                                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vew-gZ-q3O">
-                                    <frame key="frameInset" width="1000" height="1000"/>
+                                <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vew-gZ-q3O">
+                                    <frame key="frameInset" minX="128" width="136" height="50"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="isu-29-YtI">
-                                            <frame key="frameInset" width="1000" height="1000"/>
+                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="isu-29-YtI">
+                                            <frame key="frameInset" minX="8" width="128" height="50"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                             <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
@@ -201,11 +197,6 @@
                 <constraint firstItem="y52-0P-44z" firstAttribute="leading" secondItem="LSp-1n-nEk" secondAttribute="leading" id="zi3-Ad-UcN"/>
             </constraints>
         </view>
-        <panGestureRecognizer minimumNumberOfTouches="1" id="7sE-9V-9CY">
-            <connections>
-                <action selector="didPan:" destination="-1" id="d21-5J-QDv"/>
-            </connections>
-        </panGestureRecognizer>
     </objects>
     <resources>
         <image name="MPCloseButton.png" width="25" height="25"/>
