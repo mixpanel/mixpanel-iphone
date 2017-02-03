@@ -202,7 +202,7 @@
         self.mixpanel.currentlyShowingNotification = nil;
         self.mixpanel.notificationViewController = nil;
         if([topVC isKindOfClass:[MPNotificationViewController class]]) {
-            [(MPNotificationViewController *)topVC hideWithAnimation:YES completion:^void{
+            [(MPNotificationViewController *)topVC hide:YES completion:^void{
                 [expectation fulfill];
             }];
         }
@@ -266,7 +266,7 @@
 //    while ([[self topViewController] isKindOfClass:[MPNotificationViewController class]]) {
 //        XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
 //
-//        [((MPNotificationViewController *)[self topViewController]) hideWithAnimation:NO completion:^{
+//        [((MPNotificationViewController *)[self topViewController]) hide:NO completion:^{
 //            [expectation fulfill];
 //        }];
 //        [self waitForExpectationsWithTimeout:2 handler:nil];
@@ -328,7 +328,7 @@
 //                NSString *snapshotName = [NSString stringWithFormat:@"MPNotification-%lu-%@", (unsigned long)i, orientation];
 //                FBSnapshotVerifyView(topViewController.view, snapshotName);
 //                XCTestExpectation *expectation = [self expectationWithDescription:@"notification closed"];
-//                [topViewController hideWithAnimation:NO completion:^{
+//                [topViewController hide:NO completion:^{
 //                    [expectation fulfill];
 //                }];
 //                [self waitForExpectationsWithTimeout:2 handler:nil];
