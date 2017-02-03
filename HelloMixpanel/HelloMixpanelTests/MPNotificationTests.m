@@ -184,6 +184,8 @@
     NSData *notificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}}" dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *notifDict = [NSJSONSerialization JSONObjectWithData:notificationData options:0 error:nil];
 
+    NSUInteger numWindows = [UIApplication sharedApplication].windows.count;
+    
     MPTakeoverNotification *notif = [[MPTakeoverNotification alloc]initWithJSONObject:notifDict];
     [self.mixpanel showNotificationWithObject:notif];
     [self.mixpanel showNotificationWithObject:notif];
@@ -191,8 +193,7 @@
     //wait for notifs to be shown from main queue
     [self waitForAsyncQueue];
     
-    UIViewController *topVC = [self topViewController];
-    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification was not presented");
+    XCTAssertTrue([UIApplication sharedApplication].windows.count == numWindows + 1, @"Notification was not presented");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"$campaign_delivery", @"last event should be campaign delivery");
     
@@ -201,8 +202,16 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         self.mixpanel.currentlyShowingNotification = nil;
         self.mixpanel.notificationViewController = nil;
-        if([topVC isKindOfClass:[MPNotificationViewController class]]) {
-            [(MPNotificationViewController *)topVC hide:YES completion:^void{
+        MPNotificationViewController *notificationViewController = nil;
+        for (UIWindow *window in [UIApplication sharedApplication].windows) {
+            if ([window.rootViewController isKindOfClass:[MPNotificationViewController class]]) {
+                notificationViewController = (MPNotificationViewController *) window.rootViewController;
+                break;
+            }
+        }
+        
+        if (notificationViewController) {
+            [notificationViewController hide:YES completion:^{
                 [expectation fulfill];
             }];
         }
@@ -230,6 +239,8 @@
     NSData *notificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}}" dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *notifDict = [NSJSONSerialization JSONObjectWithData:notificationData options:0 error:nil];
 
+    NSUInteger numWindows = [UIApplication sharedApplication].windows.count;
+
     MPTakeoverNotification *notif = [[MPTakeoverNotification alloc]initWithJSONObject:notifDict];
     [self.mixpanel showNotificationWithObject:notif];
     
@@ -237,6 +248,8 @@
     [self waitForAsyncQueue];
     
     topVC = [self topViewController];
+    XCTAssertFalse([UIApplication sharedApplication].windows.count == numWindows + 1, @"Notification was presented");
+
     XCTAssertFalse([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification was presented");
     
     // Dismiss the alert and try to present notification again
@@ -249,13 +262,13 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
     }
     
+    numWindows = [UIApplication sharedApplication].windows.count;
     [self.mixpanel showNotificationWithObject:notif];
     
     //wait for notifs to be shown from main queue
     [self waitForAsyncQueue];
     
-    topVC = [self topViewController];
-    XCTAssertTrue([topVC isKindOfClass:[MPNotificationViewController class]], @"Notification wasn't presented");
+    XCTAssertTrue([UIApplication sharedApplication].windows.count == numWindows + 1, @"Notification wasn't presented");
 }
 
 // Waiting for web/backend to be ready
