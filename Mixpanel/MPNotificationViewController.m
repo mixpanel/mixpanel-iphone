@@ -50,11 +50,17 @@
 
 @implementation MPNotificationViewController
 
+- (void)show {
+    NSAssert(false, @"Sub-classes must override this method");
+}
+
+- (void)hide:(BOOL)animated completion:(void (^)(void))completion {
+    NSAssert(false, @"Sub-classes must override this method");
+}
+
 @end
 
-@interface MPTakeoverNotificationViewController () {
-    UIWindow *_window;
-}
+@interface MPTakeoverNotificationViewController ()
 
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
@@ -67,6 +73,7 @@
 @property (nonatomic, strong) IBOutlet UIView *secondButtonContainer;
 @property (nonatomic, strong) IBOutlet UIView *viewMask;
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
+@property (nonatomic, strong) UIWindow *window;
 
 @end
 
@@ -146,16 +153,16 @@
 }
 
 - (void)show {
-    _window = [[UIWindow alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    _window.windowLevel = UIWindowLevelAlert;
-    _window.rootViewController = self;
-    [_window setHidden:NO];
+    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    self.window.windowLevel = UIWindowLevelAlert;
+    self.window.rootViewController = self;
+    [self.window setHidden:NO];
 
     CGRect windowFrame = _window.frame;
     windowFrame.origin.y -= [UIScreen mainScreen].bounds.size.height;
 
     [UIView animateWithDuration:0.25 animations:^{
-        [self->_window setFrame:windowFrame];
+        [self.window setFrame:windowFrame];
     }];
 }
 
@@ -164,12 +171,12 @@
     windowFrame.origin.y += [UIScreen mainScreen].bounds.size.height;
 
     [UIView animateWithDuration:0.5 animations:^{
-        [self->_window setFrame:windowFrame];
+        [self.window setFrame:windowFrame];
     } completion:^(BOOL finished) {
-        [self->_window setHidden:YES];
-        [self->_window removeFromSuperview];
-        self->_window = nil;
-        if (completion != NULL) {
+        [self.window setHidden:YES];
+        [self.window removeFromSuperview];
+        self.window = nil;
+        if (completion != nil) {
             completion();
         }
     }];
