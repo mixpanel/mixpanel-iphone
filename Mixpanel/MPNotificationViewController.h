@@ -8,7 +8,8 @@
 @property (nonatomic, weak) id<MPNotificationViewControllerDelegate> delegate;
 @property (nonatomic, strong) MPNotification *notification;
 
-- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion;
+- (void)show;
+- (void)hide:(BOOL)animated completion:(void (^)(void))completion;
 
 @end
 
@@ -17,8 +18,6 @@
 @end
 
 @interface MPMiniNotificationViewController : MPNotificationViewController
-
-- (void)showWithAnimation;
 
 @end
 

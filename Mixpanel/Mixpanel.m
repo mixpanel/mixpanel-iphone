@@ -1676,14 +1676,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
         MPTakeoverNotificationViewController *controller = [[MPTakeoverNotificationViewController alloc] init];
-        controller.providesPresentationContextTransitionStyle = YES;
-        controller.definesPresentationContext = YES;
-        [controller setModalPresentationStyle:UIModalPresentationOverCurrentContext];
         controller.notification = notification;
         controller.delegate = self;
+        [controller show];
         self.notificationViewController = controller;
 
-        [presentingViewController presentViewController:controller animated:YES completion:nil];
         return YES;
     } else {
         return NO;
@@ -1697,7 +1694,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     controller.delegate = self;
     self.notificationViewController = controller;
 
-    [controller showWithAnimation];
+    [controller show];
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^{
@@ -1718,7 +1715,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     };
 
     if (ctaUrl) {
-        [controller hideWithAnimation:YES completion:^{
+        [controller hide:YES completion:^{
             MPLogInfo(@"%@ opening URL %@", self, ctaUrl);
 
             if (![[UIApplication sharedApplication] openURL:ctaUrl]) {
@@ -1729,7 +1726,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             completionBlock();
         }];
     } else {
-        [controller hideWithAnimation:YES completion:completionBlock];
+        [controller hide:YES completion:completionBlock];
     }
 }
 

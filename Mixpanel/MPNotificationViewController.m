@@ -57,7 +57,9 @@
 
 @end
 
-@interface MPTakeoverNotificationViewController ()
+@interface MPTakeoverNotificationViewController () {
+    UIWindow *_window;
+}
 
 @property (nonatomic, strong) IBOutlet UIImageView *backgroundImageView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
@@ -73,9 +75,6 @@
 
 @end
 
-@interface MPTakeoverNotificationViewController ()
-
-@end
 
 @implementation MPTakeoverNotificationViewController
 
@@ -151,33 +150,53 @@
     [self.delegate notificationController:self wasDismissedWithCtaUrl:((MPTakeoverNotification *)self.notification).buttons[button.tag].ctaUrl];
 }
 
-- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
-{
-    [self.presentingViewController dismissViewControllerAnimated:animated completion:completion];
+- (void)show {
+    _window = [[UIWindow alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    _window.windowLevel = UIWindowLevelAlert;
+    _window.rootViewController = self;
+    [_window setHidden:NO];
+
+    CGRect windowFrame = _window.frame;
+    windowFrame.origin.y -= [UIScreen mainScreen].bounds.size.height;
+
+    [UIView animateWithDuration:0.25 animations:^{
+        [self->_window setFrame:windowFrame];
+    }];
 }
 
-- (BOOL)shouldAutorotate
-{
+- (void)hide:(BOOL)animated completion:(void (^)(void))completion {
+    CGRect windowFrame = _window.frame;
+    windowFrame.origin.y += [UIScreen mainScreen].bounds.size.height;
+
+    [UIView animateWithDuration:0.5 animations:^{
+        [self->_window setFrame:windowFrame];
+    } completion:^(BOOL finished) {
+        [self->_window setHidden:YES];
+        [self->_window removeFromSuperview];
+        self->_window = nil;
+        if (completion != NULL) {
+            completion();
+        }
+    }];
+}
+
+- (BOOL)shouldAutorotate {
     return NO;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
+- (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
 
-- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
-{
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
     return UIStatusBarAnimationFade;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskAll;
 }
 
-- (IBAction)tappedClose:(UITapGestureRecognizer *)gesture
-{
+- (IBAction)tappedClose:(UITapGestureRecognizer *)gesture {
     if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithCtaUrl:)]) {
         [self.delegate notificationController:self wasDismissedWithCtaUrl:nil];
     }
@@ -202,8 +221,7 @@
 
 static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     _canPan = YES;
@@ -257,8 +275,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     [self.view addGestureRecognizer:pan];
 }
 
-- (void)viewWillLayoutSubviews
-{
+- (void)viewWillLayoutSubviews {
     UIView *parentView = self.view.superview;
     CGRect parentFrame = parentView.frame;
 
@@ -287,8 +304,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     self.bodyLabel.frame = CGRectMake(MPNotifHeight, (CGFloat)ceil((MPNotifHeight - sizeToFit.height) / 2.0f) - 2.0f, (CGFloat)ceil(sizeToFit.width), (CGFloat)ceil(sizeToFit.height));
 }
 
-- (UIView *)getTopView
-{
+- (UIView *)getTopView {
     UIView *topView = nil;
     for (UIView *subview in [UIApplication sharedApplication].keyWindow.subviews) {
         if (!subview.hidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0) {
@@ -298,8 +314,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     return topView;
 }
 
-- (double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation
-{
+- (double)angleForInterfaceOrientation:(UIInterfaceOrientation)orientation {
     switch (orientation) {
         case UIInterfaceOrientationLandscapeLeft:
             return -M_PI_2;
@@ -312,8 +327,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     }
 }
 
-- (void)showWithAnimation
-{
+- (void)show {
     [self.view removeFromSuperview];
 
     UIView *topView = [self getTopView];
@@ -336,8 +350,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     }
 }
 
-- (void)animateImage
-{
+- (void)animateImage {
     CGSize imageViewSize = CGSizeMake(40.0f, 40.0f);
     CGFloat duration = 0.5f;
 
@@ -357,8 +370,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     [_imageView.layer addAnimation:imageAnimation forKey:@"bounds"];
 }
 
-- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion
-{
+- (void)hide:(BOOL)animated completion:(void (^)(void))completion {
     _canPan = NO;
 
     if (!_isBeingDismissed) {
@@ -379,15 +391,13 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     }
 }
 
-- (void)didTap:(UITapGestureRecognizer *)gesture
-{
+- (void)didTap:(UITapGestureRecognizer *)gesture {
     if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded) {
         [self.delegate notificationController:self wasDismissedWithCtaUrl:((MPMiniNotification *)self.notification).ctaUrl];
     }
 }
 
-- (void)didPan:(UIPanGestureRecognizer *)gesture
-{
+- (void)didPan:(UIPanGestureRecognizer *)gesture {
     if (_canPan) {
         if (gesture.state == UIGestureRecognizerStateBegan && gesture.numberOfTouches == 1) {
             _panStartPoint = [gesture locationInView:self.parentViewController.view];
@@ -419,8 +429,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 @implementation MPAlphaMaskView
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         _maskLayer = [GradientMaskLayer layer];
         [self.layer setMask:_maskLayer];
@@ -436,8 +445,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     return self;
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     [_maskLayer setFrame:self.bounds];
 }
@@ -446,8 +454,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 @implementation MPActionButton
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         self.layer.cornerRadius = 5.0f;
         self.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -457,8 +464,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     return self;
 }
 
-- (void)setHighlighted:(BOOL)highlighted
-{
+- (void)setHighlighted:(BOOL)highlighted {
     if (highlighted) {
         self.layer.borderColor = [UIColor grayColor].CGColor;
     } else {
@@ -482,8 +488,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     return cl;
 }
 
-- (void)drawInContext:(CGContextRef)ctx
-{
+- (void)drawInContext:(CGContextRef)ctx {
     CGFloat edge = 1.5f; //the distance from the edge so we don't get clipped.
     CGContextSetAllowsAntialiasing(ctx, true);
     CGContextSetShouldAntialias(ctx, true);
@@ -505,8 +510,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 @implementation GradientMaskLayer
 
-- (void)drawInContext:(CGContextRef)ctx
-{
+- (void)drawInContext:(CGContextRef)ctx {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
 
     CGFloat components[] = { //[Grayscale, Alpha] for each component
@@ -545,8 +549,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 @implementation ElasticEaseOutAnimation
 
-- (instancetype)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration
-{
+- (instancetype)initWithStartValue:(CGRect)start endValue:(CGRect)end andDuration:(double)duration {
     if ((self = [super init])) {
         self.duration = duration;
         self.values = [self generateValuesFrom:start to:end];
@@ -554,8 +557,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     return self;
 }
 
-- (NSArray *)generateValuesFrom:(CGRect)start to:(CGRect)end
-{
+- (NSArray *)generateValuesFrom:(CGRect)start to:(CGRect)end {
     NSUInteger steps = (NSUInteger)ceil(60 * self.duration) + 2;
 	NSMutableArray *valueArray = [NSMutableArray arrayWithCapacity:steps];
     const double increment = 1.0 / (double)(steps - 1);
