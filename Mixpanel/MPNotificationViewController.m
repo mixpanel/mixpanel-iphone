@@ -130,13 +130,20 @@
         }
         
         self.viewMask.backgroundColor = [UIColor mp_colorFromRGB:notification.backgroundColor];
-        self.viewMask.clipsToBounds = YES;
-        self.viewMask.layer.cornerRadius = 6.f;
+
+
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            self.view.backgroundColor = [UIColor mp_colorFromRGB:notification.backgroundColor];
+            self.view.backgroundColor = [self.view.backgroundColor colorWithAlphaComponent:0.8];
+            self.viewMask.clipsToBounds = YES;
+            self.viewMask.layer.cornerRadius = 6;
+        }
     }
 }
 
 - (void)setUpButtonView:(UIButton *)buttonView withData:(MPNotificationButton *)notificationButton forIndex:(NSInteger)index {
     [buttonView setTitle:notificationButton.text forState:UIControlStateNormal];
+    buttonView.titleLabel.adjustsFontSizeToFitWidth = YES;
     buttonView.layer.cornerRadius = 5.0f;
     buttonView.layer.borderWidth = 2.0f;
     UIColor *textColor = [UIColor mp_colorFromRGB:notificationButton.textColor];
