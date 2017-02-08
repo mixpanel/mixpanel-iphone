@@ -160,25 +160,20 @@
 }
 
 - (void)show {
-    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    self.window.alpha = 0;
     self.window.windowLevel = UIWindowLevelAlert;
     self.window.rootViewController = self;
     [self.window setHidden:NO];
 
-    CGRect windowFrame = _window.frame;
-    windowFrame.origin.y -= [UIScreen mainScreen].bounds.size.height;
-
     [UIView animateWithDuration:0.25 animations:^{
-        [self.window setFrame:windowFrame];
+        self.window.alpha = 1;
     }];
 }
 
 - (void)hide:(BOOL)animated completion:(void (^)(void))completion {
-    CGRect windowFrame = _window.frame;
-    windowFrame.origin.y += [UIScreen mainScreen].bounds.size.height;
-
-    [UIView animateWithDuration:0.5 animations:^{
-        [self.window setFrame:windowFrame];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.window.alpha = 0;
     } completion:^(BOOL finished) {
         [self.window setHidden:YES];
         [self.window removeFromSuperview];
