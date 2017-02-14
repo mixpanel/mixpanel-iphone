@@ -46,6 +46,29 @@
     return [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0];
 }
 
+- (UIColor *)mp_colorAddColor:(UIColor *)overlay {
+    CGFloat bgR = 0;
+    CGFloat bgG = 0;
+    CGFloat bgB = 0;
+    CGFloat bgA = 0;
+
+    CGFloat fgR = 0;
+    CGFloat fgG = 0;
+    CGFloat fgB = 0;
+    CGFloat fgA = 0;
+
+
+    [self getRed:&bgR green: &bgG blue: &bgB alpha: &bgA];
+    [overlay getRed:&fgR green: &fgG blue: &fgB alpha: &fgA];
+
+    CGFloat r = fgA * fgR + (1 - fgA) * bgR;
+    CGFloat g = fgA * fgG + (1 - fgA) * bgG;
+    CGFloat b = fgA * fgB + (1 - fgA) * bgB;
+
+    return [UIColor colorWithRed:r green:g blue:b alpha:1.0];
+
+}
+
 - (UIColor *)colorWithSaturationComponent:(CGFloat) saturation {
     UIColor *newColor;
     CGFloat h, s, b, a;

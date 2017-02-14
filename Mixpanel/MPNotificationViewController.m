@@ -40,7 +40,8 @@
 
 @interface MPActionButton : UIButton
 
-@property (nonatomic, assign) BOOL isLight;
+@property (nonatomic, strong) UIColor *origColor;
+@property (nonatomic, assign) BOOL wasCalled;
 
 @end
 
@@ -148,6 +149,8 @@
     buttonView.layer.borderWidth = 2.0f;
     UIColor *textColor = [UIColor mp_colorFromRGB:notificationButton.textColor];
     [buttonView setTitleColor:textColor forState:UIControlStateNormal];
+    [buttonView setTitleColor:textColor forState:UIControlStateHighlighted];
+    [buttonView setTitleColor:textColor forState:UIControlStateSelected];
     [buttonView setTag:index];
     UIColor *borderColor = [UIColor mp_colorFromRGB:notificationButton.borderColor];
     [buttonView.layer setBorderColor:borderColor.CGColor];
@@ -458,28 +461,25 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 @implementation MPActionButton
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
-        self.layer.cornerRadius = 5.0f;
-        self.layer.borderColor = [UIColor whiteColor].CGColor;
-        self.layer.borderWidth = 2.0f;
-    }
+- (void) setHighlighted:(BOOL)highlighted {
+    [super setHighlighted:highlighted];
+    UIColor *overlayColor = [UIColor colorWithRed:134/255.0 green:134/255.0 blue:134/255.0 alpha:0.2];
 
-    return self;
-}
-
-- (void)setHighlighted:(BOOL)highlighted {
     if (highlighted) {
-        self.layer.borderColor = [UIColor grayColor].CGColor;
-    } else {
-        if (self.isLight) {
-            self.layer.borderColor = [UIColor colorWithRed:123/255.0 green:146/255.0 blue:163/255.0 alpha:1].CGColor;
-        } else {
-            self.layer.borderColor = [UIColor whiteColor].CGColor;
+        if (!self.wasCalled) {
+            self.origColor = self.backgroundColor;
+            if ([self.origColor isEqual:[UIColor colorWithRed:0 green:0 blue:0 alpha:0]]) {
+                self.backgroundColor = overlayColor;
+            } else {
+                self.backgroundColor = [self.backgroundColor mp_colorAddColor:overlayColor];
+            }
+            self.wasCalled = YES;
         }
     }
-
-    [super setHighlighted:highlighted];
+    else {
+        self.backgroundColor = self.origColor;
+        self.wasCalled = NO;
+    }
 }
 
 @end
