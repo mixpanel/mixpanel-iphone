@@ -41,7 +41,7 @@
 @interface MPActionButton : UIButton
 
 @property (nonatomic, strong) UIColor *origColor;
-@property (nonatomic, assign) BOOL wasCalled;
+@property (nonatomic, assign) BOOL highlightedWasCalled;
 
 @end
 
@@ -466,19 +466,19 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
     UIColor *overlayColor = [UIColor colorWithRed:134/255.0 green:134/255.0 blue:134/255.0 alpha:0.2];
 
     if (highlighted) {
-        if (!self.wasCalled) {
+        if (!self.highlightedWasCalled) {
             self.origColor = self.backgroundColor;
             if ([self.origColor isEqual:[UIColor colorWithRed:0 green:0 blue:0 alpha:0]]) {
                 self.backgroundColor = overlayColor;
             } else {
                 self.backgroundColor = [self.backgroundColor mp_colorAddColor:overlayColor];
             }
-            self.wasCalled = YES;
+            self.highlightedWasCalled = YES;
         }
     }
     else {
         self.backgroundColor = self.origColor;
-        self.wasCalled = NO;
+        self.highlightedWasCalled = NO;
     }
 }
 
