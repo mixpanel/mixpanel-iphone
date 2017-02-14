@@ -40,19 +40,18 @@
                     <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n85-3o-MhK">
-                            <rect key="frame" x="20" y="20" width="333" height="335"/>
+                            <rect key="frame" x="20" y="20" width="313" height="335"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pId-RE-RjE" customClass="MPAlphaMaskView">
-                                    <rect key="frame" x="66.5" y="0.0" width="200" height="335"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="313" height="335"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="Xo2-Nk-9Zp" userLabel="Notif Image View">
-                                            <rect key="frame" x="0.0" y="0.0" width="200" height="335"/>
+                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="placeholder-image.png" translatesAutoresizingMaskIntoConstraints="NO" id="Xo2-Nk-9Zp" userLabel="Notif Image View">
+                                            <rect key="frame" x="0.0" y="0.0" width="313" height="335"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="Xo2-Nk-9Zp" secondAttribute="bottom" id="3SV-BL-h2Y"/>
-                                        <constraint firstAttribute="width" constant="200" placeholder="YES" id="Fdv-uV-Y2S"/>
                                         <constraint firstItem="Xo2-Nk-9Zp" firstAttribute="centerX" secondItem="pId-RE-RjE" secondAttribute="centerX" id="dbH-JN-O9t"/>
                                         <constraint firstItem="Xo2-Nk-9Zp" firstAttribute="leading" secondItem="pId-RE-RjE" secondAttribute="leading" id="uSN-Yq-Hmb"/>
                                         <constraint firstItem="Xo2-Nk-9Zp" firstAttribute="top" secondItem="pId-RE-RjE" secondAttribute="top" id="xtd-1y-pMm"/>
@@ -168,7 +167,7 @@
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.78000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="uOA-rR-CAL" firstAttribute="centerY" secondItem="qEo-cT-dUY" secondAttribute="centerY" id="5lz-Zs-SvT"/>
-                        <constraint firstItem="dcY-wi-XbP" firstAttribute="leading" secondItem="n85-3o-MhK" secondAttribute="trailing" constant="-20" id="8Gn-aU-2DM"/>
+                        <constraint firstItem="dcY-wi-XbP" firstAttribute="leading" secondItem="n85-3o-MhK" secondAttribute="trailing" id="8Gn-aU-2DM"/>
                         <constraint firstItem="n85-3o-MhK" firstAttribute="leading" secondItem="qEo-cT-dUY" secondAttribute="leading" constant="20" id="9nq-wv-KDH"/>
                         <constraint firstAttribute="trailing" secondItem="uOA-rR-CAL" secondAttribute="trailing" id="K6z-Ou-gqS"/>
                         <constraint firstItem="dcY-wi-XbP" firstAttribute="centerY" secondItem="qEo-cT-dUY" secondAttribute="centerY" id="KYy-q2-0BU"/>
@@ -216,5 +215,6 @@
     </objects>
     <resources>
         <image name="MPCloseButton.png" width="25" height="25"/>
+        <image name="placeholder-image.png" width="800" height="600"/>
     </resources>
 </document>

@@ -188,6 +188,7 @@
 		E12FA3B41D4C0F68009DF414 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
 		E143ABBF1D51496800513BDE /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
 		E143ABC01D51497000513BDE /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
+		E19087C21E53B51200023FCC /* placeholder-image.png in Resources */ = {isa = PBXBuildFile; fileRef = E19087C11E53B51200023FCC /* placeholder-image.png */; };
 		E1C2BDFC1CFD61030052172F /* Mixpanel-watchOS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1C2BDFB1CFD61030052172F /* Mixpanel-watchOS-Info.plist */; };
 		E1C2BE121CFD6A010052172F /* NSInvocation+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CBB1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m */; };
 		E1C2BE151CFD6A010052172F /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CBF1A4A035F00D9E0F2 /* UIColor+MPColor.m */; };
@@ -408,6 +409,7 @@
 		7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E12FA3B21D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAbstractABTestDesignerMessage.h; sourceTree = "<group>"; };
+		E19087C11E53B51200023FCC /* placeholder-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder-image.png"; sourceTree = "<group>"; };
 		E1C2BDE11CFD5F9D0052172F /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = Library/Frameworks/TVServices.framework; sourceTree = DEVELOPER_DIR; };
 		E1C2BDFB1CFD61030052172F /* Mixpanel-watchOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-watchOS-Info.plist"; sourceTree = "<group>"; };
 		E1C2BE061CFD616A0052172F /* Mixpanel-tvOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mixpanel-tvOS-Info.plist"; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				514733CF1CD7D6EC0098B23A /* MPCloseButton@3x.png */,
 				514733D01CD7D6EC0098B23A /* MPDismissKeyboard.png */,
 				514733D11CD7D6EC0098B23A /* MPDismissKeyboard@2x.png */,
+				E19087C11E53B51200023FCC /* placeholder-image.png */,
 			);
 			name = Images;
 			path = Mixpanel/Images;
@@ -1112,6 +1115,7 @@
 				514733DB1CD7D6EC0098B23A /* MPDismissKeyboard.png in Resources */,
 				7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */,
 				F11A5B0B1E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib in Resources */,
+				E19087C21E53B51200023FCC /* placeholder-image.png in Resources */,
 				F11A5B091E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib in Resources */,
 				514733D51CD7D6EC0098B23A /* MPArrowRight@2x.png in Resources */,
 				7C170D391A4A035F00D9E0F2 /* snapshot_config.json in Resources */,

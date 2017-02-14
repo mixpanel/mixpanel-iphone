@@ -49,7 +49,7 @@
                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MgN-Di-l2U" customClass="MPAlphaMaskView">
                                     <rect key="frame" x="0.0" y="0.0" width="305" height="408"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="yFj-Sb-VWy" userLabel="Notif Image View">
+                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="placeholder-image.png" translatesAutoresizingMaskIntoConstraints="NO" id="yFj-Sb-VWy" userLabel="Notif Image View">
                                             <rect key="frame" x="0.0" y="0.0" width="305" height="408"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </imageView>
@@ -68,8 +68,9 @@
                             <constraints>
                                 <constraint firstItem="MgN-Di-l2U" firstAttribute="top" secondItem="eYq-nb-bDI" secondAttribute="top" id="08z-Ju-Nhq"/>
                                 <constraint firstAttribute="bottom" secondItem="MgN-Di-l2U" secondAttribute="bottom" id="1l0-Xl-4QJ"/>
-                                <constraint firstItem="MgN-Di-l2U" firstAttribute="leading" secondItem="eYq-nb-bDI" secondAttribute="leading" id="FbB-yH-vPc"/>
-                                <constraint firstAttribute="trailing" secondItem="MgN-Di-l2U" secondAttribute="trailing" id="c3J-nZ-8MS"/>
+                                <constraint firstItem="MgN-Di-l2U" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eYq-nb-bDI" secondAttribute="leading" id="FbB-yH-vPc"/>
+                                <constraint firstItem="MgN-Di-l2U" firstAttribute="centerX" secondItem="eYq-nb-bDI" secondAttribute="centerX" id="R5A-8R-dFg"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MgN-Di-l2U" secondAttribute="trailing" id="c3J-nZ-8MS"/>
                             </constraints>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" verticalCompressionResistancePriority="760" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="h51-dK-9V2">
@@ -199,5 +200,6 @@
     </objects>
     <resources>
         <image name="MPCloseButton.png" width="25" height="25"/>
+        <image name="placeholder-image.png" width="800" height="600"/>
     </resources>
 </document>
