@@ -193,7 +193,9 @@ static const NSUInteger kBatchSize = 50;
     NSURL *urlWithEndpoint = [self.serverURL URLByAppendingPathComponent:endpoint];
     NSURLComponents *components = [NSURLComponents componentsWithURL:urlWithEndpoint
                                              resolvingAgainstBaseURL:YES];
-    components.queryItems = queryItems;
+    if (queryItems) {
+        components.queryItems = queryItems;
+    }
 
     // NSURLComponents/NSURLQueryItem doesn't encode + as %2B, and then the + is interpreted as a space on servers
     components.percentEncodedQuery = [components.percentEncodedQuery stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
