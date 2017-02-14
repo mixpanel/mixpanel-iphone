@@ -21,7 +21,7 @@
 #define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 #define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 
-#define VERSION @"3.0.9"
+#define VERSION @"3.1.0"
 
 @implementation Mixpanel
 
@@ -256,7 +256,7 @@ static NSString *defaultProjectToken;
 }
 
 - (NSString *)defaultDistinctId
-{
+{    
     NSString *distinctId = [self IFA];
 
 #if !defined(MIXPANEL_WATCH_EXTENSION)
@@ -1331,7 +1331,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 NSMutableArray *parsedNotifications = [NSMutableArray array];
                 if ([rawNotifications isKindOfClass:[NSArray class]]) {
                     for (id obj in rawNotifications) {
-                        MPNotification *notification = [MPNotification notificationWithJSONObject:obj];
+                        MPNotification *notification = nil;
+                        NSString *notificationType = obj[@"type"];
+                        if ([notificationType isEqualToString:MPNotificationTypeTakeover]) {
+                            notification = [[MPTakeoverNotification alloc] initWithJSONObject:obj];
+                        } else if ([notificationType isEqualToString:MPNotificationTypeMini]) {
+                            notification = [[MPMiniNotification alloc] initWithJSONObject:obj];
+                        }
+                        
                         if (notification) {
                             [parsedNotifications addObject:notification];
                         }
@@ -1649,59 +1656,54 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             self.currentlyShowingNotification = notification;
             BOOL shown;
             if ([notification.type isEqualToString:MPNotificationTypeMini]) {
-                shown = [self showMiniNotificationWithObject:notification];
+                shown = [self showMiniNotificationWithObject:(MPMiniNotification *)notification];
             } else {
-                shown = [self showTakeoverNotificationWithObject:notification];
+                shown = [self showTakeoverNotificationWithObject:(MPTakeoverNotification *)notification];
             }
 
-            if (shown && ![notification.title isEqualToString:@"$ignore"]) {
+            if (shown) {
                 [self markNotificationShown:notification];
-            }
-
-            if (!shown) {
+            } else {
                 self.currentlyShowingNotification = nil;
             }
         }
     });
 }
 
-- (BOOL)showTakeoverNotificationWithObject:(MPNotification *)notification
+- (BOOL)showTakeoverNotificationWithObject:(MPTakeoverNotification *)notification
 {
     UIViewController *presentingViewController = [Mixpanel topPresentedViewController];
 
     if ([[self class] canPresentFromViewController:presentingViewController]) {
-        UIStoryboard *storyboard = [MPResources notificationStoryboard];
-        MPTakeoverNotificationViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"MPNotificationViewController"];
-        controller.backgroundImage = [presentingViewController.view mp_snapshotImage];
+        MPTakeoverNotificationViewController *controller = [[MPTakeoverNotificationViewController alloc] init];
         controller.notification = notification;
         controller.delegate = self;
+        [controller show];
         self.notificationViewController = controller;
 
-        [presentingViewController presentViewController:controller animated:YES completion:nil];
         return YES;
     } else {
         return NO;
     }
 }
 
-- (BOOL)showMiniNotificationWithObject:(MPNotification *)notification
+- (BOOL)showMiniNotificationWithObject:(MPMiniNotification *)notification
 {
     MPMiniNotificationViewController *controller = [[MPMiniNotificationViewController alloc] init];
     controller.notification = notification;
     controller.delegate = self;
-    controller.backgroundColor = self.miniNotificationBackgroundColor;
     self.notificationViewController = controller;
 
-    [controller showWithAnimation];
+    [controller show];
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^{
-        [self notificationController:controller wasDismissedWithStatus:NO];
+        [self notificationController:controller wasDismissedWithCtaUrl:nil];
     });
     return YES;
 }
 
-- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithStatus:(BOOL)status
+- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithCtaUrl:(NSURL *)ctaUrl
 {
     if (controller == nil || self.currentlyShowingNotification != controller.notification) {
         return;
@@ -1712,33 +1714,28 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         self.notificationViewController = nil;
     };
 
-    if (status && controller.notification.callToActionURL) {
-        [controller hideWithAnimation:YES completion:^{
-            NSURL *URL = controller.notification.callToActionURL;
-            MPLogInfo(@"%@ opening URL %@", self, URL);
+    if (ctaUrl) {
+        [controller hide:YES completion:^{
+            MPLogInfo(@"%@ opening URL %@", self, ctaUrl);
 
-            if (![[UIApplication sharedApplication] openURL:URL]) {
-                MPLogError(@"Mixpanel failed to open given URL: %@", URL);
+            if (![[UIApplication sharedApplication] openURL:ctaUrl]) {
+                MPLogError(@"Mixpanel failed to open given URL: %@", ctaUrl);
             }
 
             [self trackNotification:controller.notification event:@"$campaign_open"];
             completionBlock();
         }];
     } else {
-        [controller hideWithAnimation:YES completion:completionBlock];
+        [controller hide:YES completion:completionBlock];
     }
 }
 
 - (void)trackNotification:(MPNotification *)notification event:(NSString *)event
 {
-    if (![notification.title isEqualToString:@"$ignore"]) {
-        [self track:event properties:@{@"campaign_id": @(notification.ID),
-                                       @"message_id": @(notification.messageID),
-                                       @"message_type": @"inapp",
-                                       @"message_subtype": notification.type}];
-    } else {
-        MPLogInfo(@"%@ ignoring notif track for %@, %@", self, @(notification.ID), event);
-    }
+    [self track:event properties:@{@"campaign_id": @(notification.ID),
+                                   @"message_id": @(notification.messageID),
+                                   @"message_type": @"inapp",
+                                   @"message_subtype": notification.type}];
 }
 
 - (void)markNotificationShown:(MPNotification *)notification

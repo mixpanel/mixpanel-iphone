@@ -188,9 +188,6 @@
 		E12FA3B41D4C0F68009DF414 /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
 		E143ABBF1D51496800513BDE /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
 		E143ABC01D51497000513BDE /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB681D14AD6F00FF8061 /* MPNetwork.h */; };
-		E1954F951CC559E000B92B19 /* MPNotification~ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */; };
-		E1954F961CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */; };
-		E1954F971CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */; };
 		E1C2BDFC1CFD61030052172F /* Mixpanel-watchOS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1C2BDFB1CFD61030052172F /* Mixpanel-watchOS-Info.plist */; };
 		E1C2BE121CFD6A010052172F /* NSInvocation+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CBB1A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m */; };
 		E1C2BE151CFD6A010052172F /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CBF1A4A035F00D9E0F2 /* UIColor+MPColor.m */; };
@@ -226,6 +223,15 @@
 		F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
 		F0FA7A721DB020F400AA8006 /* MixpanelExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5177CFC61C5032B600271843 /* MixpanelExceptionHandler.m */; };
 		F0FA7A731DB020FB00AA8006 /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C548B1D131E6500407F56 /* MixpanelPeople.m */; };
+		F11A5B091E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */; };
+		F11A5B0A1E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */; };
+		F11A5B0B1E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */; };
+		F13874C41E38326400808C36 /* MPTakeoverNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = F13874C21E38326400808C36 /* MPTakeoverNotification.h */; };
+		F13874C51E38326400808C36 /* MPTakeoverNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = F13874C31E38326400808C36 /* MPTakeoverNotification.m */; };
+		F13874C81E38327100808C36 /* MPMiniNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = F13874C61E38327100808C36 /* MPMiniNotification.h */; };
+		F13874C91E38327100808C36 /* MPMiniNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = F13874C71E38327100808C36 /* MPMiniNotification.m */; };
+		F17EB3531E393FD40002739C /* MPNotificationButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F17EB3511E393FD40002739C /* MPNotificationButton.h */; };
+		F17EB3541E393FD40002739C /* MPNotificationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F17EB3521E393FD40002739C /* MPNotificationButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -402,9 +408,6 @@
 		7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E12FA3B21D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAbstractABTestDesignerMessage.h; sourceTree = "<group>"; };
-		E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MPNotification~ipad.storyboard"; sourceTree = "<group>"; };
-		E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MPNotification~iphonelandscape.storyboard"; sourceTree = "<group>"; };
-		E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MPNotification~iphoneportrait.storyboard"; sourceTree = "<group>"; };
 		E1C2BDE11CFD5F9D0052172F /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = Library/Frameworks/TVServices.framework; sourceTree = DEVELOPER_DIR; };
 		E1C2BDFB1CFD61030052172F /* Mixpanel-watchOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-watchOS-Info.plist"; sourceTree = "<group>"; };
 		E1C2BE061CFD616A0052172F /* Mixpanel-tvOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mixpanel-tvOS-Info.plist"; sourceTree = "<group>"; };
@@ -412,6 +415,15 @@
 		E1C2C0BA1CFDD53B0052172F /* tvos.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = tvos.modulemap; path = Mixpanel/tvos.modulemap; sourceTree = "<group>"; };
 		F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchProperties.h; sourceTree = "<group>"; };
 		F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchProperties.m; sourceTree = "<group>"; };
+		F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphoneportrait.xib"; sourceTree = "<group>"; };
+		F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphonelandscape.xib"; sourceTree = "<group>"; };
+		F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~ipad.xib"; sourceTree = "<group>"; };
+		F13874C21E38326400808C36 /* MPTakeoverNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTakeoverNotification.h; sourceTree = "<group>"; };
+		F13874C31E38326400808C36 /* MPTakeoverNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTakeoverNotification.m; sourceTree = "<group>"; };
+		F13874C61E38327100808C36 /* MPMiniNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMiniNotification.h; sourceTree = "<group>"; };
+		F13874C71E38327100808C36 /* MPMiniNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMiniNotification.m; sourceTree = "<group>"; };
+		F17EB3511E393FD40002739C /* MPNotificationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationButton.h; sourceTree = "<group>"; };
+		F17EB3521E393FD40002739C /* MPNotificationButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -540,13 +552,19 @@
 		515B5A151CB6FBA500A34060 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
+				F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */,
+				F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */,
+				F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */,
 				7C170C801A4A035F00D9E0F2 /* MPNotification.h */,
 				7C170C811A4A035F00D9E0F2 /* MPNotification.m */,
-				E1954F921CC559E000B92B19 /* MPNotification~ipad.storyboard */,
-				E1954F931CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard */,
-				E1954F941CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard */,
 				7C170C831A4A035F00D9E0F2 /* MPNotificationViewController.h */,
 				7C170C841A4A035F00D9E0F2 /* MPNotificationViewController.m */,
+				F13874C21E38326400808C36 /* MPTakeoverNotification.h */,
+				F13874C31E38326400808C36 /* MPTakeoverNotification.m */,
+				F13874C61E38327100808C36 /* MPMiniNotification.h */,
+				F13874C71E38327100808C36 /* MPMiniNotification.m */,
+				F17EB3511E393FD40002739C /* MPNotificationButton.h */,
+				F17EB3521E393FD40002739C /* MPNotificationButton.m */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -892,7 +910,9 @@
 				7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */,
 				7C170CD61A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoRequestMessage.h in Headers */,
 				7C170D071A4A035F00D9E0F2 /* MPObjectSelector.h in Headers */,
+				F13874C81E38327100808C36 /* MPMiniNotification.h in Headers */,
 				7C170CF31A4A035F00D9E0F2 /* MPDesignerEventBindingMessage.h in Headers */,
+				F17EB3531E393FD40002739C /* MPNotificationButton.h in Headers */,
 				7C170D0D1A4A035F00D9E0F2 /* MPObjectSerializerContext.h in Headers */,
 				7C170CDD1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */,
 				7C170D1B1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h in Headers */,
@@ -937,6 +957,7 @@
 				7C170CDC1A4A035F00D9E0F2 /* MPABTestDesignerMessage.h in Headers */,
 				7C170CE51A4A035F00D9E0F2 /* MPApplicationStateSerializer.h in Headers */,
 				51C3B2431CA5B2D3004CE37C /* AutomaticEventsConstants.h in Headers */,
+				F13874C41E38326400808C36 /* MPTakeoverNotification.h in Headers */,
 				7C170CFD1A4A035F00D9E0F2 /* MPNotification.h in Headers */,
 				7C170CE31A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.h in Headers */,
 				7C170D331A4A035F00D9E0F2 /* MPWebSocket.h in Headers */,
@@ -1090,6 +1111,8 @@
 				514733D31CD7D6EC0098B23A /* MPArrowLeft@2x.png in Resources */,
 				514733DB1CD7D6EC0098B23A /* MPDismissKeyboard.png in Resources */,
 				7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */,
+				F11A5B0B1E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib in Resources */,
+				F11A5B091E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib in Resources */,
 				514733D51CD7D6EC0098B23A /* MPArrowRight@2x.png in Resources */,
 				7C170D391A4A035F00D9E0F2 /* snapshot_config.json in Resources */,
 				514733D81CD7D6EC0098B23A /* MPCloseButton.png in Resources */,
@@ -1099,12 +1122,10 @@
 				514733D91CD7D6EC0098B23A /* MPCloseButton@2x.png in Resources */,
 				514733DC1CD7D6EC0098B23A /* MPDismissKeyboard@2x.png in Resources */,
 				514733D41CD7D6EC0098B23A /* MPArrowRight.png in Resources */,
-				E1954F951CC559E000B92B19 /* MPNotification~ipad.storyboard in Resources */,
 				514733D21CD7D6EC0098B23A /* MPArrowLeft.png in Resources */,
 				514733D71CD7D6EC0098B23A /* MPCheckmark@2x.png in Resources */,
-				E1954F971CC559E000B92B19 /* MPNotification~iphoneportrait.storyboard in Resources */,
 				E1C2BDFC1CFD61030052172F /* Mixpanel-watchOS-Info.plist in Resources */,
-				E1954F961CC559E000B92B19 /* MPNotification~iphonelandscape.storyboard in Resources */,
+				F11A5B0A1E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1152,6 +1173,7 @@
 				7C170CD51A4A035F00D9E0F2 /* MPABTestDesignerConnection.m in Sources */,
 				7C170D381A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m in Sources */,
 				7C170D031A4A035F00D9E0F2 /* MPNSNumberToCGFloatValueTransformer.m in Sources */,
+				F13874C51E38326400808C36 /* MPTakeoverNotification.m in Sources */,
 				7C170D0F1A4A035F00D9E0F2 /* MPPassThroughValueTransformer.m in Sources */,
 				7C170D3C1A4A035F00D9E0F2 /* UIColor+MPColor.m in Sources */,
 				7C170CD11A4A035F00D9E0F2 /* MPABTestDesignerClearRequestMessage.m in Sources */,
@@ -1186,6 +1208,7 @@
 				7C170CEE1A4A035F00D9E0F2 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
 				7C170D321A4A035F00D9E0F2 /* MPVariant.m in Sources */,
 				7C170D281A4A035F00D9E0F2 /* MPUIColorToNSStringValueTransformer.m in Sources */,
+				F17EB3541E393FD40002739C /* MPNotificationButton.m in Sources */,
 				7C170D0A1A4A035F00D9E0F2 /* MPObjectSerializer.m in Sources */,
 				7C170CF01A4A035F00D9E0F2 /* MPClassDescription.m in Sources */,
 				7C170D2F1A4A035F00D9E0F2 /* MPUITableViewBinding.m in Sources */,
@@ -1211,6 +1234,7 @@
 				7C170D401A4A035F00D9E0F2 /* UIImage+MPImageEffects.m in Sources */,
 				7C170D341A4A035F00D9E0F2 /* MPWebSocket.m in Sources */,
 				7C170D201A4A035F00D9E0F2 /* MPTweak.m in Sources */,
+				F13874C91E38327100808C36 /* MPMiniNotification.m in Sources */,
 				7C170CEA1A4A035F00D9E0F2 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
 				7C170D0E1A4A035F00D9E0F2 /* MPObjectSerializerContext.m in Sources */,
 				7C170CDB1A4A035F00D9E0F2 /* MPABTestDesignerDisconnectMessage.m in Sources */,

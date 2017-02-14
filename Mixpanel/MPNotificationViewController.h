@@ -1,32 +1,28 @@
-#import "MPNotification.h"
+#import "MPTakeoverNotification.h"
+#import "MPMiniNotification.h"
 
 @protocol MPNotificationViewControllerDelegate;
 
 @interface MPNotificationViewController : UIViewController
 
-@property (nonatomic, strong) MPNotification *notification;
 @property (nonatomic, weak) id<MPNotificationViewControllerDelegate> delegate;
+@property (nonatomic, strong) MPNotification *notification;
 
-- (void)hideWithAnimation:(BOOL)animated completion:(void (^)(void))completion;
+- (void)show;
+- (void)hide:(BOOL)animated completion:(void (^)(void))completion;
 
 @end
 
 @interface MPTakeoverNotificationViewController : MPNotificationViewController
 
-@property (nonatomic, strong) UIImage *backgroundImage;
-
 @end
 
 @interface MPMiniNotificationViewController : MPNotificationViewController
-
-@property (nonatomic, strong) UIColor *backgroundColor;
-
-- (void)showWithAnimation;
 
 @end
 
 @protocol MPNotificationViewControllerDelegate <NSObject>
 
-- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithStatus:(BOOL)status;
+- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithCtaUrl:(NSURL *)ctaUrl;
 
 @end

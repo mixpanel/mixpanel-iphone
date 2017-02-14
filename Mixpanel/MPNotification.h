@@ -5,18 +5,19 @@ extern NSString *const MPNotificationTypeTakeover;
 
 @interface MPNotification : NSObject
 
+@property (nonatomic, readonly) NSDictionary *jsonDescription;
+@property (nonatomic, readonly) NSDictionary *extrasDescription;
 @property (nonatomic, readonly) NSUInteger ID;
 @property (nonatomic, readonly) NSUInteger messageID;
-@property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSString *style;
-@property (nonatomic, strong) NSURL *imageURL;
+@property (nonatomic) NSString *type;
+@property (nonatomic, copy) NSURL *imageURL;
 @property (nonatomic, strong) NSData *image;
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *body;
-@property (nonatomic, strong) NSString *callToAction;
-@property (nonatomic, strong) NSURL *callToActionURL;
+@property (nonatomic, readonly) NSString *body;
+@property (nonatomic, readonly) NSUInteger bodyColor;
+@property (nonatomic, readonly) NSUInteger backgroundColor;
 
-+ (MPNotification *)notificationWithJSONObject:(NSDictionary *)object;
 - (instancetype)init __unavailable;
+- (instancetype)initWithJSONObject:(NSDictionary *)jsonObject;
++ (void)logNotificationError:(NSString *)field withValue:(id)value;
 
 @end
