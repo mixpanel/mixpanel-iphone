@@ -94,6 +94,9 @@
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
+                if (image.size.width / [UIScreen mainScreen].bounds.size.width <= 0.6) {
+                    self.imageView.contentMode = UIViewContentModeCenter;
+                }
                 self.imageView.image = image;
             } else {
                 MPLogError(@"image failed to load from data: %@", self.notification.image);
