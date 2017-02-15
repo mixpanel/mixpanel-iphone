@@ -94,7 +94,8 @@
         if (self.notification.image) {
             UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
             if (image) {
-                if (image.size.width / [UIScreen mainScreen].bounds.size.width <= 0.6) {
+                if (image.size.width / [UIScreen mainScreen].bounds.size.width <= 0.6 &&
+                    image.size.height / [UIScreen mainScreen].bounds.size.height <= 0.3) {
                     self.imageView.contentMode = UIViewContentModeCenter;
                 }
                 self.imageView.image = image;
