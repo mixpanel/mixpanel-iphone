@@ -8,6 +8,7 @@
 
 #import "MixpanelExceptionHandler.h"
 #import "Mixpanel.h"
+#import "MixpanelPrivate.h"
 #import "MPLogger.h"
 #include <libkern/OSAtomic.h>
 #include <execinfo.h>
@@ -71,7 +72,8 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
         // Save the existing exception handler
         _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
         // Install our handler
-        [self performSelector:@selector(setupHandlers) withObject:nil afterDelay:0];
+        [self setupHandlers];
+//        [self performSelector:@selector(setupHandlers) withObject:nil afterDelay:0];
     }
     return self;
 }
@@ -110,9 +112,7 @@ void SignalHandler(int signal)
      setObject:callStack
      forKey:UncaughtExceptionHandlerAddressesKey];
 
-    SEL setUnchaughtExceptionSelector = sel_registerName("mp_handleUncaughtException:");
-
-    [MixpanelExceptionHandler performSelectorOnMainThread:setUnchaughtExceptionSelector
+    [MixpanelExceptionHandler performSelectorOnMainThread:@selector(mp_handleUncaughtException:)
                               withObject:[NSException
                                           exceptionWithName:UncaughtExceptionHandlerSignalExceptionName
                                           reason:
@@ -153,9 +153,10 @@ void HandleException(NSException *exception)
 
     // Archive the values for each Mixpanel instance
     for (Mixpanel *instance in handler.mixpanelInstances) {
+        [instance archive];
         [instance track:@"App Crashed" properties:@{@"Reason": [exception reason],
                                                     @"Trace": [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]}];
-        [instance archive];
+        dispatch_sync(instance.serialQueue, ^{});
     }
     NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
 
@@ -167,5 +168,6 @@ void HandleException(NSException *exception)
         handler.defaultExceptionHandler(exception);
     }
 }
+
 
 @end
