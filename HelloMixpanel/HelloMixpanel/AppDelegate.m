@@ -3,7 +3,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"de868b8da6d09aec7c9149e6a41cf359"
 
 @implementation AppDelegate
 
@@ -68,7 +68,8 @@
 #else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 #endif
-
+    NSArray *lol = [NSArray array];
+    lol[1];
     return YES;
 }
 
