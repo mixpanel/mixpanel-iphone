@@ -154,10 +154,20 @@ void HandleException(NSException *exception)
     // Archive the values for each Mixpanel instance
     for (Mixpanel *instance in handler.mixpanelInstances) {
         [instance archive];
-        [instance track:@"App Crashed" properties:@{@"Reason": [exception reason],
-                                                    @"Trace": [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]}];
+        NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
+        [properties setValue:[exception reason] forKey:@"Reason"];
+        [properties setValue:[[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey] forKey:@"Trace"];
+        [instance track:@"App Crashed" properties:properties];
         dispatch_sync(instance.serialQueue, ^{});
     }
+
+    NSSetUncaughtExceptionHandler(NULL);
+    signal(SIGABRT, SIG_DFL);
+    signal(SIGILL, SIG_DFL);
+    signal(SIGSEGV, SIG_DFL);
+    signal(SIGFPE, SIG_DFL);
+    signal(SIGBUS, SIG_DFL);
+    signal(SIGPIPE, SIG_DFL);
     NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
 
     NSLog(@"%@", [NSString stringWithFormat:@"Debug details follow:\n%@\n%@",
