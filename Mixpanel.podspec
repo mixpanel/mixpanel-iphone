@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
-  s.version      = '3.1.0'
+  s.version      = '3.1.1'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
     ss.source_files  = 'Mixpanel/**/*.{m,h}'
     ss.exclude_files = 'Mixpanel/MixpanelWatchProperties.{m,h}'
     ss.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
-    ss.resources 	 = ['Mixpanel/**/*.{png,storyboard}']
+    ss.resources 	 = ['Mixpanel/**/*.{png,storyboard,xib}']
     ss.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
     ss.libraries = 'icucore'
     ss.ios.deployment_target = '8.0'
