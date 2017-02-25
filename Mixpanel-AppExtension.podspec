@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel-AppExtension'
-  s.module_name  = 'Mixpanel-AppExtension'
+  s.module_name  = 'MixpanelAppex'
   s.version      = '3.1.1'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
