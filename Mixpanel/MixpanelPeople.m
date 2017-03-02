@@ -12,7 +12,7 @@
 #import "MixpanelPrivate.h"
 #import "MPLogger.h"
 
-#if defined(MIXPANEL_WATCH_EXTENSION)
+#if defined(MIXPANEL_WATCHOS)
 #import "MixpanelWatchProperties.h"
 #endif
 
@@ -35,8 +35,10 @@
 }
 
 - (NSString *)deviceSystemVersion {
-#if defined(MIXPANEL_WATCH_EXTENSION)
+#if defined(MIXPANEL_WATCHOS)
     return [MixpanelWatchProperties systemVersion];
+#elif defined(MIXPANEL_MACOS)
+    return [NSProcessInfo processInfo].operatingSystemVersionString;
 #else
     return [UIDevice currentDevice].systemVersion;
 #endif
@@ -60,10 +62,13 @@
     if (deviceModel) {
         p[@"$ios_device_model"] = deviceModel;
     }
+
+#if !defined(MIXPANEL_MACOS)
     NSString *ifa = [strongMixpanel IFA];
     if (ifa) {
         p[@"$ios_ifa"] = ifa;
     }
+#endif
     return [p copy];
 }
 
