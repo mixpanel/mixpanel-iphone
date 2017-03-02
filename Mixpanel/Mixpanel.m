@@ -13,13 +13,10 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
-#if defined(MIXPANEL_WATCH_EXTENSION)
+#if defined(MIXPANEL_WATCHOS)
 #import "MixpanelWatchProperties.h"
 #import <WatchKit/WatchKit.h>
 #endif
-
-#define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
-#define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCH_EXTENSION))
 
 #define VERSION @"3.1.1"
 
@@ -89,12 +86,10 @@ static NSString *defaultProjectToken;
         MPLogWarning(@"%@ empty api token", self);
     }
     if (self = [self init:apiToken]) {
-#if !MIXPANEL_NO_EXCEPTION_HANDLING
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
-#endif
 #endif
         self.apiToken = apiToken;
         _flushInterval = flushInterval;
@@ -115,7 +110,7 @@ static NSString *defaultProjectToken;
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
         self.taskId = UIBackgroundTaskInvalid;
 #endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
@@ -259,10 +254,12 @@ static NSString *defaultProjectToken;
 {    
     NSString *distinctId = [self IFA];
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
+#elif defined(MIXPANEL_MACOS)
+    distinctId = [self macOSIdentifier];
 #endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
@@ -270,7 +267,6 @@ static NSString *defaultProjectToken;
     }
     return distinctId;
 }
-
 
 - (void)identify:(NSString *)distinctId
 {
@@ -616,7 +612,7 @@ static NSString *defaultProjectToken;
 - (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
-#if !defined(MIXPANEL_TVOS_EXTENSION)
+#if !defined(MIXPANEL_TVOS)
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
 #else
@@ -889,6 +885,26 @@ static NSString *defaultProjectToken;
     return ifa;
 }
 
+#if defined(MIXPANEL_MACOS)
+- (NSString *)macOSIdentifier {
+    io_service_t platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
+                                                              IOServiceMatching("IOPlatformExpertDevice"));
+    CFStringRef serialNumberAsCFString = NULL;
+    if (platformExpert) {
+        serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert,
+                                                                 CFSTR(kIOPlatformSerialNumberKey),
+                                                                 kCFAllocatorDefault, 0);
+        IOObjectRelease(platformExpert);
+    }
+    NSString *serialNumberAsNSString = nil;
+    if (serialNumberAsCFString) {
+        serialNumberAsNSString = [NSString stringWithString:(__bridge NSString *)serialNumberAsCFString];
+        CFRelease(serialNumberAsCFString);
+    }
+    return serialNumberAsNSString;
+}
+#endif
+
 - (void)setCurrentRadio
 {
     dispatch_async(self.serialQueue, ^{
@@ -927,8 +943,16 @@ static NSString *defaultProjectToken;
 
 - (NSDictionary *)collectDeviceProperties
 {
-#if defined(MIXPANEL_WATCH_EXTENSION)
+#if defined(MIXPANEL_WATCHOS)
     return [MixpanelWatchProperties collectDeviceProperties];
+#elif defined(MIXPANEL_MACOS)
+    CGSize size = [NSScreen mainScreen].frame.size;
+    return @{
+             @"$os": @"macOS",
+             @"$os_version": [NSProcessInfo processInfo].operatingSystemVersionString,
+             @"$screen_height": @((NSInteger)size.height),
+             @"$screen_width": @((NSInteger)size.width),
+             };
 #else
     UIDevice *device = [UIDevice currentDevice];
     CGSize size = [UIScreen mainScreen].bounds.size;
@@ -980,6 +1004,7 @@ static NSString *defaultProjectToken;
 
 #pragma mark - UIApplication Events
 
+#if !defined(MIXPANEL_MACOS)
 - (void)setUpListeners
 {
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
@@ -1034,6 +1059,25 @@ static NSString *defaultProjectToken;
 
     [self initializeGestureRecognizer];
 }
+#else
+- (void)setUpListeners {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+    // Application lifecycle events
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillTerminate:)
+                               name:NSApplicationWillTerminateNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationWillResignActive:)
+                               name:NSApplicationWillResignActiveNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(applicationDidBecomeActive:)
+                               name:NSApplicationDidBecomeActiveNotification
+                             object:nil];
+}
+#endif
 
 - (void) initializeGestureRecognizer {
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -1120,8 +1164,27 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MPLogInfo(@"%@ application will resign active", self);
     [self stopFlushTimer];
+
+#if defined(MIXPANEL_MACOS)
+    if (self.flushOnBackground) {
+        [self flush];
+    }
+
+    dispatch_async(_serialQueue, ^{
+        [self archive];
+    });
+#endif
 }
 
+- (void)applicationWillTerminate:(NSNotification *)notification
+{
+    MPLogInfo(@"%@ application will terminate", self);
+    dispatch_async(_serialQueue, ^{
+        [self archive];
+    });
+}
+
+#if !defined(MIXPANEL_MACOS)
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
@@ -1182,14 +1245,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     });
 }
 
-- (void)applicationWillTerminate:(NSNotification *)notification
-{
-    MPLogInfo(@"%@ application will terminate", self);
-    dispatch_async(_serialQueue, ^{
-       [self archive];
-    });
-}
-
 - (void)appLinksNotificationRaised:(NSNotification *)notification
 {
     NSDictionary *eventMap = @{@"al_nav_out": @"$al_nav_out",
@@ -1201,6 +1256,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         [self track:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
     }
 }
+#endif // MIXPANEL_MACOS
 
 #endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
 

@@ -9,9 +9,7 @@
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 
-#if !MIXPANEL_NO_EXCEPTION_HANDLING
 #import "MixpanelExceptionHandler.h"
-#endif
 
 #if TARGET_OS_IPHONE
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
@@ -69,7 +67,7 @@
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 #endif
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
 #endif
