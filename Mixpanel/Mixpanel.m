@@ -16,6 +16,8 @@
 #if defined(MIXPANEL_WATCHOS)
 #import "MixpanelWatchProperties.h"
 #import <WatchKit/WatchKit.h>
+#elif defined(MIXPANEL_MACOS)
+#import <IOKit/IOKitLib.h>
 #endif
 
 #define VERSION @"3.1.1"
