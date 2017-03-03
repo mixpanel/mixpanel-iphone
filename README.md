@@ -18,11 +18,7 @@ If you are using Swift, we recommend our **[Swift Library](https://github.com/mi
 Mixpanel supports `CocoaPods` for easy installation.
 To Install, see our **[full documentation »](https://mixpanel.com/help/reference/ios)**
 
-#### iOS: 
-`pod 'Mixpanel'`
-#### tvOS:
-`pod 'Mixpanel/tvOS'`
-#### watchOS:
+#### iOS, tvOS, watchOS: 
 `pod 'Mixpanel'`
 #### App Extension:
 `pod 'Mixpanel-AppExtension'`
