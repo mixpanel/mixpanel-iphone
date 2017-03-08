@@ -25,7 +25,11 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
             return nil;
         }
         
-        NSString *body = object[@"body"];
+        NSString *body = @"";
+        if (object[@"body"] != [NSNull null]) {
+            body = object[@"body"];
+        }
+        
         if (![body isKindOfClass:[NSString class]]) {
             [MPNotification logNotificationError:@"body" withValue:body];
             return nil;
