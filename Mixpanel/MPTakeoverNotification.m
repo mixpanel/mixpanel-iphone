@@ -12,8 +12,12 @@
 
 - (instancetype)initWithJSONObject:(NSDictionary *)jsonObject {
     if (self = [super initWithJSONObject:jsonObject]) {
-        NSString *title = jsonObject[@"title"];
-        if (![title isKindOfClass:[NSString class]]) {
+        NSString *title;
+        if (jsonObject[@"title"] != [NSNull null]) {
+            title = jsonObject[@"title"];
+        }
+        
+        if (!(title == nil || [title isKindOfClass:[NSString class]])) {
             [MPNotification logNotificationError:@"title" withValue:title];
             return nil;
         }
