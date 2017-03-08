@@ -39,6 +39,11 @@
             return nil;
         }
 
+        if (!self.body) {
+            [MPNotification logNotificationError:@"body" withValue:self.body];
+            return nil;
+        }
+
         self.ctaUrl = callToActionURL;
         self.imageTintColor = imageTintColor.unsignedIntegerValue;
         self.borderColor = borderColor.unsignedIntegerValue;

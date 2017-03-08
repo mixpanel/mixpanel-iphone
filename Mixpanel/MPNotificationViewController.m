@@ -106,14 +106,14 @@
 
         MPTakeoverNotification *notification = (MPTakeoverNotification *) self.notification;
 
-        if (notification.title && notification.body) {
+        if (!notification.title || !notification.body) {
+            [[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
+            [[NSLayoutConstraint constraintWithItem:self.bodyLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
+        } else {
             self.titleLabel.text = notification.title;
             self.bodyLabel.text = notification.body;
             self.titleLabel.textColor = [UIColor mp_colorFromRGB:notification.titleColor];
             self.bodyLabel.textColor = [UIColor mp_colorFromRGB:notification.bodyColor];
-        } else {
-            [[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
-            [[NSLayoutConstraint constraintWithItem:self.bodyLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
         }
 
         UIImage *originalImage = self.closeButton.imageView.image;
@@ -263,13 +263,6 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
             self.imageView.hidden = NO;
         } else {
             self.imageView.hidden = YES;
-        }
-
-        if (notification.body != nil) {
-            self.bodyLabel.text = notification.body;
-            self.bodyLabel.hidden = NO;
-        } else {
-            self.bodyLabel.hidden = YES;
         }
     }
 
