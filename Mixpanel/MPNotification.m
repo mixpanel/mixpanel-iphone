@@ -26,9 +26,6 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         }
         
         NSString *body = object[@"body"];
-        if (![body isKindOfClass:[NSString class]]) {
-            [MPNotification logNotificationError:@"body" withValue:body];
-        }
         
         NSNumber *bodyColor = object[@"body_color"];
         if (!([bodyColor isKindOfClass:[NSNumber class]])) {
