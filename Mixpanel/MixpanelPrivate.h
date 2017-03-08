@@ -37,6 +37,7 @@
 #import "MPNotificationViewController.h"
 #import "MPSurveyNavigationController.h"
 #import "MPSwizzler.h"
+#import "MPTweakStore.h"
 #import "MPVariant.h"
 #import "MPWebSocket.h"
 #endif
