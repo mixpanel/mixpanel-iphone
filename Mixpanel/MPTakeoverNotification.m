@@ -13,7 +13,10 @@
 - (instancetype)initWithJSONObject:(NSDictionary *)jsonObject {
     if (self = [super initWithJSONObject:jsonObject]) {
         NSString *title = jsonObject[@"title"];
-        
+        if ([title isEqual:[NSNull null]]) {
+            title = nil;
+        }
+
         NSNumber *titleColor = jsonObject[@"title_color"];
         if (!([titleColor isKindOfClass:[NSNumber class]])) {
             [MPNotification logNotificationError:@"title color" withValue:titleColor];

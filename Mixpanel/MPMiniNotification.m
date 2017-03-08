@@ -39,7 +39,7 @@
             return nil;
         }
 
-        if ([self.body isEqual:[NSNull null]] || !self.body) {
+        if (!self.body) {
             [MPNotification logNotificationError:@"body" withValue:self.body];
             return nil;
         }

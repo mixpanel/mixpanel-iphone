@@ -26,6 +26,9 @@ NSString *const MPNotificationTypeTakeover = @"takeover";
         }
         
         NSString *body = object[@"body"];
+        if ([body isEqual:[NSNull null]]) {
+            body = nil;
+        }
         
         NSNumber *bodyColor = object[@"body_color"];
         if (!([bodyColor isKindOfClass:[NSNumber class]])) {

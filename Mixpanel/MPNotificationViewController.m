@@ -106,9 +106,7 @@
 
         MPTakeoverNotification *notification = (MPTakeoverNotification *) self.notification;
 
-        if ([notification.title isEqual:[NSNull null]] ||
-            [notification.body isEqual:[NSNull null]] ||
-            !notification.title || !notification.body) {
+        if (!notification.title || !notification.body) {
             [[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
             [[NSLayoutConstraint constraintWithItem:self.bodyLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:YES];
         } else {
