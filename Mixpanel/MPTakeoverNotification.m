@@ -15,7 +15,6 @@
         NSString *title = jsonObject[@"title"];
         if (![title isKindOfClass:[NSString class]]) {
             [MPNotification logNotificationError:@"title" withValue:title];
-            return nil;
         }
         
         NSNumber *titleColor = jsonObject[@"title_color"];
