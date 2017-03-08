@@ -519,6 +519,9 @@ static NSString *defaultProjectToken;
         self.decideResponseCached = NO;
         self.variants = [NSSet set];
         self.eventBindings = [NSSet set];
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+        [[MPTweakStore sharedInstance] reset];
+#endif
         [self archive];
     });
 }
