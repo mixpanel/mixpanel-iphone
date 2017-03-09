@@ -22,9 +22,9 @@
         NSMutableAttributedString *attributedString = [value mutableCopy];
         [attributedString beginEditing];
         __block BOOL safe = NO;
-        [attributedString enumerateAttribute:NSParagraphStyleAttributeName inRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
-            if (value) {
-                NSParagraphStyle *paragraphStyle = value;
+        [attributedString enumerateAttribute:NSParagraphStyleAttributeName inRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(id valueObject, NSRange range, BOOL *stop) {
+            if (valueObject) {
+                NSParagraphStyle *paragraphStyle = valueObject;
                 if([paragraphStyle respondsToSelector:@selector(headIndent)]) {
                     safe = YES;
                 }

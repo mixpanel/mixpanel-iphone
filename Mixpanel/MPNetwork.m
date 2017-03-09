@@ -60,7 +60,8 @@ static const NSUInteger kBatchSize = 50;
 
     NSMutableArray *queueCopyForFlushing;
 
-    @synchronized (self.mixpanel) {
+    Mixpanel *mixpanel = self.mixpanel;
+    @synchronized (mixpanel) {
         queueCopyForFlushing = [queue mutableCopy];
     }
     
@@ -103,7 +104,7 @@ static const NSUInteger kBatchSize = 50;
             break;
         }
 
-        @synchronized (self.mixpanel) {
+        @synchronized (mixpanel) {
             [queueCopyForFlushing removeObjectsInArray:batch];
             [queue removeObjectsInArray:batch];
         }

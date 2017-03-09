@@ -208,8 +208,9 @@
 }
 
 - (IBAction)tappedClose:(UITapGestureRecognizer *)gesture {
-    if ([self.delegate respondsToSelector:@selector(notificationController:wasDismissedWithCtaUrl:)]) {
-        [self.delegate notificationController:self wasDismissedWithCtaUrl:nil];
+    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithCtaUrl:)]) {
+        [delegate notificationController:self wasDismissedWithCtaUrl:nil];
     }
 }
 
@@ -403,10 +404,11 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 - (void)didPan:(UIPanGestureRecognizer *)gesture {
     if (_canPan) {
+        UIViewController *parentViewController = self.parentViewController;
         if (gesture.state == UIGestureRecognizerStateBegan && gesture.numberOfTouches == 1) {
-            _panStartPoint = [gesture locationInView:self.parentViewController.view];
+            _panStartPoint = [gesture locationInView:parentViewController.view];
         } else if (gesture.state == UIGestureRecognizerStateChanged) {
-            CGPoint position = [gesture locationInView:self.parentViewController.view];
+            CGPoint position = [gesture locationInView:parentViewController.view];
             CGFloat diffY = position.y - _panStartPoint.y;
 
             if (diffY > 0) {
