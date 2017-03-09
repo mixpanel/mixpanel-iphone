@@ -9,7 +9,7 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (nonatomic, readonly) NSDictionary *extrasDescription;
 @property (nonatomic, readonly) NSUInteger ID;
 @property (nonatomic, readonly) NSUInteger messageID;
-@property (nonatomic) NSString *type;
+@property (nonatomic, readonly) NSString *type;
 @property (nonatomic, copy) NSURL *imageURL;
 @property (nonatomic, strong) NSData *image;
 @property (nonatomic, readonly) NSString *body;

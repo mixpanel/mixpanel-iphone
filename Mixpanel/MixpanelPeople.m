@@ -106,7 +106,7 @@
 
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
-                MPLogInfo(@"%@ queueing people record: %@", self.mixpanel, r);
+                MPLogInfo(@"%@ queueing people record: %@", strongMixpanel, r);
                 @synchronized (strongMixpanel) {
                     [strongMixpanel.peopleQueue addObject:r];
                     if (strongMixpanel.peopleQueue.count > 500) {
