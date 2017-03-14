@@ -368,7 +368,7 @@ NS_ASSUME_NONNULL_BEGIN
  one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code> 
  or <code>initWithToken:launchOptions:andFlushInterval:</code>.
  */
-+ (Mixpanel *)sharedInstance;
++ (nullable Mixpanel *)sharedInstance;
 
 /*!
  @method
