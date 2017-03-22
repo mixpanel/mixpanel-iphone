@@ -10,10 +10,6 @@
 
 @implementation MPResources
 
-+ (UIStoryboard *)surveyStoryboard {
-    return [MPResources storyboardWithName:@"MPSurvey"];
-}
-
 + (UIStoryboard *)storyboardWithName:(NSString *)name {
     return [UIStoryboard storyboardWithName:name bundle:[MPResources frameworkBundle]];
 }

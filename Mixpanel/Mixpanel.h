@@ -6,8 +6,6 @@
 #endif
 #import "MixpanelPeople.h"
 
-#define MIXPANEL_SURVEYS_DEPRECATED DEPRECATED_MSG_ATTRIBUTE("Mixpanel surveys are deprecated as of release 3.0.8")
-
 #define MIXPANEL_FLUSH_IMMEDIATELY (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCHOS))
 #define MIXPANEL_NO_REACHABILITY_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
 #define MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
@@ -15,7 +13,7 @@
 #define MIXPANEL_NO_APP_LIFECYCLE_SUPPORT (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCHOS))
 #define MIXPANEL_NO_UIAPPLICATION_ACCESS (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
 
-@class    MixpanelPeople, MPSurvey;
+@class    MixpanelPeople;
 @protocol MixpanelDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -139,63 +137,6 @@ NS_ASSUME_NONNULL_BEGIN
  Defaults to YES.
  */
 @property (atomic) BOOL shouldManageNetworkActivityIndicator;
-
-/*!
- @property
-
- @abstract
- Mixpanel surveys are deprecated as of release 3.0.8
- Controls whether to automatically check for surveys for the
- currently identified user when the application becomes active.
-
- @discussion
- Defaults to YES. Will fire a network request on
- <code>applicationDidBecomeActive</code> to retrieve a list of valid surveys
- for the currently identified user.
- */
-@property (atomic) BOOL checkForSurveysOnActive MIXPANEL_SURVEYS_DEPRECATED;
-
-/*!
- @property
-
- @abstract
- Mixpanel surveys are deprecated as of release 3.0.8
- Controls whether to automatically show a survey for the
- currently identified user when the application becomes active.
-
- @discussion
- Defaults to YES. This will only show a survey if
- <code>checkForSurveysOnActive</code> is also set to YES, and the
- survey check retrieves at least 1 valid survey for the currently
- identified user.
- */
-@property (atomic) BOOL showSurveyOnActive MIXPANEL_SURVEYS_DEPRECATED;
-
-/*!
- @property
- 
- @abstract
- Mixpanel surveys are deprecated as of release 3.0.8
- Determines whether a valid survey is available to show to the user.
- 
- @discussion
- If we haven't fetched the surveys yet, this will return NO. Otherwise
- it will return yes if there is at least one survey available.
- */
-@property (atomic, readonly) BOOL isSurveyAvailable MIXPANEL_SURVEYS_DEPRECATED;
-
-/*!
- @property
- 
- @abstract
- Mixpanel surveys are deprecated as of release 3.0.8
- Returns a list of available surveys. You can then call <code>showSurveyWithID:</code>
- and pass in <code>survey.ID</code>
- 
- @discussion
- If we haven't fetched the surveys yet, this will return nil.
- */
-@property (atomic, readonly) NSArray<MPSurvey *> *availableSurveys MIXPANEL_SURVEYS_DEPRECATED;
 
 /*!
  @property
@@ -706,36 +647,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-#pragma mark - Mixpanel Surveys
-
-/*!
- @method
-
- @abstract
- Mixpanel surveys are deprecated as of release 3.0.8
- Shows the survey with the given name.
-
- @discussion
- This method allows you to explicitly show a named survey at the time of your choosing.
-
- */
-- (void)showSurveyWithID:(NSUInteger)ID MIXPANEL_SURVEYS_DEPRECATED;
-
-/*!
- @method
-
- @abstract
- Mixpanel surveys are deprecated as of release 3.0.8
- Show a survey if one is available.
-
- @discussion
- This method allows you to display the first available survey targeted to the currently
- identified user at the time of your choosing. You would typically pair this with
- setting <code>showSurveyOnActive = NO;</code> so that the survey won't show automatically.
-
- */
-- (void)showSurvey MIXPANEL_SURVEYS_DEPRECATED;
-
 #pragma mark - Mixpanel Notifications
 
 /*!

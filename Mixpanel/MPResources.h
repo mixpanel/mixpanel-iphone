@@ -13,7 +13,6 @@
 
 @interface MPResources : NSObject
 
-+ (UIStoryboard *)surveyStoryboard MIXPANEL_SURVEYS_DEPRECATED;
 + (NSBundle *)frameworkBundle;
 + (NSString *)notificationXibName;
 + (UIImage *)imageNamed:(NSString *)name;

@@ -78,7 +78,6 @@
     [super setUp];
     
     self.mixpanel.checkForNotificationsOnActive = NO;
-    self.mixpanel.checkForSurveysOnActive = NO;
     self.mixpanel.checkForVariantsOnActive = NO;
 }
 
@@ -305,7 +304,7 @@
     [self.mixpanel identify:@"ABC"];
     
     XCTestExpectation *expect = [self expectationWithDescription:@"wait for variants to be executed"];
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
         for (MPVariant *variant in variants) {
             [variant execute];
@@ -321,7 +320,7 @@
     XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
     
     // Test that we make another request if useCache is off
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
     } useCache:NO];
     [self waitForMixpanelQueues];
@@ -330,7 +329,7 @@
     [self stubDecide:@"test_decide_response_2"];
     
     __block BOOL completionCalled = NO;
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         completionCalled = YES;
         XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
     } useCache:NO];
@@ -380,7 +379,7 @@
     [self stubDecide:@"test_decide_response"];
     
     [self.mixpanel identify:@"DEF"];
-    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+    [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         for (MPVariant *variant in variants) {
             [variant execute];
             [self.mixpanel markVariantRun:variant];
