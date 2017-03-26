@@ -21,9 +21,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Alooma-iOS/*.{m,h}'
-  s.resource_bundles = {
-    'Alooma-iOS' => ['Alooma-iOS/*.png']
-  }
 
   s.library = 'icucore'
   s.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration'
