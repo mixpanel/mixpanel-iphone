@@ -1,6 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'SampleApp', :exclusive => true do
+target 'SampleApp' do
   pod "Alooma-iOS"
 end
-
