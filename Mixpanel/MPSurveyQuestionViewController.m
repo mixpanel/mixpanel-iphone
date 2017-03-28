@@ -3,6 +3,9 @@
 #import "MPSurveyQuestionViewController.h"
 #import "MPFoundation.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 @interface MPSurveyQuestionViewController ()
 
 @property (nonatomic, strong) IBOutlet UILabel *prompt;
@@ -58,6 +61,8 @@ typedef NS_ENUM(NSInteger, MPSurveyTableViewCellPosition) {
 @property (nonatomic, strong) IBOutlet UILabel *charactersLeftLabel;
 
 @end
+
+#pragma clang diagnostic pop
 
 @implementation MPSurveyQuestionViewController
 

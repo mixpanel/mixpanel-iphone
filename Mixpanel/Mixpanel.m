@@ -67,7 +67,10 @@ static NSString *defaultProjectToken;
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         self.shownSurveyCollections = [NSMutableSet set];
+#pragma clang diagnostic pop
         self.shownNotifications = [NSMutableSet set];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
@@ -105,7 +108,10 @@ static NSString *defaultProjectToken;
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
         self.checkForVariantsOnActive = YES;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         self.checkForSurveysOnActive = YES;
+#pragma clang diagnostic pop
         self.miniNotificationPresentationTime = 6.0;
 
         self.distinctId = [self defaultDistinctId];
@@ -120,7 +126,10 @@ static NSString *defaultProjectToken;
         NSString *networkLabel = [label stringByAppendingString:@".network"];
         self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         self.showSurveyOnActive = YES;
+#pragma clang diagnostic pop
 #if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
 #else
@@ -514,7 +523,10 @@ static NSString *defaultProjectToken;
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
         self.timedEvents = [NSMutableDictionary dictionary];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         self.shownSurveyCollections = [NSMutableSet set];
+#pragma clang diagnostic pop
         self.shownNotifications = [NSMutableSet set];
         self.decideResponseCached = NO;
         self.variants = [NSSet set];
@@ -695,7 +707,10 @@ static NSString *defaultProjectToken;
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [p setValue:self.shownSurveyCollections forKey:@"shownSurveyCollections"];
+#pragma clang diagnostic pop
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
     MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
@@ -806,7 +821,10 @@ static NSString *defaultProjectToken;
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
         self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         self.shownSurveyCollections = properties[@"shownSurveyCollections"] ?: [NSMutableSet set];
+#pragma clang diagnostic pop
         self.shownNotifications = properties[@"shownNotifications"] ?: [NSMutableSet set];
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
@@ -1137,6 +1155,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
     if (self.checkForSurveysOnActive || self.checkForNotificationsOnActive || self.checkForVariantsOnActive) {
         NSDate *start = [NSDate date];
@@ -1163,6 +1184,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }];
     }
 #endif // MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+
+#pragma clang diagnostic pop
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1379,7 +1402,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 NSMutableArray *parsedSurveys = [NSMutableArray array];
                 if ([rawSurveys isKindOfClass:[NSArray class]]) {
                     for (id obj in rawSurveys) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
                         MPSurvey *survey = [MPSurvey surveyWithJSONObject:obj];
+#pragma clang diagnostic pop
                         if (survey) {
                             [parsedSurveys addObject:survey];
                         }
@@ -1467,7 +1493,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
                 [allEventBindings unionSet:newEventBindings];
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
                 self.surveys = [NSArray arrayWithArray:parsedSurveys];
+#pragma clang diagnostic pop
                 self.notifications = [NSArray arrayWithArray:parsedNotifications];
                 self.variants = [allVariants copy];
                 self.eventBindings = [allEventBindings copy];
@@ -1488,15 +1517,21 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 completion(nil, nil, nil, nil);
             }
         } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             NSArray *unseenSurveys = [self.surveys objectsAtIndexes:[self.surveys indexesOfObjectsPassingTest:^BOOL(MPSurvey *obj, NSUInteger idx, BOOL *stop) {
                 return [self.shownSurveyCollections member:@(obj.collectionID)] == nil;
             }]];
+#pragma clang diagnostic pop
 
             NSArray *unseenNotifications = [self.notifications objectsAtIndexes:[self.notifications indexesOfObjectsPassingTest:^BOOL(MPNotification *obj, NSUInteger idx, BOOL *stop) {
                 return [self.shownNotifications member:@(obj.ID)] == nil;
             }]];
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             MPLogInfo(@"%@ decide check found %lu available surveys out of %lu total: %@", self, (unsigned long)unseenSurveys.count, (unsigned long)self.surveys.count, unseenSurveys);
+#pragma clang diagnostic pop
             MPLogInfo(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
                       (unsigned long)self.notifications.count, unseenNotifications);
             MPLogInfo(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
@@ -1708,6 +1743,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return;
     }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.currentlyShowingNotification) {
             MPLogWarning(@"%@ already showing in-app notification: %@", self, self.currentlyShowingNotification);
@@ -1729,6 +1766,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             }
         }
     });
+#pragma clang diagnostic pop
 }
 
 - (BOOL)showTakeoverNotificationWithObject:(MPTakeoverNotification *)notification
