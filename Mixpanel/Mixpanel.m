@@ -47,7 +47,7 @@ static NSString *defaultProjectToken;
     return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil];
 }
 
-+ (Mixpanel *)sharedInstance
++ (nullable Mixpanel *)sharedInstance
 {
     if (instances.count == 0) {
         MPLogWarning(@"sharedInstance called before creating a Mixpanel instance");
@@ -254,14 +254,17 @@ static NSString *defaultProjectToken;
 
 - (NSString *)defaultDistinctId
 {    
-    NSString *distinctId = [self IFA];
+    NSString *distinctId;
+#if defined(MIXPANEL_MACOS)
+    distinctId = [self macOSIdentifier];
+#else
+    distinctId = [self IFA];
+#endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
-#elif defined(MIXPANEL_MACOS)
-    distinctId = [self macOSIdentifier];
 #endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
