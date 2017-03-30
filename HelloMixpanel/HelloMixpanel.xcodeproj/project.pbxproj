@@ -37,7 +37,6 @@
 		517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */; };
 		51AF3D3C1D380D31002E8325 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		51AF3D3D1D380D31002E8325 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E7E1D120D2A001F622D /* MPSurveyTests.m */; };
 		51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E801D120D3E001F622D /* MPNotificationTests.m */; };
 		51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
 		51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E841D120D80001F622D /* MixpanelBaseTests.m */; };
@@ -210,6 +209,13 @@
 			remoteGlobalIDString = E1C2BE0A1CFD6A010052172F;
 			remoteInfo = Mixpanel_tvOS;
 		};
+		E1D563331E833F980035EFBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E1F160B01E677D2200391AE3;
+			remoteInfo = Mixpanel_macOS;
+		};
 		F058D0821DB1527000B19E59 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
@@ -365,7 +371,6 @@
 		517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetworkTests.m; sourceTree = "<group>"; };
 		518010151D11CEA300C5F3EA /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nocilla.framework; sourceTree = "<group>"; };
 		51D96E7B1D120A75001F622D /* TestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestConstants.h; sourceTree = "<group>"; };
-		51D96E7E1D120D2A001F622D /* MPSurveyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyTests.m; sourceTree = "<group>"; };
 		51D96E801D120D3E001F622D /* MPNotificationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationTests.m; sourceTree = "<group>"; };
 		51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelPeopleTests.m; sourceTree = "<group>"; };
 		51D96E841D120D80001F622D /* MixpanelBaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelBaseTests.m; sourceTree = "<group>"; };
@@ -585,7 +590,6 @@
 				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
 				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
-				51D96E7E1D120D2A001F622D /* MPSurveyTests.m */,
 				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
 				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
 				2808F9B91610EFE4005772B7 /* Supporting Files */,
@@ -617,6 +621,7 @@
 				515B5A051CB6F95200A34060 /* Mixpanel.framework */,
 				515B5A071CB6F95200A34060 /* MixpanelAppExtension.framework */,
 				E123C4841D1353D10015B425 /* Mixpanel.framework */,
+				E1D563341E833F980035EFBF /* Mixpanel.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -981,6 +986,13 @@
 			remoteRef = E123C4831D1353D10015B425 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E1D563341E833F980035EFBF /* Mixpanel.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Mixpanel.framework;
+			remoteRef = E1D563331E833F980035EFBF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1156,7 +1168,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51D96E7F1D120D2A001F622D /* MPSurveyTests.m in Sources */,
 				51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */,
 				51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */,
 				51D96E871D121763001F622D /* ABTestingTests.m in Sources */,

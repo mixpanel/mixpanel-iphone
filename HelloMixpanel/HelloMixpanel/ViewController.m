@@ -6,7 +6,6 @@
 @property (nonatomic, weak) IBOutlet UISegmentedControl *genderControl;
 @property (nonatomic, weak) IBOutlet UISegmentedControl *weaponControl;
 @property (nonatomic, weak) IBOutlet UIImageView *fakeBackground;
-@property (nonatomic, weak) IBOutlet UITextField *surveyIDField;
 @property (nonatomic, weak) IBOutlet UITextField *notificationIDField;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
@@ -81,19 +80,6 @@
     self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
 }
 
-- (IBAction)showSurvey:(id)sender
-{
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    UITextField *strongSurveyIDField = _surveyIDField;
-    if (strongSurveyIDField != nil && [strongSurveyIDField.text length] > 0) {
-        [mixpanel showSurveyWithID:(NSUInteger)([strongSurveyIDField.text integerValue])];
-    } else {
-        [mixpanel showSurvey];
-    }
-
-    [strongSurveyIDField resignFirstResponder];
-}
-
 - (IBAction)showNotif:(id)sender
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -139,10 +125,8 @@
 
 - (void)dismissKeyboard
 {
-    UITextField *strongSurveyIDField = _surveyIDField;
     UITextField *strongNotificationIDField = _notificationIDField;
 
-    [strongSurveyIDField resignFirstResponder];
     [strongNotificationIDField resignFirstResponder];
 }
 

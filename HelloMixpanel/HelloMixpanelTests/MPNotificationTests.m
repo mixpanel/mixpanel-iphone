@@ -53,11 +53,6 @@
     testDict[@"id"] = @NO;
     XCTAssertNil([[MPTakeoverNotification alloc] initWithJSONObject:testDict]);
     
-    // invalid body
-    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
-    testDict[@"body"] = @NO;
-    XCTAssertNil([[MPTakeoverNotification alloc] initWithJSONObject:testDict]);
-    
     // invalid body color
     testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
     testDict[@"body_color"] = @"#FFFFFFFF";
@@ -77,11 +72,6 @@
     testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
     testDict[@"image_url"] = @"https://test.com/animagewithaspace init.jpg";
     XCTAssertNotNil([[MPTakeoverNotification alloc] initWithJSONObject:testDict]);
-
-    // invalid title
-    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
-    testDict[@"title"] = @NO;
-    XCTAssertNil([[MPTakeoverNotification alloc] initWithJSONObject:testDict]);
 
     // invalid title color
     testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];

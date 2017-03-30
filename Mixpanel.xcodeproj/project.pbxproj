@@ -126,15 +126,6 @@
 		7C170D111A4A035F00D9E0F2 /* MPPropertyDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C941A4A035F00D9E0F2 /* MPPropertyDescription.m */; };
 		7C170D121A4A035F00D9E0F2 /* MPSequenceGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C951A4A035F00D9E0F2 /* MPSequenceGenerator.h */; };
 		7C170D131A4A035F00D9E0F2 /* MPSequenceGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C961A4A035F00D9E0F2 /* MPSequenceGenerator.m */; };
-		7C170D141A4A035F00D9E0F2 /* MPSurvey.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C971A4A035F00D9E0F2 /* MPSurvey.h */; };
-		7C170D151A4A035F00D9E0F2 /* MPSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C981A4A035F00D9E0F2 /* MPSurvey.m */; };
-		7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C170C991A4A035F00D9E0F2 /* MPSurvey.storyboard */; };
-		7C170D171A4A035F00D9E0F2 /* MPSurveyNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C9A1A4A035F00D9E0F2 /* MPSurveyNavigationController.h */; };
-		7C170D181A4A035F00D9E0F2 /* MPSurveyNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C9B1A4A035F00D9E0F2 /* MPSurveyNavigationController.m */; };
-		7C170D191A4A035F00D9E0F2 /* MPSurveyQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C9C1A4A035F00D9E0F2 /* MPSurveyQuestion.h */; };
-		7C170D1A1A4A035F00D9E0F2 /* MPSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C9D1A4A035F00D9E0F2 /* MPSurveyQuestion.m */; };
-		7C170D1B1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C9E1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h */; };
-		7C170D1C1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C9F1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m */; };
 		7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170CA01A4A035F00D9E0F2 /* MPSwizzler.h */; };
 		7C170D1E1A4A035F00D9E0F2 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CA11A4A035F00D9E0F2 /* MPSwizzler.m */; };
 		7C170D201A4A035F00D9E0F2 /* MPTweak.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170CA31A4A035F00D9E0F2 /* MPTweak.m */; };
@@ -361,15 +352,6 @@
 		7C170C941A4A035F00D9E0F2 /* MPPropertyDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPropertyDescription.m; sourceTree = "<group>"; };
 		7C170C951A4A035F00D9E0F2 /* MPSequenceGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSequenceGenerator.h; sourceTree = "<group>"; };
 		7C170C961A4A035F00D9E0F2 /* MPSequenceGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSequenceGenerator.m; sourceTree = "<group>"; };
-		7C170C971A4A035F00D9E0F2 /* MPSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSurvey.h; sourceTree = "<group>"; };
-		7C170C981A4A035F00D9E0F2 /* MPSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurvey.m; sourceTree = "<group>"; };
-		7C170C991A4A035F00D9E0F2 /* MPSurvey.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MPSurvey.storyboard; sourceTree = "<group>"; };
-		7C170C9A1A4A035F00D9E0F2 /* MPSurveyNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSurveyNavigationController.h; sourceTree = "<group>"; };
-		7C170C9B1A4A035F00D9E0F2 /* MPSurveyNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyNavigationController.m; sourceTree = "<group>"; };
-		7C170C9C1A4A035F00D9E0F2 /* MPSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSurveyQuestion.h; sourceTree = "<group>"; };
-		7C170C9D1A4A035F00D9E0F2 /* MPSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyQuestion.m; sourceTree = "<group>"; };
-		7C170C9E1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSurveyQuestionViewController.h; sourceTree = "<group>"; };
-		7C170C9F1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSurveyQuestionViewController.m; sourceTree = "<group>"; };
 		7C170CA01A4A035F00D9E0F2 /* MPSwizzler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzler.h; sourceTree = "<group>"; };
 		7C170CA11A4A035F00D9E0F2 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
 		7C170CA21A4A035F00D9E0F2 /* MPTweak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTweak.h; sourceTree = "<group>"; };
@@ -582,22 +564,6 @@
 				F17EB3521E393FD40002739C /* MPNotificationButton.m */,
 			);
 			name = Notifications;
-			sourceTree = "<group>";
-		};
-		515B5A161CB6FBAC00A34060 /* Surveys */ = {
-			isa = PBXGroup;
-			children = (
-				7C170C971A4A035F00D9E0F2 /* MPSurvey.h */,
-				7C170C981A4A035F00D9E0F2 /* MPSurvey.m */,
-				7C170C991A4A035F00D9E0F2 /* MPSurvey.storyboard */,
-				7C170C9A1A4A035F00D9E0F2 /* MPSurveyNavigationController.h */,
-				7C170C9B1A4A035F00D9E0F2 /* MPSurveyNavigationController.m */,
-				7C170C9C1A4A035F00D9E0F2 /* MPSurveyQuestion.h */,
-				7C170C9D1A4A035F00D9E0F2 /* MPSurveyQuestion.m */,
-				7C170C9E1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h */,
-				7C170C9F1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m */,
-			);
-			name = Surveys;
 			sourceTree = "<group>";
 		};
 		515B5A181CB6FC0C00A34060 /* Categories */ = {
@@ -844,7 +810,6 @@
 				514733BB1CD7CCDB0098B23A /* MPResources.h */,
 				514733BC1CD7CCDB0098B23A /* MPResources.m */,
 				515B5A1A1CB6FC4000A34060 /* Designer Support */,
-				515B5A161CB6FBAC00A34060 /* Surveys */,
 				515B5A151CB6FBA500A34060 /* Notifications */,
 				51C3B22F1CA5B2A2004CE37C /* AE */,
 				515B5A181CB6FC0C00A34060 /* Categories */,
@@ -940,14 +905,11 @@
 				F17EB3531E393FD40002739C /* MPNotificationButton.h in Headers */,
 				7C170D0D1A4A035F00D9E0F2 /* MPObjectSerializerContext.h in Headers */,
 				7C170CDD1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotRequestMessage.h in Headers */,
-				7C170D1B1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.h in Headers */,
 				7C170D0B1A4A035F00D9E0F2 /* MPObjectSerializerConfig.h in Headers */,
 				7C170D261A4A035F00D9E0F2 /* MPTypeDescription.h in Headers */,
 				7C170D291A4A035F00D9E0F2 /* MPUIControlBinding.h in Headers */,
-				7C170D191A4A035F00D9E0F2 /* MPSurveyQuestion.h in Headers */,
 				7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */,
 				51F308831C86881900614A13 /* MPSwizzle.h in Headers */,
-				7C170D171A4A035F00D9E0F2 /* MPSurveyNavigationController.h in Headers */,
 				51C3B23F1CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.h in Headers */,
 				7C170CD81A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
 				51C3B23D1CA5B2D3004CE37C /* UIApplication+AutomaticEvents.h in Headers */,
@@ -971,7 +933,6 @@
 				7C170CDF1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				7C170CE11A4A035F00D9E0F2 /* MPABTestDesignerTweakRequestMessage.h in Headers */,
 				7C170CD41A4A035F00D9E0F2 /* MPABTestDesignerConnection.h in Headers */,
-				7C170D141A4A035F00D9E0F2 /* MPSurvey.h in Headers */,
 				7C170D301A4A035F00D9E0F2 /* MPValueTransformers.h in Headers */,
 				7C170CFA1A4A035F00D9E0F2 /* MPEventBinding.h in Headers */,
 				7C170CEF1A4A035F00D9E0F2 /* MPClassDescription.h in Headers */,
@@ -1168,7 +1129,6 @@
 			files = (
 				514733D31CD7D6EC0098B23A /* MPArrowLeft@2x.png in Resources */,
 				514733DB1CD7D6EC0098B23A /* MPDismissKeyboard.png in Resources */,
-				7C170D161A4A035F00D9E0F2 /* MPSurvey.storyboard in Resources */,
 				F11A5B0B1E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib in Resources */,
 				E19087C21E53B51200023FCC /* placeholder-image.png in Resources */,
 				F11A5B091E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib in Resources */,
@@ -1231,9 +1191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C170D1C1A4A035F00D9E0F2 /* MPSurveyQuestionViewController.m in Sources */,
 				513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */,
-				7C170D1A1A4A035F00D9E0F2 /* MPSurveyQuestion.m in Sources */,
 				7C170D221A4A035F00D9E0F2 /* MPTweakInline.m in Sources */,
 				7C170D0C1A4A035F00D9E0F2 /* MPObjectSerializerConfig.m in Sources */,
 				7C170CD51A4A035F00D9E0F2 /* MPABTestDesignerConnection.m in Sources */,
@@ -1245,7 +1203,6 @@
 				7C170CD11A4A035F00D9E0F2 /* MPABTestDesignerClearRequestMessage.m in Sources */,
 				51C3B23E1CA5B2D3004CE37C /* NSNotificationCenter+AutomaticEvents.m in Sources */,
 				7C170D011A4A035F00D9E0F2 /* MPNotificationViewController.m in Sources */,
-				7C170D151A4A035F00D9E0F2 /* MPSurvey.m in Sources */,
 				51C3B23A1CA5B2D3004CE37C /* UIViewController+AutomaticEvents.m in Sources */,
 				7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */,
 				7C170D2D1A4A035F00D9E0F2 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
@@ -1286,7 +1243,6 @@
 				7C170D131A4A035F00D9E0F2 /* MPSequenceGenerator.m in Sources */,
 				517ABB6B1D14AD6F00FF8061 /* MPNetwork.m in Sources */,
 				7C170D2C1A4A035F00D9E0F2 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
-				7C170D181A4A035F00D9E0F2 /* MPSurveyNavigationController.m in Sources */,
 				7C170CCD1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				7C170CCB1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m in Sources */,
 				51F308841C86881900614A13 /* MPSwizzle.m in Sources */,

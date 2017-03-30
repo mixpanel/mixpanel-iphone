@@ -35,7 +35,6 @@
 #import "MPTakeoverNotification.h"
 #import "MPMiniNotification.h"
 #import "MPNotificationViewController.h"
-#import "MPSurveyNavigationController.h"
 #import "MPSwizzler.h"
 #import "MPTweakStore.h"
 #import "MPVariant.h"
@@ -43,7 +42,7 @@
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-@interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate>
+@interface Mixpanel () <MPNotificationViewControllerDelegate>
 #else
 @interface Mixpanel ()
 #endif
@@ -90,9 +89,6 @@
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
-@property (nonatomic, strong) NSArray *surveys MIXPANEL_SURVEYS_DEPRECATED;
-@property (nonatomic, strong) id currentlyShowingSurvey MIXPANEL_SURVEYS_DEPRECATED;
-@property (nonatomic, strong) NSMutableSet *shownSurveyCollections MIXPANEL_SURVEYS_DEPRECATED;
 
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) id currentlyShowingNotification;
@@ -116,11 +112,10 @@
 - (NSString *)propertiesFilePath;
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-- (void)presentSurveyWithRootViewController:(MPSurvey *)survey MIXPANEL_SURVEYS_DEPRECATED;
 - (void)showNotificationWithObject:(MPNotification *)notification;
 - (void)markVariantRun:(MPVariant *)variant;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
+- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
 #endif
 
 @end

@@ -46,9 +46,6 @@
 
     // Override point for customization after application launch.
 
-    self.mixpanel.checkForSurveysOnActive = YES;
-    self.mixpanel.showSurveyOnActive = YES; //Change this to NO to show your surveys manually.
-
     self.mixpanel.checkForNotificationsOnActive = YES;
     self.mixpanel.showNotificationOnActive = YES; //Change this to NO to show your notifs manually.
 
