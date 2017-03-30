@@ -3,7 +3,7 @@
 echo "Generating documentation."
 
 rm -rf ./Docs/
-headerdoc2html -q -o ./Docs ./Mixpanel/Mixpanel.h > /dev/null 2>&1
+headerdoc2html -q -o ./Docs ./Mixpanel/Mixpanel.h ./Mixpanel/MixpanelPeople.h > /dev/null 2>&1
 rm -rf ../TempMixpanelDocs
 mkdir ../TempMixpanelDocs
 cp -a ./Docs/Mixpanel_h/. ../TempMixpanelDocs/.
