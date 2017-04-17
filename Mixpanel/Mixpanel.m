@@ -1490,6 +1490,19 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } useCache:NO];
 }
 
+- (void)checkForNewNotificaitonsWithCompletion:(void (^)(BOOL available))completion
+{ 
+    [self checkForDecideResponseWithCompletion:^(NSArray *surveys, NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
+        if (completion) {
+            BOOL available = NO;
+            if(notifications.count){
+                available = YES;
+            }
+            completion(available);
+        }
+    } useCache:NO];
+}
+
 - (void)checkForVariantsWithCompletion:(void (^)(NSSet *variants))completion
 {
     [self checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
@@ -1508,6 +1521,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             [self showNotificationWithObject:notifications[0]];
         }
     }];
+}
+
+- (NSInteger)notificationsCount 
+{
+    return [self.notifications count];
 }
 
 - (void)showNotificationWithType:(NSString *)type
