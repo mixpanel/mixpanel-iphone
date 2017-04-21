@@ -126,7 +126,11 @@ static NSString *defaultProjectToken;
         
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
-
+#if !defined(MIXPANEL_WATCH_EXTENSION)
+        self.automaticEvents = [[AutomaticEvents alloc] init];
+        self.automaticEvents.delegate = self;
+        [self.automaticEvents initializeEvents];
+#endif
         [self setUpListeners];
         [self unarchive];
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -193,6 +197,16 @@ static NSString *defaultProjectToken;
 - (void)setUseIPAddressForGeoLocation:(BOOL)useIPAddressForGeoLocation {
     self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
 }
+
+#if !defined(MIXPANEL_WATCH_EXTENSION)
+- (UInt64)minimumSessionDuration {
+    return self.automaticEvents.minimumSessionDuration;
+}
+
+- (void)setMinimumSessionDuration:(UInt64)minimumSessionDuration {
+    self.automaticEvents.minimumSessionDuration = minimumSessionDuration;
+}
+#endif
 
 #pragma mark - Tracking
 + (void)assertPropertyTypes:(NSDictionary *)properties
@@ -340,8 +354,8 @@ static NSString *defaultProjectToken;
     
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
     // Safety check
-    BOOL isAutomaticEvent = [event isEqualToString:kAutomaticEventName];
-    if (isAutomaticEvent && !self.isValidationEnabled) return;
+    BOOL isAutomaticTrack = [event isEqualToString:kAutomaticTrackName];
+    if (isAutomaticTrack && !self.isValidationEnabled) return;
 #endif
     
     properties = [properties copy];
@@ -368,8 +382,8 @@ static NSString *defaultProjectToken;
         
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         if (self.validationEnabled) {
-            if (self.validationMode == AutomaticEventModeCount) {
-                if (isAutomaticEvent) {
+            if (self.validationMode == AutomaticTrackModeCount) {
+                if (isAutomaticTrack) {
                     self.validationEventCount++;
                 } else {
                     if (self.validationEventCount > 0) {
@@ -1360,7 +1374,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                         NSString *method = validationConfig[@"method"];
                         if (method && [method isKindOfClass:NSString.class]) {
                             if ([method isEqualToString:@"count"]) {
-                                self.validationMode = AutomaticEventModeCount;
+                                self.validationMode = AutomaticTrackModeCount;
                             }
                         }
                     }

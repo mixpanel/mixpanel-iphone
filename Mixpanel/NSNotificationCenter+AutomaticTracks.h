@@ -1,5 +1,5 @@
 //
-//  NSNotificationCenter+AutomaticEvents.h
+//  NSNotificationCenter+AutomaticTracks.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSNotificationCenter (AutomaticEvents)
+@interface NSNotificationCenter (AutomaticTracks)
 
 - (void)mp_postNotification:(NSNotification *)notification;
 

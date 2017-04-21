@@ -238,6 +238,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) CGFloat miniNotificationPresentationTime;
 
+#if !defined(MIXPANEL_WATCH_EXTENSION)
+/*!
+ @property
+
+ @abstract
+ The minimum session duration (ms) that is tracked in automatic events.
+
+ @discussion
+ The default value is 2000 (2 seconds).
+ */
+@property (atomic) UInt64 minimumSessionDuration;
+#endif
+
 /*!
  @property
 

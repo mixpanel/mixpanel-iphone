@@ -1,20 +1,20 @@
 //
-//  NSNotificationCenter+AutomaticEvents.m
+//  NSNotificationCenter+AutomaticTracks.m
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
-#import "NSNotificationCenter+AutomaticEvents.h"
-#import "Mixpanel+AutomaticEvents.h"
-#import "AutomaticEventsConstants.h"
+#import "NSNotificationCenter+AutomaticTracks.h"
+#import "Mixpanel+AutomaticTracks.h"
+#import "AutomaticTracksConstants.h"
 
-@implementation NSNotificationCenter (AutomaticEvents)
+@implementation NSNotificationCenter (AutomaticTracks)
 
 - (void)mp_postNotification:(NSNotification *)notification {
     if ([NSNotificationCenter shouldTrackNotificationNamed:notification.name]) {
-        [[Mixpanel sharedAutomatedInstance] track:kAutomaticEventName];
+        [[Mixpanel sharedAutomatedInstance] track:kAutomaticTrackName];
     }
     
     [self mp_postNotification:notification];
@@ -24,7 +24,7 @@
                          object:(nullable id)object
                        userInfo:(nullable NSDictionary *)info {
     if ([NSNotificationCenter shouldTrackNotificationNamed:name]) {
-        [[Mixpanel sharedAutomatedInstance] track:kAutomaticEventName];
+        [[Mixpanel sharedAutomatedInstance] track:kAutomaticTrackName];
     }
     
     [self mp_postNotificationName:name object:object userInfo:info];

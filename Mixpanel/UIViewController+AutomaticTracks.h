@@ -1,5 +1,5 @@
 //
-//  UIViewController+AutomaticEvents.h
+//  UIViewController+AutomaticTracks.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UIViewController (AutomaticEvents)
+@interface UIViewController (AutomaticTracks)
 
 - (void)mp_viewDidAppear:(BOOL)animated;
 

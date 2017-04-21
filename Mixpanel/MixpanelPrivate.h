@@ -9,6 +9,11 @@
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 
+#if !defined(MIXPANEL_WATCH_EXTENSION)
+#import "AutomaticEvents.h"
+#endif
+
+#if !MIXPANEL_NO_EXCEPTION_HANDLING
 #import "MixpanelExceptionHandler.h"
 
 #if TARGET_OS_IPHONE
@@ -19,8 +24,8 @@
 #endif
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-#import "Mixpanel+AutomaticEvents.h"
-#import "AutomaticEventsConstants.h"
+#import "Mixpanel+AutomaticTracks.h"
+#import "AutomaticTracksConstants.h"
 #endif
 #endif
 
@@ -42,7 +47,9 @@
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-@interface Mixpanel () <MPNotificationViewControllerDelegate>
+@interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate, TrackDelegate>
+#elif !defined(MIXPANEL_WATCH_EXTENSION)
+@interface Mixpanel () <TrackDelegate>
 #else
 @interface Mixpanel ()
 #endif
@@ -62,7 +69,7 @@
 #endif
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-@property (nonatomic) AutomaticEventMode validationMode;
+@property (nonatomic) AutomaticTrackMode validationMode;
 @property (nonatomic) NSUInteger validationEventCount;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 #endif
@@ -70,6 +77,7 @@
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 @property (nonatomic, strong) UIViewController *notificationViewController;
+@property (atomic, strong) AutomaticEvents *automaticEvents;
 #endif
 
 // re-declare internally as readwrite
