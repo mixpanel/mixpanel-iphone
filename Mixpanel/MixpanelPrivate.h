@@ -9,12 +9,13 @@
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !defined(MIXPANEL_WATCHOS)
 #import "AutomaticEvents.h"
 #endif
 
 #if !MIXPANEL_NO_EXCEPTION_HANDLING
 #import "MixpanelExceptionHandler.h"
+#endif
 
 #if TARGET_OS_IPHONE
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
@@ -47,8 +48,8 @@
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-@interface Mixpanel () <MPSurveyNavigationControllerDelegate, MPNotificationViewControllerDelegate, TrackDelegate>
-#elif !defined(MIXPANEL_WATCH_EXTENSION)
+@interface Mixpanel () <MPNotificationViewControllerDelegate, TrackDelegate>
+#elif !defined(MIXPANEL_WATCHOS)
 @interface Mixpanel () <TrackDelegate>
 #else
 @interface Mixpanel ()

@@ -68,8 +68,6 @@
 #else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 #endif
-    NSArray *lol = [NSArray array];
-    lol[1];
     return YES;
 }
 

@@ -126,7 +126,7 @@ static NSString *defaultProjectToken;
         
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !defined(MIXPANEL_WATCHOS)
         self.automaticEvents = [[AutomaticEvents alloc] init];
         self.automaticEvents.delegate = self;
         [self.automaticEvents initializeEvents];
@@ -198,7 +198,7 @@ static NSString *defaultProjectToken;
     self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
 }
 
-#if !defined(MIXPANEL_WATCH_EXTENSION)
+#if !defined(MIXPANEL_WATCHOS)
 - (UInt64)minimumSessionDuration {
     return self.automaticEvents.minimumSessionDuration;
 }

@@ -17,10 +17,14 @@
     NSTimeInterval sessionStartTime;
 }
 
-//__attribute__((constructor))
-//static void initialize_appStartTime() {
-//    AutomaticEvents.appStartTime = [[NSDate date] timeIntervalSince1970];
-//}
+static NSTimeInterval _appStartTime;
++ (NSTimeInterval)appStartTime { return _appStartTime; }
++ (void)setAppStartTime:(NSTimeInterval)appStartTime { _appStartTime = appStartTime; }
+
+__attribute__((constructor))
+static void initialize_appStartTime() {
+    AutomaticEvents.appStartTime = [[NSDate date] timeIntervalSince1970];
+}
 
 - (instancetype)init
 {
