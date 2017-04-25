@@ -156,8 +156,8 @@ void HandleException(NSException *exception)
         [instance archive];
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
         [properties setValue:[exception reason] forKey:@"Reason"];
-        [properties setValue:[[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey] forKey:@"Trace"];
-        [instance track:@"App Crashed" properties:properties];
+//        [properties setValue:[[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey] forKey:@"Trace"];
+        [instance track:@"MP: App Crashed" properties:properties];
         dispatch_sync(instance.serialQueue, ^{});
     }
 
