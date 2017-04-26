@@ -238,7 +238,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) CGFloat miniNotificationPresentationTime;
 
-#if !defined(MIXPANEL_WATCHOS)
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 /*!
  @property
 

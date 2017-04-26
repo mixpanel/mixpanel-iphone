@@ -87,8 +87,10 @@ static NSString *defaultProjectToken;
         MPLogWarning(@"%@ empty api token", self);
     }
     if (self = [self init:apiToken]) {
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         // Install uncaught exception handlers first
         [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
+#endif
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
@@ -126,7 +128,7 @@ static NSString *defaultProjectToken;
         
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
-#if !defined(MIXPANEL_WATCHOS)
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         self.automaticEvents = [[AutomaticEvents alloc] init];
         self.automaticEvents.delegate = self;
         [self.automaticEvents initializeEvents];
@@ -198,7 +200,7 @@ static NSString *defaultProjectToken;
     self.network.useIPAddressForGeoLocation = useIPAddressForGeoLocation;
 }
 
-#if !defined(MIXPANEL_WATCHOS)
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 - (UInt64)minimumSessionDuration {
     return self.automaticEvents.minimumSessionDuration;
 }

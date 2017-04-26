@@ -8,6 +8,8 @@
 
 #import "AutomaticEvents.h"
 #import "MPSwizzler.h"
+#import <objc/runtime.h>
+
 
 @implementation AutomaticEvents {
     NSMutableDictionary *awaitingTransactions;
@@ -56,6 +58,9 @@ static void initialize_appStartTime() {
             [self.delegate track:@"MP: App Updated" properties:@{@"App Version": appVersionValue}];
             [defaults setObject:appVersionValue forKey:appVersionKey];
             [defaults synchronize];
+        } else if (savedVersionValue == nil) {
+            [defaults setObject:appVersionValue forKey:appVersionKey];
+            [defaults synchronize];
         }
     }
 
@@ -71,12 +76,22 @@ static void initialize_appStartTime() {
 
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 
-    [MPSwizzler swizzleSelector:NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:")
-                        onClass:[[UIApplication sharedApplication].delegate class]
-                      withBlock:^{
-                          [self.delegate track:@"MP: Notification Opened" properties:nil];
-                      }
-                          named:@"notification opened"];
+    SEL selector = nil;
+    Class cls = [[UIApplication sharedApplication].delegate class];
+    if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
+        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:");
+    } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:"))) {
+        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:");
+    }
+
+    if (selector) {
+        [MPSwizzler swizzleSelector:selector
+                            onClass:cls
+                          withBlock:^{
+                              [self.delegate track:@"MP: Notification Opened" properties:nil];
+                          }
+                              named:@"notification opened"];
+    }
 
 }
 
@@ -88,7 +103,7 @@ static void initialize_appStartTime() {
         if (appLoadSpeed > 0) {
             [properties setObject:[NSNumber numberWithUnsignedInt:appLoadSpeed] forKey:@"App Load Speed (ms)"];
         }
-        [self.delegate track:@"MP: App Open" properties:properties];
+        [self.delegate track:@"MP: App Session" properties:properties];
     }
     AutomaticEvents.appStartTime = 0;
 }

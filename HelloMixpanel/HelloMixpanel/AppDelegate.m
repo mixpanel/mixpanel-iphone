@@ -3,7 +3,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"de868b8da6d09aec7c9149e6a41cf359"
+#define MIXPANEL_TOKEN @"93fdad6026e4debf13479bf0aeba0e9f"
 
 @implementation AppDelegate
 
@@ -106,28 +106,30 @@
 {
     // Show alert for push notifications recevied while the app is running
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    } else {
+    if (!userInfo[@"testingAutomaticEvents"]) {
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        } else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                            message:userInfo[@"aps"][@"alert"]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+#else
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
                                                         message:userInfo[@"aps"][@"alert"]
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
-    }
-#else
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-                                                    message:userInfo[@"aps"][@"alert"]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
 #endif
-
-    [self.mixpanel trackPushNotification:userInfo];
+        
+        [self.mixpanel trackPushNotification:userInfo];
+    }
 }
 
 #pragma mark - Session timing example
