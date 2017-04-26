@@ -10,9 +10,10 @@
 #import "AutomaticEvents.h"
 #import "MixpanelPrivate.h"
 #import <objc/runtime.h>
+#import <StoreKit/StoreKit.h>
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
-@interface AutomaticEventsTests : MixpanelBaseTests
+@interface AutomaticEventsTests : MixpanelBaseTests <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 //@property (nonatomic, strong) AutomaticEvents *automaticEvents;
 
@@ -86,7 +87,45 @@
 }
 
 - (void)testIAP {
+    NSSet<NSString *> *productIdentifiers = [[NSSet alloc] initWithObjects:@"com.mixpanel.swiftdemo.test",
+                                             @"test",
+                                             @"com.mixpanel.swiftdemo.SwiftSDKIAPTestingProductID",
+                                             @"SwiftSDKIAPTestingProductID",
+                                             @"mixpanel.swiftdemo.test", nil];
+    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
+    productsRequest.delegate = self;
+    [productsRequest start];
+}
 
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
+    if (response.products.count > 0) {
+        if (response.products.firstObject) {
+            SKPayment *payment = [SKPayment paymentWithProduct:response.products.firstObject];
+            [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+            [[SKPaymentQueue defaultQueue] addPayment:payment];
+        }
+    }
+}
+
+- (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray<SKPaymentTransaction *> *)transactions {
+    for (SKPaymentTransaction *transaction in transactions) {
+        switch (transaction.transactionState) {
+            case SKPaymentTransactionStatePurchased:
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                NSLog(@"IAP Purchased");
+                break;
+            case SKPaymentTransactionStateFailed:
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                NSLog(@"IAP Failed");
+                break;
+            case SKPaymentTransactionStateRestored:
+                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+                NSLog(@"IAP Restored");
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 @end
