@@ -10,13 +10,13 @@
 #import "MPSwizzler.h"
 #import <objc/runtime.h>
 
-
 @implementation AutomaticEvents {
     NSMutableDictionary *awaitingTransactions;
     NSUserDefaults *defaults;
     NSTimeInterval appLoadSpeed;
     NSTimeInterval sessionLength;
     NSTimeInterval sessionStartTime;
+    MixpanelPeople *people;
 }
 
 static NSTimeInterval _appStartTime;
@@ -41,10 +41,12 @@ static void initialize_appStartTime() {
     return self;
 }
 
-- (void)initializeEvents {
+- (void)initializeEvents:(MixpanelPeople *)peopleInstance {
+    people = peopleInstance;
     NSString *firstOpenKey = @"MPFirstOpen";
     if (defaults != nil && ![defaults boolForKey:firstOpenKey]) {
         [self.delegate track:@"MP: First App Open" properties:nil];
+        [people setOnce:@{@"First App Open Date": [NSDate date]}];
         [defaults setBool:TRUE forKey:firstOpenKey];
         [defaults synchronize];
     }
@@ -104,6 +106,8 @@ static void initialize_appStartTime() {
             [properties setObject:[NSNumber numberWithUnsignedInt:appLoadSpeed] forKey:@"App Load Speed (ms)"];
         }
         [self.delegate track:@"MP: App Session" properties:properties];
+        [people increment:@"Total App Sessions" by:[NSNumber numberWithInt:1]];
+        [people increment:@"Total App Session Length" by:[NSNumber numberWithInt:(int)sessionLength]];
     }
     AutomaticEvents.appStartTime = 0;
 }

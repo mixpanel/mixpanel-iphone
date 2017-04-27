@@ -131,7 +131,7 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
         self.automaticEvents = [[AutomaticEvents alloc] init];
         self.automaticEvents.delegate = self;
-        [self.automaticEvents initializeEvents];
+        [self.automaticEvents initializeEvents:self.people];
 #endif
         [self setUpListeners];
         [self unarchive];

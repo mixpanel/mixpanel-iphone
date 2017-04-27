@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <StoreKit/StoreKit.h>
+#import "MixpanelPeople.h"
 
 @protocol TrackDelegate <NSObject>
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
@@ -17,7 +18,7 @@
 @property (atomic, weak) id<TrackDelegate> delegate;
 @property (class, atomic, assign) NSTimeInterval appStartTime;
 @property (atomic, assign) UInt64 minimumSessionDuration;
-- (void)initializeEvents;
+- (void)initializeEvents:(MixpanelPeople *)peopleInstance;
 
 @end
 
