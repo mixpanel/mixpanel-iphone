@@ -25,7 +25,9 @@ static NSTimeInterval _appStartTime;
 
 __attribute__((constructor))
 static void initialize_appStartTime() {
-    AutomaticEvents.appStartTime = [[NSDate date] timeIntervalSince1970];
+    if (AutomaticEvents.appStartTime == 0) {
+        AutomaticEvents.appStartTime = [[NSDate date] timeIntervalSince1970];
+    }
 }
 
 - (instancetype)init
@@ -67,8 +69,8 @@ static void initialize_appStartTime() {
     }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(appEnteredBackground:)
-                                                 name:UIApplicationDidEnterBackgroundNotification
+                                             selector:@selector(appWillResignActive:)
+                                                 name:UIApplicationWillResignActiveNotification
                                                object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -97,7 +99,7 @@ static void initialize_appStartTime() {
 
 }
 
-- (void)appEnteredBackground:(NSNotification *)notification {
+- (void)appWillResignActive:(NSNotification *)notification {
     sessionLength = [[NSDate date] timeIntervalSince1970] - sessionStartTime;
     if (sessionLength > (double)(self.minimumSessionDuration / 1000)) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc]

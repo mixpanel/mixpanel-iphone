@@ -128,13 +128,15 @@ static NSString *defaultProjectToken;
         
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
-#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-        self.automaticEvents = [[AutomaticEvents alloc] init];
-        self.automaticEvents.delegate = self;
-        [self.automaticEvents initializeEvents:self.people];
-#endif
         [self setUpListeners];
         [self unarchive];
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
+        if (!self.automaticEventsEnabled || [self.automaticEventsEnabled boolValue]) {
+            self.automaticEvents = [[AutomaticEvents alloc] init];
+            self.automaticEvents.delegate = self;
+            [self.automaticEvents initializeEvents:self.people];
+        }
+#endif
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
@@ -712,6 +714,7 @@ static NSString *defaultProjectToken;
     [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
     [p setValue:self.shownNotifications forKey:@"shownNotifications"];
     [p setValue:self.timedEvents forKey:@"timedEvents"];
+    [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
     MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![self archiveObject:p withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive properties data", self);
@@ -824,6 +827,7 @@ static NSString *defaultProjectToken;
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
         self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
+        self.automaticEventsEnabled = properties[@"automaticEvents"];
     }
 }
 
@@ -1413,6 +1417,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     }
                 } else {
                     MPLogError(@"%@ variants check response format error: %@", self, object);
+                }
+
+                id rawAutomaticEvents = object[@"automatic_events"];
+                if ([rawAutomaticEvents isKindOfClass:[NSNumber class]]) {
+                    if (!self.automaticEventsEnabled || [self.automaticEventsEnabled boolValue] != [rawAutomaticEvents boolValue]) {
+                        self.automaticEventsEnabled = rawAutomaticEvents;
+                        [self archiveProperties];
+                    }
                 }
 
                 // Variants that are already running (may or may not have been marked as finished).
