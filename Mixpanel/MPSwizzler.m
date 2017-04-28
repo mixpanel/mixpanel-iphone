@@ -11,7 +11,7 @@
 #import "MPSwizzler.h"
 
 #define MIN_ARGS 2
-#define MAX_ARGS 4
+#define MAX_ARGS 5
 
 @interface MPSwizzle : NSObject
 
@@ -77,7 +77,22 @@ static void mp_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2)
     }
 }
 
-static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMethod_2, mp_swizzledMethod_3, mp_swizzledMethod_4};
+static void mp_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3)
+{
+    Method aMethod = class_getInstanceMethod([self class], _cmd);
+    MPSwizzle *swizzle = (MPSwizzle *)[swizzles objectForKey:(__bridge id)((void *)aMethod)];
+    if (swizzle) {
+        ((void(*)(id, SEL, id, id, id))swizzle.originalMethod)(self, _cmd, arg, arg2, arg3);
+
+        NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
+        swizzleBlock block;
+        while ((block = [blocks nextObject])) {
+            block(self, _cmd, arg, arg2, arg3);
+        }
+    }
+}
+
+static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMethod_2, mp_swizzledMethod_3, mp_swizzledMethod_4, mp_swizzledMethod_5};
 
 @implementation MPSwizzler
 
