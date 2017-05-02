@@ -62,7 +62,7 @@ static const NSUInteger kBatchSize = 50;
     if (!self.mixpanel.automaticEventsEnabled || !self.mixpanel.automaticEventsEnabled.boolValue) {
         NSMutableArray *discardedItems = [NSMutableArray array];
         for (NSDictionary *e in events) {
-            if ([e[@"event"] hasPrefix:@"MP: "]) {
+            if ([e[@"event"] hasPrefix:@"$ae_"]) {
                 [discardedItems addObject:e];
             }
         }

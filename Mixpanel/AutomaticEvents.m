@@ -39,6 +39,7 @@ static void initialize_appStartTime() {
         appLoadSpeed = 0;
         sessionLength = 0;
         sessionStartTime = 0;
+        self.minimumSessionDuration = 10000;
     }
     return self;
 }
@@ -47,7 +48,7 @@ static void initialize_appStartTime() {
     people = peopleInstance;
     NSString *firstOpenKey = @"MPFirstOpen";
     if (defaults != nil && ![defaults boolForKey:firstOpenKey]) {
-        [self.delegate track:@"MP: First App Open" properties:nil];
+        [self.delegate track:@"$ae_first_open" properties:nil];
         [people setOnce:@{@"First App Open Date": [NSDate date]}];
         [defaults setBool:TRUE forKey:firstOpenKey];
         [defaults synchronize];
@@ -58,8 +59,8 @@ static void initialize_appStartTime() {
         NSString* appVersionKey = @"MPAppVersion";
         NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
         NSString* savedVersionValue = [defaults stringForKey:appVersionKey];
-        if (appVersionValue != nil && savedVersionValue != nil && appVersionValue != savedVersionValue) {
-            [self.delegate track:@"MP: App Updated" properties:@{@"App Version": appVersionValue}];
+        if (appVersionValue != nil && savedVersionValue != nil && ![appVersionValue isEqualToString:savedVersionValue]) {
+            [self.delegate track:@"$ae_updated" properties:@{@"App Version": appVersionValue}];
             [defaults setObject:appVersionValue forKey:appVersionKey];
             [defaults synchronize];
         } else if (savedVersionValue == nil) {
@@ -92,7 +93,7 @@ static void initialize_appStartTime() {
         [MPSwizzler swizzleSelector:selector
                             onClass:cls
                           withBlock:^{
-                              [self.delegate track:@"MP: Notification Opened" properties:nil];
+                              [self.delegate track:@"$ae_notif_opened" properties:nil];
                           }
                               named:@"notification opened"];
     }
@@ -100,14 +101,14 @@ static void initialize_appStartTime() {
 }
 
 - (void)appWillResignActive:(NSNotification *)notification {
-    sessionLength = [[NSDate date] timeIntervalSince1970] - sessionStartTime;
+    sessionLength = [self roundThreeDigits:[[NSDate date] timeIntervalSince1970] - sessionStartTime];
     if (sessionLength > (double)(self.minimumSessionDuration / 1000)) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc]
                                            initWithObjectsAndKeys:[NSNumber numberWithDouble:sessionLength], @"Session Length", nil];
         if (appLoadSpeed > 0) {
             [properties setObject:[NSNumber numberWithUnsignedInt:appLoadSpeed] forKey:@"App Load Speed (ms)"];
         }
-        [self.delegate track:@"MP: App Session" properties:properties];
+        [self.delegate track:@"$ae_session" properties:properties];
         [people increment:@"Total App Sessions" by:[NSNumber numberWithInt:1]];
         [people increment:@"Total App Session Length" by:[NSNumber numberWithInt:(int)sessionLength]];
     }
@@ -143,12 +144,16 @@ static void initialize_appStartTime() {
     [productsRequest start];
 }
 
+- (NSTimeInterval)roundThreeDigits:(NSTimeInterval) num {
+    return round(num * 10.0) / 10.0;
+}
+
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
     @synchronized (awaitingTransactions) {
         for (SKProduct *product in response.products) {
             SKPaymentTransaction *transaction = [awaitingTransactions objectForKey:product.productIdentifier];
             if (transaction != nil) {
-                [self.delegate track:@"MP: In-App Purchase" properties:@{@"Price": product.price,
+                [self.delegate track:@"$ae_iap" properties:@{@"Price": product.price,
                                                                          @"Quantity": [NSNumber numberWithInteger:transaction.payment.quantity],
                                                                          @"Product Name": product.productIdentifier}];
             }

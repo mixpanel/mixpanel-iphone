@@ -246,7 +246,7 @@ NS_ASSUME_NONNULL_BEGIN
  The minimum session duration (ms) that is tracked in automatic events.
 
  @discussion
- The default value is 2000 (2 seconds).
+ The default value is 10000 (10 seconds).
  */
 @property (atomic) UInt64 minimumSessionDuration;
 #endif

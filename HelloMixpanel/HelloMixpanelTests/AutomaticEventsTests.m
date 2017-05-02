@@ -49,7 +49,7 @@
     [self waitForMixpanelQueues];
     NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
     XCTAssertNotNil(event, @"should have an event");
-    XCTAssert([event[@"event"] isEqualToString:@"MP: App Session"], @"should be app session event");
+    XCTAssert([event[@"event"] isEqualToString:@"$ae_session], @"should be app session event");
     XCTAssertNotNil(event[@"properties"][@"Session Length"], @"should have session length");
 }
 
@@ -81,7 +81,7 @@
         [self waitForMixpanelQueues];
         NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
         XCTAssertNotNil(event, @"should have an event");
-        XCTAssert([event[@"event"] isEqualToString:@"MP: Notification Opened"], @"should be an notificaiton opened event");
+        XCTAssert([event[@"event"] isEqualToString:@"$ae_notif_opened"], @"should be an notificaiton opened event");
     }
     [self waitForMixpanelQueues];
 }
