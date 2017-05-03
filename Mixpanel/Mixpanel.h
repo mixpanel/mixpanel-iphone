@@ -249,6 +249,17 @@ NS_ASSUME_NONNULL_BEGIN
  The default value is 10000 (10 seconds).
  */
 @property (atomic) UInt64 minimumSessionDuration;
+
+/*!
+ @property
+
+ @abstract
+ The maximum session duration (ms) that is tracked in automatic events.
+
+ @discussion
+ The default value is UINT64_MAX (no maximum session duration).
+ */
+@property (atomic) UInt64 maximumSessionDuration;
 #endif
 
 /*!

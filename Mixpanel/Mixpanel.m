@@ -210,6 +210,14 @@ static NSString *defaultProjectToken;
 - (void)setMinimumSessionDuration:(UInt64)minimumSessionDuration {
     self.automaticEvents.minimumSessionDuration = minimumSessionDuration;
 }
+
+- (UInt64)maximumSessionDuration {
+    return self.automaticEvents.maximumSessionDuration;
+}
+
+- (void)setMaximumSessionDuration:(UInt64)maximumSessionDuration {
+    self.automaticEvents.maximumSessionDuration = maximumSessionDuration;
+}
 #endif
 
 #pragma mark - Tracking

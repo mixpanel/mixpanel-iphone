@@ -18,6 +18,7 @@
 @property (atomic, weak) id<TrackDelegate> delegate;
 @property (class, atomic, assign) NSTimeInterval appStartTime;
 @property (atomic, assign) UInt64 minimumSessionDuration;
+@property (atomic, assign) UInt64 maximumSessionDuration;
 - (void)initializeEvents:(MixpanelPeople *)peopleInstance;
 
 @end

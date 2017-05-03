@@ -38,6 +38,7 @@ static void initialize_appStartTime() {
         sessionLength = 0;
         sessionStartTime = 0;
         self.minimumSessionDuration = 10000;
+        self.maximumSessionDuration = UINT64_MAX;
     }
     return self;
 }
@@ -102,7 +103,8 @@ static void initialize_appStartTime() {
 
 - (void)appWillResignActive:(NSNotification *)notification {
     sessionLength = [self roundThreeDigits:[[NSDate date] timeIntervalSince1970] - sessionStartTime];
-    if (sessionLength > (double)(self.minimumSessionDuration / 1000)) {
+    if (sessionLength > (double)(self.minimumSessionDuration / 1000) &&
+        sessionLength < (double)(self.maximumSessionDuration / 1000)) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc]
                                            initWithObjectsAndKeys:[NSNumber numberWithDouble:sessionLength], @"Session Length", nil];
         [self.delegate track:@"$ae_session" properties:properties];
