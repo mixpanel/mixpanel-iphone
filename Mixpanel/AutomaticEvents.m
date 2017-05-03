@@ -13,7 +13,6 @@
 @implementation AutomaticEvents {
     NSMutableDictionary *awaitingTransactions;
     NSUserDefaults *defaults;
-    NSTimeInterval appLoadSpeed;
     NSTimeInterval sessionLength;
     NSTimeInterval sessionStartTime;
     MixpanelPeople *people;
@@ -36,7 +35,6 @@ static void initialize_appStartTime() {
     if (self) {
         awaitingTransactions = [[NSMutableDictionary alloc] init];
         defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
-        appLoadSpeed = 0;
         sessionLength = 0;
         sessionStartTime = 0;
         self.minimumSessionDuration = 10000;
@@ -107,9 +105,6 @@ static void initialize_appStartTime() {
     if (sessionLength > (double)(self.minimumSessionDuration / 1000)) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc]
                                            initWithObjectsAndKeys:[NSNumber numberWithDouble:sessionLength], @"Session Length", nil];
-        if (appLoadSpeed > 0) {
-            [properties setObject:[NSNumber numberWithUnsignedInt:appLoadSpeed] forKey:@"App Load Speed (ms)"];
-        }
         [self.delegate track:@"$ae_session" properties:properties];
         [people increment:@"Total App Sessions" by:[NSNumber numberWithInt:1]];
         [people increment:@"Total App Session Length" by:[NSNumber numberWithInt:(int)sessionLength]];
@@ -119,7 +114,6 @@ static void initialize_appStartTime() {
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
     NSTimeInterval nowTime = [[NSDate date] timeIntervalSince1970];
-    appLoadSpeed = AutomaticEvents.appStartTime != 0 ? (nowTime - AutomaticEvents.appStartTime) * 1000 : 0;
     sessionStartTime = nowTime;
 }
 
