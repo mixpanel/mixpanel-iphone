@@ -48,8 +48,10 @@ static void initialize_appStartTime() {
     people = peopleInstance;
     NSString *firstOpenKey = @"MPFirstOpen";
     if (defaults != nil && ![defaults boolForKey:firstOpenKey]) {
-        [self.delegate track:@"$ae_first_open" properties:nil];
-        [people setOnce:@{@"First App Open Date": [NSDate date]}];
+        if (![self isExistingUser]) {
+            [self.delegate track:@"$ae_first_open" properties:nil];
+            [people setOnce:@{@"First App Open Date": [NSDate date]}];
+        }
         [defaults setBool:TRUE forKey:firstOpenKey];
         [defaults synchronize];
     }
@@ -146,6 +148,17 @@ static void initialize_appStartTime() {
 
 - (NSTimeInterval)roundThreeDigits:(NSTimeInterval) num {
     return round(num * 10.0) / 10.0;
+}
+
+- (BOOL)isExistingUser {
+    NSString *searchPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    NSArray<NSString *> *pathContents = [NSFileManager.defaultManager contentsOfDirectoryAtPath:searchPath error:nil];
+    for (NSString *path in pathContents) {
+        if ([path hasPrefix:@"mixpanel-"]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {

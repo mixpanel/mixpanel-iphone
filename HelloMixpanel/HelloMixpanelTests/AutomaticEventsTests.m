@@ -30,6 +30,8 @@
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
     [defaults setObject:nil forKey:firstOpenKey];
     [defaults synchronize];
+    NSString *searchPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+    [NSFileManager.defaultManager removeItemAtPath:searchPath error:nil];
     [super setUp];
     startTime = [[NSDate date] timeIntervalSince1970];
 }
@@ -45,11 +47,11 @@
 }
 
 - (void)testSession {
-    [self.mixpanel.automaticEvents performSelector:NSSelectorFromString(@"appEnteredBackground:") withObject:nil];
+    [self.mixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
     [self waitForMixpanelQueues];
     NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
     XCTAssertNotNil(event, @"should have an event");
-    XCTAssert([event[@"event"] isEqualToString:@"$ae_session], @"should be app session event");
+    XCTAssert([event[@"event"] isEqualToString:@"$ae_session"], @"should be app session event");
     XCTAssertNotNil(event[@"properties"][@"Session Length"], @"should have session length");
 }
 
