@@ -265,6 +265,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
         } else {
             self.imageView.hidden = YES;
         }
+        self.bodyLabel.text = notification.body;
     }
 
     [self.view addSubview:self.imageView];
