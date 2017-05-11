@@ -155,8 +155,7 @@ void HandleException(NSException *exception)
     for (Mixpanel *instance in handler.mixpanelInstances) {
         [instance archive];
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
-        [properties setValue:[exception reason] forKey:@"Reason"];
-//        [properties setValue:[[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey] forKey:@"Trace"];
+        [properties setValue:[exception reason] forKey:@"$ae_crashed_reason"];
         [instance track:@"$ae_crashed" properties:properties];
         dispatch_sync(instance.serialQueue, ^{});
     }

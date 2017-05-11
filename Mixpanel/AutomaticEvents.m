@@ -49,7 +49,7 @@ static void initialize_appStartTime() {
     if (defaults != nil && ![defaults boolForKey:firstOpenKey]) {
         if (![self isExistingUser]) {
             [self.delegate track:@"$ae_first_open" properties:nil];
-            [people setOnce:@{@"First App Open Date": [NSDate date]}];
+            [people setOnce:@{@"$ae_first_app_open_date": [NSDate date]}];
         }
         [defaults setBool:TRUE forKey:firstOpenKey];
         [defaults synchronize];
@@ -61,7 +61,7 @@ static void initialize_appStartTime() {
         NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
         NSString* savedVersionValue = [defaults stringForKey:appVersionKey];
         if (appVersionValue != nil && savedVersionValue != nil && ![appVersionValue isEqualToString:savedVersionValue]) {
-            [self.delegate track:@"$ae_updated" properties:@{@"App Version": appVersionValue}];
+            [self.delegate track:@"$ae_updated" properties:@{@"$ae_updated_version": appVersionValue}];
             [defaults setObject:appVersionValue forKey:appVersionKey];
             [defaults synchronize];
         } else if (savedVersionValue == nil) {
@@ -82,34 +82,17 @@ static void initialize_appStartTime() {
 
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 
-    SEL selector = nil;
-    Class cls = [[UIApplication sharedApplication].delegate class];
-    if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
-        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:");
-    } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:"))) {
-        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:");
-    }
-
-    if (selector) {
-        [MPSwizzler swizzleSelector:selector
-                            onClass:cls
-                          withBlock:^{
-                              [self.delegate track:@"$ae_notif_opened" properties:nil];
-                          }
-                              named:@"notification opened"];
-    }
-
 }
 
 - (void)appWillResignActive:(NSNotification *)notification {
-    sessionLength = [self roundThreeDigits:[[NSDate date] timeIntervalSince1970] - sessionStartTime];
+    sessionLength = [self roundOneDigit:[[NSDate date] timeIntervalSince1970] - sessionStartTime];
     if (sessionLength > (double)(self.minimumSessionDuration / 1000) &&
         sessionLength < (double)(self.maximumSessionDuration / 1000)) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc]
-                                           initWithObjectsAndKeys:[NSNumber numberWithDouble:sessionLength], @"Session Length", nil];
+                                           initWithObjectsAndKeys:[NSNumber numberWithDouble:sessionLength], @"$ae_session_length", nil];
         [self.delegate track:@"$ae_session" properties:properties];
-        [people increment:@"Total App Sessions" by:[NSNumber numberWithInt:1]];
-        [people increment:@"Total App Session Length" by:[NSNumber numberWithInt:(int)sessionLength]];
+        [people increment:@"$ae_total_app_sessions" by:[NSNumber numberWithInt:1]];
+        [people increment:@"$ae_total_app_session_length" by:[NSNumber numberWithInt:(int)sessionLength]];
     }
     AutomaticEvents.appStartTime = 0;
 }
@@ -137,12 +120,14 @@ static void initialize_appStartTime() {
             }
         }
     }
-    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
-    productsRequest.delegate = self;
-    [productsRequest start];
+    if ([productIdentifiers count] > 0) {
+        SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
+        productsRequest.delegate = self;
+        [productsRequest start];
+    }
 }
 
-- (NSTimeInterval)roundThreeDigits:(NSTimeInterval) num {
+- (NSTimeInterval)roundOneDigit:(NSTimeInterval) num {
     return round(num * 10.0) / 10.0;
 }
 
@@ -162,9 +147,9 @@ static void initialize_appStartTime() {
         for (SKProduct *product in response.products) {
             SKPaymentTransaction *transaction = [awaitingTransactions objectForKey:product.productIdentifier];
             if (transaction != nil) {
-                [self.delegate track:@"$ae_iap" properties:@{@"Price": product.price,
-                                                                         @"Quantity": [NSNumber numberWithInteger:transaction.payment.quantity],
-                                                                         @"Product Name": product.productIdentifier}];
+                [self.delegate track:@"$ae_iap" properties:@{@"$ae_iap_price": product.price,
+                                                          @"$ae_iap_quantity": [NSNumber numberWithInteger:transaction.payment.quantity],
+                                                              @"$ae_iap_name": product.productIdentifier}];
             }
         }
     }
