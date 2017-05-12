@@ -13,7 +13,7 @@
 #import <StoreKit/StoreKit.h>
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
-@interface AutomaticEventsTests : MixpanelBaseTests <SKProductsRequestDelegate, SKPaymentTransactionObserver>
+@interface AutomaticEventsTests : MixpanelBaseTests
 
 //@property (nonatomic, strong) AutomaticEvents *automaticEvents;
 
@@ -52,7 +52,7 @@
     NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
     XCTAssertNotNil(event, @"should have an event");
     XCTAssert([event[@"event"] isEqualToString:@"$ae_session"], @"should be app session event");
-    XCTAssertNotNil(event[@"properties"][@"Session Length"], @"should have session length");
+    XCTAssertNotNil(event[@"properties"][@"$ae_session_length"], @"should have session length");
 }
 
 - (void)testUpdated {
@@ -61,73 +61,6 @@
     NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
     NSString* savedVersionValue = [defaults stringForKey:@"MPAppVersion"];
     XCTAssert(appVersionValue == savedVersionValue, @"saved version and current version need to be the same");
-}
-
-- (void)testCrash {
-    //crash your app and see it track
-    //[self performSelector:@selector(die_die)];
-}
-
-- (void)testPushNotificationOpened {
-    SEL selector = nil;
-    Class cls = [[UIApplication sharedApplication].delegate class];
-    if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
-        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:");
-        [[UIApplication sharedApplication].delegate performSelector:selector withObject:@{@"testingAutomaticEvents":@TRUE} withObject:nil];
-    } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:"))) {
-        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:");
-        [[UIApplication sharedApplication].delegate performSelector:selector withObject:@{@"testingAutomaticEvents":@TRUE}];
-
-    }
-    if (selector) {
-        [self waitForMixpanelQueues];
-        NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
-        XCTAssertNotNil(event, @"should have an event");
-        XCTAssert([event[@"event"] isEqualToString:@"$ae_notif_opened"], @"should be an notificaiton opened event");
-    }
-    [self waitForMixpanelQueues];
-}
-
-- (void)testIAP {
-    NSSet<NSString *> *productIdentifiers = [[NSSet alloc] initWithObjects:@"com.mixpanel.swiftdemo.test",
-                                             @"test",
-                                             @"com.mixpanel.swiftdemo.SwiftSDKIAPTestingProductID",
-                                             @"SwiftSDKIAPTestingProductID",
-                                             @"mixpanel.swiftdemo.test", nil];
-    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
-    productsRequest.delegate = self;
-    [productsRequest start];
-}
-
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    if (response.products.count > 0) {
-        if (response.products.firstObject) {
-            SKPayment *payment = [SKPayment paymentWithProduct:response.products.firstObject];
-            [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-            [[SKPaymentQueue defaultQueue] addPayment:payment];
-        }
-    }
-}
-
-- (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray<SKPaymentTransaction *> *)transactions {
-    for (SKPaymentTransaction *transaction in transactions) {
-        switch (transaction.transactionState) {
-            case SKPaymentTransactionStatePurchased:
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-                NSLog(@"IAP Purchased");
-                break;
-            case SKPaymentTransactionStateFailed:
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-                NSLog(@"IAP Failed");
-                break;
-            case SKPaymentTransactionStateRestored:
-                [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-                NSLog(@"IAP Restored");
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 @end
