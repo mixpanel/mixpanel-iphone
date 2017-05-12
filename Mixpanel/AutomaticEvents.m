@@ -127,6 +127,19 @@ static void initialize_appStartTime() {
     }
 }
 
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
+    @synchronized (awaitingTransactions) {
+        for (SKProduct *product in response.products) {
+            SKPaymentTransaction *transaction = [awaitingTransactions objectForKey:product.productIdentifier];
+            if (transaction != nil) {
+                [self.delegate track:@"$ae_iap" properties:@{@"$ae_iap_price": product.price,
+                                                          @"$ae_iap_quantity": [NSNumber numberWithInteger:transaction.payment.quantity],
+                                                              @"$ae_iap_name": product.productIdentifier}];
+            }
+        }
+    }
+}
+
 - (NSTimeInterval)roundOneDigit:(NSTimeInterval) num {
     return round(num * 10.0) / 10.0;
 }
@@ -142,16 +155,4 @@ static void initialize_appStartTime() {
     return false;
 }
 
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    @synchronized (awaitingTransactions) {
-        for (SKProduct *product in response.products) {
-            SKPaymentTransaction *transaction = [awaitingTransactions objectForKey:product.productIdentifier];
-            if (transaction != nil) {
-                [self.delegate track:@"$ae_iap" properties:@{@"$ae_iap_price": product.price,
-                                                          @"$ae_iap_quantity": [NSNumber numberWithInteger:transaction.payment.quantity],
-                                                              @"$ae_iap_name": product.productIdentifier}];
-            }
-        }
-    }
-}
 @end

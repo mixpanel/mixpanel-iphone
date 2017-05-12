@@ -63,4 +63,23 @@
     XCTAssert(appVersionValue == savedVersionValue, @"saved version and current version need to be the same");
 }
 
+- (void)testMultipleInstances {
+    Mixpanel *mp = [[Mixpanel alloc] initWithToken:@"abc"
+                                      launchOptions:nil
+                                   andFlushInterval:60];
+    mp.automaticEventsEnabled = @FALSE;
+    self.mixpanel.automaticEventsEnabled = @TRUE;
+    [self.mixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
+    [self waitForMixpanelQueues];
+    dispatch_sync(mp.serialQueue, ^{
+        dispatch_sync(mp.networkQueue, ^{ return; });
+    });
+    NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
+    XCTAssertNotNil(event, @"should have an event");
+    XCTAssert([event[@"event"] isEqualToString:@"$ae_session"], @"should be app session event");
+    XCTAssertNotNil(event[@"properties"][@"$ae_session_length"], @"should have session length");
+    NSDictionary *otherEvent = [mp.eventsQueue lastObject];
+    XCTAssertNil(otherEvent, @"shouldn't have an event");
+}
+
 @end
