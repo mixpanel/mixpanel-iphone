@@ -73,7 +73,6 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
         _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
         // Install our handler
         [self setupHandlers];
-//        [self performSelector:@selector(setupHandlers) withObject:nil afterDelay:0];
     }
     return self;
 }

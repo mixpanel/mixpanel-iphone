@@ -18,17 +18,6 @@
     MixpanelPeople *people;
 }
 
-static NSTimeInterval _appStartTime;
-+ (NSTimeInterval)appStartTime { return _appStartTime; }
-+ (void)setAppStartTime:(NSTimeInterval)appStartTime { _appStartTime = appStartTime; }
-
-__attribute__((constructor))
-static void initialize_appStartTime() {
-    if (AutomaticEvents.appStartTime == 0) {
-        AutomaticEvents.appStartTime = [[NSDate date] timeIntervalSince1970];
-    }
-}
-
 - (instancetype)init
 {
     self = [super init];
@@ -36,7 +25,7 @@ static void initialize_appStartTime() {
         awaitingTransactions = [[NSMutableDictionary alloc] init];
         defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
         sessionLength = 0;
-        sessionStartTime = 0;
+        sessionStartTime = [[NSDate date] timeIntervalSince1970];
         self.minimumSessionDuration = 10000;
         self.maximumSessionDuration = UINT64_MAX;
     }
@@ -94,7 +83,6 @@ static void initialize_appStartTime() {
         [people increment:@"$ae_total_app_sessions" by:[NSNumber numberWithInt:1]];
         [people increment:@"$ae_total_app_session_length" by:[NSNumber numberWithInt:(int)sessionLength]];
     }
-    AutomaticEvents.appStartTime = 0;
 }
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
