@@ -131,11 +131,9 @@ static NSString *defaultProjectToken;
         [self setUpListeners];
         [self unarchive];
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-        if (!self.automaticEventsEnabled || [self.automaticEventsEnabled boolValue]) {
-            self.automaticEvents = [[AutomaticEvents alloc] init];
-            self.automaticEvents.delegate = self;
-            [self.automaticEvents initializeEvents:self.people];
-        }
+        self.automaticEvents = [[AutomaticEvents alloc] init];
+        self.automaticEvents.delegate = self;
+        [self.automaticEvents initializeEvents:self.people];
 #endif
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         [self executeCachedVariants];

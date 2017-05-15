@@ -49,7 +49,8 @@
         NSString* appVersionKey = @"MPAppVersion";
         NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
         NSString* savedVersionValue = [defaults stringForKey:appVersionKey];
-        if (appVersionValue != nil && savedVersionValue != nil && ![appVersionValue isEqualToString:savedVersionValue]) {
+        if (appVersionValue != nil && savedVersionValue != nil &&
+            [appVersionValue compare:savedVersionValue options:NSNumericSearch] == NSOrderedDescending) {
             [self.delegate track:@"$ae_updated" properties:@{@"$ae_updated_version": appVersionValue}];
             [defaults setObject:appVersionValue forKey:appVersionKey];
             [defaults synchronize];
