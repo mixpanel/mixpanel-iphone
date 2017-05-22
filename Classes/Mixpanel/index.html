@@ -1047,6 +1047,14 @@ created A/B tests and codeless events will still be delivered.
 enters the background.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/maximumSessionDuration" target="_top">maximumSessionDuration</a></tt></dt>
+<dd><p>The maximum session duration (ms) that is tracked in automatic events.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/minimumSessionDuration" target="_top">minimumSessionDuration</a></tt></dt>
+<dd><p>The minimum session duration (ms) that is tracked in automatic events.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime" target="_top">miniNotificationPresentationTime</a></tt></dt>
 <dd><p>Determines the time, in seconds, that a mini notification will remain on
 the screen before automatically hiding itself.
@@ -1230,6 +1238,30 @@ enters the background.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=start --><p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
 task support was introduced, and later.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/flushOnBackground;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;   name=Mixpanel::maximumSessionDuration -->
+<a name="//apple_ref/occ/instp/Mixpanel/maximumSessionDuration"></a>
+<h3><a name="maximumSessionDuration">maximumSessionDuration</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;name=start --><!-- begin abstract --><p>The maximum session duration (ms) that is tracked in automatic events.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/UInt64 //apple_ref/occ/tdef/UInt64 //apple_ref/occ/tag/UInt64 //apple_ref/occ/struct/UInt64 //apple_ref/occ/intf/UInt64 //apple_ref/doc/anysymbol/UInt64" machineGenerated="true" --><span class="type">UInt64</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/maximumSessionDuration //apple_ref/occ/data/Mixpanel/maximumSessionDuration //apple_ref/occ/data/maximumSessionDuration //apple_ref/occ/clconst/Mixpanel/maximumSessionDuration " machineGenerated="true" --><span class="var">maximumSessionDuration</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;name=start --><p>The default value is UINT64_MAX (no maximum session duration).
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/maximumSessionDuration;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;   name=Mixpanel::minimumSessionDuration -->
+<a name="//apple_ref/occ/instp/Mixpanel/minimumSessionDuration"></a>
+<h3><a name="minimumSessionDuration">minimumSessionDuration</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;name=start --><!-- begin abstract --><p>The minimum session duration (ms) that is tracked in automatic events.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;name=start -->@property (<span class="param">atomic</span>) <!-- a logicalPath="//apple_ref/occ/cl/UInt64 //apple_ref/occ/tdef/UInt64 //apple_ref/occ/tag/UInt64 //apple_ref/occ/struct/UInt64 //apple_ref/occ/intf/UInt64 //apple_ref/doc/anysymbol/UInt64" machineGenerated="true" --><span class="type">UInt64</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/econst/minimumSessionDuration //apple_ref/occ/data/Mixpanel/minimumSessionDuration //apple_ref/occ/data/minimumSessionDuration //apple_ref/occ/clconst/Mixpanel/minimumSessionDuration " machineGenerated="true" --><span class="var">minimumSessionDuration</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;name=start --><p>The default value is 10000 (10 seconds).
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/minimumSessionDuration;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instp;  uid=//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime;   name=Mixpanel::miniNotificationPresentationTime -->
 <a name="//apple_ref/occ/instp/Mixpanel/miniNotificationPresentationTime"></a>
 <h3><a name="miniNotificationPresentationTime">miniNotificationPresentationTime</a></h3>
@@ -1314,7 +1346,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Thursday, March 30, 2017
+<p class="hd_timestamp">Last Updated: Monday, May 22, 2017
 </p></div>
 </td></tr></table>
 </body></html>
