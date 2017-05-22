@@ -47,6 +47,7 @@
 }
 
 - (void)testSession {
+    self.mixpanel.minimumSessionDuration = 0;
     [self.mixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
     [self waitForMixpanelQueues];
     NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
@@ -67,9 +68,10 @@
     Mixpanel *mp = [[Mixpanel alloc] initWithToken:@"abc"
                                       launchOptions:nil
                                    andFlushInterval:60];
-    mp.automaticEventsEnabled = @FALSE;
-    self.mixpanel.automaticEventsEnabled = @TRUE;
+    mp.minimumSessionDuration = 0;
+    self.mixpanel.minimumSessionDuration = 0;
     [self.mixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
+    [mp.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
     [self waitForMixpanelQueues];
     dispatch_sync(mp.serialQueue, ^{
         dispatch_sync(mp.networkQueue, ^{  });
@@ -79,7 +81,9 @@
     XCTAssert([event[@"event"] isEqualToString:@"$ae_session"], @"should be app session event");
     XCTAssertNotNil(event[@"properties"][@"$ae_session_length"], @"should have session length");
     NSDictionary *otherEvent = [mp.eventsQueue lastObject];
-    XCTAssertNil(otherEvent, @"shouldn't have an event");
+    XCTAssertNotNil(otherEvent, @"should have an event");
+    XCTAssert([otherEvent[@"event"] isEqualToString:@"$ae_session"], @"should be app session event");
+    XCTAssertNotNil(otherEvent[@"properties"][@"$ae_session_length"], @"should have session length");
 }
 
 @end

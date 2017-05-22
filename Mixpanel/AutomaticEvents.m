@@ -76,8 +76,8 @@
 
 - (void)appWillResignActive:(NSNotification *)notification {
     sessionLength = [self roundOneDigit:[[NSDate date] timeIntervalSince1970] - sessionStartTime];
-    if (sessionLength > (double)(self.minimumSessionDuration / 1000) &&
-        sessionLength < (double)(self.maximumSessionDuration / 1000)) {
+    if (sessionLength >= (double)(self.minimumSessionDuration / 1000) &&
+        sessionLength <= (double)(self.maximumSessionDuration / 1000)) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc]
                                            initWithObjectsAndKeys:[NSNumber numberWithDouble:sessionLength], @"$ae_session_length", nil];
         [self.delegate track:@"$ae_session" properties:properties];
