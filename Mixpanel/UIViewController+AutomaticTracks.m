@@ -1,20 +1,20 @@
 //
-//  UIViewController+AutomaticEvents.m
+//  UIViewController+AutomaticTracks.m
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
-#import "UIViewController+AutomaticEvents.h"
-#import "Mixpanel+AutomaticEvents.h"
-#import "AutomaticEventsConstants.h"
+#import "UIViewController+AutomaticTracks.h"
+#import "Mixpanel+AutomaticTracks.h"
+#import "AutomaticTracksConstants.h"
 
-@implementation UIViewController (AutomaticEvents)
+@implementation UIViewController (AutomaticTracks)
 
 - (void)mp_viewDidAppear:(BOOL)animated {
     if ([self shouldTrackClass:self.class]) {
-        [[Mixpanel sharedAutomatedInstance] track:kAutomaticEventName];
+        [[Mixpanel sharedAutomatedInstance] track:kAutomaticTrackName];
     }
     [self mp_viewDidAppear:animated];
 }

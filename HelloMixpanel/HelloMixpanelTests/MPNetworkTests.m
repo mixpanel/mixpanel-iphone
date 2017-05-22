@@ -96,14 +96,14 @@
 // Flushing and empty event queue does nothing
 //
 - (void)testFlushEmptyEventQueue {
-    [self.network flushEventQueue:[NSArray array]];
+    [self.network flushEventQueue:[NSMutableArray array]];
 }
 
 //
 // Flushing an empty people queue does nothing
 //
 - (void)testFlushEmptyPeopleQueue {
-    [self.network flushPeopleQueue:[NSArray array]];
+    [self.network flushPeopleQueue:[NSMutableArray array]];
 }
 
 // TODO: Add flushing tests.

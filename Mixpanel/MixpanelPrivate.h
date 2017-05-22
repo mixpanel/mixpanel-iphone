@@ -9,8 +9,6 @@
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 
-#import "MixpanelExceptionHandler.h"
-
 #if TARGET_OS_IPHONE
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
 #import <CoreTelephony/CTCarrier.h>
@@ -19,8 +17,10 @@
 #endif
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-#import "Mixpanel+AutomaticEvents.h"
-#import "AutomaticEventsConstants.h"
+#import "Mixpanel+AutomaticTracks.h"
+#import "AutomaticTracksConstants.h"
+#import "AutomaticEvents.h"
+#import "MixpanelExceptionHandler.h"
 #endif
 #endif
 
@@ -42,7 +42,7 @@
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-@interface Mixpanel () <MPNotificationViewControllerDelegate>
+@interface Mixpanel () <MPNotificationViewControllerDelegate, TrackDelegate>
 #else
 @interface Mixpanel ()
 #endif
@@ -62,9 +62,10 @@
 #endif
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-@property (nonatomic) AutomaticEventMode validationMode;
+@property (nonatomic) AutomaticTrackMode validationMode;
 @property (nonatomic) NSUInteger validationEventCount;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
+@property (atomic, strong) AutomaticEvents *automaticEvents;
 #endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
@@ -89,7 +90,7 @@
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
-
+@property (nonatomic, strong) NSNumber *automaticEventsEnabled;
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) id currentlyShowingNotification;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;

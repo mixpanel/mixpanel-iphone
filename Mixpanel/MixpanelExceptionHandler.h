@@ -14,5 +14,4 @@
 
 + (instancetype)sharedHandler;
 - (void)addMixpanelInstance:(Mixpanel *)instance;
-
 @end

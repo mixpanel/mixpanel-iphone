@@ -1,5 +1,5 @@
 //
-//  UIApplication+AutomaticEvents.h
+//  UIApplication+AutomaticTracks.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UIApplication (AutomaticEvents)
+@interface UIApplication (AutomaticTracks)
 
 - (BOOL)mp_sendAction:(SEL)action
                    to:(nullable id)to

@@ -1,5 +1,5 @@
 //
-//  Mixpanel+AutomaticEvents.h
+//  Mixpanel+AutomaticTracks.h
 //  HelloMixpanel
 //
 //  Created by Sam Green on 2/23/16.
@@ -8,7 +8,7 @@
 
 #import "Mixpanel.h"
 
-@interface Mixpanel (AutomaticEvents)
+@interface Mixpanel (AutomaticTracks)
 
 + (instancetype)sharedAutomatedInstance;
 + (void)setSharedAutomatedInstance:(Mixpanel *)instance;
