@@ -19,31 +19,15 @@
 
 @end
 
-@implementation AutomaticEventsTests {
-    NSTimeInterval startTime;
-}
-
+@implementation AutomaticEventsTests
 
 - (void)setUp {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    NSString *firstOpenKey = @"MPFirstOpen";
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
-    [defaults setObject:nil forKey:firstOpenKey];
-    [defaults synchronize];
-    NSString *searchPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
-    [NSFileManager.defaultManager removeItemAtPath:searchPath error:nil];
     [super setUp];
-    startTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-}
-
-- (void)testFirstOpen {
-    [self waitForMixpanelQueues];
-    XCTAssert(self.mixpanel.eventsQueue.count == 1, @"First App Open Should be tracked");
 }
 
 - (void)testSession {
