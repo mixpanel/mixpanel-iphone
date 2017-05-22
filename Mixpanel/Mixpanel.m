@@ -20,7 +20,7 @@
 #import <IOKit/IOKitLib.h>
 #endif
 
-#define VERSION @"3.1.4"
+#define VERSION @"3.1.5"
 
 @implementation Mixpanel
 
