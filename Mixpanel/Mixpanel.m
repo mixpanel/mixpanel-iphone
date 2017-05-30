@@ -517,6 +517,15 @@ static NSString *defaultProjectToken;
     });
 }
 
+- (double)eventElapsedTime:(NSString *)event {
+    NSNumber *startTime = self.timedEvents[event];
+    if (!startTime) {
+        return 0;
+    } else {
+        return [[NSDate date] timeIntervalSince1970] - [startTime doubleValue];
+    }
+}
+
 - (void)clearTimedEvents
 {   dispatch_async(self.serialQueue, ^{
         self.timedEvents = [NSMutableDictionary dictionary];
