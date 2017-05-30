@@ -577,6 +577,16 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
+ Retrieves the time elapsed for the named event since <code>timeEvent:</code> was called.
+
+ @param event   the name of the event to be tracked that was passed to <code>timeEvent:</code>
+ */
+- (double)eventElapsedTime:(NSString *)event;
+
+/*!
+ @method
+
+ @abstract
  Clears all current event timers.
  */
 - (void)clearTimedEvents;
