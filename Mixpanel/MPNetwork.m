@@ -337,7 +337,9 @@ static const NSUInteger kBatchSize = 50;
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
 #if !MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR
     if (self.shouldManageNetworkActivityIndicator) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
+        });
     }
 #endif
 }
