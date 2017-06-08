@@ -74,8 +74,10 @@
     
     BOOL oldState = [UIApplication sharedApplication].isNetworkActivityIndicatorVisible;
     [self.network updateNetworkActivityIndicator:!oldState];
-    XCTAssert([UIApplication sharedApplication].networkActivityIndicatorVisible != oldState,
-              @"Updating the network activity indicator had no effect, even though we are managing it.");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssert([UIApplication sharedApplication].networkActivityIndicatorVisible != oldState,
+                  @"Updating the network activity indicator had no effect, even though we are managing it.");
+    });
 }
 
 //
@@ -86,8 +88,10 @@
     
     BOOL currentState = [UIApplication sharedApplication].isNetworkActivityIndicatorVisible;
     [self.network updateNetworkActivityIndicator:!currentState];
-    XCTAssert([UIApplication sharedApplication].isNetworkActivityIndicatorVisible == currentState,
-              @"Updating the network activity indicator had an effect, even though we are not managing it.");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        XCTAssert([UIApplication sharedApplication].isNetworkActivityIndicatorVisible == currentState,
+                  @"Updating the network activity indicator had an effect, even though we are not managing it.");
+    });
 }
 #endif
 
