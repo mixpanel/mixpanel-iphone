@@ -72,6 +72,7 @@ static NSString *defaultProjectToken;
         dispatch_once(&onceToken, ^{
             instances = [NSMutableDictionary dictionary];
             defaultProjectToken = apiToken;
+            loggingLockObject = [[NSObject alloc] init];
         });
     }
 
@@ -1295,18 +1296,22 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging {
-    gLoggingEnabled = enableLogging;
+    @synchronized (loggingLockObject) {
+        gLoggingEnabled = enableLogging;
 
-    if (gLoggingEnabled) {
-        asl_add_log_file(NULL, STDERR_FILENO);
-        asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
-    } else {
-        asl_remove_log_file(NULL, STDERR_FILENO);
+        if (gLoggingEnabled) {
+            asl_add_log_file(NULL, STDERR_FILENO);
+            asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
+        } else {
+            asl_remove_log_file(NULL, STDERR_FILENO);
+        }
     }
 }
 
 - (BOOL)enableLogging {
-    return gLoggingEnabled;
+    @synchronized (loggingLockObject) {
+        return gLoggingEnabled;
+    }
 }
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT

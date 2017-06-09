@@ -8,18 +8,22 @@
 
 #import <Foundation/Foundation.h>
 #import <asl.h>
+#import <pthread.h>
 
-static bool gLoggingEnabled = NO;
+static BOOL gLoggingEnabled = NO;
+static NSObject *loggingLockObject;
 
 #define __MP_MAKE_LOG_FUNCTION(LEVEL, NAME) \
 static inline void NAME(NSString *format, ...) { \
-    if (!gLoggingEnabled) return; \
-    va_list arg_list; \
-    va_start(arg_list, format); \
-    NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arg_list]; \
-    asl_add_log_file(NULL, STDERR_FILENO); \
-    asl_log(NULL, NULL, (LEVEL), "%s", [formattedString UTF8String]); \
-    va_end(arg_list); \
+    @synchronized(loggingLockObject) { \
+        if (!gLoggingEnabled) return; \
+        va_list arg_list; \
+        va_start(arg_list, format); \
+        NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arg_list]; \
+        asl_add_log_file(NULL, STDERR_FILENO); \
+        asl_log(NULL, NULL, (LEVEL), "%s", [formattedString UTF8String]); \
+        va_end(arg_list); \
+    } \
 }
 
 // Something has failed.
