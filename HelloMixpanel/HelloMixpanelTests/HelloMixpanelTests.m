@@ -326,7 +326,7 @@
                                              @"mp": @{
                                                      @"m": @"the_message_id",
                                                      @"c": @"the_campaign_id",
-                                                     @"journey_id": 123456
+                                                     @"journey_id": @123456
                                                      }
                                              }
                                      };
@@ -340,7 +340,7 @@
     NSDictionary *p = e[@"properties"];
     XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
-    XCTAssertEqualObjects(p[@"journey_id"], 123456, @"journey_id not equal");
+    XCTAssertEqualObjects(p[@"journey_id"], @123456, @"journey_id not equal");
     XCTAssertEqualObjects(p[@"message_type"], @"push", @"type does not equal inapp");
 }
 #endif

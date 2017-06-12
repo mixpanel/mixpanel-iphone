@@ -435,11 +435,11 @@ static NSString *defaultProjectToken;
 
         if (mpPayload[@"m"] && mpPayload[@"c"]) {
             NSMutableDictionary *properties = [mpPayload mutableCopy];
-            properties[@"campaign_id"] = mpPayload[@"c"]
-            properties[@"message_id"] = mpPayload[@"m"]
-            properties[@"message_type"] = @"push"
-            [properties removeObjectForKey:@"c"]
-            [properties removeObjectForKey:@"m"]
+            properties[@"campaign_id"] = mpPayload[@"c"];
+            properties[@"message_id"] = mpPayload[@"m"];
+            properties[@"message_type"] = @"push";
+            [properties removeObjectForKey:@"c"];
+            [properties removeObjectForKey:@"m"];
 
             [self track:event properties:properties];
         } else {
