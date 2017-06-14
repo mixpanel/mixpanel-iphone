@@ -456,7 +456,7 @@ static NSMapTable *originalCache;
 
     // The block that is called on swizzle executes the executeBlock on the main queue to minimize time
     // spent in the swizzle, and allow the newly added UI elements time to be initialized on screen.
-    void (^swizzleBlock)(id, SEL) = ^(id view, SEL command){
+    void (^swizzleExecuteBlock)(id, SEL) = ^(id view, SEL command){
         dispatch_async(dispatch_get_main_queue(), ^{ executeBlock(view, command);});
     };
 
@@ -464,7 +464,7 @@ static NSMapTable *originalCache;
         // Swizzle the method needed to check for this object coming onscreen
         [MPSwizzler swizzleSelector:self.swizzleSelector
                             onClass:self.swizzleClass
-                          withBlock:swizzleBlock
+                          withBlock:(swizzleBlock)swizzleExecuteBlock
                               named:self.name];
     }
 }

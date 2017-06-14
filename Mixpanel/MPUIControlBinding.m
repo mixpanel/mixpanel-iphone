@@ -150,11 +150,11 @@
 
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToWindow")
                             onClass:self.swizzleClass
-                          withBlock:executeBlock
+                          withBlock:(swizzleBlock)executeBlock
                               named:self.name];
         [MPSwizzler swizzleSelector:NSSelectorFromString(@"didMoveToSuperview")
                             onClass:self.swizzleClass
-                          withBlock:executeBlock
+                          withBlock:(swizzleBlock)executeBlock
                               named:self.name];
         self.running = true;
     }

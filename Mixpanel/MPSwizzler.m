@@ -42,7 +42,7 @@ static void mp_swizzledMethod_2(id self, SEL _cmd)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd);
+            ((void(^)(id, SEL))block)(self, _cmd);
         }
     }
 }
@@ -57,7 +57,7 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, arg);
+            ((void(^)(id, SEL, id))block)(self, _cmd, arg);
         }
     }
 }
@@ -72,7 +72,7 @@ static void mp_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, arg, arg2);
+            ((void(^)(id, SEL, id, id))block)(self, _cmd, arg, arg2);
         }
     }
 }
@@ -87,7 +87,7 @@ static void mp_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, arg, arg2, arg3);
+            ((void(^)(id, SEL, id, id, id))block)(self, _cmd, arg, arg2, arg3);
         }
     }
 }

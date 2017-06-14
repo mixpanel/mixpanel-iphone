@@ -620,7 +620,7 @@ static NSString *defaultProjectToken;
     [self flushWithCompletion:nil];
 }
 
-- (void)flushWithCompletion:(void (^)())handler
+- (void)flushWithCompletion:(void (^)(void))handler
 {
     [self dispatchOnNetworkQueue:^{
         MPLogInfo(@"%@ flush starting", self);
@@ -1656,7 +1656,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return;
     }
 
-    void (^completionBlock)() = ^void() {
+    void (^completionBlock)(void) = ^void() {
         self.currentlyShowingNotification = nil;
         self.notificationViewController = nil;
     };
@@ -1765,7 +1765,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 [connection sendMessage:message];
             };
             
-            [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
+            [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:(swizzleBlock)block named:@"track_properties"];
         }
     };
     void (^disconnectCallback)(void) = ^{
@@ -1819,7 +1819,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self track:@"$experiment_started" properties:@{@"$experiment_id": @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
-- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
+- (void)joinExperimentsWithCallback:(void(^)(void))experimentsLoadedCallback
 {
     [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
         for (MPVariant *variant in newVariants) {
