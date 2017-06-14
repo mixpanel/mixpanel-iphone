@@ -92,7 +92,7 @@ static void mp_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3)
     }
 }
 
-static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMethod_2, mp_swizzledMethod_3, mp_swizzledMethod_4, mp_swizzledMethod_5};
+static IMP mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1] =  {(IMP)mp_swizzledMethod_2, (IMP)mp_swizzledMethod_3, (IMP)mp_swizzledMethod_4, (IMP)mp_swizzledMethod_5};
 
 @implementation MPSwizzler
 
@@ -149,7 +149,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
         if (numArgs >= MIN_ARGS && numArgs <= MAX_ARGS) {
                 
             BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
-            IMP swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
+            IMP swizzledMethod = mp_swizzledMethods[numArgs - 2];
             MPSwizzle *swizzle = [self swizzleForMethod:aMethod];
                 
             if (isLocal) {
