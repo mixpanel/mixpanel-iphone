@@ -434,9 +434,14 @@ static NSString *defaultProjectToken;
         NSDictionary *mpPayload = [rawMp isKindOfClass:[NSDictionary class]] ? rawMp : nil;
 
         if (mpPayload[@"m"] && mpPayload[@"c"]) {
-            [self track:event properties:@{@"campaign_id": mpPayload[@"c"],
-                                           @"message_id": mpPayload[@"m"],
-                                           @"message_type": @"push"}];
+            NSMutableDictionary *properties = [mpPayload mutableCopy];
+            properties[@"campaign_id"] = mpPayload[@"c"];
+            properties[@"message_id"] = mpPayload[@"m"];
+            properties[@"message_type"] = @"push";
+            [properties removeObjectForKey:@"c"];
+            [properties removeObjectForKey:@"m"];
+
+            [self track:event properties:properties];
         } else {
             MPLogInfo(@"%@ malformed mixpanel push payload %@", self, mpPayload);
         }
