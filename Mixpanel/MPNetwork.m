@@ -131,8 +131,16 @@ static const NSUInteger kBatchSize = 50;
         }
 
         @synchronized (mixpanel) {
-            [queueCopyForFlushing removeObjectsInArray:batch];
-            [queue removeObjectsInArray:batch];
+            for (NSDictionary *event in batch) {
+                NSUInteger index = [queueCopyForFlushing indexOfObjectIdenticalTo:event];
+                if (index != NSNotFound) {
+                    [queueCopyForFlushing removeObjectAtIndex:index];
+                }
+                index = [queue indexOfObjectIdenticalTo:event];
+                if (index != NSNotFound) {
+                    [queue removeObjectAtIndex:index];
+                }
+            }
         }
     }
 }
