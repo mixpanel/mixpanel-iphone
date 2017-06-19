@@ -625,7 +625,7 @@ static NSString *defaultProjectToken;
     [self flushWithCompletion:nil];
 }
 
-- (void)flushWithCompletion:(void (^)())handler
+- (void)flushWithCompletion:(void (^)(void))handler
 {
     [self dispatchOnNetworkQueue:^{
         MPLogInfo(@"%@ flush starting", self);
@@ -1824,7 +1824,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     [self track:@"$experiment_started" properties:@{@"$experiment_id": @(variant.experimentID), @"$variant_id": @(variant.ID)}];
 }
 
-- (void)joinExperimentsWithCallback:(void(^)())experimentsLoadedCallback
+- (void)joinExperimentsWithCallback:(void(^)(void))experimentsLoadedCallback
 {
     [self checkForVariantsWithCompletion:^(NSSet *newVariants) {
         for (MPVariant *variant in newVariants) {
