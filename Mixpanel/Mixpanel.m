@@ -1692,9 +1692,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)markNotificationShown:(MPNotification *)notification
 {
-    MPLogInfo(@"%@ marking notification shown: %@, %@", self, @(notification.ID), _shownNotifications);
+    MPLogInfo(@"%@ marking notification shown: %@, %@", self, @(notification.ID), self.shownNotifications);
 
-    [_shownNotifications addObject:@(notification.ID)];
+    dispatch_async(self.serialQueue, ^{
+        [self.shownNotifications addObject:@(notification.ID)];
+        [self archiveProperties];
+    });
 
     NSDictionary *properties = @{
                                  @"$campaigns": @(notification.ID),
