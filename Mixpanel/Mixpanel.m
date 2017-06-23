@@ -4,11 +4,13 @@
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 
+#import <objc/runtime.h>
 #import "Mixpanel.h"
 #import "MixpanelPrivate.h"
 #import "MixpanelPeople.h"
 #import "MixpanelPeoplePrivate.h"
 #import "MPNetworkPrivate.h"
+#import "MPSwizzler.h"
 
 #import "MPLogger.h"
 #import "MPFoundation.h"
@@ -139,7 +141,7 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
-
+        [self trackPushNotificationAutomatically];
         NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (remoteNotification) {
             [self trackPushNotification:remoteNotification event:@"$app_open"];
@@ -423,6 +425,26 @@ static NSString *defaultProjectToken;
 #endif
 }
 
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+- (void)trackPushNotificationAutomatically {
+    SEL selector = nil;
+    Class cls = [[UIApplication sharedApplication].delegate class];
+    if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
+        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:");
+    } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:"))) {
+        selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:");
+    }
+
+    if (selector) {
+        [MPSwizzler swizzleSelector:selector
+                            onClass:cls
+                          withBlock:^(id view, SEL command, NSDictionary *userInfo) {
+                              [self trackPushNotification:userInfo];
+                          }
+                              named:@"notification opened"];
+    }
+}
+#endif
 
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
