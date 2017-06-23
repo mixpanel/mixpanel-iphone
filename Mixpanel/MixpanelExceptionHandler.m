@@ -78,13 +78,13 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 }
 
 - (void)setupHandlers {
-    NSSetUncaughtExceptionHandler(&HandleException);
-    signal(SIGABRT, SignalHandler);
-    signal(SIGILL, SignalHandler);
-    signal(SIGSEGV, SignalHandler);
-    signal(SIGFPE, SignalHandler);
-    signal(SIGBUS, SignalHandler);
-    signal(SIGPIPE, SignalHandler);
+    NSSetUncaughtExceptionHandler(&MPHandleException);
+    signal(SIGABRT, MPSignalHandler);
+    signal(SIGILL, MPSignalHandler);
+    signal(SIGSEGV, MPSignalHandler);
+    signal(SIGFPE, MPSignalHandler);
+    signal(SIGBUS, MPSignalHandler);
+    signal(SIGPIPE, MPSignalHandler);
 }
 
 - (void)addMixpanelInstance:(Mixpanel *)instance {
@@ -93,7 +93,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     [self.mixpanelInstances addObject:instance];
 }
 
-void SignalHandler(int signal)
+void MPSignalHandler(int signal)
 {
     int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
     if (exceptionCount > UncaughtExceptionMaximum)
@@ -124,7 +124,7 @@ void SignalHandler(int signal)
                                            forKey:UncaughtExceptionHandlerSignalKey]] waitUntilDone:YES];
 }
 
-void HandleException(NSException *exception)
+void MPHandleException(NSException *exception)
 {
     int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
     if (exceptionCount > UncaughtExceptionMaximum)
