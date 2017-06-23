@@ -1011,7 +1011,7 @@ static NSString *defaultProjectToken;
 - (NSDictionary *)collectAutomaticProperties
 {
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    NSString *deviceModel = [self deviceModel];
+    id deviceModel = [self deviceModel] ? : [NSNull null];
 
     // Use setValue semantics to avoid adding keys where value can be nil.
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_version"];
