@@ -438,7 +438,7 @@ static NSString *defaultProjectToken;
     if (selector) {
         [MPSwizzler swizzleSelector:selector
                             onClass:cls
-                          withBlock:^(id view, SEL command, NSDictionary *userInfo) {
+                          withBlock:^(id view, SEL command, UIApplication *application, NSDictionary *userInfo) {
                               [self trackPushNotification:userInfo];
                           }
                               named:@"notification opened"];
