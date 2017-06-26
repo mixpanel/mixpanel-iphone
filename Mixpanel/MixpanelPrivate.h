@@ -113,6 +113,7 @@
 - (NSString *)propertiesFilePath;
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+- (void)trackPushNotification:(NSDictionary *)userInfo;
 - (void)showNotificationWithObject:(MPNotification *)notification;
 - (void)markVariantRun:(MPVariant *)variant;
 - (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
