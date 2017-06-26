@@ -141,7 +141,7 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         [self executeCachedVariants];
         [self executeCachedEventBindings];
-        [self trackPushNotificationAutomatically];
+        [self setupAutomaticPushTracking];
         NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
         if (remoteNotification) {
             [self trackPushNotification:remoteNotification event:@"$app_open"];
@@ -426,7 +426,7 @@ static NSString *defaultProjectToken;
 }
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-- (void)trackPushNotificationAutomatically {
+- (void)setupAutomaticPushTracking {
     SEL selector = nil;
     Class cls = [[UIApplication sharedApplication].delegate class];
     if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
@@ -444,7 +444,6 @@ static NSString *defaultProjectToken;
                               named:@"notification opened"];
     }
 }
-#endif
 
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
@@ -474,6 +473,7 @@ static NSString *defaultProjectToken;
 {
     [self trackPushNotification:userInfo event:@"$campaign_received"];
 }
+#endif
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
