@@ -1831,9 +1831,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MPLogInfo(@"%@ marking variant %@ shown for experiment %@", self, @(variant.ID), @(variant.experimentID));
     NSDictionary *shownVariant = @{@(variant.experimentID).stringValue: @(variant.ID)};
-    if (self.people.distinctId) {
-        [self.people merge:@{@"$experiments": shownVariant}];
-    }
+    [self.people merge:@{@"$experiments": shownVariant}];
 
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *superProperties = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
