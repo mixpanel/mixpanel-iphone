@@ -1687,7 +1687,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return;
     }
 
-    void (^completionBlock)() = ^void() {
+    void (^completionBlock)(void) = ^void() {
         self.currentlyShowingNotification = nil;
         self.notificationViewController = nil;
     };
@@ -1799,7 +1799,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 [connection sendMessage:message];
             };
             
-            [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:block named:@"track_properties"];
+            [MPSwizzler swizzleSelector:@selector(track:properties:) onClass:[Mixpanel class] withBlock:(swizzleBlock)block named:@"track_properties"];
         }
     };
     void (^disconnectCallback)(void) = ^{

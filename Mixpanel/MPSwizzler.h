@@ -11,7 +11,7 @@
 // Cast to turn things that are not ids into NSMapTable keys
 #define MAPTABLE_ID(x) (__bridge id)((void *)x)
 
-typedef void (^swizzleBlock)();
+typedef void (^swizzleBlock)(void);
 
 @interface MPSwizzler : NSObject
 

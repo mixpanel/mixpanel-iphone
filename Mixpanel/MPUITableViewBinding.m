@@ -92,7 +92,7 @@
 
         [MPSwizzler swizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
                             onClass:self.swizzleClass
-                          withBlock:block
+                          withBlock:(swizzleBlock)block
                               named:self.name];
         self.running = true;
     }

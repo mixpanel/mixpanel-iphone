@@ -42,7 +42,7 @@ static void mp_swizzledMethod_2(id self, SEL _cmd)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd);
+            ((void(^)(id, SEL))block)(self, _cmd);
         }
     }
 }
@@ -57,7 +57,7 @@ static void mp_swizzledMethod_3(id self, SEL _cmd, id arg)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, arg);
+            ((void(^)(id, SEL, id))block)(self, _cmd, arg);
         }
     }
 }
@@ -72,7 +72,7 @@ static void mp_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, arg, arg2);
+            ((void(^)(id, SEL, id, id))block)(self, _cmd, arg, arg2);
         }
     }
 }
@@ -87,12 +87,12 @@ static void mp_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3)
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
         swizzleBlock block;
         while ((block = [blocks nextObject])) {
-            block(self, _cmd, arg, arg2, arg3);
+            ((void(^)(id, SEL, id, id, id))block)(self, _cmd, arg, arg2, arg3);
         }
     }
 }
 
-static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMethod_2, mp_swizzledMethod_3, mp_swizzledMethod_4, mp_swizzledMethod_5};
+static IMP mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1] =  {(IMP)mp_swizzledMethod_2, (IMP)mp_swizzledMethod_3, (IMP)mp_swizzledMethod_4, (IMP)mp_swizzledMethod_5};
 
 @implementation MPSwizzler
 
@@ -149,7 +149,7 @@ static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMetho
         if (numArgs >= MIN_ARGS && numArgs <= MAX_ARGS) {
                 
             BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
-            IMP swizzledMethod = (IMP)mp_swizzledMethods[numArgs - 2];
+            IMP swizzledMethod = mp_swizzledMethods[numArgs - 2];
             MPSwizzle *swizzle = [self swizzleForMethod:aMethod];
                 
             if (isLocal) {
