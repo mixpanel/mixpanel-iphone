@@ -53,11 +53,6 @@
 #define maybe_bridge(x) (x)
 #endif
 
-#if !__has_feature(objc_arc)
-#error MPWebSocket must be compiled with ARC enabled
-#endif
-
-
 typedef NS_OPTIONS(unsigned int, MPOpCode)  {
     MPOpCodeTextFrame = 0x1,
     MPOpCodeBinaryFrame = 0x2,
