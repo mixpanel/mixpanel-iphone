@@ -22,6 +22,10 @@
 #import <IOKit/IOKitLib.h>
 #endif
 
+#if !__has_feature(objc_arc)
+#error The Mixpanel library must be compiled with ARC enabled
+#endif
+
 #define VERSION @"3.1.8"
 
 @implementation Mixpanel
