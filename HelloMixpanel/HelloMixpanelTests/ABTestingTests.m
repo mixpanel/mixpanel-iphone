@@ -91,6 +91,21 @@
     .withBody([NSData dataWithContentsOfURL:responseURL]);
 }
 
+- (void)waitForABTest {
+    __block BOOL hasCalledBack = NO;
+    dispatch_async(self.mixpanel.serialQueue, ^{
+        dispatch_async(self.mixpanel.networkQueue, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                hasCalledBack = true;
+            });
+        });
+    });
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
+    while (hasCalledBack == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+}
+
 #pragma mark - Invocation and Swizzling
 /*
  Test that invocations for various objects work. This includes the parsing and
@@ -303,19 +318,17 @@
     
     [self.mixpanel identify:@"ABC"];
     
-    XCTestExpectation *expect = [self expectationWithDescription:@"wait for variants to be executed"];
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         XCTAssertEqual([variants count], 2u, @"Should have got 2 new variants from decide");
         for (MPVariant *variant in variants) {
             [variant execute];
         }
-        [expect fulfill];
     }];
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForABTest];
     
     // Test that calling again uses the cache (no extra requests to decide).
     [self.mixpanel checkForDecideResponseWithCompletion:nil];
-    [self waitForMixpanelQueues];
+    [self waitForABTest];
     
     XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
     
@@ -323,7 +336,7 @@
     [self.mixpanel checkForDecideResponseWithCompletion:^(NSArray *notifications, NSSet *variants, NSSet *eventBindings) {
         XCTAssertEqual([variants count], 0u, @"Should not get any *new* variants if the decide response was the same");
     } useCache:NO];
-    [self waitForMixpanelQueues];
+    [self waitForABTest];
     
     [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
@@ -333,7 +346,7 @@
         completionCalled = YES;
         XCTAssertEqual([variants count], 1u, @"Should have got 1 new variants from decide (new variant for same experiment)");
     } useCache:NO];
-    [self waitForMixpanelQueues];
+    [self waitForABTest];
     XCTAssert(completionCalled, @"completion block should have been called");
     
     // Reset to default decide response
@@ -350,7 +363,7 @@
 
     [self.mixpanel identify:@"ABC"];
     [self.mixpanel joinExperiments];
-    [self waitForMixpanelQueues];
+    [self waitForABTest];
 
     XCTAssertEqual([self.mixpanel.variants count], 2u, @"Should have 2 variants");
     XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
@@ -360,19 +373,15 @@
     // Returning a new variant for the same experiment from decide should override the old one
     [[LSNocilla sharedInstance] clearStubs];
     [self stubDecide:@"test_decide_response_2"];
-    
-    __block BOOL lastCall = NO;
-    [self.mixpanel joinExperimentsWithCallback:^{
-        XCTAssert(lastCall, @"callback should run after variants have been processed");
-    }];
-    [self waitForMixpanelQueues];
 
-    XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
-    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
-    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && !variant.running && variant.finished;}] count], 1u, @"Variant 2 should be stopped but marked as finished.");
-    XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 3 && variant.running;}] count], 1u, @"We should be running variant 3");
-    XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[2] * 255), 255, @"Button background should be blue");
-    lastCall = YES;
+    [self.mixpanel joinExperimentsWithCallback:^{
+        XCTAssertEqual([self.mixpanel.variants count], 3u, @"Should have 3 variants");
+        XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 1 && variant.running;}] count], 1u, @"We should be running variant 1");
+        XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 2 && !variant.running && variant.finished;}] count], 1u, @"Variant 2 should be stopped but marked as finished.");
+        XCTAssertEqual([[self.mixpanel.variants objectsPassingTest:^BOOL(MPVariant *variant, BOOL *stop) { return variant.ID == 3 && variant.running;}] count], 1u, @"We should be running variant 3");
+        XCTAssertEqual((int)(CGColorGetComponents(button.backgroundColor.CGColor)[2] * 255), 255, @"Button background should be blue");
+    }];
+    [self waitForABTest];
 }
 
 - (void)testVariantsTracked {
@@ -385,20 +394,20 @@
             [self.mixpanel markVariantRun:variant];
         }
     }];
-    [self waitForMixpanelQueues];
-    
+    [self waitForABTest];
+
     XCTestExpectation *expect = [self expectationWithDescription:@"decide variants tracked"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         XCTAssertEqual([self.mixpanel.variants count], (uint)2, @"no variants found");
         XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
         XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
-        
+
         XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
         for (NSDictionary *event in self.mixpanel.eventsQueue) {
             XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
             XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
         }
-        
+
         [expect fulfill];
     });
     [self waitForExpectationsWithTimeout:2 handler:nil];
@@ -496,7 +505,11 @@
 
 - (void)testUITableViewCellOrdering
 {
-    MPObjectSelector *sel = [MPObjectSelector objectSelectorWithString:@"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell[0]"];
+    NSString *selectorString = @"/HomeViewController/UITableViewController/UITableView/UITableViewWrapperView/UITableViewCell[0]";
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){11, 0, 0}]) {
+        selectorString = @"/HomeViewController/UITableViewController/UITableView/UITableViewCell[0]";
+    }
+    MPObjectSelector *sel = [MPObjectSelector objectSelectorWithString:selectorString];
     NSArray *selected = [sel selectFromRoot:[[UIApplication sharedApplication] keyWindow].rootViewController];
     XCTAssertEqual([selected count], 1U, @"Should have selected one object");
     XCTAssert([selected[0] isKindOfClass:[UITableViewCell class]], @"object should be UITableViewCell");

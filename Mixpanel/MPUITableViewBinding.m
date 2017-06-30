@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
+#import "NSThread+MPHelpers.h"
 
 @implementation MPUITableViewBinding
 
@@ -76,18 +77,20 @@
 {
     if (!self.running && self.swizzleClass != nil) {
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
-            NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
-            // select targets based off path
-            if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
-                UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-                NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
-                [[self class] track:[self eventName]
-                                      properties:@{
-                                                   @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
-                                                   @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
-                                                   @"Cell Label": label
-                                                }];
-            }
+            [NSThread mp_safelyRunOnMainThreadSync:^{
+                NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
+                // select targets based off path
+                if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
+                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+                    NSString *label = (cell && cell.textLabel && cell.textLabel.text) ? cell.textLabel.text : @"";
+                    [[self class] track:[self eventName]
+                             properties:@{
+                                          @"Cell Index": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.row],
+                                          @"Cell Section": [NSString stringWithFormat: @"%ld", (unsigned long)indexPath.section],
+                                          @"Cell Label": label
+                                          }];
+                }
+            }];
         };
 
         [MPSwizzler swizzleSelector:@selector(tableView:didSelectRowAtIndexPath:)
