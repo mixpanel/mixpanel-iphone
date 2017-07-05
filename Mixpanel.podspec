@@ -11,22 +11,26 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.ios.source_files  = 'Mixpanel/**/*.{m,h}'
   s.ios.exclude_files = 'Mixpanel/MixpanelWatchProperties.{m,h}'
-  s.ios.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
+  s.ios.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h', 'Mixpanel/MPTweak.h', 'Mixpanel/MPTweakInline.h', 'Mixpanel/MPTweakInlineInternal.h', 'Mixpanel/MPTweakStore.h', 'Mixpanel/_MPTweakBindObserver.h'
+  s.ios.private_header_files = 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MixpanelPrivate.h'
   s.ios.resources   = ['Mixpanel/**/*.{png,storyboard,xib}']
   s.ios.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
   s.tvos.deployment_target = '9.0'
   s.tvos.source_files  = 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h', 'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelExceptionHandler.{m,h}'
-  s.tvos.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h',  'Mixpanel/MPLogger.h'
+  s.tvos.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h'
+  s.tvos.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
   s.tvos.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_TVOS'}
   s.tvos.frameworks = 'UIKit', 'Foundation'
   s.watchos.deployment_target = '2.0'
   s.watchos.source_files = 'Mixpanel/MixpanelWatchProperties.{m,h}', 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h', 'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelExceptionHandler.{m,h}'
-  s.watchos.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h'
+  s.watchos.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h'
+  s.watchos.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
   s.watchos.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_WATCHOS'}
   s.watchos.frameworks = 'WatchKit', 'Foundation'
   s.osx.deployment_target = '10.10'
   s.osx.source_files  = 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h', 'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelExceptionHandler.{m,h}'
-  s.osx.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h',  'Mixpanel/MPLogger.h'
+  s.osx.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h'
+  s.osx.private_header_files = 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h'
   s.osx.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) MIXPANEL_MACOS'}
   s.osx.frameworks = 'Cocoa', 'Foundation', 'IOKit'
 

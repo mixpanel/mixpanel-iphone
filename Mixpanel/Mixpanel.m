@@ -10,7 +10,6 @@
 #import "MixpanelPeople.h"
 #import "MixpanelPeoplePrivate.h"
 #import "MPNetworkPrivate.h"
-#import "MPSwizzler.h"
 
 #import "MPLogger.h"
 #import "MPFoundation.h"

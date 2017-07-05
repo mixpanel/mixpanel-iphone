@@ -277,7 +277,7 @@
 		51C3B2391CA5B2D3004CE37C /* AutomaticTracksConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticTracksConstants.h; sourceTree = "<group>"; };
 		51F308791C86881900614A13 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
 		51F3087A1C86881900614A13 /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
-		51FF9AB71C2B77B4004B0028 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Mixpanel/module.modulemap; sourceTree = "<group>"; };
+		51FF9AB71C2B77B4004B0028 /* ios.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = ios.modulemap; path = Mixpanel/ios.modulemap; sourceTree = "<group>"; };
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C170C2E1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
@@ -786,7 +786,7 @@
 				7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */,
 				7C170CBC1A4A035F00D9E0F2 /* snapshot_config.json */,
 				7C170CBD1A4A035F00D9E0F2 /* test_variant.json */,
-				51FF9AB71C2B77B4004B0028 /* module.modulemap */,
+				51FF9AB71C2B77B4004B0028 /* ios.modulemap */,
 				24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */,
 				5166DCDF1CAF0D2C00920FF1 /* watchos.modulemap */,
 				E1C2C0BA1CFDD53B0052172F /* tvos.modulemap */,
@@ -1533,7 +1533,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MODULEMAP_FILE = Mixpanel/module.modulemap;
+				MODULEMAP_FILE = Mixpanel/ios.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1554,7 +1554,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MODULEMAP_FILE = Mixpanel/module.modulemap;
+				MODULEMAP_FILE = Mixpanel/ios.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
