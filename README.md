@@ -103,7 +103,9 @@ You initialize your Mixpanel instance with the token provided to you on mixpanel
 <a name="start-tracking"></a>
 # Start tracking
 
-Tracking your first event is as easy as adding `track:` or `track:properties:` anywhere after initializing Mixpanel.
+After installing the library into your iOS app, Mixpanel will <a href="https://mixpanel.com/help/questions/articles/which-common-mobile-events-can-mixpanel-collect-on-my-behalf-automatically" target="_blank">automatically collect common mobile events</a>. You can enable/ disable automatic collection through your <a href="https://mixpanel.com/help/questions/articles/how-do-i-enable-common-mobile-events-if-i-have-already-implemented-mixpanel" target="_blank">project settings</a>.
+
+Tracking additional events is as easy as adding `track:` or `track:properties:` anywhere after initializing Mixpanel.
 
 ```objective-c
 [[Mixpanel sharedInstance] track:@"Event name"];
