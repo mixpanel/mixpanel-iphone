@@ -241,7 +241,7 @@
 
 - (BOOL)isEqualToVariant:(MPVariant *)variant
 {
-    return self.ID == variant.ID && self.actions == variant.actions;
+    return self.ID == variant.ID && [self.actions isEqual:variant.actions];
 }
 
 - (BOOL)isEqual:(id)object
