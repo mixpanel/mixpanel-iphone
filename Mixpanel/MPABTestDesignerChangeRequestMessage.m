@@ -30,9 +30,7 @@ NSString *const MPABTestDesignerChangeRequestMessageType = @"change_request";
 
         id actions = [self payload][@"actions"];
         if ([actions isKindOfClass:[NSArray class]]) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [variant addActionsFromJSONObject:actions andExecute:YES];
-            });
+            [variant addActionsFromJSONObject:actions andExecute:YES];
         }
 
         MPABTestDesignerChangeResponseMessage *changeResponseMessage = [MPABTestDesignerChangeResponseMessage message];

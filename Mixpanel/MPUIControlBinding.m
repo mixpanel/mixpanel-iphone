@@ -8,6 +8,7 @@
 
 #import "MPSwizzler.h"
 #import "MPUIControlBinding.h"
+#import "NSThread+MPHelpers.h"
 
 @interface MPUIControlBinding()
 
@@ -110,40 +111,42 @@
     
     if (!self.running) {
         void (^executeBlock)(id, SEL) = ^(id view, SEL command) {
-            NSArray *objects;
-            NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
-            if (view && [self.appliedTo containsObject:view]) {
-                if (![self.path fuzzyIsLeafSelected:view fromRoot:root]) {
-                    [self stopOnView:view];
-                    [self.appliedTo removeObject:view];
-                }
-            } else {
-                // select targets based off path
-                if (view) {
-                    if ([self.path fuzzyIsLeafSelected:view fromRoot:root]) {
-                        objects = @[view];
-                    } else {
-                        objects = @[];
+            [NSThread mp_safelyRunOnMainThreadSync:^{
+                NSArray *objects;
+                NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
+                if (view && [self.appliedTo containsObject:view]) {
+                    if (![self.path fuzzyIsLeafSelected:view fromRoot:root]) {
+                        [self stopOnView:view];
+                        [self.appliedTo removeObject:view];
                     }
                 } else {
-                    objects = [self.path fuzzySelectFromRoot:root];
-                }
-
-                for (UIControl *control in objects) {
-                    if ([control isKindOfClass:[UIControl class]]) {
-                        if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
-                            [control addTarget:self
-                                        action:@selector(preVerify:forEvent:)
-                              forControlEvents:self.verifyEvent];
+                    // select targets based off path
+                    if (view) {
+                        if ([self.path fuzzyIsLeafSelected:view fromRoot:root]) {
+                            objects = @[view];
+                        } else {
+                            objects = @[];
                         }
+                    } else {
+                        objects = [self.path fuzzySelectFromRoot:root];
+                    }
 
-                        [control addTarget:self
-                                    action:@selector(execute:forEvent:)
-                          forControlEvents:self.controlEvent];
-                        [self.appliedTo addObject:control];
+                    for (UIControl *control in objects) {
+                        if ([control isKindOfClass:[UIControl class]]) {
+                            if (self.verifyEvent != 0 && self.verifyEvent != self.controlEvent) {
+                                [control addTarget:self
+                                            action:@selector(preVerify:forEvent:)
+                                  forControlEvents:self.verifyEvent];
+                            }
+
+                            [control addTarget:self
+                                        action:@selector(execute:forEvent:)
+                              forControlEvents:self.controlEvent];
+                            [self.appliedTo addObject:control];
+                        }
                     }
                 }
-            }
+            }];
         };
 
         executeBlock(nil, _cmd);

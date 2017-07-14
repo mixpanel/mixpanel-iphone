@@ -41,7 +41,6 @@
 		519C548C1D131E6500407F56 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		519C548E1D131E6500407F56 /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C548B1D131E6500407F56 /* MixpanelPeople.m */; };
 		519C548F1D131E6500407F56 /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C548B1D131E6500407F56 /* MixpanelPeople.m */; };
-		519C54911D131EC900407F56 /* MixpanelPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54901D131EC800407F56 /* MixpanelPrivate.h */; };
 		51C3B23A1CA5B2D3004CE37C /* UIViewController+AutomaticTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 51C3B2301CA5B2D3004CE37C /* UIViewController+AutomaticTracks.m */; };
 		51C3B23B1CA5B2D3004CE37C /* UIViewController+AutomaticTracks.h in Headers */ = {isa = PBXBuildFile; fileRef = 51C3B2311CA5B2D3004CE37C /* UIViewController+AutomaticTracks.h */; };
 		51C3B23C1CA5B2D3004CE37C /* UIApplication+AutomaticTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 51C3B2321CA5B2D3004CE37C /* UIApplication+AutomaticTracks.m */; };
@@ -215,6 +214,8 @@
 		E1F161991E68C59900391AE3 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */; };
 		F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */; };
+		F0B0E7AB1F05B8CA00F0FF08 /* NSThread+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */; };
+		F0B0E7AC1F05B8CA00F0FF08 /* NSThread+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */; };
 		F0F179F61DB6CA12003DFD43 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
 		F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */; };
 		F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
@@ -412,6 +413,8 @@
 		E1F1615C1E68B87500391AE3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchProperties.h; sourceTree = "<group>"; };
 		F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchProperties.m; sourceTree = "<group>"; };
+		F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSThread+MPHelpers.h"; sourceTree = "<group>"; };
+		F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSThread+MPHelpers.m"; sourceTree = "<group>"; };
 		F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphoneportrait.xib"; sourceTree = "<group>"; };
 		F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphonelandscape.xib"; sourceTree = "<group>"; };
 		F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~ipad.xib"; sourceTree = "<group>"; };
@@ -584,6 +587,8 @@
 				7C170CC31A4A035F00D9E0F2 /* UIImage+MPImageEffects.m */,
 				513583951BD1BE50008EEDF1 /* UIView+MPHelpers.h */,
 				513583961BD1BE50008EEDF1 /* UIView+MPHelpers.m */,
+				F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */,
+				F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -751,6 +756,7 @@
 				7C170C2C1A4A02F500D9E0F2 /* Mixpanel */,
 				E1C2BDE01CFD5F9D0052172F /* Frameworks */,
 				7C170C2B1A4A02F500D9E0F2 /* Products */,
+				F0B0E7A61F05B07200F0FF08 /* Recovered References */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -863,6 +869,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F0B0E7A61F05B07200F0FF08 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				E1F1615C1E68B87500391AE3 /* IOKit.framework */,
+				E1F160DA1E68AC5E00391AE3 /* Foundation.framework */,
+				E1F160D81E68AC5A00391AE3 /* Cocoa.framework */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -943,7 +959,6 @@
 				7C170D2E1A4A035F00D9E0F2 /* MPUITableViewBinding.h in Headers */,
 				7C170CCE1A4A035F00D9E0F2 /* MPABTestDesignerChangeResponseMessage.h in Headers */,
 				51C3B2421CA5B2D3004CE37C /* Mixpanel+AutomaticTracks.h in Headers */,
-				519C54911D131EC900407F56 /* MixpanelPrivate.h in Headers */,
 				7C170D001A4A035F00D9E0F2 /* MPNotificationViewController.h in Headers */,
 				E12FA3B31D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h in Headers */,
 				7C170CDF1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
@@ -968,6 +983,7 @@
 				7C170CF61A4A035F00D9E0F2 /* MPDesignerSessionCollection.h in Headers */,
 				5177CFC71C5032B600271843 /* MixpanelExceptionHandler.h in Headers */,
 				7C170D041A4A035F00D9E0F2 /* MPObjectIdentifierProvider.h in Headers */,
+				F0B0E7AB1F05B8CA00F0FF08 /* NSThread+MPHelpers.h in Headers */,
 				7C170CD21A4A035F00D9E0F2 /* MPABTestDesignerClearResponseMessage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1098,7 +1114,7 @@
 		7C170C211A4A02F500D9E0F2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
 					7C170C291A4A02F500D9E0F2 = {
@@ -1248,6 +1264,7 @@
 				7C170D281A4A035F00D9E0F2 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				F17EB3541E393FD40002739C /* MPNotificationButton.m in Sources */,
 				7C170D0A1A4A035F00D9E0F2 /* MPObjectSerializer.m in Sources */,
+				F0B0E7AC1F05B8CA00F0FF08 /* NSThread+MPHelpers.m in Sources */,
 				7C170CF01A4A035F00D9E0F2 /* MPClassDescription.m in Sources */,
 				7C170D2F1A4A035F00D9E0F2 /* MPUITableViewBinding.m in Sources */,
 				7C170CCF1A4A035F00D9E0F2 /* MPABTestDesignerChangeResponseMessage.m in Sources */,
@@ -1435,14 +1452,20 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1483,14 +1506,20 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

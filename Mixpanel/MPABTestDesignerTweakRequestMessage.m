@@ -35,9 +35,7 @@ NSString *const MPABTestDesignerTweakRequestMessageType = @"tweak_request";
 
         id tweaks = [self payload][@"tweaks"];
         if ([tweaks isKindOfClass:[NSArray class]]) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [variant addTweaksFromJSONObject:tweaks andExecute:YES];
-            });
+            [variant addTweaksFromJSONObject:tweaks andExecute:YES];
         }
 
         MPABTestDesignerTweakResponseMessage *changeResponseMessage = [MPABTestDesignerTweakResponseMessage message];

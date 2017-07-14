@@ -789,7 +789,7 @@ static NSString *defaultProjectToken;
             return NO;
         }
     } @catch (NSException* exception) {
-        NSAssert(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
+        MPLogError(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
         return NO;
     }
 
@@ -806,7 +806,7 @@ static NSString *defaultProjectToken;
     BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
                                   forKey: NSURLIsExcludedFromBackupKey error: &error];
     if (!success) {
-        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+        MPLogError(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
     }
     return success;
 }
@@ -1061,15 +1061,6 @@ static NSString *defaultProjectToken;
     return [p copy];
 }
 
-+ (BOOL)inBackground
-{
-#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
-    return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
-#else
-    return NO;
-#endif
-}
-
 #pragma mark - UIApplication Events
 
 #if !defined(MIXPANEL_MACOS)
@@ -1207,18 +1198,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             if (self.showNotificationOnActive && notifications.count > 0) {
                 [self showNotificationWithObject:notifications[0]];
             }
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                for (MPVariant *variant in variants) {
-                    [variant execute];
-                    [self markVariantRun:variant];
-                }
-            });
-
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                for (MPEventBinding *binding in eventBindings) {
-                    [binding execute];
-                }
-            });
+            for (MPVariant *variant in variants) {
+                [variant execute];
+                [self markVariantRun:variant];
+            }
+            for (MPEventBinding *binding in eventBindings) {
+                [binding execute];
+            }
         }];
     }
 #endif // MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -1842,9 +1828,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         [shownVariants addEntriesFromDictionary:shownVariant];
         [superProperties addEntriesFromDictionary:@{@"$experiments": [shownVariants copy]}];
         self.superProperties = [superProperties copy];
-        if ([Mixpanel inBackground]) {
-            [self archiveProperties];
-        }
+#if !MIXPANEL_NO_UI_APPLICATION_ACCESS
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+                [self archiveProperties];
+            }
+        });
+#endif
     });
 
     [self track:@"$experiment_started" properties:@{@"$experiment_id": @(variant.experimentID), @"$variant_id": @(variant.ID)}];
