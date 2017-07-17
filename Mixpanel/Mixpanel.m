@@ -569,22 +569,23 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         // wait for all current network requests to finish before resetting
         dispatch_sync(self.networkQueue, ^{ return; });
-
-        self.distinctId = [self defaultDistinctId];
-        self.superProperties = [NSMutableDictionary dictionary];
-        self.people.distinctId = nil;
-        self.alias = nil;
-        self.people.unidentifiedQueue = [NSMutableArray array];
-        self.eventsQueue = [NSMutableArray array];
-        self.peopleQueue = [NSMutableArray array];
-        self.timedEvents = [NSMutableDictionary dictionary];
-        self.shownNotifications = [NSMutableSet set];
-        self.decideResponseCached = NO;
-        self.variants = [NSSet set];
-        self.eventBindings = [NSSet set];
+        @synchronized (self) {
+            self.distinctId = [self defaultDistinctId];
+            self.superProperties = [NSMutableDictionary dictionary];
+            self.people.distinctId = nil;
+            self.alias = nil;
+            self.people.unidentifiedQueue = [NSMutableArray array];
+            self.eventsQueue = [NSMutableArray array];
+            self.peopleQueue = [NSMutableArray array];
+            self.timedEvents = [NSMutableDictionary dictionary];
+            self.shownNotifications = [NSMutableSet set];
+            self.decideResponseCached = NO;
+            self.variants = [NSSet set];
+            self.eventBindings = [NSSet set];
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-        [[MPTweakStore sharedInstance] reset];
+            [[MPTweakStore sharedInstance] reset];
 #endif
+        }
         [self archive];
     });
 }
@@ -725,61 +726,63 @@ static NSString *defaultProjectToken;
 
 - (void)archiveEvents
 {
-    NSString *filePath = [self eventsFilePath];
-    NSMutableArray *eventsQueueCopy;
     @synchronized (self) {
-        eventsQueueCopy = [self.eventsQueue mutableCopy];
-    }
-    MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, eventsQueueCopy);
-    if (![self archiveObject:eventsQueueCopy withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive event data", self);
+        NSString *filePath = [self eventsFilePath];
+        MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
+        if (![self archiveObject:self.eventsQueue withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive event data", self);
+        }
     }
 }
 
 - (void)archivePeople
 {
-    NSString *filePath = [self peopleFilePath];
-    NSMutableArray *peopleQueueCopy;
     @synchronized (self) {
-        peopleQueueCopy = [self.peopleQueue mutableCopy];
-    }
-    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, peopleQueueCopy);
-    if (![self archiveObject:peopleQueueCopy withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive people data", self);
+        NSString *filePath = [self peopleFilePath];
+        MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
+        if (![self archiveObject:self.peopleQueue withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive people data", self);
+        }
     }
 }
 
 - (void)archiveProperties
 {
-    NSString *filePath = [self propertiesFilePath];
-    NSMutableDictionary *p = [NSMutableDictionary dictionary];
-    [p setValue:self.distinctId forKey:@"distinctId"];
-    [p setValue:self.alias forKey:@"alias"];
-    [p setValue:self.superProperties forKey:@"superProperties"];
-    [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    [p setValue:self.shownNotifications forKey:@"shownNotifications"];
-    [p setValue:self.timedEvents forKey:@"timedEvents"];
-    [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
-    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
-    if (![self archiveObject:p withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive properties data", self);
+    @synchronized (self) {
+        NSString *filePath = [self propertiesFilePath];
+        NSMutableDictionary *p = [NSMutableDictionary dictionary];
+        [p setValue:self.distinctId forKey:@"distinctId"];
+        [p setValue:self.alias forKey:@"alias"];
+        [p setValue:self.superProperties forKey:@"superProperties"];
+        [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
+        [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+        [p setValue:self.shownNotifications forKey:@"shownNotifications"];
+        [p setValue:self.timedEvents forKey:@"timedEvents"];
+        [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
+        MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
+        if (![self archiveObject:p withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive properties data", self);
+        }
     }
 }
 
 - (void)archiveVariants
 {
-    NSString *filePath = [self variantsFilePath];
-    if (![self archiveObject:self.variants withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive variants data", self);
+    @synchronized (self) {
+        NSString *filePath = [self variantsFilePath];
+        if (![self archiveObject:self.variants withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive variants data", self);
+        }
     }
 }
 
 - (void)archiveEventBindings
 {
-    NSString *filePath = [self eventBindingsFilePath];
-    if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive tracking events data", self);
+    @synchronized (self) {
+        NSString *filePath = [self eventBindingsFilePath];
+        if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive tracking events data", self);
+        }
     }
 }
 
@@ -1218,20 +1221,16 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 #if defined(MIXPANEL_MACOS)
     if (self.flushOnBackground) {
         [self flush];
-    }
-
-    dispatch_async(_serialQueue, ^{
+    } else {
         [self archive];
-    });
+    }
 #endif
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will terminate", self);
-    dispatch_async(_serialQueue, ^{
-        [self archive];
-    });
+    [self archive];
 }
 
 #if !defined(MIXPANEL_MACOS)
@@ -1262,18 +1261,20 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             dispatch_group_leave(bgGroup);
         }] resume];
     }
-    
-    if (self.flushOnBackground) {
-        [self flush];
-    }
-    
-    dispatch_group_enter(bgGroup);
-    dispatch_async(_serialQueue, ^{
-        [self archive];
+
+    @synchronized (self) {
         self.decideResponseCached = NO;
-        dispatch_group_leave(bgGroup);
-    });
-    
+    }
+    if (self.flushOnBackground) {
+        dispatch_group_enter(bgGroup);
+        [self flushWithCompletion:^{
+            dispatch_group_leave(bgGroup);
+        }];
+    } else {
+        // only need to archive if don't flush because flush archives at the end
+        [self archive];
+    }
+
     dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
         MPLogInfo(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
@@ -1368,7 +1369,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSMutableSet *newEventBindings = [NSMutableSet set];
         __block BOOL hadError = NO;
 
-        if (!useCache || !self.decideResponseCached) {
+        BOOL decideResponseCached;
+        @synchronized (self) {
+            decideResponseCached = self.decideResponseCached;
+        }
+
+        if (!useCache || !decideResponseCached) {
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
                                                             withDistinctID:self.people.distinctId ?: self.distinctId
@@ -1513,7 +1519,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 self.variants = [allVariants copy];
                 self.eventBindings = [allEventBindings copy];
 
-                self.decideResponseCached = YES;
+                @synchronized (self) {
+                    self.decideResponseCached = YES;
+                }
 
                 dispatch_semaphore_signal(semaphore);
             }] resume];
