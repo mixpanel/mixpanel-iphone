@@ -25,7 +25,7 @@
 #error The Mixpanel library must be compiled with ARC enabled
 #endif
 
-#define VERSION @"3.1.8"
+#define VERSION @"3.1.9"
 
 @implementation Mixpanel
 
