@@ -306,7 +306,7 @@ static NSString *defaultProjectToken;
     [self identify:distinctId usePeople:YES];
 }
 
-- (void)identify:(NSString *)distinctId usePeople(bool)usePeopleDistinctId;
+- (void)identify:(NSString *)distinctId usePeople(BOOL)usePeopleDistinctId;
 {
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
