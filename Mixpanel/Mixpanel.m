@@ -323,6 +323,8 @@ static NSString *defaultProjectToken;
             }
             if(usePeopleDistinctId) {
                 self.people.distinctId = distinctId;
+            } else {
+                self.people.distinctId = nil;
             }
         }
         if (self.people.unidentifiedQueue.count > 0) {
