@@ -300,7 +300,13 @@ static NSString *defaultProjectToken;
     return distinctId;
 }
 
-- (void)identify:(NSString *)distinctId
+
+- (void)identify:(NSString *)distinctId;
+{
+    [self identify:distinctId usePeople:YES];
+}
+
+- (void)identify:(NSString *)distinctId usePeople(bool)usePeopleDistinctId;
 {
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
@@ -315,7 +321,9 @@ static NSString *defaultProjectToken;
                 self.alias = nil;
                 self.distinctId = distinctId;
             }
-            self.people.distinctId = distinctId;
+            if(usePeopleDistinctId) {
+                self.people.distinctId = distinctId;
+            }
         }
         if (self.people.unidentifiedQueue.count > 0) {
             for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
