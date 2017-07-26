@@ -323,19 +323,19 @@ static NSString *defaultProjectToken;
             }
             if(usePeopleDistinctId) {
                 self.people.distinctId = distinctId;
+                if (self.people.unidentifiedQueue.count > 0) {
+                    for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
+                        r[@"$distinct_id"] = self.distinctId;
+                        @synchronized (self) {
+                            [self.peopleQueue addObject:r];
+                        }
+                    }
+                    [self.people.unidentifiedQueue removeAllObjects];
+                    [self archivePeople];
+                }
             } else {
                 self.people.distinctId = nil;
             }
-        }
-        if (self.people.unidentifiedQueue.count > 0) {
-            for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"$distinct_id"] = self.distinctId;
-                @synchronized (self) {
-                    [self.peopleQueue addObject:r];
-                }
-            }
-            [self.people.unidentifiedQueue removeAllObjects];
-            [self archivePeople];
         }
         [self archiveProperties];
     });
