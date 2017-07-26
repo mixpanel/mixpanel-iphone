@@ -407,6 +407,24 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)identify:(NSString *)distinctId;
 
 /*!
+ @property
+ 
+ @abstract
+ Sets the distinct ID of the current user. With the option of only updating the
+ distinct ID value and not the Mixpanel People distinct ID.
+ 
+ @discussion
+ This method is not intended to be used unless you wish to prevent updating the Mixpanel
+ People distinct ID value by passing a value of NO to the usePeople param. This can be
+ useful if the user wishes to prevent People updates from being sent until the identify 
+ method is called.
+ 
+ @param distinctId string that uniquely identifies the current user
+ @param usePeople bool controls whether or not to set the people distinctId to the event distinctId
+ */
+- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeopleDistinctId;
+
+/*!
  @method
 
  @abstract
