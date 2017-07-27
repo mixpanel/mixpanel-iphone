@@ -300,7 +300,13 @@ static NSString *defaultProjectToken;
     return distinctId;
 }
 
-- (void)identify:(NSString *)distinctId
+
+- (void)identify:(NSString *)distinctId;
+{
+    [self identify:distinctId usePeople:YES];
+}
+
+- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeopleDistinctId;
 {
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
@@ -315,17 +321,21 @@ static NSString *defaultProjectToken;
                 self.alias = nil;
                 self.distinctId = distinctId;
             }
-            self.people.distinctId = distinctId;
-        }
-        if (self.people.unidentifiedQueue.count > 0) {
-            for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                r[@"$distinct_id"] = self.distinctId;
-                @synchronized (self) {
-                    [self.peopleQueue addObject:r];
+            if(usePeopleDistinctId) {
+                self.people.distinctId = distinctId;
+                if (self.people.unidentifiedQueue.count > 0) {
+                    for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
+                        r[@"$distinct_id"] = self.distinctId;
+                        @synchronized (self) {
+                            [self.peopleQueue addObject:r];
+                        }
+                    }
+                    [self.people.unidentifiedQueue removeAllObjects];
+                    [self archivePeople];
                 }
+            } else {
+                self.people.distinctId = nil;
             }
-            [self.people.unidentifiedQueue removeAllObjects];
-            [self archivePeople];
         }
         [self archiveProperties];
     });
