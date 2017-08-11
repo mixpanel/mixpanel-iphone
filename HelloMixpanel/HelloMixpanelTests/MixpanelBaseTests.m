@@ -20,22 +20,32 @@
     [[LSNocilla sharedInstance] start];
 
     self.mixpanelWillFlush = NO;
+    [self setUpMixpanel];
+}
+
+- (void)tearDown {
+    [super tearDown];
+
+    [self tearDownMixpanel];
+
+    // HTTP Stubs
+    [[LSNocilla sharedInstance] stop];
+    [[LSNocilla sharedInstance] clearStubs];
+}
+
+- (void)setUpMixpanel {
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
 }
 
-- (void)tearDown {
-    [super tearDown];
+- (void)tearDownMixpanel {
     // stub track and engage temporarily because reset flushes. unstub after
     stubTrack();
     stubEngage();
     [self.mixpanel reset];
     [self waitForMixpanelQueues];
-    // HTTP Stubs
-    [[LSNocilla sharedInstance] stop];
-    [[LSNocilla sharedInstance] clearStubs];
-    
+
     self.mixpanel = nil;
 }
 

@@ -64,6 +64,8 @@
 		E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
 		E18E6C401EAFC94E00FDD3A2 /* AutomaticEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */; };
 		EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */; };
+		F049AD2E1F3E4FCF000DB295 /* MiscEdgeCaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F049AD2D1F3E4FCF000DB295 /* MiscEdgeCaseTests.m */; };
+		F049AD2F1F3E4FCF000DB295 /* MiscEdgeCaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F049AD2D1F3E4FCF000DB295 /* MiscEdgeCaseTests.m */; };
 		F058D0851DB1527900B19E59 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; };
 		F058D0861DB1527900B19E59 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F0E7329F1DAEF81000CB4C13 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E7329D1DAEF81000CB4C13 /* Interface.storyboard */; };
@@ -404,6 +406,7 @@
 		E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutomaticEventsTests.m; sourceTree = "<group>"; };
 		E1B343191D6BB96E00BEB29E /* HelloMixpanel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HelloMixpanel.entitlements; sourceTree = "<group>"; };
 		E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.appstore.xcconfig"; sourceTree = "<group>"; };
+		F049AD2D1F3E4FCF000DB295 /* MiscEdgeCaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MiscEdgeCaseTests.m; sourceTree = "<group>"; };
 		F0E7329B1DAEF81000CB4C13 /* HelloMixpanelWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanelWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0E7329E1DAEF81000CB4C13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		F0E732A01DAEF81000CB4C13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -586,15 +589,16 @@
 		2808F9B81610EFE4005772B7 /* HelloMixpanelTests */ = {
 			isa = PBXGroup;
 			children = (
-				51D96E921D1219AE001F622D /* Helpers */,
 				055FA714194A6B020080A709 /* ABTestingTests.m */,
-				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
-				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
-				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
-				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
-				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
-				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
 				E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */,
+				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
+				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
+				51D96E921D1219AE001F622D /* Helpers */,
+				F049AD2D1F3E4FCF000DB295 /* MiscEdgeCaseTests.m */,
+				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
+				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
+				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
+				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
 				2808F9B91610EFE4005772B7 /* Supporting Files */,
 			);
 			path = HelloMixpanelTests;
@@ -632,9 +636,9 @@
 		51D96E921D1219AE001F622D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				51D96E7B1D120A75001F622D /* TestConstants.h */,
 				51D96E861D120D90001F622D /* MixpanelBaseTests.h */,
 				51D96E841D120D80001F622D /* MixpanelBaseTests.m */,
+				51D96E7B1D120A75001F622D /* TestConstants.h */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1177,6 +1181,7 @@
 				515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */,
 				51D96E881D121796001F622D /* MPCategoryHelpersTests.m in Sources */,
 				51D96E891D12179A001F622D /* EventBindingTests.m in Sources */,
+				F049AD2E1F3E4FCF000DB295 /* MiscEdgeCaseTests.m in Sources */,
 				51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */,
 				517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */,
 				E18E6C401EAFC94E00FDD3A2 /* AutomaticEventsTests.m in Sources */,
@@ -1198,6 +1203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */,
+				F049AD2F1F3E4FCF000DB295 /* MiscEdgeCaseTests.m in Sources */,
 				517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */,
 				E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */,
 				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
