@@ -90,6 +90,7 @@
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 
 @property (nonatomic) BOOL decideResponseCached;
+@property (nonatomic) BOOL hasAddedObserver;
 @property (nonatomic, strong) NSNumber *automaticEventsEnabled;
 @property (nonatomic, strong) NSArray *notifications;
 @property (nonatomic, strong) id currentlyShowingNotification;

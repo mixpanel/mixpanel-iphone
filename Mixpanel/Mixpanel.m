@@ -14,6 +14,7 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
+#import <UserNotifications/UserNotifications.h>
 #if defined(MIXPANEL_WATCHOS)
 #import "MixpanelWatchProperties.h"
 #import <WatchKit/WatchKit.h>
@@ -174,6 +175,12 @@ static NSString *defaultProjectToken;
         }
         CFRelease(_reachability);
         _reachability = NULL;
+    }
+#endif
+
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
+    if (self.hasAddedObserver) {
+        [[UNUserNotificationCenter currentNotificationCenter] removeObserver:self forKeyPath:@"delegate"];
     }
 #endif
 }
@@ -441,20 +448,56 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 - (void)setupAutomaticPushTracking {
     SEL selector = nil;
+    Class newCls = [[UNUserNotificationCenter currentNotificationCenter].delegate class];
     Class cls = [[UIApplication sharedApplication].delegate class];
-    if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
+
+    if ([UNUserNotificationCenter class] && !newCls) {
+        [[UNUserNotificationCenter currentNotificationCenter] addObserver:self forKeyPath:@"delegate" options:0 context:nil];
+        self.hasAddedObserver = YES;
+    }
+
+    if (class_getInstanceMethod(newCls, NSSelectorFromString(@"userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"))) {
+        selector = NSSelectorFromString(@"userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:");
+    } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
         selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:");
     } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:"))) {
         selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:");
     }
 
     if (selector) {
-        [MPSwizzler swizzleSelector:selector
-                            onClass:cls
-                          withBlock:^(id view, SEL command, UIApplication *application, NSDictionary *userInfo) {
-                              [self trackPushNotification:userInfo];
-                          }
-                              named:@"notification opened"];
+        if (newCls) {
+            [MPSwizzler swizzleSelector:selector
+                                onClass:newCls
+                              withBlock:^(id view, SEL command, UIApplication *application, UNNotificationResponse *response) {
+                                  [self trackPushNotification:response.notification.request.content.userInfo];
+                              }
+                                  named:@"notification opened"];
+        } else {
+            [MPSwizzler swizzleSelector:selector
+                                onClass:cls
+                              withBlock:^(id view, SEL command, UIApplication *application, NSDictionary *userInfo) {
+                                  [self trackPushNotification:userInfo];
+                              }
+                                  named:@"notification opened"];
+        }
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"delegate"]) {
+        Class cls = [[UNUserNotificationCenter currentNotificationCenter].delegate class];
+        if (class_getInstanceMethod(cls, NSSelectorFromString(@"userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"))) {
+            SEL selector = NSSelectorFromString(@"userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:");
+            if (selector) {
+                [MPSwizzler swizzleSelector:selector
+                                    onClass:cls
+                                  withBlock:^(id view, SEL command, UIApplication *application, UNNotificationResponse *response) {
+                                      [self trackPushNotification:response.notification.request.content.userInfo];
+                                  }
+                                      named:@"notification opened"];
+            }
+        }
     }
 }
 

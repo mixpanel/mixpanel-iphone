@@ -173,6 +173,7 @@
 		E12CE4371EA68A3C0023AA2D /* AutomaticEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = E12CE4351EA68A3C0023AA2D /* AutomaticEvents.m */; };
 		E12FA3B31D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = E12FA3B21D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h */; };
 		E143ABBF1D51496800513BDE /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
+		E14FA8071F44DF17009B4533 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14FA8061F44DF17009B4533 /* UserNotifications.framework */; };
 		E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */; };
 		E19087C21E53B51200023FCC /* placeholder-image.png in Resources */ = {isa = PBXBuildFile; fileRef = E19087C11E53B51200023FCC /* placeholder-image.png */; };
 		E1C2BE261CFD6A010052172F /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */; };
@@ -398,6 +399,7 @@
 		E12CE4341EA68A3C0023AA2D /* AutomaticEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticEvents.h; sourceTree = "<group>"; };
 		E12CE4351EA68A3C0023AA2D /* AutomaticEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutomaticEvents.m; sourceTree = "<group>"; };
 		E12FA3B21D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPAbstractABTestDesignerMessage.h; sourceTree = "<group>"; };
+		E14FA8061F44DF17009B4533 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E19087C11E53B51200023FCC /* placeholder-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "placeholder-image.png"; sourceTree = "<group>"; };
 		E1C2BDE11CFD5F9D0052172F /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = Library/Frameworks/TVServices.framework; sourceTree = DEVELOPER_DIR; };
@@ -449,6 +451,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E14FA8071F44DF17009B4533 /* UserNotifications.framework in Frameworks */,
 				E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */,
 				515B5A231CB6FF8600A34060 /* libicucore.tbd in Frameworks */,
 				519AD7A61CB706A9005411A5 /* CFNetwork.framework in Frameworks */,
@@ -862,6 +865,7 @@
 		E1C2BDE01CFD5F9D0052172F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E14FA8061F44DF17009B4533 /* UserNotifications.framework */,
 				E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */,
 				513243431D1B473100CBA9AA /* WatchKit.framework */,
 				E1C2BDE11CFD5F9D0052172F /* TVServices.framework */,
