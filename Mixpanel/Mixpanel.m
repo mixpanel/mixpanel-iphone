@@ -451,8 +451,8 @@ static NSString *defaultProjectToken;
     Class newCls = [[UNUserNotificationCenter currentNotificationCenter].delegate class];
     Class cls = [[UIApplication sharedApplication].delegate class];
 
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"10.0" options:NSNumericSearch] != NSOrderedAscending && !newCls) {
-        [[UNUserNotificationCenter currentNotificationCenter] addObserver:self forKeyPath:@"delegate" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    if ([UNUserNotificationCenter class] && !newCls) {
+        [[UNUserNotificationCenter currentNotificationCenter] addObserver:self forKeyPath:@"delegate" options:0 context:nil];
         self.hasAddedObserver = YES;
     }
 
