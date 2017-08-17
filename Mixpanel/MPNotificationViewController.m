@@ -163,7 +163,15 @@
 }
 
 - (void)buttonTapped:(UIButton *)button {
-    [self.delegate notificationController:self wasDismissedWithCtaUrl:((MPTakeoverNotification *)self.notification).buttons[button.tag].ctaUrl];
+    MPTakeoverNotification *takeoverNotification = (MPTakeoverNotification *)self.notification;
+    NSString *whichButton = @"primary";
+    if (takeoverNotification.buttons.count == 2) {
+        whichButton = button.tag == 0 ? @"secondary" : @"primary";
+    }
+    [self.delegate notificationController:self
+                   wasDismissedWithCtaUrl:takeoverNotification.buttons[button.tag].ctaUrl
+                              shouldTrack:YES
+             additionalTrackingProperties:@{@"button": whichButton}];
 }
 
 - (void)show {
@@ -208,10 +216,7 @@
 }
 
 - (IBAction)tappedClose:(UITapGestureRecognizer *)gesture {
-    id<MPNotificationViewControllerDelegate> delegate = self.delegate;
-    if ([delegate respondsToSelector:@selector(notificationController:wasDismissedWithCtaUrl:)]) {
-        [delegate notificationController:self wasDismissedWithCtaUrl:nil];
-    }
+    [self.delegate notificationController:self wasDismissedWithCtaUrl:nil shouldTrack:NO additionalTrackingProperties:nil];
 }
 
 @end
@@ -399,7 +404,10 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
 
 - (void)didTap:(UITapGestureRecognizer *)gesture {
     if (!_isBeingDismissed && gesture.state == UIGestureRecognizerStateEnded) {
-        [self.delegate notificationController:self wasDismissedWithCtaUrl:((MPMiniNotification *)self.notification).ctaUrl];
+        [self.delegate notificationController:self
+                       wasDismissedWithCtaUrl:((MPMiniNotification *)self.notification).ctaUrl
+                                  shouldTrack:YES
+                 additionalTrackingProperties:nil];
     }
 }
 
@@ -422,7 +430,7 @@ static const NSUInteger MPMiniNotificationSpacingFromBottom = 10;
         } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
             id strongDelegate = self.delegate;
             if (self.view.layer.position.y > _position.y + MPNotifHeight / 2.0f && strongDelegate != nil) {
-                [strongDelegate notificationController:self wasDismissedWithCtaUrl:nil];
+                [strongDelegate notificationController:self wasDismissedWithCtaUrl:nil shouldTrack:NO additionalTrackingProperties:nil];
             } else {
                 [UIView animateWithDuration:0.2f animations:^{
                     self.view.layer.position = self->_position;

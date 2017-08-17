@@ -1722,18 +1722,33 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.miniNotificationPresentationTime * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^{
-        [self notificationController:controller wasDismissedWithCtaUrl:nil];
+        [self notificationController:controller wasDismissedWithCtaUrl:nil shouldTrack:NO additionalTrackingProperties:nil];
     });
     return YES;
 }
 
-- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithCtaUrl:(NSURL *)ctaUrl
-{
+- (void)notificationController:(MPNotificationViewController *)controller
+        wasDismissedWithCtaUrl:(NSURL *)ctaUrl
+                   shouldTrack:(BOOL)shouldTrack
+  additionalTrackingProperties:(NSDictionary *)trackingProperties {
     if (controller == nil || self.currentlyShowingNotification != controller.notification) {
         return;
     }
 
-    void (^completionBlock)() = ^void() {
+    void (^completionBlock)(void) = ^{
+        if (shouldTrack) {
+            NSMutableDictionary *properties = nil;
+            if (trackingProperties) {
+                properties = [trackingProperties mutableCopy];
+            }
+            if (ctaUrl) {
+                if (!properties) {
+                    properties = [[NSMutableDictionary alloc] init];
+                }
+                properties[@"url"] = ctaUrl.absoluteString;
+            }
+            [self trackNotification:controller.notification event:@"$campaign_open" properties:properties];
+        }
         self.currentlyShowingNotification = nil;
         self.notificationViewController = nil;
     };
@@ -1746,7 +1761,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 MPLogError(@"Mixpanel failed to open given URL: %@", ctaUrl);
             }
 
-            [self trackNotification:controller.notification event:@"$campaign_open"];
             completionBlock();
         }];
     } else {
@@ -1754,16 +1768,23 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
-- (void)trackNotification:(MPNotification *)notification event:(NSString *)event
-{
-    [self track:event properties:@{@"campaign_id": @(notification.ID),
-                                   @"message_id": @(notification.messageID),
-                                   @"message_type": @"inapp",
-                                   @"message_subtype": notification.type}];
+- (void)trackNotification:(MPNotification *)notification
+                    event:(NSString *)event
+               properties:(NSDictionary *)properties {
+    NSMutableDictionary *mutableProperties;
+    if (!properties) {
+        mutableProperties = [[NSMutableDictionary alloc] init];
+    } else {
+        mutableProperties = [properties mutableCopy];
+    }
+    [mutableProperties addEntriesFromDictionary:@{@"campaign_id": @(notification.ID),
+                                                  @"message_id": @(notification.messageID),
+                                                  @"message_type": @"inapp",
+                                                  @"message_subtype": notification.type}];
+    [self track:event properties:mutableProperties];
 }
 
-- (void)markNotificationShown:(MPNotification *)notification
-{
+- (void)markNotificationShown:(MPNotification *)notification {
     MPLogInfo(@"%@ marking notification shown: %@, %@", self, @(notification.ID), self.shownNotifications);
 
     dispatch_async(self.serialQueue, ^{
@@ -1783,7 +1804,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     [self.people append:properties];
 
-    [self trackNotification:notification event:@"$campaign_delivery"];
+    [self trackNotification:notification event:@"$campaign_delivery" properties:nil];
 }
 
 #pragma mark - Mixpanel A/B Testing and Codeless (Designer)

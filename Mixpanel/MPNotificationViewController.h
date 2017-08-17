@@ -23,6 +23,9 @@
 
 @protocol MPNotificationViewControllerDelegate <NSObject>
 
-- (void)notificationController:(MPNotificationViewController *)controller wasDismissedWithCtaUrl:(NSURL *)ctaUrl;
+- (void)notificationController:(MPNotificationViewController *)controller
+        wasDismissedWithCtaUrl:(NSURL *)ctaUrl
+                   shouldTrack:(BOOL)shouldTrack
+  additionalTrackingProperties:(NSDictionary *)trackingProperties;
 
 @end
