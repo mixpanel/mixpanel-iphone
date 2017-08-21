@@ -2,6 +2,7 @@
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
 #import "Mixpanel.h"
+#import "MixpanelPrivate.h"
 #import "MPABTestDesignerChangeRequestMessage.h"
 #import "MPABTestDesignerClearRequestMessage.h"
 #import "MPABTestDesignerConnection.h"
@@ -256,7 +257,7 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
 
 - (void)showConnectedViewWithLoading:(BOOL)isLoading {
     if (!self.connectivityIndicatorWindow) {
-        UIWindow *mainWindow = [[UIApplication sharedApplication] delegate].window;
+        UIWindow *mainWindow = [[Mixpanel sharedUIApplication] delegate].window;
         self.connectivityIndicatorWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, mainWindow.frame.size.width, 4.f)];
         self.connectivityIndicatorWindow.backgroundColor = [UIColor clearColor];
         self.connectivityIndicatorWindow.windowLevel = UIWindowLevelAlert;

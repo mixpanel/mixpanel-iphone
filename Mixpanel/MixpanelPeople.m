@@ -125,6 +125,10 @@
         });
 #if MIXPANEL_FLUSH_IMMEDIATELY
         [strongMixpanel flush];
+#else
+        if ([Mixpanel isAppExtension]) {
+            [strongMixpanel flush];
+        }
 #endif
     }
 }

@@ -8,6 +8,7 @@
 
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
+#import "MixpanelPrivate.h"
 #import "MPObjectSelector.h"
 
 @interface MPObjectFilter : NSObject
@@ -371,7 +372,7 @@
         if (presentingViewController) {
             [result addObject:presentingViewController];
         }
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        UIWindow *keyWindow = [Mixpanel sharedUIApplication].keyWindow;
         if (keyWindow.rootViewController == obj) {
             //TODO is there a better way to get the actual window that has this VC
             [result addObject:keyWindow];

@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Mixpanel. All rights reserved.
 //
 
+#import "MixpanelPrivate.h"
 #import "MPSwizzler.h"
 #import "MPUIControlBinding.h"
 #import "NSThread+MPHelpers.h"
@@ -113,7 +114,7 @@
         void (^executeBlock)(id, SEL) = ^(id view, SEL command) {
             [NSThread mp_safelyRunOnMainThreadSync:^{
                 NSArray *objects;
-                NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
+                NSObject *root = [[Mixpanel sharedUIApplication] keyWindow].rootViewController;
                 if (view && [self.appliedTo containsObject:view]) {
                     if (![self.path fuzzyIsLeafSelected:view fromRoot:root]) {
                         [self stopOnView:view];
@@ -201,7 +202,7 @@
 
 - (BOOL)verifyControlMatchesPath:(id)control
 {
-    NSObject *root = [[UIApplication sharedApplication] keyWindow].rootViewController;
+    NSObject *root = [[Mixpanel sharedUIApplication] keyWindow].rootViewController;
     return [self.path isLeafSelected:control fromRoot:root];
 }
 
