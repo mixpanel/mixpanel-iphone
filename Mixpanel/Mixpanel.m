@@ -14,7 +14,9 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #import <UserNotifications/UserNotifications.h>
+#endif
 #if defined(MIXPANEL_WATCHOS)
 #import "MixpanelWatchProperties.h"
 #import <WatchKit/WatchKit.h>
@@ -313,7 +315,7 @@ static NSString *defaultProjectToken;
     [self identify:distinctId usePeople:YES];
 }
 
-- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeopleDistinctId;
+- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople;
 {
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
@@ -328,7 +330,7 @@ static NSString *defaultProjectToken;
                 self.alias = nil;
                 self.distinctId = distinctId;
             }
-            if(usePeopleDistinctId) {
+            if (usePeople) {
                 self.people.distinctId = distinctId;
                 if (self.people.unidentifiedQueue.count > 0) {
                     for (NSMutableDictionary *r in self.people.unidentifiedQueue) {

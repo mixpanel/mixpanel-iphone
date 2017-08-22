@@ -422,7 +422,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param distinctId string that uniquely identifies the current user
  @param usePeople bool controls whether or not to set the people distinctId to the event distinctId
  */
-- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeopleDistinctId;
+- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople;
 
 /*!
  @method
