@@ -26,6 +26,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 @interface MixpanelExceptionHandler ()
 
 @property (nonatomic) NSUncaughtExceptionHandler *defaultExceptionHandler;
+@property (nonatomic, unsafe_unretained) void (**signal_handler_array)(int);
 @property (nonatomic, strong) NSHashTable *mixpanelInstances;
 
 @end
@@ -71,6 +72,8 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
         
         // Save the existing exception handler
         _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
+        _signal_handler_array = calloc(NSIG, sizeof(void (*)(int)));
+
         // Install our handler
         [self setupHandlers];
     }
@@ -79,12 +82,12 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 
 - (void)setupHandlers {
     NSSetUncaughtExceptionHandler(&MPHandleException);
-    signal(SIGABRT, MPSignalHandler);
-    signal(SIGILL, MPSignalHandler);
-    signal(SIGSEGV, MPSignalHandler);
-    signal(SIGFPE, MPSignalHandler);
-    signal(SIGBUS, MPSignalHandler);
-    signal(SIGPIPE, MPSignalHandler);
+    _signal_handler_array[SIGABRT] = signal(SIGABRT, MPSignalHandler);
+    _signal_handler_array[SIGILL] = signal(SIGILL, MPSignalHandler);
+    _signal_handler_array[SIGSEGV] = signal(SIGSEGV, MPSignalHandler);
+    _signal_handler_array[SIGFPE] = signal(SIGFPE, MPSignalHandler);
+    _signal_handler_array[SIGBUS] = signal(SIGBUS, MPSignalHandler);
+    _signal_handler_array[SIGPIPE] = signal(SIGPIPE, MPSignalHandler);
 }
 
 - (void)addMixpanelInstance:(Mixpanel *)instance {
@@ -152,28 +155,31 @@ void MPHandleException(NSException *exception)
 
     // Archive the values for each Mixpanel instance
     for (Mixpanel *instance in handler.mixpanelInstances) {
-        [instance archive];
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
         [properties setValue:[exception reason] forKey:@"$ae_crashed_reason"];
         [instance track:@"$ae_crashed" properties:properties];
-        dispatch_sync(instance.serialQueue, ^{});
+        dispatch_sync(instance.serialQueue, ^{
+            [instance archive];
+        });
     }
-
-    NSSetUncaughtExceptionHandler(NULL);
-    signal(SIGABRT, SIG_DFL);
-    signal(SIGILL, SIG_DFL);
-    signal(SIGSEGV, SIG_DFL);
-    signal(SIGFPE, SIG_DFL);
-    signal(SIGBUS, SIG_DFL);
-    signal(SIGPIPE, SIG_DFL);
     NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
 
     NSLog(@"%@", [NSString stringWithFormat:@"Debug details follow:\n%@\n%@",
                   [exception reason],
                   [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]);
-    if (handler.defaultExceptionHandler) {
-        // Ensure the existing handler gets called once we're finished
-        handler.defaultExceptionHandler(exception);
+    // call original signal/exception handler
+    if ([exception.name isEqualToString:UncaughtExceptionHandlerSignalExceptionName]) {
+        int signal = [exception.userInfo[UncaughtExceptionHandlerSignalKey] intValue];
+        void (*signal_handler)(int) = handler.signal_handler_array[signal];
+        if (signal_handler != NULL) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                signal_handler(signal);
+            });
+        }
+    } else if (handler.defaultExceptionHandler) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler.defaultExceptionHandler(exception);
+        });
     }
 }
 
