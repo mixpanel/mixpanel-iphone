@@ -35,8 +35,7 @@
 static NSMutableDictionary *instances;
 static NSString *defaultProjectToken;
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
-{
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions {
     if (instances[apiToken]) {
         return instances[apiToken];
     }
@@ -50,13 +49,11 @@ static NSString *defaultProjectToken;
     return [[self alloc] initWithToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
-{
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken {
     return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil];
 }
 
-+ (nullable Mixpanel *)sharedInstance
-{
++ (nullable Mixpanel *)sharedInstance {
     if (instances.count == 0) {
         MPLogWarning(@"sharedInstance called before creating a Mixpanel instance");
         return nil;
@@ -69,8 +66,7 @@ static NSString *defaultProjectToken;
     return instances[defaultProjectToken];
 }
 
-- (instancetype)init:(NSString *)apiToken
-{
+- (instancetype)init:(NSString *)apiToken {
     if (self = [super init]) {
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
@@ -87,8 +83,10 @@ static NSString *defaultProjectToken;
     return self;
 }
 
-- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval
-{
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(NSDictionary *)launchOptions
+                flushInterval:(NSUInteger)flushInterval
+                 trackCrashes:(BOOL)trackCrashes {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
             apiToken = @"";
@@ -97,8 +95,10 @@ static NSString *defaultProjectToken;
     }
     if (self = [self init:apiToken]) {
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-        // Install uncaught exception handlers first
-        [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
+        if (trackCrashes) {
+            // Install signal and exception handlers first
+            [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
+        }
 #endif
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
         self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -158,13 +158,20 @@ static NSString *defaultProjectToken;
     return self;
 }
 
-- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
-{
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(NSDictionary *)launchOptions
+             andFlushInterval:(NSUInteger)flushInterval {
+    return [self initWithToken:apiToken
+                 launchOptions:launchOptions
+                 flushInterval:flushInterval
+                  trackCrashes:YES];
+}
+
+- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval {
     return [self initWithToken:apiToken launchOptions:nil andFlushInterval:flushInterval];
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
