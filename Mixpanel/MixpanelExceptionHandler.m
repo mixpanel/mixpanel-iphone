@@ -42,28 +42,6 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     return gSharedHandler;
 }
 
-+ (NSArray *)backtrace
-{
-    void* callstack[128];
-    int frames = backtrace(callstack, 128);
-    char **strs = backtrace_symbols(callstack, frames);
-
-    int i;
-    NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
-    for (
-         i = UncaughtExceptionHandlerSkipAddressCount;
-         i < UncaughtExceptionHandlerSkipAddressCount +
-         UncaughtExceptionHandlerReportAddressCount;
-         i++)
-    {
-        [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
-    }
-    free(strs);
-    
-    return backtrace;
-}
-
-
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -113,9 +91,7 @@ void MPSignalHandler(int signal, struct __siginfo *info, void *context) {
 
     int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
     if (exceptionCount <= UncaughtExceptionMaximum) {
-        NSArray *callStack = [MixpanelExceptionHandler backtrace];
-        NSDictionary *userInfo = @{UncaughtExceptionHandlerSignalKey: @(signal),
-                                   UncaughtExceptionHandlerAddressesKey: callStack};
+        NSDictionary *userInfo = @{UncaughtExceptionHandlerSignalKey: @(signal)};
         NSException *exception = [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName
                                                          reason:[NSString stringWithFormat:@"Signal %d was raised.", signal]
                                                        userInfo:userInfo];
@@ -138,21 +114,13 @@ void MPHandleException(NSException *exception) {
 
     int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
     if (exceptionCount <= UncaughtExceptionMaximum) {
-        NSArray *callStack = [MixpanelExceptionHandler backtrace];
-        NSMutableDictionary *userInfo = [[exception userInfo] mutableCopy];
-        userInfo[UncaughtExceptionHandlerAddressesKey] = callStack;
-        NSException *exceptionWithCallstack = [NSException exceptionWithName:[exception name]
-                                                                      reason:[exception reason]
-                                                                    userInfo:userInfo];
-
-        [handler mp_handleUncaughtException:exceptionWithCallstack];
+        [handler mp_handleUncaughtException:exception];
     }
 
     if (handler.defaultExceptionHandler) {
         handler.defaultExceptionHandler(exception);
     }
 }
-
 
 - (void) mp_handleUncaughtException:(NSException *)exception {
     // Archive the values for each Mixpanel instance
@@ -165,9 +133,6 @@ void MPHandleException(NSException *exception) {
         });
     }
     NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
-    NSLog(@"%@", [NSString stringWithFormat:@"Debug details follow:\n%@\n%@",
-                  [exception reason],
-                  [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]);
 }
 
 
