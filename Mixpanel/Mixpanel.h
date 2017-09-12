@@ -339,7 +339,9 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
- Initializes an instance of the API with the given project token.
+ Initializes an instance of the API with the given project token. This also sets
+ it as a shared instance so you can use [Mixpanel sharedInstance] or
+ [Mixpanel sharedInstanceWithToken:apiToken] to retrieve this object later.
 
  @discussion
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
