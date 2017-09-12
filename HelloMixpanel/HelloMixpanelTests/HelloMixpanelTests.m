@@ -618,6 +618,16 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"supposed to all be flushed");
 }
 
+- (void)testInitializeMixpanelOnBackgroundThread {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"main thread checker found no errors"];
+    [self tearDownMixpanel];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self setUpMixpanel];
+        [expectation fulfill];
+    });
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+}
+
 #if !defined(MIXPANEL_TVOS_EXTENSION)
 - (void)testTelephonyInfoInitialized {
     XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
