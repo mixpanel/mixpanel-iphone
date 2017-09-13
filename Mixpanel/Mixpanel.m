@@ -12,10 +12,10 @@
 #import "MPFoundation.h"
 #import "MPLogger.h"
 #import "MPNetworkPrivate.h"
-#import "NSThread+MPHelpers.h"
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #import <UserNotifications/UserNotifications.h>
+#import "NSThread+MPHelpers.h"
 #endif
 #if defined(MIXPANEL_WATCHOS)
 #import "MixpanelWatchProperties.h"
