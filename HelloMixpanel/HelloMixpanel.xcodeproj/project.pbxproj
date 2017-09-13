@@ -586,15 +586,15 @@
 		2808F9B81610EFE4005772B7 /* HelloMixpanelTests */ = {
 			isa = PBXGroup;
 			children = (
-				51D96E921D1219AE001F622D /* Helpers */,
 				055FA714194A6B020080A709 /* ABTestingTests.m */,
-				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
-				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
-				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
-				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
-				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
-				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
 				E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */,
+				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
+				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
+				51D96E921D1219AE001F622D /* Helpers */,
+				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
+				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
+				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
+				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
 				2808F9B91610EFE4005772B7 /* Supporting Files */,
 			);
 			path = HelloMixpanelTests;
@@ -632,9 +632,9 @@
 		51D96E921D1219AE001F622D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				51D96E7B1D120A75001F622D /* TestConstants.h */,
 				51D96E861D120D90001F622D /* MixpanelBaseTests.h */,
 				51D96E841D120D80001F622D /* MixpanelBaseTests.m */,
+				51D96E7B1D120A75001F622D /* TestConstants.h */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";

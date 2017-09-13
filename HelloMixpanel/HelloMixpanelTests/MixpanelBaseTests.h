@@ -22,6 +22,9 @@
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (atomic) BOOL mixpanelWillFlush;
 
+- (void)setUpMixpanel;
+- (void)tearDownMixpanel;
+
 - (void)flushAndWaitForMixpanelQueues;
 - (void)waitForMixpanelQueues;
 - (void)waitForAsyncQueue;
