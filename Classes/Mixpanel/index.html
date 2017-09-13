@@ -320,12 +320,23 @@ and People record queues to disk.
 <dd><p>Sets the distinct ID of the current user.
 </p>
 </dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/identify:usePeople:" target="_top">-identify:usePeople:</a></tt></dt>
+<dd><p>Sets the distinct ID of the current user. With the option of only updating the
+distinct ID value and not the Mixpanel People distinct ID.
+</p>
+</dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/initWithToken:andFlushInterval:" target="_top">-initWithToken:andFlushInterval:</a></tt></dt>
 <dd><p>Initializes an instance of the API with the given project token.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:" target="_top">-initWithToken:launchOptions:andFlushInterval:</a></tt></dt>
 <dd><p>Initializes an instance of the API with the given project token.
+</p>
+</dd>
+<dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:" target="_top">-initWithToken:launchOptions:flushInterval:trackCrashes:</a></tt></dt>
+<dd><p>Initializes an instance of the API with the given project token. This also sets
+it as a shared instance so you can use [Mixpanel sharedInstance] or
+[Mixpanel sharedInstanceWithToken:apiToken] to retrieve this object later.
 </p>
 </dd>
 <dt><tt><a href="index.html#//apple_ref/occ/instm/Mixpanel/joinExperiments" target="_top">-joinExperiments</a></tt></dt>
@@ -576,6 +587,34 @@ flushed once <code>identify:</code> is called.
 <code>[mixpanel identify:mixpanel.distinctId]</code>.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/identify:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;   name=Mixpanel::identify:usePeople: -->
+<a name="//apple_ref/occ/instm/Mixpanel/identify:usePeople:"></a>
+<h3><a name="identify:usePeople:">identify:usePeople:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;name=start --><!-- begin abstract --><p>Sets the distinct ID of the current user. With the option of only updating the
+distinct ID value and not the Mixpanel People distinct ID.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/void //apple_ref/occ/tdef/void //apple_ref/occ/tag/void //apple_ref/occ/struct/void //apple_ref/occ/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/identify //apple_ref/occ/clm/Mixpanel/identify //apple_ref/occ/intfcm/Mixpanel/identify //apple_ref/occ/intfm/Mixpanel/identify //apple_ref/occ/func/identify //apple_ref/occ/ftmplt/Mixpanel/identify //apple_ref/occ/defn/identify //apple_ref/occ/macro/identify //apple_ref/doc/anysymbol/identify" machineGenerated="true" --><span class="function">identify</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span>)<span class="param">distinctId</span> <!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/usePeople //apple_ref/occ/clm/Mixpanel/usePeople //apple_ref/occ/intfcm/Mixpanel/usePeople //apple_ref/occ/intfm/Mixpanel/usePeople //apple_ref/occ/func/usePeople //apple_ref/occ/ftmplt/Mixpanel/usePeople //apple_ref/occ/defn/usePeople //apple_ref/occ/macro/usePeople //apple_ref/doc/anysymbol/usePeople" machineGenerated="true" --><span class="function">usePeople</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/usePeople //apple_ref/occ/data/Mixpanel/usePeople //apple_ref/occ/data/usePeople //apple_ref/occ/clconst/Mixpanel/usePeople " machineGenerated="true" --><span class="var">usePeople</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/identify:usePeople:/distinctId;   name=identify:usePeople:::distinctId -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/identify:usePeople:/distinctId"></a>
+<code>distinctId</code></dt><dd><p>string that uniquely identifies the current user</dd>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/identify:usePeople:/usePeople;   name=identify:usePeople:::usePeople -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/identify:usePeople:/usePeople"></a>
+<code>usePeople</code></dt><dd><p>bool controls whether or not to set the people distinctId to the event distinctId</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;name=start --><p>This method is not intended to be used unless you wish to prevent updating the Mixpanel
+People distinct ID value by passing a value of NO to the usePeople param. This can be
+useful if the user wishes to prevent People updates from being sent until the identify
+method is called.
+</p>
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/identify:usePeople:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/initWithToken:andFlushInterval:;   name=Mixpanel::initWithToken:andFlushInterval: -->
 <a name="//apple_ref/occ/instm/Mixpanel/initWithToken:andFlushInterval:"></a>
 <h3><a name="initWithToken:andFlushInterval:">initWithToken:andFlushInterval:</a></h3>
@@ -631,6 +670,41 @@ launchOptions to the above method as nil.
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:;name=start --><p>Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:andFlushInterval:;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;   name=Mixpanel::initWithToken:launchOptions:flushInterval:trackCrashes: -->
+<a name="//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:"></a>
+<h3><a name="initWithToken:launchOptions:flushInterval:trackCrashes:">initWithToken:launchOptions:flushInterval:trackCrashes:</a></h3>
+<hr class="afterName"><p><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;name=start --><!-- begin abstract --><p>Initializes an instance of the API with the given project token. This also sets
+it as a shared instance so you can use [Mixpanel sharedInstance] or
+[Mixpanel sharedInstanceWithToken:apiToken] to retrieve this object later.
+</p>
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;name=end --></p>
+<div class='declaration_indent'>
+<pre><!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;name=start -->- (<!-- a logicalPath="//apple_ref/occ/cl/instancetype //apple_ref/occ/tdef/instancetype //apple_ref/occ/tag/instancetype //apple_ref/occ/struct/instancetype //apple_ref/occ/intf/instancetype //apple_ref/doc/anysymbol/instancetype" machineGenerated="true" --><span class="type">instancetype</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/initWithToken //apple_ref/occ/clm/Mixpanel/initWithToken //apple_ref/occ/intfcm/Mixpanel/initWithToken //apple_ref/occ/intfm/Mixpanel/initWithToken //apple_ref/occ/func/initWithToken //apple_ref/occ/ftmplt/Mixpanel/initWithToken //apple_ref/occ/defn/initWithToken //apple_ref/occ/macro/initWithToken //apple_ref/doc/anysymbol/initWithToken" machineGenerated="true" --><span class="function">initWithToken</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/intf/NSString //apple_ref/doc/anysymbol/NSString" machineGenerated="true" --><span class="type">NSString</span><!-- /a --> <span class="type">*</span>)<span class="param">apiToken</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/launchOptions //apple_ref/occ/clm/Mixpanel/launchOptions //apple_ref/occ/intfcm/Mixpanel/launchOptions //apple_ref/occ/intfm/Mixpanel/launchOptions //apple_ref/occ/func/launchOptions //apple_ref/occ/ftmplt/Mixpanel/launchOptions //apple_ref/occ/defn/launchOptions //apple_ref/occ/macro/launchOptions //apple_ref/doc/anysymbol/launchOptions" machineGenerated="true" --><span class="function">launchOptions</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/nullable //apple_ref/occ/tdef/nullable //apple_ref/occ/tag/nullable //apple_ref/occ/struct/nullable //apple_ref/occ/intf/nullable //apple_ref/doc/anysymbol/nullable" machineGenerated="true" --><span class="type">nullable</span><!-- /a --> <!-- a logicalPath="//apple_ref/occ/cl/NSDictionary //apple_ref/occ/tdef/NSDictionary //apple_ref/occ/tag/NSDictionary //apple_ref/occ/struct/NSDictionary //apple_ref/occ/intf/NSDictionary //apple_ref/doc/anysymbol/NSDictionary" machineGenerated="true" --><span class="type">NSDictionary</span><!-- /a --> <span class="type">*</span>)<span class="param">launchOptions</span> 
+        <!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/flushInterval //apple_ref/occ/clm/Mixpanel/flushInterval //apple_ref/occ/intfcm/Mixpanel/flushInterval //apple_ref/occ/intfm/Mixpanel/flushInterval //apple_ref/occ/func/flushInterval //apple_ref/occ/ftmplt/Mixpanel/flushInterval //apple_ref/occ/defn/flushInterval //apple_ref/occ/macro/flushInterval //apple_ref/doc/anysymbol/flushInterval" machineGenerated="true" --><span class="function">flushInterval</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/NSUInteger //apple_ref/occ/tdef/NSUInteger //apple_ref/occ/tag/NSUInteger //apple_ref/occ/struct/NSUInteger //apple_ref/occ/intf/NSUInteger //apple_ref/doc/anysymbol/NSUInteger" machineGenerated="true" --><span class="type">NSUInteger</span><!-- /a -->)<span class="param">flushInterval</span> <!-- a logicalPath="//apple_ref/occ/instm/Mixpanel/trackCrashes //apple_ref/occ/clm/Mixpanel/trackCrashes //apple_ref/occ/intfcm/Mixpanel/trackCrashes //apple_ref/occ/intfm/Mixpanel/trackCrashes //apple_ref/occ/func/trackCrashes //apple_ref/occ/ftmplt/Mixpanel/trackCrashes //apple_ref/occ/defn/trackCrashes //apple_ref/occ/macro/trackCrashes //apple_ref/doc/anysymbol/trackCrashes" machineGenerated="true" --><span class="function">trackCrashes</span><!-- /a -->:(<!-- a logicalPath="//apple_ref/occ/cl/BOOL //apple_ref/occ/tdef/BOOL //apple_ref/occ/tag/BOOL //apple_ref/occ/struct/BOOL //apple_ref/occ/intf/BOOL //apple_ref/doc/anysymbol/BOOL" machineGenerated="true" --><span class="type">BOOL</span><!-- /a -->)<!-- a logicalPath="//apple_ref/occ/econst/trackCrashes //apple_ref/occ/data/Mixpanel/trackCrashes //apple_ref/occ/data/trackCrashes //apple_ref/occ/clconst/Mixpanel/trackCrashes " machineGenerated="true" --><span class="var">trackCrashes</span><!-- /a -->; <!-- headerDoc=declaration;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class='param_indent'>
+<dl>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/apiToken;   name=initWithToken:launchOptions:flushInterval:trackCrashes:::apiToken -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/apiToken"></a>
+<code>apiToken</code></dt><dd><p>your project token</dd>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/launchOptions;   name=initWithToken:launchOptions:flushInterval:trackCrashes:::launchOptions -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/launchOptions"></a>
+<code>launchOptions</code></dt><dd><p>optional app delegate launchOptions</dd>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/flushInterval;   name=initWithToken:launchOptions:flushInterval:trackCrashes:::flushInterval -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/flushInterval"></a>
+<code>flushInterval</code></dt><dd><p>interval to run background flushing</dd>
+<dt><!-- headerDoc=methodparam;  uid=//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/trackCrashes;   name=initWithToken:launchOptions:flushInterval:trackCrashes:::trackCrashes -->
+<a name="//apple_ref/doc/methodparam/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:/trackCrashes"></a>
+<code>trackCrashes</code></dt><dd><p>whether or not to track crashes in Mixpanel. may want to disable if you're seeing
+issues with your crash reporting for either signals or exceptions</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;name=start --><p>Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
+</p>
+<!-- headerDoc=discussion;uid=//apple_ref/occ/instm/Mixpanel/initWithToken:launchOptions:flushInterval:trackCrashes:;name=end --><!-- end discussion -->
 <hr class="betweenAPIEntries"><!-- headerDoc=instm;  uid=//apple_ref/occ/instm/Mixpanel/joinExperiments;   name=Mixpanel::joinExperiments -->
 <a name="//apple_ref/occ/instm/Mixpanel/joinExperiments"></a>
 <h3><a name="joinExperiments">joinExperiments</a></h3>
@@ -1339,7 +1413,7 @@ effectively having access to such granular location information via the IP Addre
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=start --><p>Defaults to YES.
 <!-- headerDoc=discussion;uid=//apple_ref/occ/instp/Mixpanel/useIPAddressForGeoLocation;name=end --><!-- end discussion -->
 <p class="gapBeforeFooter">&nbsp;</p><hr class="afterFooter"><div class="hd_copyright_and_timestamp">
-<p class="hd_timestamp">Last Updated: Monday, July 17, 2017
+<p class="hd_timestamp">Last Updated: Wednesday, September 13, 2017
 </p></div>
 </td></tr></table>
 </body></html>
