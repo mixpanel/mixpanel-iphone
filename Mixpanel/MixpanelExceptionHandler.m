@@ -26,6 +26,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 @interface MixpanelExceptionHandler ()
 
 @property (nonatomic) NSUncaughtExceptionHandler *defaultExceptionHandler;
+@property (nonatomic, unsafe_unretained) struct sigaction *prev_signal_handlers;
 @property (nonatomic, strong) NSHashTable *mixpanelInstances;
 
 @end
@@ -41,50 +42,42 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     return gSharedHandler;
 }
 
-+ (NSArray *)backtrace
-{
-    void* callstack[128];
-    int frames = backtrace(callstack, 128);
-    char **strs = backtrace_symbols(callstack, frames);
-
-    int i;
-    NSMutableArray *backtrace = [NSMutableArray arrayWithCapacity:frames];
-    for (
-         i = UncaughtExceptionHandlerSkipAddressCount;
-         i < UncaughtExceptionHandlerSkipAddressCount +
-         UncaughtExceptionHandlerReportAddressCount;
-         i++)
-    {
-        [backtrace addObject:[NSString stringWithUTF8String:strs[i]]];
-    }
-    free(strs);
-    
-    return backtrace;
-}
-
-
 - (instancetype)init {
     self = [super init];
     if (self) {
         // Create a hash table of weak pointers to mixpanel instances
         _mixpanelInstances = [NSHashTable weakObjectsHashTable];
         
-        // Save the existing exception handler
-        _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
+        _prev_signal_handlers = calloc(NSIG, sizeof(struct sigaction));
+
         // Install our handler
         [self setupHandlers];
     }
     return self;
 }
 
+- (void)dealloc {
+    free(_prev_signal_handlers);
+}
+
 - (void)setupHandlers {
+    _defaultExceptionHandler = NSGetUncaughtExceptionHandler();
     NSSetUncaughtExceptionHandler(&MPHandleException);
-    signal(SIGABRT, MPSignalHandler);
-    signal(SIGILL, MPSignalHandler);
-    signal(SIGSEGV, MPSignalHandler);
-    signal(SIGFPE, MPSignalHandler);
-    signal(SIGBUS, MPSignalHandler);
-    signal(SIGPIPE, MPSignalHandler);
+
+    struct sigaction action;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = SA_SIGINFO;
+    action.sa_sigaction = &MPSignalHandler;
+    int signals[] = {SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS, SIGPIPE};
+    for (int i = 0; i < sizeof(signals) / sizeof(int); i++) {
+        struct sigaction prev_action;
+        int err = sigaction(signals[i], &action, &prev_action);
+        if (err == 0) {
+            memcpy(_prev_signal_handlers + signals[i], &prev_action, sizeof(prev_action));
+        } else {
+            NSLog(@"Errored while trying to set up sigaction for signal %d", signals[i]);
+        }
+    }
 }
 
 - (void)addMixpanelInstance:(Mixpanel *)instance {
@@ -93,88 +86,53 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
     [self.mixpanelInstances addObject:instance];
 }
 
-void MPSignalHandler(int signal)
-{
-    int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
-    if (exceptionCount > UncaughtExceptionMaximum)
-    {
-        return;
-    }
-
-    NSMutableDictionary *userInfo =
-    [NSMutableDictionary
-     dictionaryWithObject:[NSNumber numberWithInt:signal]
-     forKey:UncaughtExceptionHandlerSignalKey];
-
-    NSArray *callStack = [MixpanelExceptionHandler backtrace];
-    [userInfo
-     setObject:callStack
-     forKey:UncaughtExceptionHandlerAddressesKey];
-
-    [MixpanelExceptionHandler performSelectorOnMainThread:@selector(mp_handleUncaughtException:)
-                              withObject:[NSException
-                                          exceptionWithName:UncaughtExceptionHandlerSignalExceptionName
-                                          reason:
-                                          [NSString stringWithFormat:
-                                           NSLocalizedString(@"Signal %d was raised.", nil),
-                                           signal]
-                                          userInfo:
-                                          [NSDictionary
-                                           dictionaryWithObject:[NSNumber numberWithInt:signal]
-                                           forKey:UncaughtExceptionHandlerSignalKey]] waitUntilDone:YES];
-}
-
-void MPHandleException(NSException *exception)
-{
-    int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
-    if (exceptionCount > UncaughtExceptionMaximum)
-    {
-        return;
-    }
-
-    NSArray *callStack = [MixpanelExceptionHandler backtrace];
-    NSMutableDictionary *userInfo =
-    [NSMutableDictionary dictionaryWithDictionary:[exception userInfo]];
-    [userInfo
-     setObject:callStack
-     forKey:UncaughtExceptionHandlerAddressesKey];
-
-    [MixpanelExceptionHandler performSelectorOnMainThread:@selector(mp_handleUncaughtException:)
-                              withObject:[NSException
-                                          exceptionWithName:[exception name]
-                                          reason:[exception reason]
-                                          userInfo:userInfo] waitUntilDone:YES];
-}
-
-
-+ (void) mp_handleUncaughtException:(NSException *)exception {
+void MPSignalHandler(int signal, struct __siginfo *info, void *context) {
     MixpanelExceptionHandler *handler = [MixpanelExceptionHandler sharedHandler];
 
+    int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
+    if (exceptionCount <= UncaughtExceptionMaximum) {
+        NSDictionary *userInfo = @{UncaughtExceptionHandlerSignalKey: @(signal)};
+        NSException *exception = [NSException exceptionWithName:UncaughtExceptionHandlerSignalExceptionName
+                                                         reason:[NSString stringWithFormat:@"Signal %d was raised.", signal]
+                                                       userInfo:userInfo];
+
+        [handler mp_handleUncaughtException:exception];
+    }
+
+    struct sigaction prev_action = handler.prev_signal_handlers[signal];
+    if (prev_action.sa_flags & SA_SIGINFO) {
+        if (prev_action.sa_sigaction) {
+            prev_action.sa_sigaction(signal, info, context);
+        }
+    } else if (prev_action.sa_handler) {
+        prev_action.sa_handler(signal);
+    }
+}
+
+void MPHandleException(NSException *exception) {
+    MixpanelExceptionHandler *handler = [MixpanelExceptionHandler sharedHandler];
+
+    int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
+    if (exceptionCount <= UncaughtExceptionMaximum) {
+        [handler mp_handleUncaughtException:exception];
+    }
+
+    if (handler.defaultExceptionHandler) {
+        handler.defaultExceptionHandler(exception);
+    }
+}
+
+- (void) mp_handleUncaughtException:(NSException *)exception {
     // Archive the values for each Mixpanel instance
-    for (Mixpanel *instance in handler.mixpanelInstances) {
-        [instance archive];
+    for (Mixpanel *instance in self.mixpanelInstances) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
         [properties setValue:[exception reason] forKey:@"$ae_crashed_reason"];
         [instance track:@"$ae_crashed" properties:properties];
-        dispatch_sync(instance.serialQueue, ^{});
+        dispatch_sync(instance.serialQueue, ^{
+            [instance archive];
+        });
     }
-
-    NSSetUncaughtExceptionHandler(NULL);
-    signal(SIGABRT, SIG_DFL);
-    signal(SIGILL, SIG_DFL);
-    signal(SIGSEGV, SIG_DFL);
-    signal(SIGFPE, SIG_DFL);
-    signal(SIGBUS, SIG_DFL);
-    signal(SIGPIPE, SIG_DFL);
     NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
-
-    NSLog(@"%@", [NSString stringWithFormat:@"Debug details follow:\n%@\n%@",
-                  [exception reason],
-                  [[exception userInfo] objectForKey:UncaughtExceptionHandlerAddressesKey]]);
-    if (handler.defaultExceptionHandler) {
-        // Ensure the existing handler gets called once we're finished
-        handler.defaultExceptionHandler(exception);
-    }
 }
 
 

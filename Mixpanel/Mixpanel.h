@@ -339,6 +339,28 @@ NS_ASSUME_NONNULL_BEGIN
  @method
 
  @abstract
+ Initializes an instance of the API with the given project token. This also sets
+ it as a shared instance so you can use [Mixpanel sharedInstance] or
+ [Mixpanel sharedInstanceWithToken:apiToken] to retrieve this object later.
+
+ @discussion
+ Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
+
+ @param apiToken        your project token
+ @param launchOptions   optional app delegate launchOptions
+ @param flushInterval   interval to run background flushing
+ @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
+                        issues with your crash reporting for either signals or exceptions
+ */
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(nullable NSDictionary *)launchOptions
+                flushInterval:(NSUInteger)flushInterval
+                 trackCrashes:(BOOL)trackCrashes;
+
+/*!
+ @method
+
+ @abstract
  Initializes an instance of the API with the given project token.
 
  @discussion
@@ -348,7 +370,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(nullable NSDictionary *)launchOptions
+             andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  @method
