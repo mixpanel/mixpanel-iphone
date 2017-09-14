@@ -11,14 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- @class
  Mixpanel People API.
 
- @abstract
  Access to the Mixpanel People API, available as a property on the main
  Mixpanel API.
 
- @discussion
  <b>You should not instantiate this object yourself.</b> An instance of it will
  be available as a property of the main Mixpanel object. Calls to Mixpanel
  People methods will look like this:
@@ -41,9 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface MixpanelPeople : NSObject
 /*!
- @property
-
- @abstract
  controls the $ignore_time property in any subsequent MixpanelPeople operation.
 
  If the $ignore_time property is present and true in your request,
@@ -51,18 +45,13 @@ NS_ASSUME_NONNULL_BEGIN
  Otherwise, Mixpanel will add a "Last Seen" property associated with the
  current time for all $set, $append, and $add operations
 
- @discussion
  Defaults to NO.
  */
 @property (atomic) BOOL ignoreTime;
 
 /*!
- @method
-
- @abstract
  Register the given device to receive push notifications.
 
- @discussion
  This will associate the device token with the current user in Mixpanel People,
  which will allow you to send push notifications to the user from the Mixpanel
  People web interface. You should call this method with the <code>NSData</code>
@@ -74,36 +63,26 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addPushDeviceToken:(NSData *)deviceToken;
 
 /*!
- @method
-
- @abstract
  Unregister the given device to receive push notifications.
 
- @discussion
  This will unset all of the push tokens saved to this people profile. This is useful
  in conjunction with a call to `reset`, or when a user is logging out.
  */
 - (void)removeAllPushDeviceTokens;
 
 /*!
- @method
-
- @abstract
  Unregister a specific device token from the ability to receive push notifications.
 
- @discussion
  This will remove the provided push token saved to this people profile. This is useful
  in conjunction with a call to `reset`, or when a user is logging out.
+
+ @param deviceToken     device token to be unregistered
  */
 - (void)removePushDeviceToken:(NSData *)deviceToken;
 
 /*!
- @method
-
- @abstract
  Set properties on the current user in Mixpanel People.
 
- @discussion
  The properties will be set on the current user. The keys must be NSString
  objects and the values should be NSString, NSNumber, NSArray, NSDate, or
  NSNull objects. We use an NSAssert to enforce this type requirement. In
@@ -126,12 +105,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)set:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Convenience method for setting a single property in Mixpanel People.
 
- @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
@@ -143,13 +118,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)set:(NSString *)property to:(id)object;
 
 /*!
- @method
-
- @abstract
  Set properties on the current user in Mixpanel People, but don't overwrite if
  there is an existing value.
 
- @discussion
  This method is identical to <code>set:</code> except it will only set
  properties that are not already set. It is particularly useful for collecting
  data about the user's initial experience and source, as well as dates
@@ -161,13 +132,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setOnce:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Remove a list of properties and their values from the current user's profile
  in Mixpanel People.
 
- @discussion
  The properties array must ony contain NSString names of properties. For properties
  that don't exist there will be no effect.
 
@@ -177,12 +144,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)unset:(NSArray *)properties;
 
 /*!
- @method
-
- @abstract
  Increment the given numeric properties by the given values.
 
- @discussion
  Property keys must be NSString names of numeric properties. A property is
  numeric if its current value is a number. If a property does not exist, it
  will be set to the increment amount. Property values must be NSNumber objects.
@@ -192,9 +155,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)increment:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Convenience method for incrementing a single numeric property by the specified
  amount.
 
@@ -204,12 +164,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)increment:(NSString *)property by:(NSNumber *)amount;
 
 /*!
- @method
-
- @abstract
  Append values to list properties.
 
- @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
@@ -220,12 +176,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)append:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Union list properties.
 
- @discussion
  Property keys must be <code>NSArray</code> objects.
 
  @param properties      mapping of list property names to lists to union
@@ -233,12 +185,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)union:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Remove list properties.
 
- @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
@@ -249,9 +197,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)remove:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Track money spent by the current user for revenue analytics.
 
  @param amount          amount of revenue received
@@ -259,13 +204,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)trackCharge:(NSNumber *)amount;
 
 /*!
- @method
-
- @abstract
  Track money spent by the current user for revenue analytics and associate
  properties with the charge.
 
- @discussion
  Charge properties allow you segment on types of revenue. For instance, you
  could record a product ID with each charge so that you could segment on it in
  revenue analytics to see which products are generating the most revenue.
@@ -274,17 +215,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /*!
- @method
-
- @abstract
  Delete current user's revenue history.
  */
 - (void)clearCharges;
 
 /*!
- @method
-
- @abstract
  Delete current user's record from Mixpanel People.
  */
 - (void)deleteUser;

@@ -19,13 +19,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
- @class
  Mixpanel API.
 
- @abstract
  The primary interface for integrating Mixpanel with your app.
 
- @discussion
  Use the Mixpanel class to set up your project and track events in Mixpanel
  Engagement. It now also includes a <code>people</code> property for accessing
  the Mixpanel People API.
@@ -51,23 +48,15 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Properties
 
 /*!
- @property
-
- @abstract
  Accessor to the Mixpanel People API object.
 
- @discussion
  See the documentation for MixpanelDelegate below for more information.
  */
 @property (atomic, readonly, strong) MixpanelPeople *people;
 
 /*!
- @property
-
- @abstract
  The distinct ID of the current user.
 
- @discussion
  A distinct ID is a string that uniquely identifies one of your users. By default, 
  we'll use the device's advertisingIdentifier UUIDString, if that is not available
  we'll use the device's identifierForVendor UUIDString, and finally if that
@@ -77,12 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (atomic, readonly, copy) NSString *distinctId;
 
 /*!
- @property
- 
- @abstract
  The alias of the current user.
  
- @discussion
  An alias is another string that uniquely identifies one of your users. Typically, 
  this is the user ID from your database. By using an alias you can link pre- and
  post-sign up activity as well as cross-platform activity under one distinct ID.
@@ -91,61 +76,41 @@ NS_ASSUME_NONNULL_BEGIN
 @property (atomic, readonly, copy) NSString *alias;
 
 /*!
- @property
-
- @abstract
  The base URL used for Mixpanel API requests.
 
- @discussion
  Useful if you need to proxy Mixpanel requests. Defaults to
  https://api.mixpanel.com.
  */
 @property (nonatomic, copy) NSString *serverURL;
 
 /*!
- @property
-
- @abstract
  Flush timer's interval.
 
- @discussion
  Setting a flush interval of 0 will turn off the flush timer.
  */
 @property (atomic) NSUInteger flushInterval;
 
 /*!
- @property
-
- @abstract
  Control whether the library should flush data to Mixpanel when the app
  enters the background.
 
- @discussion
  Defaults to YES. Only affects apps targeted at iOS 4.0, when background
  task support was introduced, and later.
  */
 @property (atomic) BOOL flushOnBackground;
 
 /*!
- @property
-
- @abstract
  Controls whether to show spinning network activity indicator when flushing
  data to the Mixpanel servers.
 
- @discussion
  Defaults to YES.
  */
 @property (atomic) BOOL shouldManageNetworkActivityIndicator;
 
 /*!
- @property
-
- @abstract
  Controls whether to automatically check for notifications for the
  currently identified user when the application becomes active.
 
- @discussion
  Defaults to YES. Will fire a network request on
  <code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
  for the currently identified user.
@@ -153,13 +118,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (atomic) BOOL checkForNotificationsOnActive;
 
 /*!
- @property
-
- @abstract
  Controls whether to automatically check for A/B test variants for the
  currently identified user when the application becomes active.
 
- @discussion
  Defaults to YES. Will fire a network request on
  <code>applicationDidBecomeActive</code> to retrieve a list of valid variants
  for the currently identified user.
@@ -167,49 +128,34 @@ NS_ASSUME_NONNULL_BEGIN
 @property (atomic) BOOL checkForVariantsOnActive;
 
 /*!
- @property
-
- @abstract
  Controls whether to automatically check for and show in-app notifications
  for the currently identified user when the application becomes active.
 
- @discussion
  Defaults to YES.
  */
 @property (atomic) BOOL showNotificationOnActive;
 
 /*!
- @property
- 
- @abstract
  Controls whether to automatically send the client IP Address as part of 
  event tracking. With an IP address, geo-location is possible down to neighborhoods
  within a city, although the Mixpanel Dashboard will just show you city level location
  specificity. For privacy reasons, you may be in a situation where you need to forego
  effectively having access to such granular location information via the IP Address.
  
- @discussion
  Defaults to YES.
  */
 @property (atomic) BOOL useIPAddressForGeoLocation;
 
 /*!
- @property
- 
- @abstract
  Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com. 
  You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
  created A/B tests and codeless events will still be delivered.
  
- @discussion
  Defaults to YES.
  */
 @property (atomic) BOOL enableVisualABTestAndCodeless;
 
 /*!
- @property
- 
- @abstract
  Controls whether to enable the run time debug logging at all levels. Note that the
  Mixpanel SDK uses Apple System Logging to forward log messages to `STDERR`, this also
  means that mixpanel logs are segmented by log level. Settings this to `YES` will enable 
@@ -221,55 +167,38 @@ NS_ASSUME_NONNULL_BEGIN
    * Debug - Information useful only to developers, and normally not logged.
  
  
- @discussion
  Defaults to NO.
  */
 @property (atomic) BOOL enableLogging;
 
 /*!
- @property
-
- @abstract
  Determines the time, in seconds, that a mini notification will remain on
  the screen before automatically hiding itself.
 
- @discussion
  Defaults to 6.0.
  */
 @property (atomic) CGFloat miniNotificationPresentationTime;
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 /*!
- @property
-
- @abstract
  The minimum session duration (ms) that is tracked in automatic events.
 
- @discussion
  The default value is 10000 (10 seconds).
  */
 @property (atomic) UInt64 minimumSessionDuration;
 
 /*!
- @property
-
- @abstract
  The maximum session duration (ms) that is tracked in automatic events.
 
- @discussion
  The default value is UINT64_MAX (no maximum session duration).
  */
 @property (atomic) UInt64 maximumSessionDuration;
 #endif
 
 /*!
- @property
-
- @abstract
  The a MixpanelDelegate object that can be used to assert fine-grain control
  over Mixpanel network activity.
 
- @discussion
  Using a delegate is optional. See the documentation for MixpanelDelegate
  below for more information.
  */
@@ -278,12 +207,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Tracking
 
 /*!
- @method
-
- @abstract
  Returns (and creates, if needed) a singleton instance of the API.
 
- @discussion
  This method will return a singleton instance of the <code>Mixpanel</code> class for
  you using the given project token. If an instance does not exist, this method will create
  one using <code>initWithToken:launchOptions:andFlushInterval:</code>. If you only have one
@@ -303,13 +228,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken;
 
 /*!
- @method
-
- @abstract
  Initializes a singleton instance of the API, uses it to track launchOptions information,
  and then returns it.
 
- @discussion
  This is the preferred method for creating a sharedInstance with a mixpanel
  like above. With the launchOptions parameter, Mixpanel can track referral
  information created by push notifications.
@@ -321,12 +242,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
 /*!
- @method
-
- @abstract
  Returns a previously instantiated singleton instance of the API.
 
- @discussion
  The API must be initialized with <code>sharedInstanceWithToken:</code> or
  <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
  This method will return <code>nil</code> if there are no instances created. If there is more than 
@@ -336,14 +253,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable Mixpanel *)sharedInstance;
 
 /*!
- @method
-
- @abstract
  Initializes an instance of the API with the given project token. This also sets
- it as a shared instance so you can use [Mixpanel sharedInstance] or
- [Mixpanel sharedInstanceWithToken:apiToken] to retrieve this object later.
+ it as a shared instance so you can use <code>sharedInstance</code> or
+ <code>sharedInstanceWithToken:</code> to retrieve this object later.
 
- @discussion
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
@@ -358,12 +271,8 @@ NS_ASSUME_NONNULL_BEGIN
                  trackCrashes:(BOOL)trackCrashes;
 
 /*!
- @method
-
- @abstract
  Initializes an instance of the API with the given project token.
 
- @discussion
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
@@ -375,12 +284,8 @@ NS_ASSUME_NONNULL_BEGIN
              andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
- @method
-
- @abstract
  Initializes an instance of the API with the given project token.
 
- @discussion
  Supports for the old initWithToken method format but really just passes
  launchOptions to the above method as nil.
 
@@ -390,12 +295,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
- @property
-
- @abstract
  Sets the distinct ID of the current user.
 
- @discussion
  As of version 2.3.1, Mixpanel will choose a default distinct ID based on
  whether you are using the AdSupport.framework or not.
 
@@ -431,13 +332,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)identify:(NSString *)distinctId;
 
 /*!
- @property
- 
- @abstract
  Sets the distinct ID of the current user. With the option of only updating the
  distinct ID value and not the Mixpanel People distinct ID.
  
- @discussion
  This method is not intended to be used unless you wish to prevent updating the Mixpanel
  People distinct ID value by passing a value of NO to the usePeople param. This can be
  useful if the user wishes to prevent People updates from being sent until the identify 
@@ -449,9 +346,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople;
 
 /*!
- @method
-
- @abstract
  Tracks an event.
 
  @param event           event name
@@ -459,12 +353,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)track:(NSString *)event;
 
 /*!
- @method
-
- @abstract
  Tracks an event with properties.
 
- @discussion
  Properties will allow you to segment your events in your Mixpanel reports.
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
@@ -478,12 +368,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)track:(NSString *)event properties:(nullable NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Registers super properties, overwriting ones that have already been set.
 
- @discussion
  Super properties, once registered, are automatically sent as properties for
  all event tracking calls. They save you having to maintain and add a common
  set of properties to your events. Property keys must be <code>NSString</code>
@@ -496,13 +382,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)registerSuperProperties:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Registers super properties without overwriting ones that have already been
  set.
 
- @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
@@ -513,13 +395,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties;
 
 /*!
- @method
-
- @abstract
  Registers super properties without overwriting ones that have already been set
  unless the existing value is equal to defaultValue.
 
- @discussion
  Property keys must be <code>NSString</code> objects and values must be
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
@@ -531,12 +409,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(nullable id)defaultValue;
 
 /*!
- @method
-
- @abstract
  Removes a previously registered super property.
 
- @discussion
  As an alternative to clearing all properties, unregistering specific super
  properties prevents them from being recorded on future events. This operation
  does not affect the value of other super properties. Any property name that is
@@ -551,29 +425,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)unregisterSuperProperty:(NSString *)propertyName;
 
 /*!
- @method
-
- @abstract
  Clears all currently set super properties.
  */
 - (void)clearSuperProperties;
 
 /*!
- @method
-
- @abstract
  Returns the currently set super properties.
  */
 - (NSDictionary *)currentSuperProperties;
 
 /*!
- @method
-
- @abstract
  Starts a timer that will be stopped and added as a property when a
  corresponding event is tracked.
 
- @discussion
  This method is intended to be used in advance of events that have
  a duration. For example, if a developer were to track an "Image Upload" event
  she might want to also know how long the upload took. Calling this method
@@ -598,9 +462,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)timeEvent:(NSString *)event;
 
 /*!
- @method
-
- @abstract
  Retrieves the time elapsed for the named event since <code>timeEvent:</code> was called.
 
  @param event   the name of the event to be tracked that was passed to <code>timeEvent:</code>
@@ -608,28 +469,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (double)eventElapsedTime:(NSString *)event;
 
 /*!
- @method
-
- @abstract
  Clears all current event timers.
  */
 - (void)clearTimedEvents;
 
 /*!
- @method
-
- @abstract
  Clears all stored properties and distinct IDs. Useful if your app's user logs out.
  */
 - (void)reset;
 
 /*!
- @method
-
- @abstract
  Uploads queued data to the Mixpanel server.
 
- @discussion
  By default, queued data is flushed to the Mixpanel servers every minute (the
  default for <code>flushInterval</code>), and on background (since
  <code>flushOnBackground</code> is on by default). You only need to call this
@@ -638,12 +489,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)flush;
 
 /*!
- @method
- 
- @abstract
  Calls flush, then optionally archives and calls a handler when finished.
  
- @discussion
  When calling <code>flush</code> manually, it is sometimes important to verify
  that the flush has finished before further action is taken. This is
  especially important when the app is in the background and could be suspended
@@ -651,17 +498,15 @@ NS_ASSUME_NONNULL_BEGIN
  <code>application:didReceiveRemoteNotification:fetchCompletionHandler:</code>
  are called when an app is brought to the background and require a handler to
  be called when it finishes.
+
+ @param handler     completion handler to be called after flush completes
  */
 - (void)flushWithCompletion:(nullable void (^)(void))handler;
 
 /*!
- @method
-
- @abstract
  Writes current project info, including distinct ID, super properties and pending event
  and People record queues to disk.
 
- @discussion
  This state will be recovered when the app is launched again if the Mixpanel
  library is initialized with the same project token. <b>You do not need to call
  this method</b>. The library listens for app state changes and handles
@@ -671,12 +516,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)archive;
 
 /*!
- @method
-
- @abstract
  Creates a distinct_id alias from alias to original id.
 
- @discussion
  This method is used to map an identifier called an alias to the existing Mixpanel
  distinct id. This causes all events and people requests sent with the alias to be
  mapped back to the original distinct id. The recommended usage pattern is to call
@@ -700,7 +541,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
+/*!
+ Returns the Mixpanel library version number as a string, e.g. "3.2.0".
+ */
 - (NSString *)libVersion;
+
+/*!
+ Returns the Mixpanel library version number as a string, e.g. "3.2.0".
+ */
 + (NSString *)libVersion;
 
 
@@ -708,24 +556,18 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Mixpanel Notifications
 
 /*!
- @method
-
- @abstract
  Shows the notification of the given id.
 
- @discussion
  You do not need to call this method on the main thread.
+
+ @param ID      notification id
  */
 - (void)showNotificationWithID:(NSUInteger)ID;
 
 
 /*!
- @method
-
- @abstract
  Shows a notification with the given type if one is available.
 
- @discussion
  You do not need to call this method on the main thread.
 
  @param type The type of notification to show, either @"mini", or @"takeover"
@@ -733,12 +575,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showNotificationWithType:(NSString *)type;
 
 /*!
- @method
-
- @abstract
  Shows a notification if one is available.
 
- @discussion
  You do not need to call this method on the main thread.
  */
 - (void)showNotification;
@@ -746,12 +584,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Mixpanel A/B Testing
 
 /*!
- @method
-
- @abstract
  Join any experiments (A/B tests) that are available for the current user.
 
- @discussion
  Mixpanel will check for A/B tests automatically when your app enters
  the foreground. Call this method if you would like to to check for,
  and join, any experiments are newly available for the current user.
@@ -761,14 +595,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)joinExperiments;
 
 /*!
- @method
-
- @abstract
  Join any experiments (A/B tests) that are available for the current user.
 
- @discussion
  Same as joinExperiments but will fire the given callback after all experiments
  have been loaded and applied.
+
+ @param experimentsLoadedCallback       callback to be called after experiments
+                                        joined and applied
  */
 - (void)joinExperimentsWithCallback:(nullable void (^)(void))experimentsLoadedCallback;
 
@@ -776,9 +609,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Deprecated
 /*!
- @property
- 
- @abstract
  Current user's name in Mixpanel Streams.
  */
 @property (nullable, atomic, copy) NSString *nameTag __deprecated; // Deprecated in v3.0.1
@@ -788,10 +618,8 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  @protocol
 
- @abstract
  Delegate protocol for controlling the Mixpanel API's network behavior.
 
- @discussion
  Creating a delegate for the Mixpanel object is entirely optional. It is only
  necessary when you want full control over when data is uploaded to the server,
  beyond simply calling stop: and start: before and after a particular block of
@@ -802,12 +630,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 /*!
- @method
-
- @abstract
  Asks the delegate if data should be uploaded to the server.
 
- @discussion
  Return YES to upload now, NO to defer until later.
 
  @param mixpanel        Mixpanel API instance

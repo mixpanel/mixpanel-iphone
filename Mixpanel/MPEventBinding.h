@@ -19,12 +19,8 @@
 @property (nonatomic, assign) Class swizzleClass;
 
 /*!
- @property
-
- @abstract
  Whether this specific binding is currently running on the device.
 
- @discussion
  This property will not be restored on unarchive, as the binding will need
  to be run again once the app is restarted.
  */

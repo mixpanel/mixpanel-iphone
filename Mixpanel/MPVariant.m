@@ -17,8 +17,8 @@
 
 @interface MPVariant ()
 
-    @property (nonatomic, strong) NSMutableOrderedSet *actions;
-    @property (nonatomic, strong) NSMutableArray *tweaks;
+@property (nonatomic, strong) NSMutableOrderedSet *actions;
+@property (nonatomic, strong) NSMutableArray *tweaks;
 
 @end
 
