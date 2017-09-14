@@ -2,19 +2,12 @@
 
 echo "Generating documentation."
 
-rm -rf ./Docs
-appledoc --project-name mixpanel-iphone --project-company Mixpanel --company-id com.mixpanel --no-repeat-first-par --keep-undocumented-objects --keep-undocumented-members --preprocess-headerdoc --no-create-docset --output Docs Mixpanel/Mixpanel.h Mixpanel/MixpanelPeople.h
-rm -rf ../TempMixpanelDocs
-cp -a ./Docs/html/. ../TempMixpanelDocs
-rm -rf ./Docs
-git checkout gh-pages
-git pull
-cp -a ../TempMixpanelDocs/. .
-rm -rf ../TempMixpanelDocs/
-git add .
-git reset HelloMixpanel/
+rm -rf docs
+appledoc --project-name mixpanel-iphone --project-company Mixpanel --company-id com.mixpanel --no-repeat-first-par --keep-undocumented-objects --keep-undocumented-members --preprocess-headerdoc --no-create-docset --output docs Mixpanel/Mixpanel.h Mixpanel/MixpanelPeople.h
+cp -a docs/html/. docs/.
+rm -rf docs/html
+git add docs
 git commit -m 'updated docs'
-git push origin gh-pages
-git checkout master
+git push
 
-echo "Updated docs and pushed them to gh-pages!"
+echo "Updated docs!"
