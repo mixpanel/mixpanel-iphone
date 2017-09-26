@@ -466,8 +466,10 @@ static NSString *defaultProjectToken;
             self.hasAddedObserver = YES;
         }
 
+        BOOL selectorFromNewClass = NO;
         if (class_getInstanceMethod(newCls, NSSelectorFromString(@"userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"))) {
             selector = NSSelectorFromString(@"userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:");
+            selectorFromNewClass = YES;
         } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"))) {
             selector = NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:");
         } else if (class_getInstanceMethod(cls, NSSelectorFromString(@"application:didReceiveRemoteNotification:"))) {
@@ -475,7 +477,7 @@ static NSString *defaultProjectToken;
         }
 
         if (selector) {
-            if (newCls) {
+            if (selectorFromNewClass) {
                 [MPSwizzler swizzleSelector:selector
                                     onClass:newCls
                                   withBlock:^(id view, SEL command, UIApplication *application, UNNotificationResponse *response) {
