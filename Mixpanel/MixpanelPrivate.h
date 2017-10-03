@@ -43,6 +43,10 @@
 #import "MPWebSocket.h"
 #endif
 
+#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
+#import "MPConnectIntegrations.h"
+#endif
+
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 @interface Mixpanel () <MPNotificationViewControllerDelegate, TrackDelegate>
 #else
@@ -68,6 +72,10 @@
 @property (nonatomic) NSUInteger validationEventCount;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 @property (atomic, strong) AutomaticEvents *automaticEvents;
+#endif
+
+#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
+@property (nonatomic, strong) MPConnectIntegrations *connectIntegrations;
 #endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
@@ -100,6 +108,8 @@
 
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
+
+@property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
 
 @property (atomic, copy) NSString *switchboardURL;
 
