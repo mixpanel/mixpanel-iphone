@@ -8,10 +8,13 @@
 
 #import "MPConnectIntegrations.h"
 
+static const NSInteger MAX_RETRIES = 3;
+
 @interface MPConnectIntegrations ()
 
 @property (nonatomic, weak) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
+@property (nonatomic, assign) NSInteger urbanAirshipRetries;
 
 @end
 
@@ -26,6 +29,7 @@
 
 - (void)reset {
     self.savedUrbanAirshipChannelID = nil;
+    self.urbanAirshipRetries = 0;
 }
 
 - (void)setupIntegrations:(NSArray<NSNumber *> *)integrations {
@@ -39,12 +43,18 @@
     if (urbanAirship) {
         NSString *channelID = [[urbanAirship performSelector:NSSelectorFromString(@"push")] performSelector:NSSelectorFromString(@"channelID")];
         if (!channelID) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self setUrbanAirshipPeopleProp];
-            });
-        } else if (![channelID isEqualToString:self.savedUrbanAirshipChannelID]) {
-            [self.mixpanel.people set:@"$urban_airship_channel_id" to:channelID];
-            self.savedUrbanAirshipChannelID = channelID;
+            self.urbanAirshipRetries++;
+            if (self.urbanAirshipRetries <= MAX_RETRIES) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self setUrbanAirshipPeopleProp];
+                });
+            }
+        } else {
+            self.urbanAirshipRetries = 0;
+            if (![channelID isEqualToString:self.savedUrbanAirshipChannelID]) {
+                [self.mixpanel.people set:@"$urban_airship_channel_id" to:channelID];
+                self.savedUrbanAirshipChannelID = channelID;
+            }
         }
     }
 }
