@@ -542,12 +542,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
 /*!
- Returns the Mixpanel library version number as a string, e.g. "3.2.1".
+ Returns the Mixpanel library version number as a string, e.g. "3.2.2".
  */
 - (NSString *)libVersion;
 
 /*!
- Returns the Mixpanel library version number as a string, e.g. "3.2.1".
+ Returns the Mixpanel library version number as a string, e.g. "3.2.2".
  */
 + (NSString *)libVersion;
 
