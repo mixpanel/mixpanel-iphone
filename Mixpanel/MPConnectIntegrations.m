@@ -8,7 +8,7 @@
 
 #import "MPConnectIntegrations.h"
 
-static const NSInteger MAX_RETRIES = 3;
+static const NSInteger UA_MAX_RETRIES = 3;
 
 @interface MPConnectIntegrations ()
 
@@ -42,9 +42,9 @@ static const NSInteger MAX_RETRIES = 3;
     Class urbanAirship = NSClassFromString(@"UAirship");
     if (urbanAirship) {
         NSString *channelID = [[urbanAirship performSelector:NSSelectorFromString(@"push")] performSelector:NSSelectorFromString(@"channelID")];
-        if (!channelID) {
+        if (!channelID.length) {
             self.urbanAirshipRetries++;
-            if (self.urbanAirshipRetries <= MAX_RETRIES) {
+            if (self.urbanAirshipRetries <= UA_MAX_RETRIES) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self setUrbanAirshipPeopleProp];
                 });
