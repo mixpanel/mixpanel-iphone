@@ -52,7 +52,7 @@ static const NSInteger UA_MAX_RETRIES = 3;
         } else {
             self.urbanAirshipRetries = 0;
             if (![channelID isEqualToString:self.savedUrbanAirshipChannelID]) {
-                [self.mixpanel.people set:@"$urban_airship_channel_id" to:channelID];
+                [self.mixpanel.people set:@"$ios_urban_airship_channel_id" to:channelID];
                 self.savedUrbanAirshipChannelID = channelID;
             }
         }
