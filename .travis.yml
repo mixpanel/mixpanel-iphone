@@ -2,6 +2,9 @@ language: objective-c
 before_install:
   - gem install cocoapods
 osx_image: xcode8
+branches:
+  only:
+  - master
 env:
   global:
   - APP_NAME="HelloMixpanel"
