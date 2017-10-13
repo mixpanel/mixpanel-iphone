@@ -32,8 +32,8 @@ static const NSInteger UA_MAX_RETRIES = 3;
     self.urbanAirshipRetries = 0;
 }
 
-- (void)setupIntegrations:(NSArray<NSNumber *> *)integrations {
-    if ([integrations containsObject:@4]) {
+- (void)setupIntegrations:(NSArray<NSString *> *)integrations {
+    if ([integrations containsObject:@"urban_airship"]) {
         [self setUrbanAirshipPeopleProp];
     }
 }

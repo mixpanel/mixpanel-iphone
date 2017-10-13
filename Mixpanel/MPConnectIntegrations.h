@@ -12,6 +12,6 @@
 
 - (instancetype)initWithMixpanel:(Mixpanel *)mixpanel;
 - (void)reset;
-- (void)setupIntegrations:(NSArray<NSNumber *> *)integrations;
+- (void)setupIntegrations:(NSArray<NSString *> *)integrations;
 
 @end
