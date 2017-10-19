@@ -177,9 +177,9 @@
         // remove target-action pairs
         for (UIControl *control in self.appliedTo.allObjects) {
             if (control && [control isKindOfClass:[UIControl class]]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                [NSThread mp_safelyRunOnMainThreadSync:^{
                     [self stopOnView:control];
-                });
+                }];
             }
         }
         [self resetAppliedTo];
