@@ -177,7 +177,9 @@
         // remove target-action pairs
         for (UIControl *control in self.appliedTo.allObjects) {
             if (control && [control isKindOfClass:[UIControl class]]) {
-                [self stopOnView:control];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self stopOnView:control];
+                });
             }
         }
         [self resetAppliedTo];
