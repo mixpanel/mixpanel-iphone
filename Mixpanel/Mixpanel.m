@@ -362,6 +362,11 @@ static NSString *defaultProjectToken;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID
 {
+    [self createAlias:alias forDistinctID:distinctID usePeople:YES];
+}
+
+- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID usePeople:(BOOL)usePeople;
+{
     if (alias.length == 0) {
         MPLogError(@"%@ create alias called with empty alias: %@", self, alias);
         return;
@@ -376,6 +381,7 @@ static NSString *defaultProjectToken;
             [self archiveProperties];
         });
         [self track:@"$create_alias" properties:@{ @"distinct_id": distinctID, @"alias": alias }];
+        [self identify:distinctID usePeople:usePeople];
         [self flush];
     } else {
         MPLogWarning(@"alias: %@ matches distinctID: %@ - skipping api call.", alias, distinctID);
