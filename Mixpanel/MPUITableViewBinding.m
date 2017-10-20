@@ -8,6 +8,7 @@
 
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
+#import "MixpanelPrivate.h"
 #import "MPSwizzler.h"
 #import "MPUITableViewBinding.h"
 #import "NSThread+MPHelpers.h"
@@ -78,7 +79,7 @@
     if (!self.running && self.swizzleClass != nil) {
         void (^block)(id, SEL, id, id) = ^(id view, SEL command, UITableView *tableView, NSIndexPath *indexPath) {
             [NSThread mp_safelyRunOnMainThreadSync:^{
-                NSObject *root = [UIApplication sharedApplication].keyWindow.rootViewController;
+                NSObject *root = [Mixpanel sharedUIApplication].keyWindow.rootViewController;
                 // select targets based off path
                 if (tableView && [self.path isLeafSelected:tableView fromRoot:root]) {
                     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];

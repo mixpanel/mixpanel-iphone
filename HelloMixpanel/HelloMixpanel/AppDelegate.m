@@ -22,7 +22,6 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }]];
         [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
-
 #endif
     } else {
         // Initialize the MixpanelAPI object

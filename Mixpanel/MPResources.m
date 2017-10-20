@@ -7,6 +7,7 @@
 //
 
 #import "MPResources.h"
+#import "MixpanelPrivate.h"
 
 @implementation MPResources
 
@@ -22,7 +23,8 @@
     NSMutableString *xibFileName = [NSMutableString stringWithString:@"MPTakeoverNotificationViewController"];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
+        UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
+        BOOL isLandscape = UIInterfaceOrientationIsLandscape(sharedApplication.statusBarOrientation);
         if (isLandscape) {
             [xibFileName appendString:@"~iphonelandscape"];
         } else {

@@ -9,7 +9,10 @@
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IOS
+#import <UIKit/UIKit.h>
+#endif
+
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -21,7 +24,6 @@
 #import "AutomaticTracksConstants.h"
 #import "AutomaticEvents.h"
 #import "MixpanelExceptionHandler.h"
-#endif
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -102,6 +104,11 @@
 @property (atomic, copy) NSString *switchboardURL;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
+
++ (BOOL)isAppExtension;
+#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
++ (UIApplication *)sharedUIApplication;
+#endif
 
 - (NSString *)deviceModel;
 - (NSString *)IFA;

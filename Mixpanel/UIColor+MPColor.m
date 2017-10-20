@@ -1,10 +1,11 @@
+#import "MixpanelPrivate.h"
 #import "UIColor+MPColor.h"
 
 @implementation UIColor (MPColor)
 
 + (UIColor *)mp_applicationPrimaryColor {
     // First try and find the color of the UINavigationBar of the top UINavigationController that is showing now.
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *rootViewController = [Mixpanel sharedUIApplication].keyWindow.rootViewController;
     UINavigationController *topNavigationController = nil;
 
     do {

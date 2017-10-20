@@ -6,16 +6,16 @@
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
-#import "MPNetwork.h"
-#import "MPNetworkPrivate.h"
-#import "MPLogger.h"
 #import "Mixpanel.h"
 #import "MixpanelPrivate.h"
+#import "MPLogger.h"
+#import "MPNetwork.h"
+#import "MPNetworkPrivate.h"
 #if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
 #endif
 
-#define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR (defined(MIXPANEL_APP_EXTENSION) || defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
+#define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR (defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
 
 static const NSUInteger kBatchSize = 50;
 
@@ -344,10 +344,12 @@ static const NSUInteger kBatchSize = 50;
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled {
 #if !MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR
-    if (self.shouldManageNetworkActivityIndicator) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = enabled;
-        });
+    if (![Mixpanel isAppExtension]) {
+        if (self.shouldManageNetworkActivityIndicator) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Mixpanel sharedUIApplication].networkActivityIndicatorVisible = enabled;
+            });
+        }
     }
 #endif
 }

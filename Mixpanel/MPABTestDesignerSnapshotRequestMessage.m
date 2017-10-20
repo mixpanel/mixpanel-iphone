@@ -1,6 +1,7 @@
 //
 // Copyright (c) 2014 Mixpanel. All rights reserved.
 
+#import "MixpanelPrivate.h"
 #import "MPABTestDesignerConnection.h"
 #import "MPABTestDesignerSnapshotRequestMessage.h"
 #import "MPABTestDesignerSnapshotResponseMessage.h"
@@ -53,7 +54,7 @@ static NSString * const kObjectIdentityProviderKey = @"object_identity_provider"
             [connection setSessionObject:objectIdentityProvider forKey:kObjectIdentityProviderKey];
         }
 
-        MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[UIApplication sharedApplication]
+        MPApplicationStateSerializer *serializer = [[MPApplicationStateSerializer alloc] initWithApplication:[Mixpanel sharedUIApplication]
                                                                                                configuration:serializerConfig
                                                                                       objectIdentityProvider:objectIdentityProvider];
 
