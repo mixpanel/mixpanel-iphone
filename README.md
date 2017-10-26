@@ -37,8 +37,6 @@ To Install, see our **[full documentation »](https://mixpanel.com/help/referenc
 
 #### iOS, tvOS, watchOS, macOS: 
 `pod 'Mixpanel'`
-#### App Extension:
-`pod 'Mixpanel-AppExtension'`
 
 <a name="carthage"></a>
 ## Carthage
