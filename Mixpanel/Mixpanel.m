@@ -143,7 +143,7 @@ static NSString *defaultProjectToken;
 #else
         self.enableVisualABTestAndCodeless = YES;
 #endif
-
+        self.sessionMetadata = [[SessionMetadata alloc] initWithDispatchQueue:self.serialQueue];
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         [self setUpListeners];
@@ -498,7 +498,8 @@ static NSString *defaultProjectToken;
         }
 #endif
 
-        NSDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
+        NSMutableDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
+        [e addEntriesFromDictionary:[self.sessionMetadata toDict:YES]];
         MPLogInfo(@"%@ queueing event: %@", self, e);
         @synchronized (self) {
             [self.eventsQueue addObject:e];
@@ -1335,6 +1336,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
+    [self.sessionMetadata applicationDidBecomeActive];
     [self startFlushTimer];
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
