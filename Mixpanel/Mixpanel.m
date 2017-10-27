@@ -498,7 +498,8 @@ static NSString *defaultProjectToken;
         }
 #endif
 
-        NSMutableDictionary *e = @{ @"event": event, @"properties": [NSDictionary dictionaryWithDictionary:p]} ;
+        NSMutableDictionary *e = [[NSMutableDictionary alloc] initWithDictionary:@{ @"event": event,
+                                                                                    @"properties": [NSDictionary dictionaryWithDictionary:p]}];
         [e addEntriesFromDictionary:[self.sessionMetadata toDict:YES]];
         MPLogInfo(@"%@ queueing event: %@", self, e);
         @synchronized (self) {

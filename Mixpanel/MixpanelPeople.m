@@ -104,7 +104,7 @@
                 r[action] = [NSDictionary dictionaryWithDictionary:p];
             }
 
-            [r addEntriesFromDictionary:[self.mixpanel.sessionMetadata toDict:YES]];
+            [r addEntriesFromDictionary:[self.mixpanel.sessionMetadata toDict:NO]];
 
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
