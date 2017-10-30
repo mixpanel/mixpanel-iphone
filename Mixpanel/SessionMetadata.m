@@ -10,22 +10,15 @@
 
 @implementation SessionMetadata
 
-- (instancetype)initWithDispatchQueue:(dispatch_queue_t)queue {
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.eventsCounter = 0;
         self.peopleCounter = 0;
         self.sessionID = 0;
         self.sessionStartEpoch = (uint64_t)[[NSDate date] timeIntervalSince1970];
-        self.trackingQueue = queue;
     }
     return self;
-}
-
-- (void)applicationDidBecomeActive {
-    dispatch_async(self.trackingQueue, ^{
-        [self reset];
-    });
 }
 
 - (void)reset {

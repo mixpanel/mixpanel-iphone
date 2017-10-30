@@ -143,7 +143,7 @@ static NSString *defaultProjectToken;
 #else
         self.enableVisualABTestAndCodeless = YES;
 #endif
-        self.sessionMetadata = [[SessionMetadata alloc] initWithDispatchQueue:self.serialQueue];
+        self.sessionMetadata = [[SessionMetadata alloc] init];
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         [self setUpListeners];
@@ -1337,7 +1337,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
-    [self.sessionMetadata applicationDidBecomeActive];
+    dispatch_async(self.serialQueue, ^{
+        [self.sessionMetadata reset];
+    });
     [self startFlushTimer];
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT

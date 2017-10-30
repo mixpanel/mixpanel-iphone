@@ -15,7 +15,7 @@
     @property (nonatomic) uint64_t sessionStartEpoch;
     @property (nonatomic) dispatch_queue_t trackingQueue;
 
-    - (instancetype)initWithDispatchQueue:(dispatch_queue_t)queue;
-    - (void)applicationDidBecomeActive;
+    - (instancetype)init;
+    - (void)reset;
     - (NSDictionary *)toDictionaryForEvent:(BOOL)flag;
 @end
