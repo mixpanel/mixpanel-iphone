@@ -13,7 +13,6 @@
     @property (nonatomic) uint64_t peopleCounter;
     @property (nonatomic) uint64_t sessionID;
     @property (nonatomic) uint64_t sessionStartEpoch;
-    @property (nonatomic) dispatch_queue_t trackingQueue;
 
     - (instancetype)init;
     - (void)reset;
