@@ -16,7 +16,7 @@
         self.eventsCounter = 0;
         self.peopleCounter = 0;
         self.sessionID = 0;
-        self.sessionStartEpoch = 0;
+        self.sessionStartEpoch = (uint64_t)[[NSDate date] timeIntervalSince1970];
         self.trackingQueue = queue;
     }
     return self;
@@ -24,11 +24,15 @@
 
 - (void)applicationDidBecomeActive {
     dispatch_async(self.trackingQueue, ^{
-        self.eventsCounter = 0;
-        self.peopleCounter = 0;
-        self.sessionID = random();
-        self.sessionStartEpoch = (uint64_t)[[NSDate date] timeIntervalSince1970];
+        [self reset];
     });
+}
+
+- (void)reset {
+    self.eventsCounter = 0;
+    self.peopleCounter = 0;
+    self.sessionID = random();
+    self.sessionStartEpoch = (uint64_t)[[NSDate date] timeIntervalSince1970];
 }
 
 + (uint64_t)random {
@@ -40,12 +44,12 @@
     return num;
 }
 
-- (NSDictionary *)toDict:(BOOL)isEvent {
+- (NSDictionary *)toDictionaryForEvent:(BOOL)flag {
     NSDictionary *dict = @{@"$mp_event_id": [NSNumber numberWithUnsignedLongLong:random()],
                            @"$mp_session_id": [NSNumber numberWithUnsignedLongLong:self.sessionID],
-                           @"$mp_session_seq_id": [NSNumber numberWithUnsignedLongLong: (isEvent ? self.eventsCounter : self.peopleCounter)],
+                           @"$mp_session_seq_id": [NSNumber numberWithUnsignedLongLong: (flag ? self.eventsCounter : self.peopleCounter)],
                            @"$mp_session_start_sec": [NSNumber numberWithUnsignedLongLong:self.sessionStartEpoch]};
-    isEvent ? (self.eventsCounter += 1) : (self.peopleCounter += 1);
+    flag ? (self.eventsCounter += 1) : (self.peopleCounter += 1);
     return dict;
 }
 

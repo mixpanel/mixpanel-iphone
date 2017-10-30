@@ -17,5 +17,5 @@
 
     - (instancetype)initWithDispatchQueue:(dispatch_queue_t)queue;
     - (void)applicationDidBecomeActive;
-    - (NSDictionary *)toDict:(BOOL)isEvent;
+    - (NSDictionary *)toDictionaryForEvent:(BOOL)flag;
 @end

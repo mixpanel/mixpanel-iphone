@@ -500,7 +500,7 @@ static NSString *defaultProjectToken;
 
         NSMutableDictionary *e = [[NSMutableDictionary alloc] initWithDictionary:@{ @"event": event,
                                                                                     @"properties": [NSDictionary dictionaryWithDictionary:p]}];
-        [e addEntriesFromDictionary:[self.sessionMetadata toDict:YES]];
+        [e addEntriesFromDictionary:[self.sessionMetadata toDictionaryForEvent:YES]];
         MPLogInfo(@"%@ queueing event: %@", self, e);
         @synchronized (self) {
             [self.eventsQueue addObject:e];
