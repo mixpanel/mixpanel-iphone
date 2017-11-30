@@ -43,6 +43,8 @@ static NSString * const kSendingTimeKey = @"sending_time";
 @property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
+@property (nonatomic, readonly, nullable) UIApplication *application;
+@property (nonatomic) BOOL inBG;
 
 @end
 
@@ -105,7 +107,12 @@ static Alooma *sharedInstance = nil;
 
 
 #if !defined(ALOOMA_APP_EXTENSION)
+//        application = [UIApplication sharedApplication];
+        if ([[UIApplication class] respondsToSelector:@selector(sharedApplication)]) {
+            _application = [[UIApplication class] performSelector:@selector(sharedApplication)];
+        }
         [self setUpListeners];
+        
 #endif
         [self unarchive];
 
@@ -263,7 +270,7 @@ static __unused NSString *MPURLEncode(NSString *s)
     }
     dispatch_async(self.serialQueue, ^{
         self.distinctId = distinctId;
-        if ([Alooma inBackground]) {
+        if ([self inBackground]) {
             [self archiveProperties];
         }
     });
@@ -346,7 +353,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         if ([self.eventsQueue count] > 500) {
             [self.eventsQueue removeObjectAtIndex:0];
         }
-        if ([Alooma inBackground]) {
+        if ([self inBackground]) {
             [self archiveEvents];
         }
     });
@@ -386,7 +393,7 @@ static __unused NSString *MPURLEncode(NSString *s)
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         [tmp addEntriesFromDictionary:properties];
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        if ([Alooma inBackground]) {
+        if ([self inBackground]) {
             [self archiveProperties];
         }
     });
@@ -410,7 +417,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             }
         }
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        if ([Alooma inBackground]) {
+        if ([self inBackground]) {
             [self archiveProperties];
         }
     });
@@ -424,7 +431,7 @@ static __unused NSString *MPURLEncode(NSString *s)
             [tmp removeObjectForKey:propertyName];
         }
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
-        if ([Alooma inBackground]) {
+        if ([self inBackground]) {
             [self archiveProperties];
         }
     });
@@ -434,7 +441,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
     dispatch_async(self.serialQueue, ^{
         self.superProperties = @{};
-        if ([Alooma inBackground]) {
+        if ([self inBackground]) {
             [self archiveProperties];
         }
     });
@@ -802,10 +809,16 @@ static __unused NSString *MPURLEncode(NSString *s)
     return [p copy];
 }
 
-+ (BOOL)inBackground
+- (BOOL)inBackground
 {
 #if !defined(ALOOMA_APP_EXTENSION)
-    return [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
+    _inBG = false;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_application.applicationState == UIApplicationStateBackground) {
+            _inBG = true;
+        }
+    });
+    return _inBG;
 #else
     return NO;
 #endif
@@ -815,7 +828,7 @@ static __unused NSString *MPURLEncode(NSString *s)
 {
 #if !defined(ALOOMA_APP_EXTENSION)
     if (_showNetworkActivityIndicator) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = on;
+        _application.networkActivityIndicatorVisible = on;
     }
 #endif
 }
@@ -926,9 +939,9 @@ static void AloomaReachabilityCallback(SCNetworkReachabilityRef target, SCNetwor
 {
     AloomaDebug(@"%@ did enter background", self);
 
-    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+    self.taskId = [_application beginBackgroundTaskWithExpirationHandler:^{
         AloomaDebug(@"%@ flush %lu cut short", self, (unsigned long)self.taskId);
-        [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+        [_application endBackgroundTask:self.taskId];
         self.taskId = UIBackgroundTaskInvalid;
     }];
     AloomaDebug(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
@@ -941,7 +954,7 @@ static void AloomaReachabilityCallback(SCNetworkReachabilityRef target, SCNetwor
         [self archive];
         AloomaDebug(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {
-            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+            [_application endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
         }
 //        self.decideResponseCached = NO;
@@ -953,7 +966,7 @@ static void AloomaReachabilityCallback(SCNetworkReachabilityRef target, SCNetwor
     AloomaDebug(@"%@ will enter foreground", self);
     dispatch_async(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
-            [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+            [_application endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
             [self updateNetworkActivityIndicator:NO];
         }
@@ -982,9 +995,9 @@ static void AloomaReachabilityCallback(SCNetworkReachabilityRef target, SCNetwor
 
 #pragma mark - Decide
 
-+ (UIViewController *)topPresentedViewController
+- (UIViewController *)topPresentedViewController
 {
-    UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *controller = _application.keyWindow.rootViewController;
     while (controller.presentedViewController) {
         controller = controller.presentedViewController;
     }
@@ -992,6 +1005,14 @@ static void AloomaReachabilityCallback(SCNetworkReachabilityRef target, SCNetwor
 }
 
 #endif
+
++ (BOOL)isAppExtension {
+#if TARGET_OS_IOS
+    return [[NSBundle mainBundle].bundlePath hasSuffix:@".appex"];
+#else
+    return NO;
+#endif
+}
 
 @end
 
