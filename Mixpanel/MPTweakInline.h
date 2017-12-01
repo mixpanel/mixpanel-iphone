@@ -17,7 +17,7 @@
  @param default_ The default value of the tweak. If the user doesn't configure
  a custom value or the build is a release build, then the default value is used.
  The default value supports a variety of types, but all must be constant literals.
- Supported types include: BOOL, NSInteger, NSUInteger, CGFloat, NSString *, char *.
+ Supported types include: BOOL, int, double, unsigned long long, CGFloat, NSString *, char *.
  @param min_ Optional, for numbers. The minimum value. Same restrictions as default.
  @param max_ Optional, for numbers. The maximum value. Same restrictions as default.
  @return The current value of the tweak, or the default value if none is set.
@@ -32,7 +32,7 @@
  @param default_ The default value of the tweak. If the user doesn't configure
  a custom value or the build is a release build, then the default value is used.
  The default value supports a variety of types, but all must be constant literals.
- Supported types include: BOOL, NSInteger, NSUInteger, CGFloat, NSString *, char *.
+ Supported types include: BOOL, int, double, unsigned long long, CGFloat, NSString *, char *.
  @param min_ Optional, for numbers. The minimum value. Same restrictions as default.
  @param max_ Optional, for numbers. The maximum value. Same restrictions as default.
  @discussion As long as the object is alive, the property will be updated to match the tweak.
