@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.ios.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h', 'Mixpanel/MPTweak.h', 'Mixpanel/MPTweakInline.h', 'Mixpanel/MPTweakInlineInternal.h', 'Mixpanel/MPTweakStore.h', 'Mixpanel/_MPTweakBindObserver.h'
   s.ios.private_header_files = 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MixpanelPrivate.h'
   s.ios.resources   = ['Mixpanel/**/*.{png,storyboard,xib}']
-  s.ios.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore'
+  s.ios.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'StoreKit', 'UserNotifications'
   s.tvos.deployment_target = '9.0'
   s.tvos.source_files  = 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h', 'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelExceptionHandler.{m,h}'
   s.tvos.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h'
