@@ -150,8 +150,10 @@
 
 - (void)addPushDeviceToken:(NSData *)deviceToken
 {
-    NSDictionary *properties = @{@"$ios_devices": @[[MixpanelPeople pushDeviceTokenToString:deviceToken]]};
-    [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
+    if (deviceToken){
+        NSDictionary *properties = @{@"$ios_devices": @[[MixpanelPeople pushDeviceTokenToString:deviceToken]]};
+        [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
+    }
 }
 
 - (void)removeAllPushDeviceTokens
