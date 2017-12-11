@@ -201,6 +201,8 @@
 		E1F161991E68C59900391AE3 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */; };
 		F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */; };
+		F0ACBDEC1F8C46B400ABF03D /* MPConnectIntegrations.h in Headers */ = {isa = PBXBuildFile; fileRef = F0ACBDEA1F8C46B400ABF03D /* MPConnectIntegrations.h */; };
+		F0ACBDED1F8C46B400ABF03D /* MPConnectIntegrations.m in Sources */ = {isa = PBXBuildFile; fileRef = F0ACBDEB1F8C46B400ABF03D /* MPConnectIntegrations.m */; };
 		F0B0E7AB1F05B8CA00F0FF08 /* NSThread+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */; };
 		F0B0E7AC1F05B8CA00F0FF08 /* NSThread+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */; };
 		F0F179F61DB6CA12003DFD43 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
@@ -399,6 +401,8 @@
 		E1F1615C1E68B87500391AE3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchProperties.h; sourceTree = "<group>"; };
 		F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchProperties.m; sourceTree = "<group>"; };
+		F0ACBDEA1F8C46B400ABF03D /* MPConnectIntegrations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPConnectIntegrations.h; sourceTree = "<group>"; };
+		F0ACBDEB1F8C46B400ABF03D /* MPConnectIntegrations.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPConnectIntegrations.m; sourceTree = "<group>"; };
 		F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSThread+MPHelpers.h"; sourceTree = "<group>"; };
 		F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSThread+MPHelpers.m"; sourceTree = "<group>"; };
 		F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphoneportrait.xib"; sourceTree = "<group>"; };
@@ -804,6 +808,8 @@
 				E12CE4331EA68A1E0023AA2D /* Automatic Events */,
 				E12CE4341EA68A3C0023AA2D /* AutomaticEvents.h */,
 				E12CE4351EA68A3C0023AA2D /* AutomaticEvents.m */,
+				F0ACBDEA1F8C46B400ABF03D /* MPConnectIntegrations.h */,
+				F0ACBDEB1F8C46B400ABF03D /* MPConnectIntegrations.m */,
 			);
 			name = Source;
 			path = Mixpanel;
@@ -908,6 +914,7 @@
 				7C170D371A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h in Headers */,
 				E1F160D31E67A93500391AE3 /* MPNetwork.h in Headers */,
 				7C170D3D1A4A035F00D9E0F2 /* UIImage+MPAverageColor.h in Headers */,
+				F0ACBDEC1F8C46B400ABF03D /* MPConnectIntegrations.h in Headers */,
 				7C170CFC1A4A035F00D9E0F2 /* MPLogger.h in Headers */,
 				7C170D091A4A035F00D9E0F2 /* MPObjectSerializer.h in Headers */,
 				7C170CF81A4A035F00D9E0F2 /* MPEnumDescription.h in Headers */,
@@ -1210,6 +1217,7 @@
 				7C170D2C1A4A035F00D9E0F2 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				7C170CCD1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				7C170CCB1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.m in Sources */,
+				F0ACBDED1F8C46B400ABF03D /* MPConnectIntegrations.m in Sources */,
 				51F308841C86881900614A13 /* MPSwizzle.m in Sources */,
 				7C170D081A4A035F00D9E0F2 /* MPObjectSelector.m in Sources */,
 				7C170CF41A4A035F00D9E0F2 /* MPDesignerEventBindingRequestMesssage.m in Sources */,
