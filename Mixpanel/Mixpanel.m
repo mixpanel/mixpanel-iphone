@@ -117,6 +117,7 @@ static NSString *defaultProjectToken;
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
         self.checkForVariantsOnActive = YES;
+        self.enableAutomaticPushTracking = YES;
         self.miniNotificationPresentationTime = 6.0;
 
         self.distinctId = [self defaultDistinctId];
@@ -155,7 +156,9 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
             [self executeCachedVariants];
             [self executeCachedEventBindings];
-            [self setupAutomaticPushTracking];
+            if (enableAutomaticPushTracking) {
+                [self setupAutomaticPushTracking];
+            }
             NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
             if (remoteNotification) {
                 [self trackPushNotification:remoteNotification event:@"$app_open"];
