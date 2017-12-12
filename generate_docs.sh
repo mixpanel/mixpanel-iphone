@@ -8,6 +8,5 @@ cp -a docs/html/. docs/.
 rm -rf docs/html
 git add docs
 git commit -m 'updated docs'
-git push
 
 echo "Updated docs!"
