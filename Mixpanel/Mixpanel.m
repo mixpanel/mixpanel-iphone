@@ -1993,7 +1993,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         [shownVariants addEntriesFromDictionary:shownVariant];
         [superProperties addEntriesFromDictionary:@{@"$experiments": [shownVariants copy]}];
         self.superProperties = [superProperties copy];
-#if !MIXPANEL_NO_UI_APPLICATION_ACCESS
+#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
         if (![Mixpanel isAppExtension]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([Mixpanel sharedUIApplication].applicationState == UIApplicationStateBackground) {
