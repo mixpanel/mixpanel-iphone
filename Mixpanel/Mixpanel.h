@@ -173,6 +173,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (atomic) BOOL enableLogging;
 
 /*!
+ Controls whether to disable automatic tracking of push notifications.
+ 
+ Defaults to YES.
+ */
+@property (atomic) BOOL enableAutomaticPushTracking;
+
+/*!
  Determines the time, in seconds, that a mini notification will remain on
  the screen before automatically hiding itself.
 
