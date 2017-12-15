@@ -44,11 +44,11 @@ static NSString * const kFinishLoadingAnimationKey = @"MPConnectivityBarFinishLo
     NSOperationQueue *_commandQueue;
     UIView *_recordingView;
     CALayer *_indeterminateLayer;
-    void (^_connectCallback)();
-    void (^_disconnectCallback)();
+    void (^_connectCallback)(void);
+    void (^_disconnectCallback)(void);
 }
 
-- (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)())connectCallback disconnectCallback:(void (^)())disconnectCallback
+- (instancetype)initWithURL:(NSURL *)url keepTrying:(BOOL)keepTrying connectCallback:(void (^)(void))connectCallback disconnectCallback:(void (^)(void))disconnectCallback
 {
     self = [super init];
     if (self) {

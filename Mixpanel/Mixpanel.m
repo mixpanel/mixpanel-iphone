@@ -86,7 +86,8 @@ static NSString *defaultProjectToken;
 - (instancetype)initWithToken:(NSString *)apiToken
                 launchOptions:(NSDictionary *)launchOptions
                 flushInterval:(NSUInteger)flushInterval
-                 trackCrashes:(BOOL)trackCrashes {
+                 trackCrashes:(BOOL)trackCrashes
+        automaticPushTracking:(BOOL)automaticPushTracking {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
             apiToken = @"";
@@ -155,10 +156,12 @@ static NSString *defaultProjectToken;
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
             [self executeCachedVariants];
             [self executeCachedEventBindings];
-            [self setupAutomaticPushTracking];
-            NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-            if (remoteNotification) {
-                [self trackPushNotification:remoteNotification event:@"$app_open"];
+            if (automaticPushTracking) {
+                [self setupAutomaticPushTracking];
+                NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+                if (remoteNotification) {
+                    [self trackPushNotification:remoteNotification event:@"$app_open"];
+                }
             }
 #endif
         }
@@ -174,6 +177,17 @@ static NSString *defaultProjectToken;
                  launchOptions:launchOptions
                  flushInterval:flushInterval
                   trackCrashes:YES];
+}
+
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(NSDictionary *)launchOptions
+                flushInterval:(NSUInteger)flushInterval
+                 trackCrashes:(BOOL)trackCrashes {
+    return [self initWithToken:apiToken
+                 launchOptions:launchOptions
+                 flushInterval:flushInterval
+                  trackCrashes:trackCrashes
+         automaticPushTracking:YES];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval {
