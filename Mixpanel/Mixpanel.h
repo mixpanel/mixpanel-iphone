@@ -283,7 +283,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param flushInterval   interval to run background flushing
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
- @param pushTracking    whether or not to automatically track pushes sent from Mixpanel
+ @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
  */
 - (instancetype)initWithToken:(NSString *)apiToken
                 launchOptions:(nullable NSDictionary *)launchOptions
