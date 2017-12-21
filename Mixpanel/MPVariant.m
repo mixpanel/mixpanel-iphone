@@ -241,13 +241,11 @@
 
 #pragma mark Equality
 
-- (BOOL)isEqualToVariant:(MPVariant *)variant
-{
-    return self.ID == variant.ID && [self.actions isEqual:variant.actions];
+- (BOOL)isEqualToVariant:(MPVariant *)variant {
+    return self.ID == variant.ID && [self.actions isEqual:variant.actions] && [self.tweaks isEqual:variant.tweaks];
 }
 
-- (BOOL)isEqual:(id)object
-{
+- (BOOL)isEqual:(id)object {
     if (self == object) {
         return YES;
     }
@@ -259,8 +257,7 @@
     return [self isEqualToVariant:(MPVariant *)object];
 }
 
-- (NSUInteger)hash
-{
+- (NSUInteger)hash {
     return self.ID;
 }
 
@@ -728,13 +725,11 @@ static NSMapTable *originalCache;
 
 #pragma mark Equality
 
-- (BOOL)isEqualToTweak:(MPVariantTweak *)tweak
-{
-    return [self.name isEqualToString:tweak.name];
+- (BOOL)isEqualToTweak:(MPVariantTweak *)tweak {
+    return [self.name isEqualToString:tweak.name] && [self.value isEqual:tweak.value];
 }
 
-- (BOOL)isEqual:(id)object
-{
+- (BOOL)isEqual:(id)object {
     if (self == object) {
         return YES;
     }
@@ -746,8 +741,7 @@ static NSMapTable *originalCache;
     return [self isEqualToTweak:(MPVariantTweak *)object];
 }
 
-- (NSUInteger)hash
-{
+- (NSUInteger)hash {
     return self.name.hash;
 }
 
