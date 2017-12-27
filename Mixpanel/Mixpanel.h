@@ -243,6 +243,22 @@ NS_ASSUME_NONNULL_BEGIN
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
 /*!
+ Initializes a singleton instance of the API, uses it to track launchOptions information,
+ and then returns it.
+ 
+ This is the preferred method for creating a sharedInstance with a mixpanel
+ like above. With the launchOptions parameter, Mixpanel can track referral
+ information created by push notifications.
+ 
+ @param apiToken        your project token
+ @param launchOptions   your application delegate's launchOptions
+ @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
+ issues with your crash reporting for either signals or exceptions
+ @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
+
+/*!
  Returns a previously instantiated singleton instance of the API.
 
  The API must be initialized with <code>sharedInstanceWithToken:</code> or
