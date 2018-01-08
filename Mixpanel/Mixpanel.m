@@ -50,7 +50,7 @@ static NSString *defaultProjectToken;
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:YES automaticPushTracking:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken {
