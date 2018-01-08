@@ -41,7 +41,10 @@ static const NSInteger UA_MAX_RETRIES = 3;
 - (void)setUrbanAirshipPeopleProp {
     Class urbanAirship = NSClassFromString(@"UAirship");
     if (urbanAirship) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         NSString *channelID = [[urbanAirship performSelector:NSSelectorFromString(@"push")] performSelector:NSSelectorFromString(@"channelID")];
+#pragma clang diagnostic pop
         if (!channelID.length) {
             self.urbanAirshipRetries++;
             if (self.urbanAirshipRetries <= UA_MAX_RETRIES) {
