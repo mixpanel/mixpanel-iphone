@@ -256,7 +256,7 @@ NS_ASSUME_NONNULL_BEGIN
  issues with your crash reporting for either signals or exceptions
  @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
 
 /*!
  Returns a previously instantiated singleton instance of the API.
