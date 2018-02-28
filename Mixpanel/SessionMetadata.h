@@ -10,10 +10,10 @@
 
 @interface SessionMetadata : NSObject
 
-@property (nonatomic) uint64_t eventsCounter;
-@property (nonatomic) uint64_t peopleCounter;
+@property (nonatomic, readonly) uint64_t eventsCounter;
+@property (nonatomic, readonly) uint64_t peopleCounter;
 @property (nonatomic, readonly, copy) NSString *sessionID;
-@property (nonatomic) uint64_t sessionStartEpoch;
+@property (nonatomic, readonly) uint64_t sessionStartEpoch;
 
 - (instancetype)init;
 - (void)reset;

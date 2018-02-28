@@ -8,6 +8,15 @@
 
 #import "SessionMetadata.h"
 
+@interface SessionMetadata()
+
+@property (nonatomic, readwrite) uint64_t eventsCounter;
+@property (nonatomic, readwrite) uint64_t peopleCounter;
+@property (nonatomic, readwrite, copy) NSString *sessionID;
+@property (nonatomic, readwrite) uint64_t sessionStartEpoch;
+
+@end
+
 @implementation SessionMetadata
 
 - (instancetype)init {
@@ -15,7 +24,7 @@
     if (self) {
         self.eventsCounter = 0;
         self.peopleCounter = 0;
-        _sessionID = @"";
+        self.sessionID = [self randomId];
         self.sessionStartEpoch = (uint64_t)[[NSDate date] timeIntervalSince1970];
     }
     return self;
@@ -24,7 +33,7 @@
 - (void)reset {
     self.eventsCounter = 0;
     self.peopleCounter = 0;
-    _sessionID = [self randomId];
+    self.sessionID = [self randomId];
     self.sessionStartEpoch = (uint64_t)[[NSDate date] timeIntervalSince1970];
 }
 
