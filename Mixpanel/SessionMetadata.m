@@ -42,10 +42,10 @@
 }
 
 - (NSDictionary *)toDictionaryForEvent:(BOOL)flag {
-    NSDictionary *dict = @{@"$mp_event_id": [self randomId],
-                           @"$mp_session_id":self.sessionID,
-                           @"$mp_session_seq_id": [NSNumber numberWithUnsignedLongLong: (flag ? self.eventsCounter : self.peopleCounter)],
-                           @"$mp_session_start_sec": [NSNumber numberWithUnsignedLongLong:self.sessionStartEpoch]};
+    NSDictionary *dict = @{@"$mp_metadata":@{@"$mp_event_id": [self randomId],
+                                             @"$mp_session_id":self.sessionID,
+                                             @"$mp_session_seq_id": [NSNumber numberWithUnsignedLongLong: (flag ? self.eventsCounter : self.peopleCounter)],
+                                             @"$mp_session_start_sec": [NSNumber numberWithUnsignedLongLong:self.sessionStartEpoch]}};
     flag ? (self.eventsCounter += 1) : (self.peopleCounter += 1);
     return dict;
 }
