@@ -7,6 +7,7 @@
 //
 
 #import "MPTakeoverNotification.h"
+#import "Mixpanel.h"
 
 @implementation MPTakeoverNotification
 

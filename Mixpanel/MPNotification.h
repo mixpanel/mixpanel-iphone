@@ -1,8 +1,5 @@
 #import <Foundation/Foundation.h>
 
-extern NSString *const MPNotificationTypeMini;
-extern NSString *const MPNotificationTypeTakeover;
-
 @interface MPNotification : NSObject
 
 @property (nonatomic, readonly) NSDictionary *jsonDescription;

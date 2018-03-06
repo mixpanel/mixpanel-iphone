@@ -7,6 +7,7 @@
 //
 
 #import "MPMiniNotification.h"
+#import "Mixpanel.h"
 
 @implementation MPMiniNotification
 
