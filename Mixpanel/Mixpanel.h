@@ -20,6 +20,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /*!
+ A string constant "mini" that respresent Mini Notification
+ */
+extern NSString *const MPNotificationTypeMini;
+/*!
+ A string constant "takeover" that respresent Takeover Notification
+ */
+extern NSString *const MPNotificationTypeTakeover;
+
+/*!
  Mixpanel API.
 
  The primary interface for integrating Mixpanel with your app.

@@ -30,6 +30,9 @@
 
 #define VERSION @"3.2.7"
 
+NSString *const MPNotificationTypeMini = @"mini";
+NSString *const MPNotificationTypeTakeover = @"takeover";
+
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;

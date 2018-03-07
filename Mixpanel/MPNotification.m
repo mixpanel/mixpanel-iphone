@@ -1,8 +1,6 @@
 #import "MPLogger.h"
 #import "MPNotification.h"
-
-NSString *const MPNotificationTypeMini = @"mini";
-NSString *const MPNotificationTypeTakeover = @"takeover";
+#import "Mixpanel.h"
 
 @implementation MPNotification
 
