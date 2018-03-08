@@ -172,6 +172,14 @@
 		E1C2BE5E1CFD6A010052172F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
 		E1C2BE7B1CFD6A010052172F /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
 		E1C2BE801CFD6A010052172F /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
+		E1ECD01A1FA3AF9E002104E8 /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */; };
+		E1ECD01B1FA3AF9F002104E8 /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */; };
+		E1ECD01C1FA3AFA0002104E8 /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */; };
+		E1ECD01D1FA3AFA0002104E8 /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */; };
+		E1ECD01E1FA3AFB2002104E8 /* SessionMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */; };
+		E1ECD01F1FA3AFB3002104E8 /* SessionMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */; };
+		E1ECD0201FA3AFB3002104E8 /* SessionMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */; };
+		E1ECD0211FA3AFB4002104E8 /* SessionMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */; };
 		E1F160BD1E67944700391AE3 /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C548B1D131E6500407F56 /* MixpanelPeople.m */; };
 		E1F160C41E6794ED00391AE3 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
 		E1F160C91E6795E400391AE3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
@@ -393,6 +401,8 @@
 		E1C2BE061CFD616A0052172F /* Mixpanel-tvOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mixpanel-tvOS-Info.plist"; sourceTree = "<group>"; };
 		E1C2BEB61CFD6A010052172F /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1C2C0BA1CFDD53B0052172F /* tvos.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = tvos.modulemap; path = Mixpanel/tvos.modulemap; sourceTree = "<group>"; };
+		E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SessionMetadata.h; sourceTree = "<group>"; };
+		E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionMetadata.m; sourceTree = "<group>"; };
 		E1F160B01E677D2200391AE3 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F160B81E6783C400391AE3 /* macos.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = macos.modulemap; path = Mixpanel/macos.modulemap; sourceTree = "<group>"; };
 		E1F160B91E6791F900391AE3 /* Mixpanel-macOS-info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-macOS-info.plist"; sourceTree = "<group>"; };
@@ -808,8 +818,11 @@
 				E12CE4331EA68A1E0023AA2D /* Automatic Events */,
 				E12CE4341EA68A3C0023AA2D /* AutomaticEvents.h */,
 				E12CE4351EA68A3C0023AA2D /* AutomaticEvents.m */,
+				E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */,
+				E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */,
 				F0ACBDEA1F8C46B400ABF03D /* MPConnectIntegrations.h */,
 				F0ACBDEB1F8C46B400ABF03D /* MPConnectIntegrations.m */,
+
 			);
 			name = Source;
 			path = Mixpanel;
@@ -877,6 +890,7 @@
 				F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */,
 				F0F179F61DB6CA12003DFD43 /* MPLogger.h in Headers */,
 				51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */,
+				E1ECD01F1FA3AFB3002104E8 /* SessionMetadata.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -910,6 +924,7 @@
 				51C3B23F1CA5B2D3004CE37C /* NSNotificationCenter+AutomaticTracks.h in Headers */,
 				7C170CD81A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.h in Headers */,
 				51C3B23D1CA5B2D3004CE37C /* UIApplication+AutomaticTracks.h in Headers */,
+				E1ECD01E1FA3AFB2002104E8 /* SessionMetadata.h in Headers */,
 				7C170D051A4A035F00D9E0F2 /* MPObjectIdentityProvider.h in Headers */,
 				7C170D371A4A035F00D9E0F2 /* NSInvocation+MPHelpers.h in Headers */,
 				E1F160D31E67A93500391AE3 /* MPNetwork.h in Headers */,
@@ -964,6 +979,7 @@
 				E1F1618C1E68C55B00391AE3 /* MixpanelPeople.h in Headers */,
 				E1F1618D1E68C55E00391AE3 /* MixpanelPrivate.h in Headers */,
 				E1F1618E1E68C56100391AE3 /* MixpanelPeoplePrivate.h in Headers */,
+				E1ECD0201FA3AFB3002104E8 /* SessionMetadata.h in Headers */,
 				E1F1618F1E68C56300391AE3 /* MPNetworkPrivate.h in Headers */,
 				E1C2BE7B1CFD6A010052172F /* MPLogger.h in Headers */,
 				E1C2BE801CFD6A010052172F /* MPFoundation.h in Headers */,
@@ -978,6 +994,7 @@
 				E1F1618A1E68C52B00391AE3 /* MixpanelPeople.h in Headers */,
 				E1F161851E68C4B700391AE3 /* MixpanelPrivate.h in Headers */,
 				E1F161861E68C4B700391AE3 /* MixpanelPeoplePrivate.h in Headers */,
+				E1ECD0211FA3AFB4002104E8 /* SessionMetadata.h in Headers */,
 				E1F161871E68C4BC00391AE3 /* MPNetworkPrivate.h in Headers */,
 				E1F160C91E6795E400391AE3 /* MPFoundation.h in Headers */,
 				E1F160CA1E6795E800391AE3 /* MPLogger.h in Headers */,
@@ -1154,6 +1171,7 @@
 				F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */,
 				F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */,
 				F0FA7A731DB020FB00AA8006 /* MixpanelPeople.m in Sources */,
+				E1ECD01B1FA3AF9F002104E8 /* SessionMetadata.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1188,6 +1206,7 @@
 				7C170CE61A4A035F00D9E0F2 /* MPApplicationStateSerializer.m in Sources */,
 				7C170CC91A4A035F00D9E0F2 /* Mixpanel.m in Sources */,
 				7C170D3E1A4A035F00D9E0F2 /* UIImage+MPAverageColor.m in Sources */,
+				E1ECD01A1FA3AF9E002104E8 /* SessionMetadata.m in Sources */,
 				7C170CE41A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				7C170CE01A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				7C170CF91A4A035F00D9E0F2 /* MPEnumDescription.m in Sources */,
@@ -1243,6 +1262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1C2BE261CFD6A010052172F /* Mixpanel.m in Sources */,
+				E1ECD01C1FA3AFA0002104E8 /* SessionMetadata.m in Sources */,
 				517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */,
 				E123C47F1D1342150015B425 /* MixpanelPeople.m in Sources */,
 			);
@@ -1253,6 +1273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1F160BD1E67944700391AE3 /* MixpanelPeople.m in Sources */,
+				E1ECD01D1FA3AFA0002104E8 /* SessionMetadata.m in Sources */,
 				E1F160D61E67AF8300391AE3 /* Mixpanel.m in Sources */,
 				E1F160C41E6794ED00391AE3 /* MPNetwork.m in Sources */,
 			);

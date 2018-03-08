@@ -8,6 +8,7 @@
 
 #import "Mixpanel.h"
 #import "MPNetwork.h"
+#import "SessionMetadata.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
@@ -98,6 +99,7 @@
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic) dispatch_queue_t networkQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
+@property (nonatomic, strong) SessionMetadata *sessionMetadata;
 
 @property (nonatomic) BOOL decideResponseCached;
 @property (nonatomic) BOOL hasAddedObserver;

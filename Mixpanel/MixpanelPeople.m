@@ -104,6 +104,8 @@
                 r[action] = [NSDictionary dictionaryWithDictionary:p];
             }
 
+            [r addEntriesFromDictionary:[self.mixpanel.sessionMetadata toDictionaryForEvent:NO]];
+
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
                 MPLogInfo(@"%@ queueing people record: %@", strongMixpanel, r);
