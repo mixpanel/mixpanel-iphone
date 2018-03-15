@@ -33,6 +33,8 @@
 NSString *const MPNotificationTypeMini = @"mini";
 NSString *const MPNotificationTypeTakeover = @"takeover";
 
+static NSString *const kMPOptOutFlag = @"optOutFlag";
+
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;
@@ -374,6 +376,10 @@ static NSString *defaultProjectToken;
 
 - (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople;
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
@@ -421,6 +427,10 @@ static NSString *defaultProjectToken;
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID usePeople:(BOOL)usePeople;
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     if (alias.length == 0) {
         MPLogError(@"%@ create alias called with empty alias: %@", self, alias);
         return;
@@ -449,6 +459,10 @@ static NSString *defaultProjectToken;
 
 - (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     if (event.length == 0) {
         MPLogWarning(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
@@ -586,6 +600,10 @@ static NSString *defaultProjectToken;
 
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     MPLogInfo(@"%@ tracking push payload %@", self, userInfo);
 
     id rawMp = userInfo[@"mp"];
@@ -616,6 +634,10 @@ static NSString *defaultProjectToken;
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
@@ -633,6 +655,9 @@ static NSString *defaultProjectToken;
 
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties defaultValue:(id)defaultValue
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
@@ -673,6 +698,10 @@ static NSString *defaultProjectToken;
 
 - (void)timeEvent:(NSString *)event
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
 
     if (event.length == 0) {
@@ -765,7 +794,7 @@ static NSString *defaultProjectToken;
 {
     [self stopFlushTimer];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.flushInterval > 0) {
+        if (self.flushInterval > 0 && ![self hasOptedOutTracking]) {
             self.timer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
                                                           target:self
                                                         selector:@selector(flush)
@@ -794,6 +823,10 @@ static NSString *defaultProjectToken;
 
 - (void)flushWithCompletion:(void (^)(void))handler
 {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    
     [self dispatchOnNetworkQueue:^{
         MPLogInfo(@"%@ flush starting", self);
 
@@ -1144,6 +1177,25 @@ static NSString *defaultProjectToken;
     return @"";
 }
 
+- (void)optOutTracking
+{
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMPOptOutFlag];
+    self.eventsQueue = [NSMutableArray array];
+    self.peopleQueue = [NSMutableArray array];
+    [self archiveEvents];
+    [self archivePeople];
+}
+
+- (void)optInTracking
+{
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kMPOptOutFlag];
+}
+
+- (BOOL)hasOptedOutTracking
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kMPOptOutFlag];
+}
+
 - (NSString *)libVersion
 {
     return [Mixpanel libVersion];
@@ -1287,7 +1339,7 @@ static NSString *defaultProjectToken;
 }
 #endif
 
-- (void) initializeGestureRecognizer {
+- (void)initializeGestureRecognizer {
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
     if (![Mixpanel isAppExtension]) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1389,6 +1441,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+
     __block UIBackgroundTaskIdentifier backgroundTask = [[Mixpanel sharedUIApplication] beginBackgroundTaskWithExpirationHandler:^{
         MPLogInfo(@"%@ flush %lu cut short", self, (unsigned long) backgroundTask);
         [[Mixpanel sharedUIApplication] endBackgroundTask:backgroundTask];

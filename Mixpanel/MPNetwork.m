@@ -81,6 +81,10 @@ static const NSUInteger kBatchSize = 50;
 }
 
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(MPNetworkEndpoint)endpoint {
+    if ([self.mixpanel hasOptedOutTracking]) {
+        return;
+    }
+    
     if ([[NSDate date] timeIntervalSince1970] < self.requestsDisabledUntilTime) {
         MPLogDebug(@"Attempted to flush to %lu, when we still have a timeout. Ignoring flush.", endpoint);
         return;

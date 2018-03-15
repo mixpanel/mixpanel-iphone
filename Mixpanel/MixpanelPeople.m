@@ -74,6 +74,9 @@
 
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
+    if ([self.mixpanel hasOptedOutTracking]) {
+        return;
+    }
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = self.mixpanel;
     if (strongMixpanel) {

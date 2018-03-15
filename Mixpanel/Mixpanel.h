@@ -614,6 +614,27 @@ extern NSString *const MPNotificationTypeTakeover;
 - (NSString *)libVersion;
 
 /*!
+ Opt out tracking.
+ 
+ This method is used to opt out tracking. This causes all events and people request no longer
+ to be sent back to the Mixpanel server.
+ */
+- (void)optOutTracking;
+
+/*!
+ Opt in tracking.
+ 
+ This method is used to opt in tracking. This causes all events and people request to be sent back
+ to the Mixpanel server.
+ */
+- (void)optInTracking;
+
+/*!
+ Returns YES if the current user has opted out tracking, NO if the current user has opted in tracking.
+ */
+- (BOOL)hasOptedOutTracking;
+
+/*!
  Returns the Mixpanel library version number as a string, e.g. "3.2.3".
  */
 + (NSString *)libVersion;
