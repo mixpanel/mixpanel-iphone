@@ -600,10 +600,6 @@ static NSString *defaultProjectToken;
 
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
-    if ([self hasOptedOutTracking]) {
-        return;
-    }
-    
     MPLogInfo(@"%@ tracking push payload %@", self, userInfo);
 
     id rawMp = userInfo[@"mp"];
