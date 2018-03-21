@@ -31,6 +31,24 @@
     [super tearDown];
 }
 
+- (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutYES
+{
+    Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"abc123Random" optOutTracking:YES];
+    XCTAssertTrue([mixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted out tracking");
+}
+
+- (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutNO
+{
+    Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"abc123Radd" optOutTracking:NO];
+    XCTAssertFalse([mixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted out tracking");
+}
+
+- (void)testHasOptOutTrackingFlagBeingSetProperlyByDefault
+{
+    Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"abc123"];
+    XCTAssertFalse([mixpanel hasOptedOutTracking], @"By default, the current user should not opted out tracking");
+}
+
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptOut
 {
     [self.mixpanel optOutTracking];
@@ -42,7 +60,7 @@
 {
     [self.mixpanel optOutTracking];
     [self waitForMixpanelQueues];
-    XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"first, the current user should have opted out tracking");
+    XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"By calling optOutTracking, the current user should have opted out tracking");
     [self.mixpanel optInTracking];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted in tracking");
 }
@@ -83,7 +101,7 @@
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
     [self waitForMixpanelQueues];
-    XCTAssertTrue([self.mixpanel.people.unidentifiedQueue count] == 50, @"When opted out, people should have been queued");
+    XCTAssertTrue([self.mixpanel.people.unidentifiedQueue count] == 50, @"When opted out, calling identify should be skipped");
 }
 
 - (void)testOptOutTrackingWillSkipAlias

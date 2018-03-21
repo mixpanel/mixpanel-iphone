@@ -66,7 +66,7 @@ static NSString *defaultProjectToken;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTracking:(BOOL)optOutTracking
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTracking:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTracking:optOutTracking];
 }
 
 + (nullable Mixpanel *)sharedInstance {
