@@ -111,6 +111,8 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
+@property (nonatomic, strong) NSMutableDictionary *optOutStatus;
+
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
 
 @property (atomic, copy) NSString *switchboardURL;
@@ -131,6 +133,7 @@
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
 - (NSString *)propertiesFilePath;
+- (NSString *)optOutFilePath;
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 - (void)trackPushNotification:(NSDictionary *)userInfo;

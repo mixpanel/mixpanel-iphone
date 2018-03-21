@@ -246,6 +246,19 @@ extern NSString *const MPNotificationTypeTakeover;
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken;
 
 /*!
+ Initializes a singleton instance of the API, uses it to set whether or not to opt out tracking for
+ GDPR compliance, and then returns it.
+ 
+ This is the preferred method for creating a sharedInstance with a mixpanel
+ like above. With the optOutTracking parameter, Mixpanel tracking can be opted out by default.
+ 
+ @param apiToken        your project token
+ @param optOutTracking  whether or not to be opted out from tracking by default
+ 
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTracking:(BOOL)optOutTracking;
+
+/*!
  Initializes a singleton instance of the API, uses it to track launchOptions information,
  and then returns it.
 
@@ -264,8 +277,7 @@ extern NSString *const MPNotificationTypeTakeover;
  and then returns it.
  
  This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the launchOptions parameter, Mixpanel can track referral
- information created by push notifications.
+ like above. With the trackCrashes and automaticPushTracking parameter, Mixpanel can track crashes and automatic push.
  
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
@@ -274,6 +286,22 @@ extern NSString *const MPNotificationTypeTakeover;
  @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
  */
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
+
+/*!
+ Initializes a singleton instance of the API, uses it to track launchOptions information,
+ and then returns it.
+ 
+ This is the preferred method for creating a sharedInstance with a mixpanel
+ like above. With the optOutTracking parameter, Mixpanel tracking can be opted out by default.
+ 
+ @param apiToken        your project token
+ @param launchOptions   your application delegate's launchOptions
+ @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
+ issues with your crash reporting for either signals or exceptions
+ @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
+ @param optOutTracking    whether or not to be opted out from tracking by default
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTracking:(BOOL)optOutTracking;
 
 /*!
  Returns a previously instantiated singleton instance of the API.

@@ -24,19 +24,24 @@
 
 - (void)tearDown
 {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSString *filename = [self.mixpanel optOutFilePath];
+    [manager removeItemAtPath:filename error:&error];
     [super tearDown];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"optOutFlag"];
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptOut
 {
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted out tracking");
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptIn
 {
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"first, the current user should have opted out tracking");
     [self.mixpanel optInTracking];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted in tracking");
@@ -46,7 +51,7 @@
 {
     stubTrack();
     [self.mixpanel optOutTracking];
-    
+    [self waitForMixpanelQueues];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
@@ -58,7 +63,7 @@
 {
     stubEngage();
     [self.mixpanel optOutTracking];
-    
+    [self waitForMixpanelQueues];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
@@ -70,6 +75,7 @@
 {
     stubEngage();
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     [self.mixpanel identify:@"d1"];
     //opt in again just to enable people queue
     [self.mixpanel optInTracking];
@@ -84,6 +90,7 @@
 {
     stubEngage();
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     [self.mixpanel createAlias:@"testAlias" forDistinctID:@"aDistintID"];
     XCTAssertFalse([self.mixpanel.alias isEqualToString:@"testAlias"], @"When opted out, alias should not be set");
 }
@@ -91,6 +98,7 @@
 - (void)testOptOutTrackingRegisterSuperProperties {
     NSDictionary *p = @{ @"p1": @"a", @"p2": @3, @"p2": [NSDate date] };
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     [self.mixpanel registerSuperProperties:p];
     [self waitForMixpanelQueues];
     XCTAssertNotEqualObjects([self.mixpanel currentSuperProperties], p, @"When opted out, register super properties should not be successful");
@@ -99,6 +107,7 @@
 - (void)testOptOutTrackingRegisterSuperPropertiesOnce {
     NSDictionary *p = @{ @"p4": @"a" };
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     [self.mixpanel registerSuperPropertiesOnce:p];
     [self waitForMixpanelQueues];
     XCTAssertNotEqualObjects([self.mixpanel currentSuperProperties][@"p4"], @"a",
@@ -107,6 +116,7 @@
 
 - (void)testOptOutWilSkipTimeEvent {
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     [self.mixpanel track:@"400 Meters"];
     [self waitForMixpanelQueues];
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
@@ -118,6 +128,7 @@
 {
     stubTrack();
     [self.mixpanel optInTracking];
+    [self waitForMixpanelQueues];
     [self.mixpanel identify:@"d1"];
     
     for (NSUInteger i = 0, n = 50; i < n; i++) {
@@ -127,6 +138,7 @@
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 50, @"When opted in, events should have been queued");
     
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 0, @"When opted out, events should have been purged");
 }
 
@@ -143,6 +155,7 @@
     XCTAssertTrue([self.mixpanel.peopleQueue count] == 50, @"When opted in, people should have been queued");
     
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.peopleQueue count] == 0, @"When opted out, people should have been purged");
 }
 
@@ -160,6 +173,7 @@
     
     NSMutableArray *peopleQueue = [NSMutableArray arrayWithArray:self.mixpanel.peopleQueue];
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     self.mixpanel.peopleQueue = [NSMutableArray arrayWithArray:peopleQueue];
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
@@ -180,6 +194,7 @@
     
     NSMutableArray *eventsQueue = [NSMutableArray arrayWithArray:self.mixpanel.eventsQueue];
     [self.mixpanel optOutTracking];
+    [self waitForMixpanelQueues];
     self.mixpanel.eventsQueue = [NSMutableArray arrayWithArray:eventsQueue];
     [self.mixpanel flush];
     [self waitForMixpanelQueues];

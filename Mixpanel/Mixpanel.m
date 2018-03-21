@@ -33,25 +33,27 @@
 NSString *const MPNotificationTypeMini = @"mini";
 NSString *const MPNotificationTypeTakeover = @"takeover";
 
-static NSString *const kMPOptOutFlag = @"optOutFlag";
-
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;
 static NSString *defaultProjectToken;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking {
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTracking:NO];
+}
+
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTracking:(BOOL)optOutTracking {
     if (instances[apiToken]) {
         return instances[apiToken];
     }
-
+    
 #if defined(DEBUG)
     const NSUInteger flushInterval = 1;
 #else
     const NSUInteger flushInterval = 60;
 #endif
     
-    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking];
+    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTracking:optOutTracking];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions {
@@ -60,6 +62,11 @@ static NSString *defaultProjectToken;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken {
     return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil];
+}
+
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTracking:(BOOL)optOutTracking
+{
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTracking:NO];
 }
 
 + (nullable Mixpanel *)sharedInstance {
@@ -89,6 +96,21 @@ static NSString *defaultProjectToken;
         });
     }
 
+    return self;
+}
+
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(NSDictionary *)launchOptions
+                flushInterval:(NSUInteger)flushInterval
+                 trackCrashes:(BOOL)trackCrashes
+        automaticPushTracking:(BOOL)automaticPushTracking
+               optOutTracking:(BOOL)optOutTracking
+{
+    if (self = [self initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking]) {
+        if (optOutTracking) {
+            [self optOutTracking];
+        }
+    }
     return self;
 }
 
@@ -885,6 +907,11 @@ static NSString *defaultProjectToken;
     return [self filePathFor:@"event_bindings"];
 }
 
+- (NSString *)optOutFilePath
+{
+    return [self filePathFor:@"optOut"];
+}
+
 - (void)archive
 {
     [self archiveEvents];
@@ -970,6 +997,16 @@ static NSString *defaultProjectToken;
     return YES;
 }
 
+- (void)archiveOptOut
+{
+    @synchronized (self) {
+        NSString *filePath = [self optOutFilePath];
+        if (![self archiveObject:self.optOutStatus withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive opt out status", self);
+        }
+    }
+}
+
 - (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString
 {
     NSURL *URL = [NSURL fileURLWithPath: filePathString];
@@ -991,6 +1028,7 @@ static NSString *defaultProjectToken;
     [self unarchiveProperties];
     [self unarchiveVariants];
     [self unarchiveEventBindings];
+    [self unarchiveOptOut];
 }
 
 + (nonnull id)unarchiveOrDefaultFromFile:(NSString *)filePath asClass:(Class)class
@@ -1058,6 +1096,11 @@ static NSString *defaultProjectToken;
 - (void)unarchiveEventBindings
 {
     self.eventBindings = (NSSet *)[Mixpanel unarchiveOrDefaultFromFile:[self eventBindingsFilePath] asClass:[NSSet class]];
+}
+
+- (void)unarchiveOptOut
+{
+    self.optOutStatus = (NSMutableDictionary *)[Mixpanel unarchiveOrDefaultFromFile:[self optOutFilePath] asClass:[NSMutableDictionary class]];
 }
 
 #pragma mark - Application Helpers
@@ -1175,21 +1218,33 @@ static NSString *defaultProjectToken;
 
 - (void)optOutTracking
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMPOptOutFlag];
-    self.eventsQueue = [NSMutableArray array];
-    self.peopleQueue = [NSMutableArray array];
-    [self archiveEvents];
-    [self archivePeople];
+    [self.optOutStatus setObject:@YES forKey:self.distinctId];
+    [self archiveOptOut];
+    dispatch_async(self.serialQueue, ^{
+        dispatch_sync(self.networkQueue, ^{ return; });
+        @synchronized (self) {
+            self.superProperties = [NSMutableDictionary dictionary];
+            self.people.distinctId = nil;
+            self.alias = nil;
+            self.people.unidentifiedQueue = [NSMutableArray array];
+            self.eventsQueue = [NSMutableArray array];
+            self.peopleQueue = [NSMutableArray array];
+            self.timedEvents = [NSMutableDictionary dictionary];
+        }
+        [self archive];
+    });
 }
 
 - (void)optInTracking
 {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kMPOptOutFlag];
+    [self.optOutStatus setObject:@NO forKey:self.distinctId];
+    [self archiveOptOut];
 }
 
 - (BOOL)hasOptedOutTracking
 {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:kMPOptOutFlag];
+    NSNumber *optOutStatus = [self.optOutStatus objectForKey:self.distinctId];
+    return optOutStatus? [optOutStatus boolValue]: NO;
 }
 
 - (NSString *)libVersion
