@@ -34,7 +34,8 @@
     return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", (void *)self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
-- (NSString *)deviceSystemVersion {
+- (NSString *)deviceSystemVersion
+{
 #if defined(MIXPANEL_WATCHOS)
     return [MixpanelWatchProperties systemVersion];
 #elif defined(MIXPANEL_MACOS)

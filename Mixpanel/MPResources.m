@@ -11,15 +11,18 @@
 
 @implementation MPResources
 
-+ (UIStoryboard *)storyboardWithName:(NSString *)name {
++ (UIStoryboard *)storyboardWithName:(NSString *)name
+{
     return [UIStoryboard storyboardWithName:name bundle:[MPResources frameworkBundle]];
 }
 
-+ (NSBundle *)frameworkBundle {
++ (NSBundle *)frameworkBundle
+{
     return [NSBundle bundleForClass:self.class];
 }
 
-+ (NSString *)notificationXibName {
++ (NSString *)notificationXibName
+{
     NSMutableString *xibFileName = [NSMutableString stringWithString:@"MPTakeoverNotificationViewController"];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -37,7 +40,8 @@
     return [xibFileName copy];
 }
 
-+ (UIImage *)imageNamed:(NSString *)name {
++ (UIImage *)imageNamed:(NSString *)name
+{
     NSString *imagePath = [[MPResources frameworkBundle] pathForResource:name ofType:@"png"];
     return [UIImage imageWithContentsOfFile:imagePath];
 }
