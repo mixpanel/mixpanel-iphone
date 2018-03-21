@@ -818,7 +818,6 @@ static NSString *defaultProjectToken;
     [self.optOutStatus setObject:@YES forKey:self.distinctId];
     [self archiveOptOut];
     dispatch_async(self.serialQueue, ^{
-        dispatch_sync(self.networkQueue, ^{ return; });
         @synchronized (self) {
             self.superProperties = [NSMutableDictionary dictionary];
             self.people.distinctId = nil;
@@ -841,7 +840,7 @@ static NSString *defaultProjectToken;
 - (BOOL)hasOptedOutTracking
 {
     NSNumber *optOutStatus = [self.optOutStatus objectForKey:self.distinctId];
-    return optOutStatus? [optOutStatus boolValue]: NO;
+    return [optOutStatus boolValue];
 }
 
 #pragma mark - Network control
