@@ -813,6 +813,37 @@ static NSString *defaultProjectToken;
     });
 }
 
+- (void)optOutTracking
+{
+    [self.optOutStatus setObject:@YES forKey:self.distinctId];
+    [self archiveOptOut];
+    dispatch_async(self.serialQueue, ^{
+        dispatch_sync(self.networkQueue, ^{ return; });
+        @synchronized (self) {
+            self.superProperties = [NSMutableDictionary dictionary];
+            self.people.distinctId = nil;
+            self.alias = nil;
+            self.people.unidentifiedQueue = [NSMutableArray array];
+            self.eventsQueue = [NSMutableArray array];
+            self.peopleQueue = [NSMutableArray array];
+            self.timedEvents = [NSMutableDictionary dictionary];
+        }
+        [self archive];
+    });
+}
+
+- (void)optInTracking
+{
+    [self.optOutStatus setObject:@NO forKey:self.distinctId];
+    [self archiveOptOut];
+}
+
+- (BOOL)hasOptedOutTracking
+{
+    NSNumber *optOutStatus = [self.optOutStatus objectForKey:self.distinctId];
+    return optOutStatus? [optOutStatus boolValue]: NO;
+}
+
 #pragma mark - Network control
 - (void)setServerURL:(NSString *)serverURL
 {
@@ -1241,37 +1272,6 @@ static NSString *defaultProjectToken;
     }
 #endif
     return @"";
-}
-
-- (void)optOutTracking
-{
-    [self.optOutStatus setObject:@YES forKey:self.distinctId];
-    [self archiveOptOut];
-    dispatch_async(self.serialQueue, ^{
-        dispatch_sync(self.networkQueue, ^{ return; });
-        @synchronized (self) {
-            self.superProperties = [NSMutableDictionary dictionary];
-            self.people.distinctId = nil;
-            self.alias = nil;
-            self.people.unidentifiedQueue = [NSMutableArray array];
-            self.eventsQueue = [NSMutableArray array];
-            self.peopleQueue = [NSMutableArray array];
-            self.timedEvents = [NSMutableDictionary dictionary];
-        }
-        [self archive];
-    });
-}
-
-- (void)optInTracking
-{
-    [self.optOutStatus setObject:@NO forKey:self.distinctId];
-    [self archiveOptOut];
-}
-
-- (BOOL)hasOptedOutTracking
-{
-    NSNumber *optOutStatus = [self.optOutStatus objectForKey:self.distinctId];
-    return optOutStatus? [optOutStatus boolValue]: NO;
 }
 
 - (NSString *)libVersion
