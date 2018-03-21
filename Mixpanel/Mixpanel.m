@@ -815,7 +815,7 @@ static NSString *defaultProjectToken;
 
 - (void)optOutTracking
 {
-    [self.optOutStatus setObject:@YES forKey:self.distinctId];
+    self.optOutStatus[self.distinctId] = @YES;
     [self archiveOptOut];
     dispatch_async(self.serialQueue, ^{
         @synchronized (self) {
@@ -833,13 +833,13 @@ static NSString *defaultProjectToken;
 
 - (void)optInTracking
 {
-    [self.optOutStatus setObject:@NO forKey:self.distinctId];
+    self.optOutStatus[self.distinctId] = @NO;
     [self archiveOptOut];
 }
 
 - (BOOL)hasOptedOutTracking
 {
-    NSNumber *optOutStatus = [self.optOutStatus objectForKey:self.distinctId];
+    NSNumber *optOutStatus = self.optOutStatus[self.distinctId];
     return [optOutStatus boolValue];
 }
 
