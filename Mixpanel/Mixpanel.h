@@ -214,6 +214,12 @@ extern NSString *const MPNotificationTypeTakeover;
  */
 @property (atomic, weak) id<MixpanelDelegate> delegate; // allows fine grain control over uploading (optional)
 
+/*!
+ A custom NSURLSession which can be provided for by the user of this library to allow for custom configuration within their app
+ that is then used when making network calls within Mixpanel
+ */
+@property (atomic, strong) NSURLSession *customUrlSession;
+
 #pragma mark Tracking
 
 /*!

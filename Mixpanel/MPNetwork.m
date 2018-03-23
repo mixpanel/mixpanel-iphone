@@ -24,7 +24,10 @@ static const NSUInteger kBatchSize = 50;
 + (NSURLSession *)sharedURLSession {
     static NSURLSession *sharedSession = nil;
     @synchronized(self) {
-        if (sharedSession == nil) {
+        Mixpanel * mixpanelInstance = [Mixpanel sharedInstance];
+        if (sharedSession == nil && mixpanelInstance && mixpanelInstance.customUrlSession ) {
+            sharedSession = mixpanelInstance.customUrlSession;
+        } else if (sharedSession == nil) {
             NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
             sessionConfig.timeoutIntervalForRequest = 7.0;
             sharedSession = [NSURLSession sessionWithConfiguration:sessionConfig];
