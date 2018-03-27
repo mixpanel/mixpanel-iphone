@@ -112,20 +112,6 @@ static NSString *defaultProjectToken;
         automaticPushTracking:(BOOL)automaticPushTracking
                optOutTracking:(BOOL)optOutTracking
 {
-    if (self = [self initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking]) {
-        if (optOutTracking) {
-            [self optOutTracking];
-        }
-    }
-    return self;
-}
-
-- (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(NSDictionary *)launchOptions
-                flushInterval:(NSUInteger)flushInterval
-                 trackCrashes:(BOOL)trackCrashes
-        automaticPushTracking:(BOOL)automaticPushTracking
-{
     if (apiToken.length == 0) {
         if (apiToken == nil) {
             apiToken = @"";
@@ -149,19 +135,19 @@ static NSString *defaultProjectToken;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
-
+        
         self.serverURL = @"https://api.mixpanel.com";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
-
+        
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
         self.checkForVariantsOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
-
+        
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
-
+        
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
         if (![Mixpanel isAppExtension]) {
             self.taskId = UIBackgroundTaskInvalid;
@@ -171,7 +157,7 @@ static NSString *defaultProjectToken;
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         NSString *networkLabel = [label stringByAppendingString:@".network"];
         self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
-
+        
 #if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
 #else
@@ -182,6 +168,11 @@ static NSString *defaultProjectToken;
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         [self setUpListeners];
         [self unarchive];
+        
+        if (optOutTracking) {
+            [self optOutTracking];
+        }
+        
         if (![Mixpanel isAppExtension]) {
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
             self.automaticEvents = [[AutomaticEvents alloc] init];
@@ -206,6 +197,20 @@ static NSString *defaultProjectToken;
         instances[apiToken] = self;
     }
     return self;
+}
+
+- (instancetype)initWithToken:(NSString *)apiToken
+                launchOptions:(NSDictionary *)launchOptions
+                flushInterval:(NSUInteger)flushInterval
+                 trackCrashes:(BOOL)trackCrashes
+        automaticPushTracking:(BOOL)automaticPushTracking
+{
+    return [self initWithToken:apiToken
+                 launchOptions:launchOptions
+                 flushInterval:flushInterval
+                  trackCrashes:trackCrashes
+         automaticPushTracking:automaticPushTracking
+                optOutTracking:NO];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
@@ -813,34 +818,43 @@ static NSString *defaultProjectToken;
     });
 }
 
-- (void)optOutTracking
-{
-    self.optOutStatus[self.distinctId] = @YES;
-    [self archiveOptOut];
+- (void)optOutTracking{
     dispatch_async(self.serialQueue, ^{
         @synchronized (self) {
-            self.superProperties = [NSMutableDictionary dictionary];
-            self.people.distinctId = nil;
-            self.alias = nil;
-            self.people.unidentifiedQueue = [NSMutableArray array];
-            self.eventsQueue = [NSMutableArray array];
-            self.peopleQueue = [NSMutableArray array];
-            self.timedEvents = [NSMutableDictionary dictionary];
+            [self.eventsQueue removeAllObjects];
+            [self.peopleQueue removeAllObjects];
         }
+    });
+    if (self.people.distinctId) {
+        [self.people deleteUser];
+        [self.people clearCharges];
+        [self flush];
+    }
+    dispatch_async(self.serialQueue, ^{
+        @synchronized (self) {
+            self.alias = nil;
+            self.people.distinctId = nil;
+            self.distinctId = [self defaultDistinctId];
+            self.superProperties = [NSDictionary new];
+            [self.people.unidentifiedQueue removeAllObjects];
+            [self.timedEvents removeAllObjects];
+        };
         [self archive];
     });
+    self.optOutStatus = YES;
+    [self archiveOptOut];
 }
 
 - (void)optInTracking
 {
-    self.optOutStatus[self.distinctId] = @NO;
+    self.optOutStatus = NO;
+    [self track:@"$opt_in"];
     [self archiveOptOut];
 }
 
 - (BOOL)hasOptedOutTracking
 {
-    NSNumber *optOutStatus = self.optOutStatus[self.distinctId];
-    return [optOutStatus boolValue];
+    return self.optOutStatus;
 }
 
 #pragma mark - Network control
@@ -867,7 +881,7 @@ static NSString *defaultProjectToken;
 {
     [self stopFlushTimer];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.flushInterval > 0 && ![self hasOptedOutTracking]) {
+        if (self.flushInterval > 0) {
             self.timer = [NSTimer scheduledTimerWithTimeInterval:self.flushInterval
                                                           target:self
                                                         selector:@selector(flush)
@@ -1057,7 +1071,7 @@ static NSString *defaultProjectToken;
 {
     @synchronized (self) {
         NSString *filePath = [self optOutFilePath];
-        if (![self archiveObject:self.optOutStatus withFilePath:filePath]) {
+        if (![self archiveObject:[NSNumber numberWithBool:self.optOutStatus] withFilePath:filePath]) {
             MPLogError(@"%@ unable to archive opt out status", self);
         }
     }
@@ -1156,7 +1170,8 @@ static NSString *defaultProjectToken;
 
 - (void)unarchiveOptOut
 {
-    self.optOutStatus = (NSMutableDictionary *)[Mixpanel unarchiveOrDefaultFromFile:[self optOutFilePath] asClass:[NSMutableDictionary class]];
+    NSNumber *optOutStatus = (NSNumber *)[Mixpanel unarchiveOrDefaultFromFile:[self optOutFilePath] asClass:[NSNumber class]];
+    self.optOutStatus = [optOutStatus boolValue];
 }
 
 #pragma mark - Application Helpers

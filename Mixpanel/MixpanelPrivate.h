@@ -111,7 +111,7 @@
 @property (nonatomic, strong) NSSet *variants;
 @property (nonatomic, strong) NSSet *eventBindings;
 
-@property (nonatomic, strong) NSMutableDictionary *optOutStatus;
+@property (nonatomic, assign) BOOL optOutStatus;
 
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
 
