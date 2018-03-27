@@ -847,9 +847,22 @@ static NSString *defaultProjectToken;
 
 - (void)optInTracking
 {
+    [self optInTrackingForDistinctID:nil withEventProperties:nil];
+}
+
+- (void)optInTrackingForDistinctID:(NSString *)distinctID
+{
+    [self optInTrackingForDistinctID:distinctID withEventProperties:nil];
+}
+
+- (void)optInTrackingForDistinctID:(NSString *)distinctID withEventProperties:(NSDictionary *)properties
+{
     self.optOutStatus = NO;
-    [self track:@"$opt_in"];
     [self archiveOptOut];
+    if (distinctID) {
+        [self identify:distinctID];
+    }
+    [self track:@"$opt_in" properties:properties];
 }
 
 - (BOOL)hasOptedOutTracking

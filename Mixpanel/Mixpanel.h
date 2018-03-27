@@ -299,7 +299,7 @@ extern NSString *const MPNotificationTypeTakeover;
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
  @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
- @param optOutTracking    whether or not to be opted out from tracking by default
+ @param optOutTracking  whether or not to be opted out from tracking by default
  */
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTracking:(BOOL)optOutTracking;
 
@@ -652,10 +652,44 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Opt in tracking.
  
- This method is used to opt in tracking. This causes all events and people request to be sent back
- to the Mixpanel server.
+ Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+ sent to Mixpanel after using this method.
+ 
+ This method will internally track an opt in event to your project. If you want to identify the opt-in
+ event and/or pass properties to the event, See also <code>optInTrackingForDistinctId:</code> and
+ <code>optInTrackingForDistinctId:withEventProperties:</code>.
  */
 - (void)optInTracking;
+
+/*!
+ Opt in tracking.
+ 
+ Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+ sent to Mixpanel after using this method.
+ 
+ This method will internally track an opt in event to your project. If you want to pass properties to the event, see also
+ <code>optInTrackingForDistinctId:withEventProperties:</code>.
+ 
+ @param distinctID     optional string to use as the distinct ID for events. This will call <code>identify:</code>.
+ If you use people profiles make sure you manually call <code>identify:</code> after this method.
+ */
+- (void)optInTrackingForDistinctID:(nullable NSString *)distinctID;
+
+/*!
+ Opt in tracking.
+ 
+ Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+ sent to Mixpanel after using this method.
+ 
+ This method will internally track an opt in event to your project.See also <code>optInTracking</code> or
+ <code>optInTrackingForDistinctId:</code>.
+ 
+ @param distinctID     optional string to use as the distinct ID for events. This will call <code>identify:</code>.
+ If you use people profiles make sure you manually call <code>identify:</code> after this method.
+ @param properties     optional properties dictionary that could be passed to add properties to the opt-in event that is sent to
+ Mixpanel.
+ */
+- (void)optInTrackingForDistinctID:(nullable NSString *)distinctID withEventProperties:(nullable NSDictionary *)properties;
 
 /*!
  Returns YES if the current user has opted out tracking, NO if the current user has opted in tracking.

@@ -106,12 +106,60 @@
 - (void)testOptInWillAddOptInEvent
 {
     [self.mixpanel optInTracking];
+    XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
     if ([self.mixpanel.eventsQueue count]) {
         NSDictionary *event = self.mixpanel.eventsQueue[0];
         XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
     }
+}
+
+- (void)testOptInTrackingForDistinctID
+{
+    [self.mixpanel optInTrackingForDistinctID:@"testDistinctId"];
+    XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
+    
+    [self waitForMixpanelQueues];
+    XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
+    if ([self.mixpanel.eventsQueue count]) {
+        NSDictionary *event = self.mixpanel.eventsQueue[0];
+        XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
+    }
+    
+    XCTAssertEqualObjects(self.mixpanel.distinctId, @"testDistinctId", @"mixpanel identify failed to set distinct id");
+    XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"testDistinctId", @"mixpanel identify failed to set people distinct id");
+    XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify: should move records from unidentified queue");
+}
+
+- (void)testOptInTrackingForDistinctIDAndWithEventProperties
+{
+    NSDate *now = [NSDate date];
+    NSDictionary *p = @{ @"string": @"yello",
+                         @"number": @3,
+                         @"date": now,
+                         @"$app_version": @"override" };
+    [self.mixpanel optInTrackingForDistinctID:@"testDistinctId" withEventProperties:p];
+    XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
+    
+    [self waitForMixpanelQueues];
+    NSDictionary *props = self.mixpanel.eventsQueue.lastObject[@"properties"];
+    XCTAssertEqualObjects(props[@"string"], @"yello");
+    XCTAssertEqualObjects(props[@"number"], @3);
+    XCTAssertEqualObjects(props[@"date"], now);
+    XCTAssertEqualObjects(props[@"$app_version"], @"override", @"reserved property override failed");
+    
+    XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
+    if ([self.mixpanel.eventsQueue count]) {
+        NSDictionary *event = self.mixpanel.eventsQueue[0];
+        XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
+    }
+    
+    XCTAssertEqualObjects(self.mixpanel.distinctId, @"testDistinctId", @"mixpanel identify failed to set distinct id");
+    XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"testDistinctId", @"mixpanel identify failed to set people distinct id");
+    XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify: should move records from unidentified queue");
+    
+    
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForMultipleInstances
