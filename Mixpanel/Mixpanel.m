@@ -1564,7 +1564,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSString *trackedKey = [NSString stringWithFormat:@"MPTracked:%@", self.apiToken];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:trackedKey]) {
         dispatch_group_enter(bgGroup);
-        NSString *requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration", @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone", @"distinct_id": self.apiToken}}]];
+        NSString *requestData = [MPNetwork encodeArrayForAPI:@[@{@"event": @"Integration",
+                                                                 @"properties": @{@"token": @"85053bf24bba75239b16a601d9387e17", @"mp_lib": @"iphone",
+                                                                                  @"distinct_id": self.apiToken, @"$lib_version": self.libVersion}}]];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack andBody:postBody];
         [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
