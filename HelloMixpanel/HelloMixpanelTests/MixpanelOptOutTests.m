@@ -80,7 +80,6 @@
 
 - (void)testAutoTrackShouldBeTriggeredDuringInitializedWithOptedOutNO
 {
-    __block NSInteger trackCount = 0;
     NSDictionary *launchOptions = @{ UIApplicationLaunchOptionsRemoteNotificationKey: @{
                                              @"mp": @{
                                                      @"m": @"the_message_id",
@@ -97,10 +96,6 @@
     
     NSDictionary *p = e[@"properties"];
     XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
-    
-    XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
-    
-    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
 - (void)testOptInWillAddOptInEvent
@@ -108,10 +103,12 @@
     [self.mixpanel optInTracking];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     [self waitForMixpanelQueues];
-    XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
-    if ([self.mixpanel.eventsQueue count]) {
+    if ([self.mixpanel.eventsQueue count] == 1) {
         NSDictionary *event = self.mixpanel.eventsQueue[0];
         XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
+    }
+    else {
+        XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
     }
 }
 
@@ -121,10 +118,12 @@
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     
     [self waitForMixpanelQueues];
-    XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
-    if ([self.mixpanel.eventsQueue count]) {
+    if ([self.mixpanel.eventsQueue count] == 1) {
         NSDictionary *event = self.mixpanel.eventsQueue[0];
         XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
+    }
+    else {
+        XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
     }
     
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"testDistinctId", @"mixpanel identify failed to set distinct id");
@@ -149,17 +148,17 @@
     XCTAssertEqualObjects(props[@"date"], now);
     XCTAssertEqualObjects(props[@"$app_version"], @"override", @"reserved property override failed");
     
-    XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
-    if ([self.mixpanel.eventsQueue count]) {
+    if ([self.mixpanel.eventsQueue count] == 1) {
         NSDictionary *event = self.mixpanel.eventsQueue[0];
         XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
+    }
+    else {
+        XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
     }
     
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"testDistinctId", @"mixpanel identify failed to set distinct id");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"testDistinctId", @"mixpanel identify failed to set people distinct id");
     XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify: should move records from unidentified queue");
-    
-    
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForMultipleInstances
@@ -240,12 +239,12 @@
 {
     stubEngage();
     [self.mixpanel optOutTracking];
-    [self.mixpanel createAlias:@"testAlias" forDistinctID:@"aDistintID"];
+    [self.mixpanel createAlias:@"testAlias" forDistinctID:@"aDistinctID"];
     XCTAssertFalse([self.mixpanel.alias isEqualToString:@"testAlias"], @"When opted out, alias should not be set");
 }
 
 - (void)testOptOutTrackingRegisterSuperProperties {
-    NSDictionary *p = @{ @"p1": @"a", @"p2": @3, @"p2": [NSDate date] };
+    NSDictionary *p = @{ @"p1": @"a", @"p2": @3, @"p3": [NSDate date] };
     [self.mixpanel optOutTracking];
     [self.mixpanel registerSuperProperties:p];
     [self waitForMixpanelQueues];
@@ -305,18 +304,7 @@
     
     [self.mixpanel optOutTracking];
     [self waitForMixpanelQueues];
-    //delete user and clear charges
-    if ([self.mixpanel.peopleQueue count] == 2) {
-        NSDictionary *people1 = self.mixpanel.peopleQueue[0];
-        XCTAssertTrue([people1.allKeys containsObject:@"$delete"], @"");
-        
-        NSDictionary *people2 = self.mixpanel.peopleQueue[1];
-        NSDictionary *set = people2[@"$set"];
-        XCTAssertTrue([set.allKeys containsObject:@"$transactions"] && [set[@"$transactions"] isEqualToArray:@[]], @"");
-    }
-    else {
-        XCTAssertThrows(@"");
-    }
+
     XCTAssertTrue([self.mixpanel.peopleQueue count] == 2, @"When opted out, people should have been purged except 'deleteUser' and 'clearCharges'");
 }
 
@@ -341,9 +329,6 @@
         XCTAssertTrue([set.allKeys containsObject:@"$transactions"] && [set[@"$transactions"] isEqualToArray:@[]],
                       @"When optOutTracking, 'clearCharges' should be called");
     }
-    else {
-        XCTAssertThrows(@"deleteUser or clearCharges not being called.");
-    }
 }
 
 - (void)testOptOutWillSkipFlushPeople
@@ -355,19 +340,19 @@
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
     [self waitForMixpanelQueues];
-    XCTAssertTrue([self.mixpanel.peopleQueue count] == 50, @"When opted in, people should have been queued");
+    XCTAssertTrue([self.mixpanel.peopleQueue count] == 50, @"When opted in, people queue should have been queued");
     
     NSMutableArray *peopleQueue = [NSMutableArray arrayWithArray:self.mixpanel.peopleQueue];
     [self.mixpanel optOutTracking];
     
-    //In order to test if flush will be skipped, we have to create a fake peopleQueue since optOutTracking will clear peopleQueue.
+    //In order to test if flush will be skipped, we have to re-create a fake peopleQueue since optOutTracking will clear peopleQueue.
     [self waitForMixpanelQueues];
     self.mixpanel.peopleQueue = [NSMutableArray arrayWithArray:peopleQueue];
 
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
     
-    XCTAssertTrue([self.mixpanel.peopleQueue count] == 50, @"When opted out, people should not be flushed");
+    XCTAssertTrue([self.mixpanel.peopleQueue count] == 50, @"When opted out, people queue should not be flushed");
 }
 
 - (void)testOptOutWillSkipFlushEvent
