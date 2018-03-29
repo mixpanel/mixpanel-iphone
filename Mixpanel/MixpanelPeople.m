@@ -80,7 +80,7 @@
         properties = [properties copy];
         BOOL ignore_time = self.ignoreTime;
 
-        dispatch_async(strongMixpanel.serialQueue, ^{
+        dispatch_sync(strongMixpanel.serialQueue, ^{
             NSMutableDictionary *r = [NSMutableDictionary dictionary];
             NSMutableDictionary *p = [NSMutableDictionary dictionary];
             r[@"$token"] = strongMixpanel.apiToken;

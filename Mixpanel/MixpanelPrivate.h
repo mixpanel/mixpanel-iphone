@@ -98,6 +98,7 @@
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic) dispatch_queue_t networkQueue;
+@property (nonatomic) dispatch_queue_t backgroundQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
 

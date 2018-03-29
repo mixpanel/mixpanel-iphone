@@ -140,6 +140,8 @@ static NSString *defaultProjectToken;
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         NSString *networkLabel = [label stringByAppendingString:@".network"];
         self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
+        NSString *backgroundLabel = [label stringByAppendingString:@".background"];
+        self.backgroundQueue = dispatch_queue_create([backgroundLabel UTF8String], DISPATCH_QUEUE_CONCURRENT);
 
 #if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
@@ -379,7 +381,7 @@ static NSString *defaultProjectToken;
         return;
     }
 
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         // identify only changes the distinct id if it doesn't match either the existing or the alias;
         // if it's new, blow away the alias as well.
         if (![distinctId isEqualToString:self.alias]) {
@@ -430,7 +432,7 @@ static NSString *defaultProjectToken;
         return;
     }
     if (![alias isEqualToString:distinctID]) {
-        dispatch_async(self.serialQueue, ^{
+        dispatch_sync(self.serialQueue, ^{
             self.alias = alias;
             [self archiveProperties];
         });
@@ -467,7 +469,7 @@ static NSString *defaultProjectToken;
 
     NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
     NSNumber *epochSeconds = @(round(epochInterval));
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[event];
         NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:self.automaticProperties];
         p[@"token"] = self.apiToken;
@@ -618,7 +620,7 @@ static NSString *defaultProjectToken;
 {
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         [tmp addEntriesFromDictionary:properties];
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
@@ -635,7 +637,7 @@ static NSString *defaultProjectToken;
 {
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         for (NSString *key in properties) {
             id value = tmp[key];
@@ -650,7 +652,7 @@ static NSString *defaultProjectToken;
 
 - (void)unregisterSuperProperty:(NSString *)propertyName
 {
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         tmp[propertyName] = nil;
         self.superProperties = [NSDictionary dictionaryWithDictionary:tmp];
@@ -660,7 +662,7 @@ static NSString *defaultProjectToken;
 
 - (void)clearSuperProperties
 {
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         self.superProperties = @{};
         [self archiveProperties];
     });
@@ -679,7 +681,7 @@ static NSString *defaultProjectToken;
         MPLogError(@"Mixpanel cannot time an empty event");
         return;
     }
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         self.timedEvents[event] = startTime;
     });
 }
@@ -694,51 +696,48 @@ static NSString *defaultProjectToken;
 }
 
 - (void)clearTimedEvents
-{   dispatch_async(self.serialQueue, ^{
+{   dispatch_sync(self.serialQueue, ^{
         self.timedEvents = [NSMutableDictionary dictionary];
     });
 }
 
-- (void)reset
+- (void)resetWithCompletion:(void (^)(void))handler
 {
     [self flush];
-    dispatch_async(self.serialQueue, ^{
+    dispatch_async(self.backgroundQueue, ^{
         // wait for all current network requests to finish before resetting
         dispatch_sync(self.networkQueue, ^{ return; });
-        @synchronized (self) {
-            self.distinctId = [self defaultDistinctId];
-            self.superProperties = [NSMutableDictionary dictionary];
-            self.people.distinctId = nil;
-            self.alias = nil;
-            self.people.unidentifiedQueue = [NSMutableArray array];
-            self.eventsQueue = [NSMutableArray array];
-            self.peopleQueue = [NSMutableArray array];
-            self.timedEvents = [NSMutableDictionary dictionary];
-            self.shownNotifications = [NSMutableSet set];
-            self.decideResponseCached = NO;
-            self.variants = [NSSet set];
-            self.eventBindings = [NSSet set];
+        dispatch_sync(self.backgroundQueue, ^{
+            @synchronized (self) {
+                self.distinctId = [self defaultDistinctId];
+                self.superProperties = [NSMutableDictionary dictionary];
+                self.people.distinctId = nil;
+                self.alias = nil;
+                self.people.unidentifiedQueue = [NSMutableArray array];
+                self.eventsQueue = [NSMutableArray array];
+                self.peopleQueue = [NSMutableArray array];
+                self.timedEvents = [NSMutableDictionary dictionary];
+                self.shownNotifications = [NSMutableSet set];
+                self.decideResponseCached = NO;
+                self.variants = [NSSet set];
+                self.eventBindings = [NSSet set];
 #if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-            [self.connectIntegrations reset];
+                [self.connectIntegrations reset];
 #endif
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-            if (![Mixpanel isAppExtension]) {
-                [[MPTweakStore sharedInstance] reset];
-            }
+                if (![Mixpanel isAppExtension]) {
+                    [[MPTweakStore sharedInstance] reset];
+                }
 #endif
-        }
-        [self archive];
+            }
+            [self archive];
+            dispatch_async(dispatch_get_main_queue(), handler);
+        });
     });
 }
 
 - (void)dispatchOnNetworkQueue:(void (^)(void))dispatchBlock {
-    // so this looks stupid but to make [Mixpanel track]; [Mixpanel flush]; continue to have the track
-    // guaranteed to be part of the flush we need to make networkQueue stuff be dispatched on serialQueue
-    // first. still will allow serialQueue stuff to happen at the same time as networkQueue stuff just
-    // don't want to change track -> flush behavior that people may be relying on
-    dispatch_async(self.serialQueue, ^{
-        dispatch_async(self.networkQueue, dispatchBlock);
-    });
+    dispatch_async(self.networkQueue, dispatchBlock);
 }
 
 #pragma mark - Network control
@@ -1119,7 +1118,7 @@ static NSString *defaultProjectToken;
 
 - (void)setCurrentRadio
 {
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         NSMutableDictionary *properties = [self.automaticProperties mutableCopy];
         if (properties) {
             properties[@"$radio"] = [self currentRadio];
@@ -1340,7 +1339,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         [self.sessionMetadata reset];
     });
     [self startFlushTimer];
@@ -1439,7 +1438,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationWillEnterForeground:(NSNotificationCenter *)notification
 {
     MPLogInfo(@"%@ will enter foreground", self);
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[Mixpanel sharedUIApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
@@ -1896,7 +1895,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)markNotificationShown:(MPNotification *)notification {
     MPLogInfo(@"%@ marking notification shown: %@, %@", self, @(notification.ID), self.shownNotifications);
 
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         [self.shownNotifications addObject:@(notification.ID)];
         [self archiveProperties];
     });
@@ -2013,7 +2012,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSDictionary *shownVariant = @{@(variant.experimentID).stringValue: @(variant.ID)};
     [self.people merge:@{@"$experiments": shownVariant}];
 
-    dispatch_async(self.serialQueue, ^{
+    dispatch_sync(self.serialQueue, ^{
         NSMutableDictionary *superProperties = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         NSMutableDictionary *shownVariants = [NSMutableDictionary dictionaryWithDictionary:superProperties[@"$experiments"]];
         [shownVariants addEntriesFromDictionary:shownVariant];

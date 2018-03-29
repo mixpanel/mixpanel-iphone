@@ -522,7 +522,7 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Clears all stored properties and distinct IDs. Useful if your app's user logs out.
  */
-- (void)reset;
+- (void)resetWithCompletion:(void (^)(void))handler;
 
 /*!
  Uploads queued data to the Mixpanel server.
