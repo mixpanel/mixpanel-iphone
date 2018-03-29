@@ -65,6 +65,13 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (atomic, readonly, strong) MixpanelPeople *people;
 
 /*!
+ The distinct ID of the current user that can be called from any queue.
+
+ See the documentation for distinctId below for more information.
+ */
+- (NSString *)safeDistinctId;
+
+/*!
  The distinct ID of the current user.
 
  A distinct ID is a string that uniquely identifies one of your users. By default, 

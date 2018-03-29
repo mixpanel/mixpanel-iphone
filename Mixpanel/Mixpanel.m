@@ -244,6 +244,16 @@ static NSString *defaultProjectToken;
 }
 #endif
 
+- (NSString *)safeDistinctId {
+    __block NSString *result;
+
+    dispatch_sync(self.serialQueue, ^{
+        result = self.distinctId;
+    });
+
+    return result;
+}
+
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 - (void)setValidationEnabled:(BOOL)validationEnabled {
     _validationEnabled = validationEnabled;
