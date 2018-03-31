@@ -17,8 +17,6 @@
 
 #if (defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
 #define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR 1
-#else
-#define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR 0
 #endif
 
 static const NSUInteger kBatchSize = 50;
