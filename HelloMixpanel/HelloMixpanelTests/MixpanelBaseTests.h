@@ -24,6 +24,7 @@
 
 - (void)setUpMixpanel;
 - (void)tearDownMixpanel;
+- (void)deleteOptOutSettingsWithMixpanelInstance:(Mixpanel *)MixpanelInstance;
 
 - (void)flushAndWaitForMixpanelQueues;
 - (void)waitForMixpanelQueues;

@@ -18,19 +18,6 @@
 
 @implementation MixpanelOptOutTests
 
-- (void)deleteOptOutSettingsWithMixpanelInstance:(Mixpanel *)MixpanelInstance {
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSError *error = nil;
-    NSString *filename = [MixpanelInstance optOutFilePath];
-    [manager removeItemAtPath:filename error:&error];
-}
-
-- (void)tearDown
-{
-    [self deleteOptOutSettingsWithMixpanelInstance:self.mixpanel];
-    [super tearDown];
-}
-
 - (NSString *)randomTokenId {
     return [NSString stringWithFormat:@"%08x%08x", arc4random(), arc4random()];
 }
@@ -169,8 +156,8 @@
     Mixpanel *mixpanel2 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:NO];
     XCTAssertFalse([mixpanel2 hasOptedOutTracking], @"When initialize with opted out flag set to NO, the current user should have opted in tracking");
     
-    [self deleteOptOutSettingsWithMixpanelInstance:mixpanel1];
-    [self deleteOptOutSettingsWithMixpanelInstance:mixpanel2];
+    [super deleteOptOutSettingsWithMixpanelInstance:mixpanel1];
+    [super deleteOptOutSettingsWithMixpanelInstance:mixpanel2];
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutNO

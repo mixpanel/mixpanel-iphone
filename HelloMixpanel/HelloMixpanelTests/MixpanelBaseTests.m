@@ -37,6 +37,7 @@
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
+    [self deleteOptOutSettingsWithMixpanelInstance:self.mixpanel];
 }
 
 - (void)tearDownMixpanel {
@@ -45,8 +46,16 @@
     stubEngage();
     [self.mixpanel reset];
     [self waitForMixpanelQueues];
+    [self deleteOptOutSettingsWithMixpanelInstance:self.mixpanel];
 
     self.mixpanel = nil;
+}
+
+- (void)deleteOptOutSettingsWithMixpanelInstance:(Mixpanel *)MixpanelInstance {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSString *filename = [MixpanelInstance optOutFilePath];
+    [manager removeItemAtPath:filename error:&error];
 }
 
 #pragma mark - Mixpanel Delegate
