@@ -1499,9 +1499,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application did become active", self);
-    dispatch_async(self.serialQueue, ^{
-        [self.sessionMetadata reset];
-    });
     [self startFlushTimer];
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -1605,6 +1602,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MPLogInfo(@"%@ will enter foreground", self);
     dispatch_async(self.serialQueue, ^{
+        [self.sessionMetadata reset];
         if (self.taskId != UIBackgroundTaskInvalid) {
             [[Mixpanel sharedUIApplication] endBackgroundTask:self.taskId];
             self.taskId = UIBackgroundTaskInvalid;
