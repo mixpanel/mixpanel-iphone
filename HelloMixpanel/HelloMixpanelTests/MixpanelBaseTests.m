@@ -37,7 +37,6 @@
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
-    [self deleteOptOutSettingsWithMixpanelInstance:self.mixpanel];
 }
 
 - (void)tearDownMixpanel {
