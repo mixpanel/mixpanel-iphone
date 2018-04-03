@@ -820,10 +820,8 @@ static NSString *defaultProjectToken;
 
 - (void)optOutTracking{
     dispatch_async(self.serialQueue, ^{
-        @synchronized (self) {
-            [self.eventsQueue removeAllObjects];
-            [self.peopleQueue removeAllObjects];
-        }
+        [self.eventsQueue removeAllObjects];
+        [self.peopleQueue removeAllObjects];
     });
     if (self.people.distinctId) {
         [self.people deleteUser];
@@ -831,14 +829,12 @@ static NSString *defaultProjectToken;
         [self flush];
     }
     dispatch_async(self.serialQueue, ^{
-        @synchronized (self) {
-            self.alias = nil;
-            self.people.distinctId = nil;
-            self.distinctId = [self defaultDistinctId];
-            self.superProperties = [NSDictionary new];
-            [self.people.unidentifiedQueue removeAllObjects];
-            [self.timedEvents removeAllObjects];
-        };
+        self.alias = nil;
+        self.people.distinctId = nil;
+        self.distinctId = [self defaultDistinctId];
+        self.superProperties = [NSDictionary new];
+        [self.people.unidentifiedQueue removeAllObjects];
+        [self.timedEvents removeAllObjects];
         [self archive];
     });
     self.optOutStatus = YES;
