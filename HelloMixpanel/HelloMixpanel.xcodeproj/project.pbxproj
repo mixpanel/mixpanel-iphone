@@ -49,6 +49,8 @@
 		51D96E8F1D1217E1001F622D /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E11B4F4DF700787217 /* checkerboard.jpg */; };
 		51D96E901D1217E1001F622D /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
 		51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
+		860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE35E207548E600C12F18 /* TrackingViewController.m */; };
+		860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36120754DBE00C12F18 /* PeopleViewController.m */; };
 		862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
@@ -168,13 +170,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 511FC39D1C2B74BD00DC4796;
 			remoteInfo = Mixpanel_watchOS;
-		};
-		515B5A061CB6F95200A34060 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 513B0BB61C73CA35008EEE6E;
-			remoteInfo = MixpanelAppExtension;
 		};
 		51AF3D3A1D380D2A002E8325 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -380,6 +375,10 @@
 		70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloMixpanelTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8308A8331759009320850991 /* Pods-HelloMixpanelTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		860BE35D207548E600C12F18 /* TrackingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackingViewController.h; sourceTree = "<group>"; };
+		860BE35E207548E600C12F18 /* TrackingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackingViewController.m; sourceTree = "<group>"; };
+		860BE36020754DBE00C12F18 /* PeopleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeopleViewController.h; sourceTree = "<group>"; };
+		860BE36120754DBE00C12F18 /* PeopleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeopleViewController.m; sourceTree = "<group>"; };
 		86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelOptOutTests.m; sourceTree = "<group>"; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
@@ -562,6 +561,10 @@
 				2808F9A31610EFE3005772B7 /* ViewController.h */,
 				2808F9A41610EFE3005772B7 /* ViewController.m */,
 				0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */,
+				860BE35D207548E600C12F18 /* TrackingViewController.h */,
+				860BE35E207548E600C12F18 /* TrackingViewController.m */,
+				860BE36020754DBE00C12F18 /* PeopleViewController.h */,
+				860BE36120754DBE00C12F18 /* PeopleViewController.m */,
 				05FF819C18452EA20073FBAC /* HomeViewController.h */,
 				05FF819D18452EA20073FBAC /* HomeViewController.m */,
 				18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */,
@@ -1162,8 +1165,10 @@
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
+				860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */,
 				05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
+				860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */,
 				18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */,
 				05438FF819214E210076094E /* SecretTableViewCell.m in Sources */,
 				8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */,
