@@ -20,8 +20,6 @@ typedef void (^ActionBlock)(void);
 
 @implementation TrackingViewController
 
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.trackActions = @{@"Track Event": ^(void){[self testTrackEvent];},
@@ -75,11 +73,6 @@ typedef void (^ActionBlock)(void);
     [alert addAction:okButton];
     
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)testTrackActions
-{
-    NSLog(@"my block");
 }
 
 - (void)testTrackEvent
