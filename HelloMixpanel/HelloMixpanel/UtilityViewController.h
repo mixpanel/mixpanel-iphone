@@ -1,5 +1,5 @@
 //
-//  TrackingViewController.h
+//  UtilityViewController.h
 //  HelloMixpanel
 //
 //  Created by Zihe Jia on 4/4/18.
@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "BaseTestViewController.h"
 
-@interface TrackingViewController : BaseTestViewController
+@interface UtilityViewController : BaseTestViewController
 
 @end

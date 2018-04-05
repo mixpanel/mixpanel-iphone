@@ -5,16 +5,9 @@
 //  Created by Zihe Jia on 4/4/18.
 //  Copyright © 2018 Mixpanel. All rights reserved.
 //
-@import Mixpanel;
 #import "TrackingViewController.h"
 
-typedef void (^ActionBlock)(void);
-
-
-@interface TrackingViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, strong) NSDictionary *trackActions;
-@property (nonatomic, strong) Mixpanel *mixpanel;
+@interface TrackingViewController ()
 
 @end
 
@@ -33,48 +26,11 @@ typedef void (^ActionBlock)(void);
                           @"Register SP Once w Default Value": ^(void){[self testRegisterSuperPropertiesOnceWithDefaultValue];},
                           @"Unregister SuperProperty": ^(void){[self testUnRegisterSuperProperty];}
                           };
-    self.mixpanel = [Mixpanel sharedInstance];
+    [self.tableView reloadData];
 }
 
-#pragma mark - tableView delegate and datasource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return (NSInteger)self.trackActions.allKeys.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"trackingCellIdentifier"];
-    cell.textLabel.text = self.trackActions.allKeys[(NSUInteger)indexPath.row];
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ActionBlock actionBlock = self.trackActions[self.trackActions.allKeys[(NSUInteger)indexPath.row]];
-    actionBlock();
-    if (indexPath) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-}
 
 #pragma mark - track actions
-- (void)presentLogMessage:(NSString *)message title:(NSString *)title
-{
-    UIAlertController * alert = [UIAlertController
-                                 alertControllerWithTitle:title
-                                 message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* okButton = [UIAlertAction
-                               actionWithTitle:@"OK"
-                               style:UIAlertActionStyleDefault
-                               handler:nil];
-    [alert addAction:okButton];
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void)testTrackEvent
 {
     NSString *eventTitle = @"Track Event";

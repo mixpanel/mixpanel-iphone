@@ -5,16 +5,10 @@
 //  Created by Zihe Jia on 4/4/18.
 //  Copyright © 2018 Mixpanel. All rights reserved.
 //
-@import Mixpanel;
 #import "PeopleViewController.h"
 
-typedef void (^ActionBlock)(void);
 
-
-@interface PeopleViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, strong) NSDictionary *trackActions;
-@property (nonatomic, strong) Mixpanel *mixpanel;
+@interface PeopleViewController ()
 
 @end
 
@@ -35,46 +29,7 @@ typedef void (^ActionBlock)(void);
                           @"Clear Charges": ^(void){[self testClearCharges];},
                           @"Delete User": ^(void){[self testDeleteUsers];}
                           };
-    self.mixpanel = [Mixpanel sharedInstance];
-}
-
-#pragma mark - tableView delegate and datasource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return (NSInteger)self.trackActions.allKeys.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"peopleCellIdentifier"];
-    cell.textLabel.text = self.trackActions.allKeys[(NSUInteger)indexPath.row];
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ActionBlock actionBlock = self.trackActions[self.trackActions.allKeys[(NSUInteger)indexPath.row]];
-    actionBlock();
-    if (indexPath) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-}
-
-#pragma mark - track actions
-- (void)presentLogMessage:(NSString *)message title:(NSString *)title
-{
-    UIAlertController * alert = [UIAlertController
-                                 alertControllerWithTitle:title
-                                 message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* okButton = [UIAlertAction
-                               actionWithTitle:@"OK"
-                               style:UIAlertActionStyleDefault
-                               handler:nil];
-    [alert addAction:okButton];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+    [self.tableView reloadData];
 }
 
 - (void)testSetProperties

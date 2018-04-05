@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseTestViewController.h"
 
-@interface PeopleViewController : UIViewController
+@interface PeopleViewController : BaseTestViewController
 
 @end

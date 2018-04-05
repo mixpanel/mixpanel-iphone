@@ -51,6 +51,9 @@
 		51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE35E207548E600C12F18 /* TrackingViewController.m */; };
 		860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36120754DBE00C12F18 /* PeopleViewController.m */; };
+		860BE3672075A82C00C12F18 /* BaseTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE3662075A82C00C12F18 /* BaseTestViewController.m */; };
+		860BE36B2075AC2100C12F18 /* UtilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36A2075AC2100C12F18 /* UtilityViewController.m */; };
+		860BE36E2076979C00C12F18 /* GDPRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36D2076979C00C12F18 /* GDPRViewController.m */; };
 		862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
@@ -379,6 +382,12 @@
 		860BE35E207548E600C12F18 /* TrackingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackingViewController.m; sourceTree = "<group>"; };
 		860BE36020754DBE00C12F18 /* PeopleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeopleViewController.h; sourceTree = "<group>"; };
 		860BE36120754DBE00C12F18 /* PeopleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeopleViewController.m; sourceTree = "<group>"; };
+		860BE3652075A82C00C12F18 /* BaseTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTestViewController.h; sourceTree = "<group>"; };
+		860BE3662075A82C00C12F18 /* BaseTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseTestViewController.m; sourceTree = "<group>"; };
+		860BE3692075AC2100C12F18 /* UtilityViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UtilityViewController.h; sourceTree = "<group>"; };
+		860BE36A2075AC2100C12F18 /* UtilityViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UtilityViewController.m; sourceTree = "<group>"; };
+		860BE36C2076979C00C12F18 /* GDPRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDPRViewController.h; sourceTree = "<group>"; };
+		860BE36D2076979C00C12F18 /* GDPRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDPRViewController.m; sourceTree = "<group>"; };
 		86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelOptOutTests.m; sourceTree = "<group>"; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
@@ -554,6 +563,7 @@
 		2808F9971610EFE3005772B7 /* HelloMixpanel */ = {
 			isa = PBXGroup;
 			children = (
+				860BE36F2076987600C12F18 /* Samples */,
 				E1B343191D6BB96E00BEB29E /* HelloMixpanel.entitlements */,
 				05438FFC1921805F0076094E /* SecretWhisper */,
 				2808F9A01610EFE3005772B7 /* AppDelegate.h */,
@@ -561,10 +571,6 @@
 				2808F9A31610EFE3005772B7 /* ViewController.h */,
 				2808F9A41610EFE3005772B7 /* ViewController.m */,
 				0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */,
-				860BE35D207548E600C12F18 /* TrackingViewController.h */,
-				860BE35E207548E600C12F18 /* TrackingViewController.m */,
-				860BE36020754DBE00C12F18 /* PeopleViewController.h */,
-				860BE36120754DBE00C12F18 /* PeopleViewController.m */,
 				05FF819C18452EA20073FBAC /* HomeViewController.h */,
 				05FF819D18452EA20073FBAC /* HomeViewController.m */,
 				18FCCF81199BD9CA00D6E474 /* SomeTableViewController.h */,
@@ -628,7 +634,6 @@
 			children = (
 				515B5A031CB6F95200A34060 /* Mixpanel.framework */,
 				515B5A051CB6F95200A34060 /* Mixpanel.framework */,
-				515B5A071CB6F95200A34060 /* MixpanelAppExtension.framework */,
 				E123C4841D1353D10015B425 /* Mixpanel.framework */,
 				E1D563341E833F980035EFBF /* Mixpanel.framework */,
 			);
@@ -689,6 +694,23 @@
 				8943B032B4AB174C4AD3BBDF /* Pods_HelloMixpanel_tvOSTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		860BE36F2076987600C12F18 /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				860BE3652075A82C00C12F18 /* BaseTestViewController.h */,
+				860BE3662075A82C00C12F18 /* BaseTestViewController.m */,
+				860BE3692075AC2100C12F18 /* UtilityViewController.h */,
+				860BE36A2075AC2100C12F18 /* UtilityViewController.m */,
+				860BE35D207548E600C12F18 /* TrackingViewController.h */,
+				860BE35E207548E600C12F18 /* TrackingViewController.m */,
+				860BE36020754DBE00C12F18 /* PeopleViewController.h */,
+				860BE36120754DBE00C12F18 /* PeopleViewController.m */,
+				860BE36C2076979C00C12F18 /* GDPRViewController.h */,
+				860BE36D2076979C00C12F18 /* GDPRViewController.m */,
+			);
+			name = Samples;
 			sourceTree = "<group>";
 		};
 		E123C48A1D1354EC0015B425 /* HelloMixpanel_tvOS */ = {
@@ -981,13 +1003,6 @@
 			remoteRef = 515B5A041CB6F95200A34060 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		515B5A071CB6F95200A34060 /* MixpanelAppExtension.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MixpanelAppExtension.framework;
-			remoteRef = 515B5A061CB6F95200A34060 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		E123C4841D1353D10015B425 /* Mixpanel.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1164,8 +1179,11 @@
 			files = (
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
+				860BE36E2076979C00C12F18 /* GDPRViewController.m in Sources */,
 				2808F9A51610EFE3005772B7 /* ViewController.m in Sources */,
 				860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */,
+				860BE3672075A82C00C12F18 /* BaseTestViewController.m in Sources */,
+				860BE36B2075AC2100C12F18 /* UtilityViewController.m in Sources */,
 				05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */,
