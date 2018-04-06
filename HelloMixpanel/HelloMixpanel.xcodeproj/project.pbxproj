@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF419214D3D0076094E /* SecretWhisperViewController.m */; };
-		05438FF819214E210076094E /* SecretTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 05438FF719214E210076094E /* SecretTableViewCell.m */; };
 		05438FFB192175940076094E /* HelloMixpanel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05438FFA192175940076094E /* HelloMixpanel.xcassets */; };
 		0545AE2A196F5382003DCE7F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0545AE29196F5382003DCE7F /* Settings.bundle */; };
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
@@ -326,10 +324,6 @@
 
 /* Begin PBXFileReference section */
 		05113949199BD7D4005189D2 /* test_decide_response_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response_2.json; sourceTree = "<group>"; };
-		05438FF319214D3D0076094E /* SecretWhisperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretWhisperViewController.h; sourceTree = "<group>"; };
-		05438FF419214D3D0076094E /* SecretWhisperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretWhisperViewController.m; sourceTree = "<group>"; };
-		05438FF619214E210076094E /* SecretTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretTableViewCell.h; sourceTree = "<group>"; };
-		05438FF719214E210076094E /* SecretTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecretTableViewCell.m; sourceTree = "<group>"; };
 		05438FFA192175940076094E /* HelloMixpanel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HelloMixpanel.xcassets; sourceTree = "<group>"; };
 		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Settings.bundle; sourceTree = "<group>"; };
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
@@ -498,17 +492,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		05438FFC1921805F0076094E /* SecretWhisper */ = {
-			isa = PBXGroup;
-			children = (
-				05438FF319214D3D0076094E /* SecretWhisperViewController.h */,
-				05438FF419214D3D0076094E /* SecretWhisperViewController.m */,
-				05438FF619214E210076094E /* SecretTableViewCell.h */,
-				05438FF719214E210076094E /* SecretTableViewCell.m */,
-			);
-			name = SecretWhisper;
-			sourceTree = "<group>";
-		};
 		2808F9821610EFE3005772B7 = {
 			isa = PBXGroup;
 			children = (
@@ -565,7 +548,6 @@
 			children = (
 				860BE36F2076987600C12F18 /* Samples */,
 				E1B343191D6BB96E00BEB29E /* HelloMixpanel.entitlements */,
-				05438FFC1921805F0076094E /* SecretWhisper */,
 				2808F9A01610EFE3005772B7 /* AppDelegate.h */,
 				2808F9A11610EFE3005772B7 /* AppDelegate.m */,
 				2808F9A31610EFE3005772B7 /* ViewController.h */,
@@ -1184,11 +1166,9 @@
 				860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */,
 				860BE3672075A82C00C12F18 /* BaseTestViewController.m in Sources */,
 				860BE36B2075AC2100C12F18 /* UtilityViewController.m in Sources */,
-				05438FF519214D3D0076094E /* SecretWhisperViewController.m in Sources */,
 				05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */,
 				860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */,
 				18FCCF83199BD9CA00D6E474 /* SomeTableViewController.m in Sources */,
-				05438FF819214E210076094E /* SecretTableViewCell.m in Sources */,
 				8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
