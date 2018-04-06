@@ -15,17 +15,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.trackActions = @{@"Track Event": ^(void){[self testTrackEvent];},
-                          @"Track Event with Properties": ^(void){[self testTrackEventWithProperties];},
-                          @"Time Event 2secs": ^(void){[self testTimedEvent];},
-                          @"Clear Timed Events": ^(void){[self testClearTimedEvent];},
-                          @"Get Current SuperProperties": ^(void){[self testGetCurrentSuperProperties];},
-                          @"Clear SuperProperties": ^(void){[self testClearSuperProperties];},
-                          @"Register SuperProperties": ^(void){[self testRegisterSuperProperties];},
-                          @"Register SuperProperties Once": ^(void){[self testRegisterSuperPropertiesOnce];},
-                          @"Register SP Once w Default Value": ^(void){[self testRegisterSuperPropertiesOnceWithDefaultValue];},
-                          @"Unregister SuperProperty": ^(void){[self testUnRegisterSuperProperty];}
+    self.trackActions = @{@"1.  Track Event": ^(void){[self testTrackEvent];},
+                          @"2.  Track Event with Properties": ^(void){[self testTrackEventWithProperties];},
+                          @"3.  Time Event 2secs": ^(void){[self testTimedEvent];},
+                          @"4.  Clear Timed Events": ^(void){[self testClearTimedEvent];},
+                          @"5.  Get Current SuperProperties": ^(void){[self testGetCurrentSuperProperties];},
+                          @"6.  Clear SuperProperties": ^(void){[self testClearSuperProperties];},
+                          @"7.  Register SuperProperties": ^(void){[self testRegisterSuperProperties];},
+                          @"8.  Register SuperProperties Once": ^(void){[self testRegisterSuperPropertiesOnce];},
+                          @"9.  Register SP Once w Default Value": ^(void){[self testRegisterSuperPropertiesOnceWithDefaultValue];},
+                          @"10. Identify": ^(void){[self testIdentify];},
+                          @"11. Unregister SuperProperty": ^(void){[self testUnRegisterSuperProperty];}
                           };
+    self.trackActionsArray = [self.trackActions.allKeys sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
     [self.tableView reloadData];
 }
 
@@ -72,20 +74,17 @@
 
 - (void)testGetCurrentSuperProperties
 {
-    NSString *eventTitle = @"Get Super Properties";
-    [self presentLogMessage:[NSString stringWithFormat:@"Super Properties: %@", self.mixpanel.currentSuperProperties] title:eventTitle];
+    [self presentLogMessage:[NSString stringWithFormat:@"Super Properties: %@", self.mixpanel.currentSuperProperties] title:@"Get Super Properties"];
 }
 
 - (void)testClearSuperProperties
 {
-    NSString *eventTitle = @"Clear Super Properties";
     [self.mixpanel clearSuperProperties];
-    [self presentLogMessage:@"Cleared Super Properties" title:eventTitle];
+    [self presentLogMessage:@"Cleared Super Properties" title:@"Clear Super Properties"];
 }
 
 - (void)testRegisterSuperProperties
 {
-    NSString *eventTitle = @"Register Super Properties";
     NSDictionary *properties = @{@"Super Property 1": @1,
                                  @"Super Property 2": @"p2",
                                  @"Super Property 3": [NSDate date],
@@ -95,31 +94,39 @@
                                      [NSURL URLWithString:@"https://mixpanel.com"],
                                  @"Super Property 7": [NSNull null]};
     [self.mixpanel registerSuperProperties:properties];
-    [self presentLogMessage:[NSString stringWithFormat:@"Properties: %@", properties] title:eventTitle];
+    [self presentLogMessage:[NSString stringWithFormat:@"Properties: %@", properties] title:@"Register Super Properties"];
 }
 
 - (void)testRegisterSuperPropertiesOnce
 {
-    NSString *eventTitle = @"Register Super Properties Once";
     NSDictionary *properties = @{@"Super Property 1": @2.3};
     [self.mixpanel registerSuperPropertiesOnce:properties];
-    [self presentLogMessage:[NSString stringWithFormat:@"Properties: %@", properties] title:eventTitle];
+    [self presentLogMessage:[NSString stringWithFormat:@"Properties: %@", properties] title:@"Register Super Properties Once"];
 }
 
 - (void)testRegisterSuperPropertiesOnceWithDefaultValue
 {
-    NSString *eventTitle = @"Register Super Properties Once";
     NSDictionary *properties = @{@"Super Property 1": @1.2};
     [self.mixpanel registerSuperPropertiesOnce:properties defaultValue:@2.3];
-    [self presentLogMessage:[NSString stringWithFormat:@"Properties %@ with Default Value: 2.3", properties] title:eventTitle];
+    [self presentLogMessage:[NSString stringWithFormat:@"Properties %@ with Default Value: 2.3", properties] title:@"Register Super Properties Once"];
 }
 
 - (void)testUnRegisterSuperProperty
 {
-    NSString *eventTitle = @"Unregister Super Properties";
     [self.mixpanel unregisterSuperProperty:@"Super Property 1"];
-    
-    [self presentLogMessage:[NSString stringWithFormat:@"Unregister Super Properties %@", @"Super Property 1"] title:eventTitle];
+    [self presentLogMessage:[NSString stringWithFormat:@"Unregister Super Properties %@", @"Super Property 1"] title:@"Unregister Super Properties"];
+}
+
+- (void)testIdentify
+{
+    // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
+    // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
+    // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
+    // Note that the call to Mixpanel People identify: can come after properties have been set. We queue them until
+    // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
+    // and identify them once you know their user ID.
+    [self.mixpanel identify:self.mixpanel.distinctId];
+    [self presentLogMessage:@"Flushed Data" title:@"Identify"];
 }
 
 @end

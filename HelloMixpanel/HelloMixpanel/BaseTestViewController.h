@@ -12,6 +12,7 @@
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *trackActions;
+@property (nonatomic, strong) NSArray *trackActionsArray;
 @property (nonatomic, strong) Mixpanel *mixpanel;
 
 - (void)presentLogMessage:(NSString *)message title:(NSString *)title;

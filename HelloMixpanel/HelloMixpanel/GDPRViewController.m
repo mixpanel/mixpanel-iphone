@@ -17,20 +17,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.trackActions = @{@"Opt Out": ^(void){[self testOptOut];},
-                          @"Check Has Opted Out": ^(void){[self testHasOptedOut];},
-                          @"Opt In": ^(void){[self testOptIn];},
-                          @"Opt In w DistinctId": ^(void){[self testOptInWithDistinctId];},
-                          @"Opt In w DistinctId & Properties": ^(void){[self testOptInWithDistinctIdProperties];}};
-    
+    self.trackActions = @{@"1. Opt Out": ^(void){[self testOptOut];},
+                          @"2. Check Has Opted Out": ^(void){[self testHasOptedOut];},
+                          @"3. Opt In": ^(void){[self testOptIn];},
+                          @"4. Opt In w DistinctId": ^(void){[self testOptInWithDistinctId];},
+                          @"5. Opt In w DistinctId & Properties": ^(void){[self testOptInWithDistinctIdProperties];}};
+    self.trackActionsArray = [self.trackActions.allKeys sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
     [self.tableView reloadData];
-}
-
-- (void)testSetOneProperty
-{
-    NSString *eventTitle = @"Set One Property";
-    [self.mixpanel.people set:@"g" to:@"yo"];
-    [self presentLogMessage:@"Property key: g, value: yo" title:eventTitle];
 }
 
 - (void)testOptOut

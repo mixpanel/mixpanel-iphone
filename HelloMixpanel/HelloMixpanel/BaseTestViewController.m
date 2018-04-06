@@ -26,20 +26,20 @@ typedef void (^ActionBlock)(void);
 #pragma mark - tableView delegate and datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return (NSInteger)self.trackActions.allKeys.count;
+    return (NSInteger)self.trackActionsArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"trackingCellIdentifier"];
-    cell.textLabel.text = self.trackActions.allKeys[(NSUInteger)indexPath.row];
+    cell.textLabel.text = self.trackActionsArray[(NSUInteger)indexPath.row];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ActionBlock actionBlock = self.trackActions[self.trackActions.allKeys[(NSUInteger)indexPath.row]];
+    ActionBlock actionBlock = self.trackActions[self.trackActionsArray[(NSUInteger)indexPath.row]];
     actionBlock();
     if (indexPath) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
