@@ -69,20 +69,14 @@
 
 - (void)testInitWithDefaultOptOut
 {
-    [self.mixpanel reset];
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
-    [self presentLogMessage:@"Init Mixpanel with default opt-out" title:@"Init Mixpanel"];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:@"a token id" optOutTracking:YES];
+    [self presentLogMessage:@"Init Mixpanel with default opt-out(sample only), to make it work, place it in your startup stage of your app" title:@"Init Mixpanel with default opt-out"];
 }
 
 - (void)testInitWithDefaultOptIn
 {
-    [self.mixpanel reset];
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:NO];
-    [self presentLogMessage:@"Init Mixpanel with default opt-in" title:@"Init Mixpanel"];
-}
-
-- (NSString *)randomTokenId {
-    return [NSString stringWithFormat:@"%08x%08x", arc4random(), arc4random()];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:@"a token id" optOutTracking:NO];
+    [self presentLogMessage:@"Init Mixpanel with default opt-out(sample only), to make it work, place it in your startup stage of your app" title:@"Init Mixpanel with default opt-out"];
 }
 
 @end

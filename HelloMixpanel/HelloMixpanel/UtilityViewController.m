@@ -17,10 +17,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.trackActions = @{@"1. Create Alias": ^(void){[self testCreateAlias];},
-                          @"2. Identify": ^(void){[self testIdentify];},
-                          @"3. Reset": ^(void){[self testReset];},
-                          @"4. Archive": ^(void){[self testArchive];},
-                          @"5. Flush": ^(void){[self testFlush];}
+                          @"2. Reset": ^(void){[self testReset];},
+                          @"3. Archive": ^(void){[self testArchive];},
+                          @"4. Flush": ^(void){[self testFlush];}
                           };
     self.trackActionsArray = [self.trackActions.allKeys sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
     [self.tableView reloadData];
@@ -56,18 +55,6 @@
 {
     [self.mixpanel flush];
     [self presentLogMessage:@"Flushed Data" title:@"Flush"];
-}
-
-- (void)testIdentify
-{
-    // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
-    // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
-    // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
-    // Note that the call to Mixpanel People identify: can come after properties have been set. We queue them until
-    // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
-    // and identify them once you know their user ID.
-    [self.mixpanel identify:self.mixpanel.distinctId];
-    [self presentLogMessage:@"Flushed Data" title:@"Identify"];
 }
 
 @end

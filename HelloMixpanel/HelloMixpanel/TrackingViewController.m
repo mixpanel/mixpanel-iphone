@@ -24,8 +24,7 @@
                           @"7.  Register SuperProperties": ^(void){[self testRegisterSuperProperties];},
                           @"8.  Register SuperProperties Once": ^(void){[self testRegisterSuperPropertiesOnce];},
                           @"9.  Register SP Once w Default Value": ^(void){[self testRegisterSuperPropertiesOnceWithDefaultValue];},
-                          @"10. Identify": ^(void){[self testIdentify];},
-                          @"11. Unregister SuperProperty": ^(void){[self testUnRegisterSuperProperty];}
+                          @"10. Unregister SuperProperty": ^(void){[self testUnRegisterSuperProperty];}
                           };
     self.trackActionsArray = [self.trackActions.allKeys sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
     [self.tableView reloadData];
@@ -115,18 +114,6 @@
 {
     [self.mixpanel unregisterSuperProperty:@"Super Property 1"];
     [self presentLogMessage:[NSString stringWithFormat:@"Unregister Super Properties %@", @"Super Property 1"] title:@"Unregister Super Properties"];
-}
-
-- (void)testIdentify
-{
-    // Mixpanel People requires that you explicitly set a distinct ID for the current user. In this case,
-    // we're using the automatically generated distinct ID from event tracking, based on the device's MAC address.
-    // It is strongly recommended that you use the same distinct IDs for Mixpanel Engagement and Mixpanel People.
-    // Note that the call to Mixpanel People identify: can come after properties have been set. We queue them until
-    // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
-    // and identify them once you know their user ID.
-    [self.mixpanel identify:self.mixpanel.distinctId];
-    [self presentLogMessage:@"Flushed Data" title:@"Identify"];
 }
 
 @end

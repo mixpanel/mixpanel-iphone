@@ -133,7 +133,7 @@
     // identify: is called and flush them at that time. That way, you can set properties before a user is logged in
     // and identify them once you know their user ID.
     [self.mixpanel identify:self.mixpanel.distinctId];
-    [self presentLogMessage:@"Flushed Data" title:@"Identify"];
+    [self presentLogMessage:@"Identified" title:@"Identify"];
 }
 
 @end
