@@ -24,15 +24,19 @@
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutYES
 {
+    stubTrack();
+    stubEngage();
     self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
 }
 
 - (void)testNoTrackShouldEverBeTriggeredDuringInitializedWithOptedOutYES
 {
+    stubTrack();
+    stubEngage();
     __block NSInteger trackCount = 0;
     [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
-        trackCount++;
+        trackCount++;  
     } named:@"Swizzle Mixpanel.track"];
     
     self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
@@ -43,6 +47,8 @@
 
 - (void)testAutoTrackEventsShouldNotBeQueuedDuringInitializedWithOptedOutYES
 {
+    stubTrack();
+    stubEngage();
     __block NSInteger trackCount = 0;
     [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
         trackCount++;
@@ -67,6 +73,8 @@
 
 - (void)testAutoTrackShouldBeTriggeredDuringInitializedWithOptedOutNO
 {
+    stubTrack();
+    stubEngage();
     NSDictionary *launchOptions = @{ UIApplicationLaunchOptionsRemoteNotificationKey: @{
                                              @"mp": @{
                                                      @"m": @"the_message_id",
@@ -87,6 +95,8 @@
 
 - (void)testOptInWillAddOptInEvent
 {
+    stubTrack();
+    stubEngage();
     [self.mixpanel optInTracking];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     [self waitForMixpanelQueues];
@@ -101,6 +111,8 @@
 
 - (void)testOptInTrackingForDistinctID
 {
+    stubTrack();
+    stubEngage();
     [self.mixpanel optInTrackingForDistinctID:@"testDistinctId"];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     
@@ -120,6 +132,8 @@
 
 - (void)testOptInTrackingForDistinctIDAndWithEventProperties
 {
+    stubTrack();
+    stubEngage();
     NSDate *now = [NSDate date];
     NSDictionary *p = @{ @"string": @"yello",
                          @"number": @3,
@@ -150,6 +164,8 @@
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForMultipleInstances
 {
+    stubTrack();
+    stubEngage();
     Mixpanel *mixpanel1 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
     XCTAssertTrue([mixpanel1 hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
     
@@ -162,24 +178,32 @@
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutNO
 {
+    stubTrack();
+    stubEngage();
     self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:NO];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"When initialize with opted out flag set to NO, the current user should have opted out tracking");
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyByDefault
 {
+    stubTrack();
+    stubEngage();
     self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"By default, the current user should not opted out tracking");
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptOut
 {
+    stubTrack();
+    stubEngage();
     [self.mixpanel optOutTracking];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted out tracking");
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptIn
 {
+    stubTrack();
+    stubEngage();
     [self.mixpanel optOutTracking];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"By calling optOutTracking, the current user should have opted out tracking");
     [self.mixpanel optInTracking];
@@ -189,6 +213,7 @@
 - (void)testOptOutTrackingWillNotGenerateEventQueue
 {
     stubTrack();
+    stubEngage();
     [self.mixpanel optOutTracking];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -199,7 +224,9 @@
 
 - (void)testOptOutTrackingWillNotGeneratePeopleQueue
 {
+    stubTrack();
     stubEngage();
+    [self.mixpanel identify:@"d1"];
     [self.mixpanel optOutTracking];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
@@ -210,6 +237,7 @@
 
 - (void)testOptOutTrackingWillSkipIdentify
 {
+    stubTrack();
     stubEngage();
     [self.mixpanel optOutTracking];
     [self.mixpanel identify:@"d1"];
@@ -224,6 +252,7 @@
 
 - (void)testOptOutTrackingWillSkipAlias
 {
+    stubTrack();
     stubEngage();
     [self.mixpanel optOutTracking];
     [self.mixpanel createAlias:@"testAlias" forDistinctID:@"aDistinctID"];
@@ -231,6 +260,8 @@
 }
 
 - (void)testOptOutTrackingRegisterSuperProperties {
+    stubTrack();
+    stubEngage();
     NSDictionary *p = @{ @"p1": @"a", @"p2": @3, @"p3": [NSDate date] };
     [self.mixpanel optOutTracking];
     [self.mixpanel registerSuperProperties:p];
@@ -239,6 +270,8 @@
 }
 
 - (void)testOptOutTrackingRegisterSuperPropertiesOnce {
+    stubTrack();
+    stubEngage();
     NSDictionary *p = @{ @"p4": @"a" };
     [self.mixpanel optOutTracking];
     [self.mixpanel registerSuperPropertiesOnce:p];
@@ -249,6 +282,7 @@
 
 - (void)testOptOutWilSkipTimeEvent {
     stubTrack();
+    stubEngage();
     [self.mixpanel optOutTracking];
     [self.mixpanel timeEvent:@"400 Meters"];
     [self.mixpanel track:@"400 Meters"];
@@ -261,6 +295,7 @@
 - (void)testOptOutTrackingWillPurgeEventQueue
 {
     stubTrack();
+    stubEngage();
     [self.mixpanel optInTracking];
     [self.mixpanel identify:@"d1"];
     
@@ -280,6 +315,7 @@
 
 - (void)testOptOutTrackingWillPurgePeopleQueue
 {
+    stubTrack();
     stubEngage();
     [self.mixpanel optInTracking];
     [self.mixpanel identify:@"d1"];
@@ -291,35 +327,13 @@
     
     [self.mixpanel optOutTracking];
     [self waitForMixpanelQueues];
-
-    XCTAssertTrue([self.mixpanel.peopleQueue count] == 2, @"When opted out, people should have been purged except 'deleteUser' and 'clearCharges'");
-}
-
-- (void)testOptOutTrackingWillDeleteUserAndClearCharges
-{
-    stubEngage();
-    [self.mixpanel optInTracking];
-    [self.mixpanel identify:@"d1"];
-    for (NSUInteger i = 0, n = 50; i < n; i++) {
-        [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
-    }
-    [self waitForMixpanelQueues];
-    [self.mixpanel optOutTracking];
-    [self waitForMixpanelQueues];
-    //delete user and clear charges
-    if ([self.mixpanel.peopleQueue count] == 2) {
-        NSDictionary *people1 = self.mixpanel.peopleQueue[0];
-        XCTAssertTrue([people1.allKeys containsObject:@"$delete"], @"When optOutTracking, 'deleteUser' should be called");
-        
-        NSDictionary *people2 = self.mixpanel.peopleQueue[1];
-        NSDictionary *set = people2[@"$set"];
-        XCTAssertTrue([set.allKeys containsObject:@"$transactions"] && [set[@"$transactions"] isEqualToArray:@[]],
-                      @"When optOutTracking, 'clearCharges' should be called");
-    }
+    
+    XCTAssertTrue([self.mixpanel.peopleQueue count] == 0, @"When opted out, people should have been purged");
 }
 
 - (void)testOptOutWillSkipFlushPeople
 {
+    stubTrack();
     stubEngage();
     [self.mixpanel optInTracking];
     [self.mixpanel identify:@"d1"];
@@ -345,6 +359,7 @@
 - (void)testOptOutWillSkipFlushEvent
 {
     stubTrack();
+    stubEngage();
     [self.mixpanel optInTracking];
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
