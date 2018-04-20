@@ -49,6 +49,7 @@
 		51D96E8F1D1217E1001F622D /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E11B4F4DF700787217 /* checkerboard.jpg */; };
 		51D96E901D1217E1001F622D /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
 		51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
+		862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
 		E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
@@ -379,6 +380,7 @@
 		70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloMixpanelTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8308A8331759009320850991 /* Pods-HelloMixpanelTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		83AEB5FB8EC0EA469A50BBB4 /* libPods-EventBindingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EventBindingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelOptOutTests.m; sourceTree = "<group>"; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
 		86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
 				51D96E921D1219AE001F622D /* Helpers */,
 				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
+				86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */,
 				5115A0D91B4F49C000787217 /* MPCategoryHelpersTests.m */,
 				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
 				51D96E801D120D3E001F622D /* MPNotificationTests.m */,
@@ -1171,6 +1174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */,
 				51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */,
 				51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */,
 				51D96E871D121763001F622D /* ABTestingTests.m in Sources */,
