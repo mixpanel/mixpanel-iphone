@@ -29,7 +29,7 @@ static const NSUInteger kBatchSize = 50;
     @synchronized(self) {
         if (sharedSession == nil) {
             NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-            sessionConfig.timeoutIntervalForRequest = 7.0;
+            sessionConfig.timeoutIntervalForRequest = 30.0;
             sharedSession = [NSURLSession sessionWithConfiguration:sessionConfig];
         }
     }
