@@ -250,13 +250,13 @@ extern NSString *const MPNotificationTypeTakeover;
  GDPR compliance, and then returns it.
  
  This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the optOutTracking parameter, Mixpanel tracking can be opted out by default.
+ like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
  
  @param apiToken        your project token
- @param optOutTracking  whether or not to be opted out from tracking by default
+ @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
  
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTracking:(BOOL)optOutTracking;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
 
 /*!
  Initializes a singleton instance of the API, uses it to track launchOptions information,
@@ -292,16 +292,16 @@ extern NSString *const MPNotificationTypeTakeover;
  and then returns it.
  
  This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the optOutTracking parameter, Mixpanel tracking can be opted out by default.
+ like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
  
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
  @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
- @param optOutTracking  whether or not to be opted out from tracking by default
+ @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTracking:(BOOL)optOutTracking;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
 
 /*!
  Returns a previously instantiated singleton instance of the API.

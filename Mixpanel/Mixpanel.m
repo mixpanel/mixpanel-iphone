@@ -40,10 +40,10 @@ static NSString *defaultProjectToken;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTracking:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:NO];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTracking:(BOOL)optOutTracking
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
     if (instances[apiToken]) {
         return instances[apiToken];
@@ -55,7 +55,7 @@ static NSString *defaultProjectToken;
     const NSUInteger flushInterval = 60;
 #endif
     
-    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTracking:optOutTracking];
+    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTrackingByDefault:optOutTrackingByDefault];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
@@ -68,9 +68,9 @@ static NSString *defaultProjectToken;
     return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTracking:(BOOL)optOutTracking
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTracking:optOutTracking];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:optOutTrackingByDefault];
 }
 
 + (nullable Mixpanel *)sharedInstance
@@ -110,7 +110,7 @@ static NSString *defaultProjectToken;
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
         automaticPushTracking:(BOOL)automaticPushTracking
-               optOutTracking:(BOOL)optOutTracking
+               optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
@@ -169,7 +169,7 @@ static NSString *defaultProjectToken;
         [self setUpListeners];
         [self unarchive];
         
-        if (optOutTracking) {
+        if (optOutTrackingByDefault) {
             [self optOutTracking];
         }
         
@@ -210,7 +210,7 @@ static NSString *defaultProjectToken;
                  flushInterval:flushInterval
                   trackCrashes:trackCrashes
          automaticPushTracking:automaticPushTracking
-                optOutTracking:NO];
+                optOutTrackingByDefault:NO];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken

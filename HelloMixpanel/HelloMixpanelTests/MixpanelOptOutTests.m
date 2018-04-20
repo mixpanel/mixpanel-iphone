@@ -26,7 +26,7 @@
 {
     stubTrack();
     stubEngage();
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
 }
 
@@ -39,7 +39,7 @@
         trackCount++;  
     } named:@"Swizzle Mixpanel.track"];
     
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
     XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
     
     [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
@@ -63,7 +63,7 @@
                                              }
                                      };
     
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTracking:YES];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:YES];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"no event should be queued");
     XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
@@ -84,7 +84,7 @@
                                              }
                                      };
     
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTracking:NO];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:NO];
     [self waitForMixpanelQueues];
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
@@ -166,10 +166,10 @@
 {
     stubTrack();
     stubEngage();
-    Mixpanel *mixpanel1 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:YES];
+    Mixpanel *mixpanel1 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
     XCTAssertTrue([mixpanel1 hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
     
-    Mixpanel *mixpanel2 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:NO];
+    Mixpanel *mixpanel2 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:NO];
     XCTAssertFalse([mixpanel2 hasOptedOutTracking], @"When initialize with opted out flag set to NO, the current user should have opted in tracking");
     
     [super deleteOptOutSettingsWithMixpanelInstance:mixpanel1];
@@ -180,7 +180,7 @@
 {
     stubTrack();
     stubEngage();
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTracking:NO];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:NO];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"When initialize with opted out flag set to NO, the current user should have opted out tracking");
 }
 
