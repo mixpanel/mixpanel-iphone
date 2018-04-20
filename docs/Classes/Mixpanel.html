@@ -108,6 +108,10 @@
 		
 		<option value="//api/name/sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:">+ sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:</option>
 		
+		<option value="//api/name/sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:">+ sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:</option>
+		
+		<option value="//api/name/sharedInstanceWithToken:optOutTrackingByDefault:">+ sharedInstanceWithToken:optOutTrackingByDefault:</option>
+		
 	</optgroup>
 	
 
@@ -132,6 +136,8 @@
 		
 		<option value="//api/name/flushWithCompletion:">- flushWithCompletion:</option>
 		
+		<option value="//api/name/hasOptedOutTracking">- hasOptedOutTracking</option>
+		
 		<option value="//api/name/identify:">- identify:</option>
 		
 		<option value="//api/name/identify:usePeople:">- identify:usePeople:</option>
@@ -149,6 +155,14 @@
 		<option value="//api/name/joinExperimentsWithCallback:">- joinExperimentsWithCallback:</option>
 		
 		<option value="//api/name/libVersion">- libVersion</option>
+		
+		<option value="//api/name/optInTracking">- optInTracking</option>
+		
+		<option value="//api/name/optInTrackingForDistinctID:">- optInTrackingForDistinctID:</option>
+		
+		<option value="//api/name/optInTrackingForDistinctID:withEventProperties:">- optInTrackingForDistinctID:withEventProperties:</option>
+		
+		<option value="//api/name/optOutTracking">- optOutTracking</option>
 		
 		<option value="//api/name/registerSuperProperties:">- registerSuperProperties:</option>
 		
@@ -1136,6 +1150,71 @@ the API.</p>
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:optOutTrackingByDefault:" title="sharedInstanceWithToken:optOutTrackingByDefault:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:optOutTrackingByDefault:">+&nbsp;sharedInstanceWithToken:optOutTrackingByDefault:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a singleton instance of the API, uses it to set whether or not to opt out tracking for
+GDPR compliance, and then returns it.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> optOutTrackingByDefault:(BOOL)<em>optOutTrackingByDefault</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>optOutTrackingByDefault</code></th>
+						<td><p>whether or not to be opted out from tracking by default</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This is the preferred method for creating a <a href="#//api/name/sharedInstance">sharedInstance</a> with a mixpanel
+like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/sharedInstanceWithToken:launchOptions:" title="sharedInstanceWithToken:launchOptions:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:launchOptions:">+&nbsp;sharedInstanceWithToken:launchOptions:</a></code>
 </h3>
@@ -1260,8 +1339,88 @@ issues with your crash reporting for either signals or exceptions</p></td>
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
 				<p>This is the preferred method for creating a <a href="#//api/name/sharedInstance">sharedInstance</a> with a mixpanel
-like above. With the launchOptions parameter, Mixpanel can track referral
-information created by push notifications.</p>
+like above. With the trackCrashes and automaticPushTracking parameter, Mixpanel can track crashes and automatic push.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:" title="sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:">+&nbsp;sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a singleton instance of the API, uses it to track launchOptions information,
+and then returns it.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> launchOptions:(nullable NSDictionary *)<em>launchOptions</em> trackCrashes:(BOOL)<em>trackCrashes</em> automaticPushTracking:(BOOL)<em>automaticPushTracking</em> optOutTrackingByDefault:(BOOL)<em>optOutTrackingByDefault</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>launchOptions</code></th>
+						<td><p>your application delegate&rsquo;s launchOptions</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackCrashes</code></th>
+						<td><p>whether or not to track crashes in Mixpanel. may want to disable if you&rsquo;re seeing
+issues with your crash reporting for either signals or exceptions</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>automaticPushTracking</code></th>
+						<td><p>whether or not to automatically track pushes sent from Mixpanel</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>optOutTrackingByDefault</code></th>
+						<td><p>whether or not to be opted out from tracking by default</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This is the preferred method for creating a <a href="#//api/name/sharedInstance">sharedInstance</a> with a mixpanel
+like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.</p>
 			</div>
 			
 
@@ -2797,6 +2956,277 @@ method is called.</p>
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/optOutTracking" title="optOutTracking"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optOutTracking">&ndash;&nbsp;optOutTracking</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt out tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optOutTracking</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is used to opt out tracking. This causes all events and <a href="#//api/name/people">people</a> request no longer
+to be sent back to the Mixpanel server.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optInTracking" title="optInTracking"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optInTracking">&ndash;&nbsp;optInTracking</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optInTracking</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+sent to Mixpanel after using this method.</p>
+
+<p>This method will internally track an opt in event to your project. If you want to identify the opt-in
+event and/or pass properties to the event, See also <code>optInTrackingForDistinctId:</code> and
+<code>optInTrackingForDistinctId:withEventProperties:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optInTrackingForDistinctID:" title="optInTrackingForDistinctID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optInTrackingForDistinctID:">&ndash;&nbsp;optInTrackingForDistinctID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optInTrackingForDistinctID:(nullable NSString *)<em>distinctID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctID</code></th>
+						<td><p>optional string to use as the distinct ID for events. This will call <code>identify:</code>.
+If you use <a href="#//api/name/people">people</a> profiles make sure you manually call <code>identify:</code> after this method.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+sent to Mixpanel after using this method.</p>
+
+<p>This method will internally track an opt in event to your project. If you want to pass properties to the event, see also
+<code>optInTrackingForDistinctId:withEventProperties:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optInTrackingForDistinctID:withEventProperties:" title="optInTrackingForDistinctID:withEventProperties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optInTrackingForDistinctID:withEventProperties:">&ndash;&nbsp;optInTrackingForDistinctID:withEventProperties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optInTrackingForDistinctID:(nullable NSString *)<em>distinctID</em> withEventProperties:(nullable NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctID</code></th>
+						<td><p>optional string to use as the distinct ID for events. This will call <code>identify:</code>.
+If you use <a href="#//api/name/people">people</a> profiles make sure you manually call <code>identify:</code> after this method.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>optional properties dictionary that could be passed to add properties to the opt-in event that is sent to
+Mixpanel.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+sent to Mixpanel after using this method.</p>
+
+<p>This method will internally track an opt in event to your project.See also <code>optInTracking</code> or
+<code>optInTrackingForDistinctId:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/hasOptedOutTracking" title="hasOptedOutTracking"></a>
+	<h3 class="method-title"><code><a href="#//api/name/hasOptedOutTracking">&ndash;&nbsp;hasOptedOutTracking</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns YES if the current user has opted out tracking, NO if the current user has opted in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)hasOptedOutTracking</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/libVersion" title="libVersion"></a>
 	<h3 class="method-title"><code><a href="#//api/name/libVersion">+&nbsp;libVersion</a></code>
 </h3>
@@ -3165,7 +3595,7 @@ have been loaded and applied.</p>
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2018 Mixpanel. All rights reserved. Updated: 2018-04-02</p>
+						<p class="copyright">Copyright &copy; 2018 Mixpanel. All rights reserved. Updated: 2018-04-20</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
