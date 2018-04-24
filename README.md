@@ -79,6 +79,12 @@ Add Mixpanel.framework under "Linked Frameworks and Libaries" to your app.
 
 ![alt text](http://i.imgur.com/aJx6R8S.png)
 
+### Step 4: Copy the Mixpanel framework
+
+Add a copy files build step to your app. Change the destination to "Frameworks". Add Mixpanel.framework as one of these files.
+
+![copy files changes](https://imgur.com/yHGJRcw.png)
+
 <a name="integrate"></a>
 # Integrate
 
