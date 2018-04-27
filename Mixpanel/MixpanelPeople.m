@@ -34,7 +34,8 @@
     return [NSString stringWithFormat:@"<MixpanelPeople: %p %@>", (void *)self, (strongMixpanel ? strongMixpanel.apiToken : @"")];
 }
 
-- (NSString *)deviceSystemVersion {
+- (NSString *)deviceSystemVersion
+{
 #if defined(MIXPANEL_WATCHOS)
     return [MixpanelWatchProperties systemVersion];
 #elif defined(MIXPANEL_MACOS)
@@ -74,6 +75,9 @@
 
 - (void)addPeopleRecordToQueueWithAction:(NSString *)action andProperties:(NSDictionary *)properties
 {
+    if ([self.mixpanel hasOptedOutTracking]) {
+        return;
+    }
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = self.mixpanel;
     if (strongMixpanel) {
