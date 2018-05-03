@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E144f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -81,13 +81,13 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pOh-07-cCm" userLabel="Button - Close">
-                            <rect key="frame" x="224" y="20" width="30" height="30"/>
+                            <rect key="frame" x="210" y="20" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="23" id="BNF-qy-r5Z">
-                                    <variation key="heightClass=regular-widthClass=regular" constant="30"/>
+                                    <variation key="heightClass=regular-widthClass=regular" constant="44"/>
                                 </constraint>
                                 <constraint firstAttribute="width" constant="23" id="TdL-4E-5SU">
-                                    <variation key="heightClass=regular-widthClass=regular" constant="30"/>
+                                    <variation key="heightClass=regular-widthClass=regular" constant="44"/>
                                 </constraint>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
