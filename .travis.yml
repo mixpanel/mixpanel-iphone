@@ -1,32 +1,26 @@
 language: objective-c
 before_install:
-  - gem install cocoapods
-osx_image: xcode8
+  - gem install cocoapods -v 1.3.1
+osx_image: xcode9.3
 branches:
   only:
   - master
 env:
   global:
-  - APP_NAME="HelloMixpanel"
-  - 'DEVELOPER_NAME="iPhone Distribution: Mixpanel, Inc."'
-  - PROFILE_NAME="HelloMixpanel_Ad_Hoc"
-  - secure: hYFo+h9Txhp2x9sTIDHrbhiVJk1Y5rvbJkkhyaH0Rhco2v5BZNzq5Uoegl4DJ8YmM7Qm8Xl1SBDNK9WvfxowCO0Bc8DzFPWqh2p9bN2HyM/dwjLC1K9Imlssa4oxN4sHFG7x6Ck24UWpErR3wG8umY7Eyrlh3TzNtAEoaSRpMpc=
+  - WORKSPACE="HelloMixpanel/HelloMixpanel.xcworkspace"
+  - SCHEME="[iOS] HelloMixpanel"
   matrix:
-    - DESTINATION="platform=iOS Simulator,OS=10.0,name=iPhone 5" POD_LINT="YES"
-    - DESTINATION="platform=iOS Simulator,OS=9.1,name=iPhone 6s Plus" POD_LINT="NO"
+    - DESTINATION="OS=10.0,name=iPhone 7" RUN_TESTS="YES" POD_LINT="YES"
+    - DESTINATION="OS=11.1,name=iPhone X" RUN_TESTS="YES" POD_LINT="NO"
 podfile: HelloMixpanel/podfile
-before_script:
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision.enc
-  -d -a -out scripts/profile/HelloMixpanel_Ad_Hoc.mobileprovision
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.cer.enc -d -a
-  -out scripts/certs/dist.cer
-- openssl aes-256-cbc -k "$ENCRYPTION_SECRET" -in scripts/certs/dist.p12.enc -d -a
-  -out scripts/certs/dist.p12
 script:
 - set -o pipefail
+- xcodebuild -version
+- xcodebuild -showsdks
+
 # travis_retry here because sometimes tests mysteriously fail without running any tests but will succeed the next time
-- travis_retry xcodebuild -workspace "HelloMixpanel/HelloMixpanel.xcworkspace" -scheme "[iOS] HelloMixpanel" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
-- xcodebuild -workspace "HelloMixpanel/HelloMixpanel.xcworkspace" -scheme "[iOS] HelloMixpanel" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c
+- travis_retry xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
+- xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c
 
 # Run `pod lib lint` if specified
 # allow warnings while surveys are deprecated but not yet removed. disallow them again later
