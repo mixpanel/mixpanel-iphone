@@ -92,7 +92,7 @@
 
     if (self.notification) {
         if (self.notification.image) {
-            UIImage *image = [UIImage imageWithData:self.notification.image scale:2.0f];
+            UIImage *image = [UIImage imageWithData:self.notification.image];
             if (image) {
                 if (image.size.width / [UIScreen mainScreen].bounds.size.width <= 0.6 &&
                     image.size.height / [UIScreen mainScreen].bounds.size.height <= 0.3) {
@@ -135,7 +135,6 @@
         }
         
         self.viewMask.backgroundColor = [UIColor mp_colorFromRGB:notification.backgroundColor];
-
 
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             self.view.backgroundColor = [UIColor mp_colorFromRGB:notification.backgroundColor];
@@ -266,8 +265,8 @@
 
     if (notification != nil) {
         if (notification.image != nil) {
-            self.imageView.image = [UIImage imageWithData:notification.image scale:2.0f];
-            UIImage *originalImage = [UIImage imageWithData:notification.image scale:2.0f];
+            self.imageView.image = [UIImage imageWithData:notification.image];
+            UIImage *originalImage = [UIImage imageWithData:notification.image];
             UIImage *tintedImage = [originalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.imageView setImage:tintedImage];
             self.imageView.tintColor = [UIColor mp_colorFromRGB:notification.imageTintColor];
