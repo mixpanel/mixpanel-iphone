@@ -14,6 +14,7 @@ static const NSInteger UA_MAX_RETRIES = 3;
 
 @property (nonatomic, weak) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
+@property (nonatomic, strong) NSString *savedBrazeUserID;
 @property (nonatomic, assign) NSInteger urbanAirshipRetries;
 
 @end
@@ -29,12 +30,16 @@ static const NSInteger UA_MAX_RETRIES = 3;
 
 - (void)reset {
     self.savedUrbanAirshipChannelID = nil;
+    self.savedBrazeUserID = nil;
     self.urbanAirshipRetries = 0;
 }
 
 - (void)setupIntegrations:(NSArray<NSString *> *)integrations {
     if ([integrations containsObject:@"urbanairship"]) {
         [self setUrbanAirshipPeopleProp];
+    }
+    if ([integrations containsObject:@"braze"]) {
+        [self setBrazePeopleProp];
     }
 }
 
@@ -57,6 +62,23 @@ static const NSInteger UA_MAX_RETRIES = 3;
             if (![channelID isEqualToString:self.savedUrbanAirshipChannelID]) {
                 [self.mixpanel.people set:@"$ios_urban_airship_channel_id" to:channelID];
                 self.savedUrbanAirshipChannelID = channelID;
+            }
+        }
+    }
+}
+
+- (void)setBrazePeopleProp {
+    Class brazeClass = NSClassFromString(@"Appboy");
+    if (brazeClass) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        NSString *externalUserId = [[[brazeClass performSelector:NSSelectorFromString(@"sharedInstance")] performSelector:NSSelectorFromString(@"user")] performSelector:NSSelectorFromString(@"userID")];
+#pragma clang diagnostic pop
+        if (externalUserId.length) {
+            if (![self.savedBrazeUserID isEqualToString:self.savedUrbanAirshipChannelID]) {
+                [self.mixpanel createAlias:externalUserId forDistinctID:self.mixpanel.distinctId];
+                [self.mixpanel.people set:@"$braze_external_id" to:externalUserId];
+                self.savedBrazeUserID = externalUserId;
             }
         }
     }
