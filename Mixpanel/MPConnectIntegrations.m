@@ -15,6 +15,7 @@ static const NSInteger UA_MAX_RETRIES = 3;
 @property (nonatomic, weak) Mixpanel *mixpanel;
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
 @property (nonatomic, strong) NSString *savedBrazeUserID;
+@property (nonatomic, strong) NSString *savedDeviceId;
 @property (nonatomic, assign) NSInteger urbanAirshipRetries;
 
 @end
@@ -31,6 +32,7 @@ static const NSInteger UA_MAX_RETRIES = 3;
 - (void)reset {
     self.savedUrbanAirshipChannelID = nil;
     self.savedBrazeUserID = nil;
+    self.savedDeviceId = nil;
     self.urbanAirshipRetries = 0;
 }
 
@@ -73,9 +75,18 @@ static const NSInteger UA_MAX_RETRIES = 3;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         NSString *externalUserId = [[[brazeClass performSelector:NSSelectorFromString(@"sharedInstance")] performSelector:NSSelectorFromString(@"user")] performSelector:NSSelectorFromString(@"userID")];
+        NSString *deviceId = [[brazeClass performSelector:NSSelectorFromString(@"sharedInstance")] performSelector:NSSelectorFromString(@"getDeviceId")];
 #pragma clang diagnostic pop
+        if (deviceId.length) {
+            if (![deviceId isEqualToString:self.savedDeviceId]) {
+                [self.mixpanel createAlias:deviceId forDistinctID:self.mixpanel.distinctId];
+                [self.mixpanel.people set:@"$braze_device_id" to:deviceId];
+                self.savedDeviceId = deviceId;
+            }
+        }
+        
         if (externalUserId.length) {
-            if (![self.savedBrazeUserID isEqualToString:self.savedUrbanAirshipChannelID]) {
+            if (![externalUserId isEqualToString:self.savedBrazeUserID]) {
                 [self.mixpanel createAlias:externalUserId forDistinctID:self.mixpanel.distinctId];
                 [self.mixpanel.people set:@"$braze_external_id" to:externalUserId];
                 self.savedBrazeUserID = externalUserId;
