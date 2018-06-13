@@ -1001,63 +1001,53 @@ static NSString *defaultProjectToken;
 
 - (void)archiveEvents
 {
-    @synchronized (self) {
-        NSString *filePath = [self eventsFilePath];
-        MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
-        if (![self archiveObject:self.eventsQueue withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive event data", self);
-        }
+    NSString *filePath = [self eventsFilePath];
+    MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
+    if (![self archiveObject:self.eventsQueue withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive event data", self);
     }
 }
 
 - (void)archivePeople
 {
-    @synchronized (self) {
-        NSString *filePath = [self peopleFilePath];
-        MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
-        if (![self archiveObject:self.peopleQueue withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive people data", self);
-        }
+    NSString *filePath = [self peopleFilePath];
+    MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
+    if (![self archiveObject:self.peopleQueue withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive people data", self);
     }
 }
 
 - (void)archiveProperties
 {
-    @synchronized (self) {
-        NSString *filePath = [self propertiesFilePath];
-        NSMutableDictionary *p = [NSMutableDictionary dictionary];
-        [p setValue:self.distinctId forKey:@"distinctId"];
-        [p setValue:self.alias forKey:@"alias"];
-        [p setValue:self.superProperties forKey:@"superProperties"];
-        [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-        [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-        [p setValue:self.shownNotifications forKey:@"shownNotifications"];
-        [p setValue:self.timedEvents forKey:@"timedEvents"];
-        [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
-        MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
-        if (![self archiveObject:p withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive properties data", self);
-        }
+    NSString *filePath = [self propertiesFilePath];
+    NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    [p setValue:self.distinctId forKey:@"distinctId"];
+    [p setValue:self.alias forKey:@"alias"];
+    [p setValue:self.superProperties forKey:@"superProperties"];
+    [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
+    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+    [p setValue:self.shownNotifications forKey:@"shownNotifications"];
+    [p setValue:self.timedEvents forKey:@"timedEvents"];
+    [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
+    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
+    if (![self archiveObject:p withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive properties data", self);
     }
 }
 
 - (void)archiveVariants
 {
-    @synchronized (self) {
-        NSString *filePath = [self variantsFilePath];
-        if (![self archiveObject:self.variants withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive variants data", self);
-        }
+    NSString *filePath = [self variantsFilePath];
+    if (![self archiveObject:self.variants withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive variants data", self);
     }
 }
 
 - (void)archiveEventBindings
 {
-    @synchronized (self) {
-        NSString *filePath = [self eventBindingsFilePath];
-        if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive tracking events data", self);
-        }
+    NSString *filePath = [self eventBindingsFilePath];
+    if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive tracking events data", self);
     }
 }
 
@@ -1078,11 +1068,9 @@ static NSString *defaultProjectToken;
 
 - (void)archiveOptOut
 {
-    @synchronized (self) {
-        NSString *filePath = [self optOutFilePath];
-        if (![self archiveObject:[NSNumber numberWithBool:self.optOutStatus] withFilePath:filePath]) {
-            MPLogError(@"%@ unable to archive opt out status", self);
-        }
+    NSString *filePath = [self optOutFilePath];
+    if (![self archiveObject:[NSNumber numberWithBool:self.optOutStatus] withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive opt out status", self);
     }
 }
 
@@ -1526,7 +1514,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if (self.flushOnBackground) {
         [self flush];
     } else {
-        [self archive];
+        [self dispatchOnNetworkQueue:^{
+            [self archive];
+        }];
     }
 #endif
 }
@@ -1534,7 +1524,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will terminate", self);
-    [self archive];
+    [self dispatchOnNetworkQueue:^{
+        [self archive];
+    }];
 }
 
 #if !defined(MIXPANEL_MACOS)
@@ -1582,7 +1574,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }];
     } else {
         // only need to archive if don't flush because flush archives at the end
-        [self archive];
+        [self dispatchOnNetworkQueue:^{
+            [self archive];
+        }];
     }
 
     dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
