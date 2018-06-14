@@ -108,7 +108,7 @@
                 r[action] = [NSDictionary dictionaryWithDictionary:p];
             }
 
-            [r addEntriesFromDictionary:[self.mixpanel.sessionMetadata toDictionaryForEvent:NO]];
+            [r addEntriesFromDictionary:[strongMixpanel.sessionMetadata toDictionaryForEvent:NO]];
 
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
@@ -120,7 +120,7 @@
                     }
                 }
             } else {
-                MPLogInfo(@"%@ queueing unidentified people record: %@", self.mixpanel, r);
+                MPLogInfo(@"%@ queueing unidentified people record: %@", strongMixpanel, r);
                 [self.unidentifiedQueue addObject:r];
                 if (self.unidentifiedQueue.count > 500) {
                     [self.unidentifiedQueue removeObjectAtIndex:0];
