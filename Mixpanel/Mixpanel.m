@@ -920,6 +920,9 @@ static NSString *defaultProjectToken;
 - (void)flushWithCompletion:(void (^)(void))handler
 {
     if ([self hasOptedOutTracking]) {
+        if (handler) {
+            dispatch_async(dispatch_get_main_queue(), handler);
+        }
         return;
     }
     
