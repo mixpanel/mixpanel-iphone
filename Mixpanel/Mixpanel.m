@@ -1514,9 +1514,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if (self.flushOnBackground) {
         [self flush];
     } else {
-        [self dispatchOnNetworkQueue:^{
+        dispatch_async(self.serialQueue, ^{
             [self archive];
-        }];
+        });
     }
 #endif
 }
@@ -1524,9 +1524,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will terminate", self);
-    [self dispatchOnNetworkQueue:^{
+    dispatch_async(self.serialQueue, ^{
         [self archive];
-    }];
+    });
 }
 
 #if !defined(MIXPANEL_MACOS)
@@ -1574,9 +1574,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }];
     } else {
         // only need to archive if don't flush because flush archives at the end
-        [self dispatchOnNetworkQueue:^{
+        dispatch_async(self.serialQueue, ^{
             [self archive];
-        }];
+        });
     }
 
     dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
