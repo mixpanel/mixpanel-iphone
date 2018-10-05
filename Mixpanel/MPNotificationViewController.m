@@ -178,6 +178,7 @@
     self.window.alpha = 0;
     self.window.windowLevel = UIWindowLevelAlert;
     self.window.rootViewController = self;
+    [[[Mixpanel sharedUIApplication] keyWindow] endEditing:YES];
     [self.window setHidden:NO];
 
     [UIView animateWithDuration:0.25 animations:^{
