@@ -48,7 +48,9 @@ __MP_MAKE_LOG_FUNCTION(ASL_LEVEL_DEBUG, MPLogDebug_legacy)
 static inline os_log_t mixpanelLog() {
     static os_log_t logger;
     if (!logger) {
-        logger = os_log_create("com.mixpanel.sdk.objc", "Mixpanel");
+        if (@available(iOS 10.0, macOS 10.12, *)) {
+            logger = os_log_create("com.mixpanel.sdk.objc", "Mixpanel");
+        }
     }
     return logger;
 }

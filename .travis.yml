@@ -1,7 +1,8 @@
 language: objective-c
 before_install:
-  - gem install cocoapods -v 1.3.1
-osx_image: xcode9.3
+  - gem uninstall cocoapods --force -a -q -I -x
+  - gem install cocoapods -v 1.4.0
+osx_image: xcode10
 branches:
   only:
   - master
@@ -10,8 +11,8 @@ env:
   - WORKSPACE="HelloMixpanel/HelloMixpanel.xcworkspace"
   - SCHEME="[iOS] HelloMixpanel"
   matrix:
-    - DESTINATION="OS=10.0,name=iPhone 7" RUN_TESTS="YES" POD_LINT="YES"
-    - DESTINATION="OS=11.1,name=iPhone X" RUN_TESTS="YES" POD_LINT="NO"
+    - DESTINATION="OS=10.0,name=iPhone 5s" RUN_TESTS="YES" POD_LINT="YES" 
+    - DESTINATION="OS=12.0,name=iPhone X" RUN_TESTS="YES" POD_LINT="YES" 
 podfile: HelloMixpanel/podfile
 script:
 - set -o pipefail
@@ -25,5 +26,5 @@ script:
 # Run `pod lib lint` if specified
 # allow warnings while surveys are deprecated but not yet removed. disallow them again later
 - if [ $POD_LINT == "YES" ]; then
-    pod lib lint --allow-warnings;
+    pod lib lint --allow-warnings --no-clean;
   fi
