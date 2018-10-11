@@ -3,11 +3,12 @@
 
 #import <libkern/OSAtomic.h>
 #import "MPSequenceGenerator.h"
+#include <stdatomic.h>
 
 @implementation MPSequenceGenerator
 
 {
-    int32_t _value;
+    atomic_int_fast32_t _value;
 }
 
 - (instancetype)init
@@ -27,7 +28,7 @@
 
 - (int32_t)nextValue
 {
-    return OSAtomicAdd32(1, &_value);
+    return atomic_fetch_add_explicit(&_value, 1, memory_order_relaxed);
 }
 
 @end
