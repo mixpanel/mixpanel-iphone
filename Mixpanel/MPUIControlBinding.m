@@ -77,6 +77,12 @@
         [self setSwizzleClass:[UIControl class]];
         _controlEvent = controlEvent;
 
+        //iOS UITextField didMoveToWindow wont call its super method.So patch it.
+        if ([[[UIDevice currentDevice]systemVersion]floatValue]>=12.0f
+            && controlEvent == UIControlEventEditingDidEnd) {
+            [self setSwizzleClass:[UITextField class]];
+        }
+        
         if (verifyEvent == 0) {
             if (controlEvent & UIControlEventAllTouchEvents) {
                 verifyEvent = UIControlEventTouchDown;
