@@ -1624,13 +1624,19 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     @synchronized (loggingLockObject) {
         gLoggingEnabled = enableLogging;
-
+        if (@available(iOS 10.0, macOS 10.12, *)) {
+            return;
+        }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        // Legacy logging, will be removed in future as long as we only support iOS 10+
         if (gLoggingEnabled) {
             asl_add_log_file(NULL, STDERR_FILENO);
             asl_set_filter(NULL, ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG));
         } else {
             asl_remove_log_file(NULL, STDERR_FILENO);
         }
+#pragma clang diagnostic pop
     }
 }
 
