@@ -13,7 +13,6 @@
 
 static BOOL gLoggingEnabled = NO;
 static NSObject *loggingLockObject;
-static os_log_t mixpanelLogger;
 
 #define __MP_MAKE_LOG_FUNCTION(LEVEL, NAME) \
 static inline void NAME(NSString *format, ...) { \
@@ -46,7 +45,7 @@ __MP_MAKE_LOG_FUNCTION(ASL_LEVEL_DEBUG, MPLogDebug_legacy)
 #pragma clang diagnostic pop
 
 static inline os_log_t mixpanelLog() {
-    static os_log_t logger;
+    static os_log_t logger = nil;
     if (!logger) {
         if (@available(iOS 10.0, macOS 10.12, *)) {
             logger = os_log_create("com.mixpanel.sdk.objc", "Mixpanel");

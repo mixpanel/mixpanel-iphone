@@ -16,8 +16,8 @@
 static NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
 static NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
 
-static volatile atomic_int UncaughtExceptionCount = 0;
-static const atomic_int UncaughtExceptionMaximum = 10;
+static volatile atomic_int_fast32_t UncaughtExceptionCount = 0;
+static const atomic_int_fast32_t UncaughtExceptionMaximum = 10;
 
 @interface MixpanelExceptionHandler ()
 
@@ -84,7 +84,7 @@ static const atomic_int UncaughtExceptionMaximum = 10;
 void MPSignalHandler(int signalNumber, struct __siginfo *info, void *context) {
     MixpanelExceptionHandler *handler = [MixpanelExceptionHandler sharedHandler];
 
-    atomic_int exceptionCount = atomic_fetch_add_explicit(&UncaughtExceptionCount, 1, memory_order_relaxed);
+    atomic_int_fast32_t exceptionCount = atomic_fetch_add_explicit(&UncaughtExceptionCount, 1, memory_order_relaxed);
     
     if (exceptionCount <= UncaughtExceptionMaximum) {
         NSDictionary *userInfo = @{UncaughtExceptionHandlerSignalKey: @(signalNumber)};
@@ -114,7 +114,7 @@ void MPSignalHandler(int signalNumber, struct __siginfo *info, void *context) {
 void MPHandleException(NSException *exception) {
     MixpanelExceptionHandler *handler = [MixpanelExceptionHandler sharedHandler];
 
-    atomic_int exceptionCount = atomic_fetch_add_explicit(&UncaughtExceptionCount, 1, memory_order_relaxed);
+    atomic_int_fast32_t exceptionCount = atomic_fetch_add_explicit(&UncaughtExceptionCount, 1, memory_order_relaxed);
     if (exceptionCount <= UncaughtExceptionMaximum) {
         [handler mp_handleUncaughtException:exception];
     }
