@@ -92,7 +92,11 @@ static void mp_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3)
     }
 }
 
+// Ignore the warning cause we need the paramters to be dynamic and it's only being used internally
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 static void (*mp_swizzledMethods[MAX_ARGS - MIN_ARGS + 1])() = {mp_swizzledMethod_2, mp_swizzledMethod_3, mp_swizzledMethod_4, mp_swizzledMethod_5};
+#pragma clang diagnostic pop
 
 @implementation MPSwizzler
 

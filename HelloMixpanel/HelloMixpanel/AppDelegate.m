@@ -32,7 +32,8 @@
 
     self.mixpanel.checkForNotificationsOnActive = YES;
     self.mixpanel.showNotificationOnActive = YES; //Change this to NO to show your notifs manually.
-
+    self.mixpanel.enableLogging = YES;
+    
     // Set the upload interval to 20 seconds for demonstration purposes. This would be overkill for most applications.
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
     
@@ -50,10 +51,6 @@
                 });
             }
         }];
-    } else {
-        UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
 
     return YES;
@@ -61,19 +58,22 @@
 
 #pragma mark - Push notifications
 
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)(void))completionHandler
 {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-}
-
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)(void))completionHandler
-{
-    if ([identifier isEqualToString:@"declineAction"]) {
+    if ([response.actionIdentifier isEqualToString:@"declineAction"]) {
         NSLog(@"%@ user declined push notification action", self);
-
-    } else if ([identifier isEqualToString:@"answerAction"]) {
+        
+    } else if ([response.actionIdentifier isEqualToString:@"answerAction"]) {
         NSLog(@"%@ user answered push notification action", self);
     }
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:response.notification.request.content.userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    
+    completionHandler();
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
@@ -88,20 +88,8 @@
 #endif
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    // Show alert for push notifications recevied while the app is running
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-}
-
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
     completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);
-}
-
--(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler{
-    completionHandler();
 }
 
 

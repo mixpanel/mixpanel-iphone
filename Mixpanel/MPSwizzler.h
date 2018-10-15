@@ -11,7 +11,11 @@
 // Cast to turn things that are not ids into NSMapTable keys
 #define MAPTABLE_ID(x) (__bridge id)((void *)x)
 
+// Ignore the warning cause we need the paramters to be dynamic and it's only being used internally
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 typedef void (^swizzleBlock)();
+#pragma clang diagnostic pop
 
 @interface MPSwizzler : NSObject
 

@@ -74,9 +74,15 @@
          andVerifyEvent:(UIControlEvents)verifyEvent
 {
     if (self = [super initWithEventName:eventName onPath:path]) {
-        [self setSwizzleClass:[UIControl class]];
+        // iOS 12: UITextField now implements -didMoveToWindow, without calling the parent implementation. so Swizzle UIControl won't work
+        if (@available(iOS 12, *)) {
+            [self setSwizzleClass:[path containsString:@"UITextField"] ? [UITextField class] : [UIControl class]];
+        }
+        else {
+            [self setSwizzleClass:[UIControl class]];
+        }
         _controlEvent = controlEvent;
-
+        
         if (verifyEvent == 0) {
             if (controlEvent & UIControlEventAllTouchEvents) {
                 verifyEvent = UIControlEventTouchDown;
