@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <StoreKit/StoreKit.h>
 #import "MixpanelPeople.h"
+
 
 @protocol TrackDelegate <NSObject>
 - (void)track:(NSString *)event properties:(NSDictionary *)properties;
 @end
 
-@interface AutomaticEvents: NSObject <SKPaymentTransactionObserver, SKProductsRequestDelegate>
+@interface AutomaticEvents: NSObject
 @property (atomic, weak) id<TrackDelegate> delegate;
 @property (atomic, assign) UInt64 minimumSessionDuration;
 @property (atomic, assign) UInt64 maximumSessionDuration;

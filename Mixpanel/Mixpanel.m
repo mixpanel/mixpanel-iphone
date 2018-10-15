@@ -13,8 +13,8 @@
 #import "MPLogger.h"
 #import "MPNetworkPrivate.h"
 
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #import <UserNotifications/UserNotifications.h>
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #import "NSThread+MPHelpers.h"
 #endif
 #if defined(MIXPANEL_WATCHOS)
@@ -1729,6 +1729,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     return;
                 }
 
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
                 NSDictionary *config = object[@"config"];
                 if (config && [config isKindOfClass:NSDictionary.class]) {
                     NSDictionary *validationConfig = config[@"ce"];
@@ -1743,6 +1744,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                         }
                     }
                 }
+#endif
 
                 id rawNotifications = object[@"notifications"];
                 NSMutableArray *parsedNotifications = [NSMutableArray array];
