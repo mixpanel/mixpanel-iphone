@@ -48,11 +48,16 @@
 #import "MPConnectIntegrations.h"
 #endif
 
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-@interface Mixpanel () <MPNotificationViewControllerDelegate, TrackDelegate>
-#else
+#if defined(MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT) && defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
+#elif defined(MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT)
+@interface Mixpanel () <TrackDelegate>
+#elif defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
+@interface Mixpanel () <MPNotificationViewControllerDelegate>
+#else
+@interface Mixpanel () <MPNotificationViewControllerDelegate, TrackDelegate>
 #endif
+
 {
     NSUInteger _flushInterval;
     BOOL _enableVisualABTestAndCodeless;
