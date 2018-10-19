@@ -75,7 +75,7 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  The distinct ID of the current user.
 
- A distinct ID is a string that uniquely identifies one of your users. By default, 
+ A distinct ID is a string that uniquely identifies one of your users. By default,
  we'll use the device's advertisingIdentifier UUIDString, if that is not available
  we'll use the device's identifierForVendor UUIDString, and finally if that
  is not available we will generate a new random UUIDString. To change the
@@ -84,9 +84,27 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (atomic, readonly, copy) NSString *distinctId;
 
 /*!
+ The default anonymous Id / distinct Id  given to the events before identify.
+
+ A default distinct ID is a string that uniquely identifies the anonymous activity.
+ By default, we'll use the device's advertisingIdentifier UUIDString, if that is not
+ available we'll use the device's identifierForVendor UUIDString, and finally if that
+ is not available we will generate a new random UUIDString.
+ */
+@property (atomic, readonly, copy) NSString *anonymousId;
+
+/*!
+  The user ID with which <code>identify:</code> is called with.
+
+  This is null until <code>identify:</code> is called and is set to the id
+  with which identify is called with.
+ */
+@property (atomic, readonly, copy) NSString *userId;
+
+/*!
  The alias of the current user.
- 
- An alias is another string that uniquely identifies one of your users. Typically, 
+
+ An alias is another string that uniquely identifies one of your users. Typically,
  this is the user ID from your database. By using an alias you can link pre- and
  post-sign up activity as well as cross-platform activity under one distinct ID.
  To set the alias use the <code>createAlias:forDistinctID:</code> method.
@@ -154,21 +172,21 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (atomic) BOOL showNotificationOnActive;
 
 /*!
- Controls whether to automatically send the client IP Address as part of 
+ Controls whether to automatically send the client IP Address as part of
  event tracking. With an IP address, geo-location is possible down to neighborhoods
  within a city, although the Mixpanel Dashboard will just show you city level location
  specificity. For privacy reasons, you may be in a situation where you need to forego
  effectively having access to such granular location information via the IP Address.
- 
+
  Defaults to YES.
  */
 @property (atomic) BOOL useIPAddressForGeoLocation;
 
 /*!
- Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com. 
+ Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com.
  You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
  created A/B tests and codeless events will still be delivered.
- 
+
  Defaults to YES.
  */
 @property (atomic) BOOL enableVisualABTestAndCodeless;
@@ -176,15 +194,15 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Controls whether to enable the run time debug logging at all levels. Note that the
  Mixpanel SDK uses Apple System Logging to forward log messages to `STDERR`, this also
- means that mixpanel logs are segmented by log level. Settings this to `YES` will enable 
+ means that mixpanel logs are segmented by log level. Settings this to `YES` will enable
  Mixpanel logging at the following levels:
- 
-   * Error - Something has failed 
+
+   * Error - Something has failed
    * Warning - Something is amiss and might fail if not corrected
    * Info - The lowest priority that is normally logged, purely informational in nature
    * Debug - Information useful only to developers, and normally not logged.
- 
- 
+
+
  Defaults to NO.
  */
 @property (atomic) BOOL enableLogging;
@@ -248,13 +266,13 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Initializes a singleton instance of the API, uses it to set whether or not to opt out tracking for
  GDPR compliance, and then returns it.
- 
+
  This is the preferred method for creating a sharedInstance with a mixpanel
  like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
- 
+
  @param apiToken        your project token
  @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
- 
+
  */
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
 
@@ -275,10 +293,10 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Initializes a singleton instance of the API, uses it to track launchOptions information,
  and then returns it.
- 
+
  This is the preferred method for creating a sharedInstance with a mixpanel
  like above. With the trackCrashes and automaticPushTracking parameter, Mixpanel can track crashes and automatic push.
- 
+
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
@@ -290,10 +308,10 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Initializes a singleton instance of the API, uses it to track launchOptions information,
  and then returns it.
- 
+
  This is the preferred method for creating a sharedInstance with a mixpanel
  like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
- 
+
  @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
@@ -308,8 +326,8 @@ extern NSString *const MPNotificationTypeTakeover;
 
  The API must be initialized with <code>sharedInstanceWithToken:</code> or
  <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
- This method will return <code>nil</code> if there are no instances created. If there is more than 
- one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code> 
+ This method will return <code>nil</code> if there are no instances created. If there is more than
+ one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code>
  or <code>initWithToken:launchOptions:andFlushInterval:</code>.
  */
 + (nullable Mixpanel *)sharedInstance;
@@ -416,12 +434,12 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Sets the distinct ID of the current user. With the option of only updating the
  distinct ID value and not the Mixpanel People distinct ID.
- 
+
  This method is not intended to be used unless you wish to prevent updating the Mixpanel
  People distinct ID value by passing a value of NO to the usePeople param. This can be
- useful if the user wishes to prevent People updates from being sent until the identify 
+ useful if the user wishes to prevent People updates from being sent until the identify
  method is called.
- 
+
  @param distinctId string that uniquely identifies the current user
  @param usePeople bool controls whether or not to set the people distinctId to the event distinctId
  */
@@ -572,7 +590,7 @@ extern NSString *const MPNotificationTypeTakeover;
 
 /*!
  Calls flush, then optionally archives and calls a handler when finished.
- 
+
  When calling <code>flush</code> manually, it is sometimes important to verify
  that the flush has finished before further action is taken. This is
  especially important when the app is in the background and could be suspended
@@ -643,7 +661,7 @@ extern NSString *const MPNotificationTypeTakeover;
 
 /*!
  Opt out tracking.
- 
+
  This method is used to opt out tracking. This causes all events and people request no longer
  to be sent back to the Mixpanel server.
  */
@@ -651,10 +669,10 @@ extern NSString *const MPNotificationTypeTakeover;
 
 /*!
  Opt in tracking.
- 
+
  Use this method to opt in an already opted out user from tracking. People updates and track calls will be
  sent to Mixpanel after using this method.
- 
+
  This method will internally track an opt in event to your project. If you want to identify the opt-in
  event and/or pass properties to the event, See also <code>optInTrackingForDistinctId:</code> and
  <code>optInTrackingForDistinctId:withEventProperties:</code>.
@@ -663,13 +681,13 @@ extern NSString *const MPNotificationTypeTakeover;
 
 /*!
  Opt in tracking.
- 
+
  Use this method to opt in an already opted out user from tracking. People updates and track calls will be
  sent to Mixpanel after using this method.
- 
+
  This method will internally track an opt in event to your project. If you want to pass properties to the event, see also
  <code>optInTrackingForDistinctId:withEventProperties:</code>.
- 
+
  @param distinctID     optional string to use as the distinct ID for events. This will call <code>identify:</code>.
  If you use people profiles make sure you manually call <code>identify:</code> after this method.
  */
@@ -677,13 +695,13 @@ extern NSString *const MPNotificationTypeTakeover;
 
 /*!
  Opt in tracking.
- 
+
  Use this method to opt in an already opted out user from tracking. People updates and track calls will be
  sent to Mixpanel after using this method.
- 
+
  This method will internally track an opt in event to your project.See also <code>optInTracking</code> or
  <code>optInTrackingForDistinctId:</code>.
- 
+
  @param distinctID     optional string to use as the distinct ID for events. This will call <code>identify:</code>.
  If you use people profiles make sure you manually call <code>identify:</code> after this method.
  @param properties     optional properties dictionary that could be passed to add properties to the opt-in event that is sent to

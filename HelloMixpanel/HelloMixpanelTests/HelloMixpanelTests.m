@@ -158,7 +158,9 @@
         NSString *distinctId = @"d1";
         // try this for IFA, ODIN and nil
         XCTAssertEqualObjects(self.mixpanel.distinctId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
+        XCTAssertEqualObjects(self.mixpanel.anonymousId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set anonymous id");
         XCTAssertNil(self.mixpanel.people.distinctId, @"mixpanel people distinct id should default to nil");
+        XCTAssertNil(self.mixpanel.userId, @"mixpanel userId should default to nil");
         
         [self.mixpanel track:@"e1"];
         [self waitForMixpanelQueues];
@@ -171,9 +173,12 @@
         XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 1, @"unidentified people records not queued");
         XCTAssertEqualObjects(self.mixpanel.people.unidentifiedQueue.lastObject[@"$token"], kTestToken, @"incorrect project token in people record");
         
+        NSString *anonymousId = self.mixpanel.anonymousId;
         [self.mixpanel identify:distinctId];
         [self waitForMixpanelQueues];
+        XCTAssertEqualObjects(self.mixpanel.anonymousId, anonymousId, @"mixpanel identify shouldn't change anonymousId");
         XCTAssertEqualObjects(self.mixpanel.distinctId, distinctId, @"mixpanel identify failed to set distinct id");
+        XCTAssertEqualObjects(self.mixpanel.userId, distinctId, @"mixpanel identify failed to set user id");
         XCTAssertEqualObjects(self.mixpanel.people.distinctId, distinctId, @"mixpanel identify failed to set people distinct id");
         XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify: should move records from unidentified queue");
         XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"identify: should move records to main people queue");

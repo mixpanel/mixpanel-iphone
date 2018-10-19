@@ -110,8 +110,12 @@
 
             [r addEntriesFromDictionary:[strongMixpanel.sessionMetadata toDictionaryForEvent:NO]];
 
+            if (self.mixpanel.anonymousId) {
+              r[@"$device_id"] = self.mixpanel.anonymousId;
+            }
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
+                r[@"$user_id"] = self.distinctId;
                 MPLogInfo(@"%@ queueing people record: %@", strongMixpanel, r);
                 @synchronized (strongMixpanel) {
                     [strongMixpanel.peopleQueue addObject:r];

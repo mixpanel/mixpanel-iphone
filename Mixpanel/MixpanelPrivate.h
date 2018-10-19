@@ -94,6 +94,8 @@
 @property (atomic, strong) MPNetwork *network;
 @property (atomic, copy) NSString *distinctId;
 @property (atomic, copy) NSString *alias;
+@property (atomic, copy) NSString *anonymousId;
+@property (atomic, copy) NSString *userId;
 
 @property (nonatomic, copy) NSString *apiToken;
 @property (atomic, strong) NSDictionary *superProperties;
@@ -149,4 +151,3 @@
 #endif
 
 @end
-

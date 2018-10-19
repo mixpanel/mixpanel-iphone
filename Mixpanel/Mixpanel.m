@@ -48,13 +48,13 @@ static NSString *defaultProjectToken;
     if (instances[apiToken]) {
         return instances[apiToken];
     }
-    
+
 #if defined(DEBUG)
     const NSUInteger flushInterval = 1;
 #else
     const NSUInteger flushInterval = 60;
 #endif
-    
+
     return [[self alloc] initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTrackingByDefault:optOutTrackingByDefault];
 }
 
@@ -135,19 +135,18 @@ static NSString *defaultProjectToken;
         self.useIPAddressForGeoLocation = YES;
         self.shouldManageNetworkActivityIndicator = YES;
         self.flushOnBackground = YES;
-        
+
         self.serverURL = @"https://api.mixpanel.com";
         self.switchboardURL = @"wss://switchboard.mixpanel.com";
-        
+
         self.showNotificationOnActive = YES;
         self.checkForNotificationsOnActive = YES;
         self.checkForVariantsOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
-        
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSMutableDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
-        
+
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
         if (![Mixpanel isAppExtension]) {
             self.taskId = UIBackgroundTaskInvalid;
@@ -157,7 +156,7 @@ static NSString *defaultProjectToken;
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         NSString *networkLabel = [label stringByAppendingString:@".network"];
         self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
-        
+
 #if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
 #else
@@ -168,11 +167,11 @@ static NSString *defaultProjectToken;
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
         [self setUpListeners];
         [self unarchive];
-        
+
         if (optOutTrackingByDefault) {
             [self optOutTracking];
         }
-        
+
         if (![Mixpanel isAppExtension]) {
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
             self.automaticEvents = [[AutomaticEvents alloc] init];
@@ -428,7 +427,7 @@ static NSString *defaultProjectToken;
     if ([self hasOptedOutTracking]) {
         return;
     }
-    
+
     if (distinctId.length == 0) {
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
@@ -441,6 +440,7 @@ static NSString *defaultProjectToken;
             if (![distinctId isEqualToString:self.distinctId]) {
                 self.alias = nil;
                 self.distinctId = distinctId;
+                self.userId = distinctId;
             }
             if (usePeople) {
                 self.people.distinctId = distinctId;
@@ -479,7 +479,7 @@ static NSString *defaultProjectToken;
     if ([self hasOptedOutTracking]) {
         return;
     }
-    
+
     if (alias.length == 0) {
         MPLogError(@"%@ create alias called with empty alias: %@", self, alias);
         return;
@@ -511,7 +511,7 @@ static NSString *defaultProjectToken;
     if ([self hasOptedOutTracking]) {
         return;
     }
-    
+
     if (event.length == 0) {
         MPLogWarning(@"%@ mixpanel track called with empty event parameter. using 'mp_event'", self);
         event = @"mp_event";
@@ -541,6 +541,12 @@ static NSString *defaultProjectToken;
         }
         if (self.distinctId) {
             p[@"distinct_id"] = self.distinctId;
+        }
+        if (self.anonymousId) {
+          p[@"$device_id"] = self.anonymousId;
+        }
+        if (self.userId) {
+          p[@"$user_id"] = self.userId;
         }
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
@@ -683,7 +689,7 @@ static NSString *defaultProjectToken;
     if ([self hasOptedOutTracking]) {
         return;
     }
-    
+
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
@@ -747,7 +753,7 @@ static NSString *defaultProjectToken;
     if ([self hasOptedOutTracking]) {
         return;
     }
-    
+
     NSNumber *startTime = @([[NSDate date] timeIntervalSince1970]);
 
     if (event.length == 0) {
@@ -782,8 +788,10 @@ static NSString *defaultProjectToken;
         // wait for all current network requests to finish before resetting
         dispatch_sync(self.networkQueue, ^{ return; });
         @synchronized (self) {
-            self.distinctId = [self defaultDistinctId];
+            self.anonymousId = [self defaultDistinctId];
+            self.distinctId = self.anonymousId;
             self.superProperties = [NSMutableDictionary dictionary];
+            self.userId = nil;
             self.people.distinctId = nil;
             self.alias = nil;
             self.people.unidentifiedQueue = [NSMutableArray array];
@@ -831,7 +839,9 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         self.alias = nil;
         self.people.distinctId = nil;
-        self.distinctId = [self defaultDistinctId];
+        self.userId = nil;
+        self.anonymousId = [self defaultDistinctId];
+        self.distinctId = self.anonymousId;
         self.superProperties = [NSDictionary new];
         [self.people.unidentifiedQueue removeAllObjects];
         [self.timedEvents removeAllObjects];
@@ -925,7 +935,7 @@ static NSString *defaultProjectToken;
         }
         return;
     }
-    
+
     [self dispatchOnNetworkQueue:^{
         MPLogInfo(@"%@ flush starting", self);
 
@@ -1024,7 +1034,9 @@ static NSString *defaultProjectToken;
 {
     NSString *filePath = [self propertiesFilePath];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    [p setValue:self.anonymousId forKey:@"anonymousId"];
     [p setValue:self.distinctId forKey:@"distinctId"];
+    [p setValue:self.userId forKey:@"userId"];
     [p setValue:self.alias forKey:@"alias"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
@@ -1145,7 +1157,14 @@ static NSString *defaultProjectToken;
 {
     NSDictionary *properties = (NSDictionary *)[Mixpanel unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
     if (properties) {
-        self.distinctId = properties[@"distinctId"] ?: [self defaultDistinctId];
+        self.distinctId = properties[@"distinctId"];
+        self.userId     = properties[@"userId"];
+        self.anonymousId = properties[@"anonymousId"];
+        if (!self.distinctId) {
+          self.anonymousId = [self defaultDistinctId];
+          self.distinctId = self.anonymousId;
+          self.userId = nil;
+        }
         self.alias = properties[@"alias"];
         self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
