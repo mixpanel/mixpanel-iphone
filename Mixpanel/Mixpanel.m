@@ -1160,7 +1160,7 @@ static NSString *defaultProjectToken;
         self.distinctId = properties[@"distinctId"];
         self.userId     = properties[@"userId"];
         self.anonymousId = properties[@"anonymousId"];
-        if(!self.distinctId) {
+        if (!self.distinctId) {
           self.anonymousId = [self defaultDistinctId];
           self.distinctId = self.anonymousId;
           self.userId = nil;
