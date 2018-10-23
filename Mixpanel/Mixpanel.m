@@ -144,7 +144,7 @@ static NSString *defaultProjectToken;
         self.checkForVariantsOnActive = YES;
         self.miniNotificationPresentationTime = 6.0;
         self.distinctId = [self defaultDistinctId];
-        self.superProperties = [NSMutableDictionary dictionary];
+        self.superProperties = [NSDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
@@ -790,7 +790,7 @@ static NSString *defaultProjectToken;
         @synchronized (self) {
             self.anonymousId = [self defaultDistinctId];
             self.distinctId = self.anonymousId;
-            self.superProperties = [NSMutableDictionary dictionary];
+            self.superProperties = [NSDictionary dictionary];
             self.userId = nil;
             self.people.distinctId = nil;
             self.alias = nil;
@@ -1016,7 +1016,7 @@ static NSString *defaultProjectToken;
 {
     NSString *filePath = [self eventsFilePath];
     MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
-    if (![self archiveObject:self.eventsQueue withFilePath:filePath]) {
+    if (![self archiveObject:[self.eventsQueue copy] withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive event data", self);
     }
 }
@@ -1025,7 +1025,7 @@ static NSString *defaultProjectToken;
 {
     NSString *filePath = [self peopleFilePath];
     MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
-    if (![self archiveObject:self.peopleQueue withFilePath:filePath]) {
+    if (![self archiveObject:[self.peopleQueue copy] withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive people data", self);
     }
 }
@@ -1040,9 +1040,9 @@ static NSString *defaultProjectToken;
     [p setValue:self.alias forKey:@"alias"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [p setValue:self.people.unidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    [p setValue:self.shownNotifications forKey:@"shownNotifications"];
-    [p setValue:self.timedEvents forKey:@"timedEvents"];
+    [p setValue:[self.people.unidentifiedQueue copy] forKey:@"peopleUnidentifiedQueue"];
+    [p setValue:[self.shownNotifications copy] forKey:@"shownNotifications"];
+    [p setValue:[self.timedEvents copy] forKey:@"timedEvents"];
     [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
     MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
     if (![self archiveObject:p withFilePath:filePath]) {
@@ -1145,12 +1145,12 @@ static NSString *defaultProjectToken;
 
 - (void)unarchiveEvents
 {
-    self.eventsQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSMutableArray class]];
+    self.eventsQueue = [NSMutableArray arrayWithArray:(NSArray *)[Mixpanel unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSArray class]]];
 }
 
 - (void)unarchivePeople
 {
-    self.peopleQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSMutableArray class]];
+    self.peopleQueue = [NSMutableArray arrayWithArray:(NSArray *)[Mixpanel unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSArray class]]];
 }
 
 - (void)unarchiveProperties
@@ -1166,13 +1166,13 @@ static NSString *defaultProjectToken;
           self.userId = nil;
         }
         self.alias = properties[@"alias"];
-        self.superProperties = properties[@"superProperties"] ?: [NSMutableDictionary dictionary];
+        self.superProperties = properties[@"superProperties"] ?: [NSDictionary dictionary];
         self.people.distinctId = properties[@"peopleDistinctId"];
-        self.people.unidentifiedQueue = properties[@"peopleUnidentifiedQueue"] ?: [NSMutableArray array];
-        self.shownNotifications = properties[@"shownNotifications"] ?: [NSMutableSet set];
+        self.people.unidentifiedQueue = [NSMutableArray arrayWithArray:properties[@"peopleUnidentifiedQueue"]] ?: [NSMutableArray array];
+        self.shownNotifications = [NSMutableSet setWithSet:properties[@"shownNotifications"]] ?: [NSMutableSet set];
         self.variants = properties[@"variants"] ?: [NSSet set];
         self.eventBindings = properties[@"event_bindings"] ?: [NSSet set];
-        self.timedEvents = properties[@"timedEvents"] ?: [NSMutableDictionary dictionary];
+        self.timedEvents = [properties[@"timedEvents"] mutableCopy] ?: [NSMutableDictionary dictionary];
         self.automaticEventsEnabled = properties[@"automaticEvents"];
     }
 }
