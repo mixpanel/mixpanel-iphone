@@ -818,7 +818,10 @@
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				51D96E771D11EF69001F622D /* Copy Frameworks */,
 				11FBA527AAB4DE301A04BDD0 /* [CP] Embed Pods Frameworks */,
-				97D8318B565052717E5E5717 /* [CP] Copy Pods Resources */,
+<<<<<<< HEAD
+=======
+				E24E34127A72F8E754E38220 /* [CP] Copy Pods Resources */,
+>>>>>>> 21bfb17... b2b support
 			);
 			buildRules = (
 			);
@@ -869,7 +872,10 @@
 				E12C04AE1D135F01007D2086 /* Copy Frameworks */,
 				E123C49C1D1354EC0015B425 /* Resources */,
 				768564EFBBB1CF00026F3472 /* [CP] Embed Pods Frameworks */,
+<<<<<<< HEAD
+=======
 				9DDC10577555AC422512E445 /* [CP] Copy Pods Resources */,
+>>>>>>> 21bfb17... b2b support
 			);
 			buildRules = (
 			);
@@ -930,6 +936,7 @@
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
 					2808F98C1610EFE3005772B7 = {
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1138,6 +1145,8 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< HEAD
+=======
 		9DDC10577555AC422512E445 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1157,6 +1166,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+>>>>>>> 21bfb17... b2b support
 		AD48B0E1D0FDE02B32D8F942 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

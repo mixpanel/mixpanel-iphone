@@ -59,6 +59,9 @@
                <Test
                   Identifier = "MixpanelBaseTests">
                </Test>
+               <Test
+                  Identifier = "MixpanelGroupTests/testRemoveGroupBasic">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

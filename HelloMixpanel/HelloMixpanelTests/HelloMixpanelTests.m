@@ -9,6 +9,8 @@
 #import "TestConstants.h"
 #import "MixpanelPrivate.h"
 #import "MixpanelPeoplePrivate.h"
+#import "MixpanelGroup.h"
+#import "MixpanelGroupPrivate.h"
 #import "MPNetworkPrivate.h"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
