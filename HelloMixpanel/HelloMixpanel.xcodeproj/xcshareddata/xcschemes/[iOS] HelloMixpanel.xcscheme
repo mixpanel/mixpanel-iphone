@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0900"
+   LastUpgradeVersion = "1000"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -58,6 +58,9 @@
                </Test>
                <Test
                   Identifier = "MixpanelBaseTests">
+               </Test>
+               <Test
+                  Identifier = "MixpanelGroupTests/testRemoveGroupBasic">
                </Test>
             </SkippedTests>
          </TestableReference>

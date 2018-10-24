@@ -13,7 +13,8 @@
 typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointTrack,
     MPNetworkEndpointEngage,
-    MPNetworkEndpointDecide
+    MPNetworkEndpointDecide,
+    MPNetworkEndpointGroups
 };
 
 @interface MPNetwork : NSObject
@@ -25,6 +26,7 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 
 - (void)flushEventQueue:(NSMutableArray *)events;
 - (void)flushPeopleQueue:(NSMutableArray *)people;
+- (void)flushGroupsQueue:(NSMutableArray *)groups;
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 

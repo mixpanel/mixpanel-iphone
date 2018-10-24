@@ -8,6 +8,8 @@
 #import "Mixpanel.h"
 #import "MixpanelPeople.h"
 #import "MixpanelPeoplePrivate.h"
+#import "MixpanelGroup.h"
+#import "MixpanelGroupPrivate.h"
 #import "MixpanelPrivate.h"
 #import "MPFoundation.h"
 #import "MPLogger.h"
@@ -92,6 +94,8 @@ static NSString *defaultProjectToken;
     if (self = [super init]) {
         self.eventsQueue = [NSMutableArray array];
         self.peopleQueue = [NSMutableArray array];
+        self.groupsQueue = [NSMutableArray array];
+        self.cachedGroups = [NSMutableDictionary dictionary];
         self.timedEvents = [NSMutableDictionary dictionary];
         self.shownNotifications = [NSMutableSet set];
         static dispatch_once_t onceToken;
@@ -593,6 +597,125 @@ static NSString *defaultProjectToken;
 #endif
 }
 
+- (void)trackWithGroups:(NSString *)event
+             properties:(NSDictionary *)properties
+                 groups:(NSDictionary *)groups {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    if (properties == nil) {
+        [self track:event properties:groups];
+        return;
+    }
+    if (groups == nil) {
+        [self track:event properties:properties];
+        return;
+    }
+    NSMutableDictionary *mergedProps = [properties mutableCopy];
+    [groups enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+        if (value != nil)
+            [mergedProps setObject:value forKey:key];
+    }];
+    [self track:event properties:mergedProps];
+}
+
+- (void)addGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+
+    [self addValuesToGroupSuperProperty:groupKey groupID:groupID];
+    [self.people union:@{groupKey : @[groupID]}];
+}
+
+- (void)addValuesToGroupSuperProperty:(NSString *)groupKey
+                              groupID:(id<MixpanelType>)groupID {
+    [self updateSuperPropertiesAsync:^NSDictionary *(NSDictionary *superProps) {
+        NSMutableDictionary *mutableSuperProps = [superProps mutableCopy];
+        NSMutableArray<id<MixpanelType>> *values =
+        [NSMutableArray arrayWithArray:mutableSuperProps[groupKey]];
+        bool exist = false;
+        for (int i = 0; i < [values count]; ++i) {
+            if ([values[i] equalToMixpanelType:groupID]) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) {
+            [values addObject:groupID];
+        }
+        mutableSuperProps[groupKey] = [values copy];
+        return mutableSuperProps;
+    }];
+}
+
+- (void)removeGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    [self updateSuperPropertiesAsync:^NSDictionary *(NSDictionary *superProps) {
+        NSMutableDictionary *mutableSuperProps = [superProps mutableCopy];
+        NSObject *oldValue = superProps[groupKey];
+        if (oldValue == nil) {
+            return superProps;
+        }
+        if (![oldValue isKindOfClass:[NSArray<MixpanelType> class]]) {
+            [mutableSuperProps removeObjectForKey:groupKey];
+            [self.people unset:@[groupKey]];
+            return mutableSuperProps;
+        }
+        NSMutableArray *vals =
+        [NSMutableArray arrayWithArray:mutableSuperProps[groupKey]];
+
+        for (int i = 0; i < [vals count]; ++i) {
+            if ([vals[i] equalToMixpanelType:groupID]) {
+                [vals removeObjectAtIndex:i];
+                break;
+            }
+        }
+        if (![vals count]) {
+            [mutableSuperProps removeObjectForKey:groupKey];
+        } else {
+            mutableSuperProps[groupKey] = vals;
+        }
+        [self.people remove:@{groupKey : groupID}];
+        return mutableSuperProps;
+    }];
+}
+
+- (void)setGroup:(NSString *)groupKey
+        groupIDs:(NSArray<id<MixpanelType>> *)groupIDs {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    NSDictionary *properties = @{groupKey : groupIDs};
+    [self registerSuperProperties:properties];
+    [self.people set:properties];
+}
+
+- (void)setGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
+    NSArray *groupIDs = @[ groupID ];
+    [self setGroup:groupKey groupIDs:groupIDs];
+}
+- (NSString *)keyForGroup:(NSString *)groupKey
+                  groupID:(id<MixpanelType>)groupID {
+    return [NSString stringWithFormat:@"%@_%@", groupKey, groupID];
+}
+- (MixpanelGroup *)getGroup:(NSString *)groupKey
+                    groupID:(id<MixpanelType>)groupID {
+    NSString *mapKey = [self keyForGroup:groupKey groupID:groupID];
+    @synchronized(self.cachedGroups) {
+        MixpanelGroup *group = self.cachedGroups[mapKey];
+        if (!group || group.groupKey != groupKey ||
+            ![groupID equalToMixpanelType:group.groupID]) {
+            group = [[MixpanelGroup alloc] init:self groupKey:groupKey groupID:groupID];
+            // if key collision happens, the old entry will be evicted
+            self.cachedGroups[mapKey] = group;
+        }
+        return group;
+    }
+}
+
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 - (void)setupAutomaticPushTracking
 {
@@ -683,6 +806,16 @@ static NSString *defaultProjectToken;
     [self trackPushNotification:userInfo event:@"$campaign_received"];
 }
 #endif
+
+typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
+
+- (void)updateSuperPropertiesAsync:(PropertyUpdate) update{
+    dispatch_async(self.serialQueue, ^{
+        NSDictionary* newSuperProp = update(self.currentSuperProperties);
+        [self setSuperProperties:newSuperProp];
+        [self archiveProperties];
+    });
+}
 
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
@@ -797,6 +930,8 @@ static NSString *defaultProjectToken;
             self.people.unidentifiedQueue = [NSMutableArray array];
             self.eventsQueue = [NSMutableArray array];
             self.peopleQueue = [NSMutableArray array];
+            self.groupsQueue = [NSMutableArray array];
+            self.cachedGroups = [NSMutableDictionary dictionary];
             self.timedEvents = [NSMutableDictionary dictionary];
             self.shownNotifications = [NSMutableSet set];
             self.decideResponseCached = NO;
@@ -830,6 +965,7 @@ static NSString *defaultProjectToken;
     dispatch_async(self.serialQueue, ^{
         [self.eventsQueue removeAllObjects];
         [self.peopleQueue removeAllObjects];
+        [self.groupsQueue removeAllObjects];
     });
     if (self.people.distinctId) {
         [self.people deleteUser];
@@ -949,7 +1085,8 @@ static NSString *defaultProjectToken;
 
         [self.network flushEventQueue:self.eventsQueue];
         [self.network flushPeopleQueue:self.peopleQueue];
-
+        [self.network flushGroupsQueue:self.groupsQueue];
+        
         [self archive];
 
         if (handler) {
@@ -983,6 +1120,11 @@ static NSString *defaultProjectToken;
     return [self filePathFor:@"people"];
 }
 
+- (NSString *)groupsFilePath
+{
+    return [self filePathFor:@"groups"];
+}
+
 - (NSString *)propertiesFilePath
 {
     return [self filePathFor:@"properties"];
@@ -1007,6 +1149,7 @@ static NSString *defaultProjectToken;
 {
     [self archiveEvents];
     [self archivePeople];
+    [self archiveGroups];
     [self archiveProperties];
     [self archiveVariants];
     [self archiveEventBindings];
@@ -1027,6 +1170,15 @@ static NSString *defaultProjectToken;
     MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
     if (![self archiveObject:[self.peopleQueue copy] withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive people data", self);
+    }
+}
+
+- (void)archiveGroups
+{
+    NSString *filePath = [self groupsFilePath];
+    MPLogInfo(@"%@ archiving groups data to %@: %@", self, filePath, self.groupsQueue);
+    if (![self archiveObject:self.groupsQueue withFilePath:filePath]) {
+        MPLogError(@"%@ unable to archive groups data", self);
     }
 }
 
@@ -1107,6 +1259,7 @@ static NSString *defaultProjectToken;
 {
     [self unarchiveEvents];
     [self unarchivePeople];
+    [self unarchiveGroups];
     [self unarchiveProperties];
     [self unarchiveVariants];
     [self unarchiveEventBindings];
@@ -1151,6 +1304,11 @@ static NSString *defaultProjectToken;
 - (void)unarchivePeople
 {
     self.peopleQueue = [NSMutableArray arrayWithArray:(NSArray *)[Mixpanel unarchiveOrDefaultFromFile:[self peopleFilePath] asClass:[NSArray class]]];
+}
+
+- (void)unarchiveGroups
+{
+    self.groupsQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self groupsFilePath] asClass:[NSMutableArray class]];
 }
 
 - (void)unarchiveProperties
