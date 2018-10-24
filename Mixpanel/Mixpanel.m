@@ -1177,7 +1177,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 {
     NSString *filePath = [self groupsFilePath];
     MPLogInfo(@"%@ archiving groups data to %@: %@", self, filePath, self.groupsQueue);
-    if (![self archiveObject:self.groupsQueue withFilePath:filePath]) {
+    if (![self archiveObject:[self.groupsQueue copy] withFilePath:filePath]) {
         MPLogError(@"%@ unable to archive groups data", self);
     }
 }
@@ -1308,7 +1308,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)unarchiveGroups
 {
-    self.groupsQueue = (NSMutableArray *)[Mixpanel unarchiveOrDefaultFromFile:[self groupsFilePath] asClass:[NSMutableArray class]];
+    self.groupsQueue = [NSMutableArray arrayWithArray:(NSArray *)[Mixpanel unarchiveOrDefaultFromFile:[self groupsFilePath] asClass:[NSArray class]]];
 }
 
 - (void)unarchiveProperties
