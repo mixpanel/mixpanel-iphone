@@ -480,8 +480,12 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"default events queue archive failed");
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue archive failed");
+<<<<<<< HEAD
+
+=======
     XCTAssertTrue(self.mixpanel.groupsQueue.count == 0, @"default groups queue archive failed");
     
+>>>>>>> 87bf15e... groups unarchive/archive tests
     NSDictionary *p = @{@"p1": @"a"};
     [self.mixpanel identify:@"d1"];
     [self.mixpanel registerSuperProperties:p];

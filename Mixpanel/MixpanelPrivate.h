@@ -144,6 +144,7 @@
 - (void)archive;
 - (NSString *)eventsFilePath;
 - (NSString *)peopleFilePath;
+- (NSString *)groupsFilePath;
 - (NSString *)propertiesFilePath;
 - (NSString *)optOutFilePath;
 
