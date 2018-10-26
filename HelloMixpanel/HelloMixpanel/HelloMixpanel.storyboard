@@ -51,8 +51,8 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-imageView-4FA-CV-aBK"/>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2M5-rd-zct">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2M5-rd-zct">
+                                <rect key="frame" x="0.0" y="44" width="375" height="603"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-containerView-2M5-rd-zct"/>
                                 </userDefinedRuntimeAttributes>
@@ -595,7 +595,7 @@
             <point key="canvasLocation" x="837" y="1734"/>
         </scene>
         <!--View Controller-->
-        <scene sceneID="ELb-7z-xd7">
+        <scene sceneID="ELb-6z-xd7">
             <objects>
                 <viewController id="9cb-wX-AKx" sceneMemberID="viewController">
                     <layoutGuides>
@@ -662,7 +662,7 @@
             <objects>
                 <viewController id="zof-Y0-cqK" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5yS-SR-rlq"/>
+                        <viewControllerLayoutGuide type="top" id="6yS-SR-rlq"/>
                         <viewControllerLayoutGuide type="bottom" id="XU5-Wm-oGG"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="18S-Ud-lQo">
@@ -1330,10 +1330,6 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="Fs4-bo-DkI" id="Fj8-AT-9NH"/>
-                                    <outlet property="delegate" destination="Fs4-bo-DkI" id="O49-lC-7sa"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1347,59 +1343,9 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
             </objects>
             <point key="canvasLocation" x="134" y="2175"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="uuh-yC-cIp">
-            <objects>
-                <viewController id="Fs4-bo-DkI" customClass="GDPRViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="d6a-y1-QtI"/>
-                        <viewControllerLayoutGuide type="bottom" id="oP7-K9-d8M"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jZs-Hp-au3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YoN-h8-Xyk">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="trackingCellIdentifier" id="dI2-lV-oWm">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dI2-lV-oWm" id="Ynz-IT-gga">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="Fs4-bo-DkI" id="8bf-Ow-A2i"/>
-                                    <outlet property="delegate" destination="Fs4-bo-DkI" id="KUP-zB-ab0"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="YoN-h8-Xyk" firstAttribute="leading" secondItem="jZs-Hp-au3" secondAttribute="leading" id="HCX-p7-4D3"/>
-                            <constraint firstItem="oP7-K9-d8M" firstAttribute="top" secondItem="YoN-h8-Xyk" secondAttribute="bottom" id="ID6-gT-w5R"/>
-                            <constraint firstItem="YoN-h8-Xyk" firstAttribute="top" secondItem="d6a-y1-QtI" secondAttribute="bottom" id="kbU-M0-pw5"/>
-                            <constraint firstAttribute="trailing" secondItem="YoN-h8-Xyk" secondAttribute="trailing" id="tRb-dC-f6p"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="GzF-Zi-LFm"/>
-                    <connections>
-                        <outlet property="tableView" destination="YoN-h8-Xyk" id="NCr-jb-q97"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6bC-4h-QTi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="383" y="1437"/>
-        </scene>
     </scenes>
     <resources>
-        <image name="Comment" width="25" height="25"/>
         <image name="Icon.png" width="57" height="57"/>
-        <image name="Like" width="25" height="25"/>
         <image name="MPLogo" width="25" height="25"/>
     </resources>
 </document>
