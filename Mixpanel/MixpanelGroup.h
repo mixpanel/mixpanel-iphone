@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  Property keys must be <code>NSString</code> objects.
 
- @param properties      mapping of list property names to lists to union
+ @param property      mapping of list property names to lists to union
  */
 - (void)union:(NSString *)property values:(NSArray<id<MixpanelType>> *)values;
 
