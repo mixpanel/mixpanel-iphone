@@ -20,7 +20,7 @@
 @implementation DummyType
 - (BOOL)isEqual:(id)object
 {
-    return true; // force return true
+    return YES;
 }
 @end
 

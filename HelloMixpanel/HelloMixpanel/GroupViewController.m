@@ -122,7 +122,7 @@
     NSString *groupKey = @"company";
     NSString *groupID = @"mixpanel";
     MixpanelGroup *group = [self.mixpanel getGroup:groupKey groupID:groupID];
-    [group delete];
+    [group deleteGroup];
     [self presentLogMessage:[NSString stringWithFormat:@"Delete group [%@,%@]", groupKey, groupID] title:@"Delete"];
 }
 

@@ -165,7 +165,7 @@
 - (void)testGroupDelete
 {
     MixpanelGroup *g = [self.mixpanel getGroup:@"key" groupID:@"id"];
-    [g delete];
+    [g deleteGroup];
     [self waitForMixpanelQueues];
     NSDictionary *p = self.mixpanel.groupsQueue.lastObject;
     XCTAssertEqualObjects(p[@"$group_key"], @"key");
