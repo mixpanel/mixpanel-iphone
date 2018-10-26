@@ -73,14 +73,13 @@
     [self addGroupRecordToQueueWithAction:@"$remove" andProperties:@{property : value}];
 }
 
-- (void)delete
+- (void)deleteGroup
 {
     [self addGroupRecordToQueueWithAction:@"$delete" andProperties:nil];
     // remove cache entry
-    NSMutableDictionary *cache = self.mixpanel.cachedGroups;
     NSString *key = [self.mixpanel keyForGroup:self.groupKey groupID:self.groupID];
-    @synchronized(cache) {
-        [cache removeObjectForKey:key];
+    @synchronized(self.mixpanel.cachedGroups) {
+        [self.mixpanel.cachedGroups removeObjectForKey:key];
     }
 }
 

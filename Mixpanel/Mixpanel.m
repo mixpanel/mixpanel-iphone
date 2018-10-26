@@ -634,10 +634,10 @@ static NSString *defaultProjectToken;
         NSMutableDictionary *mutableSuperProps = [superProps mutableCopy];
         NSMutableArray<id<MixpanelType>> *values =
         [NSMutableArray arrayWithArray:mutableSuperProps[groupKey]];
-        bool exist = false;
+        BOOL exist = NO;
         for (int i = 0; i < [values count]; ++i) {
             if ([values[i] equalToMixpanelType:groupID]) {
-                exist = true;
+                exist = YES;
                 break;
             }
         }

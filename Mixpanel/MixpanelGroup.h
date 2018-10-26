@@ -5,7 +5,6 @@
 //  Created by Weizhe Yuan on 8/16/18.
 //  Copyright © 2018 Mixpanel. All rights reserved.
 //
-// #import "MixpanelType.h"
 #import "Mixpanel.h"
 #import <Foundation/Foundation.h>
 
@@ -59,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Permanently remove a group on server side.
  */
-- (void)delete;
+- (void)deleteGroup;
 
 /*!
  Remove one value from a group property.
