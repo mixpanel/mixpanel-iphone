@@ -1546,9 +1546,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     MPLogInfo(@"%@ application will terminate", self);
-    dispatch_async(self.serialQueue, ^{
-        [self archive];
-    });
+    [self archive];
 }
 
 #if !defined(MIXPANEL_MACOS)
