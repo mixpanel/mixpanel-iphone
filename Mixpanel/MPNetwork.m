@@ -65,7 +65,7 @@ static const NSUInteger kBatchSize = 50;
 
 - (NSMutableArray *)orderAutomaticEvents:(NSMutableArray *)events
 {
-    if (!self.mixpanel.automaticEventsEnabled || !self.mixpanel.automaticEventsEnabled.boolValue) {
+    if (self.mixpanel.automaticEventsEnabled == nil || !self.mixpanel.automaticEventsEnabled.boolValue) {
         NSMutableArray *discardedItems = [NSMutableArray array];
         for (NSDictionary *e in events) {
             if ([e[@"event"] hasPrefix:@"$ae_"]) {
@@ -73,7 +73,7 @@ static const NSUInteger kBatchSize = 50;
             }
         }
         [events removeObjectsInArray:discardedItems];
-        if (!self.mixpanel.automaticEventsEnabled) {
+        if (self.mixpanel.automaticEventsEnabled == nil) {
             return discardedItems;
         }
     }

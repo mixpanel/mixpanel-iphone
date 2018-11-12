@@ -53,7 +53,7 @@ typedef void (^ActionBlock)(void);
                                  message:message
                                  preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction* okButton = [UIAlertAction
-                               actionWithTitle:@"OK"
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK")
                                style:UIAlertActionStyleDefault
                                handler:nil];
     [alert addAction:okButton];
