@@ -303,7 +303,7 @@ extern NSString *const MPNotificationTypeTakeover;
  issues with your crash reporting for either signals or exceptions
  @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
 
 /*!
  Initializes a singleton instance of the API, uses it to track launchOptions information,

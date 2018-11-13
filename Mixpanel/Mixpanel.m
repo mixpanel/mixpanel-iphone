@@ -535,7 +535,7 @@ static NSString *defaultProjectToken;
         NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:self.automaticProperties];
         p[@"token"] = self.apiToken;
         p[@"time"] = epochSeconds;
-        if (eventStartTime) {
+        if (eventStartTime != nil) {
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
@@ -768,7 +768,7 @@ static NSString *defaultProjectToken;
 - (double)eventElapsedTime:(NSString *)event
 {
     NSNumber *startTime = self.timedEvents[event];
-    if (!startTime) {
+    if (startTime == nil) {
         return 0;
     } else {
         return [[NSDate date] timeIntervalSince1970] - [startTime doubleValue];
@@ -1798,7 +1798,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
                 id rawAutomaticEvents = object[@"automatic_events"];
                 if ([rawAutomaticEvents isKindOfClass:[NSNumber class]]) {
-                    if (!self.automaticEventsEnabled || [self.automaticEventsEnabled boolValue] != [rawAutomaticEvents boolValue]) {
+                    if (self.automaticEventsEnabled == nil || [self.automaticEventsEnabled boolValue] != [rawAutomaticEvents boolValue]) {
                         self.automaticEventsEnabled = rawAutomaticEvents;
                         [self archiveProperties];
                     }

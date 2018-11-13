@@ -70,7 +70,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:response.notification.request.content.userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleDefault handler:nil]];
     [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
     
     completionHandler();

@@ -546,7 +546,7 @@
     srand(124);
 
     for (NSUInteger i = 0; i < bits; ++i) {
-        rgba[i] = (rand() % 8);
+        rgba[i] = (arc4random() % 8);
     }
 
     CGContextRef noise = CGBitmapContextCreate(rgba, (NSUInteger)fabs(self.bounds.size.width), (NSUInteger)fabs(self.bounds.size.height), 8, (NSUInteger)fabs(self.bounds.size.width), NULL, (CGBitmapInfo)kCGImageAlphaOnly);
