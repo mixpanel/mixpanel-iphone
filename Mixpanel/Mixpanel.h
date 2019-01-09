@@ -112,6 +112,12 @@ extern NSString *const MPNotificationTypeTakeover;
 @property (atomic, readonly, copy) NSString *alias;
 
 /*!
+ A flag which says if a distinctId is already in peristence from old sdk
+  Defaults to NO.
+ */
+@property (atomic) BOOL hadPersistedDistinctId;
+
+/*!
  The base URL used for Mixpanel API requests.
 
  Useful if you need to proxy Mixpanel requests. Defaults to

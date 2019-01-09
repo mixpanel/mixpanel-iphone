@@ -434,6 +434,10 @@ static NSString *defaultProjectToken;
     }
 
     dispatch_async(self.serialQueue, ^{
+        if(!self.anonymousId) {
+            self.anonymousId = self.distinctId;
+            self.hadPersistedDistinctId = YES;
+        }
         // identify only changes the distinct id if it doesn't match either the existing or the alias;
         // if it's new, blow away the alias as well.
         if (![distinctId isEqualToString:self.alias]) {
@@ -547,6 +551,9 @@ static NSString *defaultProjectToken;
         }
         if (self.userId) {
           p[@"$user_id"] = self.userId;
+        }
+        if (self.hadPersistedDistinctId) {
+            p[@"$had_persisted_distinct_id"] = [NSNumber numberWithBool:self.hadPersistedDistinctId];
         }
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
@@ -794,6 +801,7 @@ static NSString *defaultProjectToken;
             self.userId = nil;
             self.people.distinctId = nil;
             self.alias = nil;
+            self.hadPersistedDistinctId = NO;
             self.people.unidentifiedQueue = [NSMutableArray array];
             self.eventsQueue = [NSMutableArray array];
             self.peopleQueue = [NSMutableArray array];
@@ -842,6 +850,7 @@ static NSString *defaultProjectToken;
         self.userId = nil;
         self.anonymousId = [self defaultDistinctId];
         self.distinctId = self.anonymousId;
+        self.hadPersistedDistinctId = NO;
         self.superProperties = [NSDictionary new];
         [self.people.unidentifiedQueue removeAllObjects];
         [self.timedEvents removeAllObjects];
@@ -1038,6 +1047,7 @@ static NSString *defaultProjectToken;
     [p setValue:self.distinctId forKey:@"distinctId"];
     [p setValue:self.userId forKey:@"userId"];
     [p setValue:self.alias forKey:@"alias"];
+    [p setValue:[NSNumber numberWithBool:self.hadPersistedDistinctId] forKey:@"hadPersistedDistinctId"];
     [p setValue:self.superProperties forKey:@"superProperties"];
     [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
     [p setValue:[self.people.unidentifiedQueue copy] forKey:@"peopleUnidentifiedQueue"];
@@ -1160,10 +1170,12 @@ static NSString *defaultProjectToken;
         self.distinctId = properties[@"distinctId"];
         self.userId     = properties[@"userId"];
         self.anonymousId = properties[@"anonymousId"];
+        self.hadPersistedDistinctId = [properties[@"hadPersistedDistinctId"] boolValue];
         if (!self.distinctId) {
           self.anonymousId = [self defaultDistinctId];
           self.distinctId = self.anonymousId;
           self.userId = nil;
+          self.hadPersistedDistinctId = NO;
         }
         self.alias = properties[@"alias"];
         self.superProperties = properties[@"superProperties"] ?: [NSDictionary dictionary];
