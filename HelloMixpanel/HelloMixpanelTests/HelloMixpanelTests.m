@@ -20,15 +20,15 @@
 #pragma mark - Network
 - (void)test5XXResponse {
     stubTrack().andReturn(503);
-    
+
     [self.mixpanel track:@"Fake Event"];
-    
+
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
-    
+
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
-    
+
     // Failure count should be 3
     NSTimeInterval waitTime = self.mixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
     NSLog(@"Delta wait time is %.3f", waitTime);
@@ -39,15 +39,15 @@
 
 - (void)testRetryAfterHTTPHeader {
     stubTrack().andReturn(200).withHeader(@"Retry-After", @"60");
-    
+
     [self.mixpanel track:@"Fake Event"];
-    
+
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
-    
+
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
-    
+
     // Failure count should be 3
     NSLog(@"Delta wait time is %.3f", self.mixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970]);
     NSTimeInterval deltaWaitTime = self.mixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
@@ -57,14 +57,14 @@
 
 - (void)testFlushEvents {
     stubTrack();
-    
+
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self flushAndWaitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events should have been flushed");
-    
+
     for (NSUInteger i=0, n=60; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
@@ -81,11 +81,11 @@
     }
     [self flushAndWaitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.peopleQueue count] == 0, @"people should have been flushed");
-    
+
     for (NSUInteger i=0, n=60; i<n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
     }
-    
+
     [self flushAndWaitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.peopleQueue count] == 0, @"people should have been flushed");
 }
@@ -99,21 +99,21 @@
     }
     [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"50 events should be queued up");
-    
+
     [self flushAndWaitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 50U, @"events should still be in the queue if flush fails");
 }
 
 - (void)testAddingEventsAfterFlush {
     stubTrack();
-    
+
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=10; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
     [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 10U, @"10 events should be queued up");
-    
+
     [self.mixpanel flush];
     // not sure this test is super useful anymore. had to add this extra wait to make sure
     // the flush didn't eat up any of the tracks that are added after but maybe that's what
@@ -124,7 +124,7 @@
     }
     [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 5U, @"5 more events should be queued up");
-    
+
     [self flushAndWaitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 0, @"events should have been flushed");
 }
@@ -132,7 +132,7 @@
 - (void)testDropEvents {
     self.mixpanel.delegate = self;
     self.mixpanelWillFlush = NO;
-    
+
     NSMutableArray *events = [NSMutableArray array];
     for (NSInteger i = 0; i < 5000; i++) {
         [events addObject:@{@"i": @(i)}];
@@ -140,7 +140,7 @@
     self.mixpanel.eventsQueue = events;
     [self waitForMixpanelQueues];
     XCTAssertTrue([self.mixpanel.eventsQueue count] == 5000);
-    
+
     for (NSInteger i = 0; i < 5; i++) {
         [self.mixpanel track:@"event" properties:@{ @"i": @(5000 + i) }];
     }
@@ -161,18 +161,18 @@
         XCTAssertEqualObjects(self.mixpanel.anonymousId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set anonymous id");
         XCTAssertNil(self.mixpanel.people.distinctId, @"mixpanel people distinct id should default to nil");
         XCTAssertNil(self.mixpanel.userId, @"mixpanel userId should default to nil");
-        
+
         [self.mixpanel track:@"e1"];
         [self waitForMixpanelQueues];
         XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"events should be sent right away with default distinct id");
         XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], self.mixpanel.defaultDistinctId, @"events should use default distinct id if none set");
-        
+
         [self.mixpanel.people set:@"p1" to:@"a"];
         [self waitForMixpanelQueues];
         XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people records should go to unidentified queue before identify:");
         XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 1, @"unidentified people records not queued");
         XCTAssertEqualObjects(self.mixpanel.people.unidentifiedQueue.lastObject[@"$token"], kTestToken, @"incorrect project token in people record");
-        
+
         NSString *anonymousId = self.mixpanel.anonymousId;
         [self.mixpanel identify:distinctId];
         [self waitForMixpanelQueues];
@@ -184,32 +184,64 @@
         XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"identify: should move records to main people queue");
         XCTAssertEqualObjects(self.mixpanel.peopleQueue.lastObject[@"$token"], kTestToken, @"incorrect project token in people record");
         XCTAssertEqualObjects(self.mixpanel.peopleQueue.lastObject[@"$distinct_id"], distinctId, @"distinct id not set properly on unidentified people record");
-        
+
         NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$set"];
         XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
-        
+
         [self assertDefaultPeopleProperties:p];
         [self.mixpanel.people set:@"p1" to:@"a"];
         [self waitForMixpanelQueues];
         XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"once idenitfy: is called, unidentified queue should be skipped");
         XCTAssertTrue(self.mixpanel.peopleQueue.count == 2, @"once identify: is called, records should go straight to main queue");
-        
+
         [self.mixpanel track:@"e2"];
         [self waitForMixpanelQueues];
         XCTAssertEqual(self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], distinctId, @"events should use new distinct id after identify:");
-        
+
         [self.mixpanel reset];
         [self waitForMixpanelQueues];
     }
 }
 
+- (void)testHadPersistedDistinctId {
+    // stub needed because reset flushes
+    stubTrack();
+    stubEngage();
+    NSString *distinctIdBeforeidentify = self.mixpanel.distinctId;
+
+    self.mixpanel.anonymousId = nil;
+    self.mixpanel.userId = nil;
+    self.mixpanel.hadPersistedDistinctId = false;
+
+    [self.mixpanel archive];
+
+    NSString *distinctId = @"d1";
+
+    [self.mixpanel identify:distinctId];
+    [self.mixpanel track:@"Something Happened"];
+    [self waitForMixpanelQueues];
+   
+    XCTAssertEqualObjects(self.mixpanel.anonymousId, distinctIdBeforeidentify, @"mixpanel identify shouldn't change anonymousId");
+    XCTAssertEqualObjects(self.mixpanel.distinctId, distinctId, @"mixpanel identify failed to set distinct id");
+    XCTAssertEqualObjects(self.mixpanel.userId, distinctId, @"mixpanel identify failed to set user id");
+    XCTAssertEqualObjects(self.mixpanel.people.distinctId, distinctId, @"mixpanel identify failed to set people distinct id");
+    XCTAssertTrue(self.mixpanel.hadPersistedDistinctId, @"mixpanel identify failed to set hadPersistedDistinctId flag as only distinctId existed before");
+
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    NSDictionary *p = e[@"properties"];
+    XCTAssertEqual(p[@"distinct_id"], distinctId, @"incorrect distinct_id");
+    XCTAssertEqual(p[@"$device_id"], distinctIdBeforeidentify, @"incorrect device_id");
+    XCTAssertEqual(p[@"$user_id"], distinctId, @"incorrect user_id");
+    XCTAssertTrue(p[@"$had_persisted_distinct_id"], @"incorrect flag");
+}
+
 - (void)testTrackWithDefaultProperties {
     [self.mixpanel track:@"Something Happened"];
     [self waitForMixpanelQueues];
-    
+
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     XCTAssertEqualObjects(e[@"event"], @"Something Happened", @"incorrect event name");
-    
+
     NSDictionary *p = e[@"properties"];
     XCTAssertNotNil(p[@"$app_version"], @"$app_version not set");
     XCTAssertNotNil(p[@"$app_release"], @"$app_release not set");
@@ -222,7 +254,7 @@
     XCTAssertNotNil(p[@"distinct_id"], @"distinct_id not set");
     XCTAssertNotNil(p[@"mp_device_model"], @"mp_device_model not set");
     XCTAssertNotNil(p[@"time"], @"time not set");
-    
+
     XCTAssertEqualObjects(p[@"$manufacturer"], @"Apple", @"incorrect $manufacturer");
     XCTAssertEqualObjects(p[@"mp_lib"], @"iphone", @"incorrect mp_lib");
     XCTAssertEqualObjects(p[@"token"], kTestToken, @"incorrect token");
@@ -236,7 +268,7 @@
                          @"$app_version": @"override" };
     [self.mixpanel track:@"Something Happened" properties:p];
     [self waitForMixpanelQueues];
-    
+
     NSDictionary *props = self.mixpanel.eventsQueue.lastObject[@"properties"];
     XCTAssertEqualObjects(props[@"string"], @"yello");
     XCTAssertEqualObjects(props[@"number"], @3);
@@ -248,7 +280,7 @@
     NSDictionary *p = @{ @"token": @"t1", @"distinct_id": @"d1" };
     [self.mixpanel track:@"e1" properties:p];
     [self waitForMixpanelQueues];
-    
+
     NSString *trackToken = self.mixpanel.eventsQueue.lastObject[@"properties"][@"token"];
     NSString *trackDistinctId = self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"];
     XCTAssertEqualObjects(trackToken, @"t1", @"user-defined distinct id not used in track.");
@@ -260,42 +292,42 @@
     [self.mixpanel registerSuperProperties:p];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects([self.mixpanel currentSuperProperties], p, @"register super properties failed");
-    
+
     p = @{ @"p1": @"b" };
     [self.mixpanel registerSuperProperties:p];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects([self.mixpanel currentSuperProperties][@"p1"], @"b",
                          @"register super properties failed to overwrite existing value");
-    
+
     p = @{ @"p4": @"a" };
     [self.mixpanel registerSuperPropertiesOnce:p];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects([self.mixpanel currentSuperProperties][@"p4"], @"a",
                          @"register super properties once failed first time");
-    
+
     p = @{ @"p4": @"b" };
     [self.mixpanel registerSuperPropertiesOnce:p];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects([self.mixpanel currentSuperProperties][@"p4"], @"a",
                          @"register super properties once failed second time");
-    
+
     p = @{ @"p4": @"c" };
     [self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"d"];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects([self.mixpanel currentSuperProperties][@"p4"], @"a",
                          @"register super properties once with default value failed when no match");
-    
+
     [self.mixpanel registerSuperPropertiesOnce:p defaultValue:@"a"];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects([self.mixpanel currentSuperProperties][@"p4"], @"c",
                          @"register super properties once with default value failed when match");
-    
+
     [self.mixpanel unregisterSuperProperty:@"a"];
     [self waitForMixpanelQueues];
     XCTAssertNil([self.mixpanel currentSuperProperties][@"a"], @"unregister super property failed");
     XCTAssertNoThrow([self.mixpanel unregisterSuperProperty:@"a"],
                      @"unregister non-existent super property should not throw");
-    
+
     [self.mixpanel clearSuperProperties];
     [self waitForMixpanelQueues];
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"clear super properties failed");
@@ -341,7 +373,7 @@
     [self waitForMixpanelQueues];
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
-    
+
     NSDictionary *p = e[@"properties"];
     XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
@@ -359,7 +391,7 @@
     [self waitForMixpanelQueues];
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     XCTAssertEqualObjects(e[@"event"], @"$campaign_received", @"incorrect event name");
-    
+
     NSDictionary *p = e[@"properties"];
     XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
     XCTAssertEqualObjects(p[@"message_id"], @"the_message_id", @"message_id not equal");
@@ -374,33 +406,33 @@
                                             }];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"Invalid push notification was incorrectly queued.");
-    
+
     [self.mixpanel trackPushNotification:@{ @"mp": @1 }];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"Invalid push notification was incorrectly queued.");
-    
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
     [self.mixpanel trackPushNotification:nil];
 #pragma clang diagnostic pop
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"Invalid push notification was incorrectly queued.");
-    
+
     [self.mixpanel trackPushNotification:@{}];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"Invalid push notification was incorrectly queued.");
-    
+
     [self.mixpanel trackPushNotification:@{ @"mp": @"bad value" }];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"Invalid push notification was incorrectly queued.");
-    
+
     NSDictionary *badUserInfo = @{ @"mp": @{
                                            @"m": [NSData data],
                                            @"c": [NSData data]
                                            }
                                    };
     XCTAssertThrows([self.mixpanel trackPushNotification:badUserInfo], @"property types should not be allowed");
-    
+
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"Invalid push notification was incorrectly queued.");
 }
@@ -411,11 +443,11 @@
     stubEngage();
     [self.mixpanel identify:@"d1"];
     [self.mixpanel track:@"e1"];
-    
+
     NSDictionary *p = @{ @"p1": @"a" };
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel.people set:p];
-    
+
     [self.mixpanel archive];
     [self.mixpanel reset];
     [self waitForMixpanelQueues];
@@ -424,7 +456,7 @@
     XCTAssertTrue([self.mixpanel currentSuperProperties].count == 0, @"super properties failed to reset");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people queue failed to reset");
-    
+
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
@@ -446,7 +478,7 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"default events queue archive failed");
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue archive failed");
-    
+
     NSDictionary *p = @{@"p1": @"a"};
     [self.mixpanel identify:@"d1"];
     [self.mixpanel registerSuperProperties:p];
@@ -454,7 +486,7 @@
     [self.mixpanel.people set:p];
     self.mixpanel.timedEvents[@"e2"] = @5.0;
     [self waitForMixpanelQueues];
-    
+
     [self.mixpanel archive];
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
@@ -466,12 +498,12 @@
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
     XCTAssertEqualObjects(self.mixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
-    
+
     NSFileManager *fileManager = [NSFileManager defaultManager];
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
-    
+
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
@@ -483,7 +515,7 @@
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from no file is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"default people queue expecting 1 item");
     XCTAssertTrue(self.mixpanel.timedEvents.count == 1, @"timedEvents expecting 1 item");
-    
+
     // corrupt file
     NSData *garbage = [@"garbage" dataUsingEncoding:NSUTF8StringEncoding];
     [garbage writeToFile:[self.mixpanel eventsFilePath] atomically:NO];
@@ -492,7 +524,7 @@
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"garbage events archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"garbage people archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"garbage properties archive file not found");
-    
+
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:nil
                                    andFlushInterval:60];
@@ -510,13 +542,13 @@
 - (void)testMixpanelDelegate {
     self.mixpanelWillFlush = NO;
     self.mixpanel.delegate = self;
-    
+
     [self.mixpanel identify:@"d1"];
     [self.mixpanel track:@"e1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
-    
+
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"delegate should have stopped flush");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"delegate should have stopped flush");
 }
@@ -527,7 +559,7 @@
     NSString *originalDistinctID = self.mixpanel.distinctId;
     [self.mixpanel identify:nil];
     XCTAssertEqualObjects(self.mixpanel.distinctId, originalDistinctID, @"identify nil should do nothing.");
-    
+
     [self.mixpanel track:nil];
     [self.mixpanel track:nil properties:nil];
     [self.mixpanel registerSuperProperties:nil];
@@ -539,7 +571,7 @@
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"mp_event", @"track with nil should create mp_event event");
     XCTAssertNotNil([self.mixpanel currentSuperProperties], @"setting super properties to nil should have no effect");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 0, @"setting super properties to nil should have no effect");
-    
+
     XCTAssertThrows([self.mixpanel.people set:nil], @"should not take nil argument");
     XCTAssertThrows([self.mixpanel.people set:nil to:@"a"], @"should not take nil argument");
     XCTAssertThrows([self.mixpanel.people set:@"p1" to:nil], @"should not take nil argument");

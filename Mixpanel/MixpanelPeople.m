@@ -113,9 +113,14 @@
             if (self.mixpanel.anonymousId) {
               r[@"$device_id"] = self.mixpanel.anonymousId;
             }
+            if (self.mixpanel.userId) {
+                r[@"$user_id"] = self.mixpanel.userId;
+            }
+            if (self.mixpanel.hadPersistedDistinctId) {
+                r[@"$had_persisted_distinct_id"] = [NSNumber numberWithBool: self.mixpanel.hadPersistedDistinctId];
+            }
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
-                r[@"$user_id"] = self.distinctId;
                 MPLogInfo(@"%@ queueing people record: %@", strongMixpanel, r);
                 @synchronized (strongMixpanel) {
                     [strongMixpanel.peopleQueue addObject:r];
