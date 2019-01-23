@@ -405,7 +405,7 @@
 		E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionMetadata.m; sourceTree = "<group>"; };
 		E1F160B01E677D2200391AE3 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F160B81E6783C400391AE3 /* macos.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = macos.modulemap; path = Mixpanel/macos.modulemap; sourceTree = "<group>"; };
-		E1F160B91E6791F900391AE3 /* Mixpanel-macOS-info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-macOS-info.plist"; sourceTree = "<group>"; };
+		E1F160B91E6791F900391AE3 /* Mixpanel-macOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-macOS-Info.plist"; sourceTree = "<group>"; };
 		E1F160D81E68AC5A00391AE3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		E1F160DA1E68AC5E00391AE3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		E1F1615C1E68B87500391AE3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -791,7 +791,7 @@
 				7C170C2E1A4A02F500D9E0F2 /* Info.plist */,
 				E1C2BDFB1CFD61030052172F /* Mixpanel-watchOS-Info.plist */,
 				E1C2BE061CFD616A0052172F /* Mixpanel-tvOS-Info.plist */,
-				E1F160B91E6791F900391AE3 /* Mixpanel-macOS-info.plist */,
+				E1F160B91E6791F900391AE3 /* Mixpanel-macOS-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
