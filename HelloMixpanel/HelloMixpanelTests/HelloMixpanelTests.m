@@ -539,6 +539,42 @@
     XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
 }
 
+- (void)testArchiveInMultithreadNotCrash {
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
+                                      launchOptions:nil
+                                   andFlushInterval:60];
+    NSDictionary *p = @{@"p1": @"a"};
+    [self.mixpanel identify:@"d1"];
+    [self.mixpanel registerSuperProperties:p];
+    [self.mixpanel track:@"e1"];
+    [self.mixpanel.people set:p];
+    [self waitForMixpanelQueues];
+    
+    __block NSMutableDictionary *properties = [NSMutableDictionary new];
+    properties[@"key"] = @"value";
+    
+    for (int i = 0; i < 100; i++) {
+        dispatch_async(self.mixpanel.serialQueue, ^{
+            dispatch_async(self.mixpanel.networkQueue, ^{
+                 [self.mixpanel track:@"test" properties:properties];
+            });
+        });
+    }
+    
+    for (int i = 0; i < 100; i++) {
+        [self.mixpanel track:@"test" properties:properties];
+        dispatch_async(self.mixpanel.networkQueue, ^{
+            [self.mixpanel archive];
+        });
+    }
+    
+    [self waitForMixpanelQueues];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
+                                      launchOptions:nil
+                                   andFlushInterval:60];
+    XCTAssertTrue(self.mixpanel.eventsQueue.count >= 0, @"archive should not crash");
+}
+
 - (void)testMixpanelDelegate {
     self.mixpanelWillFlush = NO;
     self.mixpanel.delegate = self;
