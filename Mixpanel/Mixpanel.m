@@ -12,6 +12,7 @@
 #import "MPFoundation.h"
 #import "MPLogger.h"
 #import "MPNetworkPrivate.h"
+#import "MPNotification.h"
 
 #import <UserNotifications/UserNotifications.h>
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -587,7 +588,14 @@ static NSString *defaultProjectToken;
                 [self.eventsQueue removeObjectAtIndex:0];
             }
         }
-
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+        for (MPNotification *notif in self.triggeredNotifications) {
+            if ([notif matchesEvent:e]) {
+                [self showNotificationWithObject:notif];
+                break;
+            }
+        }
+#endif //MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         // Always archive
         [self archiveEvents];
     });
@@ -1776,7 +1784,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     }
                 }
 #endif
-
+                
                 id rawNotifications = object[@"notifications"];
                 NSMutableArray *parsedNotifications = [NSMutableArray array];
                 if ([rawNotifications isKindOfClass:[NSArray class]]) {
@@ -1871,7 +1879,19 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 NSMutableSet *allEventBindings = [self.eventBindings mutableCopy];
                 [allEventBindings unionSet:newEventBindings];
 
-                self.notifications = [NSArray arrayWithArray:parsedNotifications];
+                NSMutableArray *notifications = [NSMutableArray array];
+                NSMutableArray *triggeredNotifications = [NSMutableArray array];
+                
+                for (MPNotification *notif in parsedNotifications) {
+                    if ([notif hasDisplayTriggers]) {
+                        [triggeredNotifications addObject:notif];
+                    } else {
+                        [notifications addObject:notif];
+                    }
+                }
+                
+                self.notifications = [NSArray arrayWithArray:notifications];
+                self.triggeredNotifications = [NSArray arrayWithArray:triggeredNotifications];
                 self.variants = [allVariants copy];
                 self.eventBindings = [allEventBindings copy];
 
@@ -1970,9 +1990,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     // if images fail to load, remove the notification from the queue
     if (!image) {
-        NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
-        [notifications removeObject:notification];
-        self.notifications = [NSArray arrayWithArray:notifications];
+        if ([notification hasDisplayTriggers]) {
+            NSMutableArray *notifications = [NSMutableArray arrayWithArray:_triggeredNotifications];
+            [notifications removeObject:notification];
+            self.triggeredNotifications = [NSArray arrayWithArray:notifications];
+        } else {
+            NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
+            [notifications removeObject:notification];
+            self.notifications = [NSArray arrayWithArray:notifications];
+        }        
         return;
     }
 

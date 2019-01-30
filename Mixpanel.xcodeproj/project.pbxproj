@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05A0201422028E5800D04A3A /* MPDisplayTrigger.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0201222028E5800D04A3A /* MPDisplayTrigger.h */; };
+		05A0201522028E5800D04A3A /* MPDisplayTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A0201322028E5800D04A3A /* MPDisplayTrigger.m */; };
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513243431D1B473100CBA9AA /* WatchKit.framework */; };
@@ -229,6 +231,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05A0201222028E5800D04A3A /* MPDisplayTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDisplayTrigger.h; sourceTree = "<group>"; };
+		05A0201322028E5800D04A3A /* MPDisplayTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDisplayTrigger.m; sourceTree = "<group>"; };
 		24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Mixpanel/app_extension_module.modulemap; sourceTree = "<group>"; };
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -549,6 +553,8 @@
 		515B5A151CB6FBA500A34060 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
+				05A0201222028E5800D04A3A /* MPDisplayTrigger.h */,
+				05A0201322028E5800D04A3A /* MPDisplayTrigger.m */,
 				F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */,
 				F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */,
 				F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */,
@@ -945,6 +951,7 @@
 				E12FA3B31D4C0F2B009DF414 /* MPAbstractABTestDesignerMessage.h in Headers */,
 				7C170CDF1A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.h in Headers */,
 				7C170CE11A4A035F00D9E0F2 /* MPABTestDesignerTweakRequestMessage.h in Headers */,
+				05A0201422028E5800D04A3A /* MPDisplayTrigger.h in Headers */,
 				7C170CD41A4A035F00D9E0F2 /* MPABTestDesignerConnection.h in Headers */,
 				7C170D301A4A035F00D9E0F2 /* MPValueTransformers.h in Headers */,
 				7C170CFA1A4A035F00D9E0F2 /* MPEventBinding.h in Headers */,
@@ -1246,6 +1253,7 @@
 				7C170D2A1A4A035F00D9E0F2 /* MPUIControlBinding.m in Sources */,
 				7C170D401A4A035F00D9E0F2 /* UIImage+MPImageEffects.m in Sources */,
 				7C170D341A4A035F00D9E0F2 /* MPWebSocket.m in Sources */,
+				05A0201522028E5800D04A3A /* MPDisplayTrigger.m in Sources */,
 				7C170D201A4A035F00D9E0F2 /* MPTweak.m in Sources */,
 				F13874C91E38327100808C36 /* MPMiniNotification.m in Sources */,
 				7C170CEA1A4A035F00D9E0F2 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,

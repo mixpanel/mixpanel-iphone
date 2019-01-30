@@ -111,7 +111,8 @@
 @property (nonatomic) BOOL decideResponseCached;
 @property (nonatomic) BOOL hasAddedObserver;
 @property (nonatomic, strong) NSNumber *automaticEventsEnabled;
-@property (nonatomic, strong) NSArray *notifications;
+@property (nonatomic, copy) NSArray *notifications;
+@property (nonatomic, copy) NSArray *triggeredNotifications;
 @property (nonatomic, strong) id currentlyShowingNotification;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
