@@ -1,6 +1,7 @@
 #import "MPLogger.h"
 #import "MPDisplayTrigger.h"
 #import "Mixpanel.h"
+#import "Mixpanel/Mixpanel-Swift.h"
 
 NSString * const ANY_EVENT = @"$any_event";
 
@@ -18,7 +19,7 @@ NSString * const ANY_EVENT = @"$any_event";
             event = @"";
         }
         
-        _jsonObject = object;
+        _rawJSON = object;
         _event = event;
         _selector = object[@"selector"];
     }
@@ -32,10 +33,12 @@ NSString * const ANY_EVENT = @"$any_event";
     }
     
     NSString *eventName = event[@"event"];
-    if ([eventName caseInsensitiveCompare:@""] == NSOrderedSame ||
-        [eventName caseInsensitiveCompare:ANY_EVENT] == NSOrderedSame ||
-        [eventName caseInsensitiveCompare:[self event]] == NSOrderedSame) {
-            return YES;
+    if ([eventName compare:ANY_EVENT] == NSOrderedSame ||
+        [eventName compare:[self event]] == NSOrderedSame) {
+        if ([_selector count] > 0) {
+            return [SelectorEvaluator evaluateWithSelector:_selector properties:event[@"properties"]];
+        }
+        return YES;
     }
     
     return NO;

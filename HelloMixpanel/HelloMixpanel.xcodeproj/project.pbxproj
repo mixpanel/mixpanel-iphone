@@ -12,6 +12,7 @@
 		0552DEFE1843DF00009AC90A /* HelloMixpanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */; };
 		0563B603194A186300B40489 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2808F9911610EFE3005772B7 /* UIKit.framework */; };
 		0563B606194A189200B40489 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
+		057BE5C22239A4AE00071E94 /* SelectorEvaluatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057BE5BF2239A13E00071E94 /* SelectorEvaluatorTests.swift */; };
 		05E98DF1191AE10000AFF3E1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E98DF0191AE10000AFF3E1 /* MapKit.framework */; };
 		05E98DF3191AE27200AFF3E1 /* test_variant.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E98DF2191AE27200AFF3E1 /* test_variant.json */; };
 		05FF819E18452EA20073FBAC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FF819D18452EA20073FBAC /* HomeViewController.m */; };
@@ -329,6 +330,8 @@
 		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
 		0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HelloMixpanel.storyboard; sourceTree = "<group>"; };
 		055FA714194A6B020080A709 /* ABTestingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTestingTests.m; sourceTree = "<group>"; };
+		057BE5BE2239A13E00071E94 /* HelloMixpanel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloMixpanel-Bridging-Header.h"; sourceTree = "<group>"; };
+		057BE5BF2239A13E00071E94 /* SelectorEvaluatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorEvaluatorTests.swift; sourceTree = "<group>"; };
 		05C13E5118184DBE00848D48 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		05C13E5318184DC700848D48 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		05E98DF0191AE10000AFF3E1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -560,6 +563,7 @@
 				8673E0F319C3B7090099AB66 /* MPTimingViewController.h */,
 				8673E0F419C3B7090099AB66 /* MPTimingViewController.m */,
 				2808F9981610EFE3005772B7 /* Supporting Files */,
+				057BE5BE2239A13E00071E94 /* HelloMixpanel-Bridging-Header.h */,
 			);
 			path = HelloMixpanel;
 			sourceTree = "<group>";
@@ -579,6 +583,7 @@
 		2808F9B81610EFE4005772B7 /* HelloMixpanelTests */ = {
 			isa = PBXGroup;
 			children = (
+				057BE5BF2239A13E00071E94 /* SelectorEvaluatorTests.swift */,
 				055FA714194A6B020080A709 /* ABTestingTests.m */,
 				E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */,
 				187939F919A2A7F400CC4FBE /* EventBindingTests.m */,
@@ -910,6 +915,7 @@
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
 					2808F98C1610EFE3005772B7 = {
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1163,6 +1169,7 @@
 			files = (
 				862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */,
 				51D96E811D120D3E001F622D /* MPNotificationTests.m in Sources */,
+				057BE5C22239A4AE00071E94 /* SelectorEvaluatorTests.swift in Sources */,
 				51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */,
 				51D96E871D121763001F622D /* ABTestingTests.m in Sources */,
 				515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */,
@@ -1505,6 +1512,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_OBJC_BRIDGING_HEADER = "HelloMixpanel/HelloMixpanel-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1543,6 +1553,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_OBJC_BRIDGING_HEADER = "HelloMixpanel/HelloMixpanel-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1552,7 +1564,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DF79C3E955E4F278C2032E3E /* Pods-HelloMixpanelTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1599,7 +1610,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1738,6 +1748,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_OBJC_BRIDGING_HEADER = "HelloMixpanel/HelloMixpanel-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1747,7 +1759,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
