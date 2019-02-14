@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		058229592213887D00352FC5 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058229582213887D00352FC5 /* JavaScriptCore.framework */; };
 		05A0201422028E5800D04A3A /* MPDisplayTrigger.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0201222028E5800D04A3A /* MPDisplayTrigger.h */; };
 		05A0201522028E5800D04A3A /* MPDisplayTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A0201322028E5800D04A3A /* MPDisplayTrigger.m */; };
+		05DD7BBD2238975A0019FB42 /* SelectorEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DD7BBC2238975A0019FB42 /* SelectorEvaluator.swift */; };
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513243431D1B473100CBA9AA /* WatchKit.framework */; };
@@ -231,8 +233,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		058229582213887D00352FC5 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		05A0201222028E5800D04A3A /* MPDisplayTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDisplayTrigger.h; sourceTree = "<group>"; };
 		05A0201322028E5800D04A3A /* MPDisplayTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDisplayTrigger.m; sourceTree = "<group>"; };
+		05DD7BBC2238975A0019FB42 /* SelectorEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorEvaluator.swift; sourceTree = "<group>"; };
 		24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Mixpanel/app_extension_module.modulemap; sourceTree = "<group>"; };
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -444,6 +448,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				058229592213887D00352FC5 /* JavaScriptCore.framework in Frameworks */,
 				E14FA8071F44DF17009B4533 /* UserNotifications.framework in Frameworks */,
 				E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */,
 				515B5A231CB6FF8600A34060 /* libicucore.tbd in Frameworks */,
@@ -568,6 +573,7 @@
 				F13874C71E38327100808C36 /* MPMiniNotification.m */,
 				F17EB3511E393FD40002739C /* MPNotificationButton.h */,
 				F17EB3521E393FD40002739C /* MPNotificationButton.m */,
+				05DD7BBC2238975A0019FB42 /* SelectorEvaluator.swift */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -862,6 +868,7 @@
 		E1C2BDE01CFD5F9D0052172F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				058229582213887D00352FC5 /* JavaScriptCore.framework */,
 				E14FA8061F44DF17009B4533 /* UserNotifications.framework */,
 				E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */,
 				513243431D1B473100CBA9AA /* WatchKit.framework */,
@@ -935,11 +942,11 @@
 				E1F160D31E67A93500391AE3 /* MPNetwork.h in Headers */,
 				7C170D3D1A4A035F00D9E0F2 /* UIImage+MPAverageColor.h in Headers */,
 				F0ACBDEC1F8C46B400ABF03D /* MPConnectIntegrations.h in Headers */,
-				7C170CFC1A4A035F00D9E0F2 /* MPLogger.h in Headers */,
 				7C170D091A4A035F00D9E0F2 /* MPObjectSerializer.h in Headers */,
 				7C170CF81A4A035F00D9E0F2 /* MPEnumDescription.h in Headers */,
 				7C170D311A4A035F00D9E0F2 /* MPVariant.h in Headers */,
 				7C170D101A4A035F00D9E0F2 /* MPPropertyDescription.h in Headers */,
+				7C170CFC1A4A035F00D9E0F2 /* MPLogger.h in Headers */,
 				37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */,
 				E12CE4361EA68A3C0023AA2D /* AutomaticEvents.h in Headers */,
 				513583971BD1BE50008EEDF1 /* UIView+MPHelpers.h in Headers */,
@@ -1093,6 +1100,7 @@
 				TargetAttributes = {
 					7C170C291A4A02F500D9E0F2 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 1010;
 					};
 					E1F160AF1E677D2200391AE3 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1216,6 +1224,7 @@
 				7C170CE41A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				7C170CE01A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				7C170CF91A4A035F00D9E0F2 /* MPEnumDescription.m in Sources */,
+				05DD7BBD2238975A0019FB42 /* SelectorEvaluator.swift in Sources */,
 				7C170D061A4A035F00D9E0F2 /* MPObjectIdentityProvider.m in Sources */,
 				519C548E1D131E6500407F56 /* MixpanelPeople.m in Sources */,
 				514733BE1CD7CCDB0098B23A /* MPResources.m in Sources */,
@@ -1466,6 +1475,7 @@
 		7C170C411A4A02F500D9E0F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_GCD_PERFORMANCE = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
@@ -1474,6 +1484,7 @@
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -1485,6 +1496,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Mixpanel/ios.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1492,12 +1504,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Mixpanel-Swift.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
 		7C170C421A4A02F500D9E0F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_GCD_PERFORMANCE = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
@@ -1506,6 +1523,7 @@
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -1516,6 +1534,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "@rpath";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Mixpanel/ios.modulemap;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1523,6 +1542,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Mixpanel-Swift.h";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

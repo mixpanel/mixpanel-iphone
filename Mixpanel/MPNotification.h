@@ -1,4 +1,7 @@
 #import <Foundation/Foundation.h>
+#if !TARGET_OS_WATCH
+#import <JavaScriptCore/JavaScriptCore.h>
+#endif
 #import "MPDisplayTrigger.h"
 
 @interface MPNotification : NSObject

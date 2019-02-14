@@ -1,6 +1,7 @@
 #import "MPLogger.h"
 #import "MPNotification.h"
 #import "Mixpanel.h"
+#import "MPNetworkPrivate.h"
 
 @implementation MPNotification
 

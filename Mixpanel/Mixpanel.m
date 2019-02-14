@@ -14,8 +14,8 @@
 #import "MPNetworkPrivate.h"
 #import "MPNotification.h"
 
-#import <UserNotifications/UserNotifications.h>
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+#import <UserNotifications/UserNotifications.h>
 #import "NSThread+MPHelpers.h"
 #endif
 #if defined(MIXPANEL_WATCHOS)
@@ -589,12 +589,14 @@ static NSString *defaultProjectToken;
             }
         }
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+#if !TARGET_OS_WATCH
         for (MPNotification *notif in self.triggeredNotifications) {
             if ([notif matchesEvent:e]) {
                 [self showNotificationWithObject:notif];
                 break;
             }
         }
+#endif
 #endif //MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
         // Always archive
         [self archiveEvents];
@@ -1919,6 +1921,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
             MPLogInfo(@"%@ decide check found %lu available notifs out of %lu total: %@", self, (unsigned long)unseenNotifications.count,
                       (unsigned long)self.notifications.count, unseenNotifications);
+            MPLogInfo(@"%@ decide check found %lu total triggered notifications %@", self, (unsigned long)self.triggeredNotifications.count,
+                      self.triggeredNotifications);
             MPLogInfo(@"%@ decide check found %lu variants: %@", self, (unsigned long)self.variants.count, self.variants);
             MPLogInfo(@"%@ decide check found %lu tracking events: %@", self, (unsigned long)self.eventBindings.count, self.eventBindings);
 
