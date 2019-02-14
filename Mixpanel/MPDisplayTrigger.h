@@ -6,7 +6,7 @@ extern NSString * const ANY_EVENT;
 
 @property (nonatomic, readonly) NSDictionary *jsonObject;
 @property (nonatomic, readonly) NSString *event;
-@property (nonatomic, readonly) NSDictionary *selector;
+@property (nonatomic, readonly) NSDictionary *filters;
 
 - (instancetype)init __unavailable;
 - (instancetype)initWithJSONObject:(NSDictionary *)jsonObject;

@@ -32,7 +32,7 @@
 }
 
 - (void)testParseTakeOverNotification {
-    NSData *takeOverNotificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"http://mixpanel.com/coolimage.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}, \"display_triggers\": [{\"event\": \"test_event\"}]}" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *takeOverNotificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"http://mixpanel.com/coolimage.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}, \"display_triggers\": [{\"event\": \"test_event\", \"property_filters\":{\"operator\": \"defined\", \"children\": [{\"property\": \"event\", \"value\": \"prop1\"}]}}]}" dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *notifDict = [NSJSONSerialization JSONObjectWithData:takeOverNotificationData options:0 error:nil];
 
     XCTAssertNotNil([[MPTakeoverNotification alloc] initWithJSONObject:notifDict]);
@@ -152,6 +152,8 @@
     testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
     MPTakeoverNotification *notif = [[MPTakeoverNotification alloc] initWithJSONObject:testDict];
     XCTAssertTrue([notif hasDisplayTriggers]);
+    MPDisplayTrigger *trigger = [notif displayTriggers][0];
+    XCTAssertTrue([[trigger filters] count] > 0);
 }
 
 - (void)testMiniNotification {

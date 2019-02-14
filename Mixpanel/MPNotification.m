@@ -1,8 +1,50 @@
 #import "MPLogger.h"
 #import "MPNotification.h"
 #import "Mixpanel.h"
+#import "MPNetworkPrivate.h"
 
+NSString* const PROPERTY_EVAL_FUNC_NAME = @"evaluateFilters";
+NSString* const PROPERTY_FILTERS_JS_URL = @"http://cdn-dev.mxpnl.com/libs/mixpanel.property-filters.dev.js";
 @implementation MPNotification
+
+#if !TARGET_OS_WATCH
++ (JSValue*) propertyFilterFunc {
+    static JSValue* propertyFilterFunc = nil;
+    static JSContext* jsContext = nil;
+    
+    if (propertyFilterFunc != nil) {
+        return propertyFilterFunc;
+    }
+    
+    jsContext = [[JSContext alloc] init];
+    
+    NSURL *url = [NSURL URLWithString:PROPERTY_FILTERS_JS_URL];
+    [[[MPNetwork sharedURLSession] dataTaskWithURL:url completionHandler:^(NSData *responseData, NSURLResponse *urlResponse, NSError *error) {
+        if (error) {
+            MPLogError(@"error fetching property filters js snippet: %@", error);
+            return;
+        }
+        
+        NSString* script = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        if (!script) {
+            MPLogInfo(@"Error required property filters js snippet missing");
+            return;
+        }
+
+        [jsContext setExceptionHandler:^(JSContext *context, JSValue *value) {
+            MPLogError(@"Error executing JS: %@", value);
+        }];
+        
+        [jsContext evaluateScript:script];
+        propertyFilterFunc = jsContext[PROPERTY_EVAL_FUNC_NAME];
+        BOOL out = [[propertyFilterFunc callWithArguments:@[@{@"operator": @"defined", @"children": @[@{@"property": @"event", @"value": @"prop1"}]}, @{@"prop1": @true}]] toBool];
+        NSLog(@"%d", out);
+        
+    }] resume];
+    
+    return propertyFilterFunc;
+}
+#endif
 
 - (instancetype)initWithJSONObject:(NSDictionary *)object {
     if (self = [super init]) {
@@ -109,6 +151,17 @@
     if ([self hasDisplayTriggers]) {
         for (id trigger in self.displayTriggers) {
             if([trigger matchesEvent:event]) {
+                if ([[trigger filters] count] > 0) {
+#if !TARGET_OS_WATCH
+                    if (![MPNotification propertyFilterFunc]) {
+                        MPLogError(@"Missing property filter function");
+                        return NO;
+                    }
+                    return [[[MPNotification propertyFilterFunc] callWithArguments:@[[trigger filters], event[@"properties"]]] toBool];
+#else
+                    return NO;
+#endif
+                }
                 return YES;
             }
         }

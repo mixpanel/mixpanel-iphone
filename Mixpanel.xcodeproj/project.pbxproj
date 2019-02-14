@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		058229592213887D00352FC5 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058229582213887D00352FC5 /* JavaScriptCore.framework */; };
 		05A0201422028E5800D04A3A /* MPDisplayTrigger.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0201222028E5800D04A3A /* MPDisplayTrigger.h */; };
 		05A0201522028E5800D04A3A /* MPDisplayTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A0201322028E5800D04A3A /* MPDisplayTrigger.m */; };
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
@@ -231,6 +232,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		058229582213887D00352FC5 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		05A0201222028E5800D04A3A /* MPDisplayTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDisplayTrigger.h; sourceTree = "<group>"; };
 		05A0201322028E5800D04A3A /* MPDisplayTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDisplayTrigger.m; sourceTree = "<group>"; };
 		24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Mixpanel/app_extension_module.modulemap; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				058229592213887D00352FC5 /* JavaScriptCore.framework in Frameworks */,
 				E14FA8071F44DF17009B4533 /* UserNotifications.framework in Frameworks */,
 				E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */,
 				515B5A231CB6FF8600A34060 /* libicucore.tbd in Frameworks */,
@@ -862,6 +865,7 @@
 		E1C2BDE01CFD5F9D0052172F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				058229582213887D00352FC5 /* JavaScriptCore.framework */,
 				E14FA8061F44DF17009B4533 /* UserNotifications.framework */,
 				E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */,
 				513243431D1B473100CBA9AA /* WatchKit.framework */,

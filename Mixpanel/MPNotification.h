@@ -1,5 +1,11 @@
 #import <Foundation/Foundation.h>
+#if !TARGET_OS_WATCH
+#import <JavaScriptCore/JavaScriptCore.h>
+#endif
 #import "MPDisplayTrigger.h"
+
+extern NSString* const PROPERTY_EVAL_FUNC_NAME;
+extern NSString* const PROPERTY_FILTERS_JS_URL;
 
 @interface MPNotification : NSObject
 
@@ -20,5 +26,7 @@
 - (BOOL)hasDisplayTriggers;
 - (BOOL)matchesEvent:(NSDictionary *)event;
 + (void)logNotificationError:(NSString *)field withValue:(id)value;
-
+#if !TARGET_OS_WATCH
++ (JSValue*) propertyFilterFunc;
+#endif
 @end

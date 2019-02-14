@@ -20,7 +20,7 @@ NSString * const ANY_EVENT = @"$any_event";
         
         _jsonObject = object;
         _event = event;
-        _selector = object[@"selector"];
+        _filters = object[@"property_filters"];
     }
     
     return self;
