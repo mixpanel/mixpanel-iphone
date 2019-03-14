@@ -42,6 +42,7 @@
 #import "MPTweakStore.h"
 #import "MPVariant.h"
 #import "MPWebSocket.h"
+#import "MPNotification.h"
 #endif
 
 #if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT

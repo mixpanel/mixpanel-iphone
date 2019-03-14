@@ -12,7 +12,7 @@
 #import "MPFoundation.h"
 #import "MPLogger.h"
 #import "MPNetworkPrivate.h"
-#import "MPNotification.h"
+
 
 #import <UserNotifications/UserNotifications.h>
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
