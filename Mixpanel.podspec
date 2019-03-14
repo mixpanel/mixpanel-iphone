@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
   s.requires_arc = true
   s.libraries = 'icucore'
+  s.swift_version = '4.2'
   s.ios.deployment_target = '8.0'
   s.ios.source_files  = 'Mixpanel/**/*.{m,h,swift}'
   s.ios.exclude_files = 'Mixpanel/MixpanelWatchProperties.{m,h}'
