@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "MPDisplayTrigger.h"
 
 @interface MPNotification : NSObject
 
@@ -12,9 +13,12 @@
 @property (nonatomic, readonly) NSString *body;
 @property (nonatomic, readonly) NSUInteger bodyColor;
 @property (nonatomic, readonly) NSUInteger backgroundColor;
+@property (nonatomic, readonly) NSArray *displayTriggers;
 
 - (instancetype)init __unavailable;
 - (instancetype)initWithJSONObject:(NSDictionary *)jsonObject;
+- (BOOL)hasDisplayTriggers;
+- (BOOL)matchesEvent:(NSDictionary *)event;
 + (void)logNotificationError:(NSString *)field withValue:(id)value;
 
 @end

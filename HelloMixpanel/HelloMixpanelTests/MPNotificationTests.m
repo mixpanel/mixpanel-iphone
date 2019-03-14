@@ -32,7 +32,7 @@
 }
 
 - (void)testParseTakeOverNotification {
-    NSData *takeOverNotificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"http://mixpanel.com/coolimage.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}}" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *takeOverNotificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"http://mixpanel.com/coolimage.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}, \"display_triggers\": [{\"event\": \"test_event\", \"selector\":{\"operator\": \"defined\", \"children\": [{\"property\": \"event\", \"value\": \"prop1\"}]}}]}" dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *notifDict = [NSJSONSerialization JSONObjectWithData:takeOverNotificationData options:0 error:nil];
 
     XCTAssertNotNil([[MPTakeoverNotification alloc] initWithJSONObject:notifDict]);
@@ -142,10 +142,22 @@
     extraDict[@"image_fade"] = @"mixpanel";
     testDict[@"extras"] = extraDict;
     XCTAssertNil([[MPTakeoverNotification alloc] initWithJSONObject:testDict]);
+    
+    // valid - no display triggers
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    [testDict removeObjectForKey:@"display_triggers"];
+    XCTAssertNotNil([[MPTakeoverNotification alloc] initWithJSONObject:testDict]);
+    
+    // valid - with display triggers
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    MPTakeoverNotification *notif = [[MPTakeoverNotification alloc] initWithJSONObject:testDict];
+    XCTAssertTrue([notif hasDisplayTriggers]);
+    MPDisplayTrigger *trigger = [notif displayTriggers][0];
+    XCTAssertTrue([[trigger selector] count] > 0);
 }
 
 - (void)testMiniNotification {
-    NSData *miniNotificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_tint_color\": 33283444, \"border_color\": 452243332, \"cta_url\": null, \"image_url\": \"https//mixpanel.com/image\", \"close_color\": 4294901760, \"type\": \"mini\", \"bg_color\": 0,\"extras\": {}}" dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *miniNotificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_tint_color\": 33283444, \"border_color\": 452243332, \"cta_url\": null, \"image_url\": \"https//mixpanel.com/image\", \"close_color\": 4294901760, \"type\": \"mini\", \"bg_color\": 0,\"extras\": {}, \"display_triggers\": [{\"event\": \"test_event\", \"selector\":{\"operator\": \"==\", \"children\": [{\"property\": \"event\", \"value\": \"prop1\"}, {\"property\": \"literal\", \"value\": \"test_value\"}]}}]}" dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *notifDict = [NSJSONSerialization JSONObjectWithData:miniNotificationData options:0 error:nil];
 
     XCTAssertNotNil([[MPMiniNotification alloc] initWithJSONObject:notifDict]);
@@ -166,6 +178,30 @@
     testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
     testDict[@"border_color"] = @"#FFFFFFFF";
     XCTAssertNil([[MPMiniNotification alloc] initWithJSONObject:testDict]);
+    
+    // valid - no display triggers
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    [testDict removeObjectForKey:@"display_triggers"];
+    XCTAssertNotNil([[MPMiniNotification alloc] initWithJSONObject:testDict]);
+    
+    // valid - with display triggers
+    testDict = [NSMutableDictionary dictionaryWithDictionary:notifDict];
+    MPMiniNotification *notif = [[MPMiniNotification alloc] initWithJSONObject:testDict];
+    XCTAssertTrue([notif hasDisplayTriggers]);
+    
+    NSMutableDictionary *event = [[NSMutableDictionary alloc] init];
+    event[@"event"] = @"test_event_1";
+    XCTAssertFalse([notif matchesEvent:event]);
+    event[@"event"] = @"test_event";
+    XCTAssertFalse([notif matchesEvent:event]);
+    NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
+    properties[@"prop"] = @"test";
+    event[@"properties"] = properties;
+    XCTAssertFalse([notif matchesEvent:event]);
+    properties[@"prop1"] = @"blah";
+    XCTAssertFalse([notif matchesEvent:event]);
+    properties[@"prop1"] = @"test_value";
+    XCTAssertTrue([notif matchesEvent:event]);
 }
 
 - (void)testNoDoubleShowNotification {

@@ -77,6 +77,15 @@
             return nil;
         }
         
+        id rawDisplayTriggers = object[@"display_triggers"];
+        NSMutableArray *parsedDisplayTriggers = [NSMutableArray array];
+        if (rawDisplayTriggers != nil && [rawDisplayTriggers isKindOfClass:[NSArray class]]) {
+            for (id obj in rawDisplayTriggers) {
+                MPDisplayTrigger *displayTrigger = [[MPDisplayTrigger alloc] initWithJSONObject:obj];
+                [parsedDisplayTriggers addObject:displayTrigger];
+            }
+        }
+        
         _jsonDescription = object;
         _extrasDescription = object[@"extras"];
         _ID = ID.unsignedIntegerValue;
@@ -86,9 +95,25 @@
         _backgroundColor = backgroundColor.unsignedIntegerValue;
         _imageURL = imageURL;
         _image = nil;
+        _displayTriggers = parsedDisplayTriggers;
     }
 
     return self;
+}
+
+- (BOOL)hasDisplayTriggers {
+    return self.displayTriggers != nil && [self.displayTriggers count] > 0;
+}
+
+- (BOOL)matchesEvent:(NSDictionary *)event {
+    if ([self hasDisplayTriggers]) {
+        for (id trigger in self.displayTriggers) {
+            if([trigger matchesEvent:event]) {
+                return YES;
+            }
+        }
+    }
+    return NO;
 }
 
 - (NSString *)type {
