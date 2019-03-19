@@ -130,9 +130,6 @@ void MPHandleException(NSException *exception) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
         [properties setValue:[exception reason] forKey:@"$ae_crashed_reason"];
         [instance track:@"$ae_crashed" properties:properties];
-        dispatch_sync(instance.serialQueue, ^{
-            [instance archive];
-        });
     }
     NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
 }
