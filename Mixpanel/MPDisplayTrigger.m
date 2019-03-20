@@ -1,9 +1,9 @@
 #import "MPLogger.h"
 #import "MPDisplayTrigger.h"
+#import "SelectorEvaluator.h"
 #import "Mixpanel.h"
-#import "Mixpanel/Mixpanel-Swift.h"
 
-NSString * const ANY_EVENT = @"$any_event";
+static NSString * const ANY_EVENT = @"$any_event";
 
 @implementation MPDisplayTrigger
 
@@ -33,10 +33,15 @@ NSString * const ANY_EVENT = @"$any_event";
     }
     
     NSString *eventName = event[@"event"];
-    if ([eventName compare:ANY_EVENT] == NSOrderedSame ||
-        [eventName compare:[self event]] == NSOrderedSame) {
+    NSError *error = nil;
+    if ([eventName isEqualToString:ANY_EVENT] || [eventName isEqualToString:_event]) {
         if ([_selector count] > 0) {
-            return [SelectorEvaluator evaluateWithSelector:_selector properties:event[@"properties"]];
+            BOOL result = [(NSNumber *)[SelectorEvaluator evaluate:_selector properties:event[@"properties"] withError:&error] boolValue];
+            if (error) {
+                MPLogError(@"error evaluating selector %@", error);
+                return NO;
+            }
+            return result;
         }
         return YES;
     }
