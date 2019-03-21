@@ -7,7 +7,7 @@
 
 # Latest Version
 
-##### _March 14, 2019_ - [v3.4.0](https://github.com/mixpanel/mixpanel-iphone/releases/tag/v3.4.0)
+##### _March 20, 2019_ - [v3.4.1](https://github.com/mixpanel/mixpanel-iphone/releases/tag/v3.4.1)
 [Release Notes](https://github.com/mixpanel/mixpanel-iphone/releases)
 for the latest features and improvements
 
