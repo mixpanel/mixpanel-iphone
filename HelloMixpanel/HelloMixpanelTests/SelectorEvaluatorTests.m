@@ -125,7 +125,7 @@
     XCTAssertEqualObjects([SelectorEvaluator evaluateDateTime:(@{@"operator": @"datetime", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @YES}) withError:nil], [[NSDate alloc] initWithTimeIntervalSince1970:1]);
     XCTAssertEqualObjects([SelectorEvaluator evaluateDateTime:(@{@"operator": @"datetime", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @NO}) withError:nil], [[NSDate alloc] initWithTimeIntervalSince1970:0]);
     XCTAssertEqualObjects((NSDate *)[SelectorEvaluator evaluateDateTime:(@{@"operator": @"datetime", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": [[NSDate alloc] initWithTimeIntervalSince1970:10]}) withError:nil], [[NSDate alloc] initWithTimeIntervalSince1970:10]);
-    NSDateFormatter *formatter = [SelectorEvaluator DateFormatter];
+    NSDateFormatter *formatter = [SelectorEvaluator dateFormatter];
     NSDate *date = [formatter dateFromString:@"2019-02-01T12:01:01"];
     XCTAssertEqualObjects((NSDate *)[SelectorEvaluator evaluateDateTime:(@{@"operator": @"datetime", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @"2019-02-01T12:01:01"}) withError:nil], date);
     XCTAssertNil([SelectorEvaluator evaluateDateTime:(@{@"operator": @"datetime", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @"2019-14-32T13:00:00"}) withError:nil]);
@@ -169,7 +169,7 @@
     [SelectorEvaluator evaluateString:@{@"operator": @"string", @"children": @[@[], @[]]} properties:nil withError:&error];
     XCTAssertEqualObjects([error localizedDescription], @"invalid operator: string");
     
-    NSDateFormatter *formatter = [SelectorEvaluator DateFormatter];
+    NSDateFormatter *formatter = [SelectorEvaluator dateFormatter];
     NSDate *date = [formatter dateFromString:@"2019-02-01T12:01:01"];
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": date}) withError:nil], @"2019-02-01T12:01:01");
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @100}) withError:nil], @"100");
@@ -532,7 +532,7 @@
     XCTAssertFalse([(MPBoolean*)[SelectorEvaluator evaluateOperator:(@{@"operator": @"boolean", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @{}}) withError:nil] value]);
     XCTAssertEqualObjects([SelectorEvaluator evaluateOperator:(@{@"operator": @"list", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @[@1, @2]}) withError:nil], (@[@1, @2]));
     XCTAssertEqualObjects([SelectorEvaluator evaluateOperator:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": [[MPBoolean alloc] init:NO]}) withError:nil], @"NO");
-    NSDateFormatter *formatter = [SelectorEvaluator DateFormatter];
+    NSDateFormatter *formatter = [SelectorEvaluator dateFormatter];
     NSDate *date = [formatter dateFromString:@"2019-02-01T12:01:01"];
     XCTAssertEqualObjects((NSDate *)[SelectorEvaluator evaluateOperator:(@{@"operator": @"datetime", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @"2019-02-01T12:01:01"}) withError:nil], date);
     XCTAssertFalse([(MPBoolean*)[SelectorEvaluator evaluateOperator:(@{@"operator": @"defined", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{}) withError:nil] value]);
@@ -553,7 +553,7 @@
 @end
 
 @implementation TestSelectorEvaluator
-+(NSDate *) CurrentDate {
++(NSDate *) currentDate {
     return [NSDate dateWithTimeIntervalSince1970:1000];
 }
 @end

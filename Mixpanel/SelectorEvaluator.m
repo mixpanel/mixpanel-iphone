@@ -1,66 +1,69 @@
 #import "SelectorEvaluator.h"
 
-static NSString* const errDomain = @"SelectorEvaluatorError";
+static NSString *const errDomain = @"SelectorEvaluatorError";
 static NSInteger const errCode = -1;
 
-static NSString* const OPERATOR_KEY = @"operator";
-static NSString* const CHILDREN_KEY = @"children";
-static NSString* const PROPERTY_KEY = @"property";
-static NSString* const VALUE_KEY = @"value";
-static NSString* const EVENT_KEY = @"event";
-static NSString* const LITERAL_KEY = @"literal";
-static NSString* const WINDOW_KEY = @"window";
-static NSString* const UNIT_KEY = @"unit";
-static NSString* const HOUR_KEY = @"hour";
-static NSString* const DAY_KEY = @"day";
-static NSString* const WEEK_KEY = @"week";
-static NSString* const MONTH_KEY = @"month";
+static NSString *const OPERATOR_KEY = @"operator";
+static NSString *const CHILDREN_KEY = @"children";
+static NSString *const PROPERTY_KEY = @"property";
+static NSString *const VALUE_KEY = @"value";
+static NSString *const EVENT_KEY = @"event";
+static NSString *const LITERAL_KEY = @"literal";
+static NSString *const WINDOW_KEY = @"window";
+static NSString *const UNIT_KEY = @"unit";
+static NSString *const HOUR_KEY = @"hour";
+static NSString *const DAY_KEY = @"day";
+static NSString *const WEEK_KEY = @"week";
+static NSString *const MONTH_KEY = @"month";
 // Typecast operators
-static NSString* const BOOLEAN_OPERATOR = @"boolean";
-static NSString* const DATETIME_OPERATOR = @"datetime";
-static NSString* const LIST_OPERATOR = @"list";
-static NSString* const NUMBER_OPERATOR = @"number";
-static NSString* const STRING_OPERATOR = @"string";
+static NSString *const BOOLEAN_OPERATOR = @"boolean";
+static NSString *const DATETIME_OPERATOR = @"datetime";
+static NSString *const LIST_OPERATOR = @"list";
+static NSString *const NUMBER_OPERATOR = @"number";
+static NSString *const STRING_OPERATOR = @"string";
 // Binary operators
-static NSString* const AND_OPERATOR = @"and";
-static NSString* const OR_OPERATOR = @"or";
-static NSString* const IN_OPERATOR = @"in";
-static NSString* const NOT_IN_OPERATOR = @"not in";
-static NSString* const PLUS_OPERATOR = @"+";
-static NSString* const MINUS_OPERATOR = @"-";
-static NSString* const MUL_OPERATOR = @"*";
-static NSString* const DIV_OPERATOR = @"/";
-static NSString* const MOD_OPERATOR = @"%";
-static NSString* const EQUALS_OPERATOR = @"==";
-static NSString* const NOT_EQUALS_OPERATOR = @"!=";
-static NSString* const GREATER_THAN_OPERATOR = @">";
-static NSString* const GREATER_THAN_EQUAL_OPERATOR = @">=";
-static NSString* const LESS_THAN_OPERATOR = @"<";
-static NSString* const LESS_THAN_EQUAL_OPERATOR = @"<=";
+static NSString *const AND_OPERATOR = @"and";
+static NSString *const OR_OPERATOR = @"or";
+static NSString *const IN_OPERATOR = @"in";
+static NSString *const NOT_IN_OPERATOR = @"not in";
+static NSString *const PLUS_OPERATOR = @"+";
+static NSString *const MINUS_OPERATOR = @"-";
+static NSString *const MUL_OPERATOR = @"*";
+static NSString *const DIV_OPERATOR = @"/";
+static NSString *const MOD_OPERATOR = @"%";
+static NSString *const EQUALS_OPERATOR = @"==";
+static NSString *const NOT_EQUALS_OPERATOR = @"!=";
+static NSString *const GREATER_THAN_OPERATOR = @">";
+static NSString *const GREATER_THAN_EQUAL_OPERATOR = @">=";
+static NSString *const LESS_THAN_OPERATOR = @"<";
+static NSString *const LESS_THAN_EQUAL_OPERATOR = @"<=";
 // Unary operators
-static NSString* const NOT_OPERATOR = @"not";
-static NSString* const DEFINED_OPERATOR = @"defined";
-static NSString* const NOT_DEFINED_OPERATOR = @"not defined";
+static NSString *const NOT_OPERATOR = @"not";
+static NSString *const DEFINED_OPERATOR = @"defined";
+static NSString *const NOT_DEFINED_OPERATOR = @"not defined";
 // Special words
-static NSString* const NOW_LITERAL = @"now";
+static NSString *const NOW_LITERAL = @"now";
 
 static NSInteger const kLEFT = 0;
 static NSInteger const kRIGHT = 1;
 
 @implementation MPBoolean: NSObject
-- (instancetype)init: (BOOL) value
+
+- (instancetype)init:(BOOL)value
 {
     self = [super init];
     if (self) {
         _value = value;
     }
+
     return self;
 }
-- (BOOL) isEqualToMPBoolean:(MPBoolean *)other {
+
+- (BOOL)isEqualToMPBoolean:(MPBoolean *)other {
     return [self value] == [other value];
 }
 
-- (BOOL) isEqual:(id)object {
+- (BOOL)isEqual:(id)object {
     if (self == object) {
         return YES;
     }
@@ -68,7 +71,7 @@ static NSInteger const kRIGHT = 1;
     if (![object isKindOfClass:[MPBoolean class]]) {
         return NO;
     }
-    
+
     return [self isEqualToMPBoolean:object];
 }
 
@@ -77,11 +80,11 @@ static NSInteger const kRIGHT = 1;
 @implementation SelectorEvaluator
 
 // This function exists so that unit tests can inject dates for test cases
-+ (NSDate *) CurrentDate {
++ (NSDate *)currentDate {
     return [NSDate date];
 }
 
-+ (NSDateFormatter *) DateFormatter {
++ (NSDateFormatter *)dateFormatter {
     static NSDateFormatter *formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -89,18 +92,19 @@ static NSInteger const kRIGHT = 1;
         [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     });
+
     return formatter;
 }
 
-+ (NSError *) Error:(NSString *) errDesc {
++ (NSError *)error:(NSString *)errDesc {
     NSDictionary *info = @{
-       NSLocalizedDescriptionKey: NSLocalizedString(errDesc, nil),
-   };
-    
+                           NSLocalizedDescriptionKey: NSLocalizedString(errDesc, nil),
+                           };
+
     return [[NSError alloc] initWithDomain:errDomain code:errCode userInfo:info];
 }
 
-+ (double) toNumber:(id)value withError:(NSError *__autoreleasing *)error; {
++ (double)toNumber:(id)value withError:(NSError *__autoreleasing *)error {
     if ([value isKindOfClass:[NSNumber class]]) {
         return [value doubleValue];
     }
@@ -110,19 +114,20 @@ static NSInteger const kRIGHT = 1;
     if ([value isKindOfClass:[NSDate class]]) {
         double time = [(NSDate *)value timeIntervalSince1970];
         if (time <= 0) {
-            *error = [self Error:@"invalid value for date"];
+            *error = [self error:@"invalid value for date"];
             return 0.0;
         }
         return time;
-        }
+    }
     if ([value isKindOfClass:[NSString class]]) {
         return [(NSString *)value doubleValue];
     }
-    *error = [self Error:@"invalid type"];
+    *error = [self error:@"invalid type"];
+
     return 0.0;
 }
 
-+ (BOOL) toBoolean:(id)value {
++ (BOOL)toBoolean:(id)value {
     if ([value isKindOfClass:[NSNumber class]]) {
         return [value boolValue];
     }
@@ -141,21 +146,21 @@ static NSInteger const kRIGHT = 1;
     if ([value isKindOfClass:[NSDictionary class]]) {
         return [(NSArray *)value count] > 0 ? YES: NO;
     }
-    
+
     return NO;
 }
 
-+ (NSNumber *) evaluateNumber:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (NSNumber *)evaluateNumber:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:NUMBER_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: number"];
+            *error = [self error:@"invalid operator: number"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: number"];
+            *error = [self error:@"invalid operator: number"];
         }
         return nil;
     }
@@ -163,20 +168,21 @@ static NSInteger const kRIGHT = 1;
     if (error && *error) {
         return nil;
     }
+
     return [[NSNumber alloc] initWithDouble:[self toNumber:child withError:error]];
 }
 
-+ (MPBoolean *) evaluateBoolean:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateBoolean:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:BOOLEAN_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: boolean"];
+            *error = [self error:@"invalid operator: boolean"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: boolean"];
+            *error = [self error:@"invalid operator: boolean"];
         }
         return nil;
     }
@@ -184,20 +190,21 @@ static NSInteger const kRIGHT = 1;
     if (error && *error) {
         return nil;
     }
+
     return [[MPBoolean alloc] init:[self toBoolean:child]];
 }
 
-+ (NSDate *) evaluateDateTime:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (NSDate *)evaluateDateTime:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:DATETIME_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: datetime"];
+            *error = [self error:@"invalid operator: datetime"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: datetime"];
+            *error = [self error:@"invalid operator: datetime"];
         }
         return nil;
     }
@@ -212,26 +219,27 @@ static NSInteger const kRIGHT = 1;
         return [NSDate dateWithTimeIntervalSince1970:[(NSNumber *)child integerValue]];
     }
     if ([child isKindOfClass:[NSString class]]) {
-        NSDateFormatter *formatter = [self DateFormatter];
+        NSDateFormatter *formatter = [self dateFormatter];
         return [formatter dateFromString:(NSString *)child];
     }
     if ([child isKindOfClass:[NSDate class]]) {
         return (NSDate *)child;
     }
+
     return nil;
 }
 
-+ (NSArray *) evaluateList:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (NSArray *)evaluateList:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:LIST_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: list"];
+            *error = [self error:@"invalid operator: list"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: list"];
+            *error = [self error:@"invalid operator: list"];
         }
         return nil;
     }
@@ -239,25 +247,27 @@ static NSInteger const kRIGHT = 1;
     if ([result isKindOfClass:[NSArray class]]) {
         return result;
     }
+
     return nil;
 }
 
-+ (NSString *) toJSONString:(NSObject *) obj withError: (NSError *__autoreleasing *)error {
++ (NSString *)toJSONString:(NSObject *) obj withError:(NSError *__autoreleasing *)error {
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:error];
+
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
-+ (NSString *) evaluateString:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (NSString *)evaluateString:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:STRING_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: string"];
+            *error = [self error:@"invalid operator: string"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: string"];
+            *error = [self error:@"invalid operator: string"];
         }
         return nil;
     }
@@ -270,7 +280,7 @@ static NSInteger const kRIGHT = 1;
         return [NSString stringWithFormat:@"%@", [(MPBoolean *)child value] ? @"YES" : @"NO"];
     }
     if ([child isKindOfClass:[NSDate class]]) {
-        return [[self DateFormatter] stringFromDate:(NSDate *)child];
+        return [[self dateFormatter] stringFromDate:(NSDate *)child];
     }
     if ([child isKindOfClass:[NSNumber class]]) {
         return [(NSNumber *)child stringValue];
@@ -278,61 +288,64 @@ static NSInteger const kRIGHT = 1;
     if ([child isKindOfClass:[NSArray class]] || [child isKindOfClass:[NSDictionary class]]) {
         return [self toJSONString:child withError:error];
     }
+
     return nil;
 }
 
-+ (MPBoolean *) evaluateAnd:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateAnd:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:AND_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: and"];
+            *error = [self error:@"invalid operator: and"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid operator: and"];
+            *error = [self error:@"invalid operator: and"];
         }
         return nil;
     }
     
     BOOL left = [self toBoolean:[self evaluateNode:node[CHILDREN_KEY][kLEFT] properties:properties withError:error]];
     BOOL right = [self toBoolean:[self evaluateNode:node[CHILDREN_KEY][kRIGHT] properties:properties withError:error]];
+
     return [[MPBoolean alloc] init:left && right];
 }
 
-+ (MPBoolean *) evaluateOr:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateOr:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:OR_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: or"];
+            *error = [self error:@"invalid operator: or"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid operator: or"];
+            *error = [self error:@"invalid operator: or"];
         }
         return nil;
     }
     
     BOOL left = [self toBoolean:[self evaluateNode:node[CHILDREN_KEY][kLEFT] properties:properties withError:error]];
     BOOL right = [self toBoolean:[self evaluateNode:node[CHILDREN_KEY][kRIGHT] properties:properties withError:error]];
+
     return [[MPBoolean alloc] init:left || right];
 }
 
-+ (MPBoolean *) evaluateIn:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateIn:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     NSArray *supportedOperators = @[IN_OPERATOR, NOT_IN_OPERATOR];
     if (![node objectForKey:OPERATOR_KEY] || !([supportedOperators containsObject:node[OPERATOR_KEY]])) {
         if (error) {
-            *error = [self Error:@"invalid operator: in"];
+            *error = [self error:@"invalid operator: in"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid operator: in"];
+            *error = [self error:@"invalid operator: in"];
         }
         return nil;
     }
@@ -355,21 +368,21 @@ static NSInteger const kRIGHT = 1;
     if ([node[OPERATOR_KEY] isEqualToString:NOT_IN_OPERATOR]) {
         b = !b;
     }
-    
+
     return [[MPBoolean alloc] init:b];
 }
 
-+ (id) evaluatePlus:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (id)evaluatePlus:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || !([node[OPERATOR_KEY] isEqualToString:PLUS_OPERATOR])) {
         if (error) {
-            *error = [self Error:@"invalid operator: +"];
+            *error = [self error:@"invalid operator: +"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid operator: +"];
+            *error = [self error:@"invalid operator: +"];
         }
         return nil;
     }
@@ -389,21 +402,22 @@ static NSInteger const kRIGHT = 1;
     if ([(NSNumber *)l isKindOfClass:[NSNumber class]] && [(NSNumber *)r isKindOfClass:[NSNumber class]]) {
         return [NSNumber numberWithDouble:[(NSNumber *)l doubleValue] + [(NSNumber *)r doubleValue]];
     }
+
     return nil;
 }
 
-+ (NSNumber *) evaluateArithmetic:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (NSNumber *)evaluateArithmetic:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     NSArray *supportedOperators = @[MINUS_OPERATOR, DIV_OPERATOR, MUL_OPERATOR, MOD_OPERATOR];
     if (![node objectForKey:OPERATOR_KEY] || !([supportedOperators containsObject:node[OPERATOR_KEY]])) {
         if (error) {
-            *error = [self Error:@"invalid arithmetic operator"];
+            *error = [self error:@"invalid arithmetic operator"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid arithmetic operator"];
+            *error = [self error:@"invalid arithmetic operator"];
         }
         return nil;
     }
@@ -443,21 +457,22 @@ static NSInteger const kRIGHT = 1;
             return [NSNumber numberWithDouble:fmod(ld, rd)];
         }
     }
+
     return nil;
 }
 
-+ (MPBoolean *) evaluateEquality:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateEquality:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     NSArray *supportedOperators = @[EQUALS_OPERATOR, NOT_EQUALS_OPERATOR];
     if (![node objectForKey:OPERATOR_KEY] || !([supportedOperators containsObject:node[OPERATOR_KEY]])) {
         if (error) {
-            *error = [self Error:@"invalid (not) equality operator"];
+            *error = [self error:@"invalid (not) equality operator"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid (not) equality operator"];
+            *error = [self error:@"invalid (not) equality operator"];
         }
         return nil;
     }
@@ -481,10 +496,11 @@ static NSInteger const kRIGHT = 1;
     if ([node[OPERATOR_KEY] isEqualToString:NOT_EQUALS_OPERATOR]) {
         b = !b;
     }
+
     return [[MPBoolean alloc] init:b];
 }
 
-+ (BOOL) compareDoubles:(double) l r:(double) r op:(NSString*) op {
++ (BOOL)compareDoubles:(double) l r:(double) r op:(NSString*) op {
     if ([op isEqualToString:GREATER_THAN_OPERATOR]) {
         return l > r;
     }
@@ -497,22 +513,22 @@ static NSInteger const kRIGHT = 1;
     if ([op isEqualToString:LESS_THAN_EQUAL_OPERATOR]) {
         return l <= r;
     }
-    
+
     return NO;
 }
 
-+ (MPBoolean *) evaluateComparison:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateComparison:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     NSArray *supportedOperators = @[GREATER_THAN_OPERATOR, GREATER_THAN_EQUAL_OPERATOR, LESS_THAN_OPERATOR, LESS_THAN_EQUAL_OPERATOR];
     if (![node objectForKey:OPERATOR_KEY] || !([supportedOperators containsObject:node[OPERATOR_KEY]])) {
         if (error) {
-            *error = [self Error:@"invalid comparison operator"];
+            *error = [self error:@"invalid comparison operator"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 2))) {
         if (error) {
-            *error = [self Error:@"invalid comparison operator"];
+            *error = [self error:@"invalid comparison operator"];
         }
         return nil;
     }
@@ -546,22 +562,22 @@ static NSInteger const kRIGHT = 1;
             b = [ls compare:rs] == NSOrderedAscending || [ls compare:rs] == NSOrderedSame;
         }
     }
-    
+
     return [[MPBoolean alloc] init:b];
 }
 
-+ (MPBoolean *) evaluateDefined:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateDefined:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     NSArray *supportedOperators = @[DEFINED_OPERATOR, NOT_DEFINED_OPERATOR];
     if (![node objectForKey:OPERATOR_KEY] || !([supportedOperators containsObject:node[OPERATOR_KEY]])) {
         if (error) {
-            *error = [self Error:@"invalid operator: defined"];
+            *error = [self error:@"invalid operator: defined"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: defined"];
+            *error = [self error:@"invalid operator: defined"];
         }
         return nil;
     }
@@ -573,21 +589,21 @@ static NSInteger const kRIGHT = 1;
     if ([node[OPERATOR_KEY] isEqualToString:NOT_DEFINED_OPERATOR]) {
         b = !b;
     }
-    
+
     return [[MPBoolean alloc] init: b];
 }
 
-+ (MPBoolean *) evaluateNot:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (MPBoolean *)evaluateNot:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![node[OPERATOR_KEY] isEqualToString:NOT_OPERATOR]) {
         if (error) {
-            *error = [self Error:@"invalid operator: not"];
+            *error = [self error:@"invalid operator: not"];
         }
         return nil;
     }
     if (![node objectForKey:CHILDREN_KEY]  || !([(NSArray *)node[CHILDREN_KEY] isKindOfClass:[NSArray class]] &&
                                                 ([(NSArray *)node[CHILDREN_KEY] count] == 1))) {
         if (error) {
-            *error = [self Error:@"invalid operator: not"];
+            *error = [self error:@"invalid operator: not"];
         }
         return nil;
     }
@@ -604,34 +620,34 @@ static NSInteger const kRIGHT = 1;
     if (child == nil) {
         return [[MPBoolean alloc] init: YES];
     }
-    
+
     return nil;
 }
 
 
-+ (NSDate *) evaluateWindow:(NSDictionary *)value withError:(NSError *__autoreleasing *)error {
++ (NSDate *)evaluateWindow:(NSDictionary *)value withError:(NSError *__autoreleasing *)error {
     if (![value objectForKey:WINDOW_KEY] || ![(NSDictionary *)value[WINDOW_KEY] isKindOfClass:[NSDictionary class]]) {
         if (error) {
-            *error = [self Error:@"invalid or missing required key window"];
+            *error = [self error:@"invalid or missing required key window"];
         }
         return nil;
     }
     NSDictionary *window = [value objectForKey:WINDOW_KEY];
     if (![window objectForKey:VALUE_KEY]  || ![(NSNumber *)window[VALUE_KEY] isKindOfClass:[NSNumber class]]) {
         if (error) {
-            *error = [self Error:@"invalid or missing required key value"];
+            *error = [self error:@"invalid or missing required key value"];
         }
         return nil;
     }
     NSNumber *unitValue = window[VALUE_KEY];
     if (![window objectForKey:UNIT_KEY]  || ![(NSString *)window[UNIT_KEY] isKindOfClass:[NSString class]]) {
         if (error) {
-            *error = [self Error:@"invalid or missing required key unit"];
+            *error = [self error:@"invalid or missing required key unit"];
         }
         return nil;
     }
     NSString *unit = window[UNIT_KEY];
-    NSDate *date = [self CurrentDate];
+    NSDate *date = [self currentDate];
     if ([unit isEqualToString:HOUR_KEY]) {
         return [date dateByAddingTimeInterval:(-1 * unitValue.doubleValue * 60 * 60)];
     }
@@ -645,22 +661,23 @@ static NSInteger const kRIGHT = 1;
         return [date dateByAddingTimeInterval:(-1 * unitValue.doubleValue * 30 * 24 * 60 * 60)];
     }
     if (error) {
-        *error = [self Error:@"invalid unit for window"];
+        *error = [self error:@"invalid unit for window"];
     }
+
     return nil;
 }
 
-+ (id) evaluateOperand:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (id)evaluateOperand:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:PROPERTY_KEY] || ![node[PROPERTY_KEY] isKindOfClass:[NSString class]]) {
         if (error) {
-            *error = [self Error:@"invalid or missing required key property"];
+            *error = [self error:@"invalid or missing required key property"];
         }
         return nil;
     }
     if (![node objectForKey:VALUE_KEY]  || !([node[PROPERTY_KEY] isKindOfClass:[NSString class]] ||
                                              [node[PROPERTY_KEY] isKindOfClass:[NSDictionary class]])) {
         if (error) {
-            *error = [self Error:@"invalid or missing required key value"];
+            *error = [self error:@"invalid or missing required key value"];
         }
         return nil;
     }
@@ -671,12 +688,12 @@ static NSInteger const kRIGHT = 1;
         if ([value isKindOfClass:[NSString class]]) {
             return properties[(NSString *)value];
         }
-        *error = [self Error:@"invalid type for event property name"];
+        *error = [self error:@"invalid type for event property name"];
         return nil;
     }
     if ([property isEqualToString:LITERAL_KEY]) {
         if ([value isKindOfClass:[NSString class]] && [(NSString *)value isEqualToString:NOW_LITERAL]) {
-            return [self CurrentDate];
+            return [self currentDate];
         }
         if ([value isKindOfClass:[NSDictionary class]]) {
             return [self evaluateWindow:value withError:error];
@@ -685,15 +702,16 @@ static NSInteger const kRIGHT = 1;
     }
     
     if (error) {
-        *error = [self Error:@"invalid value for property key"];
+        *error = [self error:@"invalid value for property key"];
     }
+
     return nil;
 }
 
-+ (id) evaluateOperator:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (id)evaluateOperator:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if (![node objectForKey:OPERATOR_KEY] || ![(NSString *)node[OPERATOR_KEY] isKindOfClass:[NSString class]]) {
         if (error) {
-            *error = [self Error:@"invalid operator key"];
+            *error = [self error:@"invalid operator key"];
         }
         return nil;
     }
@@ -743,19 +761,20 @@ static NSInteger const kRIGHT = 1;
     }
     
     if (error) {
-        *error = [self Error:[NSString stringWithFormat:@"unknown operator %@", op]];
+        *error = [self error:[NSString stringWithFormat:@"unknown operator %@", op]];
     }
+
     return nil;
 }
 
-+ (id) evaluateNode:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (id)evaluateNode:(NSDictionary *)node properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     if ([node objectForKey:PROPERTY_KEY]) {
         return [self evaluateOperand:node properties:properties withError:error];
     }
     return [self evaluateOperator:node properties:properties withError:error];
 }
 
-+ (id) evaluate:(NSDictionary *)selector properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
++ (id)evaluate:(NSDictionary *)selector properties:(NSDictionary *)properties withError:(NSError *__autoreleasing *)error {
     id value = [self evaluateOperator:selector properties:properties withError:error];
     if (error && *error) {
         return nil;
@@ -763,6 +782,7 @@ static NSInteger const kRIGHT = 1;
     if (value == nil) {
         return nil;
     }
+
     return [[NSNumber alloc] initWithBool:[self toBoolean:value]];
 }
 
