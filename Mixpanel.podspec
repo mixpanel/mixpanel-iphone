@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
-  s.version      = '3.4.0'
+  s.version      = '3.4.1'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.libraries = 'icucore'
   s.swift_version = '4.2'
   s.ios.deployment_target = '8.0'
-  s.ios.source_files  = 'Mixpanel/**/*.{m,h,swift}'
+  s.ios.source_files  = 'Mixpanel/**/*.{m,h}'
   s.ios.exclude_files = 'Mixpanel/MixpanelWatchProperties.{m,h}'
   s.ios.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelPeople.h', 'Mixpanel/MPTweak.h', 'Mixpanel/MPTweakInline.h', 'Mixpanel/MPTweakInlineInternal.h', 'Mixpanel/MPTweakStore.h', 'Mixpanel/_MPTweakBindObserver.h'
   s.ios.private_header_files = 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/SessionMetadata.h'
