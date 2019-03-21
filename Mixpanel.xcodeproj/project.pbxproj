@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		058229592213887D00352FC5 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058229582213887D00352FC5 /* JavaScriptCore.framework */; };
+		059BDDB5223C27260042B93B /* SelectorEvaluator.h in Headers */ = {isa = PBXBuildFile; fileRef = 059BDDB4223C27260042B93B /* SelectorEvaluator.h */; };
+		059BDDB7223C27420042B93B /* SelectorEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 059BDDB6223C27420042B93B /* SelectorEvaluator.m */; };
 		05A0201422028E5800D04A3A /* MPDisplayTrigger.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0201222028E5800D04A3A /* MPDisplayTrigger.h */; };
 		05A0201522028E5800D04A3A /* MPDisplayTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A0201322028E5800D04A3A /* MPDisplayTrigger.m */; };
-		05DD7BBD2238975A0019FB42 /* SelectorEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DD7BBC2238975A0019FB42 /* SelectorEvaluator.swift */; };
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513243431D1B473100CBA9AA /* WatchKit.framework */; };
@@ -234,9 +235,10 @@
 
 /* Begin PBXFileReference section */
 		058229582213887D00352FC5 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		059BDDB4223C27260042B93B /* SelectorEvaluator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectorEvaluator.h; sourceTree = "<group>"; };
+		059BDDB6223C27420042B93B /* SelectorEvaluator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectorEvaluator.m; sourceTree = "<group>"; };
 		05A0201222028E5800D04A3A /* MPDisplayTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDisplayTrigger.h; sourceTree = "<group>"; };
 		05A0201322028E5800D04A3A /* MPDisplayTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDisplayTrigger.m; sourceTree = "<group>"; };
-		05DD7BBC2238975A0019FB42 /* SelectorEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorEvaluator.swift; sourceTree = "<group>"; };
 		24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Mixpanel/app_extension_module.modulemap; sourceTree = "<group>"; };
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -573,7 +575,8 @@
 				F13874C71E38327100808C36 /* MPMiniNotification.m */,
 				F17EB3511E393FD40002739C /* MPNotificationButton.h */,
 				F17EB3521E393FD40002739C /* MPNotificationButton.m */,
-				05DD7BBC2238975A0019FB42 /* SelectorEvaluator.swift */,
+				059BDDB4223C27260042B93B /* SelectorEvaluator.h */,
+				059BDDB6223C27420042B93B /* SelectorEvaluator.m */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -931,6 +934,7 @@
 				7C170D0B1A4A035F00D9E0F2 /* MPObjectSerializerConfig.h in Headers */,
 				7C170D261A4A035F00D9E0F2 /* MPTypeDescription.h in Headers */,
 				7C170D291A4A035F00D9E0F2 /* MPUIControlBinding.h in Headers */,
+				059BDDB5223C27260042B93B /* SelectorEvaluator.h in Headers */,
 				7C170D1D1A4A035F00D9E0F2 /* MPSwizzler.h in Headers */,
 				51F308831C86881900614A13 /* MPSwizzle.h in Headers */,
 				51C3B23F1CA5B2D3004CE37C /* NSNotificationCenter+AutomaticTracks.h in Headers */,
@@ -1224,7 +1228,6 @@
 				7C170CE41A4A035F00D9E0F2 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				7C170CE01A4A035F00D9E0F2 /* MPABTestDesignerSnapshotResponseMessage.m in Sources */,
 				7C170CF91A4A035F00D9E0F2 /* MPEnumDescription.m in Sources */,
-				05DD7BBD2238975A0019FB42 /* SelectorEvaluator.swift in Sources */,
 				7C170D061A4A035F00D9E0F2 /* MPObjectIdentityProvider.m in Sources */,
 				519C548E1D131E6500407F56 /* MixpanelPeople.m in Sources */,
 				514733BE1CD7CCDB0098B23A /* MPResources.m in Sources */,
@@ -1247,6 +1250,7 @@
 				7C170CE71A4A035F00D9E0F2 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				7C170CD91A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				7C170D131A4A035F00D9E0F2 /* MPSequenceGenerator.m in Sources */,
+				059BDDB7223C27420042B93B /* SelectorEvaluator.m in Sources */,
 				517ABB6B1D14AD6F00FF8061 /* MPNetwork.m in Sources */,
 				7C170D2C1A4A035F00D9E0F2 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				7C170CCD1A4A035F00D9E0F2 /* MPABTestDesignerChangeRequestMessage.m in Sources */,

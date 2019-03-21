@@ -1,7 +1,5 @@
 #import <Foundation/Foundation.h>
 
-extern NSString * const ANY_EVENT;
-
 @interface MPDisplayTrigger : NSObject
 
 @property (nonatomic, readonly) NSDictionary *rawJSON;
