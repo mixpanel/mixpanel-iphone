@@ -124,6 +124,8 @@
 	
 	<optgroup label="Instance Methods">
 		
+		<option value="//api/name/addGroup:groupID:">- addGroup:groupID:</option>
+		
 		<option value="//api/name/archive">- archive</option>
 		
 		<option value="//api/name/clearSuperProperties">- clearSuperProperties</option>
@@ -141,6 +143,8 @@
 		<option value="//api/name/flush">- flush</option>
 		
 		<option value="//api/name/flushWithCompletion:">- flushWithCompletion:</option>
+		
+		<option value="//api/name/getGroup:groupID:">- getGroup:groupID:</option>
 		
 		<option value="//api/name/hasOptedOutTracking">- hasOptedOutTracking</option>
 		
@@ -176,7 +180,13 @@
 		
 		<option value="//api/name/registerSuperPropertiesOnce:defaultValue:">- registerSuperPropertiesOnce:defaultValue:</option>
 		
+		<option value="//api/name/removeGroup:groupID:">- removeGroup:groupID:</option>
+		
 		<option value="//api/name/reset">- reset</option>
+		
+		<option value="//api/name/setGroup:groupID:">- setGroup:groupID:</option>
+		
+		<option value="//api/name/setGroup:groupIDs:">- setGroup:groupIDs:</option>
 		
 		<option value="//api/name/showNotification">- showNotification</option>
 		
@@ -189,6 +199,8 @@
 		<option value="//api/name/track:">- track:</option>
 		
 		<option value="//api/name/track:properties:">- track:properties:</option>
+		
+		<option value="//api/name/trackWithGroups:properties:groups:">- trackWithGroups:properties:groups:</option>
 		
 		<option value="//api/name/unregisterSuperProperty:">- unregisterSuperProperty:</option>
 		
@@ -2074,6 +2086,375 @@ method is called.</p>
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/addGroup:groupID:" title="addGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addGroup:groupID:">&ndash;&nbsp;addGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Add a group to this user&rsquo;s membership for a particular group key.
+The groupKey must be an NSString. The groupID should be a legal MixpanelType value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)addGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/removeGroup:groupID:" title="removeGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/removeGroup:groupID:">&ndash;&nbsp;removeGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove a group from this user&rsquo;s membership for a particular group key.
+The groupKey must be an NSString. The groupID should be a legal MixpanelType value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)removeGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setGroup:groupIDs:" title="setGroup:groupIDs:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setGroup:groupIDs:">&ndash;&nbsp;setGroup:groupIDs:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the group to which the user belongs.
+The groupKey must be an NSString. The groupID should be an array
+of MixpanelTypes.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setGroup:(NSString *)<em>groupKey</em> groupIDs:(NSArray&lt;id&lt;MixpanelType&gt; &gt; *)<em>groupIDs</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupIDs</code></th>
+						<td><p>the group IDs</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setGroup:groupID:" title="setGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setGroup:groupID:">&ndash;&nbsp;setGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Convenience method to set a single group ID for the current user.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackWithGroups:properties:groups:" title="trackWithGroups:properties:groups:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackWithGroups:properties:groups:">&ndash;&nbsp;trackWithGroups:properties:groups:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tracks an event with specific groups.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)trackWithGroups:(NSString *)<em>event</em> properties:(NSDictionary *)<em>properties</em> groups:(NSDictionary *)<em>groups</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>event name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groups</code></th>
+						<td><p>groups dictionary, which contains key-value pairs
+for this event</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Similar to track(), the data will also be sent to the specific group
+datasets. Group key/value pairs are upserted into the property map
+before tracking.
+The keys in groups must be NSString objects. values can be any legal
+MixpanelType objects. If the event is being timed, the timer will
+stop and be added as a property.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getGroup:groupID:" title="getGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getGroup:groupID:">&ndash;&nbsp;getGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get a MixpanelGroup identifier from groupKey and groupID.
+The groupKey must be an NSString. The groupID should be a legal MixpanelType value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (MixpanelGroup *)getGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/track:" title="track:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/track:">&ndash;&nbsp;track:</a></code>
 </h3>
@@ -3739,7 +4120,7 @@ have been loaded and applied.</p>
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2019 Mixpanel. All rights reserved. Updated: 2019-03-20</p>
+						<p class="copyright">Copyright &copy; 2019 Mixpanel. All rights reserved. Updated: 2019-03-21</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
