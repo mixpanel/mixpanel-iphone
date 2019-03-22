@@ -178,7 +178,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  Union list properties.
 
- Property keys must be <code>NSArray</code> objects.
+ Property keys must be <code>NSString</code> objects.
 
  @param properties      mapping of list property names to lists to union
  */

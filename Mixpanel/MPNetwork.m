@@ -85,6 +85,11 @@ static const NSUInteger kBatchSize = 50;
     [self flushQueue:people endpoint:MPNetworkEndpointEngage];
 }
 
+- (void)flushGroupsQueue:(NSMutableArray *)groups
+{
+    [self flushQueue:groups endpoint:MPNetworkEndpointGroups];
+}
+
 - (void)flushQueue:(NSMutableArray *)queue endpoint:(MPNetworkEndpoint)endpoint
 {
     if ([[NSDate date] timeIntervalSince1970] < self.requestsDisabledUntilTime) {
@@ -116,7 +121,6 @@ static const NSUInteger kBatchSize = 50;
                                                                   NSURLResponse *urlResponse,
                                                                   NSError *error) {
             [self updateNetworkActivityIndicator:NO];
-            
             BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
             if (error || !success) {
                 MPLogError(@"%@ network failure: %@", self, error);
@@ -211,7 +215,9 @@ static const NSUInteger kBatchSize = 50;
     dispatch_once(&onceToken, ^{
         endPointToPath = @{ @(MPNetworkEndpointTrack): @"/track/",
                             @(MPNetworkEndpointEngage): @"/engage/",
-                            @(MPNetworkEndpointDecide): @"/decide" };
+                            @(MPNetworkEndpointDecide): @"/decide",
+                            @(MPNetworkEndpointGroups): @"/groups/"
+                            };
     });
     NSNumber *key = @(endpoint);
     return endPointToPath[key];

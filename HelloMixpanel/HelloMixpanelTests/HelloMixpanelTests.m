@@ -9,6 +9,8 @@
 #import "TestConstants.h"
 #import "MixpanelPrivate.h"
 #import "MixpanelPeoplePrivate.h"
+#import "MixpanelGroup.h"
+#import "MixpanelGroupPrivate.h"
 #import "MPNetworkPrivate.h"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
@@ -478,12 +480,16 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"default events queue archive failed");
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue archive failed");
-
+    XCTAssertTrue(self.mixpanel.groupsQueue.count == 0, @"default groups queue archive failed");
+    
     NSDictionary *p = @{@"p1": @"a"};
     [self.mixpanel identify:@"d1"];
     [self.mixpanel registerSuperProperties:p];
     [self.mixpanel track:@"e1"];
     [self.mixpanel.people set:p];
+    MixpanelGroup *g = [self.mixpanel getGroup:@"group" groupID:@"id1"];
+    NSDictionary *props = @{@"key":@"value"};
+    [g set:props];
     self.mixpanel.timedEvents[@"e2"] = @5.0;
     [self waitForMixpanelQueues];
 
@@ -495,13 +501,16 @@
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"e1", @"event was not successfully archived/unarchived");
+    XCTAssertEqualObjects(self.mixpanel.groupsQueue.lastObject[@"$set"], props, @"group update was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
+    XCTAssertTrue(self.mixpanel.groupsQueue.count == 1, @"pending groups queue archive failed");
     XCTAssertEqualObjects(self.mixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"events archive file not removed");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"people archive file not removed");
+    XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel groupsFilePath]], @"groups archive file not removed");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
 
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
@@ -514,15 +523,19 @@
     XCTAssertNotNil(self.mixpanel.people.distinctId, @"default people distinct id from no file failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from no file is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"default people queue expecting 1 item");
+    XCTAssertNotNil(self.mixpanel.groupsQueue, @"default groups queue from no file is nil");
+    XCTAssertTrue(self.mixpanel.groupsQueue.count == 1, @"default groups queue expecting 1 item");
     XCTAssertTrue(self.mixpanel.timedEvents.count == 1, @"timedEvents expecting 1 item");
 
     // corrupt file
     NSData *garbage = [@"garbage" dataUsingEncoding:NSUTF8StringEncoding];
     [garbage writeToFile:[self.mixpanel eventsFilePath] atomically:NO];
     [garbage writeToFile:[self.mixpanel peopleFilePath] atomically:NO];
+    [garbage writeToFile:[self.mixpanel groupsFilePath] atomically:NO];
     [garbage writeToFile:[self.mixpanel propertiesFilePath] atomically:NO];
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel eventsFilePath]], @"garbage events archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel peopleFilePath]], @"garbage people archive file not found");
+    XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel groupsFilePath]], @"garbage groups archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"garbage properties archive file not found");
 
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
@@ -536,6 +549,8 @@
     XCTAssertNil(self.mixpanel.people.distinctId, @"default people distinct id from garbage failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from garbage is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"default people queue from garbage not empty");
+    XCTAssertNotNil(self.mixpanel.groupsQueue, @"default groups queue from garbage is nil");
+    XCTAssertTrue(self.mixpanel.groupsQueue.count == 0, @"default groups queue from garbage not empty");
     XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"timedEvents is not empty");
 }
 

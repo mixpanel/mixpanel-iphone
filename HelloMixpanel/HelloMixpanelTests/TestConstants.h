@@ -13,6 +13,7 @@ static NSString *const kTestToken = @"abc123";
 static NSString *const kDefaultServerString = @"https://api.mixpanel.com";
 static NSString *const kDefaultServerTrackString = @"https://api.mixpanel.com/track/";
 static NSString *const kDefaultServerEngageString = @"https://api.mixpanel.com/engage/";
+static NSString *const kDefaultServerGroupsString = @"https://api.mixpanel.com/groups/";
 
 #pragma mark - Stub Helpers
 static inline LSStubRequestDSL *stubEngage() {
@@ -21,4 +22,8 @@ static inline LSStubRequestDSL *stubEngage() {
 
 static inline LSStubRequestDSL *stubTrack() {
     return stubRequest(@"POST", kDefaultServerTrackString).withHeader(@"Accept-Encoding", @"gzip");
+}
+
+static inline LSStubRequestDSL *stubGroups() {
+    return stubRequest(@"POST", kDefaultServerGroupsString).withHeader(@"Accept-Encoding", @"gzip");
 }

@@ -5,6 +5,8 @@
 #import <Cocoa/Cocoa.h>
 #endif
 #import "MixpanelPeople.h"
+#import "MixpanelType.h"
+
 
 #if defined(MIXPANEL_WATCHOS)
 #define MIXPANEL_FLUSH_IMMEDIATELY 1
@@ -23,6 +25,7 @@
 #endif
 
 @class    MixpanelPeople;
+@class    MixpanelGroup;
 @protocol MixpanelDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -450,6 +453,68 @@ extern NSString *const MPNotificationTypeTakeover;
  @param usePeople bool controls whether or not to set the people distinctId to the event distinctId
  */
 - (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople;
+
+/*!
+ Add a group to this user's membership for a particular group key.
+ The groupKey must be an NSString. The groupID should be a legal MixpanelType value.
+ 
+ @param groupKey        the group key
+ @param groupID         the group ID
+ */
+- (void)addGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;
+
+/*!
+ Remove a group from this user's membership for a particular group key.
+ The groupKey must be an NSString. The groupID should be a legal MixpanelType value.
+ 
+ @param groupKey        the group key
+ @param groupID         the group ID
+ */
+- (void)removeGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;
+
+/*!
+ Set the group to which the user belongs.
+ The groupKey must be an NSString. The groupID should be an array
+ of MixpanelTypes.
+ 
+ @param groupKey        the group key
+ @param groupIDs        the group IDs
+ */
+- (void)setGroup:(NSString *)groupKey groupIDs:(NSArray<id<MixpanelType>> *)groupIDs;
+
+/*!
+ Convenience method to set a single group ID for the current user.
+ 
+ @param groupKey        the group key
+ @param groupID         the group ID
+ */
+- (void)setGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;
+
+/*!
+ Tracks an event with specific groups.
+ 
+ Similar to track(), the data will also be sent to the specific group
+ datasets. Group key/value pairs are upserted into the property map
+ before tracking.
+ The keys in groups must be NSString objects. values can be any legal
+ MixpanelType objects. If the event is being timed, the timer will
+ stop and be added as a property.
+ 
+ @param event               event name
+ @param properties          properties dictionary
+ @param groups              groups dictionary, which contains key-value pairs
+ for this event
+ */
+- (void)trackWithGroups:(NSString *)event properties:(NSDictionary *)properties groups:(NSDictionary *)groups;
+
+/*!
+ Get a MixpanelGroup identifier from groupKey and groupID.
+ The groupKey must be an NSString. The groupID should be a legal MixpanelType value.
+ 
+ @param groupKey    the group key
+ @param groupID     the group ID
+ */
+- (MixpanelGroup *)getGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;
 
 /*!
  Tracks an event.
