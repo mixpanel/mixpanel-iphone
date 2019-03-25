@@ -36,12 +36,12 @@ static NSString * const ANY_EVENT = @"$any_event";
     NSError *error = nil;
     if ([eventName isEqualToString:ANY_EVENT] || [eventName isEqualToString:_event]) {
         if ([_selector count] > 0) {
-            BOOL result = [(NSNumber *)[SelectorEvaluator evaluate:_selector properties:event[@"properties"] withError:&error] boolValue];
+            NSNumber *result = [SelectorEvaluator evaluate:_selector properties:event[@"properties"] withError:&error];
             if (error) {
                 MPLogError(@"error evaluating selector %@", error);
                 return NO;
             }
-            return result;
+            return [result boolValue];
         }
         return YES;
     }
