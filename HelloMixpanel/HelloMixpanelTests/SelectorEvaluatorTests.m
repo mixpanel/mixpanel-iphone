@@ -322,6 +322,11 @@
     XCTAssertTrue([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"property": @"event", @"value": @"prop1"}, @{@"property": @"event", @"value": @"prop2"}]}) properties:(@{@"prop1": @NO, @"prop2": @NO}) withError:nil] value]);
     XCTAssertFalse([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"property": @"event", @"value": @"prop1"}, @{@"property": @"event", @"value": @"prop2"}]}) properties:(@{@"prop1": @YES, @"prop2": @NO}) withError:nil] value]);
     
+    XCTAssertTrue([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"operator": @"boolean", @"children": @[@{@"property": @"event", @"value": @"prop1"}]}, @{@"property": @"literal", @"value": @YES}]}) properties:(@{@"prop1": @YES}) withError:nil] value]);
+    XCTAssertTrue([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"operator": @"boolean", @"children": @[@{@"property": @"event", @"value": @"prop1"}]}, @{@"property": @"literal", @"value": @NO}]}) properties:(@{@"prop1": @NO}) withError:nil] value]);
+    XCTAssertFalse([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"operator": @"boolean", @"children": @[@{@"property": @"event", @"value": @"prop1"}]}, @{@"property": @"literal", @"value": @NO}]}) properties:(@{@"prop1": @YES}) withError:nil] value]);
+    XCTAssertFalse([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"operator": @"boolean", @"children": @[@{@"property": @"event", @"value": @"prop1"}]}, @{@"property": @"literal", @"value": @YES}]}) properties:(@{@"prop1": @NO}) withError:nil] value]);
+    
     XCTAssertTrue([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"property": @"event", @"value": @"prop1"}, @{@"property": @"event", @"value": @"prop2"}]}) properties:(@{@"prop1": @"abc", @"prop2": @"abc"}) withError:nil] value]);
     XCTAssertFalse([(MPBoolean *)[SelectorEvaluator evaluateEquality:(@{@"operator": @"==", @"children": @[@{@"property": @"event", @"value": @"prop1"}, @{@"property": @"event", @"value": @"prop2"}]}) properties:(@{@"prop1": @"abc", @"prop2": @"bac"}) withError:nil] value]);
     
