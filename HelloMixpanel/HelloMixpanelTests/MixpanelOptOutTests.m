@@ -45,6 +45,26 @@
     [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
+- (void)testTrackShouldBeTriggeredDuringInitializedWithOptedOutYESButPrevouslyOptedIn
+{
+    stubTrack();
+    stubEngage();
+    __block NSInteger trackCount = 0;
+    [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
+        trackCount++;
+    } named:@"Swizzle Mixpanel.track"];
+    
+    NSString *tokenId = [self randomTokenId];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:tokenId optOutTrackingByDefault:YES];
+    [self.mixpanel optInTracking];
+    
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:tokenId optOutTrackingByDefault:YES];
+    [self.mixpanel track:@"test"];
+    XCTAssertTrue(trackCount == 1, @"init default opted out->optedIn->init default opted out, track call should be triggered during initialization.");
+    
+    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
+}
+
 - (void)testAutoTrackEventsShouldNotBeQueuedDuringInitializedWithOptedOutYES
 {
     stubTrack();

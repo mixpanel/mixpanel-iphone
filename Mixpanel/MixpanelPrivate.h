@@ -124,6 +124,7 @@
 @property (nonatomic, strong) NSSet *eventBindings;
 
 @property (nonatomic, assign) BOOL optOutStatus;
+@property (nonatomic, assign) BOOL optOutStatusNotSet;
 
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
 

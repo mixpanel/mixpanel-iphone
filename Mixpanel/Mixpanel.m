@@ -173,7 +173,10 @@ static NSString *defaultProjectToken;
         [self setUpListeners];
         [self unarchive];
 
-        if (optOutTrackingByDefault) {
+        // check whether we should opt out by default
+        // note: we don't override opt out persistence here since opt-out default state is often
+        // used as an initial state while GDPR information is being collected
+        if (optOutTrackingByDefault && ([self hasOptedOutTracking] || self.optOutStatusNotSet)) {
             [self optOutTracking];
         }
 
@@ -1371,6 +1374,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 {
     NSNumber *optOutStatus = (NSNumber *)[Mixpanel unarchiveOrDefaultFromFile:[self optOutFilePath] asClass:[NSNumber class]];
     self.optOutStatus = [optOutStatus boolValue];
+    self.optOutStatusNotSet = (optOutStatus == nil);
 }
 
 #pragma mark - Application Helpers
