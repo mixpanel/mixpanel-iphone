@@ -276,6 +276,9 @@ static NSInteger const kRIGHT = 1;
         return nil;
     }
     
+    if ([child isKindOfClass:[NSString class]]) {
+        return (NSString *)child;
+    }
     if ([child isKindOfClass:[MPBoolean class]]) {
         return [NSString stringWithFormat:@"%@", [(MPBoolean *)child value] ? @"YES" : @"NO"];
     }

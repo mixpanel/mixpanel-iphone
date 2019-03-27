@@ -2290,6 +2290,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     dispatch_async(self.serialQueue, ^{
         [self.shownNotifications addObject:@(notification.ID)];
+        if ([notification hasDisplayTriggers]) {
+            NSMutableArray *notifications = [NSMutableArray arrayWithArray:_triggeredNotifications];
+            [notifications removeObject:notification];
+            self.triggeredNotifications = [NSArray arrayWithArray:notifications];
+        }
         [self archiveProperties];
     });
 
