@@ -45,7 +45,6 @@ static NSString * const ANY_EVENT = @"$any_event";
         }
         return YES;
     }
-    
     return NO;
 }
 

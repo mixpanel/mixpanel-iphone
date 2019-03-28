@@ -177,6 +177,7 @@
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @[@1, @"123", @2]}) withError:nil], @"[1,\"123\",2]");
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @{}}) withError:nil], @"{}");
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @{@"a": @"b"}}) withError:nil], @"{\"a\":\"b\"}");
+    XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @"blah"}) withError:nil], @"blah");
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @YES}) withError:nil], @"1");
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": @NO}) withError:nil], @"0");
     XCTAssertEqualObjects([SelectorEvaluator evaluateString:(@{@"operator": @"string", @"children": @[@{@"property": @"event", @"value": @"prop"}]}) properties:(@{@"prop": [[MPBoolean alloc] init:YES]}) withError:nil], @"YES");
