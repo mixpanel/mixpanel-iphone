@@ -51,8 +51,8 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-imageView-4FA-CV-aBK"/>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <containerView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2M5-rd-zct">
-                                <rect key="frame" x="0.0" y="44" width="375" height="603"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2M5-rd-zct">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-containerView-2M5-rd-zct"/>
                                 </userDefinedRuntimeAttributes>
