@@ -11,7 +11,8 @@
 #import "MixpanelPrivate.h"
 #import "MPLogger.h"
 #include <libkern/OSAtomic.h>
-#include <stdatomic.h> 
+#include <stdatomic.h>
+
 
 static NSString * const UncaughtExceptionHandlerSignalExceptionName = @"UncaughtExceptionHandlerSignalExceptionName";
 static NSString * const UncaughtExceptionHandlerSignalKey = @"UncaughtExceptionHandlerSignalKey";
@@ -64,15 +65,18 @@ static const atomic_int_fast32_t UncaughtExceptionMaximum = 10;
     action.sa_flags = SA_SIGINFO;
     action.sa_sigaction = &MPSignalHandler;
     int signals[] = {SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS};
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wsign-compare"
     for (int i = 0; i < sizeof(signals) / sizeof(int); i++) {
         struct sigaction prev_action;
         int err = sigaction(signals[i], &action, &prev_action);
         if (err == 0) {
             memcpy(_prev_signal_handlers + signals[i], &prev_action, sizeof(prev_action));
         } else {
-            NSLog(@"Errored while trying to set up sigaction for signal %d", signals[i]);
+            MPLogWarning(@"Errored while trying to set up sigaction for signal %d", signals[i]);
         }
     }
+#pragma clang diagnostic pop
 }
 
 - (void)addMixpanelInstance:(Mixpanel *)instance {
@@ -131,7 +135,7 @@ void MPHandleException(NSException *exception) {
         [properties setValue:[exception reason] forKey:@"$ae_crashed_reason"];
         [instance track:@"$ae_crashed" properties:properties];
     }
-    NSLog(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
+    MPLogWarning(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
 }
 
 

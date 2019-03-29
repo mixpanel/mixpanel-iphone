@@ -58,7 +58,7 @@
         return NO;
     }
     
-    for (int i = 0; i < [self count]; ++i) {
+    for (NSUInteger i = 0; i < [self count]; ++i) {
         id<MixpanelType> v1 = (id<MixpanelType>)self[i];
         id<MixpanelType> v2 = (id<MixpanelType>)mixpanelTypeArray[i];
         if ([v1 class] != [v2 class] || ![v1 conformsToProtocol:@protocol(MixpanelType)] ||

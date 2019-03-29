@@ -1151,6 +1151,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 7C170C201A4A02F500D9E0F2;
@@ -1533,6 +1534,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_FLOAT_CONVERSION = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1544,6 +1546,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Mixpanel/ios.modulemap;
+				OTHER_CFLAGS = (
+					"-Wfloat-equal",
+					"-Wextra",
+					"-Wall",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1572,6 +1579,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_FLOAT_CONVERSION = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				GCC_PREFIX_HEADER = "";
@@ -1582,6 +1590,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Mixpanel/ios.modulemap;
+				OTHER_CFLAGS = (
+					"-Wfloat-equal",
+					"-Wextra",
+					"-Wall",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
