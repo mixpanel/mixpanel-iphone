@@ -5,12 +5,6 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Apache License](http://img.shields.io/cocoapods/l/Mixpanel.svg?style=flat)](https://mixpanel.com)
 
-# Latest Version
-
-##### _March 26, 2019_ - [v3.4.3](https://github.com/mixpanel/mixpanel-iphone/releases/tag/v3.4.3)
-[Release Notes](https://github.com/mixpanel/mixpanel-iphone/releases)
-for the latest features and improvements
-
 # Table of Contents
 
 <!-- MarkdownTOC -->

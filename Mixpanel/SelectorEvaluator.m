@@ -445,13 +445,13 @@ static NSInteger const kRIGHT = 1;
             return [NSNumber numberWithDouble:ld * rd];
         }
         if ([op isEqualToString:DIV_OPERATOR]) {
-            return rd != 0 ? [NSNumber numberWithDouble:ld / rd] : nil;
+            return (NSInteger)rd != 0 ? [NSNumber numberWithDouble:ld / rd] : nil;
         }
         if ([op isEqualToString:MOD_OPERATOR]) {
-            if (rd == 0) {
+            if ((NSInteger)rd == 0) {
                 return nil;
             }
-            if (ld == 0) {
+            if ((NSInteger)ld == 0) {
                 return [NSNumber numberWithDouble:0];
             }
             if ((ld < 0 && rd > 0) || (ld > 0 && rd < 0)) {

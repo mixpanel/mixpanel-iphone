@@ -425,12 +425,12 @@ static NSString *defaultProjectToken;
 }
 
 
-- (void)identify:(NSString *)distinctId;
+- (void)identify:(NSString *)distinctId
 {
     [self identify:distinctId usePeople:YES];
 }
 
-- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople;
+- (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople
 {
     if ([self hasOptedOutTracking]) {
         return;
@@ -486,7 +486,7 @@ static NSString *defaultProjectToken;
     [self createAlias:alias forDistinctID:distinctID usePeople:YES];
 }
 
-- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID usePeople:(BOOL)usePeople;
+- (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID usePeople:(BOOL)usePeople
 {
     if ([self hasOptedOutTracking]) {
         return;
@@ -655,7 +655,7 @@ static NSString *defaultProjectToken;
         NSMutableArray<id<MixpanelType>> *values =
         [NSMutableArray arrayWithArray:mutableSuperProps[groupKey]];
         BOOL exist = NO;
-        for (int i = 0; i < [values count]; ++i) {
+        for (NSUInteger i = 0; i < [values count]; ++i) {
             if ([values[i] equalToMixpanelType:groupID]) {
                 exist = YES;
                 break;
@@ -687,7 +687,7 @@ static NSString *defaultProjectToken;
         NSMutableArray *vals =
         [NSMutableArray arrayWithArray:mutableSuperProps[groupKey]];
 
-        for (int i = 0; i < [vals count]; ++i) {
+        for (NSUInteger i = 0; i < [vals count]; ++i) {
             if ([vals[i] equalToMixpanelType:groupID]) {
                 [vals removeObjectAtIndex:i];
                 break;
@@ -2291,7 +2291,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     dispatch_async(self.serialQueue, ^{
         [self.shownNotifications addObject:@(notification.ID)];
         if ([notification hasDisplayTriggers]) {
-            NSMutableArray *notifications = [NSMutableArray arrayWithArray:_triggeredNotifications];
+            NSMutableArray *notifications = [NSMutableArray arrayWithArray: self.triggeredNotifications];
             [notifications removeObject:notification];
             self.triggeredNotifications = [NSArray arrayWithArray:notifications];
         }

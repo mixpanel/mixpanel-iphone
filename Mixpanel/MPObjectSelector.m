@@ -433,7 +433,7 @@
     return result;
 }
 
-- (NSString *)description;
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"%@[%@]", self.name, self.index ?: self.predicate];
 }

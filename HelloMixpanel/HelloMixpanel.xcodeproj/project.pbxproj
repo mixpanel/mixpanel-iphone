@@ -818,7 +818,6 @@
 				2808F9AD1610EFE4005772B7 /* Frameworks */,
 				51D96E771D11EF69001F622D /* Copy Frameworks */,
 				11FBA527AAB4DE301A04BDD0 /* [CP] Embed Pods Frameworks */,
-				97D8318B565052717E5E5717 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -926,7 +925,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = Mixpanel;
 				TargetAttributes = {
 					2808F98C1610EFE3005772B7 = {
@@ -960,11 +959,10 @@
 			};
 			buildConfigurationList = 2808F9871610EFE3005772B7 /* Build configuration list for PBXProject "HelloMixpanel" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				English,
 				Base,
 			);
 			mainGroup = 2808F9821610EFE3005772B7;
@@ -1173,25 +1171,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E24E34127A72F8E754E38220 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1543,6 +1522,7 @@
 		2808F9C41610EFE4005772B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = Yes;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -1553,7 +1533,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = Yes;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
 				GCC_WARN_PEDANTIC = YES;
@@ -1581,6 +1560,7 @@
 		2808F9C51610EFE4005772B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = Yes;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -1591,7 +1571,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = Yes;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1777,6 +1756,7 @@
 		28C2136616376D3300696E4F /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = Yes;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -1787,7 +1767,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = Yes;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
