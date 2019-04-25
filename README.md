@@ -73,11 +73,10 @@ Drag and drop Mixpanel.xcodeproj from the mixpanel-iphone folder into your Xcode
 
 ![alt text](http://i.imgur.com/6qgxEBY.png)
 
-### Step 3: Import the Mixpanel framework
+### Step 3: Embed the Mixpanel framework
 
-Add Mixpanel.framework under "Linked Frameworks and Libaries" to your app.
+Select your app .xcodeproj file. Under "General", add the Mixpanel framework as an embedded binary. Once added, please make sure `Mixpanel.framework` shows under both "Linked Frameworks and Libaries" and "Embedded Binaries".
 
-![alt text](http://i.imgur.com/aJx6R8S.png)
 
 <a name="integrate"></a>
 # Integrate
