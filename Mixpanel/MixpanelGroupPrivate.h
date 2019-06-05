@@ -5,7 +5,7 @@
 //  Created by Weizhe Yuan on 8/21/18.
 //  Copyright © 2018 Mixpanel. All rights reserved.
 //
-#import <MixpanelType.h>
+#import "MixpanelType.h"
 
 @class Mixpanel;
 
