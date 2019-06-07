@@ -226,9 +226,46 @@
 
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     NSDictionary *p = e[@"properties"];
-    XCTAssertEqual(p[@"distinct_id"], distinctId, @"incorrect distinct_id");
-    XCTAssertEqual(p[@"$anon_distinct_id"], distinctIdBeforeidentify, @"incorrect anon_distinct_id");
+    XCTAssertEqualObjects(e[@"event"], @"$identify", @"incorrect event name $identify");
+    XCTAssertEqualObjects(p[@"distinct_id"], distinctId, @"incorrect distinct_id");
+    XCTAssertEqualObjects(p[@"$anon_distinct_id"], distinctIdBeforeidentify, @"incorrect $anon_distinct_id");
     [self.mixpanel reset];
+}
+
+- (void)testIdentifyResetTrack {
+    // stub needed because reset flushes
+    stubTrack();
+    stubEngage();
+    
+    self.mixpanel.anonymousId = nil;
+    self.mixpanel.userId = nil;
+    self.mixpanel.hadPersistedDistinctId = false;
+
+    [self.mixpanel archive];
+
+    NSString *distinctId = @"testIdentifyTrack";
+    NSString *originalDistinctId = self.mixpanel.distinctId;
+    [self.mixpanel reset];
+    [self waitForMixpanelQueues];
+    for (int i = 0; i < 3; i++) {
+        NSString *prevDistinctId = self.mixpanel.distinctId;
+        NSMutableString *newDistinctId = [NSMutableString stringWithString:distinctId];
+        [newDistinctId appendString:[@(i) stringValue]];
+        [self.mixpanel identify:newDistinctId];
+        [self waitForMixpanelQueues];
+        [self waitForMixpanelQueues];
+        NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+        NSDictionary *p = e[@"properties"];
+        XCTAssertEqualObjects(p[@"distinct_id"], newDistinctId, @"incorrect distinct_id");
+        XCTAssertEqualObjects(p[@"$anon_distinct_id"], prevDistinctId, @"incorrect $anon_distinct_id");
+#if defined(MIXPANEL_RANDOM_DISTINCT_ID)
+        XCTAssertNotEqual(prevDistinctId, originalDistinctId, @"After reset, UUID will be used - never the same");
+#else
+        XCTAssertEqualObjects(prevDistinctId, originalDistinctId, @"After reset, IFA/UIDevice id will be used - always the same");
+#endif
+        [self.mixpanel reset];
+        [self waitForMixpanelQueues];
+    }
 }
 
 - (void)testHadPersistedDistinctId {

@@ -406,7 +406,9 @@ static NSString *defaultProjectToken;
 - (NSString *)defaultDistinctId
 {
     NSString *distinctId;
-#if defined(MIXPANEL_MACOS)
+#if defined(MIXPANEL_RANDOM_DISTINCT_ID)
+    distinctId = [[NSUUID UUID] UUIDString];
+#elif defined(MIXPANEL_MACOS)
     distinctId = [self macOSIdentifier];
 #else
     distinctId = [self IFA];
@@ -423,7 +425,6 @@ static NSString *defaultProjectToken;
     }
     return distinctId;
 }
-
 
 - (void)identify:(NSString *)distinctId
 {
