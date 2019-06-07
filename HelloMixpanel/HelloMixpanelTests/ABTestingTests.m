@@ -402,10 +402,16 @@
         XCTAssertNotNil(self.mixpanel.superProperties[@"$experiments"], @"$experiments super property should not be nil");
         XCTAssert([self.mixpanel.superProperties[@"$experiments"][@"1"] isEqualToNumber:@1], @"super properties should have { 1: 1 }");
 
-        XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"$experiment_started events not tracked");
+        XCTAssertTrue(self.mixpanel.eventsQueue.count == 3, @"$experiment_started events not tracked");
+        NSUInteger index = 0;
         for (NSDictionary *event in self.mixpanel.eventsQueue) {
-            XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
-            XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
+            if (index == 0) {
+                XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$identify"], @"incorrect event name");
+            } else {
+                XCTAssertTrue([(NSString *)event[@"event"] isEqualToString:@"$experiment_started"], @"incorrect event name");
+                XCTAssertNotNil(event[@"properties"][@"$experiments"], @"$experiments super-property not set on $experiment_started event");
+            }
+            index++;
         }
 
         [expect fulfill];

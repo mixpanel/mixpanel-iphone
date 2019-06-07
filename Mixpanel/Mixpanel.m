@@ -450,9 +450,11 @@ static NSString *defaultProjectToken;
         // if it's new, blow away the alias as well.
         if (![distinctId isEqualToString:self.alias]) {
             if (![distinctId isEqualToString:self.distinctId]) {
+                NSString *oldDistinctId = [self.distinctId copy];
                 self.alias = nil;
                 self.distinctId = distinctId;
                 self.userId = distinctId;
+                [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
             }
             if (usePeople) {
                 self.people.distinctId = distinctId;
