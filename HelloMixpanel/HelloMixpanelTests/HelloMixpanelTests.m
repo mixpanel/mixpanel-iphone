@@ -75,6 +75,7 @@
 }
 
 - (void)testFlushPeople {
+    stubTrack();
     stubEngage();
 
     [self.mixpanel identify:@"d1"];
@@ -95,7 +96,6 @@
 - (void)testFlushNetworkFailure {
     stubTrack().andFailWithError([NSError errorWithDomain:@"com.mixpanel.sdk.testing" code:1 userInfo:nil]);
 
-    [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
@@ -109,7 +109,6 @@
 - (void)testAddingEventsAfterFlush {
     stubTrack();
 
-    [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=10; i<n; i++) {
         [self.mixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
@@ -200,6 +199,70 @@
         [self waitForMixpanelQueues];
         XCTAssertEqual(self.mixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], distinctId, @"events should use new distinct id after identify:");
 
+        [self.mixpanel reset];
+        [self waitForMixpanelQueues];
+    }
+}
+
+- (void)testIdentifyTrack {
+    // stub needed because reset flushes
+    stubTrack();
+    stubEngage();
+    NSString *distinctIdBeforeidentify = self.mixpanel.distinctId;
+
+    self.mixpanel.anonymousId = nil;
+    self.mixpanel.userId = nil;
+    self.mixpanel.hadPersistedDistinctId = false;
+
+    [self.mixpanel archive];
+
+    NSString *distinctId = @"testIdentifyTrack";
+
+    [self.mixpanel identify:distinctId];
+    [self.mixpanel identify:distinctId]; // should not track $identify
+    [self waitForMixpanelQueues];
+    [self waitForMixpanelQueues];
+    [self waitForMixpanelQueues];
+
+    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+    NSDictionary *p = e[@"properties"];
+    XCTAssertEqualObjects(e[@"event"], @"$identify", @"incorrect event name $identify");
+    XCTAssertEqualObjects(p[@"distinct_id"], distinctId, @"incorrect distinct_id");
+    XCTAssertEqualObjects(p[@"$anon_distinct_id"], distinctIdBeforeidentify, @"incorrect $anon_distinct_id");
+    [self.mixpanel reset];
+}
+
+- (void)testIdentifyResetTrack {
+    // stub needed because reset flushes
+    stubTrack();
+    stubEngage();
+    
+    self.mixpanel.anonymousId = nil;
+    self.mixpanel.userId = nil;
+    self.mixpanel.hadPersistedDistinctId = false;
+
+    [self.mixpanel archive];
+
+    NSString *distinctId = @"testIdentifyTrack";
+    NSString *originalDistinctId = self.mixpanel.distinctId;
+    [self.mixpanel reset];
+    [self waitForMixpanelQueues];
+    for (int i = 0; i < 3; i++) {
+        NSString *prevDistinctId = self.mixpanel.distinctId;
+        NSMutableString *newDistinctId = [NSMutableString stringWithString:distinctId];
+        [newDistinctId appendString:[@(i) stringValue]];
+        [self.mixpanel identify:newDistinctId];
+        [self waitForMixpanelQueues];
+        [self waitForMixpanelQueues];
+        NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
+        NSDictionary *p = e[@"properties"];
+        XCTAssertEqualObjects(p[@"distinct_id"], newDistinctId, @"incorrect distinct_id");
+        XCTAssertEqualObjects(p[@"$anon_distinct_id"], prevDistinctId, @"incorrect $anon_distinct_id");
+#if defined(MIXPANEL_RANDOM_DISTINCT_ID)
+        XCTAssertNotEqual(prevDistinctId, originalDistinctId, @"After reset, UUID will be used - never the same");
+#else
+        XCTAssertEqualObjects(prevDistinctId, originalDistinctId, @"After reset, IFA/UIDevice id will be used - always the same");
+#endif
         [self.mixpanel reset];
         [self waitForMixpanelQueues];
     }
@@ -500,7 +563,7 @@
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
-    XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"e1", @"event was not successfully archived/unarchived");
+    XCTAssertEqualObjects(self.mixpanel.eventsQueue[self.mixpanel.eventsQueue.count - 2][@"event"], @"e1", @"event was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.groupsQueue.lastObject[@"$set"], props, @"group update was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
@@ -519,7 +582,7 @@
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"expecting d1 as distinct id as initialised");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"default super properties expected to have 1 item");
     XCTAssertNotNil(self.mixpanel.eventsQueue, @"default events queue from no file is nil");
-    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"default events queue expecting 1 item");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"default events queue expecting 2 items ($identify call added)");
     XCTAssertNotNil(self.mixpanel.people.distinctId, @"default people distinct id from no file failed");
     XCTAssertNotNil(self.mixpanel.peopleQueue, @"default people queue from no file is nil");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"default people queue expecting 1 item");
@@ -594,7 +657,7 @@
     self.mixpanelWillFlush = NO;
     self.mixpanel.delegate = self;
 
-    [self.mixpanel identify:@"d1"];
+    [self.mixpanel identify:@"testMixpanelDelegate"];
     [self.mixpanel track:@"e1"];
     [self.mixpanel.people set:@"p1" to:@"a"];
     [self.mixpanel flush];

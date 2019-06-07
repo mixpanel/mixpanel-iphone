@@ -406,7 +406,9 @@ static NSString *defaultProjectToken;
 - (NSString *)defaultDistinctId
 {
     NSString *distinctId;
-#if defined(MIXPANEL_MACOS)
+#if defined(MIXPANEL_RANDOM_DISTINCT_ID)
+    distinctId = [[NSUUID UUID] UUIDString];
+#elif defined(MIXPANEL_MACOS)
     distinctId = [self macOSIdentifier];
 #else
     distinctId = [self IFA];
@@ -423,7 +425,6 @@ static NSString *defaultProjectToken;
     }
     return distinctId;
 }
-
 
 - (void)identify:(NSString *)distinctId
 {
@@ -450,9 +451,11 @@ static NSString *defaultProjectToken;
         // if it's new, blow away the alias as well.
         if (![distinctId isEqualToString:self.alias]) {
             if (![distinctId isEqualToString:self.distinctId]) {
+                NSString *oldDistinctId = [self.distinctId copy];
                 self.alias = nil;
                 self.distinctId = distinctId;
                 self.userId = distinctId;
+                [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
             }
             if (usePeople) {
                 self.people.distinctId = distinctId;

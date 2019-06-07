@@ -423,7 +423,9 @@ extern NSString *const MPNotificationTypeTakeover;
  Mixpanel will use the IFV as the default distinct ID.
 
  If we are unable to get an IFA or IFV, we will fall back to generating a
- random persistent UUID.
+ random persistent UUID. If you want to always use a random persistent UUID
+ you can define the <code>MIXPANEL_RANDOM_DISTINCT_ID</code> preprocessor flag
+ in your build settings.
 
  For tracking events, you do not need to call <code>identify:</code> if you
  want to use the default.  However, <b>Mixpanel People always requires an
