@@ -455,7 +455,7 @@ static NSString *defaultProjectToken;
                 self.alias = nil;
                 self.distinctId = distinctId;
                 self.userId = distinctId;
-                [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
+                [self track:@"$identify" properties:@{@"$anon_id": oldDistinctId, @"$identified_id": distinctId}];
             }
             if (usePeople) {
                 self.people.distinctId = distinctId;
