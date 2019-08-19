@@ -654,6 +654,10 @@ static __strong NSData *CRLFCRLF;
 
             assert(success);
             assert(remainingRange.length == 0);
+            
+            if (!success) {
+                MPLogError(@"WPWebSocket: coseWithCode convertion was not successful");
+            }
 
             if (usedLength != maxMsgSize) {
                 payload = [payload subdataWithRange:NSMakeRange(0, usedLength + sizeof(uint16_t))];
