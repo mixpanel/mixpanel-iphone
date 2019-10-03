@@ -4,7 +4,7 @@ before_install:
   - gem install fourflusher
   - gem uninstall cocoapods --force -a -q -I -x
   - gem install cocoapods -v 1.6.1
-osx_image: xcode10.2
+osx_image: xcode11
 branches:
   only:
   - master
@@ -14,7 +14,7 @@ env:
   - SCHEME="[iOS] HelloMixpanel"
   matrix:
     - DESTINATION="OS=11.1,name=iPhone 6s" RUN_TESTS="YES" POD_LINT="YES" 
-    - DESTINATION="OS=12.2,name=iPhone X" RUN_TESTS="YES" POD_LINT="YES" 
+    - DESTINATION="OS=13.0,name=iPhone 11" RUN_TESTS="YES" POD_LINT="YES" 
 podfile: HelloMixpanel/podfile
 script:
 - set -o pipefail

@@ -3,9 +3,9 @@ import argparse
 import subprocess
 
 
-parser = argparse.ArgumentParser(description='Release Mixpanel Swift SDK')
+parser = argparse.ArgumentParser(description='Release Mixpanel Objective-C SDK')
 parser.add_argument('--old', help='old version number', action="store")
-parser.add_argument('--new', help='new version for the release', action="store")
+parser.add_argument('--new', help='new version number for the release', action="store")
 args = parser.parse_args()
 
 def bump_version():
