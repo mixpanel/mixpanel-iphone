@@ -43,7 +43,7 @@ static const atomic_int_fast32_t UncaughtExceptionMaximum = 10;
     self = [super init];
     if (self) {
         // Create a hash table of weak pointers to mixpanel instances
-        _mixpanelInstances = [NSHashTable weakObjectsHashTable];
+        _mixpanelInstances = [NSMutableArray new];
         _prev_signal_handlers = calloc(NSIG, sizeof(struct sigaction));
 
         // Install our handler
