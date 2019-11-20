@@ -2119,6 +2119,57 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     } useCache:NO];
 }
 
+#pragma mark - Mixpanel Push Notifications
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+    
+    NSDictionary* userInfo = response.notification.request.content.userInfo;
+    BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
+    NSMutableDictionary* trackingProps = [[NSMutableDictionary alloc] init];
+    [trackingProps setValuesForKeysWithDictionary:@{
+        @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
+        @"message_id": [userInfo valueForKeyPath:@"mp.m"],
+    }];
+
+    NSDictionary* ontap;
+
+    if (isButtonTarget) {
+        NSArray* buttons = userInfo[@"mp_buttons"];
+        NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
+        NSDictionary* button = buttons[idx];
+        ontap = [button valueForKey:@"ontap"];
+        [trackingProps setValuesForKeysWithDictionary:@{
+            @"button_id": [button valueForKey:@"id"],
+            @"button_label": [button valueForKey:@"lbl"],
+        }];
+    } else if ([userInfo objectForKey:@"mp_ontap"]) {
+        ontap = [userInfo objectForKey:@"mp_ontap"];
+    }
+
+    if (ontap == nil || ontap == (id)[NSNull null]) {
+        // default to homescreen if no ontap info
+        completionHandler();
+    } else {
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+        [mixpanel track:@"$push_notification_tap" properties:trackingProps];
+
+        NSString* type = [ontap valueForKey:@"type"];
+
+        if ([type isEqualToString:@"homescreen"]) {
+           // do nothing, already going to be at homescreen
+           completionHandler();
+        } else if ([type isEqualToString:@"browser"] || [type isEqualToString:@"deeplink"]) {
+           NSURL* url = [[NSURL alloc] initWithString: [ontap valueForKey:@"uri"]];
+           UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
+           if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
+               [sharedApplication performSelector:@selector(openURL:) withObject:url];
+               completionHandler();
+           }
+        }
+    }
+}
+
 #pragma mark - Mixpanel Notifications
 
 - (void)showNotification

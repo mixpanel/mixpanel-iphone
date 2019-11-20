@@ -7,6 +7,7 @@
 #import "MixpanelPeople.h"
 #import "MixpanelType.h"
 
+#import <UserNotifications/UserNotifications.h>
 
 #if defined(MIXPANEL_WATCHOS)
 #define MIXPANEL_FLUSH_IMMEDIATELY 1
@@ -792,6 +793,10 @@ extern NSString *const MPNotificationTypeTakeover;
  */
 + (NSString *)libVersion;
 
+
+#pragma mark - Mixpanel Push Notifications
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler;
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Notifications

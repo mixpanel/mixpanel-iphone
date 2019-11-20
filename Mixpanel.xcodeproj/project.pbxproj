@@ -68,6 +68,10 @@
 		51D221011C595EB1003ECFB3 /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		51F308831C86881900614A13 /* MPSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F308791C86881900614A13 /* MPSwizzle.h */; };
 		51F308841C86881900614A13 /* MPSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F3087A1C86881900614A13 /* MPSwizzle.m */; };
+		60AED6FB2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AED6FA2383BA4000BFDD51 /* MPNotificationServiceExtension.m */; };
+		60AED6FC2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AED6FA2383BA4000BFDD51 /* MPNotificationServiceExtension.m */; };
+		60AED6FD2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AED6FA2383BA4000BFDD51 /* MPNotificationServiceExtension.m */; };
+		60AED6FE2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AED6FA2383BA4000BFDD51 /* MPNotificationServiceExtension.m */; };
 		7C170CC41A4A035F00D9E0F2 /* _MPTweakBindObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C170CC51A4A035F00D9E0F2 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C481A4A035F00D9E0F2 /* _MPTweakBindObserver.m */; };
 		7C170CC81A4A035F00D9E0F2 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -305,6 +309,8 @@
 		51F308791C86881900614A13 /* MPSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzle.h; sourceTree = "<group>"; };
 		51F3087A1C86881900614A13 /* MPSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzle.m; sourceTree = "<group>"; };
 		51FF9AB71C2B77B4004B0028 /* ios.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = ios.modulemap; path = Mixpanel/ios.modulemap; sourceTree = "<group>"; };
+		60AED6FA2383BA4000BFDD51 /* MPNotificationServiceExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPNotificationServiceExtension.m; sourceTree = "<group>"; };
+		60AED6FF2383BA5400BFDD51 /* MPNotificationServiceExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPNotificationServiceExtension.h; sourceTree = "<group>"; };
 		7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C170C2E1A4A02F500D9E0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C170C471A4A035F00D9E0F2 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
@@ -778,6 +784,15 @@
 			name = AT;
 			sourceTree = "<group>";
 		};
+		60FE04532385113100446A1C /* PushNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				60AED6FA2383BA4000BFDD51 /* MPNotificationServiceExtension.m */,
+				60AED6FF2383BA5400BFDD51 /* MPNotificationServiceExtension.h */,
+			);
+			name = PushNotifications;
+			sourceTree = "<group>";
+		};
 		7C170C201A4A02F500D9E0F2 = {
 			isa = PBXGroup;
 			children = (
@@ -845,6 +860,7 @@
 				519C548A1D131E6500407F56 /* MixpanelPeople.h */,
 				519C548B1D131E6500407F56 /* MixpanelPeople.m */,
 				517ABB681D14AD6F00FF8061 /* MPNetwork.h */,
+				60FE04532385113100446A1C /* PushNotifications */,
 				517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */,
 				517ABB691D14AD6F00FF8061 /* MPNetwork.m */,
 				514733BB1CD7CCDB0098B23A /* MPResources.h */,
@@ -1222,6 +1238,7 @@
 			files = (
 				F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */,
 				F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */,
+				60AED6FC2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */,
 				F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */,
 				457CA2072141CD5C003B3862 /* MixpanelType.m in Sources */,
 				45720A91212DFC0E000D6FC3 /* MixpanelGroup.m in Sources */,
@@ -1260,6 +1277,7 @@
 				7C170CD71A4A035F00D9E0F2 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				7C170D251A4A035F00D9E0F2 /* MPTweakStore.m in Sources */,
 				7C170CE61A4A035F00D9E0F2 /* MPApplicationStateSerializer.m in Sources */,
+				60AED6FB2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */,
 				7C170CC91A4A035F00D9E0F2 /* Mixpanel.m in Sources */,
 				7C170D3E1A4A035F00D9E0F2 /* UIImage+MPAverageColor.m in Sources */,
 				E1ECD01A1FA3AF9E002104E8 /* SessionMetadata.m in Sources */,
@@ -1326,6 +1344,7 @@
 				517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */,
 				457CA2082141CD5C003B3862 /* MixpanelType.m in Sources */,
 				E123C47F1D1342150015B425 /* MixpanelPeople.m in Sources */,
+				60AED6FD2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1339,6 +1358,7 @@
 				E1F160D61E67AF8300391AE3 /* Mixpanel.m in Sources */,
 				457CA2092141CD5D003B3862 /* MixpanelType.m in Sources */,
 				E1F160C41E6794ED00391AE3 /* MPNetwork.m in Sources */,
+				60AED6FE2383BA4000BFDD51 /* MPNotificationServiceExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
