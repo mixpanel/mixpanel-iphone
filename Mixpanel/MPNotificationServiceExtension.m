@@ -49,13 +49,20 @@ static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> * _Nonnull categories) {
         
-        NSSet<UNNotificationCategory *>* filtered = [categories objectsPassingTest:^BOOL(UNNotificationCategory * _Nonnull obj, BOOL * _Nonnull stop) {
-            return ![[obj identifier] containsString:kDynamicCategoryIdentifier];
+        NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *Nonnull category, BOOL * _Nonnull stop) {
+            return ![[category identifier] containsString:kDynamicCategoryIdentifier];
         }];
         
         NSArray* buttons = userInfo[@"mp_buttons"];
         NSArray* actions = @[];
-        int i = 0;
+       __block NSArray* actions = @[];
+        [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL * _Nonnull stop) {
+            UNNotificationAction* action = [UNNotificationAction
+                                            actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%lu", (unsigned long)idx]
+                       title:button[@"lbl"]
+                       options:UNNotificationActionOptionForeground];
+            actions = [actions arrayByAddingObject:action];
+        }];
         for (NSDictionary* button in buttons) {
             UNNotificationAction* action = [UNNotificationAction
                        actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%d", i]
@@ -71,8 +78,7 @@ static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
             intentIdentifiers:@[]
             options:UNNotificationCategoryOptionNone];
         
-       
-        NSSet<UNNotificationCategory *>* final = [filtered setByAddingObject:mpDynamicCategory];
+        NSSet<UNNotificationCategory *>* finalCategory = [filtered setByAddingObject:mpDynamicCategory];
         
         [center setNotificationCategories:final];
         
@@ -99,7 +105,6 @@ static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
         if (mediaType == nil) {
             NSLog(@"unable to add attachment: extension is nil");
         }
-       
 #endif
         self.richContentTaskComplete = true;
         [self taskComplete];
@@ -116,7 +121,6 @@ static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
                         self.richContentTaskComplete = true;
                         [self taskComplete];
                    }];
-
 }
 - (void)loadAttachmentForUrlString:(NSString *)urlString withType:(NSString *)type
                  completionHandler:(void(^)(UNNotificationAttachment *))completionHandler  {

@@ -2,11 +2,11 @@
 
 @interface MPNotificationServiceExtension : UNNotificationServiceExtension
 
-@property (nonatomic, retain) NSString * _Nullable mediaUrlKey;
+@property (nonatomic, copy, readonly, nullable) NSString *mediaUrlKey;
 
 NS_ASSUME_NONNULL_BEGIN
 
-- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler;
+- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *Nonnull))contentHandler;
 
 @end
 
