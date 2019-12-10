@@ -1,7 +1,7 @@
 #import "MPNotificationServiceExtension.h"
 
-static NSString * const kMediaUrlKey = @"mp_media_url";
-static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
+static NSString *const kMediaUrlKey = @"mp_media_url";
+static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 
 @interface MPNotificationServiceExtension()
 
@@ -14,7 +14,7 @@ static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 
 @implementation MPNotificationServiceExtension
 
-- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
+- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler {
     
     self.contentHandler = contentHandler;
     self.notificationContent = [request.content mutableCopy];
@@ -47,16 +47,16 @@ static NSString * const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 - (void)registerNotificationCategories:(NSDictionary *) userInfo {
     
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
-    [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> * _Nonnull categories) {
+    [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         
-        NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *Nonnull category, BOOL * _Nonnull stop) {
+        NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *Nonnull category, BOOL *_Nonnull stop) {
             return ![[category identifier] containsString:kDynamicCategoryIdentifier];
         }];
         
         NSArray* buttons = userInfo[@"mp_buttons"];
         NSArray* actions = @[];
        __block NSArray* actions = @[];
-        [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL * _Nonnull stop) {
+        [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
             UNNotificationAction* action = [UNNotificationAction
                                             actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%lu", (unsigned long)idx]
                        title:button[@"lbl"]
