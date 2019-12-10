@@ -45,7 +45,6 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 }
 
 - (void)registerNotificationCategories:(NSDictionary *) userInfo {
-    
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         
@@ -91,7 +90,6 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 }
 
 - (void)attachRichMedia:(NSDictionary *) userInfo {
-
     NSString *mediaUrlKey = self.mediaUrlKey ? self.mediaUrlKey : kMediaUrlKey;
     NSString *mediaUrl = userInfo[mediaUrlKey];
     NSString *mediaType = [mediaUrl pathExtension];
@@ -124,7 +122,6 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 }
 - (void)loadAttachmentForUrlString:(NSString *)urlString withType:(NSString *)type
                  completionHandler:(void(^)(UNNotificationAttachment *))completionHandler  {
-    
     __block UNNotificationAttachment *attachment = nil;
     NSURL *attachmentURL = [NSURL URLWithString:urlString];
     NSString *fileExt = [@"." stringByAppendingString:type];
