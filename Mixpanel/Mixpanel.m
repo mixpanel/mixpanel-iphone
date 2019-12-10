@@ -2151,7 +2151,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         completionHandler();
     } else {
         Mixpanel *mixpanel = [Mixpanel sharedInstance];
-
+        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
+            [instances[token] track:@"$push_notification_tap" properties:trackingProps];
+        }];
         [mixpanel track:@"$push_notification_tap" properties:trackingProps];
 
         NSString* type = ontap[@"type"];
