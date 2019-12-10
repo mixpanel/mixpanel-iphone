@@ -2131,19 +2131,19 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         @"message_id": [userInfo valueForKeyPath:@"mp.m"],
     }];
 
-    NSDictionary* ontap;
+    NSDictionary* ontap = nil;
 
     if (isButtonTarget) {
         NSArray* buttons = userInfo[@"mp_buttons"];
         NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
-        NSDictionary* button = buttons[idx];
-        ontap = [button valueForKey:@"ontap"];
+        NSDictionary* buttonDict = buttons[idx];
+        ontap = buttonDict[@"ontap"];
         [trackingProps setValuesForKeysWithDictionary:@{
-            @"button_id": [button valueForKey:@"id"],
-            @"button_label": [button valueForKey:@"lbl"],
+            @"button_id": buttonDict[@"id"],
+            @"button_label": buttonDict[@"lbl"],
         }];
-    } else if ([userInfo objectForKey:@"mp_ontap"]) {
-        ontap = [userInfo objectForKey:@"mp_ontap"];
+    } else if (userInfo[@"mp_ontap"]) {
+        ontap = userInfo[@"mp_ontap"];
     }
 
     if (ontap == nil || ontap == (id)[NSNull null]) {
@@ -2154,13 +2154,13 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
         [mixpanel track:@"$push_notification_tap" properties:trackingProps];
 
-        NSString* type = [ontap valueForKey:@"type"];
+        NSString* type = ontap[@"type"];
 
         if ([type isEqualToString:@"homescreen"]) {
            // do nothing, already going to be at homescreen
            completionHandler();
         } else if ([type isEqualToString:@"browser"] || [type isEqualToString:@"deeplink"]) {
-           NSURL* url = [[NSURL alloc] initWithString: [ontap valueForKey:@"uri"]];
+           NSURL* url = [[NSURL alloc] initWithString: ontap[@"uri"]];
            UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
            if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
                [sharedApplication performSelector:@selector(openURL:) withObject:url];
