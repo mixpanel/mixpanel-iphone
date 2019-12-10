@@ -25,8 +25,23 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
         return;
     }
     
-    [self registerNotificationCategories:userInfo];
-    [self attachRichMedia:userInfo];
+    NSArray* buttons = userInfo[@"mp_buttons"];
+    if (buttons) {
+        [self registerDynamicCategory:userInfo];
+    } else {
+#ifdef DEBUG
+        NSLog(@"No action buttons specified, not adding dynamic category")
+#endif
+    }
+
+    NSString *mediaUrl = userInfo[kMediaUrlKey];
+    if (mediaUrl) {
+        [self attachRichMedia:userInfo withMediaUrl:mediaUrl];
+    } else {
+#ifdef DEBUG
+        NSLog(@"No media url specified, not attatching rich media")
+#endif
+    }
 }
 
 - (void)serviceExtensionTimeWillExpire {
@@ -34,7 +49,6 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 }
 
 - (void)taskComplete {
-    NSLog(@"Task complete!");
     if (self.richContentTaskComplete && self.notificationCategoriesTaskComplete) {
         [self sendContent];
     }
@@ -44,15 +58,14 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     self.contentHandler(self.notificationContent);
 }
 
-- (void)registerNotificationCategories:(NSDictionary *) userInfo {
+- (void)registerDynamicCategory:(NSDictionary *) userInfo (NSArray *) buttons  {
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         
         NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *Nonnull category, BOOL *_Nonnull stop) {
             return ![[category identifier] containsString:kDynamicCategoryIdentifier];
         }];
-        
-        NSArray* buttons = userInfo[@"mp_buttons"];
+
         NSArray* actions = @[];
        __block NSArray* actions = @[];
         [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
@@ -84,18 +97,13 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
         self.notificationCategoriesTaskComplete = true;
         
         [self taskComplete];
-
-        NSLog(@"Setup notification categories");
     }];
 }
 
-- (void)attachRichMedia:(NSDictionary *) userInfo {
-    NSString *mediaUrlKey = self.mediaUrlKey ? self.mediaUrlKey : kMediaUrlKey;
-    NSString *mediaUrl = userInfo[mediaUrlKey];
+- (void)attachRichMedia:(NSDictionary *) userInfo withMediaUrl:(NSString *) mediaUrl {
     NSString *mediaType = [mediaUrl pathExtension];
     
     if (mediaUrl == nil || mediaType == nil) {
-#ifdef DEBUG
         if (mediaUrl == nil) {
              NSLog(@"unable to add attachment: %@ is nil", mediaUrlKey);
         }
@@ -103,7 +111,6 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
         if (mediaType == nil) {
             NSLog(@"unable to add attachment: extension is nil");
         }
-#endif
         self.richContentTaskComplete = true;
         [self taskComplete];
         return;
@@ -130,9 +137,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     [[session downloadTaskWithURL:attachmentURL
                 completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
                     if (error != nil) {
-                        #ifdef DEBUG
                         NSLog(@"unable to add attachment: %@", error.localizedDescription);
-                        #endif
                     } else {
                         NSFileManager *fileManager = [NSFileManager defaultManager];
                         NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
@@ -141,9 +146,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
                         if (attachmentError) {
-                            #ifdef DEBUG
                             NSLog(@"unable to add attchment: %@", attachmentError.localizedDescription);
-                            #endif
                         }
                     }
                     completionHandler(attachment);
