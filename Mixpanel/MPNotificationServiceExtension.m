@@ -29,7 +29,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
         [self registerDynamicCategory:userInfo];
     } else {
 #ifdef DEBUG
-        NSLog(@"No action buttons specified, not adding dynamic category")
+        MPLogInfo(@"%@ No action buttons specified, not adding dynamic category", self)
 #endif
     }
 
@@ -38,7 +38,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
         [self attachRichMedia:userInfo withMediaUrl:mediaUrl];
     } else {
 #ifdef DEBUG
-        NSLog(@"No media url specified, not attatching rich media")
+        MPLogInfo(@"%@ No media url specified, not attatching rich media", self)
 #endif
     }
 }
@@ -104,11 +104,11 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     
     if (mediaUrl == nil || mediaType == nil) {
         if (mediaUrl == nil) {
-             NSLog(@"unable to add attachment: %@ is nil", mediaUrlKey);
+            MPLogInfo(@"%@ unable to add attachment: %@ is nil", self, mediaUrlKey);
         }
         
         if (mediaType == nil) {
-            NSLog(@"unable to add attachment: extension is nil");
+            MPLogInfo(@"%@ unable to add attachment: extension is nil", self);
         }
         self.richContentTaskComplete = true;
         [self taskComplete];
@@ -136,7 +136,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     [[session downloadTaskWithURL:attachmentURL
                 completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
                     if (error != nil) {
-                        NSLog(@"unable to add attachment: %@", error.localizedDescription);
+                        MPLogInfo(@"%@ unable to add attachment: %@", self, error.localizedDescription);
                     } else {
                         NSFileManager *fileManager = [NSFileManager defaultManager];
                         NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
@@ -145,7 +145,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
                         if (attachmentError) {
-                            NSLog(@"unable to add attchment: %@", attachmentError.localizedDescription);
+                            MPLogInfo(@"%@ unable to add attchment: %@", self, attachmentError.localizedDescription);
                         }
                     }
                     completionHandler(attachment);
