@@ -1,10 +1,11 @@
 #import <UserNotifications/UserNotifications.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface MPNotificationServiceExtension : UNNotificationServiceExtension
 
 @property (nonatomic, copy, readonly, nullable) NSString *mediaUrlKey;
 
-NS_ASSUME_NONNULL_BEGIN
 
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *Nonnull))contentHandler;
 
