@@ -36,6 +36,10 @@
 NSString *const MPNotificationTypeMini = @"mini";
 NSString *const MPNotificationTypeTakeover = @"takeover";
 
+NSString *const MPPushTapActionTypeBrowser = @"browser";
+NSString *const MPPushTapActionTypeDeeplink = @"deeplink";
+NSString *const MPPushTapActionTypeHomescreen = @"homescreen";
+
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;
@@ -2158,10 +2162,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
         NSString* type = ontap[@"type"];
 
-        if ([type isEqualToString:@"homescreen"]) {
+        if ([type isEqualToString:MPPushTapActionTypeHomescreen]) {
            // do nothing, already going to be at homescreen
            completionHandler();
-        } else if ([type isEqualToString:@"browser"] || [type isEqualToString:@"deeplink"]) {
+        } else if ([type isEqualToString:MPPushTapActionTypeBrowser] || [type isEqualToString:MPPushTapActionTypeDeeplink]) {
            NSURL* url = [[NSURL alloc] initWithString: ontap[@"uri"]];
            UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
            if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
