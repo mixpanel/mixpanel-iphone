@@ -1,6 +1,5 @@
 #import "MPNotificationServiceExtension.h"
 
-static NSString *const kMediaUrlKey = @"mp_media_url";
 static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 
 @interface MPNotificationServiceExtension()
@@ -34,7 +33,7 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
 #endif
     }
 
-    NSString *mediaUrl = userInfo[kMediaUrlKey];
+    NSString *mediaUrl = userInfo[@"mp_media_url"];
     if (mediaUrl) {
         [self attachRichMedia:userInfo withMediaUrl:mediaUrl];
     } else {
