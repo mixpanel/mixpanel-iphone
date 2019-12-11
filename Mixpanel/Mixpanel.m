@@ -2125,8 +2125,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark - Mixpanel Push Notifications
 
-+ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
-    
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {    
     NSDictionary* userInfo = response.notification.request.content.userInfo;
     BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
     NSMutableDictionary* trackingProps = [[NSMutableDictionary alloc] init];
