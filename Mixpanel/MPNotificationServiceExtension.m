@@ -137,7 +137,7 @@ static NSString *const mediaUrlKey = @"mp_media_url";
                         
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
-                        if (attachmentError) {
+                        if (attachmentError || !attachment) {
                             MPLogInfo(@"%@ unable to add attchment: %@", self, attachmentError.localizedDescription);
                         }
                     }
