@@ -1,6 +1,8 @@
 #import "MPNotificationServiceExtension.h"
+#import "MPLogger.h"
 
 static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
+static NSString *const mediaUrlKey = @"mp_media_url";
 
 @interface MPNotificationServiceExtension()
 
@@ -26,19 +28,19 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     
     NSArray* buttons = userInfo[@"mp_buttons"];
     if (buttons) {
-        [self registerDynamicCategory:userInfo];
+        [self registerDynamicCategory:userInfo withButtons:buttons];
     } else {
 #ifdef DEBUG
-        MPLogInfo(@"%@ No action buttons specified, not adding dynamic category", self)
+        MPLogInfo(@"%@ No action buttons specified, not adding dynamic category", self);
 #endif
     }
 
-    NSString *mediaUrl = userInfo[@"mp_media_url"];
+    NSString *mediaUrl = userInfo[mediaUrlKey];
     if (mediaUrl) {
         [self attachRichMedia:userInfo withMediaUrl:mediaUrl];
     } else {
 #ifdef DEBUG
-        MPLogInfo(@"%@ No media url specified, not attatching rich media", self)
+        MPLogInfo(@"%@ No media url specified, not attatching rich media", self);
 #endif
     }
 }
@@ -57,15 +59,14 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
     self.contentHandler(self.notificationContent);
 }
 
-- (void)registerDynamicCategory:(NSDictionary *) userInfo (NSArray *) buttons  {
+- (void)registerDynamicCategory:(NSDictionary *) userInfo withButtons:(NSArray *) buttons {
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         
-        NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *Nonnull category, BOOL *_Nonnull stop) {
+        NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *_Nonnull category, BOOL *_Nonnull stop) {
             return ![[category identifier] containsString:kDynamicCategoryIdentifier];
         }];
 
-        NSArray* actions = @[];
        __block NSArray* actions = @[];
         [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
             UNNotificationAction* action = [UNNotificationAction
@@ -74,14 +75,6 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
                        options:UNNotificationActionOptionForeground];
             actions = [actions arrayByAddingObject:action];
         }];
-        for (NSDictionary* button in buttons) {
-            UNNotificationAction* action = [UNNotificationAction
-                       actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%d", i]
-                       title:button[@"lbl"]
-                       options:UNNotificationActionOptionForeground];
-            actions = [actions arrayByAddingObject:action];
-            i++;
-        }
 
         UNNotificationCategory* mpDynamicCategory = [UNNotificationCategory
             categoryWithIdentifier:kDynamicCategoryIdentifier
@@ -89,9 +82,9 @@ static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
             intentIdentifiers:@[]
             options:UNNotificationCategoryOptionNone];
         
-        NSSet<UNNotificationCategory *>* finalCategory = [filtered setByAddingObject:mpDynamicCategory];
+        NSSet<UNNotificationCategory *>* finalCategory = [filteredCategories setByAddingObject:mpDynamicCategory];
         
-        [center setNotificationCategories:final];
+        [center setNotificationCategories:finalCategory];
         
         self.notificationCategoriesTaskComplete = true;
         
