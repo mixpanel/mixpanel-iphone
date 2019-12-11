@@ -2125,21 +2125,21 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark - Mixpanel Push Notifications
 
-+ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {    
-    NSDictionary* userInfo = response.notification.request.content.userInfo;
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
     BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
-    NSMutableDictionary* trackingProps = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
     [trackingProps setValuesForKeysWithDictionary:@{
         @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
         @"message_id": [userInfo valueForKeyPath:@"mp.m"],
     }];
 
-    NSDictionary* ontap = nil;
+    NSDictionary *ontap = nil;
 
     if (isButtonTarget) {
-        NSArray* buttons = userInfo[@"mp_buttons"];
+        NSArray *buttons = userInfo[@"mp_buttons"];
         NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
-        NSDictionary* buttonDict = buttons[idx];
+        NSDictionary *buttonDict = buttons[idx];
         ontap = buttonDict[@"ontap"];
         [trackingProps setValuesForKeysWithDictionary:@{
             @"button_id": buttonDict[@"id"],
@@ -2153,19 +2153,17 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         // default to homescreen if no ontap info
         completionHandler();
     } else {
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
         [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
             [instances[token] track:@"$push_notification_tap" properties:trackingProps];
         }];
-        [mixpanel track:@"$push_notification_tap" properties:trackingProps];
 
-        NSString* type = ontap[@"type"];
+        NSString *type = ontap[@"type"];
 
         if ([type isEqualToString:MPPushTapActionTypeHomescreen]) {
            // do nothing, already going to be at homescreen
            completionHandler();
         } else if ([type isEqualToString:MPPushTapActionTypeBrowser] || [type isEqualToString:MPPushTapActionTypeDeeplink]) {
-           NSURL* url = [[NSURL alloc] initWithString: ontap[@"uri"]];
+           NSURL *url = [[NSURL alloc] initWithString: ontap[@"uri"]];
            UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
            if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
                [sharedApplication performSelector:@selector(openURL:) withObject:url];
