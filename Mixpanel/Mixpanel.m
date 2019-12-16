@@ -2166,8 +2166,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
            NSURL *url = [[NSURL alloc] initWithString: ontap[@"uri"]];
            UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
            if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
-               [sharedApplication performSelector:@selector(openURL:) withObject:url];
-               completionHandler();
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   [sharedApplication performSelector:@selector(openURL:) withObject:url];
+                   completionHandler();
+               });
            }
         }
     }
