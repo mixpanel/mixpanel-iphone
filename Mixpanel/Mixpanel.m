@@ -31,7 +31,7 @@
 #error The Mixpanel library must be compiled with ARC enabled
 #endif
 
-#define VERSION @"3.5.0"
+#define VERSION @"3.5.1"
 
 NSString *const MPNotificationTypeMini = @"mini";
 NSString *const MPNotificationTypeTakeover = @"takeover";
