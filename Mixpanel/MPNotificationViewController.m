@@ -174,7 +174,20 @@
 }
 
 - (void)show {
-    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    if (@available(iOS 13, *)) {
+        NSSet *connectedScenes = [Mixpanel sharedUIApplication].connectedScenes;
+        for (UIScene *scene in connectedScenes) {
+            if (scene.activationState == UISceneActivationStateForegroundActive && [scene isKindOfClass:[UIWindowScene class]]) {
+                UIWindowScene *windowScene = (UIWindowScene *)scene;
+                self.window = [[UIWindow alloc] initWithFrame:
+                               windowScene.coordinateSpace.bounds];
+                self.window.windowScene = windowScene;
+            }
+        }
+    } else {
+        self.window = [[UIWindow alloc] initWithFrame:
+                       CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    }
     self.window.alpha = 0;
     self.window.windowLevel = UIWindowLevelAlert;
     self.window.rootViewController = self;
@@ -250,10 +263,7 @@
     _isBeingDismissed = NO;
     self.view.clipsToBounds = YES;
     
-    MPMiniNotification *notification = (MPMiniNotification *) self.notification;
-
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.imageView.layer.masksToBounds = YES;
+    MPMiniNotification *notification = (MPMiniNotification *)self.notification;
 
     self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.bodyLabel.textColor = [UIColor mp_colorFromRGB:notification.bodyColor];
@@ -266,12 +276,12 @@
 
     if (notification != nil) {
         if (notification.image != nil) {
-            self.imageView.image = [UIImage imageWithData:notification.image];
-            UIImage *originalImage = [UIImage imageWithData:notification.image];
-            UIImage *tintedImage = [originalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            self.imageView =  [[UIImageView alloc] initWithImage: [UIImage imageWithData:notification.image]];
+            UIImage *tintedImage = [self.imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [self.imageView setImage:tintedImage];
             self.imageView.tintColor = [UIColor mp_colorFromRGB:notification.imageTintColor];
             self.imageView.hidden = NO;
+            self.imageView.layer.masksToBounds = YES;
         } else {
             self.imageView.hidden = YES;
         }
@@ -283,6 +293,8 @@
 
     self.view.frame = CGRectMake(0.0f, 0.0f, 0.0f, 30.0f);
 
+    self.view.layer.borderColor = [UIColor mp_colorFromRGB:notification.borderColor].CGColor;
+    self.view.layer.borderWidth = 1;
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     gesture.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:gesture];
