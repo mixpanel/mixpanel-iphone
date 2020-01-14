@@ -2,10 +2,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+API_AVAILABLE(ios(10.0))
 @interface MPNotificationServiceExtension : UNNotificationServiceExtension
-
-@property (nonatomic, copy, readonly, nullable) NSString *mediaUrlKey;
-
 
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *Nonnull))contentHandler;
 

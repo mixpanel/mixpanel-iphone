@@ -1,9 +1,10 @@
 #import "MPNotificationServiceExtension.h"
 #import "MPLogger.h"
 
-static NSString *const kDynamicCategoryIdentifier = @"MP_DYNAMIC";
+static NSString *const dynamicCategoryIdentifier = @"MP_DYNAMIC";
 static NSString *const mediaUrlKey = @"mp_media_url";
 
+API_AVAILABLE(ios(10.0))
 @interface MPNotificationServiceExtension()
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -15,7 +16,7 @@ static NSString *const mediaUrlKey = @"mp_media_url";
 
 @implementation MPNotificationServiceExtension
 
-- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler {
+- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler  {
     
     self.contentHandler = contentHandler;
     self.notificationContent = [request.content mutableCopy];
@@ -64,7 +65,7 @@ static NSString *const mediaUrlKey = @"mp_media_url";
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         
         NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *_Nonnull category, BOOL *_Nonnull stop) {
-            return ![[category identifier] containsString:kDynamicCategoryIdentifier];
+            return ![[category identifier] containsString:dynamicCategoryIdentifier];
         }];
 
        __block NSArray* actions = @[];
@@ -77,7 +78,7 @@ static NSString *const mediaUrlKey = @"mp_media_url";
         }];
 
         UNNotificationCategory* mpDynamicCategory = [UNNotificationCategory
-            categoryWithIdentifier:kDynamicCategoryIdentifier
+            categoryWithIdentifier:dynamicCategoryIdentifier
             actions:actions
             intentIdentifiers:@[]
             options:UNNotificationCategoryOptionNone];
