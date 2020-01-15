@@ -2170,6 +2170,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                    [sharedApplication performSelector:@selector(openURL:) withObject:url];
                    completionHandler();
                });
+           } else {
+               completionHandler();
            }
         }
     }
