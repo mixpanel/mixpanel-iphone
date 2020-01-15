@@ -796,8 +796,14 @@ extern NSString *const MPNotificationTypeTakeover;
 
 #pragma mark - Mixpanel Push Notifications
 
+/*!
+ Detects if a UNNotification is from Mixpanel
+ */
 + (BOOL)isMixpanelPushNotification:(UNNotification *)notification API_AVAILABLE(ios(10.0));
 
+/*!
+ Tracks and executes the appropriate action when a Mixpanel push notification is tapped
+ */
 + (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0));
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
