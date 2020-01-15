@@ -799,12 +799,12 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Detects if a UNNotification is from Mixpanel
  */
-+ (BOOL)isMixpanelPushNotification:(UNNotification *)notification API_AVAILABLE(ios(10.0));
++ (BOOL)isMixpanelPushNotification:(UNNotification *)notification API_AVAILABLE(ios(10.0), macos(10.14)) API_UNAVAILABLE(tvos);
 
 /*!
  Tracks and executes the appropriate action when a Mixpanel push notification is tapped
  */
-+ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0));
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0), macos(10.14)) API_UNAVAILABLE(tvos);
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Notifications
