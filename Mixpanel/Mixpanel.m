@@ -2125,7 +2125,18 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark - Mixpanel Push Notifications
 
++ (BOOL)isMixpanelPushNotification:(UNNotification *)notification  API_AVAILABLE(ios(10.0)){
+    return [notification.request.content.userInfo objectForKey:@"mp"] != nil;
+}
+
 + (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler  API_AVAILABLE(ios(10.0)){
+
+    if (![self isMixpanelPushNotification:response.notification]) {
+        MPLogWarning(@"%@Calling MixpanelPushNotifications.handleResponse on a non-Mixpanel push notification is a noop", self);
+        completionHandler();
+        return;
+    }
+
     NSDictionary *userInfo = response.notification.request.content.userInfo;
     BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
     NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
