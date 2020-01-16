@@ -1,136 +1,135 @@
 #import "MPNotificationServiceExtension.h"
 #import "MPLogger.h"
 
-static NSString *const dynamicCategoryIdentifier = @"MP_DYNAMIC";
 static NSString *const mediaUrlKey = @"mp_media_url";
 
 API_AVAILABLE(ios(10.0))
 @interface MPNotificationServiceExtension()
 
-@property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
-@property (nonatomic, strong) UNMutableNotificationContent *notificationContent;
-@property BOOL richContentTaskComplete;
-@property BOOL notificationCategoriesTaskComplete;
-
 @end
 
 @implementation MPNotificationServiceExtension
 
-- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler  {
-    
-    self.contentHandler = contentHandler;
-    self.notificationContent = [request.content mutableCopy];
-    
-    NSDictionary *userInfo = request.content.userInfo;
-    if (userInfo == nil) {
-        [self sendContent];
-        return;
-    }
-    
-    NSArray* buttons = userInfo[@"mp_buttons"];
-    if (buttons) {
-        [self registerDynamicCategory:userInfo withButtons:buttons];
-    } else {
-#ifdef DEBUG
-        MPLogInfo(@"%@ No action buttons specified, not adding dynamic category", self);
-#endif
-    }
+- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request
+                   withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler  {
 
-    NSString *mediaUrl = userInfo[mediaUrlKey];
-    if (mediaUrl) {
-        [self attachRichMedia:userInfo withMediaUrl:mediaUrl];
-    } else {
-#ifdef DEBUG
-        MPLogInfo(@"%@ No media url specified, not attatching rich media", self);
-#endif
-    }
-}
+    NSLog(@"%@ MPNotificationServiceExtension didReceiveNotificationRequest", self);
 
-- (void)serviceExtensionTimeWillExpire {
-    [self sendContent];
-}
+    UNMutableNotificationContent *bestAttemptContent = [request.content mutableCopy];
+    [self getCategoryIdentifier:request.content withCompletion:^(NSString *categoryIdentifier) {
 
-- (void)taskComplete {
-    if (self.richContentTaskComplete && self.notificationCategoriesTaskComplete) {
-        [self sendContent];
-    }
-}
+        NSLog(@"%@ Using \"%@\" as categoryIdentifier", self, categoryIdentifier);
+        bestAttemptContent.categoryIdentifier = categoryIdentifier;
 
-- (void)sendContent {
-    self.contentHandler(self.notificationContent);
-}
-
-- (void)registerDynamicCategory:(NSDictionary *) userInfo withButtons:(NSArray *) buttons {
-    UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
-    [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
-        
-        NSSet<UNNotificationCategory *> *filteredCategories = [categories objectsPassingTest:^BOOL(UNNotificationCategory *_Nonnull category, BOOL *_Nonnull stop) {
-            return ![[category identifier] containsString:dynamicCategoryIdentifier];
+        [self buildAttachments:request.content withCompletion:^(NSArray *attachments){
+            if (attachments) {
+                NSLog(@"%@ Added rich media attachment", self);
+                bestAttemptContent.attachments = attachments;
+            } else {
+                NSLog(@"%@ No rich media found to attach", self);
+            }
+            contentHandler(bestAttemptContent);
         }];
 
-       __block NSArray* actions = @[];
-        [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
-            UNNotificationAction* action = [UNNotificationAction
-                                            actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%lu", (unsigned long)idx]
-                       title:button[@"lbl"]
-                       options:UNNotificationActionOptionForeground];
-            actions = [actions arrayByAddingObject:action];
-        }];
-
-        UNNotificationCategory* mpDynamicCategory = [UNNotificationCategory
-            categoryWithIdentifier:dynamicCategoryIdentifier
-            actions:actions
-            intentIdentifiers:@[]
-            options:UNNotificationCategoryOptionNone];
-        
-        NSSet<UNNotificationCategory *>* finalCategory = [filteredCategories setByAddingObject:mpDynamicCategory];
-        
-        [center setNotificationCategories:finalCategory];
-        
-        self.notificationCategoriesTaskComplete = true;
-        
-        [self taskComplete];
     }];
 }
 
-- (void)attachRichMedia:(NSDictionary *) userInfo withMediaUrl:(NSString *) mediaUrl {
-    NSString *mediaType = [mediaUrl pathExtension];
-    
-    if (mediaUrl == nil || mediaType == nil) {
-        if (mediaUrl == nil) {
-            MPLogInfo(@"%@ unable to add attachment: %@ is nil", self, mediaUrlKey);
-        }
-        
-        if (mediaType == nil) {
-            MPLogInfo(@"%@ unable to add attachment: extension is nil", self);
-        }
-        self.richContentTaskComplete = true;
-        [self taskComplete];
+- (void)getCategoryIdentifier:(UNNotificationContent *) content
+               withCompletion:(void(^)(NSString *categoryIdentifier))completion {
+
+    // If the payload explicitly specifies a category, just use that one
+    if (content.categoryIdentifier != nil) {
+        completion(content.categoryIdentifier);
         return;
     }
-    
-    // load the attachment
+
+    NSDictionary *userInfo = content.userInfo;
+    if (userInfo == nil) {
+        completion(nil);
+        return;
+    }
+
+    NSArray* buttons = userInfo[@"mp_buttons"];
+    if (buttons == nil) {
+        completion(nil);
+        return;
+    }
+
+    // Generate dynamic category id
+    UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
+    NSString *categoryId = [timeStampObj stringValue];
+
+    [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
+
+        // Generate a list of actions from the buttons data
+        __block NSArray* actions = @[];
+        [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
+            UNNotificationAction* action = [UNNotificationAction
+                                            actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%lu", (unsigned long)idx]
+                                            title:button[@"lbl"]
+                                            options:UNNotificationActionOptionForeground];
+            actions = [actions arrayByAddingObject:action];
+        }];
+
+        // Create a new category for these actions
+        UNNotificationCategory* newCategory = [UNNotificationCategory
+                                                     categoryWithIdentifier:categoryId
+                                                     actions:actions
+                                                     intentIdentifiers:@[]
+                                                     options:UNNotificationCategoryOptionNone];
+      
+        // Add the new category
+        [center setNotificationCategories:[categories setByAddingObject:newCategory]];
+
+        completion(categoryId);
+    }];
+
+    return;
+}
+
+- (void)buildAttachments:(UNNotificationContent *) content withCompletion:(void(^)(NSArray *))completion {
+
+    NSDictionary *userInfo = content.userInfo;
+    if (userInfo == nil) {
+        completion(nil);
+        return;
+    }
+
+    NSString *mediaUrl = userInfo[mediaUrlKey];
+    if (mediaUrl == nil) {
+        NSLog(@"%@ No media url specified, not attatching rich media", self);
+        completion(nil);
+        return;
+    }
+
+    NSString *mediaType = [mediaUrl pathExtension];
+    if (mediaType == nil) {
+        NSLog(@"%@ unable to add attachment: extension is nil", self);
+        completion(nil);
+        return;
+    }
+
     [self loadAttachmentForUrlString:mediaUrl
                             withType:mediaType
-                   completionHandler:^(UNNotificationAttachment *attachment) {
-                        if (attachment) {
-                            self.notificationContent.attachments = [NSArray arrayWithObject:attachment];
-                        }
-                        self.richContentTaskComplete = true;
-                        [self taskComplete];
-                   }];
+                      withCompletion:^(UNNotificationAttachment *attachment) {
+        completion([NSArray arrayWithObject:attachment]);
+    }];
 }
-- (void)loadAttachmentForUrlString:(NSString *)urlString withType:(NSString *)type
-                 completionHandler:(void(^)(UNNotificationAttachment *))completionHandler  {
+
+- (void)loadAttachmentForUrlString:(NSString *)urlString
+                          withType:(NSString *)type
+                    withCompletion:(void(^)(UNNotificationAttachment *))completion  {
     __block UNNotificationAttachment *attachment = nil;
     NSURL *attachmentURL = [NSURL URLWithString:urlString];
     NSString *fileExt = [@"." stringByAppendingString:type];
-    
+
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:attachmentURL
                 completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
                     if (error != nil) {
-                        MPLogInfo(@"%@ unable to add attachment: %@", self, error.localizedDescription);
+                        NSLog(@"%@ unable to add attachment: %@", self, error.localizedDescription);
                     } else {
                         NSFileManager *fileManager = [NSFileManager defaultManager];
                         NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
@@ -139,10 +138,10 @@ API_AVAILABLE(ios(10.0))
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
                         if (attachmentError || !attachment) {
-                            MPLogInfo(@"%@ unable to add attchment: %@", self, attachmentError.localizedDescription);
+                            NSLog(@"%@ unable to add attachment: %@", self, attachmentError.localizedDescription);
                         }
                     }
-                    completionHandler(attachment);
+                    completion(attachment);
                 }] resume];
 }
 

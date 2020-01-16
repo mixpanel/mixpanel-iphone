@@ -8,5 +8,6 @@ framework module Mixpanel {
     header "MPTweakInlineInternal.h"
     header "MPTweakStore.h"
     header "_MPTweakBindObserver.h"
+    header "MPNotificationServiceExtension.h"
     export *
 }
