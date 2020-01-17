@@ -14,6 +14,7 @@ API_AVAILABLE(ios(10.0))
     NSLog(@"%@ MPNotificationServiceExtension didReceiveNotificationRequest", self);
 
     UNMutableNotificationContent *bestAttemptContent = [request.content mutableCopy];
+
     [self getCategoryIdentifier:request.content withCompletion:^(NSString *categoryIdentifier) {
 
         NSLog(@"%@ Using \"%@\" as categoryIdentifier", self, categoryIdentifier);
@@ -36,55 +37,54 @@ API_AVAILABLE(ios(10.0))
                withCompletion:(void(^)(NSString *categoryIdentifier))completion {
 
     // If the payload explicitly specifies a category, just use that one
-    if (content.categoryIdentifier != nil) {
+    if ([content.categoryIdentifier length] > 0) {
+        NSLog(@"%@ getCategoryIdentifier: explicit categoryIdentifer included in payload: %@", self, content.categoryIdentifier);
         completion(content.categoryIdentifier);
         return;
     }
 
     NSDictionary *userInfo = content.userInfo;
     if (userInfo == nil) {
+        NSLog(@"%@ getCategoryIdentifier: content.userInfo was nil, not creating action buttons.", self);
         completion(nil);
         return;
     }
 
     NSArray* buttons = userInfo[@"mp_buttons"];
     if (buttons == nil) {
+        NSLog(@"%@ getCategoryIdentifier: nothing specified under \"mp_buttons\" key, not creating action buttons.", self);
         completion(nil);
         return;
     }
 
-    // Generate dynamic category id
+    // Generate unique category id from timestamp
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
     NSString *categoryId = [timeStampObj stringValue];
 
-    [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
-
-        // Generate a list of actions from the buttons data
-        __block NSArray* actions = @[];
-        [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
-            UNNotificationAction* action = [UNNotificationAction
-                                            actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%lu", (unsigned long)idx]
-                                            title:button[@"lbl"]
-                                            options:UNNotificationActionOptionForeground];
-            actions = [actions arrayByAddingObject:action];
-        }];
-
-        // Create a new category for these actions
-        UNNotificationCategory* newCategory = [UNNotificationCategory
-                                                     categoryWithIdentifier:categoryId
-                                                     actions:actions
-                                                     intentIdentifiers:@[]
-                                                     options:UNNotificationCategoryOptionNone];
-      
-        // Add the new category
-        [center setNotificationCategories:[categories setByAddingObject:newCategory]];
-
-        completion(categoryId);
+    // Build a list of actions from the buttons data
+    __block NSArray* actions = @[];
+    [buttons enumerateObjectsUsingBlock:^(NSDictionary *button, NSUInteger idx, BOOL *_Nonnull stop) {
+        UNNotificationAction* action = [UNNotificationAction
+                                        actionWithIdentifier:[NSString stringWithFormat:@"MP_ACTION_%lu", (unsigned long)idx]
+                                        title:button[@"lbl"]
+                                        options:UNNotificationActionOptionForeground];
+        actions = [actions arrayByAddingObject:action];
     }];
 
-    return;
+    // Create a new category for these actions
+    UNNotificationCategory* newCategory = [UNNotificationCategory
+                                           categoryWithIdentifier:categoryId
+                                           actions:actions
+                                           intentIdentifiers:@[]
+                                           options:UNNotificationCategoryOptionNone];
+
+    // Add the new category
+    [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
+        [center setNotificationCategories:[categories setByAddingObject:newCategory]];
+        completion(categoryId);
+    }];
 }
 
 - (void)buildAttachments:(UNNotificationContent *) content withCompletion:(void(^)(NSArray *))completion {
