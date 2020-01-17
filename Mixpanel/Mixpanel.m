@@ -1859,6 +1859,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 #pragma mark - Mixpanel Push Notifications
 
 + (BOOL)isMixpanelPushNotification:(UNNotificationContent *)content {
+    if ([content userInfo] == nil) {
+        MPLogInfo(@"%@ userInfo was nil, returning false");
+        return false;
+    }
     return [content.userInfo objectForKey:@"mp"] != nil;
 }
 
@@ -1871,35 +1875,57 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 
     NSDictionary *userInfo = response.notification.request.content.userInfo;
-    BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
     NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
     [trackingProps setValuesForKeysWithDictionary:@{
         @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
         @"message_id": [userInfo valueForKeyPath:@"mp.m"],
     }];
 
+
+    MPLogInfo(@"%@ didReceiveNotificationResponse action: %@", self, response.actionIdentifier);
+
+    // If the notification was dismissed, just track and return
+    if ([response.actionIdentifier isEqualToString:UNNotificationDismissActionIdentifier]) {
+        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
+            [instances[token] track:@"$push_notification_dismissed" properties:trackingProps];
+        }];
+        completionHandler();
+        return;
+    }
+
     NSDictionary *ontap = nil;
 
-    if (isButtonTarget) {
-        NSArray *buttons = userInfo[@"mp_buttons"];
-        NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
-        NSDictionary *buttonDict = buttons[idx];
-        ontap = buttonDict[@"ontap"];
-        [trackingProps setValuesForKeysWithDictionary:@{
-            @"button_id": buttonDict[@"id"],
-            @"button_label": buttonDict[@"lbl"],
-        }];
-    } else if (userInfo[@"mp_ontap"]) {
-        ontap = userInfo[@"mp_ontap"];
+    if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
+        // The action that indicates the user opened the app from the notification interface.
+        MPLogInfo(@"%@ didReceiveNotificationResponse action: UNNotificationDefaultActionIdentifier", self);
+        if (userInfo[@"mp_ontap"]) {
+            ontap = userInfo[@"mp_ontap"];
+        }
+    } else {
+        // Non-default, non-dismiss action -- probably a button tap
+        BOOL wasButtonTapped = [response.actionIdentifier containsString:@"MP_ACTION_"];
+        if (wasButtonTapped) {
+            NSArray *buttons = userInfo[@"mp_buttons"];
+            NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
+            NSDictionary *buttonDict = buttons[idx];
+            ontap = buttonDict[@"ontap"];
+            [trackingProps setValuesForKeysWithDictionary:@{
+                @"button_id": buttonDict[@"id"],
+                @"button_label": buttonDict[@"lbl"],
+            }];
+        }
     }
+
+    // track that the notification was tapped
+    [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
+        [instances[token] track:@"$push_notification_tap" properties:trackingProps];
+    }];
 
     if (ontap == nil || ontap == (id)[NSNull null]) {
         // default to homescreen if no ontap info
+        MPLogInfo(@"%@ No tap instructions found.", self);
         completionHandler();
     } else {
-        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
-            [instances[token] track:@"$push_notification_tap" properties:trackingProps];
-        }];
 
         NSString *type = ontap[@"type"];
 

@@ -74,18 +74,18 @@
         return;
     }
 
-    NSArray* buttons = userInfo[@"mp_buttons"];
-    if (buttons == nil) {
-        NSLog(@"%@ getCategoryIdentifier: nothing specified under \"mp_buttons\" key, not creating action buttons.", self);
-        completion(nil);
-        return;
-    }
-
     // Generate unique category id from timestamp
     UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
     NSString *categoryId = [timeStampObj stringValue];
+
+    // Get buttons if they are specified
+    NSArray* buttons = userInfo[@"mp_buttons"];
+    if (buttons == nil) {
+        NSLog(@"%@ getCategoryIdentifier: nothing specified under \"mp_buttons\" key, not creating action buttons.", self);
+        buttons = @[];
+    }
 
     // Build a list of actions from the buttons data
     __block NSArray* actions = @[];
@@ -97,14 +97,14 @@
         actions = [actions arrayByAddingObject:action];
     }];
 
-    // Create a new category for these actions
+    // Create a new category with custom dismiss action set to true and any action buttons specified
     UNNotificationCategory* newCategory = [UNNotificationCategory
                                            categoryWithIdentifier:categoryId
                                            actions:actions
                                            intentIdentifiers:@[]
-                                           options:UNNotificationCategoryOptionNone];
+                                           options:UNNotificationCategoryOptionCustomDismissAction];
 
-    NSLog(@"%@ getCategoryIdentifier: Created a new category \"%@\" with %lu action(s)", self, categoryId, (unsigned long)[actions count]);
+    NSLog(@"%@ getCategoryIdentifier: Created a new category \"%@\" with %lu action button(s)", self, categoryId, (unsigned long)[actions count]);
 
     // Add the new category
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
