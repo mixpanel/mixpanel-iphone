@@ -1,8 +1,11 @@
 #import "MPNotificationServiceExtension.h"
 #import "MPLogger.h"
+#import "Mixpanel.h"
 
-API_AVAILABLE(ios(10.0))
 @interface MPNotificationServiceExtension()
+
+@property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
+@property (nonatomic, strong) UNMutableNotificationContent *bestAttemptContent;
 
 @end
 
@@ -13,30 +16,51 @@ API_AVAILABLE(ios(10.0))
 
     NSLog(@"%@ MPNotificationServiceExtension didReceiveNotificationRequest", self);
 
-    UNMutableNotificationContent *bestAttemptContent = [request.content mutableCopy];
+     if (![Mixpanel isMixpanelPushNotification:request.content]) {
+         NSLog(@"%@ Not a Mixpanel push notification, returning original content", self);
+         contentHandler(request.content);
+         return;
+     }
 
+    // Store a reference to the mutable content and the contentHandler on the class so we
+    // can use them in serviceExtensionTimeWillExpire if needed
+    self.contentHandler = contentHandler;
+    self.bestAttemptContent = [request.content mutableCopy];
+
+    // Setup the category first since it's faster and less likely to cause time to expire
     [self getCategoryIdentifier:request.content withCompletion:^(NSString *categoryIdentifier) {
 
         NSLog(@"%@ Using \"%@\" as categoryIdentifier", self, categoryIdentifier);
-        bestAttemptContent.categoryIdentifier = categoryIdentifier;
 
+        self.bestAttemptContent.categoryIdentifier = categoryIdentifier;
+
+        // Download rich media and create an attachment
         [self buildAttachments:request.content withCompletion:^(NSArray *attachments){
+
             if (attachments) {
-                NSLog(@"%@ Added rich media attachment", self);
-                bestAttemptContent.attachments = attachments;
+                NSLog(@"%@ Added %lu attachment(s)", self, (unsigned long)[attachments count]);
+                self.bestAttemptContent.attachments = attachments;
             } else {
                 NSLog(@"%@ No rich media found to attach", self);
             }
-            contentHandler(bestAttemptContent);
+
+            NSLog(@"%@ Notification finished building, returning content", self);
+            self.contentHandler(self.bestAttemptContent);
+
         }];
 
     }];
 }
 
+- (void)serviceExtensionTimeWillExpire {
+    NSLog(@"%@ contentHandler not called in time, returning bestAttemptContent", self);
+    self.contentHandler(self.bestAttemptContent);
+}
+
 - (void)getCategoryIdentifier:(UNNotificationContent *) content
                withCompletion:(void(^)(NSString *categoryIdentifier))completion {
 
-    // If the payload explicitly specifies a category, just use that one
+    // If the payload explicitly specifies a category, use it
     if ([content.categoryIdentifier length] > 0) {
         NSLog(@"%@ getCategoryIdentifier: explicit categoryIdentifer included in payload: %@", self, content.categoryIdentifier);
         completion(content.categoryIdentifier);
@@ -80,6 +104,8 @@ API_AVAILABLE(ios(10.0))
                                            intentIdentifiers:@[]
                                            options:UNNotificationCategoryOptionNone];
 
+    NSLog(@"%@ getCategoryIdentifier: Created a new category \"%@\" with %lu action(s)", self, categoryId, (unsigned long)[actions count]);
+
     // Add the new category
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         [center setNotificationCategories:[categories setByAddingObject:newCategory]];
@@ -91,20 +117,21 @@ API_AVAILABLE(ios(10.0))
 
     NSDictionary *userInfo = content.userInfo;
     if (userInfo == nil) {
+        NSLog(@"%@ buildAttachments: content.userInfo was nil, not creating action buttons.", self);
         completion(nil);
         return;
     }
 
     NSString *mediaUrl = userInfo[@"mp_media_url"];
     if (mediaUrl == nil) {
-        NSLog(@"%@ No media url specified, not attatching rich media", self);
+        NSLog(@"%@ buildAttachments: No media url specified, not attatching rich media", self);
         completion(nil);
         return;
     }
 
     NSString *mediaType = [mediaUrl pathExtension];
     if (mediaType == nil) {
-        NSLog(@"%@ unable to add attachment: extension is nil", self);
+        NSLog(@"%@ buildAttachments: Unable to add attachment: extension is nil", self);
         completion(nil);
         return;
     }
@@ -119,15 +146,18 @@ API_AVAILABLE(ios(10.0))
 - (void)loadAttachmentForUrlString:(NSString *)urlString
                           withType:(NSString *)type
                     withCompletion:(void(^)(UNNotificationAttachment *))completion  {
+
     __block UNNotificationAttachment *attachment = nil;
     NSURL *attachmentURL = [NSURL URLWithString:urlString];
     NSString *fileExt = [@"." stringByAppendingString:type];
+
+    NSLog(@"%@ Attempting download of media from url: %@", self, urlString);
 
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:attachmentURL
                 completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
                     if (error != nil) {
-                        NSLog(@"%@ unable to add attachment: %@", self, error.localizedDescription);
+                        NSLog(@"%@ loadAttachmentForUrlString: Unable to add attachment: %@", self, error.localizedDescription);
                     } else {
                         NSFileManager *fileManager = [NSFileManager defaultManager];
                         NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
@@ -136,7 +166,9 @@ API_AVAILABLE(ios(10.0))
                         NSError *attachmentError = nil;
                         attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
                         if (attachmentError || !attachment) {
-                            NSLog(@"%@ unable to add attachment: %@", self, attachmentError.localizedDescription);
+                            NSLog(@"%@ loadAttachmentForUrlString: Unable to add attachment: %@", self, attachmentError.localizedDescription);
+                        } else {
+                            NSLog(@"%@ loadAttachmentForUrlString: Successfully created attachment from url: %@", self, attachmentURL);
                         }
                     }
                     completion(attachment);

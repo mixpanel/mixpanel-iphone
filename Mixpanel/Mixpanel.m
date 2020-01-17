@@ -1856,6 +1856,74 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
+#pragma mark - Mixpanel Push Notifications
+
++ (BOOL)isMixpanelPushNotification:(UNNotificationContent *)content {
+    return [content.userInfo objectForKey:@"mp"] != nil;
+}
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+
+    if (![self isMixpanelPushNotification:response.notification.request.content]) {
+        MPLogWarning(@"%@Calling MixpanelPushNotifications.handleResponse on a non-Mixpanel push notification is a noop", self);
+        completionHandler();
+        return;
+    }
+
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
+    NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
+    [trackingProps setValuesForKeysWithDictionary:@{
+        @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
+        @"message_id": [userInfo valueForKeyPath:@"mp.m"],
+    }];
+
+    NSDictionary *ontap = nil;
+
+    if (isButtonTarget) {
+        NSArray *buttons = userInfo[@"mp_buttons"];
+        NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
+        NSDictionary *buttonDict = buttons[idx];
+        ontap = buttonDict[@"ontap"];
+        [trackingProps setValuesForKeysWithDictionary:@{
+            @"button_id": buttonDict[@"id"],
+            @"button_label": buttonDict[@"lbl"],
+        }];
+    } else if (userInfo[@"mp_ontap"]) {
+        ontap = userInfo[@"mp_ontap"];
+    }
+
+    if (ontap == nil || ontap == (id)[NSNull null]) {
+        // default to homescreen if no ontap info
+        completionHandler();
+    } else {
+        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
+            [instances[token] track:@"$push_notification_tap" properties:trackingProps];
+        }];
+
+        NSString *type = ontap[@"type"];
+
+        if ([type isEqualToString:MPPushTapActionTypeHomescreen]) {
+           // do nothing, already going to be at homescreen
+           completionHandler();
+        } else if ([type isEqualToString:MPPushTapActionTypeBrowser] || [type isEqualToString:MPPushTapActionTypeDeeplink]) {
+#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
+           NSURL *url = [[NSURL alloc] initWithString: ontap[@"uri"]];
+           UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
+           if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   [sharedApplication performSelector:@selector(openURL:) withObject:url];
+                   completionHandler();
+               });
+           } else {
+               completionHandler();
+           }
+#endif
+        }
+    }
+}
+
+
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 
 #pragma mark - Decide
@@ -2121,71 +2189,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             completion(variants);
         }
     } useCache:NO];
-}
-
-#pragma mark - Mixpanel Push Notifications
-
-+ (BOOL)isMixpanelPushNotification:(UNNotification *)notification  API_AVAILABLE(ios(10.0)){
-    return [notification.request.content.userInfo objectForKey:@"mp"] != nil;
-}
-
-+ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler  API_AVAILABLE(ios(10.0)){
-
-    if (![self isMixpanelPushNotification:response.notification]) {
-        MPLogWarning(@"%@Calling MixpanelPushNotifications.handleResponse on a non-Mixpanel push notification is a noop", self);
-        completionHandler();
-        return;
-    }
-
-    NSDictionary *userInfo = response.notification.request.content.userInfo;
-    BOOL isButtonTarget = [response.actionIdentifier containsString:@"MP_ACTION_"];
-    NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
-    [trackingProps setValuesForKeysWithDictionary:@{
-        @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
-        @"message_id": [userInfo valueForKeyPath:@"mp.m"],
-    }];
-
-    NSDictionary *ontap = nil;
-
-    if (isButtonTarget) {
-        NSArray *buttons = userInfo[@"mp_buttons"];
-        NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
-        NSDictionary *buttonDict = buttons[idx];
-        ontap = buttonDict[@"ontap"];
-        [trackingProps setValuesForKeysWithDictionary:@{
-            @"button_id": buttonDict[@"id"],
-            @"button_label": buttonDict[@"lbl"],
-        }];
-    } else if (userInfo[@"mp_ontap"]) {
-        ontap = userInfo[@"mp_ontap"];
-    }
-
-    if (ontap == nil || ontap == (id)[NSNull null]) {
-        // default to homescreen if no ontap info
-        completionHandler();
-    } else {
-        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
-            [instances[token] track:@"$push_notification_tap" properties:trackingProps];
-        }];
-
-        NSString *type = ontap[@"type"];
-
-        if ([type isEqualToString:MPPushTapActionTypeHomescreen]) {
-           // do nothing, already going to be at homescreen
-           completionHandler();
-        } else if ([type isEqualToString:MPPushTapActionTypeBrowser] || [type isEqualToString:MPPushTapActionTypeDeeplink]) {
-           NSURL *url = [[NSURL alloc] initWithString: ontap[@"uri"]];
-           UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
-           if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
-               dispatch_async(dispatch_get_main_queue(), ^{
-                   [sharedApplication performSelector:@selector(openURL:) withObject:url];
-                   completionHandler();
-               });
-           } else {
-               completionHandler();
-           }
-        }
-    }
 }
 
 #pragma mark - Mixpanel Notifications
