@@ -1,8 +1,6 @@
 #import "MPNotificationServiceExtension.h"
 #import "MPLogger.h"
 
-static NSString *const mediaUrlKey = @"mp_media_url";
-
 API_AVAILABLE(ios(10.0))
 @interface MPNotificationServiceExtension()
 
@@ -97,7 +95,7 @@ API_AVAILABLE(ios(10.0))
         return;
     }
 
-    NSString *mediaUrl = userInfo[mediaUrlKey];
+    NSString *mediaUrl = userInfo[@"mp_media_url"];
     if (mediaUrl == nil) {
         NSLog(@"%@ No media url specified, not attatching rich media", self);
         completion(nil);
