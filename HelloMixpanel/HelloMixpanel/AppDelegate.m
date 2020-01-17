@@ -62,22 +62,33 @@
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler
 {
-    if ([response.actionIdentifier isEqualToString:@"declineAction"]) {
-        NSLog(@"%@ user declined push notification action", self);
-        
-    } else if ([response.actionIdentifier isEqualToString:@"answerAction"]) {
-        NSLog(@"%@ user answered push notification action", self);
+    if ([Mixpanel isMixpanelPushNotification:response.notification.request.content]) {
+        NSLog(@"%@ delegating to Mixpanel SDK handler to handle push notification response...", self);
+        [Mixpanel userNotificationCenter:center didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+    } else {
+        if ([response.actionIdentifier isEqualToString:@"declineAction"]) {
+            NSLog(@"%@ user declined push notification action", self);
+        } else if ([response.actionIdentifier isEqualToString:@"answerAction"]) {
+            NSLog(@"%@ user answered push notification action", self);
+        }
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:response.notification.request.content.userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleDefault handler:nil]];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+
+        completionHandler();
     }
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:response.notification.request.content.userInfo[@"aps"][@"alert"] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"Okay") style:UIAlertActionStyleDefault handler:nil]];
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    
-    completionHandler();
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     [self.mixpanel.people addPushDeviceToken:devToken];
+
+    const unsigned *tokenBytes = [devToken bytes];
+    NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                         ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                         ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                         ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+    NSLog(@"%@ Your push device token is: %@", self, hexToken);
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
