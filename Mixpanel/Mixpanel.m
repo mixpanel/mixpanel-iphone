@@ -1887,7 +1887,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     // If the notification was dismissed, just track and return
     if ([response.actionIdentifier isEqualToString:UNNotificationDismissActionIdentifier]) {
         [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
-            [instances[token] track:@"$push_notification_dismissed" properties:trackingProps];
+            Mixpanel *instance = instances[token];
+            [instance track:@"$push_notification_dismissed" properties:trackingProps];
+            [instance flush];
         }];
         completionHandler();
         return;
@@ -1898,6 +1900,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
         // The action that indicates the user opened the app from the notification interface.
         MPLogInfo(@"%@ didReceiveNotificationResponse action: UNNotificationDefaultActionIdentifier", self);
+        [trackingProps setValue:@"notification" forKey:@"tap_target"];
         if (userInfo[@"mp_ontap"]) {
             ontap = userInfo[@"mp_ontap"];
         }
@@ -1912,13 +1915,16 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             [trackingProps setValuesForKeysWithDictionary:@{
                 @"button_id": buttonDict[@"id"],
                 @"button_label": buttonDict[@"lbl"],
+                @"tap_target": @"button",
             }];
         }
     }
 
     // track that the notification was tapped
     [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
-        [instances[token] track:@"$push_notification_tap" properties:trackingProps];
+        Mixpanel *instance = instances[token];
+        [instance track:@"$push_notification_tap" properties:trackingProps];
+        [instance flush];
     }];
 
     if (ontap == nil || ontap == (id)[NSNull null]) {
