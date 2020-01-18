@@ -171,10 +171,12 @@
         [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
     }
 
-    // iOS seems to require that _some_ category has been registered before custom categories
+    // Based on testing, iOS seems to require that _some_ category has been registered before custom categories
     // start working. Without this block, the first notification a user receives will not have
     // action buttons even though we register new ones in the MPNotificationServiceExtension.
-    if (@available(iOS 10.0, *)) {
+
+#if !defined(MIXPANEL_TVOS)
+    if (@available(iOS 10.0, macOS 10.14, watchOS 6.0, *)) {
         UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
         UNNotificationCategory* dummyCategory = [UNNotificationCategory
                                                      categoryWithIdentifier:@"mp_dummy"
@@ -183,6 +185,7 @@
                                                      options:UNNotificationCategoryOptionNone];
         [center setNotificationCategories:[[NSSet alloc] initWithArray:@[dummyCategory]]];
     }
+#endif
 }
 
 - (void)removeAllPushDeviceTokens
