@@ -1875,6 +1875,8 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 
     NSDictionary *userInfo = response.notification.request.content.userInfo;
+
+    // Initialize properties to track to Mixpanel
     NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
     [trackingProps setValuesForKeysWithDictionary:@{
         @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
@@ -1899,7 +1901,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
         // The action that indicates the user opened the app from the notification interface.
-        MPLogInfo(@"%@ didReceiveNotificationResponse action: UNNotificationDefaultActionIdentifier", self);
         [trackingProps setValue:@"notification" forKey:@"tap_target"];
         if (userInfo[@"mp_ontap"]) {
             ontap = userInfo[@"mp_ontap"];
@@ -1920,7 +1921,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }
     }
 
-    // track that the notification was tapped
+    // Track tap event to all Mixpanel instances
     [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
         Mixpanel *instance = instances[token];
         [instance track:@"$push_notification_tap" properties:trackingProps];
@@ -1928,7 +1929,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }];
 
     if (ontap == nil || ontap == (id)[NSNull null]) {
-        // default to homescreen if no ontap info
+        // Default to homescreen if no ontap info
         MPLogInfo(@"%@ No tap instructions found.", self);
         completionHandler();
     } else {
@@ -1936,7 +1937,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         NSString *type = ontap[@"type"];
 
         if ([type isEqualToString:MPPushTapActionTypeHomescreen]) {
-           // do nothing, already going to be at homescreen
+           // Do nothing, already going to be at homescreen
            completionHandler();
         } else if ([type isEqualToString:MPPushTapActionTypeBrowser] || [type isEqualToString:MPPushTapActionTypeDeeplink]) {
 #if !MIXPANEL_NO_UIAPPLICATION_ACCESS
