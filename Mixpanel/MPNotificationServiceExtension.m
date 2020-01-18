@@ -16,11 +16,11 @@
 
     NSLog(@"%@ MPNotificationServiceExtension didReceiveNotificationRequest", self);
 
-     if (![Mixpanel isMixpanelPushNotification:request.content]) {
-         NSLog(@"%@ Not a Mixpanel push notification, returning original content", self);
-         contentHandler(request.content);
-         return;
-     }
+    if (![Mixpanel isMixpanelPushNotification:request.content]) {
+        NSLog(@"%@ Not a Mixpanel push notification, returning original content", self);
+        contentHandler(request.content);
+        return;
+    }
 
     // Store a reference to the mutable content and the contentHandler on the class so we
     // can use them in serviceExtensionTimeWillExpire if needed
