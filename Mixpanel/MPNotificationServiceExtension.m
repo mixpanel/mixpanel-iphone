@@ -109,7 +109,27 @@
     // Add the new category
     [center getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
         [center setNotificationCategories:[categories setByAddingObject:newCategory]];
-        completion(categoryId);
+
+        // In testing, it's clear that setNotificationCategories is not a synchronous action
+        // or there is caching going on. We need to wait until the category is available.
+        [self waitForCategoryExistence:categoryId withCompletion:^{
+            NSLog(@"%@ waitForCategoryExistence: Category \"%@\" found, returning.", self, categoryId);
+            completion(categoryId);
+        }];
+    }];
+
+}
+
+- (void)waitForCategoryExistence:(NSString *) categoryIdentifier withCompletion:(void(^)(void))completion {
+    NSLog(@"%@ Checking for the existence of category \"%@\"...", self, categoryIdentifier);
+    [UNUserNotificationCenter.currentNotificationCenter getNotificationCategoriesWithCompletionHandler:^(NSSet<UNNotificationCategory *> *_Nonnull categories) {
+        for(UNNotificationCategory *category in categories) {
+            if ([category.identifier isEqualToString:categoryIdentifier]) {
+                completion();
+                return;
+            }
+        }
+        [self waitForCategoryExistence:categoryIdentifier withCompletion:completion];
     }];
 }
 
