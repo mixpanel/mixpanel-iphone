@@ -56,7 +56,6 @@
 		6088BC2A23D0CE18006FB2BF /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6088BC2923D0CE18006FB2BF /* NotificationService.m */; };
 		6088BC2E23D0CE18006FB2BF /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6088BC2623D0CE18006FB2BF /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		60B7C73623D0E00200F4C9B1 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
-		60B7C73723D0E00200F4C9B1 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE35E207548E600C12F18 /* TrackingViewController.m */; };
 		860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36120754DBE00C12F18 /* PeopleViewController.m */; };
 		860BE3672075A82C00C12F18 /* BaseTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE3662075A82C00C12F18 /* BaseTestViewController.m */; };
@@ -292,17 +291,6 @@
 				6088BC2E23D0CE18006FB2BF /* NotificationServiceExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		60B7C73823D0E00200F4C9B1 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				60B7C73723D0E00200F4C9B1 /* Mixpanel.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E12C04A81D135952007D2086 /* Embed Frameworks */ = {
@@ -905,7 +893,6 @@
 				6088BC2223D0CE18006FB2BF /* Sources */,
 				6088BC2323D0CE18006FB2BF /* Frameworks */,
 				6088BC2423D0CE18006FB2BF /* Resources */,
-				60B7C73823D0E00200F4C9B1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1655,6 +1642,7 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-Wno-gnu",
@@ -1700,6 +1688,7 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-Wno-gnu",
@@ -1899,6 +1888,7 @@
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-Wno-gnu",
@@ -1983,8 +1973,9 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.NotificationServiceExtension;
@@ -2020,8 +2011,9 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.NotificationServiceExtension;
@@ -2058,8 +2050,9 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.NotificationServiceExtension;
@@ -2100,6 +2093,7 @@
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
 				);
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2137,6 +2131,7 @@
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
 				);
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2175,6 +2170,7 @@
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
 				);
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2341,6 +2337,7 @@
 				IBSC_MODULE = HelloMixpanelWatch_Extension;
 				INFOPLIST_FILE = HelloMixpanelWatch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2373,6 +2370,7 @@
 				IBSC_MODULE = HelloMixpanelWatch_Extension;
 				INFOPLIST_FILE = HelloMixpanelWatch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2406,6 +2404,7 @@
 				IBSC_MODULE = HelloMixpanelWatch_Extension;
 				INFOPLIST_FILE = HelloMixpanelWatch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2441,6 +2440,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "HelloMixpanelWatch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2474,6 +2474,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "HelloMixpanelWatch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
@@ -2508,6 +2509,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "HelloMixpanelWatch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
