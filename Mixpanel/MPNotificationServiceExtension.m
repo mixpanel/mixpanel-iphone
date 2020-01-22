@@ -13,7 +13,6 @@
 
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request
                    withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler  {
-
     NSLog(@"%@ MPNotificationServiceExtension didReceiveNotificationRequest", self);
 
     if (![Mixpanel isMixpanelPushNotification:request.content]) {
@@ -29,14 +28,11 @@
 
     // Setup the category first since it's faster and less likely to cause time to expire
     [self getCategoryIdentifier:request.content withCompletion:^(NSString *categoryIdentifier) {
-
         NSLog(@"%@ Using \"%@\" as categoryIdentifier", self, categoryIdentifier);
 
         self.bestAttemptContent.categoryIdentifier = categoryIdentifier;
-
         // Download rich media and create an attachment
         [self buildAttachments:request.content withCompletion:^(NSArray *attachments){
-
             if (attachments) {
                 NSLog(@"%@ Added %lu attachment(s)", self, (unsigned long)[attachments count]);
                 self.bestAttemptContent.attachments = attachments;
@@ -59,7 +55,6 @@
 
 - (void)getCategoryIdentifier:(UNNotificationContent *) content
                withCompletion:(void(^)(NSString *categoryIdentifier))completion {
-
     // If the payload explicitly specifies a category, use it
     if ([content.categoryIdentifier length] > 0) {
         NSLog(@"%@ getCategoryIdentifier: explicit categoryIdentifer included in payload: %@", self, content.categoryIdentifier);
@@ -75,13 +70,13 @@
     }
 
     // Generate unique category id from timestamp
-    UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
     NSString *categoryId = [timeStampObj stringValue];
 
     // Get buttons if they are specified
-    NSArray* buttons = userInfo[@"mp_buttons"];
+    NSArray *buttons = userInfo[@"mp_buttons"];
     if (buttons == nil) {
         NSLog(@"%@ getCategoryIdentifier: nothing specified under \"mp_buttons\" key, not creating action buttons.", self);
         buttons = @[];
@@ -98,7 +93,7 @@
     }];
 
     // Create a new category with custom dismiss action set to true and any action buttons specified
-    UNNotificationCategory* newCategory = [UNNotificationCategory
+    UNNotificationCategory *newCategory = [UNNotificationCategory
                                            categoryWithIdentifier:categoryId
                                            actions:actions
                                            intentIdentifiers:@[]
@@ -134,7 +129,6 @@
 }
 
 - (void)buildAttachments:(UNNotificationContent *) content withCompletion:(void(^)(NSArray *))completion {
-
     NSDictionary *userInfo = content.userInfo;
     if (userInfo == nil) {
         NSLog(@"%@ buildAttachments: content.userInfo was nil, not creating action buttons.", self);
@@ -166,7 +160,6 @@
 - (void)loadAttachmentForUrlString:(NSString *)urlString
                           withType:(NSString *)type
                     withCompletion:(void(^)(UNNotificationAttachment *))completion  {
-
     __block UNNotificationAttachment *attachment = nil;
     NSURL *attachmentURL = [NSURL URLWithString:urlString];
     NSString *fileExt = [@"." stringByAppendingString:type];
