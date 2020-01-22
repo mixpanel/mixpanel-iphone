@@ -7,6 +7,7 @@
 #import "MixpanelPeople.h"
 #import "MixpanelType.h"
 
+#import <UserNotifications/UserNotifications.h>
 
 #if defined(MIXPANEL_WATCHOS)
 #define MIXPANEL_FLUSH_IMMEDIATELY 1
@@ -792,6 +793,18 @@ extern NSString *const MPNotificationTypeTakeover;
  */
 + (NSString *)libVersion;
 
+
+#pragma mark - Mixpanel Push Notifications
+
+/*!
+ Detects if a UNNotification is from Mixpanel
+ */
++ (BOOL)isMixpanelPushNotification:(UNNotificationContent *)notification API_AVAILABLE(ios(10.0), macos(10.14), watchos(6.0)) API_UNAVAILABLE(tvos);
+
+/*!
+ Tracks and executes the appropriate action when a Mixpanel push notification is tapped
+ */
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0), macos(10.14), watchos(6.0)) API_UNAVAILABLE(tvos);
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Notifications

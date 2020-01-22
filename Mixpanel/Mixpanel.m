@@ -36,6 +36,10 @@
 NSString *const MPNotificationTypeMini = @"mini";
 NSString *const MPNotificationTypeTakeover = @"takeover";
 
+NSString *const MPPushTapActionTypeBrowser = @"browser";
+NSString *const MPPushTapActionTypeDeeplink = @"deeplink";
+NSString *const MPPushTapActionTypeHomescreen = @"homescreen";
+
 @implementation Mixpanel
 
 static NSMutableDictionary *instances;
@@ -1851,6 +1855,107 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return gLoggingEnabled;
     }
 }
+
+#pragma mark - Mixpanel Push Notifications
+
++ (BOOL)isMixpanelPushNotification:(UNNotificationContent *)content {
+    if ([content userInfo] == nil) {
+        MPLogInfo(@"%@ userInfo was nil, returning false");
+        return false;
+    }
+    return [content.userInfo objectForKey:@"mp"] != nil;
+}
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+
+    if (![self isMixpanelPushNotification:response.notification.request.content]) {
+        MPLogWarning(@"%@Calling MixpanelPushNotifications.handleResponse on a non-Mixpanel push notification is a noop", self);
+        completionHandler();
+        return;
+    }
+
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+
+    // Initialize properties to track to Mixpanel
+    NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
+    [trackingProps setValuesForKeysWithDictionary:@{
+        @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
+        @"message_id": [userInfo valueForKeyPath:@"mp.m"],
+    }];
+
+
+    MPLogInfo(@"%@ didReceiveNotificationResponse action: %@", self, response.actionIdentifier);
+
+    // If the notification was dismissed, just track and return
+    if ([response.actionIdentifier isEqualToString:UNNotificationDismissActionIdentifier]) {
+        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
+            Mixpanel *instance = instances[token];
+            [instance track:@"$push_notification_dismissed" properties:trackingProps];
+            [instance flush];
+        }];
+        completionHandler();
+        return;
+    }
+
+    NSDictionary *ontap = nil;
+
+    if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
+        // The action that indicates the user opened the app from the notification interface.
+        [trackingProps setValue:@"notification" forKey:@"tap_target"];
+        if (userInfo[@"mp_ontap"]) {
+            ontap = userInfo[@"mp_ontap"];
+        }
+    } else {
+        // Non-default, non-dismiss action -- probably a button tap
+        BOOL wasButtonTapped = [response.actionIdentifier containsString:@"MP_ACTION_"];
+        if (wasButtonTapped) {
+            NSArray *buttons = userInfo[@"mp_buttons"];
+            NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
+            NSDictionary *buttonDict = buttons[idx];
+            ontap = buttonDict[@"ontap"];
+            [trackingProps setValuesForKeysWithDictionary:@{
+                @"button_id": buttonDict[@"id"],
+                @"button_label": buttonDict[@"lbl"],
+                @"tap_target": @"button",
+            }];
+        }
+    }
+
+    // Track tap event to all Mixpanel instances
+    [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
+        Mixpanel *instance = instances[token];
+        [instance track:@"$push_notification_tap" properties:trackingProps];
+        [instance flush];
+    }];
+
+    if (ontap == nil || ontap == (id)[NSNull null]) {
+        // Default to homescreen if no ontap info
+        MPLogInfo(@"%@ No tap instructions found.", self);
+        completionHandler();
+    } else {
+
+        NSString *type = ontap[@"type"];
+
+        if ([type isEqualToString:MPPushTapActionTypeHomescreen]) {
+           // Do nothing, already going to be at homescreen
+           completionHandler();
+        } else if ([type isEqualToString:MPPushTapActionTypeBrowser] || [type isEqualToString:MPPushTapActionTypeDeeplink]) {
+#if !MIXPANEL_NO_UIAPPLICATION_ACCESS
+           NSURL *url = [[NSURL alloc] initWithString: ontap[@"uri"]];
+           UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
+           if ([sharedApplication respondsToSelector:@selector(openURL:)]) {
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   [sharedApplication performSelector:@selector(openURL:) withObject:url];
+                   completionHandler();
+               });
+           } else {
+               completionHandler();
+           }
+#endif
+        }
+    }
+}
+
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 
