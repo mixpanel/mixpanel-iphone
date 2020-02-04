@@ -1882,7 +1882,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     // Initialize properties to track to Mixpanel
     NSMutableDictionary *additionalTrackingProps = [[NSMutableDictionary alloc] init];
     [additionalTrackingProps setValuesForKeysWithDictionary:@{
-        @"notification_id": request.identifier,
+        @"ios_notification_id": request.identifier,
     }];
 
     MPLogInfo(@"%@ didReceiveNotificationResponse action: %@", self, response.actionIdentifier);
