@@ -26,6 +26,9 @@
     self.contentHandler = contentHandler;
     self.bestAttemptContent = [request.content mutableCopy];
 
+    // Track $push_notification_received event
+    [self trackNotificationReceived:request.content];
+
     // Setup the category first since it's faster and less likely to cause time to expire
     [self getCategoryIdentifier:request.content withCompletion:^(NSString *categoryIdentifier) {
         NSLog(@"%@ Using \"%@\" as categoryIdentifier", self, categoryIdentifier);
@@ -44,13 +47,34 @@
             self.contentHandler(self.bestAttemptContent);
 
         }];
-
     }];
 }
 
 - (void)serviceExtensionTimeWillExpire {
     NSLog(@"%@ contentHandler not called in time, returning bestAttemptContent", self);
     self.contentHandler(self.bestAttemptContent);
+}
+
+- (void)trackNotificationReceived:(UNNotificationContent *)content {
+    id mpPayload = content.userInfo[@"mp"];
+    if (!mpPayload) {
+        NSLog(@"%@ Malformed mixpanel push payload, not tracking $push_notification_received", self);
+        return;
+    }
+
+    NSString* distinctId = mpPayload[@"distinct_id"];
+    if (!distinctId) {
+        NSLog(@"%@ \"distinct_id\" not found in mixpanel push payload, not tracking $push_notification_received", self);
+        return;
+    }
+
+    NSString* projectToken = mpPayload[@"token"];
+    if (!projectToken) {
+        NSLog(@"%@ \"token\" not found in mixpanel push payload, not tracking $push_notification_received", self);
+        return;
+    }
+
+    [[Mixpanel sharedInstanceWithToken:projectToken] trackPushNotification:content.userInfo event:@"$push_notification_received" properties:@{@"distinct_id": distinctId}];
 }
 
 - (void)getCategoryIdentifier:(UNNotificationContent *) content
