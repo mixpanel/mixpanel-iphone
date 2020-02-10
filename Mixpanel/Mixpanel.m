@@ -844,12 +844,14 @@ static NSString *defaultProjectToken;
         NSLog(@"%@ \"distinct_id\" not found in mixpanel push payload, not tracking %@", self, event);
         return;
     }
+    [mpPayload removeObjectForKey:@"distinct_id"];
 
     NSString *projectToken = mpPayload[@"token"];
     if (!projectToken) {
         NSLog(@"%@ \"token\" not found in mixpanel push payload, not tracking %@", self, event);
         return;
     }
+    [mpPayload removeObjectForKey:@"token"];
 
     NSMutableDictionary *properties = [additionalProperties mutableCopy];
     [properties addEntriesFromDictionary:@{@"distinct_id": distinctId, @"ios_notification_id": request.identifier}];
