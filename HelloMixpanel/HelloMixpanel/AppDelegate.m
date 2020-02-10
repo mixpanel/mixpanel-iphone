@@ -40,6 +40,18 @@
     // Set some super properties, which will be added to every tracked event
     [self.mixpanel registerSuperProperties:@{@"Plan": @"Premium"}];
 
+    // Set a profile property so a profile is created
+    [self.mixpanel.people setOnce:@{@"$name": @"Demo User"}];
+
+    // Track a test event
+    [self.mixpanel track:@"HelloMixpanel"];
+
+    // Identify using the generated distinctId so people queue is flushed
+    [self.mixpanel identify:[self.mixpanel distinctId]];
+
+    // Force a flush to make debugging easier
+    [self.mixpanel flush];
+
     if ([UNUserNotificationCenter class]) {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
         center.delegate = self;
