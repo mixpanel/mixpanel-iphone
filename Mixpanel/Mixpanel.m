@@ -812,6 +812,13 @@ static NSString *defaultProjectToken;
     if (rawMp) {
         NSDictionary *mpPayload = [rawMp isKindOfClass:[NSDictionary class]] ? rawMp : @{};
         NSMutableDictionary *properties = [mpPayload mutableCopy];
+
+        // "token" and "distinct_id" are sent with the Mixpanel push payload but we don't need to track them
+        // they are handled upstream
+        [properties removeObjectForKey:@"token"];
+        [properties removeObjectForKey:@"distinct_id"];
+
+        // merge in additional properties we explicitly want to include
         [properties addEntriesFromDictionary:additionalProperties];
 
         if (mpPayload[@"m"] && mpPayload[@"c"]) {
@@ -844,14 +851,12 @@ static NSString *defaultProjectToken;
         NSLog(@"%@ \"distinct_id\" not found in mixpanel push payload, not tracking %@", self, event);
         return;
     }
-    [mpPayload removeObjectForKey:@"distinct_id"];
 
     NSString *projectToken = mpPayload[@"token"];
     if (!projectToken) {
         NSLog(@"%@ \"token\" not found in mixpanel push payload, not tracking %@", self, event);
         return;
     }
-    [mpPayload removeObjectForKey:@"token"];
 
     NSMutableDictionary *properties = [additionalProperties mutableCopy];
     [properties addEntriesFromDictionary:@{@"distinct_id": distinctId, @"$ios_notification_id": request.identifier}];
