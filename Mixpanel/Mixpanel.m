@@ -854,7 +854,7 @@ static NSString *defaultProjectToken;
     [mpPayload removeObjectForKey:@"token"];
 
     NSMutableDictionary *properties = [additionalProperties mutableCopy];
-    [properties addEntriesFromDictionary:@{@"distinct_id": distinctId, @"ios_notification_id": request.identifier}];
+    [properties addEntriesFromDictionary:@{@"distinct_id": distinctId, @"$ios_notification_id": request.identifier}];
 
     // Track using project token and distinct_id from push payload
     Mixpanel *instance = [Mixpanel sharedInstanceWithToken:projectToken];
