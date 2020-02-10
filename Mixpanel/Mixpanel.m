@@ -814,7 +814,8 @@ static NSString *defaultProjectToken;
         NSMutableDictionary *properties = [mpPayload mutableCopy];
 
         // "token" and "distinct_id" are sent with the Mixpanel push payload but we don't need to track them
-        // they are handled upstream
+        // they are handled upstream to initialize the mixpanel instance and "distinct_id" will be passed in
+        // explicitly in "additionalProperties"
         [properties removeObjectForKey:@"token"];
         [properties removeObjectForKey:@"distinct_id"];
 
