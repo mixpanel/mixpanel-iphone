@@ -1933,7 +1933,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
     if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
         // The action that indicates the user opened the app from the notification interface.
-        additionalTrackingProps[@"tap_target"] = @"notification";
+        additionalTrackingProps[@"$tap_target"] = @"notification";
         if (userInfo[@"mp_ontap"]) {
             ontap = userInfo[@"mp_ontap"];
         }
@@ -1946,9 +1946,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             NSDictionary *buttonDict = buttons[idx];
             ontap = buttonDict[@"ontap"];
             [additionalTrackingProps addEntriesFromDictionary:@{
-                @"button_id": buttonDict[@"id"],
-                @"button_label": buttonDict[@"lbl"],
-                @"tap_target": @"button",
+                @"$button_id": buttonDict[@"id"],
+                @"$button_label": buttonDict[@"lbl"],
+                @"$tap_target": @"button",
             }];
         }
     }
@@ -1957,11 +1957,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     if (ontap != nil && ontap != (id)[NSNull null]) {
         NSString *tapActionType = ontap[@"type"];
         if (tapActionType != nil) {
-            additionalTrackingProps[@"tap_action_type"] = tapActionType;
+            additionalTrackingProps[@"$tap_action_type"] = tapActionType;
         }
         NSString *tapActionUri = ontap[@"uri"];
         if (tapActionUri != nil) {
-            additionalTrackingProps[@"tap_action_uri"] = tapActionUri;
+            additionalTrackingProps[@"$tap_action_uri"] = tapActionUri;
         }
     }
 
