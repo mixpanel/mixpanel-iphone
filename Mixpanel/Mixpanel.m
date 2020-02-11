@@ -200,7 +200,7 @@ static NSString *defaultProjectToken;
                 [self setupAutomaticPushTracking];
                 NSDictionary *remoteNotification = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
                 if (remoteNotification) {
-                    [self trackPushNotification:remoteNotification event:@"$app_open"];
+                    [self trackPushNotification:remoteNotification event:@"$app_open" properties:@{}];
                 }
             }
 #endif
@@ -804,17 +804,25 @@ static NSString *defaultProjectToken;
     }
 }
 
-- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
+- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event properties:(NSDictionary *)additionalProperties
 {
     MPLogInfo(@"%@ tracking push payload %@", self, userInfo);
 
     id rawMp = userInfo[@"mp"];
     if (rawMp) {
+        NSDictionary *mpPayload = [rawMp isKindOfClass:[NSDictionary class]] ? rawMp : @{};
+        NSMutableDictionary *properties = [mpPayload mutableCopy];
 
-        NSDictionary *mpPayload = [rawMp isKindOfClass:[NSDictionary class]] ? rawMp : nil;
+        // "token" and "distinct_id" are sent with the Mixpanel push payload but we don't need to track them
+        // they are handled upstream to initialize the mixpanel instance and "distinct_id" will be passed in
+        // explicitly in "additionalProperties"
+        [properties removeObjectForKey:@"token"];
+        [properties removeObjectForKey:@"distinct_id"];
+
+        // merge in additional properties we explicitly want to include
+        [properties addEntriesFromDictionary:additionalProperties];
 
         if (mpPayload[@"m"] && mpPayload[@"c"]) {
-            NSMutableDictionary *properties = [mpPayload mutableCopy];
             properties[@"campaign_id"] = mpPayload[@"c"];
             properties[@"message_id"] = mpPayload[@"m"];
             properties[@"message_type"] = @"push";
@@ -828,9 +836,41 @@ static NSString *defaultProjectToken;
     }
 }
 
+
++ (void)trackPushNotificationEventFromRequest:(UNNotificationRequest *)request event:(NSString *)event properties:(NSDictionary *)additionalProperties
+{
+    NSDictionary* userInfo = request.content.userInfo;
+
+    id mpPayload = userInfo[@"mp"];
+    if (!mpPayload) {
+        NSLog(@"%@ Malformed mixpanel push payload, not tracking %@", self, event);
+        return;
+    }
+
+    NSString *distinctId = mpPayload[@"distinct_id"];
+    if (!distinctId) {
+        NSLog(@"%@ \"distinct_id\" not found in mixpanel push payload, not tracking %@", self, event);
+        return;
+    }
+
+    NSString *projectToken = mpPayload[@"token"];
+    if (!projectToken) {
+        NSLog(@"%@ \"token\" not found in mixpanel push payload, not tracking %@", self, event);
+        return;
+    }
+
+    NSMutableDictionary *properties = [additionalProperties mutableCopy];
+    [properties addEntriesFromDictionary:@{@"distinct_id": distinctId, @"$ios_notification_id": request.identifier}];
+
+    // Track using project token and distinct_id from push payload
+    Mixpanel *instance = [Mixpanel sharedInstanceWithToken:projectToken];
+    [instance trackPushNotification:userInfo event:event properties:properties];
+    [instance flush];
+}
+
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotification:userInfo event:@"$campaign_received"];
+    [self trackPushNotification:userInfo event:@"$campaign_received" properties:@{}];
 }
 #endif
 
@@ -1874,34 +1914,26 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         return;
     }
 
-    NSDictionary *userInfo = response.notification.request.content.userInfo;
-
-    // Initialize properties to track to Mixpanel
-    NSMutableDictionary *trackingProps = [[NSMutableDictionary alloc] init];
-    [trackingProps setValuesForKeysWithDictionary:@{
-        @"campaign_id": [userInfo valueForKeyPath:@"mp.c"],
-        @"message_id": [userInfo valueForKeyPath:@"mp.m"],
-    }];
-
+    UNNotificationRequest *request = response.notification.request;
+    NSDictionary *userInfo = request.content.userInfo;
 
     MPLogInfo(@"%@ didReceiveNotificationResponse action: %@", self, response.actionIdentifier);
 
     // If the notification was dismissed, just track and return
     if ([response.actionIdentifier isEqualToString:UNNotificationDismissActionIdentifier]) {
-        [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
-            Mixpanel *instance = instances[token];
-            [instance track:@"$push_notification_dismissed" properties:trackingProps];
-            [instance flush];
-        }];
+        [Mixpanel trackPushNotificationEventFromRequest:request event:@"$push_notification_dismissed" properties:@{}];
         completionHandler();
         return;
     }
+
+    // Initialize additonal properties to track to Mixpanel with the $push_notification_tap event
+    NSMutableDictionary *additionalTrackingProps = [[NSMutableDictionary alloc] init];
 
     NSDictionary *ontap = nil;
 
     if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
         // The action that indicates the user opened the app from the notification interface.
-        [trackingProps setValue:@"notification" forKey:@"tap_target"];
+        additionalTrackingProps[@"$tap_target"] = @"notification";
         if (userInfo[@"mp_ontap"]) {
             ontap = userInfo[@"mp_ontap"];
         }
@@ -1913,20 +1945,28 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             NSInteger idx = [[response.actionIdentifier stringByReplacingOccurrencesOfString:@"MP_ACTION_" withString:@""] integerValue];
             NSDictionary *buttonDict = buttons[idx];
             ontap = buttonDict[@"ontap"];
-            [trackingProps setValuesForKeysWithDictionary:@{
-                @"button_id": buttonDict[@"id"],
-                @"button_label": buttonDict[@"lbl"],
-                @"tap_target": @"button",
+            [additionalTrackingProps addEntriesFromDictionary:@{
+                @"$button_id": buttonDict[@"id"],
+                @"$button_label": buttonDict[@"lbl"],
+                @"$tap_target": @"button",
             }];
         }
     }
 
-    // Track tap event to all Mixpanel instances
-    [instances.allKeys enumerateObjectsUsingBlock:^(NSString *token, NSUInteger idx, BOOL * _Nonnull stop) {
-        Mixpanel *instance = instances[token];
-        [instance track:@"$push_notification_tap" properties:trackingProps];
-        [instance flush];
-    }];
+    // Add additional tracking props
+    if (ontap != nil && ontap != (id)[NSNull null]) {
+        NSString *tapActionType = ontap[@"type"];
+        if (tapActionType != nil) {
+            additionalTrackingProps[@"$tap_action_type"] = tapActionType;
+        }
+        NSString *tapActionUri = ontap[@"uri"];
+        if (tapActionUri != nil) {
+            additionalTrackingProps[@"$tap_action_uri"] = tapActionUri;
+        }
+    }
+
+    // Track tap event
+    [Mixpanel trackPushNotificationEventFromRequest:request event:@"$push_notification_tap" properties:additionalTrackingProps];
 
     if (ontap == nil || ontap == (id)[NSNull null]) {
         // Default to homescreen if no ontap info

@@ -26,6 +26,9 @@
     self.contentHandler = contentHandler;
     self.bestAttemptContent = [request.content mutableCopy];
 
+    // Track $push_notification_received event
+    [Mixpanel trackPushNotificationEventFromRequest:request event:@"$push_notification_received" properties:@{}];
+
     // Setup the category first since it's faster and less likely to cause time to expire
     [self getCategoryIdentifier:request.content withCompletion:^(NSString *categoryIdentifier) {
         NSLog(@"%@ Using \"%@\" as categoryIdentifier", self, categoryIdentifier);
@@ -44,7 +47,6 @@
             self.contentHandler(self.bestAttemptContent);
 
         }];
-
     }];
 }
 
