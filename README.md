@@ -126,7 +126,7 @@ The Mixpanel SDK comes with a custom [Notification Service Extension](https://de
 <img width="738" alt="Screenshot 2020-02-13 14 44 38" src="https://user-images.githubusercontent.com/556882/74478475-0c224700-4e73-11ea-9f57-3b40b6fdbbcd.png">
 <img width="739" alt="Screenshot 2020-02-13 14 46 53" src="https://user-images.githubusercontent.com/556882/74483383-febd8a80-4e7b-11ea-9421-ad5005e670f8.png">
 
-#### 2. Add Mixpanel-swift as a dependency
+#### 2. Add Mixpanel as a dependency
 Add the following to the end of your `Podfile`:
 ```Podspec
 target 'NotificationService' do
