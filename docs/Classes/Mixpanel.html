@@ -104,6 +104,8 @@
 	
 	<optgroup label="Class Methods">
 		
+		<option value="//api/name/isMixpanelPushNotification:">+ isMixpanelPushNotification:</option>
+		
 		<option value="//api/name/libVersion">+ libVersion</option>
 		
 		<option value="//api/name/sharedInstance">+ sharedInstance</option>
@@ -117,6 +119,10 @@
 		<option value="//api/name/sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:">+ sharedInstanceWithToken:launchOptions:trackCrashes:automaticPushTracking:optOutTrackingByDefault:</option>
 		
 		<option value="//api/name/sharedInstanceWithToken:optOutTrackingByDefault:">+ sharedInstanceWithToken:optOutTrackingByDefault:</option>
+		
+		<option value="//api/name/trackPushNotificationEventFromRequest:event:properties:">+ trackPushNotificationEventFromRequest:event:properties:</option>
+		
+		<option value="//api/name/userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:">+ userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:</option>
 		
 	</optgroup>
 	
@@ -199,6 +205,8 @@
 		<option value="//api/name/track:">- track:</option>
 		
 		<option value="//api/name/track:properties:">- track:properties:</option>
+		
+		<option value="//api/name/trackPushNotification:event:properties:">- trackPushNotification:event:properties:</option>
 		
 		<option value="//api/name/trackWithGroups:properties:groups:">- trackWithGroups:properties:groups:</option>
 		
@@ -3795,6 +3803,170 @@ sent to Mixpanel after using this method.</p>
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/isMixpanelPushNotification:" title="isMixpanelPushNotification:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isMixpanelPushNotification:">+&nbsp;isMixpanelPushNotification:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Detects if a UNNotification is from Mixpanel</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)isMixpanelPushNotification:(UNNotificationContent *)<em>notification</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:" title="userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:">+&nbsp;userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tracks and executes the appropriate action when a Mixpanel push notification is tapped</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)userNotificationCenter:(UNUserNotificationCenter *)<em>center</em> didReceiveNotificationResponse:(UNNotificationResponse *)<em>response</em> withCompletionHandler:(void ( ^ ) ( void ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackPushNotificationEventFromRequest:event:properties:" title="trackPushNotificationEventFromRequest:event:properties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackPushNotificationEventFromRequest:event:properties:">+&nbsp;trackPushNotificationEventFromRequest:event:properties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Internal utility for push notification-related event tracking using the project token from the push payload</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)trackPushNotificationEventFromRequest:(UNNotificationRequest *)<em>request</em> event:(NSString *)<em>event</em> properties:(NSDictionary *)<em>additionalProperties</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackPushNotification:event:properties:" title="trackPushNotification:event:properties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackPushNotification:event:properties:">&ndash;&nbsp;trackPushNotification:event:properties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Internal utility for push notification-related event tracking</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)trackPushNotification:(NSDictionary *)<em>userInfo</em> event:(NSString *)<em>event</em> properties:(NSDictionary *)<em>additionalProperties</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/showNotificationWithID:" title="showNotificationWithID:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/showNotificationWithID:">&ndash;&nbsp;showNotificationWithID:</a></code>
 </h3>
@@ -4122,7 +4294,7 @@ have been loaded and applied.</p>
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2020 Mixpanel. All rights reserved. Updated: 2020-01-10</p>
+						<p class="copyright">Copyright &copy; 2020 Mixpanel. All rights reserved. Updated: 2020-02-12</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
