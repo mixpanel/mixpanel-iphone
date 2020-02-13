@@ -111,3 +111,52 @@ Tracking additional events is as easy as adding `track:` or `track:properties:` 
 You're done! You've successfully integrated the Mixpanel SDK into your app. To stay up to speed on important SDK releases and updates watch our iPhone repository on [Github](https://github.com/mixpanel/mixpanel-iphone).
 
 Have any questions? Reach out to [support@mixpanel.com](mailto:support@mixpanel.com) to speak to someone smart, quickly.
+
+
+## Using Mixpanel Push Notifications
+
+First [enable Mixpanel push notifications in your app](https://developer.mixpanel.com/docs/ios-push-notifications). Then for Rich Push Notifications, you'll need to integrate your application with the MixpanelNotificationServiceExtension.
+
+### Integrating the MixpanelNotificationServiceExtension
+
+The Mixpanel SDK comes with a custom [Notification Service Extension](https://developer.apple.com/documentation/usernotifications/unnotificationserviceextension?language=objc) used to render rich media, custom action buttons, and track when push notifications are received. In order to enable these features, you will need to integrate it into your application.
+
+#### 1. Create a new Notification Service Extension Target
+<img width="660" alt="Screenshot 2020-02-13 14 45 23" src="https://user-images.githubusercontent.com/556882/74478474-0c224700-4e73-11ea-847c-b3f58ab16c4a.png">
+<img width="738" alt="Screenshot 2020-02-13 14 44 38" src="https://user-images.githubusercontent.com/556882/74478475-0c224700-4e73-11ea-9f57-3b40b6fdbbcd.png">
+<img width="739" alt="Screenshot 2020-02-13 14 46 53" src="https://user-images.githubusercontent.com/556882/74478559-3ecc3f80-4e73-11ea-926f-96659958936e.png">
+
+#### 2. Add Mixpanel-swift as a dependency
+Add the following to the end of your `Podfile`:
+```Podspec
+target 'NotificationService' do
+  use_frameworks!
+  
+  pod 'Mixpanel'
+end
+```
+Then run `pod install`
+
+
+#### 3. Extend your NotificationService from MixpanelNotificationServiceExtension
+Replace the contents of your `NotificationService.h` file with the following:
+```objective-c
+@import Mixpanel;
+
+@interface NotificationService : MPNotificationServiceExtension
+
+@end
+```
+
+Replace the contents of your `NotificationService.m` file with the following:
+```objective-c
+#import "NotificationService.h"
+
+@implementation NotificationService
+
+@end
+```
+
+#### 4. Run the app and send a test push notification from Mixpanel that includes an image or buttons
+
+That's it! Your app should now be able to receive rich push notifications from Mixpanel.
