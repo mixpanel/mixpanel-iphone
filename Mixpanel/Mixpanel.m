@@ -1896,6 +1896,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     }
 }
 
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Push Notifications
 
 + (BOOL)isMixpanelPushNotification:(UNNotificationContent *)content {
@@ -1995,7 +1996,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }
     }
 }
-
+#endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 

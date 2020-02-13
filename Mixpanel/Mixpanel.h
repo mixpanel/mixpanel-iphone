@@ -793,7 +793,7 @@ extern NSString *const MPNotificationTypeTakeover;
  */
 + (NSString *)libVersion;
 
-
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Push Notifications
 
 /*!
@@ -815,6 +815,7 @@ extern NSString *const MPNotificationTypeTakeover;
  Internal utility for push notification-related event tracking
  */
 - (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event properties:(NSDictionary *)additionalProperties;
+#endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
 #pragma mark - Mixpanel Notifications

@@ -2,6 +2,8 @@
 #import "MPLogger.h"
 #import "Mixpanel.h"
 
+#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+
 @interface MPNotificationServiceExtension()
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -10,6 +12,7 @@
 @end
 
 @implementation MPNotificationServiceExtension
+
 
 - (void)didReceiveNotificationRequest:(UNNotificationRequest *)request
                    withContentHandler:(void (^)(UNNotificationContent *_Nonnull))contentHandler  {
@@ -191,3 +194,5 @@
 }
 
 @end
+
+#endif
