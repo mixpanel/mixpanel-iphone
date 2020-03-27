@@ -695,7 +695,8 @@ extern NSString *const MPNotificationTypeTakeover;
  <pre>
  [mixpanel createAlias:@"New ID"
          forDistinctID:mixpanel.distinctId];
- //You can add multiple id aliases to the existing id
+ 
+ // You can add multiple id aliases to the existing id
  [mixpanel createAlias:@"Newer ID"
          forDistinctID:mixpanel.distinctId];
 </pre>
