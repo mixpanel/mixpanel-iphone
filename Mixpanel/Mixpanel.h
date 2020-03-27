@@ -407,29 +407,29 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Sets the distinct ID of the current user.
 
- As of version 2.3.1, Mixpanel will choose a default distinct ID based on
+ As of version 2.3.1, Mixpanel will choose a default local distinct ID based on
  whether you are using the AdSupport.framework or not.
 
  If you are not using the AdSupport Framework (iAds), then we use the
  <code>[UIDevice currentDevice].identifierForVendor</code> (IFV) string as the
- default distinct ID.  This ID will identify a user across all apps by the same
+ default local distinct ID.  This ID will identify a user across all apps by the same
  vendor, but cannot be used to link the same user across apps from different
  vendors.
 
  If you are showing iAds in your application, you are allowed use the iOS ID
  for Advertising (IFA) to identify users. If you have this framework in your
- app, Mixpanel will use the IFA as the default distinct ID. If you have
+ app, Mixpanel will use the IFA as the default local distinct ID. If you have
  AdSupport installed but still don't want to use the IFA, you can define the
  <code>MIXPANEL_NO_IFA</code> preprocessor flag in your build settings, and
- Mixpanel will use the IFV as the default distinct ID.
+ Mixpanel will use the IFV as the default local distinct ID.
 
  If we are unable to get an IFA or IFV, we will fall back to generating a
  random persistent UUID. If you want to always use a random persistent UUID
  you can define the <code>MIXPANEL_RANDOM_DISTINCT_ID</code> preprocessor flag
  in your build settings.
 
- For tracking events, you do not need to call <code>identify:</code> if you
- want to use the default.  However, <b>Mixpanel People always requires an
+ For tracking events, you do not need to call <code>identify:</code>.
+ However, <b>Mixpanel User profiles always require an
  explicit call to <code>identify:</code></b>. If calls are made to
  <code>set:</code>, <code>increment</code> or other <code>MixpanelPeople</code>
  methods prior to calling <code>identify:</code>, then they are queued up and
@@ -690,27 +690,19 @@ extern NSString *const MPNotificationTypeTakeover;
 - (void)archive;
 
 /*!
- Creates a distinct_id alias from alias to original id.
-
- This method is used to map an identifier called an alias to the existing Mixpanel
- distinct id. This causes all events and people requests sent with the alias to be
- mapped back to the original distinct id. The recommended usage pattern is to call
- createAlias: and then identify: (with their new user ID) when they log in the next time.
- This will keep your signup funnels working correctly.
+ The alias method creates an alias which Mixpanel will use to remap one id to another. Multiple aliases can point to the same identifier.
 
  <pre>
- // This makes the current ID (an auto-generated GUID)
- // and 'Alias' interchangeable distinct ids.
- [mixpanel createAlias:@"Alias"
-    forDistinctID:mixpanel.distinctId];
-
- // You must call identify if you haven't already
- // (e.g., when your app launches).
- [mixpanel identify:mixpanel.distinctId];
+ [mixpanel createAlias:@"New ID"
+         forDistinctID:mixpanel.distinctId];
+ 
+ // You can add multiple id aliases to the existing id
+ [mixpanel createAlias:@"Newer ID"
+         forDistinctID:mixpanel.distinctId];
 </pre>
 
-@param alias 		the new distinct_id that should represent original
-@param distinctID 	the old distinct_id that alias will be mapped to
+@param alias 		A unique identifier that you want to use as an identifier for this user.
+@param distinctID 	The current user identifier.
  */
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
