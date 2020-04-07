@@ -158,7 +158,7 @@ Replace the contents of your `NotificationService.m` file with the following:
 ```
 
 #### 4. Delegate the handling of the notification response to the Mixpanel SDK
-In your `AppDelegate.m` file, you need to call `MixpanelPushNotifications.handleResponse` when a push notification response is received:
+In your `AppDelegate.m` file:
 ```objc
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
