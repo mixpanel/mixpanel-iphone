@@ -6,7 +6,7 @@ def shared_pods
 end
 
 target :HelloMixpanelTests do
-  platform :ios, '8.0'
+  platform :ios, '10.0'
   shared_pods
 end
 
