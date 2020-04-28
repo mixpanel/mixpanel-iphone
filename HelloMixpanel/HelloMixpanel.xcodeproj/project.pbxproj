@@ -932,7 +932,6 @@
 				E12C04AE1D135F01007D2086 /* Copy Frameworks */,
 				E123C49C1D1354EC0015B425 /* Resources */,
 				768564EFBBB1CF00026F3472 /* [CP] Embed Pods Frameworks */,
-				9DDC10577555AC422512E445 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1170,7 +1169,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Nocilla-iOS/Nocilla.framework",
 				"${BUILT_PRODUCTS_DIR}/OCMock-iOS/OCMock.framework",
 			);
@@ -1181,7 +1180,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		222471ECB08A5E0572E0D631 /* [CP] Check Pods Manifest.lock */ = {
@@ -1208,7 +1207,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Nocilla-tvOS/Nocilla.framework",
 				"${BUILT_PRODUCTS_DIR}/OCMock-tvOS/OCMock.framework",
 			);
@@ -1219,26 +1218,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9DDC10577555AC422512E445 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AD48B0E1D0FDE02B32D8F942 /* [CP] Check Pods Manifest.lock */ = {
