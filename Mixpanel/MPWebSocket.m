@@ -19,7 +19,7 @@
 
 #import "MPWebSocket.h"
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE && !TARGET_OS_MACCATALYST
 #define HAS_ICU
 #endif
 
@@ -29,7 +29,7 @@
 
 #endif
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE && !TARGET_OS_MACCATALYST
 
 #import <Endian.h>
 
