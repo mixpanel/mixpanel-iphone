@@ -219,7 +219,7 @@
     //wait for notifs to be shown from main queue
     [self waitForAsyncQueue];
     
-    XCTAssertTrue([UIApplication sharedApplication].windows.count == numWindows + 1, @"Notification was not presented");
+    XCTAssertTrue([UIApplication sharedApplication].windows.count >= numWindows + 1, @"Notification was not presented");
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"should only show same notification once (and track 1 notif shown event)");
     XCTAssertEqualObjects(self.mixpanel.eventsQueue.lastObject[@"event"], @"$campaign_delivery", @"last event should be campaign delivery");
     

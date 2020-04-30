@@ -67,7 +67,6 @@
 
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
-@property (nonatomic, strong) CTTelephonyNetworkInfo *telephonyInfo;
 #endif
 
 #if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
@@ -109,6 +108,7 @@
 @property (nonatomic, strong) NSMutableArray *groupsQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
 @property (nonatomic) dispatch_queue_t networkQueue;
+@property (nonatomic) dispatch_queue_t archiveQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
 

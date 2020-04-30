@@ -110,7 +110,7 @@ static const NSUInteger kBatchSize = 50;
         
         NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
-        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queue.count, endpoint, queueCopyForFlushing);
+        MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queueCopyForFlushing.count, endpoint, queueCopyForFlushing);
         NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint andBody:postBody];
         
         [self updateNetworkActivityIndicator:YES];

@@ -45,6 +45,10 @@ NSString *const MPPushTapActionTypeHomescreen = @"homescreen";
 static NSMutableDictionary *instances;
 static NSString *defaultProjectToken;
 
+#if !MIXPANEL_NO_REACHABILITY_SUPPORT
+static CTTelephonyNetworkInfo *telephonyInfo;
+#endif
+
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking
 {
     return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTrackingByDefault:NO];
@@ -108,6 +112,9 @@ static NSString *defaultProjectToken;
             instances = [NSMutableDictionary dictionary];
             defaultProjectToken = apiToken;
             loggingLockObject = [[NSObject alloc] init];
+            #if !MIXPANEL_NO_REACHABILITY_SUPPORT
+            telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
+            #endif
         });
     }
 
@@ -134,9 +141,6 @@ static NSString *defaultProjectToken;
                 // Install signal and exception handlers first
                 [[MixpanelExceptionHandler sharedHandler] addMixpanelInstance:self];
             }
-#endif
-#if !MIXPANEL_NO_REACHABILITY_SUPPORT
-            self.telephonyInfo = [[CTTelephonyNetworkInfo alloc] init];
 #endif
         }
         self.apiToken = apiToken;
@@ -165,6 +169,8 @@ static NSString *defaultProjectToken;
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
         NSString *networkLabel = [label stringByAppendingString:@".network"];
         self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
+        NSString *archiveLabel = [label stringByAppendingString:@".archive"];
+        self.archiveQueue = dispatch_queue_create([archiveLabel UTF8String], DISPATCH_QUEUE_SERIAL);
 
 #if defined(DISABLE_MIXPANEL_AB_DESIGNER) // Deprecated in v3.0.1
         self.enableVisualABTestAndCodeless = NO;
@@ -1228,87 +1234,93 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 {
     NSString *filePath = [self eventsFilePath];
     MPLogInfo(@"%@ archiving events data to %@: %@", self, filePath, self.eventsQueue);
-    NSArray *shadowEventsQueue = [NSArray new];
-    @synchronized (self) {
-        shadowEventsQueue = [self.eventsQueue copy];
-    }
-    if (![self archiveObject:shadowEventsQueue withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive event data", self);
-    }
+    dispatch_sync(self.archiveQueue, ^{
+        NSArray *shadowEventsQueue =  [self.eventsQueue copy];
+        if (![self archiveObject:shadowEventsQueue withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive event data", self);
+        }
+    });
 }
 
 - (void)archivePeople
 {
     NSString *filePath = [self peopleFilePath];
     MPLogInfo(@"%@ archiving people data to %@: %@", self, filePath, self.peopleQueue);
-    NSArray *shadowPeopleQueue = [NSArray new];
-    @synchronized (self) {
-        shadowPeopleQueue = [self.peopleQueue copy];
-    }
-    if (![self archiveObject:shadowPeopleQueue withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive people data", self);
-    }
+    dispatch_sync(self.archiveQueue, ^{
+        NSArray *shadowPeopleQueue = [self.peopleQueue copy];
+        if (![self archiveObject:shadowPeopleQueue withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive people data", self);
+        }
+    });
 }
 
 - (void)archiveGroups
 {
     NSString *filePath = [self groupsFilePath];
     MPLogInfo(@"%@ archiving groups data to %@: %@", self, filePath, self.groupsQueue);
-    NSArray *shadowGroupQueue = [NSArray new];
-    @synchronized (self) {
-        shadowGroupQueue = [self.groupsQueue copy];
-    }
-    if (![self archiveObject:shadowGroupQueue withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive groups data", self);
-    }
+    dispatch_sync(self.archiveQueue, ^{
+        NSArray *shadowGroupQueue = [self.groupsQueue copy];
+        if (![self archiveObject:shadowGroupQueue withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive groups data", self);
+        }
+    });
 }
 
 - (void)archiveProperties
 {
     NSString *filePath = [self propertiesFilePath];
     NSMutableDictionary *p = [NSMutableDictionary dictionary];
+    dispatch_sync(self.archiveQueue, ^{
+        NSArray *shadowUnidentifiedQueue = [self.people.unidentifiedQueue copy];
+        NSArray *shadowShownNotifications = [self.shownNotifications copy];
+        NSArray *shadowTimeEvents = [self.timedEvents copy];
     
-    NSArray *shadowUnidentifiedQueue = [NSArray new];
-    NSArray *shadowShownNotifications = [NSArray new];
-    NSArray *shadowTimeEvents = [NSArray new];
-    
-    @synchronized (self) {
-        shadowUnidentifiedQueue = [self.people.unidentifiedQueue copy];
-        shadowShownNotifications = [self.shownNotifications copy];
-        shadowTimeEvents = [self.timedEvents copy];
-    }
-    
-    [p setValue:self.anonymousId forKey:@"anonymousId"];
-    [p setValue:self.distinctId forKey:@"distinctId"];
-    [p setValue:self.userId forKey:@"userId"];
-    [p setValue:self.alias forKey:@"alias"];
-    [p setValue:[NSNumber numberWithBool:self.hadPersistedDistinctId] forKey:@"hadPersistedDistinctId"];
-    [p setValue:self.superProperties forKey:@"superProperties"];
-    [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
-    [p setValue:shadowUnidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
-    [p setValue:shadowShownNotifications forKey:@"shownNotifications"];
-    [p setValue:shadowTimeEvents forKey:@"timedEvents"];
-    [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
-    MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
-    if (![self archiveObject:p withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive properties data", self);
-    }
+        [p setValue:self.anonymousId forKey:@"anonymousId"];
+        [p setValue:self.distinctId forKey:@"distinctId"];
+        [p setValue:self.userId forKey:@"userId"];
+        [p setValue:self.alias forKey:@"alias"];
+        [p setValue:[NSNumber numberWithBool:self.hadPersistedDistinctId] forKey:@"hadPersistedDistinctId"];
+        [p setValue:self.superProperties forKey:@"superProperties"];
+        [p setValue:self.people.distinctId forKey:@"peopleDistinctId"];
+        [p setValue:shadowUnidentifiedQueue forKey:@"peopleUnidentifiedQueue"];
+        [p setValue:shadowShownNotifications forKey:@"shownNotifications"];
+        [p setValue:shadowTimeEvents forKey:@"timedEvents"];
+        [p setValue:self.automaticEventsEnabled forKey:@"automaticEvents"];
+        MPLogInfo(@"%@ archiving properties data to %@: %@", self, filePath, p);
+        if (![self archiveObject:p withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive properties data", self);
+        }
+    });
 }
 
 - (void)archiveVariants
 {
     NSString *filePath = [self variantsFilePath];
-    if (![self archiveObject:self.variants withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive variants data", self);
-    }
+    dispatch_sync(self.archiveQueue, ^{
+        if (![self archiveObject:self.variants withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive variants data", self);
+        }
+    });
 }
 
 - (void)archiveEventBindings
 {
     NSString *filePath = [self eventBindingsFilePath];
-    if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive tracking events data", self);
-    }
+    dispatch_sync(self.archiveQueue, ^{
+        if (![self archiveObject:self.eventBindings withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive tracking events data", self);
+        }
+    });
+}
+
+- (void)archiveOptOut
+{
+    NSString *filePath = [self optOutFilePath];
+    dispatch_sync(self.archiveQueue, ^{
+        if (![self archiveObject:[NSNumber numberWithBool:self.optOutStatus] withFilePath:filePath]) {
+            MPLogError(@"%@ unable to archive opt out status", self);
+        }
+    });
 }
 
 - (BOOL)archiveObject:(id)object withFilePath:(NSString *)filePath
@@ -1324,14 +1336,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
     [self addSkipBackupAttributeToItemAtPath:filePath];
     return YES;
-}
-
-- (void)archiveOptOut
-{
-    NSString *filePath = [self optOutFilePath];
-    if (![self archiveObject:[NSNumber numberWithBool:self.optOutStatus] withFilePath:filePath]) {
-        MPLogError(@"%@ unable to archive opt out status", self);
-    }
 }
 
 - (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString
@@ -1525,7 +1529,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 {
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
     if (![Mixpanel isAppExtension]) {
-        NSString *radio = _telephonyInfo.currentRadioAccessTechnology;
+        NSString *radio = telephonyInfo.currentRadioAccessTechnology;
         if (!radio) {
             radio = @"None";
         } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
@@ -1585,7 +1589,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
     if (![Mixpanel isAppExtension]) {
-        CTCarrier *carrier = [self.telephonyInfo subscriberCellularProvider];
+        CTCarrier *carrier = [telephonyInfo subscriberCellularProvider];
         [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
 #endif
