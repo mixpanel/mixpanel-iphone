@@ -563,7 +563,7 @@
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
-    XCTAssertEqualObjects(self.mixpanel.eventsQueue[self.mixpanel.eventsQueue.count - 2][@"event"], @"e1", @"event was not successfully archived/unarchived");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count == 2, @"event was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.groupsQueue.lastObject[@"$set"], props, @"group update was not successfully archived/unarchived");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"d1", @"custom people distinct id archive failed");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"pending people queue archive failed");
@@ -662,8 +662,7 @@
     [self.mixpanel.people set:@"p1" to:@"a"];
     [self.mixpanel flush];
     [self waitForMixpanelQueues];
-
-    XCTAssertTrue(self.mixpanel.eventsQueue.count == 1, @"delegate should have stopped flush");
+    XCTAssertTrue(self.mixpanel.eventsQueue.count >= 1, @"delegate should have stopped flush");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"delegate should have stopped flush");
 }
 
@@ -779,10 +778,5 @@
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
-#if !defined(MIXPANEL_TVOS_EXTENSION)
-- (void)testTelephonyInfoInitialized {
-    XCTAssertNotNil([self.mixpanel performSelector:@selector(telephonyInfo)], @"telephonyInfo wasn't initialized");
-}
-#endif
 
 @end
