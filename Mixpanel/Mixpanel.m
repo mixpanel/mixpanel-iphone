@@ -1529,13 +1529,27 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 {
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
     if (![Mixpanel isAppExtension]) {
-        NSString *radio = telephonyInfo.currentRadioAccessTechnology;
-        if (!radio) {
-            radio = @"None";
-        } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
-            radio = [radio substringFromIndex:23];
+        if (@available(iOS 12, *)) {
+            NSDictionary *radioDict = telephonyInfo.serviceCurrentRadioAccessTechnology;
+            NSMutableString *radio = [NSMutableString new];
+            [radioDict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
+                if (value && [value hasPrefix:@"CTRadioAccessTechnology"]) {
+                    if (radio.length > 0) {
+                        [radio appendString:@","];
+                    }
+                    [radio appendString:[value substringFromIndex:23]];
+                }
+            }];
+            return radio.length == 0 ? @"None" : [radio copy];
+        } else {
+            NSString *radio = telephonyInfo.currentRadioAccessTechnology;
+            if (!radio) {
+                radio = @"None";
+            } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
+                radio = [radio substringFromIndex:23];
+            }
+            return radio;
         }
-        return radio;
     }
 #endif
     return @"";
