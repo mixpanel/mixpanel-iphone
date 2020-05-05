@@ -24,6 +24,7 @@
     [super viewDidLoad];
 
     self.showNotificationType = @"takeover";
+
     UIScrollView *strongScrollView = _scrollView;
     if (strongScrollView != nil) {
         strongScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
