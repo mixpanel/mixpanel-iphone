@@ -54,7 +54,7 @@ static inline os_log_t mixpanelLog() {
     return logger;
 }
 
-static inline void MPLogDebug(NSString *format, ...) {
+static inline __attribute__((always_inline)) void MPLogDebug(NSString *format, ...) {
     if (!gLoggingEnabled) return;
     va_list arg_list;
     va_start(arg_list, format);
@@ -67,7 +67,7 @@ static inline void MPLogDebug(NSString *format, ...) {
     }
 }
 
-static inline void MPLogInfo(NSString *format, ...) {
+static inline __attribute__((always_inline)) void MPLogInfo(NSString *format, ...) {
     if (!gLoggingEnabled) return;
     va_list arg_list;
     va_start(arg_list, format);
@@ -80,7 +80,7 @@ static inline void MPLogInfo(NSString *format, ...) {
     }
 }
 
-static inline void MPLogWarning(NSString *format, ...) {
+static inline __attribute__((always_inline)) void MPLogWarning(NSString *format, ...) {
     if (!gLoggingEnabled) return;
     va_list arg_list;
     va_start(arg_list, format);
@@ -93,7 +93,7 @@ static inline void MPLogWarning(NSString *format, ...) {
     }
 }
 
-static inline void MPLogError(NSString *format, ...) {
+static inline __attribute__((always_inline)) void MPLogError(NSString *format, ...) {
     if (!gLoggingEnabled) return;
     va_list arg_list;
     va_start(arg_list, format);
