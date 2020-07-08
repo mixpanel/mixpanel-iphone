@@ -420,8 +420,6 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     distinctId = [[NSUUID UUID] UUIDString];
 #elif defined(MIXPANEL_MACOS)
     distinctId = [self macOSIdentifier];
-#else
-    distinctId = [self IFA];
 #endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
@@ -1473,26 +1471,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     return results;
 }
 
-- (NSString *)IFA
-{
-    NSString *ifa = nil;
-#if !defined(MIXPANEL_NO_IFA)
-    Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
-    if (ASIdentifierManagerClass) {
-        SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
-        id sharedManager = ((id (*)(id, SEL))[ASIdentifierManagerClass methodForSelector:sharedManagerSelector])(ASIdentifierManagerClass, sharedManagerSelector);
-        SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
-        BOOL isTrackingEnabled = ((BOOL (*)(id, SEL))[sharedManager methodForSelector:advertisingTrackingEnabledSelector])(sharedManager, advertisingTrackingEnabledSelector);
-        if (isTrackingEnabled) {
-            SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
-            NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
-            ifa = [uuid UUIDString];
-        }
-    }
-#endif
-    return ifa;
-}
-
 #if defined(MIXPANEL_MACOS)
 - (NSString *)macOSIdentifier
 {
@@ -1599,7 +1577,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_release"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] forKey:@"$app_build_number"];
     [p setValue:[[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] forKey:@"$app_version_string"];
-    [p setValue:[self IFA] forKey:@"$ios_ifa"];
 
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
     if (![Mixpanel isAppExtension]) {

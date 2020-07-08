@@ -157,7 +157,6 @@
     stubEngage();
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *distinctId = @"d1";
-        // try this for IFA, ODIN and nil
         XCTAssertEqualObjects(self.mixpanel.distinctId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
         XCTAssertEqualObjects(self.mixpanel.anonymousId, self.mixpanel.defaultDistinctId, @"mixpanel identify failed to set anonymous id");
         XCTAssertNil(self.mixpanel.people.distinctId, @"mixpanel people distinct id should default to nil");
@@ -261,7 +260,7 @@
 #if defined(MIXPANEL_RANDOM_DISTINCT_ID)
         XCTAssertNotEqual(prevDistinctId, originalDistinctId, @"After reset, UUID will be used - never the same");
 #else
-        XCTAssertEqualObjects(prevDistinctId, originalDistinctId, @"After reset, IFA/UIDevice id will be used - always the same");
+        XCTAssertEqualObjects(prevDistinctId, originalDistinctId, @"After reset, IFV will be used - always the same");
 #endif
         [self.mixpanel reset];
         [self waitForMixpanelQueues];
