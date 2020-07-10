@@ -416,16 +416,16 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 - (NSString *)defaultDistinctId
 {
     NSString *distinctId;
-#if defined(MIXPANEL_RANDOM_DISTINCT_ID)
-    distinctId = [[NSUUID UUID] UUIDString];
-#elif defined(MIXPANEL_MACOS)
-    distinctId = [self macOSIdentifier];
-#endif
-
+#if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
+#elif defined(MIXPANEL_MACOS)
+    distinctId = [self macOSIdentifier];
+#endif
+#else
+    distinctId = [[NSUUID UUID] UUIDString];
 #endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);

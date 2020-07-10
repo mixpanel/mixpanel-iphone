@@ -407,14 +407,14 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Sets the distinct ID of the current user.
 
- Mixpanel uses the <code>[UIDevice currentDevice].identifierForVendor</code> (IFV) string
- as the default local distinct ID.  This ID will identify a user across all apps by the same
- vendor, but cannot be used to link the same user across apps from different vendors.
+ Mixpanel use a random persistent UUID as the default local distinct ID.
 
- If we are unable to get an IFV, we will fall back to generating a random persistent UUID.
- If you want to always use a random persistent UUID
- you can define the <code>MIXPANEL_RANDOM_DISTINCT_ID</code> preprocessor flag
- in your build settings.
+ If you want to  use a unique persistent UUID, you can define the
+ <code>MIXPANEL_UNIQUE_DISTINCT_ID</code>  preprocessor flag in your build settings.
+ It then uses the IFV String (`UIDevice.current().identifierForVendor`) as the default local distinct ID.
+ This ID will identify a user across all apps by the same vendor, but cannot be used to link the same
+ user across apps from different vendors. If we are unable to get an IFV, we will fall back to generating
+ a random persistent UUID.
 
  For tracking events, you do not need to call <code>identify:</code>.
  However, <b>Mixpanel User profiles always require an
