@@ -407,7 +407,7 @@ extern NSString *const MPNotificationTypeTakeover;
 /*!
  Sets the distinct ID of the current user.
 
- Mixpanel use a random persistent UUID as the default local distinct ID.
+ Mixpanel uses a randomly generated persistent UUID as the default local distinct ID.
 
  If you want to  use a unique persistent UUID, you can define the
  <code>MIXPANEL_UNIQUE_DISTINCT_ID</code>  preprocessor flag in your build settings.
