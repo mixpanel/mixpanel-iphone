@@ -64,12 +64,6 @@
         p[@"$ios_device_model"] = deviceModel;
     }
 
-#if !defined(MIXPANEL_MACOS)
-    NSString *ifa = [strongMixpanel IFA];
-    if (ifa) {
-        p[@"$ios_ifa"] = ifa;
-    }
-#endif
     return [p copy];
 }
 
