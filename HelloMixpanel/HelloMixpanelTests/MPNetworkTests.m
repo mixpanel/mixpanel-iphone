@@ -144,6 +144,17 @@
 }
 
 //
+// Encoding corrupted string to JSON strings should not crash
+//
+- (void)testEncodeCorruptedJSON {
+    NSString *utf8String = @"🇹🇲🇧🇹🇨🇫";
+    NSString *corruptedString = [utf8String substringToIndex:1];
+    NSArray *events = @[@{ @"corruptedString": corruptedString, @"utf8String": utf8String}];
+    NSData *data = [MPNetwork encodeArrayAsJSONData:events];
+    XCTAssert(data != nil, @"Encode JSON data should not crash and return nil result");
+}
+
+//
 // Encoding arrays for API should go to JSON, then Base64, and match our final expectations
 //
 - (void)testEncodeAPI {
