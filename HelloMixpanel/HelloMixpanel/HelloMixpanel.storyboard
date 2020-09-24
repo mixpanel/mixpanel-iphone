@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="Uq2-fg-yt9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="Uq2-fg-yt9">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -114,7 +115,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nz-Tb-Vkj">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nz-Tb-Vkj">
                                 <rect key="frame" x="71" y="202" width="33" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Start">
@@ -127,7 +128,7 @@
                                     <action selector="start:" destination="xYk-qi-taq" eventType="touchUpInside" id="BfR-zW-Ulj"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NqI-JX-Jvq">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NqI-JX-Jvq">
                                 <rect key="frame" x="215" y="202" width="37" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Track">
@@ -199,7 +200,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-OC3-Xs-814"/>
@@ -222,7 +223,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-OC3-Xs-814"/>
@@ -245,7 +246,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-OC3-Xs-814"/>
@@ -268,7 +269,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-OC3-Xs-814"/>
@@ -291,7 +292,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-CJv-3C-4Lz"/>
@@ -314,7 +315,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-D3f-sr-A1P"/>
@@ -337,7 +338,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="56"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-1x8-g3-DoV"/>
@@ -360,7 +361,7 @@
                                                     <rect key="frame" x="16" y="0.0" width="324" height="56"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-1x8-g3-DoV"/>
@@ -500,7 +501,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-imageView-jGo-oH-Gk5"/>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9B-Gc-zhT">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9B-Gc-zhT">
                                 <rect key="frame" x="97.5" y="164" width="180" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="LHS-Wy-u6c"/>
@@ -544,7 +545,7 @@
                                     <action selector="setNotificationType:" destination="PAi-oO-Noz" eventType="valueChanged" id="5xi-Es-mQk"/>
                                 </connections>
                             </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hvb-ez-zdi">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hvb-ez-zdi">
                                 <rect key="frame" x="97.5" y="193" width="180" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="htx-sh-cga"/>
@@ -562,6 +563,13 @@
                                     <action selector="changeBackground" destination="PAi-oO-Noz" eventType="touchUpInside" id="GVf-TM-LqN"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tqE-oz-ZdM" userLabel="Request notification permission">
+                                <rect key="frame" x="79.5" y="235" width="216" height="30"/>
+                                <state key="normal" title="Request notification permission"/>
+                                <connections>
+                                    <action selector="requestNotificationPermission:" destination="PAi-oO-Noz" eventType="touchUpInside" id="fDS-cL-5i7"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -574,7 +582,9 @@
                             <constraint firstAttribute="trailing" secondItem="jGo-oH-Gk5" secondAttribute="trailing" id="K8m-QA-f46"/>
                             <constraint firstAttribute="centerX" secondItem="auC-4E-3iO" secondAttribute="centerX" id="M5c-Yo-Ugz"/>
                             <constraint firstItem="Eka-Dd-tSy" firstAttribute="top" secondItem="jGo-oH-Gk5" secondAttribute="bottom" id="Mrn-HA-fI9"/>
+                            <constraint firstItem="tqE-oz-ZdM" firstAttribute="centerX" secondItem="hvb-ez-zdi" secondAttribute="centerX" id="NPc-vC-1WA"/>
                             <constraint firstItem="jGo-oH-Gk5" firstAttribute="top" secondItem="Efi-Hy-TDA" secondAttribute="top" id="RoE-aN-Ik8"/>
+                            <constraint firstItem="tqE-oz-ZdM" firstAttribute="top" secondItem="hvb-ez-zdi" secondAttribute="bottom" constant="21" id="dnd-UW-c2p"/>
                             <constraint firstAttribute="centerX" secondItem="Ews-8i-K8A" secondAttribute="centerX" id="ef0-qR-N4Y"/>
                             <constraint firstAttribute="centerX" secondItem="e9B-Gc-zhT" secondAttribute="centerX" id="ooN-If-c1d"/>
                             <constraint firstItem="auC-4E-3iO" firstAttribute="top" secondItem="Ews-8i-K8A" secondAttribute="bottom" constant="18" id="ytt-Jb-Htd"/>
@@ -605,7 +615,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CoZ-lb-2Y5">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CoZ-lb-2Y5">
                                 <rect key="frame" x="160.5" y="286.5" width="54" height="30"/>
                                 <state key="normal" title="Dismiss">
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -618,7 +628,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label with constraints" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AZb-DT-cbh">
-                                <rect key="frame" x="104.5" y="360.5" width="167.5" height="20.5"/>
+                                <rect key="frame" x="105" y="360.5" width="166.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -627,7 +637,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Constraints" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VVc-oe-1mi">
-                                <rect key="frame" x="184" y="522.5" width="88" height="20.5"/>
+                                <rect key="frame" x="183.5" y="522.5" width="88" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -677,7 +687,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-sEU-Eo-c2O"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tvE-69-z87">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tvE-69-z87">
                                 <rect key="frame" x="110.5" y="49" width="154" height="30"/>
                                 <state key="normal" title="Button with a long title">
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -695,7 +705,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-stepper-l3e-1K-yxm"/>
                                 </userDefinedRuntimeAttributes>
                             </stepper>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OAo-lJ-2UW">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OAo-lJ-2UW">
                                 <rect key="frame" x="306" y="86" width="51" height="31"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-switch-OAo-lJ-2UW"/>
@@ -711,13 +721,13 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-segmentedControl-YWo-CI-4Ue"/>
                                 </userDefinedRuntimeAttributes>
                             </segmentedControl>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="HV0-wq-yAr">
-                                <rect key="frame" x="162" y="83" width="94" height="37"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="HV0-wq-yAr">
+                                <rect key="frame" x="162" y="88" width="94" height="27.5"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-pageControl-HV0-wq-yAr"/>
                                 </userDefinedRuntimeAttributes>
                             </pageControl>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="NPd-jX-jFD">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="NPd-jX-jFD">
                                 <rect key="frame" x="269" y="91.5" width="20" height="20"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-activityIndicatorView-NPd-jX-jFD"/>
@@ -813,7 +823,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                 </userDefinedRuntimeAttributes>
                             </textView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="YgV-bM-dil">
-                                <rect key="frame" x="20" y="10" width="335" height="2"/>
+                                <rect key="frame" x="20" y="10" width="335" height="4"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-progressView-YgV-bM-dil"/>
                                 </userDefinedRuntimeAttributes>
@@ -1119,7 +1129,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-4xb-bA-KXH"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SNk-YS-2S2">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SNk-YS-2S2">
                                 <rect key="frame" x="82" y="334" width="156" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Present Modal">
@@ -1132,7 +1142,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                     <segue destination="9cb-wX-AKx" kind="modal" identifier="PresentModal" id="Whc-DY-5P5"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ale-TE-MhX">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ale-TE-MhX">
                                 <rect key="frame" x="82" y="372" width="156" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Push Kitchen Sink">
@@ -1155,7 +1165,7 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
                                     <userDefinedRuntimeAttribute type="string" keyPath="mixpanelViewId" value="mp-label-2FA-bp-70L"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yP3-UX-Czn">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yP3-UX-Czn">
                                 <rect key="frame" x="95" y="410" width="131" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Join available tests">
@@ -1332,5 +1342,8 @@ Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr
         <image name="Icon.png" width="57" height="57"/>
         <image name="Like" width="25" height="25"/>
         <image name="MPLogo" width="25" height="25"/>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

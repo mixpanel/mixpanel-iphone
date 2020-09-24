@@ -77,7 +77,6 @@
 - (void)testFlushPeople {
     stubTrack();
     stubEngage();
-
     [self.mixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [self.mixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
