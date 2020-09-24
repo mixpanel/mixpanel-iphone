@@ -206,7 +206,7 @@
 
 - (void)testNoDoubleShowNotification {
     [[LSNocilla sharedInstance] stop];
-
+    stubRequest(@"GET", @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin@2x.png");
     NSData *notificationData = [@"{\"id\": 1234, \"message_id\": 4444, \"title\": \"This is a title\", \"title_color\": 4294901760, \"body\": \"This is a body\", \"body_color\": 4294901760, \"image_url\": \"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin.png\", \"close_color\": 4294901760, \"type\": \"takeover\", \"bg_color\": 0, \"buttons\": [{\"bg_color\": 0, \"text\": \"Yes!\", \"border_color\": 4294901760, \"text_color\": 4294901760, \"cta_url\": \"mixpanel://deeplink/howareyou\"}],\"extras\": {\"image_fade\": true}}" dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *notifDict = [NSJSONSerialization JSONObjectWithData:notificationData options:0 error:nil];
 
@@ -247,7 +247,7 @@
 
 - (void)testNoShowNotificationOnAlertController {
     [[LSNocilla sharedInstance] stop];
-    
+    stubRequest(@"GET", @"https://cdn.mxpnl.com/site_media/images/engage/inapp_messages/mini/icon_coin@2x.png");
     UIViewController *topVC = [self topViewController];
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Alert" message:nil preferredStyle:UIAlertControllerStyleAlert];
