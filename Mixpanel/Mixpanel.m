@@ -1616,10 +1616,12 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
         // cellular info
         [self setCurrentRadio];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(setCurrentRadio)
-                                                     name:CTRadioAccessTechnologyDidChangeNotification
-                                                   object:nil];
+        // Temporarily remove the ability to monitor the radio change due to a crash issue might relate to the api from Apple
+        // https://openradar.appspot.com/46873673
+//        [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                 selector:@selector(setCurrentRadio)
+//                                                     name:CTRadioAccessTechnologyDidChangeNotification
+//                                                   object:nil];
 #endif // MIXPANEL_NO_REACHABILITY_SUPPORT
 
 #if !MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
