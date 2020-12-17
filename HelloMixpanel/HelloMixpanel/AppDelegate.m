@@ -51,9 +51,25 @@
 
     // Force a flush to make debugging easier
     [self.mixpanel flush];
-
-
+    
+    [self requestNotificationPermission];
     return YES;
+}
+
+- (void)requestNotificationPermission
+{
+    if ([UNUserNotificationCenter class]) {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge)
+                              completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (!error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] registerForRemoteNotifications];
+                });
+            }
+        }];
+    }
 }
 
 #pragma mark - Push notifications
