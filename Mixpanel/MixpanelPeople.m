@@ -124,9 +124,11 @@
                 }
             } else {
                 MPLogInfo(@"%@ queueing unidentified people record: %@", strongMixpanel, r);
-                [self.unidentifiedQueue addObject:r];
-                if (self.unidentifiedQueue.count > 500) {
-                    [self.unidentifiedQueue removeObjectAtIndex:0];
+                @synchronized (strongMixpanel) {
+                    [self.unidentifiedQueue addObject:r];
+                    if (self.unidentifiedQueue.count > 500) {
+                        [self.unidentifiedQueue removeObjectAtIndex:0];
+                    }
                 }
             }
 
