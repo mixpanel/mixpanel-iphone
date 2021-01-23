@@ -1351,8 +1351,21 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 - (BOOL)archiveObject:(id)object withFilePath:(NSString *)filePath
 {
     @try {
-        if (![NSKeyedArchiver archiveRootObject:object toFile:filePath]) {
-            return NO;
+        if (@available(iOS 11, macOS 10.13, tvOS 11, watchOS 4, *)) {
+            NSError *error = nil;
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
+            if (error) {
+                MPLogError(@"%@ got error while archiving data: %@", self, error);
+            }
+            if (!data) {
+                return NO;
+            } else {
+                [data writeToFile:filePath atomically:YES];
+            }
+        } else {
+            if (![NSKeyedArchiver archiveRootObject:object toFile:filePath]) {
+                return NO;
+            }
         }
     } @catch (NSException* exception) {
         MPLogError(@"Got exception: %@, reason: %@. You can only send to Mixpanel values that inherit from NSObject and implement NSCoding.", exception.name, exception.reason);
@@ -1397,7 +1410,16 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 {
     id unarchivedData = nil;
     @try {
-        unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        if (@available(iOS 11, macOS 10.13, tvOS 11, watchOS 4, *)) {
+            NSError *error = nil;
+            NSData *data = [NSData dataWithContentsOfFile:filePath];
+            unarchivedData = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:&error];
+            if (error) {
+                MPLogError(@"%@ got error while unarchiving data in %@: %@", self, filePath, error);
+            }
+        } else {
+            unarchivedData = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        }
         // this check is inside the try-catch as the unarchivedData may be a non-NSObject, not responding to `isKindOfClass:` or `respondsToSelector:`
         if (![unarchivedData isKindOfClass:class]) {
             unarchivedData = nil;
@@ -1547,7 +1569,12 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
             }];
             return radio.length == 0 ? @"None" : [radio copy];
         } else {
-            NSString *radio = telephonyInfo.currentRadioAccessTechnology;
+            NSString *radio = nil;
+            if (@available(iOS 12, *)) {
+                radio = [[telephonyInfo.serviceCurrentRadioAccessTechnology allValues] firstObject];
+            } else {
+                radio = telephonyInfo.currentRadioAccessTechnology;
+            }
             if (!radio) {
                 radio = @"None";
             } else if ([radio hasPrefix:@"CTRadioAccessTechnology"]) {
@@ -1607,7 +1634,12 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT
     if (![Mixpanel isAppExtension]) {
-        CTCarrier *carrier = [telephonyInfo subscriberCellularProvider];
+        CTCarrier *carrier = nil;
+        if (@available(iOS 12, *)) {
+            carrier = [[telephonyInfo serviceSubscriberCellularProviders] allValues].firstObject;
+        } else {
+            carrier = [telephonyInfo subscriberCellularProvider];
+        }
         [p setValue:carrier.carrierName forKey:@"$carrier"];
     }
 #endif
@@ -2340,7 +2372,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             NSMutableArray *notifications = [NSMutableArray arrayWithArray:_notifications];
             [notifications removeObject:notification];
             self.notifications = [NSArray arrayWithArray:notifications];
-        }        
+        }
         return;
     }
 
