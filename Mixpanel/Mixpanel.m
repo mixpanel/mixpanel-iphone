@@ -1357,7 +1357,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
             if (error) {
                 MPLogError(@"%@ got error while archiving data: %@", self, error);
             }
-            if (!data) {
+            if (error || !data) {
                 return NO;
             } else {
                 [data writeToFile:filePath atomically:YES];
