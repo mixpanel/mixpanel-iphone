@@ -991,6 +991,20 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     }
 }
 
+- (void)clearTimedEvent:(NSString *)event
+{
+    if (event.length == 0) {
+        MPLogError(@"Mixpanel cannot clear the timer for an empty event");
+        return;
+    }
+    
+    dispatch_async(self.serialQueue, ^{
+        @synchronized (self) {
+            [self.timedEvents removeObjectForKey:event];
+        }
+    });
+}
+
 - (void)clearTimedEvents
 {
     dispatch_async(self.serialQueue, ^{

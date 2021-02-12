@@ -731,6 +731,19 @@
     e = self.mixpanel.eventsQueue.lastObject;
     p = e[@"properties"];
     XCTAssertNil(p[@"$duration"], @"Tracking the same event should require a second call to timeEvent.");
+    
+    [self.mixpanel timeEvent:@"Time Event A"];
+    [self.mixpanel timeEvent:@"Time Event B"];
+    [self.mixpanel timeEvent:@"Time Event C"];
+    [self waitForMixpanelQueues];
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 3, @"Each call to timeEvent: should add an event to timedEvents");
+    XCTAssertNotNil(self.mixpanel.timedEvents[@"Time Event A"], @"Keys in timedEvents should be event names");
+    [self.mixpanel clearTimedEvent:@"Time Event A"];
+    [self waitForMixpanelQueues];
+    XCTAssertNil(self.mixpanel.timedEvents[@"Time Event A"], @"clearTimedEvent: should remove key/value pair");
+    [self.mixpanel clearTimedEvents];
+    [self waitForMixpanelQueues];
+    XCTAssertTrue(self.mixpanel.timedEvents.count == 0, @"clearTimedEvents should remove all key/value pairs");
 }
 
 - (void)testNetworkingWithStress {
