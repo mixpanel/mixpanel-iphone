@@ -631,6 +631,13 @@ extern NSString *const MPNotificationTypeTakeover;
 - (double)eventElapsedTime:(NSString *)event;
 
 /*!
+ Clears the event timer for the named event.
+ 
+ @param event    the name of the event to clear the timer for
+ */
+- (void)clearTimedEvent:(NSString *)event;
+
+/*!
  Clears all current event timers.
  */
 - (void)clearTimedEvents;
