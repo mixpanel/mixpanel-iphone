@@ -983,7 +983,12 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (double)eventElapsedTime:(NSString *)event
 {
-    NSNumber *startTime = self.timedEvents[event];
+    __block NSNumber *startTime;
+    
+    dispatch_sync(self.serialQueue, ^{
+        startTime = self.timedEvents[event];
+    });
+    
     if (startTime == nil) {
         return 0;
     } else {
