@@ -11,6 +11,7 @@
 #import "TestConstants.h"
 #import "MixpanelPeoplePrivate.h"
 #import <OCMock/OCMock.h>
+#import "MPSwizzler.h"
 
 @interface MixpanelOptOutTests : MixpanelBaseTests
 
@@ -36,12 +37,12 @@
     stubEngage();
     __block NSInteger trackCount = 0;
     [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
-        trackCount++;  
+        trackCount++;
     } named:@"Swizzle Mixpanel.track"];
-    
+
     self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
     XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
-    
+
     [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
@@ -53,15 +54,15 @@
     [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
         trackCount++;
     } named:@"Swizzle Mixpanel.track"];
-    
+
     NSString *tokenId = [self randomTokenId];
     self.mixpanel = [Mixpanel sharedInstanceWithToken:tokenId optOutTrackingByDefault:YES];
     [self.mixpanel optInTracking];
-    
+
     self.mixpanel = [Mixpanel sharedInstanceWithToken:tokenId optOutTrackingByDefault:YES];
     [self.mixpanel track:@"test"];
     XCTAssertTrue(trackCount == 1, @"init default opted out->optedIn->init default opted out, track call should be triggered during initialization.");
-    
+
     [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
@@ -73,44 +74,14 @@
     [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
         trackCount++;
     } named:@"Swizzle Mixpanel.track"];
-    
-    NSDictionary *launchOptions = @{ UIApplicationLaunchOptionsRemoteNotificationKey: @{
-                                             @"mp": @{
-                                                     @"m": @"the_message_id",
-                                                     @"c": @"the_campaign_id",
-                                                     @"journey_id": @123456
-                                                     }
-                                             }
-                                     };
-    
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:NO automaticPushTracking:NO optOutTrackingByDefault:YES];
+
+
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:YES];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"no event should be queued");
     XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
-    
-    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
-}
 
-- (void)testAutoTrackShouldBeTriggeredDuringInitializedWithOptedOutNO
-{
-    stubTrack();
-    stubEngage();
-    NSDictionary *launchOptions = @{ UIApplicationLaunchOptionsRemoteNotificationKey: @{
-                                             @"mp": @{
-                                                     @"m": @"the_message_id",
-                                                     @"c": @"the_campaign_id",
-                                                     @"journey_id": @123456
-                                                     }
-                                             }
-                                     };
-    
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:NO automaticPushTracking:YES optOutTrackingByDefault:NO];
-    [self waitForMixpanelQueues];
-    NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
-    XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
-    
-    NSDictionary *p = e[@"properties"];
-    XCTAssertEqualObjects(p[@"campaign_id"], @"the_campaign_id", @"campaign_id not equal");
+    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
 - (void)testOptInWillAddOptInEvent
@@ -137,14 +108,10 @@
     XCTAssertFalse([self.mixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     
     [self waitForMixpanelQueues];
-    if ([self.mixpanel.eventsQueue count] == 1) {
-        NSDictionary *event = self.mixpanel.eventsQueue[0];
-        XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
-    }
-    else {
-        XCTAssertTrue([self.mixpanel.eventsQueue count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
-    }
-    
+
+    NSDictionary *event = self.mixpanel.eventsQueue[0];
+    XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
+   
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"testDistinctId", @"mixpanel identify failed to set distinct id");
     XCTAssertEqualObjects(self.mixpanel.people.distinctId, @"testDistinctId", @"mixpanel identify failed to set people distinct id");
     XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 0, @"identify: should move records from unidentified queue");

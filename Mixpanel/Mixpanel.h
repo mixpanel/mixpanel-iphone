@@ -7,7 +7,6 @@
 #import "MixpanelPeople.h"
 #import "MixpanelType.h"
 
-#import <UserNotifications/UserNotifications.h>
 
 #if defined(MIXPANEL_WATCHOS)
 #define MIXPANEL_FLUSH_IMMEDIATELY 1
@@ -21,7 +20,7 @@
 #if (defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
 #define MIXPANEL_NO_REACHABILITY_SUPPORT 1
 #define MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT 1
-#define MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT 1
+#define MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT 1
 #endif
 
 @class    MixpanelPeople;
@@ -29,15 +28,6 @@
 @protocol MixpanelDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
-
-/*!
- A string constant "mini" that respresent Mini Notification
- */
-extern NSString *const MPNotificationTypeMini;
-/*!
- A string constant "takeover" that respresent Takeover Notification
- */
-extern NSString *const MPNotificationTypeTakeover;
 
 /*!
  Mixpanel API.
@@ -152,33 +142,6 @@ extern NSString *const MPNotificationTypeTakeover;
  */
 @property (atomic) BOOL shouldManageNetworkActivityIndicator;
 
-/*!
- Controls whether to automatically check for notifications for the
- currently identified user when the application becomes active.
-
- Defaults to YES. Will fire a network request on
- <code>applicationDidBecomeActive</code> to retrieve a list of valid notifications
- for the currently identified user.
- */
-@property (atomic) BOOL checkForNotificationsOnActive;
-
-/*!
- Controls whether to automatically check for A/B test variants for the
- currently identified user when the application becomes active.
-
- Defaults to YES. Will fire a network request on
- <code>applicationDidBecomeActive</code> to retrieve a list of valid variants
- for the currently identified user.
- */
-@property (atomic) BOOL checkForVariantsOnActive;
-
-/*!
- Controls whether to automatically check for and show in-app notifications
- for the currently identified user when the application becomes active.
-
- Defaults to YES.
- */
-@property (atomic) BOOL showNotificationOnActive;
 
 /*!
  Controls whether to automatically send the client IP Address as part of
@@ -190,15 +153,6 @@ extern NSString *const MPNotificationTypeTakeover;
  Defaults to YES.
  */
 @property (atomic) BOOL useIPAddressForGeoLocation;
-
-/*!
- Controls whether to enable the visual test designer for A/B testing and codeless on mixpanel.com.
- You will be unable to edit A/B tests and codeless events with this disabled, however *previously*
- created A/B tests and codeless events will still be delivered.
-
- Defaults to YES.
- */
-@property (atomic) BOOL enableVisualABTestAndCodeless;
 
 /*!
  Controls whether to enable the run time debug logging at all levels. Note that the
@@ -216,13 +170,6 @@ extern NSString *const MPNotificationTypeTakeover;
  */
 @property (atomic) BOOL enableLogging;
 
-/*!
- Determines the time, in seconds, that a mini notification will remain on
- the screen before automatically hiding itself.
-
- Defaults to 6.0.
- */
-@property (atomic) CGFloat miniNotificationPresentationTime;
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 /*!
@@ -778,91 +725,6 @@ extern NSString *const MPNotificationTypeTakeover;
  Returns the Mixpanel library version number as a string, e.g. "3.2.3".
  */
 + (NSString *)libVersion;
-
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-#pragma mark - Mixpanel Push Notifications
-
-/*!
- Detects if a UNNotification is from Mixpanel
- */
-+ (BOOL)isMixpanelPushNotification:(UNNotificationContent *)notification API_AVAILABLE(ios(10.0), macos(10.14), watchos(6.0)) API_UNAVAILABLE(tvos);
-
-/*!
- Tracks and executes the appropriate action when a Mixpanel push notification is tapped
- */
-+ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0), macos(10.14), watchos(6.0)) API_UNAVAILABLE(tvos);
-
-/*!
- Internal utility for push notification-related event tracking using the project token from the push payload
- */
-+ (void)trackPushNotificationEventFromRequest:(UNNotificationRequest *)request event:(NSString *)event properties:(NSDictionary *)additionalProperties;
-
-/*!
- Internal utility for push notification-related event tracking
- */
-- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event properties:(NSDictionary *)additionalProperties;
-#endif
-
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-#pragma mark - Mixpanel Notifications
-
-/*!
- Shows the notification of the given id.
-
- You do not need to call this method on the main thread.
-
- @param ID      notification id
- */
-- (void)showNotificationWithID:(NSUInteger)ID;
-
-
-/*!
- Shows a notification with the given type if one is available.
-
- You do not need to call this method on the main thread.
-
- @param type The type of notification to show, either @"mini", or @"takeover"
- */
-- (void)showNotificationWithType:(NSString *)type;
-
-/*!
- Shows a notification if one is available.
-
- You do not need to call this method on the main thread.
- */
-- (void)showNotification;
-
-#pragma mark - Mixpanel A/B Testing
-
-/*!
- Join any experiments (A/B tests) that are available for the current user.
-
- Mixpanel will check for A/B tests automatically when your app enters
- the foreground. Call this method if you would like to to check for,
- and join, any experiments are newly available for the current user.
-
- You do not need to call this method on the main thread.
- */
-- (void)joinExperiments;
-
-/*!
- Join any experiments (A/B tests) that are available for the current user.
-
- Same as joinExperiments but will fire the given callback after all experiments
- have been loaded and applied.
-
- @param experimentsLoadedCallback       callback to be called after experiments
-                                        joined and applied
- */
-- (void)joinExperimentsWithCallback:(nullable void (^)(void))experimentsLoadedCallback;
-
-#endif // MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-
-#pragma mark - Deprecated
-/*!
- Current user's name in Mixpanel Streams.
- */
-@property (nullable, atomic, copy) NSString *nameTag __deprecated; // Deprecated in v3.0.1
 
 @end
 

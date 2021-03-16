@@ -33,14 +33,6 @@
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
-
-    if (self.pointsLabel) {
-        self.pointsLabel.text = [NSString stringWithFormat:@"%d points", MPTweakValue(@"points", 5)];
-    }
-
-    if (self.textLabel) {
-        MPTweakBind(self.textLabel, text, @"Text", @"tweak me");
-    }
 }
 
 - (IBAction)trackEvent:(id)sender
@@ -73,24 +65,6 @@
         // and identify them once you know their user ID.
         [mixpanel identify:mixpanel.distinctId];
     }
-}
-
-- (IBAction)setNotificationType:(id)sender
-{
-    NSArray *types = @[@"takeover", @"mini"];
-    self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
-}
-
-- (IBAction)showNotif:(id)sender
-{
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    UITextField *strongNotificationIDField = _notificationIDField;
-    if (strongNotificationIDField != nil && [strongNotificationIDField.text length] > 0) {
-        [mixpanel showNotificationWithID:(NSUInteger)strongNotificationIDField.text.integerValue];
-    } else {
-        [mixpanel showNotificationWithType:_showNotificationType];
-    }
-    [strongNotificationIDField resignFirstResponder];
 }
 
 - (IBAction)changeBackground
@@ -145,11 +119,6 @@
 {
     UIViewController *sourceViewController = sender.sourceViewController;
     [sourceViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)joinExperiments:(id)sender
-{
-    [[Mixpanel sharedInstance] joinExperiments];
 }
 
 @end

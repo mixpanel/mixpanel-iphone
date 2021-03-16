@@ -14,7 +14,6 @@
 @interface MPResources : NSObject
 
 + (NSBundle *)frameworkBundle;
-+ (NSString *)notificationXibName;
 + (UIImage *)imageNamed:(NSString *)name;
 
 @end

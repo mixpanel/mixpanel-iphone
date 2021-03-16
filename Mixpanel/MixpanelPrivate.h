@@ -22,39 +22,16 @@
 #endif
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-#import "Mixpanel+AutomaticTracks.h"
-#import "AutomaticTracksConstants.h"
 #import "AutomaticEvents.h"
 #import "MixpanelExceptionHandler.h"
 #endif
 
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-#import "MPResources.h"
-#import "MPABTestDesignerConnection.h"
-#import "UIView+MPHelpers.h"
-#import "MPDesignerEventBindingMessage.h"
-#import "MPDesignerSessionCollection.h"
-#import "MPEventBinding.h"
-#import "MPNotification.h"
-#import "MPTakeoverNotification.h"
-#import "MPMiniNotification.h"
-#import "MPNotificationViewController.h"
-#import "MPSwizzler.h"
-#import "MPTweakStore.h"
-#import "MPVariant.h"
-#import "MPWebSocket.h"
-#import "MPNotification.h"
-#endif
 
 
-#if defined(MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT) && defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
+#if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
-#elif defined(MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT)
-@interface Mixpanel () <TrackDelegate>
-#elif defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
-@interface Mixpanel () <MPNotificationViewControllerDelegate>
 #else
-@interface Mixpanel () <MPNotificationViewControllerDelegate, TrackDelegate>
+@interface Mixpanel () <TrackDelegate>
 #endif
 
 {
@@ -66,21 +43,13 @@
 @property (nonatomic, assign) SCNetworkReachabilityRef reachability;
 #endif
 
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-@property (nonatomic, strong) UILongPressGestureRecognizer *testDesignerGestureRecognizer;
-@property (nonatomic, strong) MPABTestDesignerConnection *abtestDesignerConnection;
-#endif
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-@property (nonatomic) AutomaticTrackMode validationMode;
-@property (nonatomic) NSUInteger validationEventCount;
-@property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 @property (atomic, strong) AutomaticEvents *automaticEvents;
 #endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
-@property (nonatomic, strong) UIViewController *notificationViewController;
 #endif
 
 // re-declare internally as readwrite
@@ -106,22 +75,13 @@
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
 
 @property (nonatomic) BOOL decideResponseCached;
-@property (nonatomic) BOOL hasAddedObserver;
 @property (nonatomic, strong) NSNumber *automaticEventsEnabled;
-@property (nonatomic, copy) NSArray *notifications;
-@property (nonatomic, copy) NSArray *triggeredNotifications;
-@property (nonatomic, strong) id currentlyShowingNotification;
-@property (nonatomic, strong) NSMutableSet *shownNotifications;
 
-@property (nonatomic, strong) NSSet *variants;
-@property (nonatomic, strong) NSSet *eventBindings;
 
 @property (nonatomic, assign) BOOL optOutStatus;
 @property (nonatomic, assign) BOOL optOutStatusNotSet;
 
 @property (nonatomic, strong) NSString *savedUrbanAirshipChannelID;
-
-@property (atomic, copy) NSString *switchboardURL;
 
 + (void)assertPropertyTypes:(NSDictionary *)properties;
 
@@ -143,12 +103,5 @@
 
 // for group caching
 - (NSString *)keyForGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
-- (void)trackPushNotification:(NSDictionary *)userInfo;
-- (void)showNotificationWithObject:(MPNotification *)notification;
-- (void)markVariantRun:(MPVariant *)variant;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion;
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache;
-#endif
 
 @end
