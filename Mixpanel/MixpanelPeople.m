@@ -144,42 +144,6 @@
     }
 }
 
-+ (NSString *)pushDeviceTokenToString:(NSData *)deviceToken
-{
-    const unsigned char *buffer = (const unsigned char *)deviceToken.bytes;
-    if (!buffer) {
-        return nil;
-    }
-    NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
-    for (NSUInteger i = 0; i < deviceToken.length; i++) {
-        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
-    }
-    return [hex copy];
-}
-
-#pragma mark - Public API
-
-- (void)addPushDeviceToken:(NSData *)deviceToken
-{
-    NSString *tokenString = [MixpanelPeople pushDeviceTokenToString:deviceToken];
-    if (tokenString) {
-        NSDictionary *properties = @{@"$ios_devices": @[tokenString]};
-        [self addPeopleRecordToQueueWithAction:@"$union" andProperties:properties];
-    }
-}
-
-- (void)removeAllPushDeviceTokens
-{
-    NSDictionary *properties = @{ @"$properties": @[@"$ios_devices"] };
-    [self addPeopleRecordToQueueWithAction:@"$unset" andProperties:properties];
-}
-
-- (void)removePushDeviceToken:(NSData *)deviceToken
-{
-    NSDictionary *properties = @{@"$ios_devices": [MixpanelPeople pushDeviceTokenToString:deviceToken]};
-    [self addPeopleRecordToQueueWithAction:@"$remove" andProperties:properties];
-}
-
 - (void)set:(NSDictionary *)properties
 {
     NSAssert(properties != nil, @"properties must not be nil");
