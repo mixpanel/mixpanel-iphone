@@ -55,21 +55,6 @@
     XCTAssertThrows([self.mixpanel.people increment:p], @"unsupported property type was allowed");
 }
 
-- (void)testPeopleAddPushDeviceToken {
-    [self.mixpanel identify:@"d1"];
-    NSData *token = [@"0123456789abcdef" dataUsingEncoding:NSUTF8StringEncoding];
-    [self.mixpanel.people addPushDeviceToken:token];
-    [self waitForMixpanelQueues];
-    XCTAssertTrue(self.mixpanel.peopleQueue.count == 1, @"people records not queued");
-    
-    NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$union"];
-    XCTAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
-    
-    NSArray *a = p[@"$ios_devices"];
-    XCTAssertTrue(a.count == 1, @"device token array not set");
-    XCTAssertEqualObjects(a.lastObject, @"30313233343536373839616263646566", @"device token not encoded properly");
-}
-
 #pragma mark - Operations
 - (void)testPeopleSet {
     [self.mixpanel identify:@"d1"];

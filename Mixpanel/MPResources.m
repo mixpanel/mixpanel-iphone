@@ -21,25 +21,6 @@
     return [NSBundle bundleForClass:self.class];
 }
 
-+ (NSString *)notificationXibName
-{
-    NSMutableString *xibFileName = [NSMutableString stringWithString:@"MPTakeoverNotificationViewController"];
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        UIApplication *sharedApplication = [Mixpanel sharedUIApplication];
-        BOOL isLandscape = UIInterfaceOrientationIsLandscape(sharedApplication.statusBarOrientation);
-        if (isLandscape) {
-            [xibFileName appendString:@"~iphonelandscape"];
-        } else {
-            [xibFileName appendString:@"~iphoneportrait"];
-        }
-    } else {
-        [xibFileName appendString:@"~ipad"];
-    }
-    
-    return [xibFileName copy];
-}
-
 + (UIImage *)imageNamed:(NSString *)name
 {
     NSString *imagePath = [[MPResources frameworkBundle] pathForResource:name ofType:@"png"];

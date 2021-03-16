@@ -7,7 +7,6 @@
 //
 
 #import "AutomaticEvents.h"
-#import "MPSwizzler.h"
 #import <objc/runtime.h>
 #import <StoreKit/StoreKit.h>
 
