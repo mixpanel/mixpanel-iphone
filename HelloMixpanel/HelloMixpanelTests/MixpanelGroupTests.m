@@ -97,9 +97,14 @@
     [self.mixpanel identify:@"d1"];
     [self.mixpanel setGroup:@"key" groupIDs:@[@"id"]];
     [self.mixpanel removeGroup:@"key" groupID:@"id"];
+    dispatch_sync(self.mixpanel.serialQueue, ^{
+        return;
+    });
+
     [self waitForMixpanelQueues];
-    NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$remove"];
-    XCTAssertEqualObjects(p[@"key"], @"id", @"custom group property not queued");
+    
+    NSDictionary *p = self.mixpanel.peopleQueue.lastObject;
+    XCTAssertNotNil(p[@"$remove"]);
 }
 
 - (void)testRemoveGroupIgnoreNonExistingValue
