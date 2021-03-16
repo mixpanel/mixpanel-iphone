@@ -39,6 +39,7 @@ def pushPod():
     subprocess.call('pod trunk push Mixpanel.podspec --allow-warnings', shell=True)
 
 def build_Carthage():
+    subprocess.call('export XCODE_XCCONFIG_FILE=$PWD/tmp.xcconfig', shell=True)
     subprocess.call('carthage build --no-skip-current', shell=True)
     subprocess.call('carthage archive Mixpanel', shell=True)
 
