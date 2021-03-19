@@ -49,9 +49,7 @@
 }
 
 - (void)testMultipleInstances {
-    Mixpanel *mp = [[Mixpanel alloc] initWithToken:@"abc"
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    Mixpanel *mp = [[Mixpanel alloc] initWithToken:@"abc" andFlushInterval:60];
     mp.minimumSessionDuration = 0;
     self.mixpanel.minimumSessionDuration = 0;
     [self.mixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];

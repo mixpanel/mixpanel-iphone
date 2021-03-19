@@ -19,7 +19,7 @@
     // Perform any final initialization of your application.
 
     // Initialize the MixpanelAPI object
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:nil];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
 
     [self.mixpanel registerSuperProperties:@{@"super watch" : @1}];
 }

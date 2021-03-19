@@ -39,12 +39,12 @@ static NSString *defaultProjectToken;
 static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTrackingByDefault:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:trackCrashes optOutTrackingByDefault:NO];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
     if (instances[apiToken]) {
         return instances[apiToken];
@@ -56,22 +56,18 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     const NSUInteger flushInterval = 60;
 #endif
 
-    return [[self alloc] initWithToken:apiToken launchOptions:launchOptions flushInterval:flushInterval trackCrashes:trackCrashes automaticPushTracking:automaticPushTracking optOutTrackingByDefault:optOutTrackingByDefault];
-}
-
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
-{
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:NO automaticPushTracking:NO];
+    return [[self alloc] initWithToken:apiToken flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES];
 }
+
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:NO automaticPushTracking:NO optOutTrackingByDefault:optOutTrackingByDefault];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES optOutTrackingByDefault:optOutTrackingByDefault];
 }
 
 + (nullable Mixpanel *)sharedInstance
@@ -111,10 +107,8 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(NSDictionary *)launchOptions
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
-        automaticPushTracking:(BOOL)automaticPushTracking
                optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
     if (apiToken.length == 0) {
@@ -183,44 +177,21 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(NSDictionary *)launchOptions
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
-        automaticPushTracking:(BOOL)automaticPushTracking
 {
     return [self initWithToken:apiToken
-                 launchOptions:launchOptions
                  flushInterval:flushInterval
                   trackCrashes:trackCrashes
-         automaticPushTracking:automaticPushTracking
                 optOutTrackingByDefault:NO];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(NSDictionary *)launchOptions
              andFlushInterval:(NSUInteger)flushInterval
 {
     return [self initWithToken:apiToken
-                 launchOptions:launchOptions
                  flushInterval:flushInterval
                   trackCrashes:NO];
-}
-
-- (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(NSDictionary *)launchOptions
-                flushInterval:(NSUInteger)flushInterval
-                 trackCrashes:(BOOL)trackCrashes
-{
-    return [self initWithToken:apiToken
-                 launchOptions:launchOptions
-                 flushInterval:flushInterval
-                  trackCrashes:trackCrashes
-         automaticPushTracking:NO];
-}
-
-- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval
-{
-    return [self initWithToken:apiToken launchOptions:nil andFlushInterval:flushInterval];
 }
 
 - (void)dealloc
@@ -641,10 +612,12 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     NSArray *groupIDs = @[ groupID ];
     [self setGroup:groupKey groupIDs:groupIDs];
 }
+
 - (NSString *)keyForGroup:(NSString *)groupKey
                   groupID:(id<MixpanelType>)groupID {
     return [NSString stringWithFormat:@"%@_%@", groupKey, groupID];
 }
+
 - (MixpanelGroup *)getGroup:(NSString *)groupKey
                     groupID:(id<MixpanelType>)groupID {
     NSString *mapKey = [self keyForGroup:groupKey groupID:groupID];
@@ -1471,10 +1444,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
                                selector:@selector(applicationWillEnterForeground:)
                                    name:UIApplicationWillEnterForegroundNotification
                                  object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(appLinksNotificationRaised:)
-                                   name:@"com.parse.bolts.measurement_event"
-                                 object:nil];
 #endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
     }
 }
@@ -1532,6 +1501,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
+    
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
+    if (![Mixpanel isAppExtension]) {
+        [self checkForDecideResponse];
+    }
+#endif
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1630,17 +1605,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     });
 }
 
-- (void)appLinksNotificationRaised:(NSNotification *)notification
-{
-    NSDictionary *eventMap = @{@"al_nav_out": @"$al_nav_out",
-                               @"al_nav_in": @"$al_nav_in",
-                               @"al_ref_back_out": @"$al_ref_back_out"
-                               };
-    NSDictionary *userInfo = notification.userInfo;
-    if (userInfo[@"event_name"] && userInfo[@"event_args"] && eventMap[userInfo[@"event_name"]]) {
-        [self track:eventMap[userInfo[@"event_name"]] properties:userInfo[@"event_args"]];
-    }
-}
 #endif // MIXPANEL_MACOS
 
 #endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
@@ -1674,16 +1638,11 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 }
 
 
-#if !MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 
 #pragma mark - Decide
 
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion
-{
-    [self checkForDecideResponseWithCompletion:completion useCache:YES];
-}
-
-- (void)checkForDecideResponseWithCompletion:(void (^)(NSArray *notifications, NSSet *variants, NSSet *eventBindings))completion useCache:(BOOL)useCache
+- (void)checkForDecideResponse
 {
     [self dispatchOnNetworkQueue:^{
         __block BOOL hadError = NO;
@@ -1693,7 +1652,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
             decideResponseCached = self.decideResponseCached;
         }
 
-        if (!useCache || !decideResponseCached) {
+        if (!decideResponseCached) {
             // Build a proper URL from our parameters
             NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
                                                             withDistinctID:self.people.distinctId ?: self.distinctId
@@ -1759,15 +1718,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         } else {
             MPLogInfo(@"%@ decide cache found, skipping network request", self);
         }
-
-        if (hadError) {
-            if (completion) {
-                completion(nil, nil, nil);
-            }
-        }
     }];
 }
 
-#endif // MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT
+#endif
 
 @end

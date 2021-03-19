@@ -36,7 +36,6 @@
 
 {
     NSUInteger _flushInterval;
-    BOOL _enableVisualABTestAndCodeless;
 }
 
 #if !MIXPANEL_NO_REACHABILITY_SUPPORT

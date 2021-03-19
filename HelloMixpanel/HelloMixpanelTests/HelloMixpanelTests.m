@@ -445,9 +445,7 @@
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"events queue failed to reset");
     XCTAssertTrue(self.mixpanel.peopleQueue.count == 0, @"people queue failed to reset");
 
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
     [self waitForMixpanelQueues];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"distinct id failed to reset after archive");
@@ -460,9 +458,7 @@
 
 - (void)testArchive {
     [self.mixpanel archive];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id archive failed");
 #endif
@@ -484,9 +480,7 @@
     [self waitForMixpanelQueues];
 
     [self.mixpanel archive];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
     [self waitForMixpanelQueues];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"custom distinct archive failed");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"custom super properties archive failed");
@@ -503,9 +497,7 @@
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel groupsFilePath]], @"groups archive file not removed");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"properties archive file not removed");
 
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
     XCTAssertEqualObjects(self.mixpanel.distinctId, @"d1", @"expecting d1 as distinct id as initialised");
     XCTAssertTrue([[self.mixpanel currentSuperProperties] count] == 1, @"default super properties expected to have 1 item");
     XCTAssertNotNil(self.mixpanel.eventsQueue, @"default events queue from no file is nil");
@@ -528,9 +520,7 @@
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel groupsFilePath]], @"garbage groups archive file not found");
     XCTAssertTrue([fileManager fileExistsAtPath:[self.mixpanel propertiesFilePath]], @"garbage properties archive file not found");
 
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
     [self waitForMixpanelQueues];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
     XCTAssertEqualObjects(self.mixpanel.distinctId, [self.mixpanel defaultDistinctId], @"default distinct id from garbage failed");
@@ -547,9 +537,7 @@
 }
 
 - (void)testArchiveInMultithreadNotCrash {
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
     NSDictionary *p = @{@"p1": @"a"};
     [self.mixpanel identify:@"d1"];
     [self.mixpanel registerSuperProperties:p];
@@ -576,9 +564,7 @@
     }
     
     [self waitForMixpanelQueues];
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
     XCTAssertTrue(self.mixpanel.eventsQueue.count >= 0, @"archive should not crash");
 }
 

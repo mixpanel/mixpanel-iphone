@@ -203,7 +203,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  This method will return a singleton instance of the <code>Mixpanel</code> class for
  you using the given project token. If an instance does not exist, this method will create
- one using <code>initWithToken:launchOptions:andFlushInterval:</code>. If you only have one
+ one using <code>initWithToken:flushInterval:</code>. If you only have one
  instance in your project, you can use <code>sharedInstance</code> to retrieve it.
 
  <pre>
@@ -223,8 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
  Initializes a singleton instance of the API, uses it to set whether or not to opt out tracking for
  GDPR compliance, and then returns it.
 
- This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
+ With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
 
  @param apiToken        your project token
  @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
@@ -233,58 +232,37 @@ NS_ASSUME_NONNULL_BEGIN
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
 
 /*!
- Initializes a singleton instance of the API, uses it to track launchOptions information,
- and then returns it.
+ Initializes a singleton instance of the API, uses it to track crashes, and then returns it.
 
- This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the launchOptions parameter, Mixpanel can track referral
- information created by push notifications.
+ With the trackCrashes parameter, Mixpanel can track crashes.
 
  @param apiToken        your project token
- @param launchOptions   your application delegate's launchOptions
-
- */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
-
-/*!
- Initializes a singleton instance of the API, uses it to track launchOptions information,
- and then returns it.
-
- This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the trackCrashes and automaticPushTracking parameter, Mixpanel can track crashes and automatic push.
-
- @param apiToken        your project token
- @param launchOptions   your application delegate's launchOptions
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
- @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes;
 
 /*!
- Initializes a singleton instance of the API, uses it to track launchOptions information,
- and then returns it.
-
- This is the preferred method for creating a sharedInstance with a mixpanel
- like above. With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
+ Initializes a singleton instance of the API, uses it to track crashes, set whether or not to opt out tracking for
+ GDPR compliance, and then returns it.
+ 
+ With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
 
  @param apiToken        your project token
- @param launchOptions   your application delegate's launchOptions
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
- @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
  @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions trackCrashes:(BOOL)trackCrashes automaticPushTracking:(BOOL)automaticPushTracking optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
 
 /*!
  Returns a previously instantiated singleton instance of the API.
 
  The API must be initialized with <code>sharedInstanceWithToken:</code> or
- <code>initWithToken:launchOptions:andFlushInterval</code> before calling this class method.
+ <code>initWithToken:flushInterval</code> before calling this class method.
  This method will return <code>nil</code> if there are no instances created. If there is more than
  one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code>
- or <code>initWithToken:launchOptions:andFlushInterval:</code>.
+ or <code>initWithToken:flushInterval:</code>.
  */
 + (nullable Mixpanel *)sharedInstance;
 
@@ -296,13 +274,11 @@ NS_ASSUME_NONNULL_BEGIN
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
- @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
                         issues with your crash reporting for either signals or exceptions
  */
 - (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(nullable NSDictionary *)launchOptions
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes;
 
@@ -312,38 +288,6 @@ NS_ASSUME_NONNULL_BEGIN
  <code>sharedInstanceWithToken:</code> to retrieve this object later.
 
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
-
- @param apiToken        your project token
- @param launchOptions   optional app delegate launchOptions
- @param flushInterval   interval to run background flushing
- @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
- issues with your crash reporting for either signals or exceptions
- @param automaticPushTracking    whether or not to automatically track pushes sent from Mixpanel
- */
-- (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(nullable NSDictionary *)launchOptions
-                flushInterval:(NSUInteger)flushInterval
-                 trackCrashes:(BOOL)trackCrashes
-        automaticPushTracking:(BOOL)automaticPushTracking;
-
-/*!
- Initializes an instance of the API with the given project token.
-
- Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
-
- @param apiToken        your project token
- @param launchOptions   optional app delegate launchOptions
- @param flushInterval   interval to run background flushing
- */
-- (instancetype)initWithToken:(NSString *)apiToken
-                launchOptions:(nullable NSDictionary *)launchOptions
-             andFlushInterval:(NSUInteger)flushInterval;
-
-/*!
- Initializes an instance of the API with the given project token.
-
- Supports for the old initWithToken method format but really just passes
- launchOptions to the above method as nil.
 
  @param apiToken        your project token
  @param flushInterval   interval to run background flushing
@@ -609,10 +553,7 @@ NS_ASSUME_NONNULL_BEGIN
  When calling <code>flush</code> manually, it is sometimes important to verify
  that the flush has finished before further action is taken. This is
  especially important when the app is in the background and could be suspended
- at any time if protocol is not followed. Delegate methods like
- <code>application:didReceiveRemoteNotification:fetchCompletionHandler:</code>
- are called when an app is brought to the background and require a handler to
- be called when it finishes.
+ at any time if protocol is not followed. 
 
  @param handler     completion handler to be called after flush completes
  */
