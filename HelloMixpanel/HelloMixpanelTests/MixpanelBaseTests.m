@@ -34,9 +34,7 @@
 }
 
 - (void)setUpMixpanel {
-    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
-                                      launchOptions:nil
-                                   andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken andFlushInterval:60];
 }
 
 - (void)tearDownMixpanel {
