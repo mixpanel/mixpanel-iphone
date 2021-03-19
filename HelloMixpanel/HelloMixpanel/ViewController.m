@@ -6,14 +6,9 @@
 @property (nonatomic, weak) IBOutlet UISegmentedControl *genderControl;
 @property (nonatomic, weak) IBOutlet UISegmentedControl *weaponControl;
 @property (nonatomic, weak) IBOutlet UIImageView *fakeBackground;
-@property (nonatomic, weak) IBOutlet UITextField *notificationIDField;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
 @property (nonatomic, strong) IBOutlet UILabel *pointsLabel;
 @property (nonatomic, strong) IBOutlet UILabel *textLabel;
-
-
-@property (nonatomic, copy) NSString *showNotificationType;
 
 @end
 
@@ -22,8 +17,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.showNotificationType = @"takeover";
 
     UIScrollView *strongScrollView = _scrollView;
     if (strongScrollView != nil) {
@@ -96,13 +89,6 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)dismissKeyboard
-{
-    UITextField *strongNotificationIDField = _notificationIDField;
-
-    [strongNotificationIDField resignFirstResponder];
 }
 
 - (IBAction)testBarButtonItemWasPressed:(id)sender
