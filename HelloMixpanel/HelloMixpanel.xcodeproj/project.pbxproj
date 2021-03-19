@@ -41,11 +41,6 @@
 		51AF3D3D1D380D31002E8325 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */; };
 		51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D96E841D120D80001F622D /* MixpanelBaseTests.m */; };
-		51D96E8C1D1217D6001F622D /* test_decide_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 05509E50196E47EE007E5C06 /* test_decide_response.json */; };
-		51D96E8E1D1217D6001F622D /* test_decide_response_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 05113949199BD7D4005189D2 /* test_decide_response_2.json */; };
-		51D96E8F1D1217E1001F622D /* checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E11B4F4DF700787217 /* checkerboard.jpg */; };
-		51D96E901D1217E1001F622D /* huge_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */; };
-		51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */; };
 		860BE35F207548E600C12F18 /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE35E207548E600C12F18 /* TrackingViewController.m */; };
 		860BE36220754DBE00C12F18 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36120754DBE00C12F18 /* PeopleViewController.m */; };
 		860BE3672075A82C00C12F18 /* BaseTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE3662075A82C00C12F18 /* BaseTestViewController.m */; };
@@ -76,7 +71,6 @@
 		F0E732A81DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F0E732B01DAEF81000CB4C13 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E732AF1DAEF81000CB4C13 /* InterfaceController.m */; };
 		F0E732B31DAEF81000CB4C13 /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E732B21DAEF81000CB4C13 /* ExtensionDelegate.m */; };
-		F0E732B61DAEF81000CB4C13 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E732B51DAEF81000CB4C13 /* NotificationController.m */; };
 		F0E732B81DAEF81100CB4C13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E732B71DAEF81000CB4C13 /* Assets.xcassets */; };
 		F0E732BC1DAEF81100CB4C13 /* HelloMixpanelWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F0E7329B1DAEF81000CB4C13 /* HelloMixpanelWatch.app */; platformFilter = ios; };
 /* End PBXBuildFile section */
@@ -334,10 +328,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		05113949199BD7D4005189D2 /* test_decide_response_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response_2.json; sourceTree = "<group>"; };
 		05438FFA192175940076094E /* HelloMixpanel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HelloMixpanel.xcassets; sourceTree = "<group>"; };
 		0545AE29196F5382003DCE7F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Settings.bundle; sourceTree = "<group>"; };
-		05509E50196E47EE007E5C06 /* test_decide_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test_decide_response.json; sourceTree = "<group>"; };
 		0552DEFD1843DF00009AC90A /* HelloMixpanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HelloMixpanel.storyboard; sourceTree = "<group>"; };
 		057BE5BE2239A13E00071E94 /* HelloMixpanel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HelloMixpanel-Bridging-Header.h"; sourceTree = "<group>"; };
 		05C13E5118184DBE00848D48 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -370,9 +362,6 @@
 		457CA2022141AF87003B3862 /* MixpanelTypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelTypeTests.m; sourceTree = "<group>"; };
 		45C5F99D2146F416001B08CE /* GroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupViewController.m; sourceTree = "<group>"; };
 		45C5F99F2146F417001B08CE /* GroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupViewController.h; sourceTree = "<group>"; };
-		5115A0E11B4F4DF700787217 /* checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = checkerboard.jpg; sourceTree = SOURCE_ROOT; };
-		5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = huge_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
-		5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = small_checkerboard.jpg; sourceTree = SOURCE_ROOT; };
 		515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Mixpanel.xcodeproj; path = ../Mixpanel.xcodeproj; sourceTree = "<group>"; };
 		517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetworkTests.m; sourceTree = "<group>"; };
 		518010151D11CEA300C5F3EA /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nocilla.framework; sourceTree = "<group>"; };
@@ -426,13 +415,10 @@
 		F0E732A01DAEF81000CB4C13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0E732A21DAEF81000CB4C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "HelloMixpanelWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0E732AD1DAEF81000CB4C13 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		F0E732AE1DAEF81000CB4C13 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
 		F0E732AF1DAEF81000CB4C13 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
 		F0E732B11DAEF81000CB4C13 /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
 		F0E732B21DAEF81000CB4C13 /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
-		F0E732B41DAEF81000CB4C13 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
-		F0E732B51DAEF81000CB4C13 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
 		F0E732B71DAEF81000CB4C13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0E732B91DAEF81100CB4C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABTestingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -649,12 +635,7 @@
 		51D96E961D122258001F622D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				05509E50196E47EE007E5C06 /* test_decide_response.json */,
-				05113949199BD7D4005189D2 /* test_decide_response_2.json */,
 				2808F9BA1610EFE4005772B7 /* HelloMixpanelTests-Info.plist */,
-				5115A0E11B4F4DF700787217 /* checkerboard.jpg */,
-				5115A0E21B4F4DF700787217 /* huge_checkerboard.jpg */,
-				5115A0E31B4F4DF700787217 /* small_checkerboard.jpg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -763,8 +744,6 @@
 				F0E732AF1DAEF81000CB4C13 /* InterfaceController.m */,
 				F0E732B11DAEF81000CB4C13 /* ExtensionDelegate.h */,
 				F0E732B21DAEF81000CB4C13 /* ExtensionDelegate.m */,
-				F0E732B41DAEF81000CB4C13 /* NotificationController.h */,
-				F0E732B51DAEF81000CB4C13 /* NotificationController.m */,
 				F0E732B71DAEF81000CB4C13 /* Assets.xcassets */,
 				F0E732B91DAEF81100CB4C13 /* Info.plist */,
 				F0E732AC1DAEF81000CB4C13 /* Supporting Files */,
@@ -775,7 +754,6 @@
 		F0E732AC1DAEF81000CB4C13 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F0E732AD1DAEF81000CB4C13 /* PushNotificationPayload.apns */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1038,11 +1016,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51D96E8F1D1217E1001F622D /* checkerboard.jpg in Resources */,
-				51D96E901D1217E1001F622D /* huge_checkerboard.jpg in Resources */,
-				51D96E911D1217E1001F622D /* small_checkerboard.jpg in Resources */,
-				51D96E8C1D1217D6001F622D /* test_decide_response.json in Resources */,
-				51D96E8E1D1217D6001F622D /* test_decide_response_2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1226,7 +1199,6 @@
 			files = (
 				F0E732B31DAEF81000CB4C13 /* ExtensionDelegate.m in Sources */,
 				F0E732B01DAEF81000CB4C13 /* InterfaceController.m in Sources */,
-				F0E732B61DAEF81000CB4C13 /* NotificationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

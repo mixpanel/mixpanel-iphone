@@ -66,24 +66,6 @@
     [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
-- (void)testAutoTrackEventsShouldNotBeQueuedDuringInitializedWithOptedOutYES
-{
-    stubTrack();
-    stubEngage();
-    __block NSInteger trackCount = 0;
-    [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
-        trackCount++;
-    } named:@"Swizzle Mixpanel.track"];
-
-
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:YES];
-    [self waitForMixpanelQueues];
-    XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"no event should be queued");
-    XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
-
-    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
-}
-
 - (void)testOptInWillAddOptInEvent
 {
     stubTrack();
