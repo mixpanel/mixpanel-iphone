@@ -40,7 +40,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="MPLogo" translatesAutoresizingMaskIntoConstraints="NO" id="4FA-CV-aBK">
+                            <imageView userInteractionEnabled="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="4FA-CV-aBK">
                                 <rect key="frame" x="154.5" y="102" width="66" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="L3s-C5-3dZ"/>
@@ -551,7 +551,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MPLogo" width="25" height="25"/>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
