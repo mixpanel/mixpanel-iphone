@@ -17,8 +17,7 @@
                     break;
             }
     }
-    
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"MPLogo.png"]];
+
 }
 
 
