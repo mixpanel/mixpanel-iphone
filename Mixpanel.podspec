@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
   s.ios.exclude_files = 'Mixpanel/MixpanelWatchProperties.{m,h}'
   s.ios.public_header_files = 'Mixpanel/Mixpanel.h', 'Mixpanel/MixpanelType.h', 'Mixpanel/MixpanelGroup.h', 'Mixpanel/MixpanelType.h', 'Mixpanel/MixpanelPeople.h', 'Mixpanel/MPTweak.h', 'Mixpanel/MPTweakInline.h', 'Mixpanel/MPTweakInlineInternal.h', 'Mixpanel/MPTweakStore.h', 'Mixpanel/_MPTweakBindObserver.h', 'Mixpanel/MPNotificationServiceExtension.h'
   s.ios.private_header_files = 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MixpanelGroupPrivate.h', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/SessionMetadata.h'
-  s.ios.resources   = ['Mixpanel/**/*.{png,storyboard,xib}']
   s.ios.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'StoreKit', 'UserNotifications'
   s.tvos.deployment_target = '9.0'
   s.tvos.source_files  = 'Mixpanel/Mixpanel.{m,h}', 'Mixpanel/MixpanelPrivate.h', 'Mixpanel/MixpanelPeople.{m,h}', 'Mixpanel/MixpanelGroup.{m,h}', 'Mixpanel/MixpanelType.{m,h}', 'Mixpanel/MixpanelGroupPrivate.h', 'Mixpanel/MixpanelPeoplePrivate.h', 'Mixpanel/MPNetwork.{m,h}', 'Mixpanel/MPNetworkPrivate.h', 'Mixpanel/MPLogger.h', 'Mixpanel/MPFoundation.h', 'Mixpanel/MixpanelExceptionHandler.{m,h}', 'Mixpanel/SessionMetadata.{m,h}'
