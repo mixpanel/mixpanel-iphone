@@ -6,6 +6,8 @@
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
+#if defined(MIXPANEL_WATCHOS)
+
 #import "MixpanelWatchProperties.h"
 #import <WatchKit/WatchKit.h>
 
@@ -45,3 +47,5 @@
 }
 
 @end
+
+#endif
