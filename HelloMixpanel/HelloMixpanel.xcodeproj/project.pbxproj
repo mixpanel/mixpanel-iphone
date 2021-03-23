@@ -47,8 +47,6 @@
 		860BE36B2075AC2100C12F18 /* UtilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36A2075AC2100C12F18 /* UtilityViewController.m */; };
 		860BE36E2076979C00C12F18 /* GDPRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36D2076979C00C12F18 /* GDPRViewController.m */; };
 		862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */; };
-		8672E5B2260057FB00E5B654 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8672E5B0260057FB00E5B654 /* MPSwizzler.m */; };
-		8672E5B3260057FB00E5B654 /* MPSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8672E5B0260057FB00E5B654 /* MPSwizzler.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
 		E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
@@ -383,8 +381,6 @@
 		860BE36C2076979C00C12F18 /* GDPRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDPRViewController.h; sourceTree = "<group>"; };
 		860BE36D2076979C00C12F18 /* GDPRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDPRViewController.m; sourceTree = "<group>"; };
 		86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelOptOutTests.m; sourceTree = "<group>"; };
-		8672E5B0260057FB00E5B654 /* MPSwizzler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPSwizzler.m; sourceTree = "<group>"; };
-		8672E5B1260057FB00E5B654 /* MPSwizzler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPSwizzler.h; sourceTree = "<group>"; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
 		86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -579,8 +575,6 @@
 		2808F9B81610EFE4005772B7 /* HelloMixpanelTests */ = {
 			isa = PBXGroup;
 			children = (
-				8672E5B1260057FB00E5B654 /* MPSwizzler.h */,
-				8672E5B0260057FB00E5B654 /* MPSwizzler.m */,
 				E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */,
 				2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */,
 				51D96E921D1219AE001F622D /* Helpers */,
@@ -1164,7 +1158,6 @@
 				51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */,
 				517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */,
 				457CA2052141AFFE003B3862 /* MixpanelTypeTests.m in Sources */,
-				8672E5B2260057FB00E5B654 /* MPSwizzler.m in Sources */,
 				E18E6C401EAFC94E00FDD3A2 /* AutomaticEventsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1184,7 +1177,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				517ABB7A1D14CA8300FF8061 /* MPNetworkTests.m in Sources */,
-				8672E5B3260057FB00E5B654 /* MPSwizzler.m in Sources */,
 				517ABB771D14CA7B00FF8061 /* MixpanelPeopleTests.m in Sources */,
 				E123C4AE1D1355A00015B425 /* HelloMixpanelTests.m in Sources */,
 				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
@@ -1599,7 +1591,7 @@
 					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
 					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
 					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"\"$(SRCROOT)/../Mixpanel\"/**",
+					"\"$(SRCROOT)/../Sources\"/**",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1643,7 +1635,7 @@
 					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
 					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
 					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"\"$(SRCROOT)/../Mixpanel\"/**",
+					"\"$(SRCROOT)/../Sources\"/**",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1802,7 +1794,7 @@
 					"\"${PODS_ROOT}/Headers/Public/CocoaHTTPServer\"",
 					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
 					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
-					"\"$(SRCROOT)/../Mixpanel\"/**",
+					"\"$(SRCROOT)/../Sources\"/**",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

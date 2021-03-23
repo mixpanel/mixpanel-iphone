@@ -3,5 +3,6 @@ framework module Mixpanel {
     header "MixpanelPeople.h"
     header "MixpanelGroup.h"
     header "MixpanelType.h"
+    
     export *
 }
