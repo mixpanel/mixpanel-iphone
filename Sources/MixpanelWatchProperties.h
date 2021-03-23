@@ -6,6 +6,8 @@
 //  Copyright © 2016 Mixpanel. All rights reserved.
 //
 
+#if defined(MIXPANEL_WATCHOS)
+
 #import <Foundation/Foundation.h>
 
 @interface MixpanelWatchProperties : NSObject
@@ -14,3 +16,5 @@
 + (NSString *)systemVersion;
 
 @end
+
+#endif

@@ -11,7 +11,7 @@
 #import "TestConstants.h"
 #import "MixpanelPeoplePrivate.h"
 #import <OCMock/OCMock.h>
-#import "MPSwizzler.h"
+
 
 @interface MixpanelOptOutTests : MixpanelBaseTests
 
@@ -29,41 +29,6 @@
     stubEngage();
     self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
     XCTAssertTrue([self.mixpanel hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
-}
-
-- (void)testNoTrackShouldEverBeTriggeredDuringInitializedWithOptedOutYES
-{
-    stubTrack();
-    stubEngage();
-    __block NSInteger trackCount = 0;
-    [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
-        trackCount++;
-    } named:@"Swizzle Mixpanel.track"];
-
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
-    XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
-
-    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
-}
-
-- (void)testTrackShouldBeTriggeredDuringInitializedWithOptedOutYESButPrevouslyOptedIn
-{
-    stubTrack();
-    stubEngage();
-    __block NSInteger trackCount = 0;
-    [MPSwizzler swizzleSelector:@selector(track:) onClass:[Mixpanel class] withBlock:^(id obj, SEL sel){
-        trackCount++;
-    } named:@"Swizzle Mixpanel.track"];
-
-    NSString *tokenId = [self randomTokenId];
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:tokenId optOutTrackingByDefault:YES];
-    [self.mixpanel optInTracking];
-
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:tokenId optOutTrackingByDefault:YES];
-    [self.mixpanel track:@"test"];
-    XCTAssertTrue(trackCount == 1, @"init default opted out->optedIn->init default opted out, track call should be triggered during initialization.");
-
-    [MPSwizzler unswizzleSelector:@selector(track:) onClass:[Mixpanel class] named:@"Swizzle Mixpanel.track"];
 }
 
 - (void)testOptInWillAddOptInEvent
