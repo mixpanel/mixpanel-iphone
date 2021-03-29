@@ -26,7 +26,7 @@ def replace_version(file_name, old_version, new_version):
         f.write(file_str)
 
 def generate_docs():
-    subprocess.call('./generate_docs.sh', shell=True)
+    subprocess.call('./scripts/generate_docs.sh', shell=True)
     subprocess.call('git add docs', shell=True)
     subprocess.call('git commit -m "Update docs"', shell=True)
     subprocess.call('git push', shell=True)
@@ -39,8 +39,7 @@ def pushPod():
     subprocess.call('pod trunk push Mixpanel.podspec --allow-warnings', shell=True)
 
 def build_Carthage():
-    subprocess.call('carthage build --no-skip-current', shell=True)
-    subprocess.call('carthage archive Mixpanel', shell=True)
+    subprocess.call('./scripts/carthage.sh', shell=True)
 
 def main():
     bump_version()
