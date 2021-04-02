@@ -8,6 +8,7 @@ osx_image: xcode12
 branches:
   only:
   - master
+  - 4.0.0.beta
 env:
   global:
   - WORKSPACE="HelloMixpanel/HelloMixpanel.xcworkspace"
