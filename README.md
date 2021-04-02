@@ -1,3 +1,4 @@
+
 [![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/mixpanel/mixpanel-iphone.svg)](http://isitmaintained.com/project/mixpanel/mixpanel-iphone "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/mixpanel/mixpanel-iphone.svg)](http://isitmaintained.com/project/mixpanel/mixpanel-iphone "Percentage of issues still open")
@@ -28,6 +29,9 @@ If you are using Swift, we recommend our **[Swift Library](https://github.com/mi
 
 <a name="installation"></a>
 # Installation
+On Jan 1, 2022, we’ll remove the [Messages & Experiments](https://mixpanel.com/blog/why-were-sunsetting-messaging-and-experiments/#:~:text=A%20year%20from%20now%2C%20on,offering%20discounts%20for%20getting%20started) feature from Mixpanel. For now, you can choose to opt in to our beta version without Messages & Experiments feature support. You can use **Swift Package Manager** to install the beta version:
+1.  In Xcode, select File > Swift Packages > Add Package Dependency.
+2.  Follow the prompts using the URL for this repository and point to the branch `4.0.0.beta`
 
 <a name="cocoapods"></a>
 ## CocoaPods
