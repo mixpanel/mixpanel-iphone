@@ -25,8 +25,3 @@ script:
 - travis_retry xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
 - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c
 
-# Run `pod lib lint` if specified
-# allow warnings while surveys are deprecated but not yet removed. disallow them again later
-- if [ $POD_LINT == "YES" ]; then
-    pod lib lint --allow-warnings --no-clean;
-  fi
