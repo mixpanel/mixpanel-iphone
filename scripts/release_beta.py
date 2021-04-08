@@ -10,9 +10,9 @@ args = parser.parse_args()
 
 def bump_version():
     replace_version('Mixpanel.podspec', args.old, args.new)
-    replace_version('Mixpanel/Mixpanel.m', args.old, args.new)
+    replace_version('Sources/Mixpanel.m', args.old, args.new)
     subprocess.call('git add Mixpanel.podspec', shell=True)
-    subprocess.call('git add Mixpanel/Mixpanel.m', shell=True)
+    subprocess.call('git add Sources/Mixpanel.m', shell=True)
     subprocess.call('git commit -m "Version {}"'.format(args.new), shell=True)
     subprocess.call('git push', shell=True)
 
