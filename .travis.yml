@@ -29,3 +29,5 @@ script:
 - if [ $POD_LINT == "YES" ]; then
     pod lib lint --allow-warnings --no-clean;
   fi
+
+# :^)
