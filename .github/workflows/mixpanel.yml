@@ -24,6 +24,11 @@ jobs:
       working-directory: HelloMixpanel
       run: |
         set -o pipefail
-        xcodebuild -workspace HelloMixpanel.xcworkspace -scheme ${{ matrix.scheme }} -destination ${{ matrix.destination }} -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
+        xcodebuild -workspace HelloMixpanel.xcworkspace -scheme ${{ matrix.scheme }} -derivedDataPath Build/ -destination ${{ matrix.destination }} -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
     - name: Pod Lint
       run: pod lib lint --allow-warnings
+    - name: Code Coverage Report
+      working-directory: HelloMixpanel/build/Logs/Test
+      run: |
+        xcrun xccov view --report --files-for-target Mixpanel.framework  *.xcresult
+        xcrun xccov view --report --only-targets *.xcresult
