@@ -1,0 +1,34 @@
+name: Mixpanel ObjC SDK action
+
+on:
+  push:
+    branches: [ master, 4.0.0.beta ]
+  pull_request:
+    branches: [ master, 4.0.0.beta ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        destination: ['OS=14.4,name="iPhone 11"']
+        scheme: ['"[iOS] HelloMixpanel"']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: |
+        cd HelloMixpanel
+        pod install --repo-update
+    - name: Run Test
+      working-directory: HelloMixpanel
+      run: |
+        set -o pipefail
+        xcodebuild -workspace HelloMixpanel.xcworkspace -scheme ${{ matrix.scheme }} -derivedDataPath Build/ -destination ${{ matrix.destination }} -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
+    - name: Pod Lint
+      run: pod lib lint --allow-warnings
+    - name: Code Coverage Report
+      working-directory: HelloMixpanel/build/Logs/Test
+      run: |
+        xcrun xccov view --report --files-for-target Mixpanel.framework  *.xcresult
+        xcrun xccov view --report --only-targets *.xcresult
