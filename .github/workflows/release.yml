@@ -1,0 +1,72 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build:
+    name: "🚀 Release"
+    runs-on: ubuntu-18.04
+    steps:
+      - name: "Check-out"
+        uses: actions/checkout@v1
+      - name: "Update Release CHANGELOG"
+        id: update-release-changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          onlyLastTag: true
+          stripHeaders: false
+          base: "CHANGELOG.md"
+          headerLabel: "# Changelog"
+          breakingLabel: '### Breaking'
+          enhancementLabel: '### Enhancements'
+          stripGeneratorNotice: true
+          bugsLabel: '### Fixes'
+          issues: true
+          issuesWoLabels: true
+          pullRequests: true
+          prWoLabels: true
+          author: false
+          verbose: true
+      - name: Commit CHANGELOG Changes
+        run: |
+          git add .
+          git config user.name "zihe.jia"
+          git config user.email "zihe.jia@mixpanel.com"
+          git commit -m "Update CHANGELOG"
+      - name: Push CHANGELOG changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
+          force: true
+      - name: "Prepare for the Github Release"
+        id: generate-release-changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output: "output.md"
+          headerLabel: "# Changelog"
+          onlyLastTag: true
+          stripHeaders: false
+          breakingLabel: '### Breaking'
+          enhancementLabel: '### Enhancements'
+          stripGeneratorNotice: true
+          bugsLabel: '### Fixes'
+          issues: true
+          issuesWoLabels: true
+          pullRequests: true
+          prWoLabels: true
+          author: false
+          verbose: true
+      - name: "🚀 Create GitHub Release"
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.generate-release-changelog.outputs.changelog }}
