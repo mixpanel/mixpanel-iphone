@@ -17,4 +17,11 @@ jobs:
     - name: Build Carthage
       run: |
         ./scripts/carthage.sh
-    
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+          files: |
+            Mixpanel.framework.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
