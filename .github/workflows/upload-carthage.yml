@@ -1,0 +1,24 @@
+name: Mixpanel ObjC SDK action
+
+on:
+  push:
+    branches: [release-script-test]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        destination: ['OS=14.4,name="iPhone 11"']
+        scheme: ['"[iOS] HelloMixpanel"']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: |
+        cd HelloMixpanel
+        pod install --repo-update
+    - name: Build Carthage
+      run: |
+        ./scripts/carthage.sh
+    
