@@ -14,10 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: |
-        cd HelloMixpanel
-        pod install --repo-update
     - name: Build Carthage
       run: |
         ./scripts/carthage.sh
