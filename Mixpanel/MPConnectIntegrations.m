@@ -50,7 +50,7 @@ static const NSInteger UA_MAX_RETRIES = 3;
     if (urbanAirship) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        NSString *channelID = [[urbanAirship performSelector:NSSelectorFromString(@"push")] performSelector:NSSelectorFromString(@"channelID")];
+        NSString *channelID = [[urbanAirship performSelector:NSSelectorFromString(@"channel")] performSelector:NSSelectorFromString(@"identifier")];
 #pragma clang diagnostic pop
         if (!channelID.length) {
             self.urbanAirshipRetries++;
