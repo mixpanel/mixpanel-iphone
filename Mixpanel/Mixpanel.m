@@ -71,7 +71,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:launchOptions trackCrashes:NO automaticPushTracking:NO];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
@@ -81,7 +81,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:optOutTrackingByDefault];
+    return [Mixpanel sharedInstanceWithToken:apiToken launchOptions:nil trackCrashes:NO automaticPushTracking:NO optOutTrackingByDefault:optOutTrackingByDefault];
 }
 
 + (nullable Mixpanel *)sharedInstance
@@ -237,7 +237,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     return [self initWithToken:apiToken
                  launchOptions:launchOptions
                  flushInterval:flushInterval
-                  trackCrashes:YES];
+                  trackCrashes:NO];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
@@ -249,7 +249,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
                  launchOptions:launchOptions
                  flushInterval:flushInterval
                   trackCrashes:trackCrashes
-         automaticPushTracking:YES];
+         automaticPushTracking:NO];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval

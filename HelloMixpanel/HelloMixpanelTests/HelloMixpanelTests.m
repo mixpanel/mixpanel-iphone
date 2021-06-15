@@ -436,6 +436,7 @@
     self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken
                                       launchOptions:launchOptions
                                    andFlushInterval:60];
+    self.mixpanel = [[Mixpanel alloc] initWithToken:kTestToken launchOptions:launchOptions flushInterval:60 trackCrashes:YES automaticPushTracking:YES];
     [self waitForMixpanelQueues];
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
