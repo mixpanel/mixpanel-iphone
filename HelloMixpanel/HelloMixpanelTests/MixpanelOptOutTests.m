@@ -83,7 +83,7 @@
                                              }
                                      };
     
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:YES];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:NO automaticPushTracking:NO optOutTrackingByDefault:YES];
     [self waitForMixpanelQueues];
     XCTAssertTrue(self.mixpanel.eventsQueue.count == 0, @"no event should be queued");
     XCTAssertTrue(trackCount == 0, @"When opted out, no track call should be ever triggered during initialization.");
@@ -104,7 +104,7 @@
                                              }
                                      };
     
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:YES automaticPushTracking:YES optOutTrackingByDefault:NO];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] launchOptions:launchOptions trackCrashes:NO automaticPushTracking:YES optOutTrackingByDefault:NO];
     [self waitForMixpanelQueues];
     NSDictionary *e = self.mixpanel.eventsQueue.lastObject;
     XCTAssertEqualObjects(e[@"event"], @"$app_open", @"incorrect event name");
