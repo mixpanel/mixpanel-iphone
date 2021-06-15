@@ -6,6 +6,8 @@
 //  Copyright © 2017 Mixpanel. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
+
 #import "AutomaticEvents.h"
 #import <objc/runtime.h>
 #import <StoreKit/StoreKit.h>
@@ -149,3 +151,5 @@
 }
 
 @end
+
+#endif
