@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: "🚀 Release"
-    runs-on: macos-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: "Check-out"
         uses: actions/checkout@v1
@@ -71,16 +71,4 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: ${{ steps.generate-release-changelog.outputs.changelog }}
-      - name: Build Carthage
-        run: |
-          ./scripts/carthage.sh
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Mixpanel.framework.zip
-          asset_name: Mixpanel.framework.zip
-          asset_content_type: application/zip
+
