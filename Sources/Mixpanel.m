@@ -27,7 +27,7 @@
 #error The Mixpanel library must be compiled with ARC enabled
 #endif
 
-#define VERSION @"4.0.0.beta.1"
+#define VERSION @"4.0.0.beta.2"
 
 
 @implementation Mixpanel
@@ -191,7 +191,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 {
     return [self initWithToken:apiToken
                  flushInterval:flushInterval
-                  trackCrashes:YES];
+                  trackCrashes:NO];
 }
 
 - (void)dealloc

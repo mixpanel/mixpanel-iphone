@@ -64,6 +64,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "MPNotificationTests">
+               </Test>
+               <Test
                   Identifier = "MPNotificationTests/testVisualNotifications">
                </Test>
                <Test
