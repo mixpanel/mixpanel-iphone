@@ -12,6 +12,18 @@
 		059BDDB7223C27420042B93B /* SelectorEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 059BDDB6223C27420042B93B /* SelectorEvaluator.m */; };
 		05A0201422028E5800D04A3A /* MPDisplayTrigger.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A0201222028E5800D04A3A /* MPDisplayTrigger.h */; };
 		05A0201522028E5800D04A3A /* MPDisplayTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A0201322028E5800D04A3A /* MPDisplayTrigger.m */; };
+		1781FBDE26F52EC000F12427 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1781FBDD26F52EC000F12427 /* MPDB.m */; };
+		1781FBDF26F52EC000F12427 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1781FBDD26F52EC000F12427 /* MPDB.m */; };
+		1781FBE026F52EC000F12427 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1781FBDD26F52EC000F12427 /* MPDB.m */; };
+		1781FBE126F52EC000F12427 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1781FBDD26F52EC000F12427 /* MPDB.m */; };
+		1781FBE326F5310600F12427 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1781FBE226F530EC00F12427 /* libsqlite3.tbd */; };
+		1781FBE526F5311F00F12427 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1781FBE426F5311700F12427 /* libsqlite3.tbd */; };
+		1781FBE726F5313400F12427 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1781FBE626F5312D00F12427 /* libsqlite3.tbd */; };
+		1781FBE826F5313E00F12427 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1781FBE226F530EC00F12427 /* libsqlite3.tbd */; };
+		1781FBEA26F5331000F12427 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1781FBE926F5331000F12427 /* MPDB.h */; };
+		1781FBEB26F5331000F12427 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1781FBE926F5331000F12427 /* MPDB.h */; };
+		1781FBEC26F5331000F12427 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1781FBE926F5331000F12427 /* MPDB.h */; };
+		1781FBED26F5331000F12427 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1781FBE926F5331000F12427 /* MPDB.h */; };
 		37F9F7F31C2B8BFC00783DDB /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */; };
 		45720A91212DFC0E000D6FC3 /* MixpanelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 457FD2082126468300AC3C79 /* MixpanelGroup.m */; };
 		45720A92212DFC0F000D6FC3 /* MixpanelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 457FD2082126468300AC3C79 /* MixpanelGroup.m */; };
@@ -260,6 +272,11 @@
 		059BDDB6223C27420042B93B /* SelectorEvaluator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectorEvaluator.m; sourceTree = "<group>"; };
 		05A0201222028E5800D04A3A /* MPDisplayTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDisplayTrigger.h; sourceTree = "<group>"; };
 		05A0201322028E5800D04A3A /* MPDisplayTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDisplayTrigger.m; sourceTree = "<group>"; };
+		1781FBDD26F52EC000F12427 /* MPDB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPDB.m; sourceTree = "<group>"; };
+		1781FBE226F530EC00F12427 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		1781FBE426F5311700F12427 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS7.4.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		1781FBE626F5312D00F12427 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.5.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		1781FBE926F5331000F12427 /* MPDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPDB.h; sourceTree = "<group>"; };
 		24A495E21D7E9CA5006A0742 /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Mixpanel/app_extension_module.modulemap; sourceTree = "<group>"; };
 		37F9F7F11C2B8BFC00783DDB /* MPFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPFoundation.h; path = Mixpanel/MPFoundation.h; sourceTree = "<group>"; };
 		457CA1FE21419B25003B3862 /* MixpanelType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MixpanelType.h; path = Mixpanel/MixpanelType.h; sourceTree = SOURCE_ROOT; };
@@ -472,6 +489,7 @@
 			files = (
 				513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */,
 				511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */,
+				1781FBE526F5311F00F12427 /* libsqlite3.tbd in Frameworks */,
 				60F9A96223A8321900A04C2D /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,6 +500,7 @@
 			files = (
 				058229592213887D00352FC5 /* JavaScriptCore.framework in Frameworks */,
 				E14FA8071F44DF17009B4533 /* UserNotifications.framework in Frameworks */,
+				1781FBE326F5310600F12427 /* libsqlite3.tbd in Frameworks */,
 				E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */,
 				515B5A231CB6FF8600A34060 /* libicucore.tbd in Frameworks */,
 				519AD7A61CB706A9005411A5 /* CFNetwork.framework in Frameworks */,
@@ -500,6 +519,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1781FBE726F5313400F12427 /* libsqlite3.tbd in Frameworks */,
 				E1C2BE5C1CFD6A010052172F /* Foundation.framework in Frameworks */,
 				E1C2BE5E1CFD6A010052172F /* UIKit.framework in Frameworks */,
 			);
@@ -511,6 +531,7 @@
 			files = (
 				E1F1615D1E68B87500391AE3 /* IOKit.framework in Frameworks */,
 				E1F160DB1E68AC5E00391AE3 /* Foundation.framework in Frameworks */,
+				1781FBE826F5313E00F12427 /* libsqlite3.tbd in Frameworks */,
 				E1F160D91E68AC5A00391AE3 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -874,6 +895,8 @@
 				E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */,
 				F0ACBDEA1F8C46B400ABF03D /* MPConnectIntegrations.h */,
 				F0ACBDEB1F8C46B400ABF03D /* MPConnectIntegrations.m */,
+				1781FBDD26F52EC000F12427 /* MPDB.m */,
+				1781FBE926F5331000F12427 /* MPDB.h */,
 			);
 			name = Source;
 			path = Mixpanel;
@@ -908,6 +931,9 @@
 		E1C2BDE01CFD5F9D0052172F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1781FBE226F530EC00F12427 /* libsqlite3.tbd */,
+				1781FBE426F5311700F12427 /* libsqlite3.tbd */,
+				1781FBE626F5312D00F12427 /* libsqlite3.tbd */,
 				60F9A96123A8321900A04C2D /* UserNotifications.framework */,
 				058229582213887D00352FC5 /* JavaScriptCore.framework */,
 				E14FA8061F44DF17009B4533 /* UserNotifications.framework */,
@@ -935,6 +961,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1781FBEB26F5331000F12427 /* MPDB.h in Headers */,
 				E1F161951E68C58700391AE3 /* Mixpanel.h in Headers */,
 				457CA20D2141CE2E003B3862 /* MixpanelType.h in Headers */,
 				E1F161991E68C59900391AE3 /* MixpanelPeople.h in Headers */,
@@ -961,6 +988,7 @@
 				7C170D241A4A035F00D9E0F2 /* MPTweakStore.h in Headers */,
 				515B5A0F1CB6FA9600A34060 /* MPTweak.h in Headers */,
 				7C170D3F1A4A035F00D9E0F2 /* UIImage+MPImageEffects.h in Headers */,
+				1781FBEA26F5331000F12427 /* MPDB.h in Headers */,
 				E1F160D41E67A94400391AE3 /* MixpanelPeoplePrivate.h in Headers */,
 				E1F160D21E67A93100391AE3 /* MPNetworkPrivate.h in Headers */,
 				E1F160D51E67A94700391AE3 /* MixpanelPrivate.h in Headers */,
@@ -1037,6 +1065,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1F1618B1E68C55800391AE3 /* Mixpanel.h in Headers */,
+				1781FBEC26F5331000F12427 /* MPDB.h in Headers */,
 				E1F1618C1E68C55B00391AE3 /* MixpanelPeople.h in Headers */,
 				45C5F9A821470F16001B08CE /* MixpanelGroup.h in Headers */,
 				E1F1618D1E68C55E00391AE3 /* MixpanelPrivate.h in Headers */,
@@ -1054,6 +1083,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1F161841E68C4AE00391AE3 /* Mixpanel.h in Headers */,
+				1781FBED26F5331000F12427 /* MPDB.h in Headers */,
 				E1F1618A1E68C52B00391AE3 /* MixpanelPeople.h in Headers */,
 				45C5F9A921470F17001B08CE /* MixpanelGroup.h in Headers */,
 				E1F161851E68C4B700391AE3 /* MixpanelPrivate.h in Headers */,
@@ -1236,6 +1266,7 @@
 			files = (
 				F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */,
 				F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */,
+				1781FBDF26F52EC000F12427 /* MPDB.m in Sources */,
 				60F9A95E23A82DB800A04C2D /* MPNotificationServiceExtension.m in Sources */,
 				F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */,
 				457CA2072141CD5C003B3862 /* MixpanelType.m in Sources */,
@@ -1251,6 +1282,7 @@
 			files = (
 				513583981BD1BE50008EEDF1 /* UIView+MPHelpers.m in Sources */,
 				7C170D221A4A035F00D9E0F2 /* MPTweakInline.m in Sources */,
+				1781FBDE26F52EC000F12427 /* MPDB.m in Sources */,
 				7C170D0C1A4A035F00D9E0F2 /* MPObjectSerializerConfig.m in Sources */,
 				7C170CD51A4A035F00D9E0F2 /* MPABTestDesignerConnection.m in Sources */,
 				7C170D381A4A035F00D9E0F2 /* NSInvocation+MPHelpers.m in Sources */,
@@ -1342,6 +1374,7 @@
 				517ABB741D14C36600FF8061 /* MPNetwork.m in Sources */,
 				457CA2082141CD5C003B3862 /* MixpanelType.m in Sources */,
 				E123C47F1D1342150015B425 /* MixpanelPeople.m in Sources */,
+				1781FBE026F52EC000F12427 /* MPDB.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1355,6 +1388,7 @@
 				E1F160D61E67AF8300391AE3 /* Mixpanel.m in Sources */,
 				457CA2092141CD5D003B3862 /* MixpanelType.m in Sources */,
 				E1F160C41E6794ED00391AE3 /* MPNetwork.m in Sources */,
+				1781FBE126F52EC000F12427 /* MPDB.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
