@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1727D17526F9090E006C74F3 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1727D17326F9090E006C74F3 /* MPDB.h */; };
+		1727D17626F9090E006C74F3 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1727D17326F9090E006C74F3 /* MPDB.h */; };
+		1727D17726F9090E006C74F3 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1727D17326F9090E006C74F3 /* MPDB.h */; };
+		1727D17826F9090E006C74F3 /* MPDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 1727D17326F9090E006C74F3 /* MPDB.h */; };
+		1727D17926F9090E006C74F3 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1727D17426F9090E006C74F3 /* MPDB.m */; };
+		1727D17A26F9090E006C74F3 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1727D17426F9090E006C74F3 /* MPDB.m */; };
+		1727D17B26F9090E006C74F3 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1727D17426F9090E006C74F3 /* MPDB.m */; };
+		1727D17C26F9090E006C74F3 /* MPDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1727D17426F9090E006C74F3 /* MPDB.m */; };
+		1727D17E26F90933006C74F3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1727D17D26F9092C006C74F3 /* libsqlite3.tbd */; };
+		1727D18026F90945006C74F3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1727D17F26F9093F006C74F3 /* libsqlite3.tbd */; };
+		1727D18226F90951006C74F3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1727D18126F9094D006C74F3 /* libsqlite3.tbd */; };
+		1727D18326F9095C006C74F3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1727D17D26F9092C006C74F3 /* libsqlite3.tbd */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513243431D1B473100CBA9AA /* WatchKit.framework */; };
 		519AD7A41CB706A6005411A5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A31CB706A6005411A5 /* Security.framework */; };
@@ -113,6 +125,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1727D17326F9090E006C74F3 /* MPDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDB.h; sourceTree = "<group>"; };
+		1727D17426F9090E006C74F3 /* MPDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDB.m; sourceTree = "<group>"; };
+		1727D17D26F9092C006C74F3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		1727D17F26F9093F006C74F3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS7.4.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		1727D18126F9094D006C74F3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.5.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		511FC39F1C2B74DB00DC4796 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		513243431D1B473100CBA9AA /* WatchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS2.2.sdk/System/Library/Frameworks/WatchKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -180,6 +197,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1727D18026F90945006C74F3 /* libsqlite3.tbd in Frameworks */,
 				513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */,
 				511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */,
 			);
@@ -191,6 +209,7 @@
 			files = (
 				E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */,
 				519AD7A61CB706A9005411A5 /* CFNetwork.framework in Frameworks */,
+				1727D17E26F90933006C74F3 /* libsqlite3.tbd in Frameworks */,
 				519AD7A41CB706A6005411A5 /* Security.framework in Frameworks */,
 				7C170D4A1A4A05AF00D9E0F2 /* CoreTelephony.framework in Frameworks */,
 				7C170D481A4A05A500D9E0F2 /* SystemConfiguration.framework in Frameworks */,
@@ -203,6 +222,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1727D18226F90951006C74F3 /* libsqlite3.tbd in Frameworks */,
 				E1C2BE5C1CFD6A010052172F /* Foundation.framework in Frameworks */,
 				E1C2BE5E1CFD6A010052172F /* UIKit.framework in Frameworks */,
 			);
@@ -214,6 +234,7 @@
 			files = (
 				E1F1615D1E68B87500391AE3 /* IOKit.framework in Frameworks */,
 				E1F160DB1E68AC5E00391AE3 /* Foundation.framework in Frameworks */,
+				1727D18326F9095C006C74F3 /* libsqlite3.tbd in Frameworks */,
 				E1F160D91E68AC5A00391AE3 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -311,6 +332,8 @@
 				86542F92260AB14E00C478DE /* MixpanelWatchProperties.m */,
 				86542F8E260AB14E00C478DE /* MPConnectIntegrations.h */,
 				86542F9D260AB14E00C478DE /* MPConnectIntegrations.m */,
+				1727D17326F9090E006C74F3 /* MPDB.h */,
+				1727D17426F9090E006C74F3 /* MPDB.m */,
 				86542F9F260AB14E00C478DE /* MPFoundation.h */,
 				86542F8A260AB14E00C478DE /* MPLogger.h */,
 				86542F88260AB14E00C478DE /* MPNetwork.h */,
@@ -336,6 +359,9 @@
 		E1C2BDE01CFD5F9D0052172F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1727D17D26F9092C006C74F3 /* libsqlite3.tbd */,
+				1727D17F26F9093F006C74F3 /* libsqlite3.tbd */,
+				1727D18126F9094D006C74F3 /* libsqlite3.tbd */,
 				E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */,
 				513243431D1B473100CBA9AA /* WatchKit.framework */,
 				E1C2BDE11CFD5F9D0052172F /* TVServices.framework */,
@@ -370,6 +396,7 @@
 				86543058260AB28A00C478DE /* MixpanelGroup.h in Headers */,
 				86543135260AB2C200C478DE /* MPNetworkPrivate.h in Headers */,
 				865430FD260AB2B400C478DE /* MPFoundation.h in Headers */,
+				1727D17626F9090E006C74F3 /* MPDB.h in Headers */,
 				8654311B260AB2BC00C478DE /* MPNetwork.h in Headers */,
 				86543085260AB29400C478DE /* MixpanelPeople.h in Headers */,
 				8654303A260AB28300C478DE /* MixpanelExceptionHandler.h in Headers */,
@@ -396,6 +423,7 @@
 				86542FAD260AB14F00C478DE /* SessionMetadata.h in Headers */,
 				86542FB9260AB14F00C478DE /* MixpanelPrivate.h in Headers */,
 				86542FAB260AB14F00C478DE /* MixpanelGroupPrivate.h in Headers */,
+				1727D17526F9090E006C74F3 /* MPDB.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +434,7 @@
 				8654313A260AB2C300C478DE /* MPNetworkPrivate.h in Headers */,
 				865430B7260AB2A000C478DE /* MixpanelPrivate.h in Headers */,
 				865430C6260AB2A300C478DE /* MixpanelType.h in Headers */,
+				1727D17726F9090E006C74F3 /* MPDB.h in Headers */,
 				8654305D260AB28A00C478DE /* MixpanelGroup.h in Headers */,
 				8654308A260AB29500C478DE /* MixpanelPeople.h in Headers */,
 				8654303F260AB28300C478DE /* MixpanelExceptionHandler.h in Headers */,
@@ -426,6 +455,7 @@
 				8654313F260AB2C300C478DE /* MPNetworkPrivate.h in Headers */,
 				865430BC260AB2A000C478DE /* MixpanelPrivate.h in Headers */,
 				865430CB260AB2A400C478DE /* MixpanelType.h in Headers */,
+				1727D17826F9090E006C74F3 /* MPDB.h in Headers */,
 				86543062260AB28B00C478DE /* MixpanelGroup.h in Headers */,
 				8654308F260AB29500C478DE /* MixpanelPeople.h in Headers */,
 				86543044260AB28400C478DE /* MixpanelExceptionHandler.h in Headers */,
@@ -590,6 +620,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1727D17A26F9090E006C74F3 /* MPDB.m in Sources */,
 				865430EE260AB2B100C478DE /* MPConnectIntegrations.m in Sources */,
 				86543049260AB28600C478DE /* MixpanelExceptionHandler.m in Sources */,
 				86543094260AB29800C478DE /* MixpanelPeople.m in Sources */,
@@ -606,6 +637,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1727D17926F9090E006C74F3 /* MPDB.m in Sources */,
 				86542FA5260AB14F00C478DE /* MixpanelType.m in Sources */,
 				86542FA6260AB14F00C478DE /* MPNetwork.m in Sources */,
 				86542FB3260AB14F00C478DE /* Mixpanel.m in Sources */,
@@ -624,6 +656,7 @@
 			files = (
 				8654306C260AB28E00C478DE /* MixpanelGroup.m in Sources */,
 				8654304E260AB28700C478DE /* MixpanelExceptionHandler.m in Sources */,
+				1727D17B26F9090E006C74F3 /* MPDB.m in Sources */,
 				865430F3260AB2B100C478DE /* MPConnectIntegrations.m in Sources */,
 				86543030260AB28000C478DE /* Mixpanel.m in Sources */,
 				8654312B260AB2BF00C478DE /* MPNetwork.m in Sources */,
@@ -639,6 +672,7 @@
 			files = (
 				86543071260AB28E00C478DE /* MixpanelGroup.m in Sources */,
 				86543053260AB28700C478DE /* MixpanelExceptionHandler.m in Sources */,
+				1727D17C26F9090E006C74F3 /* MPDB.m in Sources */,
 				865430F8260AB2B100C478DE /* MPConnectIntegrations.m in Sources */,
 				86543035260AB28000C478DE /* Mixpanel.m in Sources */,
 				86543130260AB2C000C478DE /* MPNetwork.m in Sources */,
