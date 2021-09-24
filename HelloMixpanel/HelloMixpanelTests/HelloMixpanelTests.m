@@ -12,6 +12,7 @@
 #import "MixpanelGroup.h"
 #import "MixpanelGroupPrivate.h"
 #import "MPNetworkPrivate.h"
+#import "MPDB.h"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
 
@@ -706,5 +707,75 @@
     [self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
+- (void)removeDBfile:(NSString *)token {
+    NSString *filename = [NSString stringWithFormat:@"%@_MPDB.sqlite", token];
+#if !defined(MIXPANEL_TVOS)
+    NSString *dbPath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+            stringByAppendingPathComponent:filename];
+#else
+    NSString *dbPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
+            stringByAppendingPathComponent:filename];
+#endif
+    if (dbPath) {
+        NSFileManager *manager = [NSFileManager defaultManager];
+        if ([manager fileExistsAtPath:dbPath]) {
+            NSError *error = nil;
+            [manager removeItemAtPath:dbPath error:&error];
+            if (error) {
+                NSLog(@"Unable to remove database file at path: %@ error: %@", dbPath, error);
+            } else {
+                NSLog(@"Deleted database file at path: %@", dbPath);
+            }
+        }
+    }
+}
+
+- (void)testMPDB {
+    NSUInteger randomId = arc4random();
+    NSString *testToken = [NSString stringWithFormat:@"%lu", (unsigned long)randomId];
+    int numRows = 50;
+    int halfRows = numRows/2;
+    NSString *eventName = @"Test Event";
+    [self removeDBfile:testToken];
+    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
+    [mpdb open];
+    for (NSString *pType in @[@"events", @"people", @"groups"]) {
+        NSArray *emptyArray = [mpdb readRows:pType numRows:numRows flag:false];
+        XCTAssertTrue(emptyArray.count == 0, "Table should be empty");
+        for (int i = 0; i < numRows; i++) {
+            NSDictionary *eventObj = @{@"event": eventName, @"properties": @{@"index": @(i)}};
+            NSData *eventData = [NSJSONSerialization dataWithJSONObject:eventObj options:0 error:NULL];
+            [mpdb insertRow:pType data:eventData flag:false];
+            NSLog(@"%d", i);
+        }
+        NSArray *dataArray = [mpdb readRows:pType numRows:numRows flag:halfRows];
+        NSMutableArray *ids = [[NSMutableArray alloc] init];
+        NSUInteger index = 0;
+        for (NSDictionary *entity in dataArray) {
+            [ids addObject:entity[@"id"]];
+            XCTAssertEqual(entity[@"event"], eventName, "Event name should be unchanged");
+            // index should be oldest events, 0 - 24
+            XCTAssertEqual(entity[@"properties"], @{@"index": @(index)}, "Should read oldest events first");
+            index++;
+        }
+        
+        [mpdb deleteRows:pType ids:@[@1, @2, @3]];
+        NSArray *dataArray2 = [mpdb readRows:pType numRows:numRows flag:false];
+        // even though we request numRows, there should only be numRows - 3 left
+        XCTAssertEqual([dataArray2 count], 47);
+        NSUInteger index2 = 0;
+        for (NSDictionary *entity in dataArray2) {
+            XCTAssertEqualObjects(entity[@"event"], eventName, "Event name should be unchanged");
+            // oldest events (0-2) should have been deleted so index should be more recent events 3-49
+            NSNumber *idx = entity[@"properties"][@"index"];
+            XCTAssertEqualObjects(idx, @(index2 + 3), "Should have deleted oldest events first");
+            index2++;
+        }
+    }
+    [mpdb close];
+    // TODO: What's up with this log we get when deleting the db file? Connection should be closed and nil.
+    // BUG IN CLIENT OF libsqlite3.dylib: database integrity compromised by API violation: vnode unlinked while in use
+    [self removeDBfile:testToken];
+}
 
 @end
