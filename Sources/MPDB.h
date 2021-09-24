@@ -19,6 +19,8 @@
 
 @property (nonatomic, copy) NSString *apiToken;
 
+- (instancetype)initWithToken:(NSString *)apiToken;
+
 - (void) open;
 - (void) close;
 

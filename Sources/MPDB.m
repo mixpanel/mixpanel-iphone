@@ -14,7 +14,7 @@
 
 static sqlite3 *_connection;
 
-- (instancetype) init:(NSString *)token {
+- (instancetype) initWithToken:(NSString *)token {
     self = [super init];
     if (self) {
         self.apiToken = token;
@@ -87,7 +87,7 @@ static sqlite3 *_connection;
 - (void) createTableFor:(NSString *)persistenceType {
     if (_connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
-        NSString *createTableString = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(id integer primary key autoincrement,data blob,time real, flag integer", tableName];
+        NSString *createTableString = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(id integer primary key autoincrement,data blob,time real, flag integer);", tableName];
         sqlite3_stmt *createTableStatement;
         if (sqlite3_prepare_v2(_connection, [createTableString UTF8String], -1, &createTableStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(createTableStatement) == SQLITE_DONE) {
@@ -138,7 +138,7 @@ static sqlite3 *_connection;
 - (void) deleteRows:(NSString *)persistenceType ids:(NSArray *)ids {
     if (_connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
-        NSString *fromString = ids ? @"" : [NSString stringWithFormat:@" WHERE id IN %@", [self idsSqlString: ids]];
+        NSString *fromString = ids ? [NSString stringWithFormat:@" WHERE id IN %@", [self idsSqlString: ids]] : @"";
         NSString *deleteString = [NSString stringWithFormat:@"DELETE FROM %@%@", tableName, fromString];
         sqlite3_stmt *deleteStatement;
         if (sqlite3_prepare_v2(_connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
