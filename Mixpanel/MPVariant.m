@@ -132,14 +132,18 @@
 
 #pragma mark NSCoding
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init]) {
-        self.ID = [(NSNumber *)[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
-        self.experimentID = [(NSNumber *)[aDecoder decodeObjectForKey:@"experimentID"] unsignedLongValue];
-        self.actions = [aDecoder decodeObjectForKey:@"actions"];
-        self.tweaks = [aDecoder decodeObjectForKey:@"tweaks"];
-        _finished = [(NSNumber *)[aDecoder decodeObjectForKey:@"finished"] boolValue];
+        self.ID = [(NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:@"ID"] unsignedLongValue];
+        self.experimentID = [(NSNumber *)[aDecoder  decodeObjectOfClass:[NSNumber class] forKey:@"experimentID"] unsignedLongValue];
+        self.actions = [aDecoder decodeObjectOfClass:[NSMutableOrderedSet class] forKey:@"actions"];
+        self.tweaks = [aDecoder  decodeObjectOfClass:[NSMutableArray class] forKey:@"tweaks"];
+        _finished = [(NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:@"finished"] boolValue];
     }
     return self;
 }
@@ -395,19 +399,23 @@ static NSMapTable *originalCache;
 
 #pragma mark NSCoding
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init]) {
-        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
 
-        self.path = [MPObjectSelector objectSelectorWithString:[aDecoder decodeObjectForKey:@"path"]];
-        self.selector = NSSelectorFromString([aDecoder decodeObjectForKey:@"selector"]);
-        self.args = [aDecoder decodeObjectForKey:@"args"];
-        self.original = [aDecoder decodeObjectForKey:@"original"];
+        self.path = [MPObjectSelector objectSelectorWithString:[aDecoder decodeObjectOfClass:[NSString class] forKey:@"path"]];
+        self.selector = NSSelectorFromString([aDecoder decodeObjectOfClass:[NSString class] forKey:@"selector"]);
+        self.args = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"args"];
+        self.original = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"original"];
 
-        self.swizzle = [(NSNumber *)[aDecoder decodeObjectForKey:@"swizzle"] boolValue];
-        self.swizzleClass = NSClassFromString([aDecoder decodeObjectForKey:@"swizzleClass"]);
-        self.swizzleSelector = NSSelectorFromString([aDecoder decodeObjectForKey:@"swizzleSelector"]);
+        self.swizzle = [(NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:@"swizzle"] boolValue];
+        self.swizzleClass = NSClassFromString([aDecoder decodeObjectOfClass:[NSString class] forKey:@"swizzleClass"]);
+        self.swizzleSelector = NSSelectorFromString([aDecoder decodeObjectOfClass:[NSString class] forKey:@"swizzleSelector"]);
 
         self.appliedTo = [NSHashTable hashTableWithOptions:(NSHashTableWeakMemory|NSHashTableObjectPointerPersonality)];
     }
@@ -679,12 +687,17 @@ static NSMapTable *originalCache;
 
 #pragma mark NSCoding
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init]) {
-        self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.encoding = [aDecoder decodeObjectForKey:@"encoding"];
-        self.value = [aDecoder decodeObjectForKey:@"value"];
+        self.name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
+        self.encoding = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"encoding"];
+        // This could be made more secure with more clarification around the class expectations
+        self.value = [aDecoder decodeObjectOfClass:[NSObject class] forKey:@"value"];
     }
     return self;
 }

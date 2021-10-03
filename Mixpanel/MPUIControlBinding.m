@@ -248,8 +248,8 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        _controlEvent = [[aDecoder decodeObjectForKey:@"controlEvent"] unsignedIntegerValue];
-        _verifyEvent = [[aDecoder decodeObjectForKey:@"verifyEvent"] unsignedIntegerValue];
+        _controlEvent = [[aDecoder decodeObjectOfClass:[NSNumber class] forKey:@"controlEvent"] unsignedIntegerValue];
+        _verifyEvent = [[aDecoder  decodeObjectOfClass:[NSNumber class] forKey:@"verifyEvent"] unsignedIntegerValue];
     }
     return self;
 }

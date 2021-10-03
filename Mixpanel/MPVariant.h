@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MPVariant : NSObject <NSCoding>
+@interface MPVariant : NSObject <NSSecureCoding>
 
 @property (nonatomic) NSUInteger ID;
 @property (nonatomic) NSUInteger experimentID;
@@ -72,10 +72,10 @@
 
 @end
 
-@interface MPVariantAction : NSObject <NSCoding>
+@interface MPVariantAction : NSObject <NSSecureCoding>
 
 @end
 
-@interface MPVariantTweak : NSObject <NSCoding>
+@interface MPVariantTweak : NSObject <NSSecureCoding>
 
 @end

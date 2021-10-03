@@ -87,14 +87,18 @@
 
 #pragma mark -- NSCoder
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    NSString *path = [aDecoder decodeObjectForKey:@"path"];
-    NSString *eventName = [aDecoder decodeObjectForKey:@"eventName"];
+    NSString *path = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"path"];
+    NSString *eventName = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"eventName"];
     if (self = [self initWithEventName:eventName onPath:path]) {
-        self.ID = [[aDecoder decodeObjectForKey:@"ID"] unsignedLongValue];
-        self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.swizzleClass = NSClassFromString([aDecoder decodeObjectForKey:@"swizzleClass"]);
+        self.ID = [[aDecoder decodeObjectOfClass:[NSNumber class] forKey:@"ID"] unsignedLongValue];
+        self.name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
+        self.swizzleClass = NSClassFromString([aDecoder decodeObjectOfClass:[NSString class] forKey:@"swizzleClass"]);
     }
     return self;
 }

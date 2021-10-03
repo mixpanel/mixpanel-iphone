@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MPObjectSelector.h"
 
-@interface MPEventBinding : NSObject <NSCoding>
+@interface MPEventBinding : NSObject <NSSecureCoding>
 
 @property (nonatomic) NSUInteger ID;
 @property (nonatomic, copy) NSString *name;
