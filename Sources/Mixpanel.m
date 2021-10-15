@@ -87,6 +87,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 - (instancetype)init:(NSString *)apiToken
 {
     if (self = [super init]) {
+        self.eventsQueue = [NSMutableArray array];
+        self.peopleQueue = [NSMutableArray array];
+        self.groupsQueue = [NSMutableArray array];
         self.cachedGroups = [NSMutableDictionary dictionary];
         self.timedEvents = [NSMutableDictionary dictionary];
         static dispatch_once_t onceToken;
