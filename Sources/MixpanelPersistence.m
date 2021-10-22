@@ -21,14 +21,6 @@ NSString *kLegacyArchiveTypeGropus = @"groups";
 NSString *kLegacyArchiveTypeProperties = @"properties";
 NSString *kLegacyArchiveTypeOptOutStatus = @"optOutStatus";
 
-
-NSString *kMixpanelIdentityDistinctId = @"distinctID";
-NSString *kMixpanelIdentityPeopleDistinctId = @"peopleDistinctID";
-NSString *kMixpanelIdentityAnonymousId = @"anonymousId";
-NSString *kMixpanelIdentityUserId = @"userId";
-NSString *kMixpanelIdentityAlias = @"alias";
-NSString *kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedDistinctId";
-
 NSString *kDefaultKeySuiteName = @"Mixpanel";
 NSString *kDefaultKeyPrefix = @"mixpanel";
 NSString *kDefaultKeyOptOutStatus = @"OptOutStatus";
@@ -52,7 +44,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return self;
 }
 
-- (void) saveEntity:(NSDictionary *)entity type:(NSString *)type flag:(bool)flag {
+- (void)saveEntity:(NSDictionary *)entity type:(NSString *)type flag:(bool)flag {
     NSError *error;
     NSData *data = [NSJSONSerialization dataWithJSONObject:entity options:kNilOptions error:&error];
     if (!error) {
@@ -74,7 +66,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     [self.mpdb deleteRows:type ids:ids];
 }
 
-- (void)identifyPeople:(NSString *)token {
+- (void)identifyPeople {
     [self.mpdb updateRowsFlag:@"people" newFlag:false];
 }
 
