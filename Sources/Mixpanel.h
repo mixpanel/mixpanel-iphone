@@ -23,6 +23,7 @@
 #define MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT 1
 #endif
 
+@class    MixpanelPersistence;
 @class    MixpanelPeople;
 @class    MixpanelGroup;
 @protocol MixpanelDelegate;
@@ -57,6 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Mixpanel : NSObject
 
 #pragma mark Properties
+
+@property (atomic, readonly, strong) MixpanelPersistence *persistence;
 
 /*!
  Accessor to the Mixpanel People API object.

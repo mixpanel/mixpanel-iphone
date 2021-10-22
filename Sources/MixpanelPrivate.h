@@ -34,6 +34,12 @@ static NSString *const kPersistenceTypeEvents = @"events";
 static NSString *const kPersistenceTypePeople = @"people";
 static NSString *const kPersistenceTypeGroups = @"groups";
 
+static NSString *const kMixpanelIdentityDistinctId = @"distinctID";
+static NSString *const kMixpanelIdentityPeopleDistinctId = @"peopleDistinctID";
+static NSString *const kMixpanelIdentityAnonymousId = @"anonymousId";
+static NSString *const kMixpanelIdentityUserId = @"userId";
+static NSString *const kMixpanelIdentityAlias = @"alias";
+static NSString *const kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedDistinctId";
 
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
@@ -59,6 +65,7 @@ static NSString *const kPersistenceTypeGroups = @"groups";
 #endif
 
 // re-declare internally as readwrite
+@property (atomic, strong) MixpanelPersistence *persistence;
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, strong) NSMutableDictionary<NSString*, MixpanelGroup*> * cachedGroups;
 @property (atomic, strong) MPNetwork *network;
@@ -98,14 +105,8 @@ static NSString *const kPersistenceTypeGroups = @"groups";
 
 - (NSString *)deviceModel;
 
-- (void)archivePeople;
 - (NSString *)defaultDistinctId;
 - (void)archive;
-- (NSString *)eventsFilePath;
-- (NSString *)peopleFilePath;
-- (NSString *)groupsFilePath;
-- (NSString *)propertiesFilePath;
-- (NSString *)optOutFilePath;
 
 // for group caching
 - (NSString *)keyForGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;
