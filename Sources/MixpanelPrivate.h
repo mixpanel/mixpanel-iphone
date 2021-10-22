@@ -31,6 +31,13 @@
 #import "MPConnectIntegrations.h"
 #endif
 
+
+// Persistence constants used internally
+static NSString *const kPersistenceTypeEvents = @"events";
+static NSString *const kPersistenceTypePeople = @"people";
+static NSString *const kPersistenceTypeGroups = @"groups";
+
+
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
 #else

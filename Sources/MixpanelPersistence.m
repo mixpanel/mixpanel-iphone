@@ -8,6 +8,7 @@
 
 #import "MixpanelPersistence.h"
 #import "MPLogger.h"
+#import "MixpanelPrivate.h"
 
 @implementation MixpanelPersistence : NSObject
 
@@ -20,9 +21,6 @@ NSString *kLegacyArchiveTypeGropus = @"groups";
 NSString *kLegacyArchiveTypeProperties = @"properties";
 NSString *kLegacyArchiveTypeOptOutStatus = @"optOutStatus";
 
-NSString *kPersistenceTypeEvents = @"events";
-NSString *kPersistenceTypePeople = @"people";
-NSString *kPersistenceTypeGroups = @"groups";
 
 NSString *kMixpanelIdentityDistinctId = @"distinctID";
 NSString *kMixpanelIdentityPeopleDistinctId = @"peopleDistinctID";
@@ -62,21 +60,21 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-- (void) saveEntities:(NSArray *)entities type:(NSString *)type flag:(bool)flag {
+- (void)saveEntities:(NSArray *)entities type:(NSString *)type flag:(bool)flag {
     for (NSDictionary *entity in entities) {
         [self saveEntity:entity type:type flag:flag];
     }
 }
 
-- (NSArray *) loadEntitiesInBatch:(NSString *)type batchSize:(int)batchSize flag:(bool)flag {
+- (NSArray *)loadEntitiesInBatch:(NSString *)type batchSize:(int)batchSize flag:(bool)flag {
     return [self.mpdb readRows:type numRows:batchSize flag:flag];
 }
 
-- (void) removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids {
+- (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids {
     [self.mpdb deleteRows:type ids:ids];
 }
 
-- (void) identifyPeople:(NSString *)token {
+- (void)identifyPeople:(NSString *)token {
     [self.mpdb updateRowsFlag:@"people" newFlag:false];
 }
 
