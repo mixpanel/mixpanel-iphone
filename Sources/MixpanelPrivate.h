@@ -10,6 +10,7 @@
 #import "MPNetwork.h"
 #import "SessionMetadata.h"
 #import "MixpanelType.h"
+#import "MixpanelPersistence.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
@@ -82,10 +83,10 @@ static NSString *const kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedD
 @property (nonatomic, strong) NSMutableArray *peopleQueue;
 @property (nonatomic, strong) NSMutableArray *groupsQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
-@property (nonatomic) dispatch_queue_t networkQueue;
 @property (nonatomic) dispatch_queue_t archiveQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
+@property (nonatomic, strong) MixpanelPersistence *mixpanelPersistence;
 
 @property (nonatomic) BOOL decideResponseCached;
 @property (nonatomic, strong) NSNumber *automaticEventsEnabled;

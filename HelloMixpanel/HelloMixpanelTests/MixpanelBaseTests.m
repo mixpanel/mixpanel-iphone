@@ -68,10 +68,8 @@
 
 - (void)waitForMixpanelQueues {
     dispatch_sync(self.mixpanel.serialQueue, ^{
-        dispatch_sync(self.mixpanel.networkQueue, ^{
-            dispatch_sync(self.mixpanel.archiveQueue, ^{
-                return;
-            });
+        dispatch_sync(self.mixpanel.archiveQueue, ^{
+            return;
         });
     });
 }

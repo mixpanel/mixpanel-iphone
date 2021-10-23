@@ -56,7 +56,6 @@
     [mp.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
     [self waitForMixpanelQueues];
     dispatch_sync(mp.serialQueue, ^{
-        dispatch_sync(mp.networkQueue, ^{  });
     });
     NSDictionary *event = [self.mixpanel.eventsQueue lastObject];
     XCTAssertNotNil(event, @"should have an event");
