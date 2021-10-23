@@ -35,7 +35,7 @@ NSString *kDefaultKeyUserId = @"MPUserId";
 NSString *kDefaultKeyAlias = @"MPAlias";
 NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 
-- (instancetype) initWithToken:(NSString *)token {
+- (instancetype)initWithToken:(NSString *)token {
     self = [super init];
     if (self) {
         self.apiToken = token;
@@ -58,8 +58,8 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-- (NSArray *)loadEntitiesInBatch:(NSString *)type batchSize:(int)batchSize flag:(bool)flag {
-    return [self.mpdb readRows:type numRows:batchSize flag:flag];
+- (NSArray *)loadEntitiesInBatch:(NSString *)type {
+    return [self.mpdb readRows:type numRows:NSIntegerMax flag:NO];
 }
 
 - (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids {
@@ -70,13 +70,13 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     [self.mpdb updateRowsFlag:@"people" newFlag:false];
 }
 
-- (void) resetEntities {
+- (void)resetEntities {
     for (NSString *type in @[@"events", @"people", @"groups"]) {
         [self.mpdb deleteRows:type ids:@[]];
     }
 }
 
-+ (void) saveOptOutStatusFlag:(bool)value apiToken:(NSString *)apiToken {
++ (void)saveOptOutStatusFlag:(bool)value apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -85,7 +85,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-+ (bool) loadOptOutStatusFlag:(NSString *)apiToken {
++ (bool)loadOptOutStatusFlag:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -94,7 +94,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return nil;
 }
 
-+ (void) saveAutomaticEventsEnabledFlag:(bool)value fromDecide:(bool)fromDecide apiToken:(NSString *)apiToken {
++ (void)saveAutomaticEventsEnabledFlag:(bool)value fromDecide:(bool)fromDecide apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -128,7 +128,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return nil;
 }
 
-+ (void) saveTimedEvents:(NSDictionary *)timedEvents apiToken:(NSString *)apiToken {
++ (void)saveTimedEvents:(NSDictionary *)timedEvents apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -138,7 +138,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-+ (NSDictionary *) loadTimedEvents:(NSString *)apiToken {
++ (NSDictionary *)loadTimedEvents:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -150,7 +150,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return @{};
 }
 
-+ (void) saveSuperProperties:(NSDictionary *)superProperties apiToken:(NSString *)apiToken {
++ (void)saveSuperProperties:(NSDictionary *)superProperties apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -160,7 +160,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-+ (NSDictionary *) loadSuperProperties:(NSString *)apiToken {
++ (NSDictionary *)loadSuperProperties:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -172,7 +172,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return @{};
 }
 
-+ (void) saveIdentity:(NSDictionary *)mixpanelIdentity apiToken:(NSString *)apiToken {
++ (void)saveIdentity:(NSDictionary *)mixpanelIdentity apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -186,7 +186,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-+ (NSDictionary *) loadIdentity:(NSString *)apiToken {
++ (NSDictionary *)loadIdentity:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -209,7 +209,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     };
 }
 
-+ (void) deleteMPUserDefaultsData:(NSString *)apiToken {
++ (void)deleteMPUserDefaultsData:(NSString *)apiToken {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];

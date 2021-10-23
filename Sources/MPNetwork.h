@@ -24,9 +24,9 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 
 - (instancetype)initWithServerURL:(NSURL *)serverURL mixpanel:(Mixpanel *)mixpanel;
 
-- (void)flushEventQueue:(NSMutableArray *)events;
-- (void)flushPeopleQueue:(NSMutableArray *)people;
-- (void)flushGroupsQueue:(NSMutableArray *)groups;
+- (void)flushEventQueue:(NSArray *)events;
+- (void)flushPeopleQueue:(NSArray *)people;
+- (void)flushGroupsQueue:(NSArray *)groups;
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 
