@@ -146,9 +146,10 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
-        NSString *networkLabel = [label stringByAppendingString:@".network"];
-        self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
+        self.mixpanelPersistence = [[MixpanelPersistence alloc] initWithToken:apiToken];
+        
         NSString *archiveLabel = [label stringByAppendingString:@".archive"];
+        self.archiveQueue = dispatch_queue_create([archiveLabel UTF8String], DISPATCH_QUEUE_SERIAL);
         self.sessionMetadata = [[SessionMetadata alloc] init];
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
@@ -773,7 +774,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     [self flush];
     dispatch_async(self.serialQueue, ^{
         // wait for all current network requests to finish before resetting
-        dispatch_sync(self.networkQueue, ^{ return; });
+        dispatch_sync(self.serialQueue, ^{ return; });
         @synchronized (self) {
             [MixpanelPersistence deleteMPUserDefaultsData:self.apiToken];
             self.anonymousId = [self defaultDistinctId];
@@ -799,16 +800,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     });
 }
 
-- (void)dispatchOnNetworkQueue:(void (^)(void))dispatchBlock
-{
-    // so this looks stupid but to make [Mixpanel track]; [Mixpanel flush]; continue to have the track
-    // guaranteed to be part of the flush we need to make networkQueue stuff be dispatched on serialQueue
-    // first. still will allow serialQueue stuff to happen at the same time as networkQueue stuff just
-    // don't want to change track -> flush behavior that people may be relying on
-    dispatch_async(self.serialQueue, ^{
-        dispatch_async(self.networkQueue, dispatchBlock);
-    });
-}
 
 - (void)optOutTracking{
     dispatch_async(self.serialQueue, ^{
@@ -927,29 +918,22 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         return;
     }
 
-    [self dispatchOnNetworkQueue:^{
+    dispatch_async(self.serialQueue, ^{
         MPLogInfo(@"%@ flush starting", self);
-
-        __strong id<MixpanelDelegate> strongDelegate = self.delegate;
-        if (strongDelegate && [strongDelegate respondsToSelector:@selector(mixpanelWillFlush:)]) {
-            if (![strongDelegate mixpanelWillFlush:self]) {
-                MPLogInfo(@"%@ flush deferred by delegate", self);
-                return;
-            }
-        }
-
-        [self.network flushEventQueue:self.eventsQueue];
-        [self.network flushPeopleQueue:self.peopleQueue];
-        [self.network flushGroupsQueue:self.groupsQueue];
+        NSArray *eventQueue = [self.mixpanelPersistence loadEntitiesInBatch:kPersistenceTypeEvents];
+        NSArray *peopleQueue = [self.mixpanelPersistence loadEntitiesInBatch:kPersistenceTypePeople];
+        NSArray *groupsQueue = [self.mixpanelPersistence loadEntitiesInBatch:kPersistenceTypeGroups];
         
-        [self archive];
-
+        [self.network flushEventQueue:eventQueue];
+        [self.network flushPeopleQueue:peopleQueue];
+        [self.network flushGroupsQueue:groupsQueue];
+        
         if (handler) {
             dispatch_async(dispatch_get_main_queue(), handler);
         }
 
         MPLogInfo(@"%@ flush complete", self);
-    }];
+    });
 }
 
 #pragma mark - Persistence
@@ -1465,7 +1449,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)checkForDecideResponse
 {
-    [self dispatchOnNetworkQueue:^{
+    dispatch_async(self.serialQueue, ^{
         __block BOOL hadError = NO;
 
         BOOL decideResponseCached;
@@ -1539,7 +1523,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         } else {
             MPLogInfo(@"%@ decide cache found, skipping network request", self);
         }
-    }];
+    });
 }
 
 #endif

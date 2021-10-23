@@ -189,11 +189,11 @@ static sqlite3 *_connection;
     }
 }
 
-- (NSArray *) readRows:(NSString *)persistenceType numRows:(int)numRows flag:(bool)flag {
+- (NSArray *)readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(bool)flag {
     NSMutableArray *rows = [[NSMutableArray alloc] init];
     if (_connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
-        NSString *limitString = (numRows == INT_MAX) ? @"" : [NSString stringWithFormat:@" LIMIT %d", numRows];
+        NSString *limitString = (numRows == NSIntegerMax) ? @"" : [NSString stringWithFormat:@" LIMIT %ld", (long)numRows];
         NSString *selectString = [NSString stringWithFormat:@"SELECT id, data FROM %@ WHERE flag = %d ORDER BY time%@", tableName, flag, limitString];
         sqlite3_stmt *selectStatement;
         int rowsRead = 0;

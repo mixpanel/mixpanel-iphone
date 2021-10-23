@@ -551,15 +551,13 @@
     
     for (int i = 0; i < 100; i++) {
         dispatch_async(self.mixpanel.serialQueue, ^{
-            dispatch_async(self.mixpanel.networkQueue, ^{
-                 [self.mixpanel track:@"test" properties:properties];
-            });
+            [self.mixpanel track:@"test" properties:properties];
         });
     }
     
     for (int i = 0; i < 100; i++) {
         [self.mixpanel track:@"test" properties:properties];
-        dispatch_async(self.mixpanel.networkQueue, ^{
+        dispatch_async(self.mixpanel.serialQueue, ^{
             [self.mixpanel archive];
         });
     }

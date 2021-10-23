@@ -49,7 +49,7 @@ static const NSUInteger kBatchSize = 50;
 }
 
 #pragma mark - Flush
-- (void)flushEventQueue:(NSMutableArray *)events
+- (void)flushEventQueue:(NSArray *)events
 {
     NSMutableArray *automaticEventsQueue;
     @synchronized (self.mixpanel) {
