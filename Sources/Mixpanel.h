@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
  A flag which says if a distinctId is already in peristence from old sdk
   Defaults to NO.
  */
-@property (atomic) BOOL hadPersistedDistinctId;
+@property (nonatomic, assign) BOOL hadPersistedDistinctId;
 
 /*!
  The base URL used for Mixpanel API requests.
@@ -156,6 +156,13 @@ NS_ASSUME_NONNULL_BEGIN
  Defaults to YES.
  */
 @property (atomic) BOOL useIPAddressForGeoLocation;
+
+
+/*!
+ This allows enabling or disabling collecting common mobile events
+ If this is not set, it will query the Autotrack settings from the Mixpanel server
+ */
+@property (nonatomic) BOOL trackAutomaticEventsEnabled;
 
 /*!
  Controls whether to enable the run time debug logging at all levels. Note that the
@@ -563,8 +570,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)flushWithCompletion:(nullable void (^)(void))handler;
 
 /*!
- Writes current project info, including distinct ID, super properties and pending event
- and People record queues to disk.
+ Writes current project info, including distinct ID, super properties to disk.
 
  This state will be recovered when the app is launched again if the Mixpanel
  library is initialized with the same project token. <b>You do not need to call

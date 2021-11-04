@@ -48,6 +48,11 @@
 		860BE36E2076979C00C12F18 /* GDPRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36D2076979C00C12F18 /* GDPRViewController.m */; };
 		862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
+		86FDF4952733877D006E24AC /* mixpanel-testToken-events.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86FDF4902733877D006E24AC /* mixpanel-testToken-events.plist */; };
+		86FDF4962733877D006E24AC /* mixpanel-testToken-properties.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86FDF4912733877D006E24AC /* mixpanel-testToken-properties.plist */; };
+		86FDF4972733877D006E24AC /* mixpanel-testToken-groups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86FDF4922733877D006E24AC /* mixpanel-testToken-groups.plist */; };
+		86FDF4982733877D006E24AC /* mixpanel-testToken-optOut.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86FDF4932733877D006E24AC /* mixpanel-testToken-optOut.plist */; };
+		86FDF4992733877D006E24AC /* mixpanel-testToken-people.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86FDF4942733877D006E24AC /* mixpanel-testToken-people.plist */; };
 		A7BB224519183EB800EEDCCD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BB224419183EB800EEDCCD /* ImageIO.framework */; };
 		E115E00B1CCAD5D20026CFC0 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A031CB6F95200A34060 /* Mixpanel.framework */; };
 		E123C48D1D1354EC0015B425 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E123C48C1D1354EC0015B425 /* main.m */; };
@@ -384,6 +389,11 @@
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
 		86E02D4F180FF50B82E90400 /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		86FDF4902733877D006E24AC /* mixpanel-testToken-events.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "mixpanel-testToken-events.plist"; sourceTree = "<group>"; };
+		86FDF4912733877D006E24AC /* mixpanel-testToken-properties.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "mixpanel-testToken-properties.plist"; sourceTree = "<group>"; };
+		86FDF4922733877D006E24AC /* mixpanel-testToken-groups.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "mixpanel-testToken-groups.plist"; sourceTree = "<group>"; };
+		86FDF4932733877D006E24AC /* mixpanel-testToken-optOut.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "mixpanel-testToken-optOut.plist"; sourceTree = "<group>"; };
+		86FDF4942733877D006E24AC /* mixpanel-testToken-people.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "mixpanel-testToken-people.plist"; sourceTree = "<group>"; };
 		8943B032B4AB174C4AD3BBDF /* Pods_HelloMixpanel_tvOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloMixpanel_tvOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		936971DC65F55B41A8EE46CD /* Pods-HelloMixpanel_tvOSTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.appstore.xcconfig"; sourceTree = "<group>"; };
 		9590284C996AB21FD6B632DF /* Pods-HelloMixpanel_tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanel_tvOSTests/Pods-HelloMixpanel_tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -629,6 +639,11 @@
 		51D96E961D122258001F622D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				86FDF4902733877D006E24AC /* mixpanel-testToken-events.plist */,
+				86FDF4922733877D006E24AC /* mixpanel-testToken-groups.plist */,
+				86FDF4932733877D006E24AC /* mixpanel-testToken-optOut.plist */,
+				86FDF4942733877D006E24AC /* mixpanel-testToken-people.plist */,
+				86FDF4912733877D006E24AC /* mixpanel-testToken-properties.plist */,
 				2808F9BA1610EFE4005772B7 /* HelloMixpanelTests-Info.plist */,
 			);
 			name = Resources;
@@ -910,7 +925,6 @@
 						DevelopmentTeam = E8FVX7QLET;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
-						TestTargetID = 2808F98C1610EFE3005772B7;
 					};
 					E123C4881D1354EC0015B425 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1010,6 +1024,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86FDF4962733877D006E24AC /* mixpanel-testToken-properties.plist in Resources */,
+				86FDF4972733877D006E24AC /* mixpanel-testToken-groups.plist in Resources */,
+				86FDF4992733877D006E24AC /* mixpanel-testToken-people.plist in Resources */,
+				86FDF4952733877D006E24AC /* mixpanel-testToken-events.plist in Resources */,
+				86FDF4982733877D006E24AC /* mixpanel-testToken-optOut.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1567,7 +1586,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DF79C3E955E4F278C2032E3E /* Pods-HelloMixpanelTests.debug.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
@@ -1608,7 +1626,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
 		};
@@ -1616,7 +1633,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BB2CF402A7CC0E97A5080D11 /* Pods-HelloMixpanelTests.release.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
@@ -1652,7 +1668,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
 		};
@@ -1775,7 +1790,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HelloMixpanel.app/HelloMixpanel";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
@@ -1786,6 +1800,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/HelloMixpanelTests",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1811,7 +1829,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = AppStore;
 		};

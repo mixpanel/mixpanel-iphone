@@ -18,187 +18,216 @@
 
 #pragma mark - Queue
 - (void)testDropUnidentifiedPeopleRecords {
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    
     for (NSInteger i = 0; i < 505; i++) {
-        [self.mixpanel.people set:@"i" to:@(i)];
+        [testMixpanel.people set:@"i" to:@(i)];
     }
-    [self waitForMixpanelQueues];
-    XCTAssertTrue(self.mixpanel.people.unidentifiedQueue.count == 500);
     
-    NSDictionary *r = self.mixpanel.people.unidentifiedQueue.firstObject;
-    XCTAssertEqualObjects(r[@"$set"][@"i"], @(5));
+    [self waitForMixpanelQueues:testMixpanel];
+    XCTAssertTrue([self unIdentifiedPeopleQueue:testMixpanel.apiToken].count == 505);
     
-    r = self.mixpanel.people.unidentifiedQueue.lastObject;
+    NSDictionary *r = [self unIdentifiedPeopleQueue:testMixpanel.apiToken].firstObject;
+    XCTAssertEqualObjects(r[@"$set"][@"i"], @(0));
+    
+    r = [self unIdentifiedPeopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$set"][@"i"], @(504));
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testDropPeopleRecords {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
     for (NSInteger i = 0; i < 505; i++) {
-        [self.mixpanel.people set:@"i" to:@(i)];
+        [testMixpanel.people set:@"i" to:@(i)];
     }
-    [self waitForMixpanelQueues];
-    XCTAssertTrue(self.mixpanel.peopleQueue.count == 500);
+    [self waitForMixpanelQueues:testMixpanel];
+    XCTAssertTrue([self peopleQueue:testMixpanel.apiToken].count == 505);
     
-    NSDictionary *r = self.mixpanel.peopleQueue.firstObject;
-    XCTAssertEqualObjects(r[@"$set"][@"i"], @(5));
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].firstObject;
+    XCTAssertEqualObjects(r[@"$set"][@"i"], @(0));
     
-    r = self.mixpanel.peopleQueue.lastObject;
+    r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$set"][@"i"], @(504));
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleAssertPropertyTypes {
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
     NSDictionary *p = @{ @"URL": [NSData data] };
-    XCTAssertThrows([self.mixpanel.people set:p], @"unsupported property type was allowed");
-    XCTAssertThrows([self.mixpanel.people set:@"p1" to:[NSData data]], @"unsupported property type was allowed");
+    XCTAssertThrows([testMixpanel.people set:p], @"unsupported property type was allowed");
+    XCTAssertThrows([testMixpanel.people set:@"p1" to:[NSData data]], @"unsupported property type was allowed");
     
     p = @{ @"p1": @"a" }; // increment should require a number
-    XCTAssertThrows([self.mixpanel.people increment:p], @"unsupported property type was allowed");
+    XCTAssertThrows([testMixpanel.people increment:p], @"unsupported property type was allowed");
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 #pragma mark - Operations
 - (void)testPeopleSet {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
     NSDictionary *p = @{ @"p1": @"a" };
-    [self.mixpanel.people set:p];
-    [self waitForMixpanelQueues];
-    
-    p = self.mixpanel.peopleQueue.lastObject[@"$set"];
+    [testMixpanel.people set:p];
+    [self waitForMixpanelQueues:testMixpanel];
+    p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$set"];
     XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
     [self assertDefaultPeopleProperties:p];
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleSetOnce {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
     NSDictionary *p = @{@"p1": @"a"};
-    [self.mixpanel.people setOnce:p];
-    [self waitForMixpanelQueues];
-    
-    p = self.mixpanel.peopleQueue.lastObject[@"$set_once"];
+    [testMixpanel.people setOnce:p];
+    [self waitForMixpanelQueues:testMixpanel];
+    p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$set_once"];
     XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
     [self assertDefaultPeopleProperties:p];
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleSetReservedProperty {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
     NSDictionary *p = @{@"$ios_app_version": @"override"};
-    [self.mixpanel.people set:p];
-    [self waitForMixpanelQueues];
+    [testMixpanel.people set:p];
+    [self waitForMixpanelQueues:testMixpanel];
     
-    p = self.mixpanel.peopleQueue.lastObject[@"$set"];
+    p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$set"];
     XCTAssertEqualObjects(p[@"$ios_app_version"], @"override", @"reserved property override failed");
     [self assertDefaultPeopleProperties:p];
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleSetTo {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people set:@"p1" to:@"a"];
-    [self waitForMixpanelQueues];
-    
-    NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$set"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people set:@"p1" to:@"a"];
+    [self waitForMixpanelQueues:testMixpanel];
+    NSDictionary *p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$set"];
     XCTAssertEqualObjects(p[@"p1"], @"a", @"custom people property not queued");
     [self assertDefaultPeopleProperties:p];
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleIncrement {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
     NSDictionary *p = @{ @"p1": @3 };
-    [self.mixpanel.people increment:p];
-    [self waitForMixpanelQueues];
-    
-    p = self.mixpanel.peopleQueue.lastObject[@"$add"];
+    [testMixpanel.people increment:p];
+    [self waitForMixpanelQueues:testMixpanel];
+    p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$add"];
     XCTAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
     XCTAssertEqualObjects(p[@"p1"], @3, @"custom people property not queued");
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleIncrementBy
 {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people increment:@"p1" by:@3];
-    [self waitForMixpanelQueues];
-    
-    NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$add"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people increment:@"p1" by:@3];
+    [self waitForMixpanelQueues:testMixpanel];
+    NSDictionary *p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$add"];
     XCTAssertTrue(p.count == 1, @"incorrect people properties: %@", p);
     XCTAssertEqualObjects(p[@"p1"], @3, @"custom people property not queued");
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleDeleteUser
 {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people deleteUser];
-    [self waitForMixpanelQueues];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people deleteUser];
+    [self waitForMixpanelQueues:testMixpanel];
     
-    NSDictionary *p = self.mixpanel.peopleQueue.lastObject[@"$delete"];
+    NSDictionary *p = [self peopleQueue:testMixpanel.apiToken].lastObject[@"$delete"];
     XCTAssertTrue(p.count == 0, @"incorrect people properties: %@", p);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 #pragma mark - ($) Charges
 - (void)testPeopleTrackChargeDecimal {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people trackCharge:@25.34];
-    [self waitForMixpanelQueues];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people trackCharge:@25.34];
+    [self waitForMixpanelQueues:testMixpanel];
     
-    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25.34);
     XCTAssertNotNil(r[@"$append"][@"$transactions"][@"$time"]);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleTrackChargeNil {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
-    XCTAssertThrows([self.mixpanel.people trackCharge:nil]);
+    XCTAssertThrows([testMixpanel.people trackCharge:nil]);
 #pragma clang diagnostic pop
-    XCTAssertTrue(self.mixpanel.peopleQueue.count == 0);
+    XCTAssertTrue([self peopleQueue:testMixpanel.apiToken].count == 0);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleTrackChargeZero {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people trackCharge:@0];
-    [self waitForMixpanelQueues];
-    
-    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people trackCharge:@0];
+    [self waitForMixpanelQueues:testMixpanel];
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @0);
     XCTAssertNotNil(r[@"$append"][@"$transactions"][@"$time"]);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleTrackChargeWithTime {
-    [self.mixpanel identify:@"d1"];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
     NSDictionary *p = [self allPropertyTypes];
-    [self.mixpanel.people trackCharge:@25 withProperties:@{@"$time": p[@"date"]}];
-    [self waitForMixpanelQueues];
+    [testMixpanel.people trackCharge:@25 withProperties:@{@"$time": p[@"date"]}];
+    [self waitForMixpanelQueues:testMixpanel];
     
-    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25);
-    XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$time"], p[@"date"]);
+    XCTAssertTrue([self isDateString:r[@"$append"][@"$transactions"][@"$time"] equalToDate:p[@"date"]]);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleTrackChargeWithProperties {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people trackCharge:@25 withProperties:@{@"p1": @"a"}];
-    [self waitForMixpanelQueues];
-    
-    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people trackCharge:@25 withProperties:@{@"p1": @"a"}];
+    [self waitForMixpanelQueues:testMixpanel];
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25);
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"p1"], @"a");
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleTrackCharge {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people trackCharge:@25];
-    [self waitForMixpanelQueues];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people trackCharge:@25];
+    [self waitForMixpanelQueues:testMixpanel];
     
-    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$append"][@"$transactions"][@"$amount"], @25);
     XCTAssertNotNil(r[@"$append"][@"$transactions"][@"$time"]);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testPeopleClearCharges {
-    [self.mixpanel identify:@"d1"];
-    [self.mixpanel.people clearCharges];
-    [self waitForMixpanelQueues];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    [testMixpanel identify:@"d1"];
+    [testMixpanel.people clearCharges];
+    [self waitForMixpanelQueues:testMixpanel];
     
-    NSDictionary *r = self.mixpanel.peopleQueue.lastObject;
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].lastObject;
     XCTAssertEqualObjects(r[@"$set"][@"$transactions"], @[]);
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 @end
