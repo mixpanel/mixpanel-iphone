@@ -8,22 +8,27 @@
 
 #import "MPDB.h"
 
+
+@interface MPDB()
+
+@property (nonatomic, assign) sqlite3 *connection;
+
+@end
+
 @implementation MPDB : NSObject
 
-@synthesize apiToken = _apiToken;
 
-static sqlite3 *_connection;
-
-- (instancetype) initWithToken:(NSString *)token {
+- (instancetype)initWithToken:(NSString *)token {
     self = [super init];
     if (self) {
-        self.apiToken = token;
+        _apiToken = token;
+        _connection = nil;
         [self open];
     }
     return self;
 }
 
-- (NSString *) pathToDB {
+- (NSString *)pathToDB {
     NSString *filename = [NSString stringWithFormat:@"%@_MPDB.sqlite", self.apiToken];
 #if !defined(MIXPANEL_TVOS)
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
@@ -34,16 +39,16 @@ static sqlite3 *_connection;
 #endif
 }
 
-- (NSString *) tableNameFor:(NSString *)persistenceType {
+- (NSString *)tableNameFor:(NSString *)persistenceType {
     return [NSString stringWithFormat:@"mixpanel_%@_%@", self.apiToken, persistenceType];
 }
 
-- (void) reconnect {
+- (void)reconnect {
     NSLog(@"No database connection found. Calling [MPDB open]");
     [self open];
 }
 
-- (void) open {
+- (void)open {
     if (!self.apiToken) {
         NSLog(@"Project token must not be empty. Database cannot be opened.");
         return;
@@ -60,13 +65,13 @@ static sqlite3 *_connection;
     }
 }
 
-- (void) close {
-    sqlite3_close(_connection);
-    _connection = nil;
+- (void)close {
+    sqlite3_close(self.connection);
+    self.connection = nil;
     NSLog(@"Connection to database closed.");
 }
 
-- (void) recreate {
+- (void)recreate {
     [self close];
     NSString *dbPath = [self pathToDB];
     if (dbPath) {
@@ -84,12 +89,12 @@ static sqlite3 *_connection;
     [self reconnect];
 }
 
-- (void) createTableFor:(NSString *)persistenceType {
-    if (_connection) {
+- (void)createTableFor:(NSString *)persistenceType {
+    if (self.connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *createTableString = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@(id integer primary key autoincrement,data blob,time real, flag integer);", tableName];
         sqlite3_stmt *createTableStatement;
-        if (sqlite3_prepare_v2(_connection, [createTableString UTF8String], -1, &createTableStatement, nil) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(self.connection, [createTableString UTF8String], -1, &createTableStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(createTableStatement) == SQLITE_DONE) {
                 NSLog(@"%@ table created", tableName);
             } else {
@@ -104,18 +109,18 @@ static sqlite3 *_connection;
     }
 }
 
-- (void) createTables {
+- (void)createTables {
     [self createTableFor:@"events"];
     [self createTableFor:@"people"];
     [self createTableFor:@"groups"];
 }
 
-- (void) insertRow:(NSString *)persistenceType data:(NSData *)data flag:(bool) flag {
-    if (_connection) {
+- (void)insertRow:(NSString *)persistenceType data:(NSData *)data flag:(BOOL) flag {
+    if (self.connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *insertString = [NSString stringWithFormat:@"INSERT INTO %@ (data, flag, time) VALUES(?, ?, ?);", tableName];
         sqlite3_stmt *insertStatement;
-        if (sqlite3_prepare_v2(_connection, [insertString UTF8String], -1, &insertStatement, nil) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(self.connection, [insertString UTF8String], -1, &insertStatement, nil) == SQLITE_OK) {
             sqlite3_bind_blob(insertStatement, 1, [data bytes], (int)[data length], SQLITE_TRANSIENT);
             sqlite3_bind_int(insertStatement, 2, flag ? 1 : 0);
             sqlite3_bind_double(insertStatement, 3, NSTimeIntervalSince1970);
@@ -135,13 +140,13 @@ static sqlite3 *_connection;
     }
 }
 
-- (void) deleteRows:(NSString *)persistenceType ids:(NSArray *)ids {
-    if (_connection) {
+- (void)deleteRows:(NSString *)persistenceType ids:(NSArray *)ids {
+    if (self.connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *fromString = ids ? [NSString stringWithFormat:@" WHERE id IN %@", [self idsSqlString: ids]] : @"";
         NSString *deleteString = [NSString stringWithFormat:@"DELETE FROM %@%@", tableName, fromString];
         sqlite3_stmt *deleteStatement;
-        if (sqlite3_prepare_v2(_connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(self.connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(deleteStatement) == SQLITE_DONE) {
                 NSLog(@"Successfully deleted rows from table %@", tableName);
             } else {
@@ -167,12 +172,12 @@ static sqlite3 *_connection;
     return [sqlString stringByAppendingString:@")"];
 }
 
-- (void) updateRowsFlag:(NSString *)persistenceType newFlag:(bool)newFlag {
-    if (_connection) {
+- (void)updateRowsFlag:(NSString *)persistenceType newFlag:(BOOL)newFlag {
+    if (self.connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *updateString = [NSString stringWithFormat:@"UPDATE %@ SET flag = %d where flag = %d", tableName, newFlag, !newFlag];
         sqlite3_stmt *updateStatement;
-        if (sqlite3_prepare_v2(_connection, [updateString UTF8String], -1, &updateStatement, nil) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(self.connection, [updateString UTF8String], -1, &updateStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(updateStatement) == SQLITE_DONE) {
                 NSLog(@"Successfully updated rows in table %@", tableName);
             } else {
@@ -189,15 +194,15 @@ static sqlite3 *_connection;
     }
 }
 
-- (NSArray *)readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(bool)flag {
+- (NSArray *)readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(BOOL)flag {
     NSMutableArray *rows = [[NSMutableArray alloc] init];
-    if (_connection) {
+    if (self.connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *limitString = (numRows == NSIntegerMax) ? @"" : [NSString stringWithFormat:@" LIMIT %ld", (long)numRows];
         NSString *selectString = [NSString stringWithFormat:@"SELECT id, data FROM %@ WHERE flag = %d ORDER BY time%@", tableName, flag, limitString];
         sqlite3_stmt *selectStatement;
         int rowsRead = 0;
-        if (sqlite3_prepare_v2(_connection, [selectString UTF8String], -1, &selectStatement, nil) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(self.connection, [selectString UTF8String], -1, &selectStatement, nil) == SQLITE_OK) {
             while (sqlite3_step(selectStatement) == SQLITE_ROW) {
                 NSData *blob = [[NSData alloc] initWithBytes: sqlite3_column_blob(selectStatement, 1) length: sqlite3_column_bytes(selectStatement, 1)];
                 if (blob) {
@@ -224,12 +229,12 @@ static sqlite3 *_connection;
     return rows;
 }
 
-- (void) logSqlError:(NSString *)message {
-    if (_connection) {
+- (void)logSqlError:(NSString *)message {
+    if (self.connection) {
         if (message) {
             NSLog(@"%@", message);
         }
-        NSString *sqlError = [NSString stringWithCString:sqlite3_errmsg(_connection) encoding:NSUTF8StringEncoding];
+        NSString *sqlError = [NSString stringWithCString:sqlite3_errmsg(self.connection) encoding:NSUTF8StringEncoding];
         NSLog(@"%@", sqlError);
     } else {
         [self reconnect];

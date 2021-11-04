@@ -35,11 +35,14 @@
 		7C170D461A4A05A000D9E0F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		7C170D481A4A05A500D9E0F2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D471A4A05A500D9E0F2 /* SystemConfiguration.framework */; };
 		7C170D4A1A4A05AF00D9E0F2 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D491A4A05AF00D9E0F2 /* CoreTelephony.framework */; };
+		8631A96627399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
+		8631A96727399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
+		8631A96827399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
+		8631A96927399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
 		86542FA5260AB14F00C478DE /* MixpanelType.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F84260AB14D00C478DE /* MixpanelType.m */; };
 		86542FA6260AB14F00C478DE /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F85260AB14D00C478DE /* MPNetwork.m */; };
 		86542FA8260AB14F00C478DE /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F87260AB14D00C478DE /* MixpanelPeople.m */; };
 		86542FA9260AB14F00C478DE /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F88260AB14E00C478DE /* MPNetwork.h */; };
-		86542FAA260AB14F00C478DE /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8A260AB14E00C478DE /* MPLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		86542FAB260AB14F00C478DE /* MixpanelGroupPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8B260AB14E00C478DE /* MixpanelGroupPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		86542FAC260AB14F00C478DE /* MPNetworkPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8C260AB14E00C478DE /* MPNetworkPrivate.h */; };
 		86542FAD260AB14F00C478DE /* SessionMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8D260AB14E00C478DE /* SessionMetadata.h */; };
@@ -106,9 +109,6 @@
 		865430FD260AB2B400C478DE /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F9F260AB14E00C478DE /* MPFoundation.h */; };
 		86543102260AB2B400C478DE /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F9F260AB14E00C478DE /* MPFoundation.h */; };
 		86543107260AB2B500C478DE /* MPFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F9F260AB14E00C478DE /* MPFoundation.h */; };
-		8654310C260AB2B700C478DE /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8A260AB14E00C478DE /* MPLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		86543111260AB2B700C478DE /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8A260AB14E00C478DE /* MPLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		86543116260AB2B800C478DE /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F8A260AB14E00C478DE /* MPLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8654311B260AB2BC00C478DE /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F88260AB14E00C478DE /* MPNetwork.h */; };
 		8654311C260AB2BC00C478DE /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F88260AB14E00C478DE /* MPNetwork.h */; };
 		86543121260AB2BD00C478DE /* MPNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 86542F88260AB14E00C478DE /* MPNetwork.h */; };
@@ -124,6 +124,14 @@
 		86543171260AB2D200C478DE /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F8F260AB14E00C478DE /* SessionMetadata.m */; };
 		86543176260AB2D300C478DE /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F8F260AB14E00C478DE /* SessionMetadata.m */; };
 		8654317B260AB2D300C478DE /* SessionMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F8F260AB14E00C478DE /* SessionMetadata.m */; };
+		86EDD32D2728BAD300BA05F9 /* MPJSONHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD32C2728BAD300BA05F9 /* MPJSONHandler.m */; };
+		86EDD32E2728BAD300BA05F9 /* MPJSONHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD32C2728BAD300BA05F9 /* MPJSONHandler.m */; };
+		86EDD32F2728BAD300BA05F9 /* MPJSONHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD32C2728BAD300BA05F9 /* MPJSONHandler.m */; };
+		86EDD3302728BAD300BA05F9 /* MPJSONHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD32C2728BAD300BA05F9 /* MPJSONHandler.m */; };
+		86EDD335272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
+		86EDD336272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
+		86EDD337272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
+		86EDD338272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
 		E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */; };
 		E1C2BE5C1CFD6A010052172F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		E1C2BE5E1CFD6A010052172F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
@@ -155,11 +163,12 @@
 		7C170D491A4A05AF00D9E0F2 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		7C170D4B1A4A05B400D9E0F2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8631A96527399FD50012D7AF /* MPLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPLogger.m; sourceTree = "<group>"; };
+		8631A96A27399FED0012D7AF /* MPLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPLogger.h; sourceTree = "<group>"; };
 		86542F84260AB14D00C478DE /* MixpanelType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelType.m; sourceTree = "<group>"; };
 		86542F85260AB14D00C478DE /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
 		86542F87260AB14D00C478DE /* MixpanelPeople.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelPeople.m; sourceTree = "<group>"; };
 		86542F88260AB14E00C478DE /* MPNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetwork.h; sourceTree = "<group>"; };
-		86542F8A260AB14E00C478DE /* MPLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPLogger.h; sourceTree = "<group>"; };
 		86542F8B260AB14E00C478DE /* MixpanelGroupPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelGroupPrivate.h; sourceTree = "<group>"; };
 		86542F8C260AB14E00C478DE /* MPNetworkPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNetworkPrivate.h; sourceTree = "<group>"; };
 		86542F8D260AB14E00C478DE /* SessionMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionMetadata.h; sourceTree = "<group>"; };
@@ -190,6 +199,10 @@
 		865432A9260BF80F00C478DE /* MixpanelPeople.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelPeople.h; sourceTree = "<group>"; };
 		86543347260C059200C478DE /* MixpanelType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelType.h; sourceTree = "<group>"; };
 		865433DF260C094A00C478DE /* app_extension_module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = app_extension_module.modulemap; path = Sources/app_extension_module.modulemap; sourceTree = "<group>"; };
+		86EDD32C2728BAD300BA05F9 /* MPJSONHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPJSONHandler.m; sourceTree = "<group>"; };
+		86EDD3312728BAE800BA05F9 /* MPJSONHander.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPJSONHander.h; sourceTree = "<group>"; };
+		86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelIdentity.m; sourceTree = "<group>"; };
+		86EDD339272A150E00BA05F9 /* MixpanelIdentity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MixpanelIdentity.h; sourceTree = "<group>"; };
 		E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E1C2BDE11CFD5F9D0052172F /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = Library/Frameworks/TVServices.framework; sourceTree = DEVELOPER_DIR; };
 		E1C2BDFB1CFD61030052172F /* Mixpanel-watchOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Mixpanel-watchOS-Info.plist"; sourceTree = "<group>"; };
@@ -345,7 +358,6 @@
 				1727D17326F9090E006C74F3 /* MPDB.h */,
 				1727D17426F9090E006C74F3 /* MPDB.m */,
 				86542F9F260AB14E00C478DE /* MPFoundation.h */,
-				86542F8A260AB14E00C478DE /* MPLogger.h */,
 				86542F88260AB14E00C478DE /* MPNetwork.h */,
 				86542F85260AB14D00C478DE /* MPNetwork.m */,
 				86542F8C260AB14E00C478DE /* MPNetworkPrivate.h */,
@@ -353,6 +365,12 @@
 				86542F8F260AB14E00C478DE /* SessionMetadata.m */,
 				17B0976A2707A64B00492E14 /* MixpanelPersistence.h */,
 				17B0976F2707A66F00492E14 /* MixpanelPersistence.m */,
+				86EDD3312728BAE800BA05F9 /* MPJSONHander.h */,
+				86EDD32C2728BAD300BA05F9 /* MPJSONHandler.m */,
+				86EDD339272A150E00BA05F9 /* MixpanelIdentity.h */,
+				86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */,
+				8631A96A27399FED0012D7AF /* MPLogger.h */,
+				8631A96527399FD50012D7AF /* MPLogger.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -401,7 +419,6 @@
 				86543076260AB29100C478DE /* MixpanelGroupPrivate.h in Headers */,
 				8654301C260AB27C00C478DE /* Mixpanel.h in Headers */,
 				86543162260AB2CE00C478DE /* SessionMetadata.h in Headers */,
-				8654310C260AB2B700C478DE /* MPLogger.h in Headers */,
 				86542FD1260AB20800C478DE /* MixpanelWatchProperties.h in Headers */,
 				865430A3260AB29C00C478DE /* MixpanelPeoplePrivate.h in Headers */,
 				865430C1260AB2A300C478DE /* MixpanelType.h in Headers */,
@@ -424,7 +441,6 @@
 				17B0976B2707A64B00492E14 /* MixpanelPersistence.h in Headers */,
 				86542FAC260AB14F00C478DE /* MPNetworkPrivate.h in Headers */,
 				86542FB2260AB14F00C478DE /* MixpanelType.h in Headers */,
-				86542FAA260AB14F00C478DE /* MPLogger.h in Headers */,
 				86542FB5260AB14F00C478DE /* Mixpanel.h in Headers */,
 				86542FAE260AB14F00C478DE /* MPConnectIntegrations.h in Headers */,
 				86542FB4260AB14F00C478DE /* AutomaticEvents.h in Headers */,
@@ -452,7 +468,6 @@
 				8654305D260AB28A00C478DE /* MixpanelGroup.h in Headers */,
 				8654308A260AB29500C478DE /* MixpanelPeople.h in Headers */,
 				8654303F260AB28300C478DE /* MixpanelExceptionHandler.h in Headers */,
-				86543111260AB2B700C478DE /* MPLogger.h in Headers */,
 				865430A8260AB29C00C478DE /* MixpanelPeoplePrivate.h in Headers */,
 				17B0976D2707A64B00492E14 /* MixpanelPersistence.h in Headers */,
 				86543021260AB27C00C478DE /* Mixpanel.h in Headers */,
@@ -474,7 +489,6 @@
 				86543062260AB28B00C478DE /* MixpanelGroup.h in Headers */,
 				8654308F260AB29500C478DE /* MixpanelPeople.h in Headers */,
 				86543044260AB28400C478DE /* MixpanelExceptionHandler.h in Headers */,
-				86543116260AB2B800C478DE /* MPLogger.h in Headers */,
 				865430AD260AB29D00C478DE /* MixpanelPeoplePrivate.h in Headers */,
 				17B0976E2707A64B00492E14 /* MixpanelPersistence.h in Headers */,
 				86543026260AB27D00C478DE /* Mixpanel.h in Headers */,
@@ -636,9 +650,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86EDD32E2728BAD300BA05F9 /* MPJSONHandler.m in Sources */,
 				1727D17A26F9090E006C74F3 /* MPDB.m in Sources */,
 				865430EE260AB2B100C478DE /* MPConnectIntegrations.m in Sources */,
 				86543049260AB28600C478DE /* MixpanelExceptionHandler.m in Sources */,
+				86EDD336272A14F900BA05F9 /* MixpanelIdentity.m in Sources */,
 				86543094260AB29800C478DE /* MixpanelPeople.m in Sources */,
 				86543126260AB2BF00C478DE /* MPNetwork.m in Sources */,
 				17B097712707A66F00492E14 /* MixpanelPersistence.m in Sources */,
@@ -646,6 +662,7 @@
 				8654302B260AB27F00C478DE /* Mixpanel.m in Sources */,
 				86542FDA260AB20B00C478DE /* MixpanelWatchProperties.m in Sources */,
 				86543171260AB2D200C478DE /* SessionMetadata.m in Sources */,
+				8631A96727399FD50012D7AF /* MPLogger.m in Sources */,
 				865430D0260AB2A600C478DE /* MixpanelType.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,9 +671,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86EDD32D2728BAD300BA05F9 /* MPJSONHandler.m in Sources */,
 				1727D17926F9090E006C74F3 /* MPDB.m in Sources */,
 				86542FA5260AB14F00C478DE /* MixpanelType.m in Sources */,
 				86542FA6260AB14F00C478DE /* MPNetwork.m in Sources */,
+				86EDD335272A14F900BA05F9 /* MixpanelIdentity.m in Sources */,
 				86542FB3260AB14F00C478DE /* Mixpanel.m in Sources */,
 				86542FA8260AB14F00C478DE /* MixpanelPeople.m in Sources */,
 				17B097702707A66F00492E14 /* MixpanelPersistence.m in Sources */,
@@ -664,6 +683,7 @@
 				86542FBA260AB14F00C478DE /* MixpanelGroup.m in Sources */,
 				86542FBB260AB14F00C478DE /* MPConnectIntegrations.m in Sources */,
 				86542FAF260AB14F00C478DE /* SessionMetadata.m in Sources */,
+				8631A96627399FD50012D7AF /* MPLogger.m in Sources */,
 				86542FB6260AB14F00C478DE /* AutomaticEvents.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -672,12 +692,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86EDD32F2728BAD300BA05F9 /* MPJSONHandler.m in Sources */,
 				8654306C260AB28E00C478DE /* MixpanelGroup.m in Sources */,
 				8654304E260AB28700C478DE /* MixpanelExceptionHandler.m in Sources */,
 				1727D17B26F9090E006C74F3 /* MPDB.m in Sources */,
 				865430F3260AB2B100C478DE /* MPConnectIntegrations.m in Sources */,
+				8631A96827399FD50012D7AF /* MPLogger.m in Sources */,
 				86543030260AB28000C478DE /* Mixpanel.m in Sources */,
 				8654312B260AB2BF00C478DE /* MPNetwork.m in Sources */,
+				86EDD337272A14F900BA05F9 /* MixpanelIdentity.m in Sources */,
 				86543099260AB29900C478DE /* MixpanelPeople.m in Sources */,
 				865430D5260AB2A700C478DE /* MixpanelType.m in Sources */,
 				86543176260AB2D300C478DE /* SessionMetadata.m in Sources */,
@@ -689,12 +712,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86EDD3302728BAD300BA05F9 /* MPJSONHandler.m in Sources */,
 				86543071260AB28E00C478DE /* MixpanelGroup.m in Sources */,
 				86543053260AB28700C478DE /* MixpanelExceptionHandler.m in Sources */,
 				1727D17C26F9090E006C74F3 /* MPDB.m in Sources */,
 				865430F8260AB2B100C478DE /* MPConnectIntegrations.m in Sources */,
+				8631A96927399FD50012D7AF /* MPLogger.m in Sources */,
 				86543035260AB28000C478DE /* Mixpanel.m in Sources */,
 				86543130260AB2C000C478DE /* MPNetwork.m in Sources */,
+				86EDD338272A14F900BA05F9 /* MixpanelIdentity.m in Sources */,
 				8654309E260AB29900C478DE /* MixpanelPeople.m in Sources */,
 				865430DA260AB2A700C478DE /* MixpanelType.m in Sources */,
 				8654317B260AB2D300C478DE /* SessionMetadata.m in Sources */,

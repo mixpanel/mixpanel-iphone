@@ -12,7 +12,6 @@
 @interface MixpanelPeople ()
 
 @property (nonatomic, weak) Mixpanel *mixpanel;
-@property (nonatomic, strong) NSMutableArray *unidentifiedQueue;
 @property (nonatomic, copy) NSString *distinctId;
 @property (nonatomic, strong) NSDictionary *automaticPeopleProperties;
 

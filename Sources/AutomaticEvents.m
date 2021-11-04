@@ -48,7 +48,7 @@
         [defaults synchronize];
     }
 
-    NSDictionary* infoDict = [NSBundle mainBundle].infoDictionary;
+    NSDictionary* infoDict = [NSBundle bundleForClass:[self class]].infoDictionary;
     if (defaults != nil && infoDict != nil) {
         NSString* appVersionKey = @"MPAppVersion";
         NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
@@ -142,10 +142,10 @@
     NSArray<NSString *> *pathContents = [NSFileManager.defaultManager contentsOfDirectoryAtPath:searchPath error:nil];
     for (NSString *path in pathContents) {
         if ([path hasPrefix:@"mixpanel-"]) {
-            return true;
+            return YES;
         }
     }
-    return false;
+    return NO;
 }
 
 @end

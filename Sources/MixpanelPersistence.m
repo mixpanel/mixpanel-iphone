@@ -9,57 +9,96 @@
 #import "MixpanelPersistence.h"
 #import "MPLogger.h"
 #import "MixpanelPrivate.h"
+#import "MPJSONHander.h"
+
+
+@interface MixpanelPersistence()
+
+@property (nonatomic, readonly) MPDB *mpdb;
+
+@end
 
 @implementation MixpanelPersistence : NSObject
 
-@synthesize apiToken = _apiToken;
-@synthesize mpdb = _mpdb;
 
-NSString *kLegacyArchiveTypeEvents = @"events";
-NSString *kLegacyArchiveTypePeople = @"people";
-NSString *kLegacyArchiveTypeGropus = @"groups";
-NSString *kLegacyArchiveTypeProperties = @"properties";
-NSString *kLegacyArchiveTypeOptOutStatus = @"optOutStatus";
+static NSString *const kLegacyArchiveTypeEvents = @"events";
+static NSString *const kLegacyArchiveTypePeople = @"people";
+static NSString *const kLegacyArchiveTypeGroups = @"groups";
+static NSString *const kLegacyArchiveTypeProperties = @"properties";
+static NSString *const kLegacyArchiveTypeOptOutStatus = @"optOut";
 
-NSString *kDefaultKeySuiteName = @"Mixpanel";
-NSString *kDefaultKeyPrefix = @"mixpanel";
-NSString *kDefaultKeyOptOutStatus = @"OptOutStatus";
-NSString *kDefaultKeyAutomaticEventEnabled = @"AutomaticEventEnabled";
-NSString *kDefaultKeyAutomaticEventEnabledFromDecide = @"AutomaticEventEnabledFromDecide";
-NSString *kDefaultKeyTimedEvents = @"timedEvents";
-NSString *kDefaultKeySuperProperties = @"superProperties";
-NSString *kDefaultKeyDistinctId = @"MPDistinctID";
-NSString *kDefaultKeyPeopleDistinctId = @"MPPeopleDistinctID";
-NSString *kDefaultKeyAnonymousId = @"MPAnonymousId";
-NSString *kDefaultKeyUserId = @"MPUserId";
-NSString *kDefaultKeyAlias = @"MPAlias";
-NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
+static NSString *const kLegacyDefaultKeySuperProperties = @"superProperties";
+static NSString *const kLegacyDefaultKeyTimeEvents = @"timedEvents";
+static NSString *const kLegacyDefaultKeyAutomaticEvents = @"automaticEvents";
+static NSString *const kLegacyDefaultKeyPeopleUnidentifiedQueue = @"peopleUnidentifiedQueue";
+static NSString *const kLegacyDefaultKeyDistinctId = @"distinctId";
+static NSString *const kLegacyDefaultKeyPeopleDistinctId = @"peopleDistinctId";
+static NSString *const kLegacyDefaultKeyAnonymousId = @"anonymousId";
+static NSString *const kLegacyDefaultKeyUserId = @"userId";
+static NSString *const kLegacyDefaultKeyAlias = @"alias";
+static NSString *const kLegacyDefaultKeyHadPersistedDistinctId = @"hadPersistedDistinctId";
+
+static NSString *const kDefaultKeySuiteName = @"Mixpanel";
+static NSString *const kDefaultKeyPrefix = @"mixpanel";
+static NSString *const kDefaultKeyOptOutStatus = @"OptOutStatus";
+static NSString *const kDefaultKeyAutomaticEventEnabled = @"AutomaticEventEnabled";
+static NSString *const kDefaultKeyAutomaticEventEnabledFromDecide = @"AutomaticEventEnabledFromDecide";
+static NSString *const kDefaultKeyTimedEvents = @"timedEvents";
+static NSString *const kDefaultKeySuperProperties = @"superProperties";
+static NSString *const kDefaultKeyDistinctId = @"MPDistinctID";
+static NSString *const kDefaultKeyPeopleDistinctId = @"MPPeopleDistinctID";
+static NSString *const kDefaultKeyAnonymousId = @"MPAnonymousId";
+static NSString *const kDefaultKeyUserId = @"MPUserId";
+static NSString *const kDefaultKeyAlias = @"MPAlias";
+static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
+
+static NSString *const kMixpanelIdentityDistinctId = @"distinctID";
+static NSString *const kMixpanelIdentityPeopleDistinctId = @"peopleDistinctID";
+static NSString *const kMixpanelIdentityAnonymousId = @"anonymousId";
+static NSString *const kMixpanelIdentityUserId = @"userId";
+static NSString *const kMixpanelIdentityAlias = @"alias";
+static NSString *const kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedDistinctId";
 
 - (instancetype)initWithToken:(NSString *)token {
     self = [super init];
     if (self) {
-        self.apiToken = token;
-        self.mpdb = [[MPDB alloc] initWithToken:token];
+        _apiToken = token;
+        _mpdb = [[MPDB alloc] initWithToken:token];
     }
     return self;
 }
 
-- (void)saveEntity:(NSDictionary *)entity type:(NSString *)type flag:(bool)flag {
-    NSError *error;
-    NSData *data = [NSJSONSerialization dataWithJSONObject:entity options:kNilOptions error:&error];
-    if (!error) {
+
+- (void)saveEntity:(NSDictionary *)entity type:(NSString *)type {
+    [self saveEntity:entity type:type flag:NO];
+}
+
+- (void)saveEntity:(NSDictionary *)entity type:(NSString *)type flag:(BOOL)flag {
+    NSData *data = [MPJSONHandler encodedJSONData:entity];
+    if (data) {
         [self.mpdb insertRow:type data:data flag:flag];
     }
 }
 
-- (void)saveEntities:(NSArray *)entities type:(NSString *)type flag:(bool)flag {
+- (void)saveEntities:(NSArray *)entities type:(NSString *)type flag:(BOOL)flag {
     for (NSDictionary *entity in entities) {
         [self saveEntity:entity type:type flag:flag];
     }
 }
 
 - (NSArray *)loadEntitiesInBatch:(NSString *)type {
-    return [self.mpdb readRows:type numRows:NSIntegerMax flag:NO];
+    return [self loadEntitiesInBatch:type flag:NO];
+}
+
+- (NSArray *)loadEntitiesInBatch:(NSString *)type flag:(BOOL)flag {
+    NSArray *entities = [self.mpdb readRows:type numRows:NSIntegerMax flag:flag];
+    NSString *distinctId = [MixpanelPersistence loadIdentity:self.apiToken].distinctId;
+    for (NSMutableDictionary *r in entities) {
+        if (r[@"$distinct_id"] == nil && distinctId) {
+            r[@"$distinct_id"] = distinctId;
+        }
+    }
+    return entities;
 }
 
 - (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids {
@@ -67,17 +106,17 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 }
 
 - (void)identifyPeople {
-    [self.mpdb updateRowsFlag:@"people" newFlag:false];
+    [self.mpdb updateRowsFlag:PersistenceTypePeople newFlag:NO];
 }
 
 - (void)resetEntities {
-    for (NSString *type in @[@"events", @"people", @"groups"]) {
+    for (NSString *type in @[PersistenceTypeEvents, PersistenceTypePeople, PersistenceTypeGroups]) {
         [self.mpdb deleteRows:type ids:@[]];
     }
 }
 
-+ (void)saveOptOutStatusFlag:(bool)value apiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
++ (void)saveOptOutStatusFlag:(BOOL)value apiToken:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         [defaults setValue:[NSNumber numberWithBool:value] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyOptOutStatus]];
@@ -85,39 +124,45 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-+ (bool)loadOptOutStatusFlag:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
++ (BOOL)optOutStatusNotSet:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
+    if (defaults) {
+        NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
+        return ([defaults objectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyOptOutStatus]] == nil);
+    }
+    return YES;
+}
+
++ (BOOL)loadOptOutStatusFlagWithApiToken:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         return [defaults boolForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyOptOutStatus]];
     }
-    return nil;
+    return NO;
 }
 
-+ (void)saveAutomaticEventsEnabledFlag:(bool)value fromDecide:(bool)fromDecide apiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
++ (void)saveAutomaticEventsEnabledFlag:(BOOL)value fromDecide:(BOOL)fromDecide apiToken:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         if (fromDecide) {
-            [defaults setValue:[NSNumber numberWithBool:value] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabledFromDecide]];
+            [defaults setBool:value forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabledFromDecide]];
         } else {
-            [defaults setValue:[NSNumber numberWithBool:value] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabled]];
+            [defaults setBool:value forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabled]];
         }
         [defaults synchronize];
     }
 }
 
-+ (bool) loadAutomaticEventsEnabledFlag:(NSString *)apiToken {
-//    #if TV_AUTO_EVENTS
-//    return true
-//    #else
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
++ (BOOL)loadAutomaticEventsEnabledFlagWithApiToken:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         NSString *automaticEventsEnabledKey = [NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabled];
         NSString *automaticEventsEnabledFromDecideKey = [NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabledFromDecide];
         if ([defaults objectForKey:automaticEventsEnabledKey] == nil && [defaults objectForKey:automaticEventsEnabledFromDecideKey] == nil) {
-            return true; // default true
+            return YES; // default true
         }
         if ([defaults objectForKey:automaticEventsEnabledKey] != nil) {
             return [defaults boolForKey:automaticEventsEnabledKey];
@@ -125,11 +170,11 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
             return [defaults boolForKey:automaticEventsEnabledFromDecideKey];
         }
     }
-    return nil;
+    return YES;
 }
 
 + (void)saveTimedEvents:(NSDictionary *)timedEvents apiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         NSData *timedEventsData = [NSKeyedArchiver archivedDataWithRootObject:timedEvents];
@@ -139,7 +184,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 }
 
 + (NSDictionary *)loadTimedEvents:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         NSData *timedEventsData = [defaults dataForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyTimedEvents]];
@@ -151,7 +196,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 }
 
 + (void)saveSuperProperties:(NSDictionary *)superProperties apiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         NSData *superPropertiesData = [NSKeyedArchiver archivedDataWithRootObject:superProperties];
@@ -161,7 +206,7 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 }
 
 + (NSDictionary *)loadSuperProperties:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         NSData *superPropertiesData = [defaults dataForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeySuperProperties]];
@@ -172,45 +217,36 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return @{};
 }
 
-+ (void)saveIdentity:(NSDictionary *)mixpanelIdentity apiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
++ (void)saveIdentity:(MixpanelIdentity *)mixpanelIdentity apiToken:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
-        [defaults setValue: [mixpanelIdentity valueForKey:kMixpanelIdentityDistinctId] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyDistinctId]];
-        [defaults setValue: [mixpanelIdentity valueForKey:kMixpanelIdentityPeopleDistinctId] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]];
-        [defaults setValue: [mixpanelIdentity valueForKey:kMixpanelIdentityAnonymousId] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]];
-        [defaults setValue: [mixpanelIdentity valueForKey:kMixpanelIdentityUserId] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
-        [defaults setValue: [mixpanelIdentity valueForKey:kMixpanelIdentityAlias] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
-        [defaults setValue: [mixpanelIdentity valueForKey:kMixpanelIdentityHadPersistedDistinctId] forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
+        [defaults setValue: mixpanelIdentity.distinctId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyDistinctId]];
+        [defaults setValue: mixpanelIdentity.peopleDistinctId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]];
+        [defaults setValue: mixpanelIdentity.anonymousId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]];
+        [defaults setValue: mixpanelIdentity.userId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
+        [defaults setValue: mixpanelIdentity.alias forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
+        [defaults setBool: mixpanelIdentity.hadPersistedDistinctId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
         [defaults synchronize];
     }
 }
 
-+ (NSDictionary *)loadIdentity:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (defaults) {
-        NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
-        return @{
-            kMixpanelIdentityDistinctId: [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyDistinctId]],
-            kMixpanelIdentityPeopleDistinctId: [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]],
-            kMixpanelIdentityAnonymousId: [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]],
-            kMixpanelIdentityUserId: [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]],
-            kMixpanelIdentityAlias: [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]],
-            kMixpanelIdentityHadPersistedDistinctId: [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]],
-        };
-    }
-    return @{
-        kMixpanelIdentityDistinctId: @"",
-        kMixpanelIdentityPeopleDistinctId: @"",
-        kMixpanelIdentityAnonymousId: @"",
-        kMixpanelIdentityUserId: @"",
-        kMixpanelIdentityAlias: @"",
-        kMixpanelIdentityHadPersistedDistinctId: @"",
-    };
++ (MixpanelIdentity *)loadIdentity:(NSString *)apiToken {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
+    NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
+    NSString *distinctId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyDistinctId]];
+    NSString *peopleDistinctId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]];
+    NSString *anonymousId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]];
+    NSString *userId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
+    NSString *alias = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
+    BOOL hadPersistedDistinctId = [defaults boolForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
+    
+    return [[MixpanelIdentity alloc] initWithDistinctId:distinctId peopleDistinctId:peopleDistinctId
+                                                anonymousId:anonymousId userId:userId alias:alias hadPersistedDistinctId:hadPersistedDistinctId];
 }
 
 + (void)deleteMPUserDefaultsData:(NSString *)apiToken {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyDistinctId]];
@@ -230,26 +266,39 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 
 - (void)migrate
 {
-    if (![self needMigration]) {
+    BOOL needMigration = [self needMigration];
+    if (!needMigration) {
         return;
     }
-    NSArray *unarchivedEntities = [self unarchive];
-    [self saveEntities:unarchivedEntities[0] type:kPersistenceTypeEvents flag:false];
-    [self saveEntities:unarchivedEntities[1] type:kPersistenceTypePeople flag:true];
-    [self saveEntities:unarchivedEntities[2] type:kPersistenceTypeGroups flag:false];
-    NSDictionary *properties = unarchivedEntities[3];
-    [MixpanelPersistence saveSuperProperties:properties[@"superProperties"] apiToken:self.apiToken];
-    [MixpanelPersistence saveTimedEvents:properties[@"timedEvents"] apiToken:self.apiToken];
-    [MixpanelPersistence saveIdentity:@{
-        kMixpanelIdentityDistinctId: properties[@"distinctId"],
-        kMixpanelIdentityAnonymousId: properties[@"anonymousId"],
-        kMixpanelIdentityUserId: properties[@"userId"],
-        kMixpanelIdentityAlias: properties[@"alias"],
-        kMixpanelIdentityHadPersistedDistinctId: properties[@"hadPersistedDistinctId"],
-        kMixpanelIdentityPeopleDistinctId: properties[@"peopleDistinctId"],
-    } apiToken:self.apiToken];
-    [MixpanelPersistence saveOptOutStatusFlag:unarchivedEntities[4] != 0 apiToken:self.apiToken];
-    [MixpanelPersistence saveAutomaticEventsEnabledFlag:properties[@"automaticEvents"] != 0 fromDecide:NO apiToken:self.apiToken];
+    
+    NSArray *eventsQueue = [self unarchiveEvents];
+    NSArray *peopleQueue = [self unarchivePeople];
+    NSArray *groupsQueue = [self unarchiveGroups];
+    NSDictionary *properties = [self unarchiveProperties];
+    NSNumber *optOutStatus = [self unarchiveOptOut];
+    
+    [self saveEntities:eventsQueue type:PersistenceTypeEvents flag:NO];
+    [self saveEntities:peopleQueue type:PersistenceTypePeople flag:NO];
+    [self saveEntities:groupsQueue type:PersistenceTypeGroups flag:NO];
+
+    [MixpanelPersistence saveSuperProperties:properties[kLegacyDefaultKeySuperProperties] apiToken:self.apiToken];
+    [MixpanelPersistence saveTimedEvents:properties[kLegacyDefaultKeyTimeEvents] apiToken:self.apiToken];
+    [self saveEntities:properties[kLegacyDefaultKeyPeopleUnidentifiedQueue] type:PersistenceTypePeople flag:UnIdentifiedFlag];
+    
+    MixpanelIdentity *mixpanelIdentity = [[MixpanelIdentity alloc] initWithDistinctId:properties[kLegacyDefaultKeyDistinctId]
+                                                                     peopleDistinctId:properties[kLegacyDefaultKeyPeopleDistinctId]
+                                                                          anonymousId:properties[kLegacyDefaultKeyAnonymousId]
+                                                                               userId:properties[kLegacyDefaultKeyUserId]
+                                                                                alias:properties[kLegacyDefaultKeyAlias]
+                                                               hadPersistedDistinctId:[properties[kLegacyDefaultKeyHadPersistedDistinctId] boolValue]];
+    
+    [MixpanelPersistence saveIdentity:mixpanelIdentity apiToken:self.apiToken];
+    [MixpanelPersistence saveOptOutStatusFlag:[optOutStatus boolValue] apiToken:self.apiToken];
+    NSNumber *automaticEventsFlag = properties[kLegacyDefaultKeyAutomaticEvents];
+    if (automaticEventsFlag != nil) {
+        [MixpanelPersistence saveAutomaticEventsEnabledFlag:[automaticEventsFlag boolValue] fromDecide:NO apiToken:self.apiToken];
+    }
+    [self removeLegacyFiles];
 }
 
 - (NSString *)filePathFor:(NSString *)data
@@ -266,37 +315,27 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 
 - (NSString *)eventsFilePath
 {
-    return [self filePathFor:@"events"];
+    return [self filePathFor:kLegacyArchiveTypeEvents];
 }
 
 - (NSString *)peopleFilePath
 {
-    return [self filePathFor:@"people"];
+    return [self filePathFor:kLegacyArchiveTypePeople];
 }
 
 - (NSString *)groupsFilePath
 {
-    return [self filePathFor:@"groups"];
+    return [self filePathFor:kLegacyArchiveTypeGroups];
 }
 
 - (NSString *)propertiesFilePath
 {
-    return [self filePathFor:@"properties"];
-}
-
-- (NSString *)variantsFilePath
-{
-    return [self filePathFor:@"variants"];
-}
-
-- (NSString *)eventBindingsFilePath
-{
-    return [self filePathFor:@"event_bindings"];
+    return [self filePathFor:kLegacyArchiveTypeProperties];
 }
 
 - (NSString *)optOutFilePath
 {
-    return [self filePathFor:@"optOut"];
+    return [self filePathFor:kLegacyArchiveTypeOptOutStatus];
 }
 
 - (void)removeArchivedFileAtPath:(NSString *)filePath
@@ -308,21 +347,13 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     }
 }
 
-- (NSArray *)unarchive
+- (void)removeLegacyFiles
 {
-    NSArray *eventsQueue = [self unarchiveEvents];
-    NSArray *peopleQueue = [self unarchivePeople];
-    NSArray *groupsQueue = [self unarchiveGroups];
-    NSDictionary *properties = [self unarchiveProperties];
-    NSNumber *optOutStatus = [self unarchiveOptOut];
-    
     [self removeArchivedFileAtPath:[self eventsFilePath]];
     [self removeArchivedFileAtPath:[self peopleFilePath]];
     [self removeArchivedFileAtPath:[self groupsFilePath]];
     [self removeArchivedFileAtPath:[self propertiesFilePath]];
     [self removeArchivedFileAtPath:[self optOutFilePath]];
-    
-    return @[eventsQueue, peopleQueue, groupsQueue, properties, optOutStatus];
 }
 
 + (nonnull id)unarchiveOrDefaultFromFile:(NSString *)filePath asClass:(Class)class
@@ -366,7 +397,8 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 
 - (NSArray *)unarchiveEvents
 {
-    return (NSArray *)[MixpanelPersistence unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSArray class]];
+    NSArray *events = (NSArray *)[MixpanelPersistence unarchiveOrDefaultFromFile:[self eventsFilePath] asClass:[NSArray class]];
+    return events;
 }
 
 - (NSArray *)unarchivePeople
@@ -384,13 +416,12 @@ NSString *kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
     return (NSDictionary *)[MixpanelPersistence unarchiveFromFile:[self propertiesFilePath] asClass:[NSDictionary class]];
 }
 
-
 - (NSNumber *)unarchiveOptOut
 {
     return (NSNumber *)[MixpanelPersistence unarchiveOrDefaultFromFile:[self optOutFilePath] asClass:[NSNumber class]];
 }
 
-- (bool)needMigration
+- (BOOL)needMigration
 {
     NSFileManager *manager = [NSFileManager defaultManager];
     return [manager fileExistsAtPath:[self eventsFilePath]] ||

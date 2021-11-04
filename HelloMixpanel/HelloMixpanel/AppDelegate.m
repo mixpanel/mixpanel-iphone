@@ -3,7 +3,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"5d9d3df08d1c34a272abf23d892820bf"
 
 @implementation AppDelegate
 
@@ -71,9 +71,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     self.bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
-
         NSLog(@"%@ background task %lu cut short", self, (unsigned long)self.bgTask);
-
         [application endBackgroundTask:self.bgTask];
         self.bgTask = UIBackgroundTaskInvalid;
     }];

@@ -31,16 +31,12 @@
 
 
 // Persistence constants used internally
-static NSString *const kPersistenceTypeEvents = @"events";
-static NSString *const kPersistenceTypePeople = @"people";
-static NSString *const kPersistenceTypeGroups = @"groups";
+static NSString *const PersistenceTypeEvents = @"events";
+static NSString *const PersistenceTypePeople = @"people";
+static NSString *const PersistenceTypeGroups = @"groups";
 
-static NSString *const kMixpanelIdentityDistinctId = @"distinctID";
-static NSString *const kMixpanelIdentityPeopleDistinctId = @"peopleDistinctID";
-static NSString *const kMixpanelIdentityAnonymousId = @"anonymousId";
-static NSString *const kMixpanelIdentityUserId = @"userId";
-static NSString *const kMixpanelIdentityAlias = @"alias";
-static NSString *const kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedDistinctId";
+static BOOL UnIdentifiedFlag = YES;
+static BOOL IdentifiedFlag = NO;
 
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
@@ -79,17 +75,11 @@ static NSString *const kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedD
 @property (atomic, strong) NSDictionary *superProperties;
 @property (atomic, strong) NSDictionary *automaticProperties;
 @property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic, strong) NSMutableArray *eventsQueue;
-@property (nonatomic, strong) NSMutableArray *peopleQueue;
-@property (nonatomic, strong) NSMutableArray *groupsQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
-@property (nonatomic) dispatch_queue_t archiveQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
-@property (nonatomic, strong) MixpanelPersistence *mixpanelPersistence;
 
 @property (nonatomic) BOOL decideResponseCached;
-@property (nonatomic, strong) NSNumber *automaticEventsEnabled;
 
 
 @property (nonatomic, assign) BOOL optOutStatus;
