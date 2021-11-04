@@ -12,22 +12,19 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
-@interface MPDB : NSObject {
-    NSString *_apiToken;
-    sqlite3 *_connection;
-}
+@interface MPDB : NSObject
 
-@property (nonatomic, copy) NSString *apiToken;
+@property (nonatomic, readonly, copy) NSString *apiToken;
 
 - (instancetype)initWithToken:(NSString *)apiToken;
 
-- (void) open;
-- (void) close;
+- (void)open;
+- (void)close;
 
-- (void) insertRow:(NSString *)persistenceType data:(NSData *)data flag:(bool) flag;
-- (void) deleteRows:(NSString *)persistenceType ids:(NSArray *)ids;
-- (void) updateRowsFlag:(NSString *)persistenceType newFlag:(bool)newFlag;
-- (NSArray *) readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(bool)flag;
+- (void)insertRow:(NSString *)persistenceType data:(NSData *)data flag:(BOOL) flag;
+- (void)deleteRows:(NSString *)persistenceType ids:(NSArray *)ids;
+- (void)updateRowsFlag:(NSString *)persistenceType newFlag:(BOOL)newFlag;
+- (NSArray *)readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(BOOL)flag;
 
 @end
 

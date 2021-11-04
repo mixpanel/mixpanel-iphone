@@ -22,10 +22,6 @@
 + (NSTimeInterval)parseRetryAfterTime:(NSHTTPURLResponse *)response;
 + (BOOL)parseHTTPFailure:(NSHTTPURLResponse *)response withError:(NSError *)error;
 
-+ (NSString *)encodeArrayForAPI:(NSArray *)array;
-+ (NSData *)encodeArrayAsJSONData:(NSArray *)array;
-+ (NSString *)encodeJSONDataAsBase64:(NSData *)data;
-
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID
                                                     andToken:(NSString *)token;

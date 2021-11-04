@@ -22,7 +22,6 @@
 {
     if (self = [self init]) {
         self.mixpanel = mixpanel;
-        self.unidentifiedQueue = [NSMutableArray array];
         self.automaticPeopleProperties = [self collectAutomaticPeopleProperties];
     }
     return self;
@@ -51,7 +50,7 @@
                                                                              @"$ios_version": [self deviceSystemVersion],
                                                                              @"$ios_lib_version": [Mixpanel libVersion],
                                                                              }];
-    NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
+    NSDictionary *infoDictionary = [NSBundle bundleForClass:[self class]].infoDictionary;
     if (infoDictionary[@"CFBundleVersion"]) {
         p[@"$ios_app_version"] = infoDictionary[@"CFBundleVersion"];
     }
@@ -116,23 +115,11 @@
             if (self.distinctId) {
                 r[@"$distinct_id"] = self.distinctId;
                 MPLogInfo(@"%@ queueing people record: %@", strongMixpanel, r);
-                @synchronized (strongMixpanel) {
-                    [strongMixpanel.peopleQueue addObject:r];
-                    if (strongMixpanel.peopleQueue.count > 500) {
-                        [strongMixpanel.peopleQueue removeObjectAtIndex:0];
-                    }
-                }
+                [strongMixpanel.persistence saveEntity:r type:PersistenceTypePeople flag:IdentifiedFlag];
             } else {
                 MPLogInfo(@"%@ queueing unidentified people record: %@", strongMixpanel, r);
-                @synchronized (strongMixpanel) {
-                    [self.unidentifiedQueue addObject:r];
-                    if (self.unidentifiedQueue.count > 500) {
-                        [self.unidentifiedQueue removeObjectAtIndex:0];
-                    }
-                }
+                [strongMixpanel.persistence saveEntity:r type:PersistenceTypePeople flag:UnIdentifiedFlag];
             }
-
-            [strongMixpanel archivePeople];
         });
 #if MIXPANEL_FLUSH_IMMEDIATELY
         [strongMixpanel flush];
