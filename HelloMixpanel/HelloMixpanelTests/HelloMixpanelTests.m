@@ -660,8 +660,6 @@
 }
 
 - (void)testConcurrentTracking {
-//    [[LSNocilla sharedInstance] stop];
-//    [[LSNocilla sharedInstance] clearStubs];
     [[LSNocilla sharedInstance] start];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
 

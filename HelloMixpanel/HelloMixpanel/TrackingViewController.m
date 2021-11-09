@@ -35,9 +35,7 @@
 - (void)testTrackEvent
 {
     NSString *eventTitle = @"Track Event";
-    for (int i=0; i< 1; i++) {
-        [self.mixpanel track:eventTitle];
-    }
+    [self.mixpanel track:eventTitle];
     [self presentLogMessage:[NSString stringWithFormat:@"Event: %@", eventTitle] title:eventTitle];
 }
 

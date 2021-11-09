@@ -133,7 +133,7 @@ void MPHandleException(NSException *exception) {
     [self.mixpanelInstances enumerateObjectsUsingBlock:^(Mixpanel *instance, NSUInteger idx, BOOL * _Nonnull stop) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
         [properties setValue:[exception reason] forKey:@"$ae_crashed_reason"];
-      //  [instance track:@"$ae_crashed" properties:properties];
+        [instance track:@"$ae_crashed" properties:properties];
     }];
     MPLogWarning(@"Encountered an uncaught exception. All Mixpanel instances were archived.");
 }
