@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master, 4.0.0.beta ]
   pull_request:
-    branches: [ master, 4.0.0.beta, jared-mpdb-v4b]
+    branches: [ master, 4.0.0.beta ]
 
 jobs:
   build:
