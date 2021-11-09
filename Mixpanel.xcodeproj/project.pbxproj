@@ -39,6 +39,8 @@
 		8631A96727399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
 		8631A96827399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
 		8631A96927399FD50012D7AF /* MPLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 8631A96527399FD50012D7AF /* MPLogger.m */; };
+		8631AA1E2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8631AA1D2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8631AA2C2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8631AA2B2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		86542FA5260AB14F00C478DE /* MixpanelType.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F84260AB14D00C478DE /* MixpanelType.m */; };
 		86542FA6260AB14F00C478DE /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F85260AB14D00C478DE /* MPNetwork.m */; };
 		86542FA8260AB14F00C478DE /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 86542F87260AB14D00C478DE /* MixpanelPeople.m */; };
@@ -140,6 +142,48 @@
 		E1F1615D1E68B87500391AE3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F1615C1E68B87500391AE3 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8631AA1F2739ED8E0012D7AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C170C211A4A02F500D9E0F2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8631AA1C2739ED8E0012D7AF;
+			remoteInfo = "HelloMixpanelWatch WatchKit App";
+		};
+		8631AA2D2739ED910012D7AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C170C211A4A02F500D9E0F2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8631AA2A2739ED910012D7AF;
+			remoteInfo = "HelloMixpanelWatch WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8631AA582739ED930012D7AF /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				8631AA1E2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8631AA5B2739ED930012D7AF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8631AA2C2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1727D17326F9090E006C74F3 /* MPDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDB.h; sourceTree = "<group>"; };
 		1727D17426F9090E006C74F3 /* MPDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDB.m; sourceTree = "<group>"; };
@@ -165,6 +209,9 @@
 		7C170D4D1A4A05BE00D9E0F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8631A96527399FD50012D7AF /* MPLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPLogger.m; sourceTree = "<group>"; };
 		8631A96A27399FED0012D7AF /* MPLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPLogger.h; sourceTree = "<group>"; };
+		8631AA1A2739ED8D0012D7AF /* HelloMixpanelWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanelWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8631AA1D2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloMixpanelWatch WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8631AA2B2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "HelloMixpanelWatch WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86542F84260AB14D00C478DE /* MixpanelType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelType.m; sourceTree = "<group>"; };
 		86542F85260AB14D00C478DE /* MPNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetwork.m; sourceTree = "<group>"; };
 		86542F87260AB14D00C478DE /* MixpanelPeople.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelPeople.m; sourceTree = "<group>"; };
@@ -241,6 +288,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8631AA282739ED910012D7AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1C2BE541CFD6A010052172F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -284,6 +338,9 @@
 				511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */,
 				E1C2BEB61CFD6A010052172F /* Mixpanel.framework */,
 				E1F160B01E677D2200391AE3 /* Mixpanel.framework */,
+				8631AA1A2739ED8D0012D7AF /* HelloMixpanelWatch.app */,
+				8631AA1D2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App.app */,
+				8631AA2B2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -538,6 +595,57 @@
 			productReference = 7C170C2A1A4A02F500D9E0F2 /* Mixpanel.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		8631AA192739ED8D0012D7AF /* HelloMixpanelWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8631AA642739ED930012D7AF /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch" */;
+			buildPhases = (
+				8631AA182739ED8D0012D7AF /* Resources */,
+				8631AA582739ED930012D7AF /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8631AA202739ED8E0012D7AF /* PBXTargetDependency */,
+			);
+			name = HelloMixpanelWatch;
+			productName = HelloMixpanelWatch;
+			productReference = 8631AA1A2739ED8D0012D7AF /* HelloMixpanelWatch.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		8631AA1C2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8631AA632739ED930012D7AF /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch WatchKit App" */;
+			buildPhases = (
+				8631AA1B2739ED8E0012D7AF /* Resources */,
+				8631AA5B2739ED930012D7AF /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8631AA2E2739ED910012D7AF /* PBXTargetDependency */,
+			);
+			name = "HelloMixpanelWatch WatchKit App";
+			productName = "HelloMixpanelWatch WatchKit App";
+			productReference = 8631AA1D2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		8631AA2A2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8631AA622739ED930012D7AF /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch WatchKit Extension" */;
+			buildPhases = (
+				8631AA272739ED910012D7AF /* Sources */,
+				8631AA282739ED910012D7AF /* Frameworks */,
+				8631AA292739ED910012D7AF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HelloMixpanelWatch WatchKit Extension";
+			productName = "HelloMixpanelWatch WatchKit Extension";
+			productReference = 8631AA2B2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		E1C2BE0A1CFD6A010052172F /* Mixpanel_tvOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E1C2BEB31CFD6A010052172F /* Build configuration list for PBXNativeTarget "Mixpanel_tvOS" */;
@@ -587,6 +695,18 @@
 						CreatedOnToolsVersion = 6.1.1;
 						LastSwiftMigration = 1010;
 					};
+					8631AA192739ED8D0012D7AF = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
+					8631AA1C2739ED8E0012D7AF = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
+					8631AA2A2739ED910012D7AF = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
 					E1F160AF1E677D2200391AE3 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Manual;
@@ -610,6 +730,9 @@
 				511FC3101C2B74BD00DC4796 /* Mixpanel_watchOS */,
 				E1C2BE0A1CFD6A010052172F /* Mixpanel_tvOS */,
 				E1F160AF1E677D2200391AE3 /* Mixpanel_macOS */,
+				8631AA192739ED8D0012D7AF /* HelloMixpanelWatch */,
+				8631AA1C2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App */,
+				8631AA2A2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -623,6 +746,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7C170C281A4A02F500D9E0F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8631AA182739ED8D0012D7AF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8631AA1B2739ED8E0012D7AF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8631AA292739ED910012D7AF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -688,6 +832,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8631AA272739ED910012D7AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1C2BE0B1CFD6A010052172F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -729,6 +880,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8631AA202739ED8E0012D7AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8631AA1C2739ED8E0012D7AF /* HelloMixpanelWatch WatchKit App */;
+			targetProxy = 8631AA1F2739ED8E0012D7AF /* PBXContainerItemProxy */;
+		};
+		8631AA2E2739ED910012D7AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8631AA2A2739ED910012D7AF /* HelloMixpanelWatch WatchKit Extension */;
+			targetProxy = 8631AA2D2739ED910012D7AF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		511FC39B1C2B74BD00DC4796 /* Debug */ = {
@@ -989,6 +1153,215 @@
 			};
 			name = Release;
 		};
+		8631AA562739ED930012D7AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.HelloMixpanelWatch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8631AA572739ED930012D7AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.HelloMixpanelWatch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		8631AA592739ED930012D7AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = HelloMixpanelWatch_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "HelloMixpanelWatch WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.HelloMixpanelWatch.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8631AA5A2739ED930012D7AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = HelloMixpanelWatch_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "HelloMixpanelWatch WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.HelloMixpanelWatch.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		8631AA5C2739ED930012D7AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "HelloMixpanelWatch WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HelloMixpanelWatch WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = ExtensionDelegate;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.HelloMixpanelWatch.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8631AA5D2739ED930012D7AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "HelloMixpanelWatch WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HelloMixpanelWatch WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = ExtensionDelegate;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.HelloMixpanelWatch.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
 		E1C2BEB41CFD6A010052172F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1202,6 +1575,33 @@
 			buildConfigurations = (
 				7C170C411A4A02F500D9E0F2 /* Debug */,
 				7C170C421A4A02F500D9E0F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8631AA622739ED930012D7AF /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8631AA5C2739ED930012D7AF /* Debug */,
+				8631AA5D2739ED930012D7AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8631AA632739ED930012D7AF /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8631AA592739ED930012D7AF /* Debug */,
+				8631AA5A2739ED930012D7AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8631AA642739ED930012D7AF /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8631AA562739ED930012D7AF /* Debug */,
+				8631AA572739ED930012D7AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

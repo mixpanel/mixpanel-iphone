@@ -54,7 +54,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     }
 
 #if defined(DEBUG)
-    const NSUInteger flushInterval = 1;
+    const NSUInteger flushInterval = 2;
 #else
     const NSUInteger flushInterval = 60;
 #endif

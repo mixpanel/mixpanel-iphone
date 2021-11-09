@@ -7,6 +7,7 @@
 //
 
 #import "MPDB.h"
+#import "MPLogger.h"
 
 
 @interface MPDB()
@@ -44,13 +45,13 @@
 }
 
 - (void)reconnect {
-    NSLog(@"No database connection found. Calling [MPDB open]");
+    MPLogInfo(@"No database connection found. Calling [MPDB open]");
     [self open];
 }
 
 - (void)open {
     if (!self.apiToken) {
-        NSLog(@"Project token must not be empty. Database cannot be opened.");
+        MPLogWarning(@"Project token must not be empty. Database cannot be opened.");
         return;
     }
     NSString *dbPath = [self pathToDB];
@@ -59,7 +60,7 @@
             [self logSqlError: [NSString stringWithFormat:@"Error opening or creating database at path: %@", dbPath]];
             [self close];
         } else {
-            NSLog(@"Successfully opened connection to database at path: %@", dbPath);
+            MPLogInfo(@"Successfully opened connection to database at path: %@", dbPath);
             [self createTables];
         }
     }
@@ -68,7 +69,7 @@
 - (void)close {
     sqlite3_close(self.connection);
     self.connection = nil;
-    NSLog(@"Connection to database closed.");
+    MPLogInfo(@"Connection to database closed.");
 }
 
 - (void)recreate {
@@ -80,9 +81,9 @@
             NSError *error = nil;
             [manager removeItemAtPath:dbPath error:&error];
             if (error) {
-                NSLog(@"Unable to remove database file at path: %@ error: %@", dbPath, error);
+                MPLogWarning(@"Unable to remove database file at path: %@ error: %@", dbPath, error);
             } else {
-                NSLog(@"Deleted database file at path: %@", dbPath);
+                MPLogInfo(@"Deleted database file at path: %@", dbPath);
             }
         }
     }
@@ -96,7 +97,7 @@
         sqlite3_stmt *createTableStatement;
         if (sqlite3_prepare_v2(self.connection, [createTableString UTF8String], -1, &createTableStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(createTableStatement) == SQLITE_DONE) {
-                NSLog(@"%@ table created", tableName);
+                MPLogInfo(@"%@ table created", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"%@ table create failed", tableName]];
             }
@@ -125,7 +126,7 @@
             sqlite3_bind_int(insertStatement, 2, flag ? 1 : 0);
             sqlite3_bind_double(insertStatement, 3, NSTimeIntervalSince1970);
             if (sqlite3_step(insertStatement) == SQLITE_DONE) {
-                NSLog(@"Successfully inserted row into table %@", tableName);
+                MPLogInfo(@"Successfully inserted row into table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to insert row into table %@", tableName]];
                 [self recreate];
@@ -148,7 +149,7 @@
         sqlite3_stmt *deleteStatement;
         if (sqlite3_prepare_v2(self.connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(deleteStatement) == SQLITE_DONE) {
-                NSLog(@"Successfully deleted rows from table %@", tableName);
+                MPLogInfo(@"Successfully deleted rows from table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to delete rows from table %@", tableName]];
                 [self recreate];
@@ -179,7 +180,7 @@
         sqlite3_stmt *updateStatement;
         if (sqlite3_prepare_v2(self.connection, [updateString UTF8String], -1, &updateStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(updateStatement) == SQLITE_DONE) {
-                NSLog(@"Successfully updated rows in table %@", tableName);
+                MPLogInfo(@"Successfully updated rows in table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to update rows in table %@", tableName]];
                 [self recreate];
@@ -217,7 +218,7 @@
                 }
             }
             if (rowsRead > 0) {
-                NSLog(@"Successfully read %d rows from table %@", rowsRead, tableName);
+                MPLogInfo(@"Successfully read %d rows from table %@", rowsRead, tableName);
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"SELECT statement for table %@ could not be prepared.", tableName]];
@@ -232,10 +233,10 @@
 - (void)logSqlError:(NSString *)message {
     if (self.connection) {
         if (message) {
-            NSLog(@"%@", message);
+            MPLogWarning(@"%@", message);
         }
         NSString *sqlError = [NSString stringWithCString:sqlite3_errmsg(self.connection) encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", sqlError);
+        MPLogWarning(@"%@", sqlError);
     } else {
         [self reconnect];
     }

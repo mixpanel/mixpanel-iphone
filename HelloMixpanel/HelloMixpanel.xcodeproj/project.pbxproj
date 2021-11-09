@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -46,6 +46,25 @@
 		860BE3672075A82C00C12F18 /* BaseTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE3662075A82C00C12F18 /* BaseTestViewController.m */; };
 		860BE36B2075AC2100C12F18 /* UtilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36A2075AC2100C12F18 /* UtilityViewController.m */; };
 		860BE36E2076979C00C12F18 /* GDPRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE36D2076979C00C12F18 /* GDPRViewController.m */; };
+		8613BB732739F21500F8F1FA /* MixpanelWatchDemo WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8613BB722739F21500F8F1FA /* MixpanelWatchDemo WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8613BB792739F21500F8F1FA /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8613BB772739F21500F8F1FA /* Interface.storyboard */; };
+		8613BB7B2739F21600F8F1FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8613BB7A2739F21600F8F1FA /* Assets.xcassets */; };
+		8613BB812739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8613BB802739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8613BB872739F21600F8F1FA /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BB862739F21600F8F1FA /* InterfaceController.m */; };
+		8613BB8A2739F21600F8F1FA /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BB892739F21600F8F1FA /* ExtensionDelegate.m */; };
+		8613BB8D2739F21600F8F1FA /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BB8C2739F21600F8F1FA /* NotificationController.m */; };
+		8613BB902739F21600F8F1FA /* ComplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BB8F2739F21600F8F1FA /* ComplicationController.m */; };
+		8613BB922739F21800F8F1FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8613BB912739F21800F8F1FA /* Assets.xcassets */; };
+		8613BBC22739F3DA00F8F1FA /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; };
+		8613BBCB2739F99E00F8F1FA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BBCA2739F99E00F8F1FA /* AppDelegate.m */; };
+		8613BBCE2739F99E00F8F1FA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BBCD2739F99E00F8F1FA /* ViewController.m */; };
+		8613BBD02739F9A100F8F1FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8613BBCF2739F9A100F8F1FA /* Assets.xcassets */; };
+		8613BBD32739F9A100F8F1FA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8613BBD12739F9A100F8F1FA /* Main.storyboard */; };
+		8613BBD52739F9A100F8F1FA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BBD42739F9A100F8F1FA /* main.m */; };
+		8613BBE02739F9A100F8F1FA /* MixpanelMacDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BBDF2739F9A100F8F1FA /* MixpanelMacDemoTests.m */; };
+		8613BBEA2739F9A100F8F1FA /* MixpanelMacDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BBE92739F9A100F8F1FA /* MixpanelMacDemoUITests.m */; };
+		8613BBEC2739F9A100F8F1FA /* MixpanelMacDemoUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613BBEB2739F9A100F8F1FA /* MixpanelMacDemoUITestsLaunchTests.m */; };
+		8613BBF9273A084600F8F1FA /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1D563341E833F980035EFBF /* Mixpanel.framework */; };
 		862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */; };
 		8673E0F519C3B7090099AB66 /* MPTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8673E0F419C3B7090099AB66 /* MPTimingViewController.m */; };
 		86FDF4952733877D006E24AC /* mixpanel-testToken-events.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86FDF4902733877D006E24AC /* mixpanel-testToken-events.plist */; };
@@ -67,15 +86,6 @@
 		E12C04AA1D135ACB007D2086 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123C4841D1353D10015B425 /* Mixpanel.framework */; };
 		E18E6C401EAFC94E00FDD3A2 /* AutomaticEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */; };
 		EF3BCE46310895780DB99B9B /* Pods_HelloMixpanelTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70AE42AC0CD290C1934F03D1 /* Pods_HelloMixpanelTests.framework */; };
-		F058D0851DB1527900B19E59 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; };
-		F058D0861DB1527900B19E59 /* Mixpanel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 515B5A051CB6F95200A34060 /* Mixpanel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F0E7329F1DAEF81000CB4C13 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E7329D1DAEF81000CB4C13 /* Interface.storyboard */; };
-		F0E732A11DAEF81000CB4C13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E732A01DAEF81000CB4C13 /* Assets.xcassets */; };
-		F0E732A81DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		F0E732B01DAEF81000CB4C13 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E732AF1DAEF81000CB4C13 /* InterfaceController.m */; };
-		F0E732B31DAEF81000CB4C13 /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E732B21DAEF81000CB4C13 /* ExtensionDelegate.m */; };
-		F0E732B81DAEF81100CB4C13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E732B71DAEF81000CB4C13 /* Assets.xcassets */; };
-		F0E732BC1DAEF81100CB4C13 /* HelloMixpanelWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F0E7329B1DAEF81000CB4C13 /* HelloMixpanelWatch.app */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +194,69 @@
 			remoteGlobalIDString = 7C170C291A4A02F500D9E0F2;
 			remoteInfo = Mixpanel;
 		};
+		8613BB632739F1D800F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8631AA1A2739ED8D0012D7AF;
+			remoteInfo = HelloMixpanelWatch;
+		};
+		8613BB652739F1D800F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8631AA1D2739ED8E0012D7AF;
+			remoteInfo = "HelloMixpanelWatch WatchKit App";
+		};
+		8613BB672739F1D800F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8631AA2B2739ED910012D7AF;
+			remoteInfo = "HelloMixpanelWatch WatchKit Extension";
+		};
+		8613BB742739F21500F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8613BB712739F21500F8F1FA;
+			remoteInfo = "MixpanelWatchDemo WatchKit App";
+		};
+		8613BB822739F21600F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8613BB7F2739F21600F8F1FA;
+			remoteInfo = "MixpanelWatchDemo WatchKit Extension";
+		};
+		8613BB9A2739F21800F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8613BB7F2739F21600F8F1FA;
+			remoteInfo = "MixpanelWatchDemo WatchKit Extension";
+		};
+		8613BBA42739F21800F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8613BB712739F21500F8F1FA;
+			remoteInfo = "MixpanelWatchDemo WatchKit App";
+		};
+		8613BBDC2739F9A100F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8613BBC62739F99E00F8F1FA;
+			remoteInfo = MixpanelMacDemo;
+		};
+		8613BBE62739F9A100F8F1FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8613BBC62739F99E00F8F1FA;
+			remoteInfo = MixpanelMacDemo;
+		};
 		E123C4831D1353D10015B425 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
@@ -211,34 +284,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = E1F160B01E677D2200391AE3;
 			remoteInfo = Mixpanel_macOS;
-		};
-		F058D0821DB1527000B19E59 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 511FC3101C2B74BD00DC4796;
-			remoteInfo = Mixpanel_watchOS;
-		};
-		F058D0871DB1527900B19E59 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 511FC3101C2B74BD00DC4796;
-			remoteInfo = Mixpanel_watchOS;
-		};
-		F0E732A91DAEF81000CB4C13 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F0E732A61DAEF81000CB4C13;
-			remoteInfo = "HelloMixpanelWatch Extension";
-		};
-		F0E732BA1DAEF81100CB4C13 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2808F9841610EFE3005772B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F0E7329A1DAEF81000CB4C13;
-			remoteInfo = HelloMixpanelWatch;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -274,6 +319,28 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8613BBAF2739F21800F8F1FA /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8613BB812739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBB42739F21800F8F1FA /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				8613BB732739F21500F8F1FA /* MixpanelWatchDemo WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E12C04A81D135952007D2086 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,35 +362,12 @@
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F058D0891DB1527900B19E59 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				F058D0861DB1527900B19E59 /* Mixpanel.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F0E732C61DAEF81100CB4C13 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				F0E732A81DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F0E732C81DAEF81100CB4C13 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				F0E732BC1DAEF81100CB4C13 /* HelloMixpanelWatch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -385,6 +429,38 @@
 		860BE36A2075AC2100C12F18 /* UtilityViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UtilityViewController.m; sourceTree = "<group>"; };
 		860BE36C2076979C00C12F18 /* GDPRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDPRViewController.h; sourceTree = "<group>"; };
 		860BE36D2076979C00C12F18 /* GDPRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDPRViewController.m; sourceTree = "<group>"; };
+		8613BB6F2739F21400F8F1FA /* MixpanelWatchDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MixpanelWatchDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BB722739F21500F8F1FA /* MixpanelWatchDemo WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MixpanelWatchDemo WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BB782739F21500F8F1FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		8613BB7A2739F21600F8F1FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8613BB802739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MixpanelWatchDemo WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BB852739F21600F8F1FA /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		8613BB862739F21600F8F1FA /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		8613BB882739F21600F8F1FA /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
+		8613BB892739F21600F8F1FA /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
+		8613BB8B2739F21600F8F1FA /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		8613BB8C2739F21600F8F1FA /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		8613BB8E2739F21600F8F1FA /* ComplicationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplicationController.h; sourceTree = "<group>"; };
+		8613BB8F2739F21600F8F1FA /* ComplicationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ComplicationController.m; sourceTree = "<group>"; };
+		8613BB912739F21800F8F1FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8613BB932739F21800F8F1FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8613BB942739F21800F8F1FA /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		8613BB992739F21800F8F1FA /* MixpanelWatchDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixpanelWatchDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BBA32739F21800F8F1FA /* MixpanelWatchDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixpanelWatchDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BBC72739F99E00F8F1FA /* MixpanelMacDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MixpanelMacDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BBC92739F99E00F8F1FA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		8613BBCA2739F99E00F8F1FA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		8613BBCC2739F99E00F8F1FA /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		8613BBCD2739F99E00F8F1FA /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		8613BBCF2739F9A100F8F1FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8613BBD22739F9A100F8F1FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8613BBD42739F9A100F8F1FA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8613BBD62739F9A100F8F1FA /* MixpanelMacDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MixpanelMacDemo.entitlements; sourceTree = "<group>"; };
+		8613BBDB2739F9A100F8F1FA /* MixpanelMacDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixpanelMacDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BBDF2739F9A100F8F1FA /* MixpanelMacDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelMacDemoTests.m; sourceTree = "<group>"; };
+		8613BBE52739F9A100F8F1FA /* MixpanelMacDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixpanelMacDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8613BBE92739F9A100F8F1FA /* MixpanelMacDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelMacDemoUITests.m; sourceTree = "<group>"; };
+		8613BBEB2739F9A100F8F1FA /* MixpanelMacDemoUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelMacDemoUITestsLaunchTests.m; sourceTree = "<group>"; };
 		86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelOptOutTests.m; sourceTree = "<group>"; };
 		8673E0F319C3B7090099AB66 /* MPTimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTimingViewController.h; sourceTree = "<group>"; };
 		8673E0F419C3B7090099AB66 /* MPTimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTimingViewController.m; sourceTree = "<group>"; };
@@ -416,17 +492,6 @@
 		E18E6C3C1EAFC8CB00FDD3A2 /* AutomaticEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutomaticEventsTests.m; sourceTree = "<group>"; };
 		E1B343191D6BB96E00BEB29E /* HelloMixpanel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HelloMixpanel.entitlements; sourceTree = "<group>"; };
 		E801B3EBBA1BC612E273C12C /* Pods-HelloMixpanelTests.appstore.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.appstore.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.appstore.xcconfig"; sourceTree = "<group>"; };
-		F0E7329B1DAEF81000CB4C13 /* HelloMixpanelWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloMixpanelWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0E7329E1DAEF81000CB4C13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		F0E732A01DAEF81000CB4C13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F0E732A21DAEF81000CB4C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "HelloMixpanelWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0E732AE1DAEF81000CB4C13 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
-		F0E732AF1DAEF81000CB4C13 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
-		F0E732B11DAEF81000CB4C13 /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
-		F0E732B21DAEF81000CB4C13 /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
-		F0E732B71DAEF81000CB4C13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F0E732B91DAEF81100CB4C13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F93B64201D77994D9569DA54 /* libPods-ABTestingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABTestingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC15693B1AAFB8488BA74352 /* Pods-HelloMixpanelTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloMixpanelTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HelloMixpanelTests/Pods-HelloMixpanelTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -462,6 +527,50 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8613BB7D2739F21600F8F1FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BBC22739F3DA00F8F1FA /* Mixpanel.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BB962739F21800F8F1FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBA02739F21800F8F1FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBC42739F99E00F8F1FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BBF9273A084600F8F1FA /* Mixpanel.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBD82739F9A100F8F1FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBE22739F9A100F8F1FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E123C4861D1354EC0015B425 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -479,21 +588,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F0E732A41DAEF81000CB4C13 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F058D0851DB1527900B19E59 /* Mixpanel.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F0E732DF1DAF011E00CB4C13 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -504,8 +598,11 @@
 				2808F9971610EFE3005772B7 /* HelloMixpanel */,
 				E123C48A1D1354EC0015B425 /* HelloMixpanel_tvOS */,
 				515B59FB1CB6F69900A34060 /* Tests */,
-				F0E7329C1DAEF81000CB4C13 /* HelloMixpanelWatch */,
-				F0E732AB1DAEF81000CB4C13 /* HelloMixpanelWatch Extension */,
+				8613BB762739F21500F8F1FA /* MixpanelWatchDemo WatchKit App */,
+				8613BB842739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension */,
+				8613BBC82739F99E00F8F1FA /* MixpanelMacDemo */,
+				8613BBDE2739F9A100F8F1FA /* MixpanelMacDemoTests */,
+				8613BBE82739F9A100F8F1FA /* MixpanelMacDemoUITests */,
 				2808F98E1610EFE3005772B7 /* Products */,
 				7E006F23B3A10FFC78E0E995 /* Frameworks */,
 				E1CF6DC41D19EE0500E815CC /* Recovered References */,
@@ -522,8 +619,14 @@
 				2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */,
 				E123C4891D1354EC0015B425 /* HelloMixpanel_tvOS.app */,
 				E123C49E1D1354EC0015B425 /* HelloMixpanel_tvOSTests.xctest */,
-				F0E7329B1DAEF81000CB4C13 /* HelloMixpanelWatch.app */,
-				F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */,
+				8613BB6F2739F21400F8F1FA /* MixpanelWatchDemo.app */,
+				8613BB722739F21500F8F1FA /* MixpanelWatchDemo WatchKit App.app */,
+				8613BB802739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension.appex */,
+				8613BB992739F21800F8F1FA /* MixpanelWatchDemoTests.xctest */,
+				8613BBA32739F21800F8F1FA /* MixpanelWatchDemoUITests.xctest */,
+				8613BBC72739F99E00F8F1FA /* MixpanelMacDemo.app */,
+				8613BBDB2739F9A100F8F1FA /* MixpanelMacDemoTests.xctest */,
+				8613BBE52739F9A100F8F1FA /* MixpanelMacDemoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -622,6 +725,9 @@
 				515B5A051CB6F95200A34060 /* Mixpanel.framework */,
 				E123C4841D1353D10015B425 /* Mixpanel.framework */,
 				E1D563341E833F980035EFBF /* Mixpanel.framework */,
+				8613BB642739F1D800F8F1FA /* HelloMixpanelWatch.app */,
+				8613BB662739F1D800F8F1FA /* HelloMixpanelWatch WatchKit App.app */,
+				8613BB682739F1D800F8F1FA /* HelloMixpanelWatch WatchKit Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -700,6 +806,65 @@
 			name = Samples;
 			sourceTree = "<group>";
 		};
+		8613BB762739F21500F8F1FA /* MixpanelWatchDemo WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				8613BB772739F21500F8F1FA /* Interface.storyboard */,
+				8613BB7A2739F21600F8F1FA /* Assets.xcassets */,
+			);
+			path = "MixpanelWatchDemo WatchKit App";
+			sourceTree = "<group>";
+		};
+		8613BB842739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8613BB852739F21600F8F1FA /* InterfaceController.h */,
+				8613BB862739F21600F8F1FA /* InterfaceController.m */,
+				8613BB882739F21600F8F1FA /* ExtensionDelegate.h */,
+				8613BB892739F21600F8F1FA /* ExtensionDelegate.m */,
+				8613BB8B2739F21600F8F1FA /* NotificationController.h */,
+				8613BB8C2739F21600F8F1FA /* NotificationController.m */,
+				8613BB8E2739F21600F8F1FA /* ComplicationController.h */,
+				8613BB8F2739F21600F8F1FA /* ComplicationController.m */,
+				8613BB912739F21800F8F1FA /* Assets.xcassets */,
+				8613BB932739F21800F8F1FA /* Info.plist */,
+				8613BB942739F21800F8F1FA /* PushNotificationPayload.apns */,
+			);
+			path = "MixpanelWatchDemo WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		8613BBC82739F99E00F8F1FA /* MixpanelMacDemo */ = {
+			isa = PBXGroup;
+			children = (
+				8613BBC92739F99E00F8F1FA /* AppDelegate.h */,
+				8613BBCA2739F99E00F8F1FA /* AppDelegate.m */,
+				8613BBCC2739F99E00F8F1FA /* ViewController.h */,
+				8613BBCD2739F99E00F8F1FA /* ViewController.m */,
+				8613BBCF2739F9A100F8F1FA /* Assets.xcassets */,
+				8613BBD12739F9A100F8F1FA /* Main.storyboard */,
+				8613BBD42739F9A100F8F1FA /* main.m */,
+				8613BBD62739F9A100F8F1FA /* MixpanelMacDemo.entitlements */,
+			);
+			path = MixpanelMacDemo;
+			sourceTree = "<group>";
+		};
+		8613BBDE2739F9A100F8F1FA /* MixpanelMacDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				8613BBDF2739F9A100F8F1FA /* MixpanelMacDemoTests.m */,
+			);
+			path = MixpanelMacDemoTests;
+			sourceTree = "<group>";
+		};
+		8613BBE82739F9A100F8F1FA /* MixpanelMacDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				8613BBE92739F9A100F8F1FA /* MixpanelMacDemoUITests.m */,
+				8613BBEB2739F9A100F8F1FA /* MixpanelMacDemoUITestsLaunchTests.m */,
+			);
+			path = MixpanelMacDemoUITests;
+			sourceTree = "<group>";
+		};
 		E123C48A1D1354EC0015B425 /* HelloMixpanel_tvOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -736,37 +901,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		F0E7329C1DAEF81000CB4C13 /* HelloMixpanelWatch */ = {
-			isa = PBXGroup;
-			children = (
-				F0E7329D1DAEF81000CB4C13 /* Interface.storyboard */,
-				F0E732A01DAEF81000CB4C13 /* Assets.xcassets */,
-				F0E732A21DAEF81000CB4C13 /* Info.plist */,
-			);
-			path = HelloMixpanelWatch;
-			sourceTree = "<group>";
-		};
-		F0E732AB1DAEF81000CB4C13 /* HelloMixpanelWatch Extension */ = {
-			isa = PBXGroup;
-			children = (
-				F0E732AE1DAEF81000CB4C13 /* InterfaceController.h */,
-				F0E732AF1DAEF81000CB4C13 /* InterfaceController.m */,
-				F0E732B11DAEF81000CB4C13 /* ExtensionDelegate.h */,
-				F0E732B21DAEF81000CB4C13 /* ExtensionDelegate.m */,
-				F0E732B71DAEF81000CB4C13 /* Assets.xcassets */,
-				F0E732B91DAEF81100CB4C13 /* Info.plist */,
-				F0E732AC1DAEF81000CB4C13 /* Supporting Files */,
-			);
-			path = "HelloMixpanelWatch Extension";
-			sourceTree = "<group>";
-		};
-		F0E732AC1DAEF81000CB4C13 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -786,7 +920,6 @@
 			dependencies = (
 				51AF3D3B1D380D2A002E8325 /* PBXTargetDependency */,
 				51AF3D3F1D380D31002E8325 /* PBXTargetDependency */,
-				F0E732BB1DAEF81100CB4C13 /* PBXTargetDependency */,
 			);
 			name = HelloMixpanel;
 			productName = HelloMixpanel;
@@ -823,6 +956,146 @@
 			productName = HelloMixpanelTests;
 			productReference = 2808F9B11610EFE4005772B7 /* HelloMixpanelTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8613BB6E2739F21400F8F1FA /* MixpanelWatchDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBB52739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemo" */;
+			buildPhases = (
+				8613BB6D2739F21400F8F1FA /* Resources */,
+				8613BBB42739F21800F8F1FA /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8613BB752739F21500F8F1FA /* PBXTargetDependency */,
+			);
+			name = MixpanelWatchDemo;
+			productName = MixpanelWatchDemo;
+			productReference = 8613BB6F2739F21400F8F1FA /* MixpanelWatchDemo.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		8613BB712739F21500F8F1FA /* MixpanelWatchDemo WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBB02739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemo WatchKit App" */;
+			buildPhases = (
+				8613BB702739F21500F8F1FA /* Resources */,
+				8613BBAF2739F21800F8F1FA /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8613BB832739F21600F8F1FA /* PBXTargetDependency */,
+			);
+			name = "MixpanelWatchDemo WatchKit App";
+			productName = "MixpanelWatchDemo WatchKit App";
+			productReference = 8613BB722739F21500F8F1FA /* MixpanelWatchDemo WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		8613BB7F2739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBAB2739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemo WatchKit Extension" */;
+			buildPhases = (
+				8613BB7C2739F21600F8F1FA /* Sources */,
+				8613BB7D2739F21600F8F1FA /* Frameworks */,
+				8613BB7E2739F21600F8F1FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MixpanelWatchDemo WatchKit Extension";
+			productName = "MixpanelWatchDemo WatchKit Extension";
+			productReference = 8613BB802739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+		8613BB982739F21800F8F1FA /* MixpanelWatchDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBB92739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemoTests" */;
+			buildPhases = (
+				8613BB952739F21800F8F1FA /* Sources */,
+				8613BB962739F21800F8F1FA /* Frameworks */,
+				8613BB972739F21800F8F1FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8613BB9B2739F21800F8F1FA /* PBXTargetDependency */,
+			);
+			name = MixpanelWatchDemoTests;
+			productName = MixpanelWatchDemoTests;
+			productReference = 8613BB992739F21800F8F1FA /* MixpanelWatchDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8613BBA22739F21800F8F1FA /* MixpanelWatchDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBBD2739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemoUITests" */;
+			buildPhases = (
+				8613BB9F2739F21800F8F1FA /* Sources */,
+				8613BBA02739F21800F8F1FA /* Frameworks */,
+				8613BBA12739F21800F8F1FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8613BBA52739F21800F8F1FA /* PBXTargetDependency */,
+			);
+			name = MixpanelWatchDemoUITests;
+			productName = MixpanelWatchDemoUITests;
+			productReference = 8613BBA32739F21800F8F1FA /* MixpanelWatchDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		8613BBC62739F99E00F8F1FA /* MixpanelMacDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBED2739F9A100F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelMacDemo" */;
+			buildPhases = (
+				8613BBC32739F99E00F8F1FA /* Sources */,
+				8613BBC42739F99E00F8F1FA /* Frameworks */,
+				8613BBC52739F99E00F8F1FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MixpanelMacDemo;
+			productName = MixpanelMacDemo;
+			productReference = 8613BBC72739F99E00F8F1FA /* MixpanelMacDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8613BBDA2739F9A100F8F1FA /* MixpanelMacDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBF12739F9A100F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelMacDemoTests" */;
+			buildPhases = (
+				8613BBD72739F9A100F8F1FA /* Sources */,
+				8613BBD82739F9A100F8F1FA /* Frameworks */,
+				8613BBD92739F9A100F8F1FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8613BBDD2739F9A100F8F1FA /* PBXTargetDependency */,
+			);
+			name = MixpanelMacDemoTests;
+			productName = MixpanelMacDemoTests;
+			productReference = 8613BBDB2739F9A100F8F1FA /* MixpanelMacDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8613BBE42739F9A100F8F1FA /* MixpanelMacDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8613BBF52739F9A100F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelMacDemoUITests" */;
+			buildPhases = (
+				8613BBE12739F9A100F8F1FA /* Sources */,
+				8613BBE22739F9A100F8F1FA /* Frameworks */,
+				8613BBE32739F9A100F8F1FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8613BBE72739F9A100F8F1FA /* PBXTargetDependency */,
+			);
+			name = MixpanelMacDemoUITests;
+			productName = MixpanelMacDemoUITests;
+			productReference = 8613BBE52739F9A100F8F1FA /* MixpanelMacDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		E123C4881D1354EC0015B425 /* HelloMixpanel_tvOS */ = {
 			isa = PBXNativeTarget;
@@ -864,44 +1137,6 @@
 			productReference = E123C49E1D1354EC0015B425 /* HelloMixpanel_tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F0E7329A1DAEF81000CB4C13 /* HelloMixpanelWatch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F0E732C71DAEF81100CB4C13 /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch" */;
-			buildPhases = (
-				F0E732991DAEF81000CB4C13 /* Resources */,
-				F0E732C61DAEF81100CB4C13 /* Embed App Extensions */,
-				F0E732DF1DAF011E00CB4C13 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F0E732AA1DAEF81000CB4C13 /* PBXTargetDependency */,
-			);
-			name = HelloMixpanelWatch;
-			productName = HelloMixpanelWatch;
-			productReference = F0E7329B1DAEF81000CB4C13 /* HelloMixpanelWatch.app */;
-			productType = "com.apple.product-type.application.watchapp2";
-		};
-		F0E732A61DAEF81000CB4C13 /* HelloMixpanelWatch Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F0E732C51DAEF81100CB4C13 /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch Extension" */;
-			buildPhases = (
-				F0E732A31DAEF81000CB4C13 /* Sources */,
-				F0E732A41DAEF81000CB4C13 /* Frameworks */,
-				F0E732A51DAEF81000CB4C13 /* Resources */,
-				F058D0891DB1527900B19E59 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F058D0831DB1527000B19E59 /* PBXTargetDependency */,
-				F058D0881DB1527900B19E59 /* PBXTargetDependency */,
-			);
-			name = "HelloMixpanelWatch Extension";
-			productName = "HelloMixpanelWatch Extension";
-			productReference = F0E732A71DAEF81000CB4C13 /* HelloMixpanelWatch Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -926,6 +1161,42 @@
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
+					8613BB6E2739F21400F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
+					8613BB712739F21500F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
+					8613BB7F2739F21600F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
+					8613BB982739F21800F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8613BB7F2739F21600F8F1FA;
+					};
+					8613BBA22739F21800F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8613BB712739F21500F8F1FA;
+					};
+					8613BBC62739F99E00F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+					};
+					8613BBDA2739F9A100F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8613BBC62739F99E00F8F1FA;
+					};
+					8613BBE42739F9A100F8F1FA = {
+						CreatedOnToolsVersion = 13.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8613BBC62739F99E00F8F1FA;
+					};
 					E123C4881D1354EC0015B425 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = E8FVX7QLET;
@@ -936,16 +1207,6 @@
 						DevelopmentTeam = E8FVX7QLET;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E123C4881D1354EC0015B425;
-					};
-					F0E7329A1DAEF81000CB4C13 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = E8FVX7QLET;
-						ProvisioningStyle = Automatic;
-					};
-					F0E732A61DAEF81000CB4C13 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = E8FVX7QLET;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -972,8 +1233,14 @@
 				2808F9B01610EFE4005772B7 /* HelloMixpanelTests */,
 				E123C4881D1354EC0015B425 /* HelloMixpanel_tvOS */,
 				E123C49D1D1354EC0015B425 /* HelloMixpanel_tvOSTests */,
-				F0E7329A1DAEF81000CB4C13 /* HelloMixpanelWatch */,
-				F0E732A61DAEF81000CB4C13 /* HelloMixpanelWatch Extension */,
+				8613BB6E2739F21400F8F1FA /* MixpanelWatchDemo */,
+				8613BB712739F21500F8F1FA /* MixpanelWatchDemo WatchKit App */,
+				8613BB7F2739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension */,
+				8613BB982739F21800F8F1FA /* MixpanelWatchDemoTests */,
+				8613BBA22739F21800F8F1FA /* MixpanelWatchDemoUITests */,
+				8613BBC62739F99E00F8F1FA /* MixpanelMacDemo */,
+				8613BBDA2739F9A100F8F1FA /* MixpanelMacDemoTests */,
+				8613BBE42739F9A100F8F1FA /* MixpanelMacDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -991,6 +1258,27 @@
 			fileType = wrapper.framework;
 			path = Mixpanel.framework;
 			remoteRef = 515B5A041CB6F95200A34060 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8613BB642739F1D800F8F1FA /* HelloMixpanelWatch.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = HelloMixpanelWatch.app;
+			remoteRef = 8613BB632739F1D800F8F1FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8613BB662739F1D800F8F1FA /* HelloMixpanelWatch WatchKit App.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "HelloMixpanelWatch WatchKit App.app";
+			remoteRef = 8613BB652739F1D800F8F1FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8613BB682739F1D800F8F1FA /* HelloMixpanelWatch WatchKit Extension.appex */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.app-extension";
+			path = "HelloMixpanelWatch WatchKit Extension.appex";
+			remoteRef = 8613BB672739F1D800F8F1FA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E123C4841D1353D10015B425 /* Mixpanel.framework */ = {
@@ -1032,6 +1320,67 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8613BB6D2739F21400F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BB702739F21500F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BB7B2739F21600F8F1FA /* Assets.xcassets in Resources */,
+				8613BB792739F21500F8F1FA /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BB7E2739F21600F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BB922739F21800F8F1FA /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BB972739F21800F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBA12739F21800F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBC52739F99E00F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BBD02739F9A100F8F1FA /* Assets.xcassets in Resources */,
+				8613BBD32739F9A100F8F1FA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBD92739F9A100F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBE32739F9A100F8F1FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E123C4871D1354EC0015B425 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1045,23 +1394,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F0E732991DAEF81000CB4C13 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F0E732A11DAEF81000CB4C13 /* Assets.xcassets in Resources */,
-				F0E7329F1DAEF81000CB4C13 /* Interface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F0E732A51DAEF81000CB4C13 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F0E732B81DAEF81100CB4C13 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,6 +1513,58 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8613BB7C2739F21600F8F1FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BB8A2739F21600F8F1FA /* ExtensionDelegate.m in Sources */,
+				8613BB902739F21600F8F1FA /* ComplicationController.m in Sources */,
+				8613BB872739F21600F8F1FA /* InterfaceController.m in Sources */,
+				8613BB8D2739F21600F8F1FA /* NotificationController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BB952739F21800F8F1FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BB9F2739F21800F8F1FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBC32739F99E00F8F1FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BBCE2739F99E00F8F1FA /* ViewController.m in Sources */,
+				8613BBD52739F9A100F8F1FA /* main.m in Sources */,
+				8613BBCB2739F99E00F8F1FA /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBD72739F9A100F8F1FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BBE02739F9A100F8F1FA /* MixpanelMacDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8613BBE12739F9A100F8F1FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8613BBEA2739F9A100F8F1FA /* MixpanelMacDemoUITests.m in Sources */,
+				8613BBEC2739F9A100F8F1FA /* MixpanelMacDemoUITestsLaunchTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E123C4851D1354EC0015B425 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1201,15 +1585,6 @@
 				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
 				457CA2062141B001003B3862 /* MixpanelTypeTests.m in Sources */,
 				45720A9B212E0CD3000D6FC3 /* MixpanelGroupTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F0E732A31DAEF81000CB4C13 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F0E732B31DAEF81000CB4C13 /* ExtensionDelegate.m in Sources */,
-				F0E732B01DAEF81000CB4C13 /* InterfaceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1281,6 +1656,36 @@
 			name = Mixpanel;
 			targetProxy = 51AF3D3E1D380D31002E8325 /* PBXContainerItemProxy */;
 		};
+		8613BB752739F21500F8F1FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8613BB712739F21500F8F1FA /* MixpanelWatchDemo WatchKit App */;
+			targetProxy = 8613BB742739F21500F8F1FA /* PBXContainerItemProxy */;
+		};
+		8613BB832739F21600F8F1FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8613BB7F2739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension */;
+			targetProxy = 8613BB822739F21600F8F1FA /* PBXContainerItemProxy */;
+		};
+		8613BB9B2739F21800F8F1FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8613BB7F2739F21600F8F1FA /* MixpanelWatchDemo WatchKit Extension */;
+			targetProxy = 8613BB9A2739F21800F8F1FA /* PBXContainerItemProxy */;
+		};
+		8613BBA52739F21800F8F1FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8613BB712739F21500F8F1FA /* MixpanelWatchDemo WatchKit App */;
+			targetProxy = 8613BBA42739F21800F8F1FA /* PBXContainerItemProxy */;
+		};
+		8613BBDD2739F9A100F8F1FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8613BBC62739F99E00F8F1FA /* MixpanelMacDemo */;
+			targetProxy = 8613BBDC2739F9A100F8F1FA /* PBXContainerItemProxy */;
+		};
+		8613BBE72739F9A100F8F1FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8613BBC62739F99E00F8F1FA /* MixpanelMacDemo */;
+			targetProxy = 8613BBE62739F9A100F8F1FA /* PBXContainerItemProxy */;
+		};
 		E123C4A01D1354EC0015B425 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E123C4881D1354EC0015B425 /* HelloMixpanel_tvOS */;
@@ -1291,44 +1696,31 @@
 			name = Mixpanel_tvOS;
 			targetProxy = E12C04A61D135952007D2086 /* PBXContainerItemProxy */;
 		};
-		F058D0831DB1527000B19E59 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Mixpanel_watchOS;
-			targetProxy = F058D0821DB1527000B19E59 /* PBXContainerItemProxy */;
-		};
-		F058D0881DB1527900B19E59 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Mixpanel_watchOS;
-			targetProxy = F058D0871DB1527900B19E59 /* PBXContainerItemProxy */;
-		};
-		F0E732AA1DAEF81000CB4C13 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F0E732A61DAEF81000CB4C13 /* HelloMixpanelWatch Extension */;
-			targetProxy = F0E732A91DAEF81000CB4C13 /* PBXContainerItemProxy */;
-		};
-		F0E732BB1DAEF81100CB4C13 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilter = ios;
-			target = F0E7329A1DAEF81000CB4C13 /* HelloMixpanelWatch */;
-			targetProxy = F0E732BA1DAEF81100CB4C13 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		8613BB772739F21500F8F1FA /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8613BB782739F21500F8F1FA /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+		8613BBD12739F9A100F8F1FA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8613BBD22739F9A100F8F1FA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		E123C4941D1354EC0015B425 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E123C4951D1354EC0015B425 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		F0E7329D1DAEF81000CB4C13 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F0E7329E1DAEF81000CB4C13 /* Base */,
-			);
-			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1509,10 +1901,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.1;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -1560,10 +1949,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.1;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -1613,10 +1999,7 @@
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
@@ -1655,10 +2038,7 @@
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
@@ -1764,10 +2144,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = "HelloMixpanel/HelloMixpanel-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.1;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -1816,10 +2193,7 @@
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Mixpanel",
@@ -1829,6 +2203,1001 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+			};
+			name = AppStore;
+		};
+		8613BBAC2739F21800F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MixpanelWatchDemo WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "MixpanelWatchDemo WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = ExtensionDelegate;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8613BBAD2739F21800F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MixpanelWatchDemo WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "MixpanelWatchDemo WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = ExtensionDelegate;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		8613BBAE2739F21800F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MixpanelWatchDemo WatchKit Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "MixpanelWatchDemo WatchKit Extension";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = ComplicationController;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_WKExtensionDelegateClassName = ExtensionDelegate;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = AppStore;
+		};
+		8613BBB12739F21800F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = MixpanelWatchDemo_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "MixpanelWatchDemo WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8613BBB22739F21800F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = MixpanelWatchDemo_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "MixpanelWatchDemo WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		8613BBB32739F21800F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_MODULE = MixpanelWatchDemo_WatchKit_Extension;
+				INFOPLIST_KEY_CFBundleDisplayName = "MixpanelWatchDemo WatchKit App";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = AppStore;
+		};
+		8613BBB62739F21800F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8613BBB72739F21800F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8613BBB82739F21800F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
+		8613BBBA2739F21800F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MixpanelWatchDemo WatchKit Extension.appex/MixpanelWatchDemo WatchKit Extension";
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8613BBBB2739F21800F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MixpanelWatchDemo WatchKit Extension.appex/MixpanelWatchDemo WatchKit Extension";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		8613BBBC2739F21800F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MixpanelWatchDemo WatchKit Extension.appex/MixpanelWatchDemo WatchKit Extension";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = AppStore;
+		};
+		8613BBBE2739F21800F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "MixpanelWatchDemo WatchKit App";
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8613BBBF2739F21800F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "MixpanelWatchDemo WatchKit App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		8613BBC02739F21800F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelWatchDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "MixpanelWatchDemo WatchKit App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = AppStore;
+		};
+		8613BBEE2739F9A100F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = MixpanelMacDemo/MixpanelMacDemo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		8613BBEF2739F9A100F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = MixpanelMacDemo/MixpanelMacDemo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		8613BBF02739F9A100F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = MixpanelMacDemo/MixpanelMacDemo.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Mixpanel. All rights reserved.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = AppStore;
+		};
+		8613BBF22739F9A100F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MixpanelMacDemo.app/Contents/MacOS/MixpanelMacDemo";
+			};
+			name = Debug;
+		};
+		8613BBF32739F9A100F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MixpanelMacDemo.app/Contents/MacOS/MixpanelMacDemo";
+			};
+			name = Release;
+		};
+		8613BBF42739F9A100F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MixpanelMacDemo.app/Contents/MacOS/MixpanelMacDemo";
+			};
+			name = AppStore;
+		};
+		8613BBF62739F9A100F8F1FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = MixpanelMacDemo;
+			};
+			name = Debug;
+		};
+		8613BBF72739F9A100F8F1FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = MixpanelMacDemo;
+			};
+			name = Release;
+		};
+		8613BBF82739F9A100F8F1FA /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.MixpanelMacDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = MixpanelMacDemo;
 			};
 			name = AppStore;
 		};
@@ -1857,10 +3226,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "HelloMixpanel_tvOS/HelloMixpanel_tvOS-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
@@ -1899,10 +3265,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "HelloMixpanel_tvOS/HelloMixpanel_tvOS-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
@@ -1942,10 +3305,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "HelloMixpanel_tvOS/HelloMixpanel_tvOS-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../Mixpanel",
 					"$(inherited)",
@@ -1995,11 +3355,7 @@
 					"\"$(SRCROOT)/../Mixpanel\"",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2041,11 +3397,7 @@
 					"\"$(SRCROOT)/../Mixpanel\"",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2088,11 +3440,7 @@
 					"\"$(SRCROOT)/../Mixpanel\"",
 				);
 				INFOPLIST_FILE = "HelloMixpanelTests/HelloMixpanelTests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.mixpanel.HelloMixpanel-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2102,242 +3450,6 @@
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 				TV_OS_TEST = 1;
 				VALIDATE_PRODUCT = YES;
-			};
-			name = AppStore;
-		};
-		F0E732BD1DAEF81100CB4C13 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = E8FVX7QLET;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = HelloMixpanelWatch_Extension;
-				INFOPLIST_FILE = HelloMixpanelWatch/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.1;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Debug;
-		};
-		F0E732BE1DAEF81100CB4C13 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = E8FVX7QLET;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = HelloMixpanelWatch_Extension;
-				INFOPLIST_FILE = HelloMixpanelWatch/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.1;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Release;
-		};
-		F0E732BF1DAEF81100CB4C13 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = E8FVX7QLET;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = HelloMixpanelWatch_Extension;
-				INFOPLIST_FILE = HelloMixpanelWatch/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.1;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = AppStore;
-		};
-		F0E732C01DAEF81100CB4C13 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = E8FVX7QLET;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "HelloMixpanelWatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				VALID_ARCHS = "armv7k i386 arm64_32";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Debug;
-		};
-		F0E732C11DAEF81100CB4C13 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = E8FVX7QLET;
-				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "HelloMixpanelWatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7k i386 arm64_32";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Release;
-		};
-		F0E732C21DAEF81100CB4C13 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = E8FVX7QLET;
-				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "HelloMixpanelWatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.1;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mixpanel.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7k i386 arm64_32";
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = AppStore;
 		};
@@ -2374,6 +3486,86 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8613BBAB2739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemo WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBAC2739F21800F8F1FA /* Debug */,
+				8613BBAD2739F21800F8F1FA /* Release */,
+				8613BBAE2739F21800F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBB02739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemo WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBB12739F21800F8F1FA /* Debug */,
+				8613BBB22739F21800F8F1FA /* Release */,
+				8613BBB32739F21800F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBB52739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBB62739F21800F8F1FA /* Debug */,
+				8613BBB72739F21800F8F1FA /* Release */,
+				8613BBB82739F21800F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBB92739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBBA2739F21800F8F1FA /* Debug */,
+				8613BBBB2739F21800F8F1FA /* Release */,
+				8613BBBC2739F21800F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBBD2739F21800F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelWatchDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBBE2739F21800F8F1FA /* Debug */,
+				8613BBBF2739F21800F8F1FA /* Release */,
+				8613BBC02739F21800F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBED2739F9A100F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelMacDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBEE2739F9A100F8F1FA /* Debug */,
+				8613BBEF2739F9A100F8F1FA /* Release */,
+				8613BBF02739F9A100F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBF12739F9A100F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelMacDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBF22739F9A100F8F1FA /* Debug */,
+				8613BBF32739F9A100F8F1FA /* Release */,
+				8613BBF42739F9A100F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8613BBF52739F9A100F8F1FA /* Build configuration list for PBXNativeTarget "MixpanelMacDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8613BBF62739F9A100F8F1FA /* Debug */,
+				8613BBF72739F9A100F8F1FA /* Release */,
+				8613BBF82739F9A100F8F1FA /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E123C4A51D1354EC0015B425 /* Build configuration list for PBXNativeTarget "HelloMixpanel_tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2390,26 +3582,6 @@
 				E123C4AA1D1354EC0015B425 /* Debug */,
 				E123C4AB1D1354EC0015B425 /* Release */,
 				E123C4AC1D1354EC0015B425 /* AppStore */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F0E732C51DAEF81100CB4C13 /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F0E732C01DAEF81100CB4C13 /* Debug */,
-				F0E732C11DAEF81100CB4C13 /* Release */,
-				F0E732C21DAEF81100CB4C13 /* AppStore */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F0E732C71DAEF81100CB4C13 /* Build configuration list for PBXNativeTarget "HelloMixpanelWatch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F0E732BD1DAEF81100CB4C13 /* Debug */,
-				F0E732BE1DAEF81100CB4C13 /* Release */,
-				F0E732BF1DAEF81100CB4C13 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
