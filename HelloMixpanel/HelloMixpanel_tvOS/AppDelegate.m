@@ -15,7 +15,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:nil];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
     
     // Set some super properties, which will be added to every tracked event
