@@ -30,6 +30,7 @@
 
 - (void)tearDown {
     [[LSNocilla sharedInstance] start];
+    [NSThread sleepForTimeInterval:1.0];
     [super tearDown];
 }
 

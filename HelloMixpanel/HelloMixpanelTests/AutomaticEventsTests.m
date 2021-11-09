@@ -43,11 +43,13 @@
 }
 
 - (void)testUpdated {
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
     NSDictionary* infoDict = [NSBundle bundleForClass:[self class]].infoDictionary;
     NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
     NSString* savedVersionValue = [defaults stringForKey:@"MPAppVersion"];
     XCTAssert(appVersionValue == savedVersionValue, @"saved version and current version need to be the same");
+    [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testMultipleInstances {

@@ -17,6 +17,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMPLogger = [[self alloc] init];
+        sharedMPLogger.loggingEnabled = NO;
     });
     return sharedMPLogger;
 }
