@@ -372,34 +372,33 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             self.anonymousId = self.distinctId;
             self.hadPersistedDistinctId = YES;
         }
-        // identify only changes the distinct id if it doesn't match either the existing or the alias;
+        // identify only changes the distinct id if it doesn't match the ID
         // if it's new, blow away the alias as well.
-        if (![distinctId isEqualToString:self.alias]) {
-            if (![distinctId isEqualToString:self.distinctId]) {
-                NSString *oldDistinctId = [self.distinctId copy];
-                self.alias = nil;
-                self.distinctId = distinctId;
-                self.userId = distinctId;
-                [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
-            }
-            if (usePeople) {
-                self.people.distinctId = distinctId;
-                if (self.people.unidentifiedQueue.count > 0) {
-                    for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
-                        r[@"$distinct_id"] = self.distinctId;
-                        @synchronized (self) {
-                            [self.peopleQueue addObject:r];
-                        }
-                    }
-                    @synchronized (self) {
-                        [self.people.unidentifiedQueue removeAllObjects];
-                    }
-                    [self archivePeople];
-                }
-            } else {
-                self.people.distinctId = nil;
-            }
+        if (![distinctId isEqualToString:self.distinctId]) {
+            NSString *oldDistinctId = [self.distinctId copy];
+            self.alias = nil;
+            self.distinctId = distinctId;
+            self.userId = distinctId;
+            [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
         }
+        if (usePeople) {
+            self.people.distinctId = distinctId;
+            if (self.people.unidentifiedQueue.count > 0) {
+                for (NSMutableDictionary *r in self.people.unidentifiedQueue) {
+                    r[@"$distinct_id"] = self.distinctId;
+                    @synchronized (self) {
+                        [self.peopleQueue addObject:r];
+                    }
+                }
+                @synchronized (self) {
+                    [self.people.unidentifiedQueue removeAllObjects];
+                }
+                [self archivePeople];
+            }
+        } else {
+            self.people.distinctId = nil;
+        }
+        
         [self archiveProperties];
     });
 #if MIXPANEL_FLUSH_IMMEDIATELY
