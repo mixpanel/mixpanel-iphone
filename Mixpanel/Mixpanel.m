@@ -1655,7 +1655,18 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     if (![Mixpanel isAppExtension]) {
         CTCarrier *carrier = nil;
         if (@available(iOS 12, *)) {
-            carrier = [[telephonyInfo serviceSubscriberCellularProviders] allValues].firstObject;
+            NSArray *carriers = [[telephonyInfo serviceSubscriberCellularProviders] allValues];
+            // Find the first carrier object that has a non-empty name
+            for (CTCarrier *carrierCandidate in carriers) {
+                if (carrierCandidate.carrierName.length != 0) {
+                    carrier = carrierCandidate;
+                    break;
+                }
+            }
+            // Use the first object as default in case there are no carriers with a name
+            if (carrier == nil) {
+                carrier = carriers.firstObject;
+            }
         } else {
             carrier = [telephonyInfo subscriberCellularProvider];
         }
