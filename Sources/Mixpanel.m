@@ -1370,7 +1370,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
                     break;
                 }
             }
-            // Use the first object as fallback in case there are no carriers with a name
+            // Use the first object as default in case there are no carriers with a name
             if (carrier == nil) {
                 carrier = carriers.firstObject;
             }
