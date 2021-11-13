@@ -2,17 +2,16 @@
 //  MPDB.m
 //  Mixpanel
 //
-//  Created by Jared McFarland on 9/17/21.
-//  Copyright © 2021 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MPDB.h"
 #import "MPLogger.h"
-
+#import <sqlite3.h>
 
 @interface MPDB()
 
-@property (nonatomic, assign) sqlite3 *connection;
+@property (nonatomic) sqlite3 *connection;
 
 @end
 

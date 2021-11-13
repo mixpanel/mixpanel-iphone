@@ -2,8 +2,7 @@
 //  MixpanelPeoplePrivate.h
 //  Mixpanel
 //
-//  Created by Sam Green on 6/16/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 

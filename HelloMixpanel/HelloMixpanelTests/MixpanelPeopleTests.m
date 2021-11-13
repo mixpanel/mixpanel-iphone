@@ -2,8 +2,7 @@
 //  MixpanelPeopleTests.m
 //  HelloMixpanel
 //
-//  Created by Sam Green on 6/15/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MixpanelBaseTests.h"

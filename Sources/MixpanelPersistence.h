@@ -2,8 +2,7 @@
 //  MixpanelPersistence.h
 //  Mixpanel
 //
-//  Created by Jared McFarland on 10/1/21.
-//  Copyright © 2021 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #ifndef MixpanelPersistence_h

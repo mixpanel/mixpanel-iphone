@@ -2,8 +2,7 @@
 //  MixpanelBaseTests.m
 //  HelloMixpanel
 //
-//  Created by Sam Green on 6/15/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import <Nocilla/Nocilla.h>
@@ -135,7 +134,6 @@
 
 - (BOOL)isDateString:(NSString *)dateString equalToDate:(NSDate *)date {
     NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
-    //dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss zzz";
     NSString *dateString2 = [dateFormatter stringFromDate:date];
     return [[dateString2 substringToIndex:19] isEqualToString: [dateString substringToIndex:19]];
     

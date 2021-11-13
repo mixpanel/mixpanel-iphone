@@ -2,8 +2,7 @@
 //  AutomaticEventsTests.m
 //  HelloMixpanel
 //
-//  Created by Yarden Eitan on 4/25/17.
-//  Copyright © 2017 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MixpanelBaseTests.h"

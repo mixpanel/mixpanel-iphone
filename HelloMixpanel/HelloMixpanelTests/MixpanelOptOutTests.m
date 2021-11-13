@@ -2,8 +2,7 @@
 //  MixpanelOptOutTests.m
 //  HelloMixpanelTests
 //
-//  Created by Zihe Jia on 3/15/18.
-//  Copyright © 2018 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MixpanelBaseTests.h"

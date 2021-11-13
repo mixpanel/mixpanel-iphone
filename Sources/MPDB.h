@@ -2,15 +2,10 @@
 //  MPDB.h
 //  Mixpanel
 //
-//  Created by Jared McFarland on 9/17/21.
-//  Copyright © 2021 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
-#ifndef MPDB_h
-#define MPDB_h
-
 #import <Foundation/Foundation.h>
-#import <sqlite3.h>
 
 @interface MPDB : NSObject
 
@@ -27,6 +22,3 @@
 - (NSArray *)readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(BOOL)flag;
 
 @end
-
-
-#endif /* MPDB_h */
