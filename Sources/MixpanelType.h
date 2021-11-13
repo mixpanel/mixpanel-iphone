@@ -2,8 +2,7 @@
 //  MixpanelType.h
 //  Mixpanel
 //
-//  Created by Weizhe Yuan on 9/6/18.
-//  Copyright © 2018 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

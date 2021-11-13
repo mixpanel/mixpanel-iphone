@@ -2,8 +2,7 @@
 //  SessionMetadata.m
 //  Mixpanel
 //
-//  Created by Yarden Eitan on 10/27/17.
-//  Copyright © 2017 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "SessionMetadata.h"

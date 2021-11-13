@@ -2,8 +2,7 @@
 //  MixpanelWatchProperties.h
 //  Mixpanel
 //
-//  Created by Peter Chien on 10/14/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #if defined(MIXPANEL_WATCHOS)

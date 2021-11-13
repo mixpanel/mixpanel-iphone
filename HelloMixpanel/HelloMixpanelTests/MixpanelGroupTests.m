@@ -2,8 +2,7 @@
 //  MixpanelGroupTests.m
 //  HelloMixpanel
 //
-//  Created by Weizhe Yuan on 8/22/18.
-//  Copyright © 2018 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "Mixpanel.h"

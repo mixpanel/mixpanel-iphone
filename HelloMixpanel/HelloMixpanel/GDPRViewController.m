@@ -2,8 +2,7 @@
 //  GDPRViewController.m
 //  HelloMixpanel
 //
-//  Created by Zihe Jia on 4/5/18.
-//  Copyright © 2018 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "GDPRViewController.h"

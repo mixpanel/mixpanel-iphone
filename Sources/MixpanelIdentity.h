@@ -2,8 +2,7 @@
 //  MixpanelIdentity.h
 //  Mixpanel
 //
-//  Created by ZIHE JIA on 10/27/21.
-//  Copyright © 2021 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

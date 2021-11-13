@@ -2,8 +2,7 @@
 //  MixpanelPersistence.m
 //  Mixpanel
 //
-//  Created by Jared McFarland on 10/1/21.
-//  Copyright © 2021 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MixpanelPersistence.h"
@@ -52,12 +51,6 @@ static NSString *const kDefaultKeyUserId = @"MPUserId";
 static NSString *const kDefaultKeyAlias = @"MPAlias";
 static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 
-static NSString *const kMixpanelIdentityDistinctId = @"distinctID";
-static NSString *const kMixpanelIdentityPeopleDistinctId = @"peopleDistinctID";
-static NSString *const kMixpanelIdentityAnonymousId = @"anonymousId";
-static NSString *const kMixpanelIdentityUserId = @"userId";
-static NSString *const kMixpanelIdentityAlias = @"alias";
-static NSString *const kMixpanelIdentityHadPersistedDistinctId = @"hadPersistedDistinctId";
 
 - (instancetype)initWithToken:(NSString *)token {
     self = [super init];
