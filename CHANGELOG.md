@@ -1,5 +1,31 @@
 #
 
+## [v3.9.1](https://github.com/mixpanel/mixpanel-iphone/tree/v3.9.1) (2021-11-14)
+
+**Closed issues:**
+
+- APN settings [\#952](https://github.com/mixpanel/mixpanel-iphone/issues/952)
+
+**Merged pull requests:**
+
+- Carrier name retrieval [\#955](https://github.com/mixpanel/mixpanel-iphone/pull/955)
+- Remove alias check when calling identify [\#954](https://github.com/mixpanel/mixpanel-iphone/pull/954)
+
+## [4.0.0.beta.2](https://github.com/mixpanel/mixpanel-iphone/tree/4.0.0.beta.2) (2021-06-26)
+
+**Closed issues:**
+
+- Realme , iphone [\#946](https://github.com/mixpanel/mixpanel-iphone/issues/946)
+- Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '+\[MPSwizzler [\#937](https://github.com/mixpanel/mixpanel-iphone/issues/937)
+- iOS 13 crashes on `\[MixpanelExceptionHandler sharedHandler\]` [\#872](https://github.com/mixpanel/mixpanel-iphone/issues/872)
+
+**Merged pull requests:**
+
+- Improve README for quick start guide [\#947](https://github.com/mixpanel/mixpanel-iphone/pull/947)
+- remove github actions for uploading Carthage artifact [\#945](https://github.com/mixpanel/mixpanel-iphone/pull/945)
+
+#
+
 ## [v3.8.0](https://github.com/mixpanel/mixpanel-iphone/tree/v3.8.0) (2021-06-15)
 
 **Closed issues:**
@@ -25,6 +51,8 @@
 **Merged pull requests:**
 
 - delete M&E code [\#930](https://github.com/mixpanel/mixpanel-iphone/pull/930)
+
+
 
 
 
