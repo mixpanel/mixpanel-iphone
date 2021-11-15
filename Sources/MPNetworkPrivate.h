@@ -2,8 +2,7 @@
 //  MPNetworkPrivate.h
 //  Mixpanel
 //
-//  Created by Sam Green on 6/17/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MPNetwork.h"
@@ -21,10 +20,6 @@
 + (NSTimeInterval)calculateBackOffTimeFromFailures:(NSUInteger)failureCount;
 + (NSTimeInterval)parseRetryAfterTime:(NSHTTPURLResponse *)response;
 + (BOOL)parseHTTPFailure:(NSHTTPURLResponse *)response withError:(NSError *)error;
-
-+ (NSString *)encodeArrayForAPI:(NSArray *)array;
-+ (NSData *)encodeArrayAsJSONData:(NSArray *)array;
-+ (NSString *)encodeJSONDataAsBase64:(NSData *)data;
 
 + (NSArray<NSURLQueryItem *> *)buildDecideQueryForProperties:(NSDictionary *)properties
                                               withDistinctID:(NSString *)distinctID

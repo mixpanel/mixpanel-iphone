@@ -2,8 +2,7 @@
 //  MPConnectIntegrations.h
 //  Mixpanel
 //
-//  Created by Peter Chien on 10/9/17.
-//  Copyright © 2017 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "Mixpanel.h"

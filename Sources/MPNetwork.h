@@ -2,8 +2,7 @@
 //  MPNetwork.h
 //  Mixpanel
 //
-//  Created by Sam Green on 6/12/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -24,9 +23,9 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
 
 - (instancetype)initWithServerURL:(NSURL *)serverURL mixpanel:(Mixpanel *)mixpanel;
 
-- (void)flushEventQueue:(NSMutableArray *)events;
-- (void)flushPeopleQueue:(NSMutableArray *)people;
-- (void)flushGroupsQueue:(NSMutableArray *)groups;
+- (void)flushEventQueue:(NSArray *)events;
+- (void)flushPeopleQueue:(NSArray *)people;
+- (void)flushGroupsQueue:(NSArray *)groups;
 
 - (void)updateNetworkActivityIndicator:(BOOL)enabled;
 

@@ -2,14 +2,14 @@
 //  MixpanelPrivate.h
 //  Mixpanel
 //
-//  Created by Sam Green on 6/16/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "Mixpanel.h"
 #import "MPNetwork.h"
 #import "SessionMetadata.h"
 #import "MixpanelType.h"
+#import "MixpanelPersistence.h"
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
@@ -30,6 +30,15 @@
 #if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
 #import "MPConnectIntegrations.h"
 #endif
+
+
+// Persistence constants used internally
+static NSString *const PersistenceTypeEvents = @"events";
+static NSString *const PersistenceTypePeople = @"people";
+static NSString *const PersistenceTypeGroups = @"groups";
+
+static BOOL UnIdentifiedFlag = YES;
+static BOOL IdentifiedFlag = NO;
 
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
@@ -59,6 +68,7 @@
 #endif
 
 // re-declare internally as readwrite
+@property (atomic, strong) MixpanelPersistence *persistence;
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, strong) NSMutableDictionary<NSString*, MixpanelGroup*> * cachedGroups;
 @property (atomic, strong) MPNetwork *network;
@@ -71,17 +81,11 @@
 @property (atomic, strong) NSDictionary *superProperties;
 @property (atomic, strong) NSDictionary *automaticProperties;
 @property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic, strong) NSMutableArray *eventsQueue;
-@property (nonatomic, strong) NSMutableArray *peopleQueue;
-@property (nonatomic, strong) NSMutableArray *groupsQueue;
 @property (nonatomic) dispatch_queue_t serialQueue;
-@property (nonatomic) dispatch_queue_t networkQueue;
-@property (nonatomic) dispatch_queue_t archiveQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
 
 @property (nonatomic) BOOL decideResponseCached;
-@property (nonatomic, strong) NSNumber *automaticEventsEnabled;
 
 
 @property (nonatomic, assign) BOOL optOutStatus;
@@ -98,14 +102,8 @@
 
 - (NSString *)deviceModel;
 
-- (void)archivePeople;
 - (NSString *)defaultDistinctId;
 - (void)archive;
-- (NSString *)eventsFilePath;
-- (NSString *)peopleFilePath;
-- (NSString *)groupsFilePath;
-- (NSString *)propertiesFilePath;
-- (NSString *)optOutFilePath;
 
 // for group caching
 - (NSString *)keyForGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID;

@@ -2,8 +2,7 @@
 //  AppDelegate.m
 //  tvOS_Example
 //
-//  Created by Yarden Eitan on 5/31/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 @import Mixpanel;
@@ -15,7 +14,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:nil];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     self.mixpanel.flushInterval = 20; // defaults to 60 seconds
     
     // Set some super properties, which will be added to every tracked event

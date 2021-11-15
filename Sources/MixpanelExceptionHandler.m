@@ -2,8 +2,7 @@
 //  MixpanelExceptionHandler.m
 //  HelloMixpanel
 //
-//  Created by Sam Green on 7/28/15.
-//  Copyright (c) 2015 Mixpanel. All rights reserved.
+//  Copyright (c) Mixpanel. All rights reserved.
 //
 
 #import "MixpanelExceptionHandler.h"
@@ -128,7 +127,7 @@ void MPHandleException(NSException *exception) {
     }
 }
 
-- (void) mp_handleUncaughtException:(NSException *)exception {
+- (void)mp_handleUncaughtException:(NSException *)exception {
     // Archive the values for each Mixpanel instance
     [self.mixpanelInstances enumerateObjectsUsingBlock:^(Mixpanel *instance, NSUInteger idx, BOOL * _Nonnull stop) {
         NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];

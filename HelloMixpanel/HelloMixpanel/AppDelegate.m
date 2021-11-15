@@ -71,9 +71,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     self.bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
-
         NSLog(@"%@ background task %lu cut short", self, (unsigned long)self.bgTask);
-
         [application endBackgroundTask:self.bgTask];
         self.bgTask = UIBackgroundTaskInvalid;
     }];

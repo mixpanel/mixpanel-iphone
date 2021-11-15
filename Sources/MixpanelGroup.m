@@ -2,8 +2,7 @@
 //  MixpanelGroup.m
 //  Mixpanel
 //
-//  Created by Weizhe Yuan on 8/16/18.
-//  Copyright © 2018 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "MixpanelGroup.h"
@@ -92,7 +91,6 @@
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = self.mixpanel;
     
-    const int GroupsQueueMaximumLength = 500;
     if (strongMixpanel) {
         properties = [properties copy];
         dispatch_async(strongMixpanel.serialQueue, ^{
@@ -122,12 +120,7 @@
             }
             
             MPLogInfo(@"%@ queueing group record: %@", strongMixpanel, req);
-            @synchronized(strongMixpanel) {
-                [strongMixpanel.groupsQueue addObject:req];
-                if (strongMixpanel.groupsQueue.count > GroupsQueueMaximumLength) {
-                    [strongMixpanel.groupsQueue removeObjectAtIndex:0];
-                }
-            }
+            [strongMixpanel.persistence saveEntity:req type:PersistenceTypeGroups];
         });
 #if MIXPANEL_FLUSH_IMMEDIATELY
         [strongMixpanel flush];

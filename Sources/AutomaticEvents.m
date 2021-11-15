@@ -2,8 +2,7 @@
 //  AutomaticEvents.m
 //  Mixpanel
 //
-//  Created by Yarden Eitan on 4/18/17.
-//  Copyright © 2017 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "AutomaticEvents.h"
@@ -48,7 +47,7 @@
         [defaults synchronize];
     }
 
-    NSDictionary* infoDict = [NSBundle mainBundle].infoDictionary;
+    NSDictionary* infoDict = [NSBundle bundleForClass:[self class]].infoDictionary;
     if (defaults != nil && infoDict != nil) {
         NSString* appVersionKey = @"MPAppVersion";
         NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
@@ -142,10 +141,10 @@
     NSArray<NSString *> *pathContents = [NSFileManager.defaultManager contentsOfDirectoryAtPath:searchPath error:nil];
     for (NSString *path in pathContents) {
         if ([path hasPrefix:@"mixpanel-"]) {
-            return true;
+            return YES;
         }
     }
-    return false;
+    return NO;
 }
 
 @end

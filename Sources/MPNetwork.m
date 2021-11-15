@@ -2,8 +2,7 @@
 //  MPNetwork.m
 //  Mixpanel
 //
-//  Created by Sam Green on 6/12/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import "Mixpanel.h"
@@ -11,6 +10,7 @@
 #import "MPLogger.h"
 #import "MPNetwork.h"
 #import "MPNetworkPrivate.h"
+#import "MPJSONHander.h"
 #if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
 #endif
@@ -49,48 +49,22 @@ static const NSUInteger kBatchSize = 50;
 }
 
 #pragma mark - Flush
-- (void)flushEventQueue:(NSMutableArray *)events
+- (void)flushEventQueue:(NSArray *)events
 {
-    NSMutableArray *automaticEventsQueue;
-    @synchronized (self.mixpanel) {
-        automaticEventsQueue = [self orderAutomaticEvents:events];
-    }
-    [self flushQueue:events endpoint:MPNetworkEndpointTrack];
-    @synchronized (self.mixpanel) {
-        if (automaticEventsQueue) {
-            [events addObjectsFromArray:automaticEventsQueue];
-        }
-    }
+    [self flushQueue:events endpoint:MPNetworkEndpointTrack persistenceType:PersistenceTypeEvents];
 }
 
-- (NSMutableArray *)orderAutomaticEvents:(NSMutableArray *)events
+- (void)flushPeopleQueue:(NSArray *)people
 {
-    if (self.mixpanel.automaticEventsEnabled == nil || !self.mixpanel.automaticEventsEnabled.boolValue) {
-        NSMutableArray *discardedItems = [NSMutableArray array];
-        for (NSDictionary *e in events) {
-            if ([e[@"event"] hasPrefix:@"$ae_"]) {
-                [discardedItems addObject:e];
-            }
-        }
-        [events removeObjectsInArray:discardedItems];
-        if (self.mixpanel.automaticEventsEnabled == nil) {
-            return discardedItems;
-        }
-    }
-    return nil;
-}
-
-- (void)flushPeopleQueue:(NSMutableArray *)people
-{
-    [self flushQueue:people endpoint:MPNetworkEndpointEngage];
+    [self flushQueue:people endpoint:MPNetworkEndpointEngage persistenceType:PersistenceTypePeople];
 }
 
 - (void)flushGroupsQueue:(NSMutableArray *)groups
 {
-    [self flushQueue:groups endpoint:MPNetworkEndpointGroups];
+    [self flushQueue:groups endpoint:MPNetworkEndpointGroups persistenceType:PersistenceTypeGroups];
 }
 
-- (void)flushQueue:(NSMutableArray *)queue endpoint:(MPNetworkEndpoint)endpoint
+- (void)flushQueue:(NSArray *)queue endpoint:(MPNetworkEndpoint)endpoint persistenceType:(NSString *)persistenceType
 {
     if ([[NSDate date] timeIntervalSince1970] < self.requestsDisabledUntilTime) {
         MPLogDebug(@"Attempted to flush to %lu, when we still have a timeout. Ignoring flush.", endpoint);
@@ -99,16 +73,18 @@ static const NSUInteger kBatchSize = 50;
 
     NSMutableArray *queueCopyForFlushing;
 
-    Mixpanel *mixpanel = self.mixpanel;
-    @synchronized (mixpanel) {
-        queueCopyForFlushing = [queue mutableCopy];
-    }
+    queueCopyForFlushing = [queue mutableCopy];
     
     while (queueCopyForFlushing.count > 0) {
         NSUInteger batchSize = MIN(queueCopyForFlushing.count, kBatchSize);
         NSArray *batch = [queueCopyForFlushing subarrayWithRange:NSMakeRange(0, batchSize)];
+
+        NSMutableArray *ids = [NSMutableArray new];
+        [batch enumerateObjectsUsingBlock:^(NSDictionary *entity, NSUInteger idx, BOOL * _Nonnull stop) {
+            [ids addObject:entity[@"id"]];
+        }];
         
-        NSString *requestData = [MPNetwork encodeArrayForAPI:batch];
+        NSString *requestData = [MPJSONHandler encodedJSONString:batch];
         NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queueCopyForFlushing.count, endpoint, queueCopyForFlushing);
         NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint andBody:postBody];
@@ -141,18 +117,17 @@ static const NSUInteger kBatchSize = 50;
         if (didFail) {
             break;
         }
+        [self removeProcessedBatch:batch queue:queueCopyForFlushing];
+        [self.mixpanel.persistence removeEntitiesInBatch:persistenceType ids:ids];
+    }
+}
 
-        @synchronized (mixpanel) {
-            for (NSDictionary *event in batch) {
-                NSUInteger index = [queueCopyForFlushing indexOfObjectIdenticalTo:event];
-                if (index != NSNotFound) {
-                    [queueCopyForFlushing removeObjectAtIndex:index];
-                }
-                index = [queue indexOfObjectIdenticalTo:event];
-                if (index != NSNotFound) {
-                    [queue removeObjectAtIndex:index];
-                }
-            }
+- (void)removeProcessedBatch:(NSArray *)batch queue:(NSMutableArray *)queue
+{
+    for (NSDictionary *event in batch) {
+        NSUInteger index = [queue indexOfObjectIdenticalTo:event];
+        if (index != NSNotFound) {
+            [queue removeObjectAtIndex:index];
         }
     }
 }
@@ -265,98 +240,6 @@ static const NSUInteger kBatchSize = 50;
     MPLogDebug(@"%@ http request: %@?%@", self, request, body);
     
     return [request copy];
-}
-
-+ (NSString *)encodeArrayForAPI:(NSArray *)array {
-    NSData *data = [MPNetwork encodeArrayAsJSONData:array];
-    return [MPNetwork encodeJSONDataAsBase64:data];
-}
-
-+ (NSData *)encodeArrayAsJSONData:(NSArray *)array {
-    NSError *error = NULL;
-    NSData *data = nil;
-    @try {
-        data = [NSJSONSerialization dataWithJSONObject:[self convertFoundationTypesToJSON:array]
-                                               options:(NSJSONWritingOptions)0
-                                                 error:&error];
-    }
-    @catch (NSException *exception) {
-        MPLogError(@"exception encoding api data: %@", exception);
-    }
-    
-    if (error) {
-        MPLogError(@"error encoding api data: %@", error);
-    }
-    
-    return data;
-}
-
-+ (NSString *)encodeJSONDataAsBase64:(NSData *)data {
-    return [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-}
-
-+ (id)convertFoundationTypesToJSON:(id)obj {
-    // check if the NSString is a valid UTF-8 string
-    if ([obj isKindOfClass:NSString.class]) {
-        obj = (NSString *)obj;
-        if ([obj UTF8String] == nil) {
-            // not a valid UTF-8 string
-            // we will use the replacement char '\uFFFD' to prevent nil and crash
-            obj = @"\ufffd";
-            MPLogWarning(@"property value got invalid UTF-8 string");
-        }
-        return obj;
-    }
-    // valid json types
-    if ([obj isKindOfClass:NSNumber.class] || [obj isKindOfClass:NSNull.class]) {
-        return obj;
-    }
-    
-    if ([obj isKindOfClass:NSDate.class]) {
-        return [[self dateFormatter] stringFromDate:obj];
-    } else if ([obj isKindOfClass:NSURL.class]) {
-        return [obj absoluteString];
-    }
-    
-    // recurse on containers
-    if ([obj isKindOfClass:NSArray.class]) {
-        NSMutableArray *a = [NSMutableArray array];
-        for (id i in obj) {
-            [a addObject:[self convertFoundationTypesToJSON:i]];
-        }
-        return [NSArray arrayWithArray:a];
-    }
-    
-    if ([obj isKindOfClass:NSDictionary.class]) {
-        NSMutableDictionary *d = [NSMutableDictionary dictionary];
-        for (id key in obj) {
-            NSString *stringKey = key;
-            if (![key isKindOfClass:[NSString class]]) {
-                stringKey = [key description];
-                MPLogWarning(@"%@ property keys should be strings. got: %@. coercing to: %@", self, [key class], stringKey);
-            }
-            id v = [self convertFoundationTypesToJSON:obj[key]];
-            d[stringKey] = v;
-        }
-        return [NSDictionary dictionaryWithDictionary:d];
-    }
-    
-    // default to sending the object's description
-    NSString *s = [obj description];
-    MPLogWarning(@"%@ property values should be valid json types. got: %@. coercing to: %@", self, [obj class], s);
-    return s;
-}
-
-+ (NSDateFormatter *)dateFormatter {
-    static NSDateFormatter *formatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-        formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    });
-    return formatter;
 }
 
 + (NSTimeInterval)calculateBackOffTimeFromFailures:(NSUInteger)failureCount {
