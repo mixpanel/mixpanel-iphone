@@ -361,7 +361,11 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
         if (@available(iOS 11, macOS 10.13, tvOS 11, watchOS 4, *)) {
             NSError *error = nil;
             NSData *data = [NSData dataWithContentsOfFile:filePath];
-            unarchivedData = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSObject class] fromData:data error:&error];
+            unarchivedData = [NSKeyedUnarchiver unarchivedObjectOfClasses:
+                              [NSSet setWithArray:@[[NSArray class], [NSDictionary class],
+                                                    [NSString class], [NSDate class], [NSURL class],
+                                                    [NSNumber class], [NSNull class]]]
+                                                                 fromData:data error:&error];
             if (error) {
                 MPLogError(@"%@ got error while unarchiving data in %@: %@", self, filePath, error);
             }
