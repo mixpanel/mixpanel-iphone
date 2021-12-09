@@ -145,6 +145,8 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+        NSString *networkLabel = [label stringByAppendingString:@".network"];
+        self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
         self.sessionMetadata = [[SessionMetadata alloc] init];
         self.network = [[MPNetwork alloc] initWithServerURL:[NSURL URLWithString:self.serverURL] mixpanel:self];
         self.people = [[MixpanelPeople alloc] initWithMixpanel:self];
@@ -902,17 +904,20 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         NSArray *peopleQueue = [self.persistence loadEntitiesInBatch:PersistenceTypePeople];
         NSArray *groupsQueue = [self.persistence loadEntitiesInBatch:PersistenceTypeGroups];
         
-        [self.network flushEventQueue:eventQueue];
-        [self.network flushPeopleQueue:peopleQueue];
-        [self.network flushGroupsQueue:groupsQueue];
-        
-        if (handler) {
-            dispatch_async(dispatch_get_main_queue(), handler);
-        }
+        dispatch_async(self.networkQueue, ^{
+            [self.network flushEventQueue:eventQueue];
+            [self.network flushPeopleQueue:peopleQueue];
+            [self.network flushGroupsQueue:groupsQueue];
+            
+            if (handler) {
+                dispatch_async(dispatch_get_main_queue(), handler);
+            }
 
-        MPLogInfo(@"%@ flush complete", self);
+            MPLogInfo(@"%@ flush complete", self);
+        });
     });
 }
+
 
 #pragma mark - Persistence
 - (NSString *)filePathFor:(NSString *)data
@@ -1156,10 +1161,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
         // Application lifecycle events
         [notificationCenter addObserver:self
-                               selector:@selector(applicationWillTerminate:)
-                                   name:UIApplicationWillTerminateNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
                                selector:@selector(applicationWillResignActive:)
                                    name:UIApplicationWillResignActiveNotification
                                  object:nil];
@@ -1184,10 +1185,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // Application lifecycle events
-    [notificationCenter addObserver:self
-                           selector:@selector(applicationWillTerminate:)
-                               name:NSApplicationWillTerminateNotification
-                             object:nil];
     [notificationCenter addObserver:self
                            selector:@selector(applicationWillResignActive:)
                                name:NSApplicationWillResignActiveNotification
@@ -1256,14 +1253,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 #endif
 }
 
-- (void)applicationWillTerminate:(NSNotification *)notification
-{
-    MPLogInfo(@"%@ application will terminate", self);
-    dispatch_async(self.serialQueue, ^{
-        [self archive];
-    });
-}
-
 #if !defined(MIXPANEL_MACOS)
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
@@ -1307,13 +1296,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         [self flushWithCompletion:^{
             dispatch_group_leave(bgGroup);
         }];
-    } else {
-        // only need to archive if don't flush because flush archives at the end
-        dispatch_async(self.serialQueue, ^{
-            [self archive];
-        });
     }
-
     dispatch_group_notify(bgGroup, dispatch_get_main_queue(), ^{
         MPLogInfo(@"%@ ending background cleanup task %lu", self, (unsigned long)self.taskId);
         if (self.taskId != UIBackgroundTaskInvalid) {

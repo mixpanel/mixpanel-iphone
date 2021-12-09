@@ -118,7 +118,9 @@ static const NSUInteger kBatchSize = 50;
             break;
         }
         [self removeProcessedBatch:batch queue:queueCopyForFlushing];
-        [self.mixpanel.persistence removeEntitiesInBatch:persistenceType ids:ids];
+        dispatch_async(self.mixpanel.serialQueue, ^{
+            [self.mixpanel.persistence removeEntitiesInBatch:persistenceType ids:ids];
+        });
     }
 }
 
