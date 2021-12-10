@@ -75,10 +75,14 @@
 
 - (void)waitForMixpanelQueues:(Mixpanel *)mixpanel {
     dispatch_sync(mixpanel.serialQueue, ^{
-        return;
+        dispatch_sync(mixpanel.networkQueue, ^{
+            return;
+        });
     });
     dispatch_sync(mixpanel.serialQueue, ^{
-        return;
+        dispatch_sync(mixpanel.networkQueue, ^{
+            return;
+        });
     });
 }
 

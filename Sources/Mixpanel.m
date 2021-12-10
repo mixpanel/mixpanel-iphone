@@ -166,9 +166,6 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             self.automaticEvents.delegate = self;
             [self.automaticEvents initializeEvents:self.people];
 #endif
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-        self.connectIntegrations = [[MPConnectIntegrations alloc] initWithMixpanel:self];
-#endif
         }
         instances[apiToken] = self;
     }
@@ -773,9 +770,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         self.cachedGroups = [NSMutableDictionary dictionary];
         self.timedEvents = [NSMutableDictionary dictionary];
         self.decideResponseCached = NO;
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-        [self.connectIntegrations reset];
-#endif
         [self.persistence resetEntities];
         [self archive];
     });
@@ -1392,13 +1386,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 if (rawAutomaticEvents != nil && [rawAutomaticEvents isKindOfClass:[NSNumber class]]) {
                     [MixpanelPersistence saveAutomaticEventsEnabledFlag:[rawAutomaticEvents boolValue] fromDecide:YES apiToken:self.apiToken];
                 }
-
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-                id integrations = object[@"integrations"];
-                if ([integrations isKindOfClass:[NSArray class]]) {
-                    [self.connectIntegrations setupIntegrations:integrations];
-                }
-#endif
 
                 @synchronized (self) {
                     self.decideResponseCached = YES;
