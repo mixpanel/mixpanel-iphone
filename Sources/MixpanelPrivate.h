@@ -82,6 +82,7 @@ static BOOL IdentifiedFlag = NO;
 @property (atomic, strong) NSDictionary *automaticProperties;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic) dispatch_queue_t serialQueue;
+@property (nonatomic) dispatch_queue_t networkQueue;
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
 
