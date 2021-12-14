@@ -10,6 +10,8 @@
 
 - Remove integrations code for braze and airship [\#962](https://github.com/mixpanel/mixpanel-iphone/pull/962)
 
+From this version, Mixpanel SDK no longer sets property $braze_external_id and $ios_urban_airship_channel_id automatically. Please refer to this doc for the integration setup guide if you need to export Mixpanel Cohorts to Braze or Airship.
+
 ## [v4.0.0.beta.4](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.beta.4) (2021-12-13)
 
 **Closed issues:**
