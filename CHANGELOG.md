@@ -1,5 +1,41 @@
 #
 
+## [v3.9.2](https://github.com/mixpanel/mixpanel-iphone/tree/v3.9.2) (2021-12-14)
+
+**Closed issues:**
+
+- Remove vulnerable NSCoding [\#908](https://github.com/mixpanel/mixpanel-iphone/issues/908)
+
+**Merged pull requests:**
+
+- Remove integrations code for braze and airship [\#962](https://github.com/mixpanel/mixpanel-iphone/pull/962)
+
+## [v4.0.0.beta.4](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.beta.4) (2021-12-13)
+
+**Closed issues:**
+
+- Crash in connectToABTestDesigner [\#959](https://github.com/mixpanel/mixpanel-iphone/issues/959)
+- Crash in \[Mixpanel unarchiveFromFile:asClass:\] [\#958](https://github.com/mixpanel/mixpanel-iphone/issues/958)
+- 3.9.x build failure on Mac Catalyst due to MPFree deprecation [\#957](https://github.com/mixpanel/mixpanel-iphone/issues/957)
+- Feature: Ability to import tracked events older than five days [\#712](https://github.com/mixpanel/mixpanel-iphone/issues/712)
+
+**Merged pull requests:**
+
+- Add network queue for network request [\#961](https://github.com/mixpanel/mixpanel-iphone/pull/961)
+- Add NSSecureCoding allowed classes to avoid warning [\#956](https://github.com/mixpanel/mixpanel-iphone/pull/956)
+
+## [v4.0.0.beta.3](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.beta.3) (2021-11-15)
+
+**Closed issues:**
+
+- $carrier property can be reported as `nil` when there is multiple SIMs support [\#949](https://github.com/mixpanel/mixpanel-iphone/issues/949)
+
+**Merged pull requests:**
+
+- Replace NSKeyedArchiver with SQLite for offline tracking [\#953](https://github.com/mixpanel/mixpanel-iphone/pull/953)
+
+#
+
 ## [v3.9.1](https://github.com/mixpanel/mixpanel-iphone/tree/v3.9.1) (2021-11-14)
 
 **Closed issues:**
@@ -51,6 +87,8 @@
 **Merged pull requests:**
 
 - delete M&E code [\#930](https://github.com/mixpanel/mixpanel-iphone/pull/930)
+
+
 
 
 
