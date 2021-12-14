@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['OS=14.4,name="iPhone 11"']
+        destination: ['OS=15.0,name="iPhone 11"']
         scheme: ['"[iOS] HelloMixpanel"']
 
     steps:

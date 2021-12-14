@@ -46,9 +46,6 @@
 #import "MPNotification.h"
 #endif
 
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-#import "MPConnectIntegrations.h"
-#endif
 
 #if defined(MIXPANEL_NO_NOTIFICATION_AB_TEST_SUPPORT) && defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
@@ -79,10 +76,6 @@
 @property (nonatomic) NSUInteger validationEventCount;
 @property (nonatomic, getter=isValidationEnabled) BOOL validationEnabled;
 @property (atomic, strong) AutomaticEvents *automaticEvents;
-#endif
-
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-@property (nonatomic, strong) MPConnectIntegrations *connectIntegrations;
 #endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
