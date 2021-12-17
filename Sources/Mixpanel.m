@@ -1393,13 +1393,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                     [MixpanelPersistence saveAutomaticEventsEnabledFlag:[rawAutomaticEvents boolValue] fromDecide:YES apiToken:self.apiToken];
                 }
 
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-                id integrations = object[@"integrations"];
-                if ([integrations isKindOfClass:[NSArray class]]) {
-                    [self.connectIntegrations setupIntegrations:integrations];
-                }
-#endif
-
                 @synchronized (self) {
                     self.decideResponseCached = YES;
                 }

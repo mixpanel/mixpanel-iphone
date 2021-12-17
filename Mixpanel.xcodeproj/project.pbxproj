@@ -140,6 +140,38 @@
 		E1F160D91E68AC5A00391AE3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F160D81E68AC5A00391AE3 /* Cocoa.framework */; };
 		E1F160DB1E68AC5E00391AE3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F160DA1E68AC5E00391AE3 /* Foundation.framework */; };
 		E1F1615D1E68B87500391AE3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F1615C1E68B87500391AE3 /* IOKit.framework */; };
+		E1F161841E68C4AE00391AE3 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1F161851E68C4B700391AE3 /* MixpanelPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54901D131EC800407F56 /* MixpanelPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F161861E68C4B700391AE3 /* MixpanelPeoplePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54931D131F4F00407F56 /* MixpanelPeoplePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F161871E68C4BC00391AE3 /* MPNetworkPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F1618A1E68C52B00391AE3 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1F1618B1E68C55800391AE3 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1F1618C1E68C55B00391AE3 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1F1618D1E68C55E00391AE3 /* MixpanelPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54901D131EC800407F56 /* MixpanelPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F1618E1E68C56100391AE3 /* MixpanelPeoplePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54931D131F4F00407F56 /* MixpanelPeoplePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F1618F1E68C56300391AE3 /* MPNetworkPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F161951E68C58700391AE3 /* Mixpanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1F161961E68C58B00391AE3 /* MixpanelPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54901D131EC800407F56 /* MixpanelPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F161971E68C59400391AE3 /* MixpanelPeoplePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C54931D131F4F00407F56 /* MixpanelPeoplePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F161981E68C59600391AE3 /* MPNetworkPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E1F161991E68C59900391AE3 /* MixpanelPeople.h in Headers */ = {isa = PBXBuildFile; fileRef = 519C548A1D131E6500407F56 /* MixpanelPeople.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F083566F1DB1AF72000A610C /* MixpanelWatchProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */; };
+		F08356711DB1AF72000A610C /* MixpanelWatchProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */; };
+		F0B0E7AB1F05B8CA00F0FF08 /* NSThread+MPHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */; };
+		F0B0E7AC1F05B8CA00F0FF08 /* NSThread+MPHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */; };
+		F0F179F61DB6CA12003DFD43 /* MPLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C170C7F1A4A035F00D9E0F2 /* MPLogger.h */; };
+		F0FA7A6C1DB014B500AA8006 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */; };
+		F0FA7A711DB020E800AA8006 /* MPNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 517ABB691D14AD6F00FF8061 /* MPNetwork.m */; };
+		F0FA7A731DB020FB00AA8006 /* MixpanelPeople.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C548B1D131E6500407F56 /* MixpanelPeople.m */; };
+		F11A5B091E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */; };
+		F11A5B0A1E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */; };
+		F11A5B0B1E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */; };
+		F13874C41E38326400808C36 /* MPTakeoverNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = F13874C21E38326400808C36 /* MPTakeoverNotification.h */; };
+		F13874C51E38326400808C36 /* MPTakeoverNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = F13874C31E38326400808C36 /* MPTakeoverNotification.m */; };
+		F13874C81E38327100808C36 /* MPMiniNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = F13874C61E38327100808C36 /* MPMiniNotification.h */; };
+		F13874C91E38327100808C36 /* MPMiniNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = F13874C71E38327100808C36 /* MPMiniNotification.m */; };
+		F17EB3531E393FD40002739C /* MPNotificationButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F17EB3511E393FD40002739C /* MPNotificationButton.h */; };
+		F17EB3541E393FD40002739C /* MPNotificationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F17EB3521E393FD40002739C /* MPNotificationButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -260,6 +292,19 @@
 		E1F160D81E68AC5A00391AE3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		E1F160DA1E68AC5E00391AE3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		E1F1615C1E68B87500391AE3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		F083566C1DB1AF72000A610C /* MixpanelWatchProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixpanelWatchProperties.h; sourceTree = "<group>"; };
+		F083566D1DB1AF72000A610C /* MixpanelWatchProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelWatchProperties.m; sourceTree = "<group>"; };
+		F0B0E7A91F05B8CA00F0FF08 /* NSThread+MPHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSThread+MPHelpers.h"; sourceTree = "<group>"; };
+		F0B0E7AA1F05B8CA00F0FF08 /* NSThread+MPHelpers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSThread+MPHelpers.m"; sourceTree = "<group>"; };
+		F11A5B051E3A915C004F750B /* MPTakeoverNotificationViewController~iphoneportrait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphoneportrait.xib"; sourceTree = "<group>"; };
+		F11A5B061E3A915C004F750B /* MPTakeoverNotificationViewController~iphonelandscape.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~iphonelandscape.xib"; sourceTree = "<group>"; };
+		F11A5B071E3A915C004F750B /* MPTakeoverNotificationViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MPTakeoverNotificationViewController~ipad.xib"; sourceTree = "<group>"; };
+		F13874C21E38326400808C36 /* MPTakeoverNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPTakeoverNotification.h; sourceTree = "<group>"; };
+		F13874C31E38326400808C36 /* MPTakeoverNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPTakeoverNotification.m; sourceTree = "<group>"; };
+		F13874C61E38327100808C36 /* MPMiniNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPMiniNotification.h; sourceTree = "<group>"; };
+		F13874C71E38327100808C36 /* MPMiniNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPMiniNotification.m; sourceTree = "<group>"; };
+		F17EB3511E393FD40002739C /* MPNotificationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPNotificationButton.h; sourceTree = "<group>"; };
+		F17EB3521E393FD40002739C /* MPNotificationButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNotificationButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,6 +415,40 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
+		};
+		7C170C461A4A035F00D9E0F2 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				457CA1FE21419B25003B3862 /* MixpanelType.h */,
+				457CA20021419DC0003B3862 /* MixpanelType.m */,
+				45CFBB74212CBD7500987003 /* MixpanelGroupPrivate.h */,
+				7C170C4B1A4A035F00D9E0F2 /* Mixpanel.h */,
+				519C54901D131EC800407F56 /* MixpanelPrivate.h */,
+				7C170C4C1A4A035F00D9E0F2 /* Mixpanel.m */,
+				519C54931D131F4F00407F56 /* MixpanelPeoplePrivate.h */,
+				519C548A1D131E6500407F56 /* MixpanelPeople.h */,
+				519C548B1D131E6500407F56 /* MixpanelPeople.m */,
+				517ABB681D14AD6F00FF8061 /* MPNetwork.h */,
+				517ABB721D14B87C00FF8061 /* MPNetworkPrivate.h */,
+				517ABB691D14AD6F00FF8061 /* MPNetwork.m */,
+				514733BB1CD7CCDB0098B23A /* MPResources.h */,
+				514733BC1CD7CCDB0098B23A /* MPResources.m */,
+				457FD20A212646C800AC3C79 /* MixpanelGroup.h */,
+				457FD2082126468300AC3C79 /* MixpanelGroup.m */,
+				E1ECD0181FA3AF40002104E8 /* SessionMetadata.h */,
+				515B5A1A1CB6FC4000A34060 /* Designer Support */,
+				515B5A151CB6FBA500A34060 /* Notifications */,
+				51C3B22F1CA5B2A2004CE37C /* AT */,
+				515B5A181CB6FC0C00A34060 /* Categories */,
+				5166DCEA1CAF162000920FF1 /* watchOS */,
+				E12CE4331EA68A1E0023AA2D /* Automatic Events */,
+				E12CE4341EA68A3C0023AA2D /* AutomaticEvents.h */,
+				E12CE4351EA68A3C0023AA2D /* AutomaticEvents.m */,
+				E1ECD0191FA3AF40002104E8 /* SessionMetadata.m */,
+			);
+			name = Source;
+			path = Mixpanel;
+			sourceTree = SOURCE_ROOT;
 		};
 		7C170D511A4A060300D9E0F2 /* Frameworks */ = {
 			isa = PBXGroup;
