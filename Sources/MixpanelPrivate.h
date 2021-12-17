@@ -27,11 +27,6 @@
 #endif
 
 
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-#import "MPConnectIntegrations.h"
-#endif
-
-
 // Persistence constants used internally
 static NSString *const PersistenceTypeEvents = @"events";
 static NSString *const PersistenceTypePeople = @"people";
@@ -57,10 +52,6 @@ static BOOL IdentifiedFlag = NO;
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
 @property (atomic, strong) AutomaticEvents *automaticEvents;
-#endif
-
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-@property (nonatomic, strong) MPConnectIntegrations *connectIntegrations;
 #endif
 
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)

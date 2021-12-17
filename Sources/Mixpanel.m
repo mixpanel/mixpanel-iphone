@@ -166,9 +166,6 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             self.automaticEvents.delegate = self;
             [self.automaticEvents initializeEvents:self.people];
 #endif
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-        self.connectIntegrations = [[MPConnectIntegrations alloc] initWithMixpanel:self];
-#endif
         }
         instances[apiToken] = self;
     }
@@ -773,9 +770,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         self.cachedGroups = [NSMutableDictionary dictionary];
         self.timedEvents = [NSMutableDictionary dictionary];
         self.decideResponseCached = NO;
-#if !MIXPANEL_NO_CONNECT_INTEGRATION_SUPPORT
-        [self.connectIntegrations reset];
-#endif
         [self.persistence resetEntities];
         [self archive];
     });
