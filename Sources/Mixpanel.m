@@ -1335,7 +1335,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 - (void)checkForDecideResponse
 {
-    dispatch_async(self.serialQueue, ^{
+    dispatch_async(self.networkQueue, ^{
         __block BOOL hadError = NO;
 
         BOOL decideResponseCached;
