@@ -244,15 +244,13 @@
 }
 
 - (void)testHadPersistedDistinctId {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    NSString *randomTokenId = [self randomTokenId];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
     // stub needed because reset flushes
     NSString *distinctIdBeforeidentify = testMixpanel.distinctId;
-
-    testMixpanel.anonymousId = nil;
-    testMixpanel.userId = nil;
-    testMixpanel.hadPersistedDistinctId = false;
-
-    [testMixpanel archive];
+    
+    Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
+    XCTAssertEqualObjects(testMixpanel2.distinctId, distinctIdBeforeidentify, @"mixpanel anonymous distinct id should not be changed for each init");
 
     NSString *distinctId = @"d1";
 

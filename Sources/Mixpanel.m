@@ -949,8 +949,9 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     if (!self.distinctId) {
         self.distinctId = [self defaultDistinctId];
         self.anonymousId = self.distinctId;
-        self.hadPersistedDistinctId = NO;
+        self.hadPersistedDistinctId = YES;
         self.userId = nil;
+        [MixpanelPersistence saveIdentity:[self currentMixpanelIdentity] apiToken:self.apiToken];
     }
 }
 
