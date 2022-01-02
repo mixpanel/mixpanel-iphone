@@ -2,13 +2,13 @@
 //  MPNetworkTests.m
 //  HelloMixpanel
 //
-//  Created by Sam Green on 6/12/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
 #import "MPNetwork.h"
 #import "MPNetworkPrivate.h"
+#import "MPJSONHander.h"
 
 @interface MPNetworkTests : XCTestCase
 
@@ -117,17 +117,11 @@
 //
 // Encoding JSON strings to Base64 should match our expectations
 //
-- (void)testEncodeBase64 {
-    NSString *eventsJSON = @"[{\"name\":\"test\"}]";
-    NSData *eventsData = [eventsJSON dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *base64 = [MPNetwork encodeJSONDataAsBase64:eventsData];
-    XCTAssert([base64 isEqualToString:@"W3sibmFtZSI6InRlc3QifV0="], @"Base64 encoding failed.");
-}
 
 - (void)testDateEncodingFromJSON {
     NSDate *fixedDate = [NSDate dateWithTimeIntervalSince1970:1400000000];
     NSArray *a = @[ @{ @"event": @"an event", @"properties": @{ @"eventdate": fixedDate } } ];
-    NSString *json = [[NSString alloc] initWithData:[MPNetwork encodeArrayAsJSONData:a]
+    NSString *json = [[NSString alloc] initWithData:[MPJSONHandler encodedJSONData:a]
                                            encoding:NSUTF8StringEncoding];
     XCTAssert([json rangeOfString:@"\"eventdate\":\"2014-05-13T16:53:20.000Z\""].location != NSNotFound);
 }
@@ -137,7 +131,7 @@
 //
 - (void)testEncodeJSON {
     NSArray *events = @[ @{ @"name": @"test" } ];
-    NSData *data = [MPNetwork encodeArrayAsJSONData:events];
+    NSData *data = [MPJSONHandler encodedJSONData:events];
     NSString *eventsJSON = @"[{\"name\":\"test\"}]";
     XCTAssertEqualObjects(data, [eventsJSON dataUsingEncoding:NSUTF8StringEncoding], @"Encoded JSON data did "
                           "not match the specification");
@@ -150,7 +144,7 @@
     NSString *utf8String = @"🇹🇲🇧🇹🇨🇫";
     NSString *corruptedString = [utf8String substringToIndex:1];
     NSArray *events = @[@{ @"corruptedString": corruptedString, @"utf8String": utf8String}];
-    NSData *data = [MPNetwork encodeArrayAsJSONData:events];
+    NSData *data = [MPJSONHandler encodedJSONData:events];
     XCTAssert(data != nil, @"Encode JSON data should not crash and return nil result");
 }
 
@@ -159,8 +153,8 @@
 //
 - (void)testEncodeAPI {
     NSArray *events = @[ @{ @"name": @"test" } ];
-    NSString *base64 = [MPNetwork encodeArrayForAPI:events];
-    XCTAssert([base64 isEqualToString:@"W3sibmFtZSI6InRlc3QifV0="], @"API encoding failed.");
+    NSString *encodedString = [MPJSONHandler encodedJSONString:events];
+    XCTAssert([encodedString isEqualToString:@"[{\"name\":\"test\"}]"], @"API encoding failed.");
 }
 
 #pragma mark - HTTP Parsing

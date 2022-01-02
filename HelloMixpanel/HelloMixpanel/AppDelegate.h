@@ -1,10 +1,10 @@
 #import <UIKit/UIKit.h>
-#import <UserNotifications/UserNotifications.h>
+
 @import Mixpanel;
 
 @class ViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, MixpanelDelegate, UNUserNotificationCenterDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, MixpanelDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

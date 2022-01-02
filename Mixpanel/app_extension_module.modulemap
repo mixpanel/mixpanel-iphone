@@ -1,7 +1,0 @@
-framework module MixpanelAppExtension {
-    header "Mixpanel.h"
-    header "MixpanelPeople.h"
-    header "MixpanelType.h"
-    header "MPNotificationServiceExtension.h"
-    export *
-}

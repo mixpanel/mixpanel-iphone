@@ -2,9 +2,9 @@ name: Mixpanel ObjC SDK action
 
 on:
   push:
-    branches: [ master, 4.0.0.beta ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, 4.0.0.beta ]
+    branches: [ master ]
 
 jobs:
   build:

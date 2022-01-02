@@ -6,14 +6,9 @@
 @property (nonatomic, weak) IBOutlet UISegmentedControl *genderControl;
 @property (nonatomic, weak) IBOutlet UISegmentedControl *weaponControl;
 @property (nonatomic, weak) IBOutlet UIImageView *fakeBackground;
-@property (nonatomic, weak) IBOutlet UITextField *notificationIDField;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, strong) IBOutlet UISegmentedControl *notificationTypeControl;
 @property (nonatomic, strong) IBOutlet UILabel *pointsLabel;
 @property (nonatomic, strong) IBOutlet UILabel *textLabel;
-
-
-@property (nonatomic, copy) NSString *showNotificationType;
 
 @end
 
@@ -23,8 +18,6 @@
 {
     [super viewDidLoad];
 
-    self.showNotificationType = @"takeover";
-
     UIScrollView *strongScrollView = _scrollView;
     if (strongScrollView != nil) {
         strongScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -33,14 +26,6 @@
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
-
-    if (self.pointsLabel) {
-        self.pointsLabel.text = [NSString stringWithFormat:@"%d points", MPTweakValue(@"points", 5)];
-    }
-
-    if (self.textLabel) {
-        MPTweakBind(self.textLabel, text, @"Text", @"tweak me");
-    }
 }
 
 - (IBAction)trackEvent:(id)sender
@@ -75,24 +60,6 @@
     }
 }
 
-- (IBAction)setNotificationType:(id)sender
-{
-    NSArray *types = @[@"takeover", @"mini"];
-    self.showNotificationType = types[(NSUInteger)self.notificationTypeControl.selectedSegmentIndex];
-}
-
-- (IBAction)showNotif:(id)sender
-{
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    UITextField *strongNotificationIDField = _notificationIDField;
-    if (strongNotificationIDField != nil && [strongNotificationIDField.text length] > 0) {
-        [mixpanel showNotificationWithID:(NSUInteger)strongNotificationIDField.text.integerValue];
-    } else {
-        [mixpanel showNotificationWithType:_showNotificationType];
-    }
-    [strongNotificationIDField resignFirstResponder];
-}
-
 - (IBAction)changeBackground
 {
     UIImageView *strongFakeBackground = _fakeBackground;
@@ -124,13 +91,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)dismissKeyboard
-{
-    UITextField *strongNotificationIDField = _notificationIDField;
-
-    [strongNotificationIDField resignFirstResponder];
-}
-
 - (IBAction)testBarButtonItemWasPressed:(id)sender
 {
     NSLog(@"You pressed a bar button item.");
@@ -145,11 +105,6 @@
 {
     UIViewController *sourceViewController = sender.sourceViewController;
     [sourceViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)joinExperiments:(id)sender
-{
-    [[Mixpanel sharedInstance] joinExperiments];
 }
 
 @end

@@ -2,8 +2,7 @@
 //  MixpanelBaseTests.h
 //  HelloMixpanel
 //
-//  Created by Sam Green on 6/15/16.
-//  Copyright © 2016 Mixpanel. All rights reserved.
+//  Copyright © Mixpanel. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
@@ -14,16 +13,21 @@
 @property (nonatomic, strong) Mixpanel *mixpanel;
 @property (atomic) BOOL mixpanelWillFlush;
 
-- (void)setUpMixpanel;
-- (void)tearDownMixpanel;
-- (void)deleteOptOutSettingsWithMixpanelInstance:(Mixpanel *)MixpanelInstance;
-
-- (void)flushAndWaitForMixpanelQueues;
-- (void)waitForMixpanelQueues;
+- (void)flushAndWaitForMixpanelQueues:(Mixpanel *)mixpanel;
+- (void)waitForMixpanelQueues:(Mixpanel *)mixpanel;
 - (void)waitForAsyncQueue;
+- (void)removeDBfile:(NSString *)token;
 
 - (UIViewController *)topViewController;
 - (void)assertDefaultPeopleProperties:(NSDictionary *)p;
 - (NSDictionary *)allPropertyTypes;
+
+- (NSString *)randomTokenId;
+- (void)timeDelay;
+- (BOOL)isDateString:(NSString *)dateString equalToDate:(NSDate *)date;
+- (NSArray *)eventQueue:(NSString *)token;
+- (NSArray *)peopleQueue:(NSString *)token;
+- (NSArray *)unIdentifiedPeopleQueue:(NSString *)token;
+- (NSArray *)groupQueue:(NSString *)token;
 
 @end
