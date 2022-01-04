@@ -50,10 +50,9 @@ github "mixpanel/mixpanel-iphone"
 ```
 Check out the [Carthage docs](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos) for more info.
 
-### Installation Option 3: Swift Package Manager (only supported in 4.0.0.beta)
-On Jan 1, 2022, we’ll remove the [Messages & Experiments](https://mixpanel.com/blog/why-were-sunsetting-messaging-and-experiments/#:~:text=A%20year%20from%20now%2C%20on,offering%20discounts%20for%20getting%20started) feature from Mixpanel and they are currently no longer available for purchase. For now, you can choose to opt in to our beta version without Messages & Experiments feature support. You can use **Swift Package Manager** to install the beta version:
-1.  In Xcode, select File > Swift Packages > Add Package Dependency.
-2.  Follow the prompts using the URL for this repository and point to the branch `4.0.0.beta`
+### Installation Option 3: Swift Package Manager
+1.  In Xcode, select File > Add Packages...
+2.  Enter the package URL for this [repository](https://github.com/mixpanel/mixpanel-iphone) and must select a version greater or equal than v4.0.0
 
 ## 2. Initialize Mixpanel
 To initialize the library, add `#Import "Mixpanel/Mixpanel.h" into "AppDelegate.m" and call [sharedInstanceWithToken:](https://mixpanel.github.io/mixpanel-iphone/Classes/Mixpanel.html#//api/name/sharedInstanceWithToken:) with your project token as its argument in [application:didFinishLaunchingWithOptions:](https://developer.apple.com/documentation/uikit/uiapplicationdelegate#//apple_ref/occ/intfm/UIApplicationDelegate/application:willFinishLaunchingWithOptions:).
