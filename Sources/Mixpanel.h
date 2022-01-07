@@ -156,6 +156,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic) BOOL useIPAddressForGeoLocation;
 
+/*!
+ Controls whether or not to use a unique device identifier for the Mixpanel Distinct ID
+ 
+ Defaults to NO
+ */
+@property (atomic) BOOL useUniqueDistinctId;
 
 /*!
  This allows enabling or disabling collecting common mobile events
@@ -252,6 +258,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes;
 
 /*!
+ Initializes a singleton instance of the API, using the unique device identifier for distinct_id and then returns it.
+
+ With the useUniqueDistinctId parameter, Mixpanel will use a unique device id for distinct_id.
+
+ @param apiToken        your project token
+ @param useUniqueDistinctId    whether or not to use the unique device identifier as the distinct_id
+ */
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken useUniqueDistinctId:(BOOL)useUniqueDistinctId;
+
+/*!
  Initializes a singleton instance of the API, uses it to track crashes, set whether or not to opt out tracking for
  GDPR compliance, and then returns it.
  
@@ -261,8 +277,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
  @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
+ @param useUniqueDistinctId whether or not to use the unique device identifier as the distinct_id
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId;
 
 /*!
  Returns a previously instantiated singleton instance of the API.
@@ -286,10 +303,12 @@ NS_ASSUME_NONNULL_BEGIN
  @param flushInterval   interval to run background flushing
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
                         issues with your crash reporting for either signals or exceptions
+ @param useUniqueDistinctId whether or not to use the unique device identifier as the distinct_id
  */
 - (instancetype)initWithToken:(NSString *)apiToken
                 flushInterval:(NSUInteger)flushInterval
-                 trackCrashes:(BOOL)trackCrashes;
+                 trackCrashes:(BOOL)trackCrashes
+          useUniqueDistinctId:(BOOL)useUniqueDistinctId;
 
 /*!
  Initializes an instance of the API with the given project token. This also sets

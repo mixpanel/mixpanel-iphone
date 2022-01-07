@@ -44,10 +44,10 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:trackCrashes optOutTrackingByDefault:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:trackCrashes optOutTrackingByDefault:NO useUniqueDistinctId:NO];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
     if (instances[apiToken]) {
         return instances[apiToken];
@@ -59,7 +59,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     const NSUInteger flushInterval = 60;
 #endif
 
-    return [[self alloc] initWithToken:apiToken flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault];
+    return [[self alloc] initWithToken:apiToken flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
@@ -70,7 +70,12 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES optOutTrackingByDefault:optOutTrackingByDefault];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:NO];
+}
+
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken useUniqueDistinctId:(BOOL)useUniqueDistinctId
+{
+    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES optOutTrackingByDefault:NO useUniqueDistinctId:useUniqueDistinctId];
 }
 
 + (nullable Mixpanel *)sharedInstance
@@ -109,6 +114,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
                optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
+          useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
@@ -134,6 +140,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         self.flushOnBackground = YES;
 
         self.serverURL = @"https://api.mixpanel.com";
+        self.useUniqueDistinctId = useUniqueDistinctId;
         self.distinctId = [self defaultDistinctId];
         self.superProperties = [NSDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
@@ -175,11 +182,13 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 - (instancetype)initWithToken:(NSString *)apiToken
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
+          useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
     return [self initWithToken:apiToken
                  flushInterval:flushInterval
                   trackCrashes:trackCrashes
-                optOutTrackingByDefault:NO];
+                optOutTrackingByDefault:NO
+           useUniqueDistinctId:useUniqueDistinctId];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
@@ -187,7 +196,8 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 {
     return [self initWithToken:apiToken
                  flushInterval:flushInterval
-                  trackCrashes:NO];
+                  trackCrashes:NO
+           useUniqueDistinctId:NO];
 }
 
 - (void)dealloc
@@ -335,15 +345,13 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 {
     NSString *distinctId;
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
-#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
-    if (!distinctId && NSClassFromString(@"UIDevice")) {
-        distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    }
-#elif defined(MIXPANEL_MACOS)
-    distinctId = [self macOSIdentifier];
-#endif
+    distinctId = [self uniqueIdentifierForDevice];
 #else
-    distinctId = [[NSUUID UUID] UUIDString];
+    if (self.useUniqueDistinctId) {
+        distinctId = [self uniqueIdentifierForDevice];
+    } else {
+        distinctId = [[NSUUID UUID] UUIDString];
+    }
 #endif
     if (!distinctId) {
         MPLogInfo(@"%@ error getting device identifier: falling back to uuid", self);
@@ -997,6 +1005,20 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     return serialNumberAsNSString;
 }
 #endif
+
+
+- (NSString *)uniqueIdentifierForDevice
+{
+    NSString *distinctId;
+#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
+    if (!distinctId && NSClassFromString(@"UIDevice")) {
+        distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    }
+#elif defined(MIXPANEL_MACOS)
+    distinctId = [self macOSIdentifier];
+#endif
+    return distinctId;
+}
 
 - (void)setCurrentRadio
 {
