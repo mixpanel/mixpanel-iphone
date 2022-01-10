@@ -17,9 +17,6 @@ let package = Package(
         .target(
             name: "Mixpanel",
             path: "Sources",
-            exclude: [
-                "Info.plist"
-            ],
             cSettings: [
                 .headerSearchPath("."),
             ]
