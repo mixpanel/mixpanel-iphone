@@ -49,7 +49,7 @@
                                                                              @"$ios_version": [self deviceSystemVersion],
                                                                              @"$ios_lib_version": [Mixpanel libVersion],
                                                                              }];
-    NSDictionary *infoDictionary = [NSBundle bundleForClass:[self class]].infoDictionary;
+    NSDictionary *infoDictionary = [NSBundle mainBundle].infoDictionary;
     if (infoDictionary[@"CFBundleVersion"]) {
         p[@"$ios_app_version"] = infoDictionary[@"CFBundleVersion"];
     }
