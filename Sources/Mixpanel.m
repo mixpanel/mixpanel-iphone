@@ -1009,7 +1009,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (NSString *)uniqueIdentifierForDevice
 {
-    NSString *distinctId;
+    NSString *distinctId = nil;
 #if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
