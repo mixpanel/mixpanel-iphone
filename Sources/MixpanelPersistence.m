@@ -362,7 +362,7 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
             NSError *error = nil;
             NSData *data = [NSData dataWithContentsOfFile:filePath];
             unarchivedData = [NSKeyedUnarchiver unarchivedObjectOfClasses:
-                              [NSSet setWithArray:@[[NSArray class], [NSDictionary class],
+                              [NSSet setWithArray:@[[NSArray class], [NSDictionary class], [NSSet class],
                                                     [NSString class], [NSDate class], [NSURL class],
                                                     [NSNumber class], [NSNull class]]]
                                                                  fromData:data error:&error];
