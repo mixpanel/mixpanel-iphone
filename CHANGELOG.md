@@ -1,5 +1,22 @@
 #
 
+## [v4.1.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.0) (2022-01-14)
+
+### Enhancements
+
+- add useUniqueDistinctId [\#972](https://github.com/mixpanel/mixpanel-iphone/pull/972)
+
+### Fixes
+
+- fix incorrect app version property [\#974](https://github.com/mixpanel/mixpanel-iphone/pull/974)
+- add \[NSSet class\] to unarchiveFromFile [\#973](https://github.com/mixpanel/mixpanel-iphone/pull/973)
+
+**Closed issues:**
+
+- User Id not attached to events after createAlias call [\#824](https://github.com/mixpanel/mixpanel-iphone/issues/824)
+
+#
+
 ## [v4.0.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0) (2022-01-02)
 
 ## [v4.0.0.rc.1](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.rc.1) (2021-12-17)
@@ -101,6 +118,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 **Merged pull requests:**
 
 - delete M&E code [\#930](https://github.com/mixpanel/mixpanel-iphone/pull/930)
+
+
 
 
 
