@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>MixpanelGroup Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">mixpanel-iphone </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Mixpanel</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/deleteGroup">- deleteGroup</option>
+		
+		<option value="//api/name/remove:value:">- remove:value:</option>
+		
+		<option value="//api/name/set:">- set:</option>
+		
+		<option value="//api/name/setOnce:">- setOnce:</option>
+		
+		<option value="//api/name/union:values:">- union:values:</option>
+		
+		<option value="//api/name/unset:">- unset:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">MixpanelGroup Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>MixpanelGroup.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/set:" title="set:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/set:">&ndash;&nbsp;set:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set properties on this <a href="../Classes/Mixpanel.html">Mixpanel</a> Group. Keys in properties must be NSString,
+and values are MixpanelTypes.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)set:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The properties will be set on the current group. We use an NSAssert to enforce
+this type requirement. In release mode, the assert is stripped out and we will silently convert
+incorrect types to strings using [NSString stringWithFormat:@&ldquo;%@&rdquo;, value].
+If the existing group record on the server already has a value for a given property,
+the old value is overwritten. Other existing properties will not be affected.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelGroup.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setOnce:" title="setOnce:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setOnce:">&ndash;&nbsp;setOnce:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set properties on this <a href="../Classes/Mixpanel.html">Mixpanel</a> Group, but don&rsquo;t overwrite if
+there are existing values.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setOnce:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is identical to set() except it will only set
+properties that are not already set.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelGroup.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/unset:" title="unset:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/unset:">&ndash;&nbsp;unset:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove a property and all its values from this <a href="../Classes/Mixpanel.html">Mixpanel</a> Group. For
+properties that aren&rsquo;t set will be no effect.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)unset:(NSString *)<em>property</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>property</code></th>
+						<td><p>the property to be unset</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelGroup.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/union:values:" title="union:values:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/union:values:">&ndash;&nbsp;union:values:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Union list properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)union:(NSString *)<em>property</em> values:(NSArray&lt;id&lt;MixpanelType&gt; &gt; *)<em>values</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>property</code></th>
+						<td><p>mapping of list property names to lists to union</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelGroup.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/deleteGroup" title="deleteGroup"></a>
+	<h3 class="method-title"><code><a href="#//api/name/deleteGroup">&ndash;&nbsp;deleteGroup</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Permanently remove a group on server side.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)deleteGroup</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelGroup.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/remove:value:" title="remove:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/remove:value:">&ndash;&nbsp;remove:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove one value from a group property.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)remove:(NSString *)<em>property</em> value:(id&lt;MixpanelType&gt;)<em>value</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>property</code></th>
+						<td><p>the name of group property</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>the value to be removed</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelGroup.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2022 Mixpanel. All rights reserved. Updated: 2022-01-14</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>
