@@ -243,6 +243,20 @@
     [self removeDBfile:testMixpanel.apiToken];
 }
 
+- (void)testUseUniqueDistinctI {
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    XCTAssertNotEqualObjects(testMixpanel.distinctId, testMixpanel2.distinctId, "by default, distinctId should not be unique to the device");
+    
+    Mixpanel *testMixpanel3 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:NO];
+    Mixpanel *testMixpanel4 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:NO];
+    XCTAssertNotEqualObjects(testMixpanel3.distinctId, testMixpanel4.distinctId, "distinctId should not be unique to the device if useUniqueDistinctId is set to NO");
+    
+    Mixpanel *testMixpanel5 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
+    Mixpanel *testMixpanel6 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
+    XCTAssertEqualObjects(testMixpanel5.distinctId, testMixpanel6.distinctId, "distinctId should be unique to the device if useUniqueDistinctId is set to YES");
+}
+
 - (void)testHadPersistedDistinctId {
     NSString *randomTokenId = [self randomTokenId];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
