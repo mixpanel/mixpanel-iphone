@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>MixpanelPeople Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">mixpanel-iphone </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Mixpanel</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/ignoreTime">ignoreTime</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/append:">- append:</option>
+		
+		<option value="//api/name/clearCharges">- clearCharges</option>
+		
+		<option value="//api/name/deleteUser">- deleteUser</option>
+		
+		<option value="//api/name/increment:">- increment:</option>
+		
+		<option value="//api/name/increment:by:">- increment:by:</option>
+		
+		<option value="//api/name/remove:">- remove:</option>
+		
+		<option value="//api/name/set:">- set:</option>
+		
+		<option value="//api/name/set:to:">- set:to:</option>
+		
+		<option value="//api/name/setOnce:">- setOnce:</option>
+		
+		<option value="//api/name/trackCharge:">- trackCharge:</option>
+		
+		<option value="//api/name/trackCharge:withProperties:">- trackCharge:withProperties:</option>
+		
+		<option value="//api/name/union:">- union:</option>
+		
+		<option value="//api/name/unset:">- unset:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">MixpanelPeople Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>MixpanelPeople.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p><a href="../Classes/Mixpanel.html">Mixpanel</a> People API.</p>
+
+<p>Access to the Mixpanel People API, available as a property on the main
+Mixpanel API.</p>
+
+<p><b>You should not instantiate this object yourself.</b> An instance of it will
+be available as a property of the main Mixpanel object. Calls to Mixpanel
+People methods will look like this:</p>
+
+<pre>
+[mixpanel.people increment:@"App Opens" by:[NSNumber numberWithInt:1]];
+</pre>
+
+
+<p>Please note that the core <code>Mixpanel</code> and
+<code>MixpanelPeople</code> classes share the <code>identify:</code> method.
+The <code>Mixpanel</code> <code>identify:</code> affects the
+<code>distinct_id</code> property of events sent by <code>track:</code> and
+<code>track:properties:</code> and determines which <a href="../Classes/Mixpanel.html">Mixpanel</a> People user
+record will be updated by <code>set:</code>, <code>increment:</code> and other
+<code>MixpanelPeople</code> methods.</p>
+
+<p><b>If you are going to set your own distinct IDs for core <a href="../Classes/Mixpanel.html">Mixpanel</a> event
+tracking, make sure to use the same distinct IDs when using <a href="../Classes/Mixpanel.html">Mixpanel</a>
+People</b>.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/ignoreTime" title="ignoreTime"></a>
+	<h3 class="method-title"><code><a href="#//api/name/ignoreTime">&nbsp;&nbsp;ignoreTime</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>controls the $ignore_time property in any subsequent MixpanelPeople operation.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) BOOL ignoreTime</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>If the $ignore_time property is present and true in your request,
+<a href="../Classes/Mixpanel.html">Mixpanel</a> will not automatically update the &ldquo;Last Seen&rdquo; property of the profile.
+Otherwise, <a href="../Classes/Mixpanel.html">Mixpanel</a> will add a &ldquo;Last Seen&rdquo; property associated with the
+current time for all $set, $append, and $add operations</p>
+
+<p>Defaults to NO.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/set:" title="set:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/set:">&ndash;&nbsp;set:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set properties on the current user in <a href="../Classes/Mixpanel.html">Mixpanel</a> People.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)set:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The properties will be set on the current user. The keys must be NSString
+objects and the values should be NSString, NSNumber, NSArray, NSDate, or
+NSNull objects. We use an NSAssert to enforce this type requirement. In
+release mode, the assert is stripped out and we will silently convert
+incorrect types to strings using [NSString stringWithFormat:@&ldquo;%@&rdquo;, value]. You
+can override the default the current project token and distinct ID by
+including the special properties: $token and $distinct_id. If the existing
+user record on the server already has a value for a given property, the old
+value is overwritten. Other existing properties will not be affected.</p>
+
+<pre>
+// applies to both Mixpanel Engagement track: AND Mixpanel People set: and
+// increment: calls
+[mixpanel identify:distinctId];
+</pre>
+
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/set:to:" title="set:to:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/set:to:">&ndash;&nbsp;set:to:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Convenience method for setting a single property in <a href="../Classes/Mixpanel.html">Mixpanel</a> People.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)set:(NSString *)<em>property</em> to:(id)<em>object</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>property</code></th>
+						<td><p>property name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>object</code></th>
+						<td><p>property value</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setOnce:" title="setOnce:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setOnce:">&ndash;&nbsp;setOnce:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set properties on the current user in <a href="../Classes/Mixpanel.html">Mixpanel</a> People, but don&rsquo;t overwrite if
+there is an existing value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setOnce:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is identical to <code>set:</code> except it will only set
+properties that are not already set. It is particularly useful for collecting
+data about the user&rsquo;s initial experience and source, as well as dates
+representing the first time something happened.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/unset:" title="unset:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/unset:">&ndash;&nbsp;unset:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove a list of properties and their values from the current user&rsquo;s profile
+in <a href="../Classes/Mixpanel.html">Mixpanel</a> People.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)unset:(NSArray *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties array</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The properties array must ony contain NSString names of properties. For properties
+that don&rsquo;t exist there will be no effect.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/increment:" title="increment:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/increment:">&ndash;&nbsp;increment:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Increment the given numeric properties by the given values.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)increment:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be NSString names of numeric properties. A property is
+numeric if its current value is a number. If a property does not exist, it
+will be set to the increment amount. Property values must be NSNumber objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/increment:by:" title="increment:by:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/increment:by:">&ndash;&nbsp;increment:by:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Convenience method for incrementing a single numeric property by the specified
+amount.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)increment:(NSString *)<em>property</em> by:(NSNumber *)<em>amount</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>property</code></th>
+						<td><p>property name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>amount</code></th>
+						<td><p>amount to increment by</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/append:" title="append:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/append:">&ndash;&nbsp;append:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Append values to list properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)append:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>mapping of list property names to values to append</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/union:" title="union:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/union:">&ndash;&nbsp;union:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Union list properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)union:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>mapping of list property names to lists to union</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/remove:" title="remove:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/remove:">&ndash;&nbsp;remove:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove list properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)remove:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>mapping of list property names to values to remove</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackCharge:" title="trackCharge:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackCharge:">&ndash;&nbsp;trackCharge:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Track money spent by the current user for revenue analytics.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)trackCharge:(NSNumber *)<em>amount</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>amount</code></th>
+						<td><p>amount of revenue received</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackCharge:withProperties:" title="trackCharge:withProperties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackCharge:withProperties:">&ndash;&nbsp;trackCharge:withProperties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Track money spent by the current user for revenue analytics and associate
+properties with the charge.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)trackCharge:(NSNumber *)<em>amount</em> withProperties:(nullable NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Charge properties allow you segment on types of revenue. For instance, you
+could record a product ID with each charge so that you could segment on it in
+revenue analytics to see which products are generating the most revenue.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clearCharges" title="clearCharges"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clearCharges">&ndash;&nbsp;clearCharges</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Delete current user&rsquo;s revenue history.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)clearCharges</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/deleteUser" title="deleteUser"></a>
+	<h3 class="method-title"><code><a href="#//api/name/deleteUser">&ndash;&nbsp;deleteUser</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Delete current user&rsquo;s record from <a href="../Classes/Mixpanel.html">Mixpanel</a> People.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)deleteUser</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MixpanelPeople.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2022 Mixpanel. All rights reserved. Updated: 2022-01-14</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>
