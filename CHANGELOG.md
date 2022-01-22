@@ -2,6 +2,11 @@
 
 ## [v4.1.1](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.1) (2022-01-22)
 
+### Fixes:
+- Set content-type to `application/json` as required by Mixpanel ingestion API [\#977](https://github.com/mixpanel/mixpanel-iphone/pull/977)
+
+  This will avoid events being rejected by the server if there is any string containing "& % \".
+
 #
 
 ## [v4.1.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.0) (2022-01-14)
