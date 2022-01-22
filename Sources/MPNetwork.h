@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
                               withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems;
 
 - (NSURLRequest *)buildPostRequestForEndpoint:(MPNetworkEndpoint)endpoint
+                               withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                       andBody:(NSString *)body;
 
 @end
