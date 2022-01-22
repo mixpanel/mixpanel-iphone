@@ -84,10 +84,10 @@ static const NSUInteger kBatchSize = 50;
             [ids addObject:entity[@"id"]];
         }];
         
-        NSString *requestData = [MPJSONHandler encodedJSONString:batch];
-        NSString *postBody = [NSString stringWithFormat:@"ip=%d&data=%@", self.useIPAddressForGeoLocation, requestData];
         MPLogDebug(@"%@ flushing %lu of %lu to %lu: %@", self, (unsigned long)batch.count, (unsigned long)queueCopyForFlushing.count, endpoint, queueCopyForFlushing);
-        NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint andBody:postBody];
+        NSString *requestData = [MPJSONHandler encodedJSONString:batch];
+        NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
+        NSURLRequest *request = [self buildPostRequestForEndpoint:endpoint withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
         
         [self updateNetworkActivityIndicator:YES];
         
@@ -210,11 +210,12 @@ static const NSUInteger kBatchSize = 50;
 }
 
 - (NSURLRequest *)buildPostRequestForEndpoint:(MPNetworkEndpoint)endpoint
+                               withQueryItems:(NSArray <NSURLQueryItem *> *)queryItems
                                       andBody:(NSString *)body
 {
     return [self buildRequestForEndpoint:[MPNetwork pathForEndpoint:endpoint]
                             byHTTPMethod:@"POST"
-                          withQueryItems:nil
+                          withQueryItems:queryItems
                                  andBody:body];
 }
 
@@ -235,7 +236,7 @@ static const NSUInteger kBatchSize = 50;
 
     // Build request from URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
-    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPMethod:method];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     

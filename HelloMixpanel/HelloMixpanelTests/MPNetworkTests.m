@@ -36,20 +36,20 @@
 #pragma mark - Request Creation
 - (void)testRequestForTrackEndpoint {
     NSString *body = @"track test body";
-    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack andBody:body];
+    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:nil andBody:body];
     XCTAssertEqualObjects(request.URL, [NSURL URLWithString:@"http://localhost:31337/track/"]);
     XCTAssert([request.HTTPMethod isEqualToString:@"POST"]);
     XCTAssertEqualObjects(request.HTTPBody, [body dataUsingEncoding:NSUTF8StringEncoding]);
-    XCTAssert([request.allHTTPHeaderFields[@"Accept-Encoding"] isEqualToString:@"gzip"]);
+    XCTAssert([request.allHTTPHeaderFields[@"Content-Type"] isEqualToString:@"application/json"]);
 }
 
 - (void)testRequestForPeopleEndpoint {
     NSString *body = @"engage test body";
-    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage andBody:body];
+    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage withQueryItems:nil andBody:body];
     XCTAssertEqualObjects(request.URL, [NSURL URLWithString:@"http://localhost:31337/engage/"]);
     XCTAssert([request.HTTPMethod isEqualToString:@"POST"]);
     XCTAssertEqualObjects(request.HTTPBody, [body dataUsingEncoding:NSUTF8StringEncoding]);
-    XCTAssert([request.allHTTPHeaderFields[@"Accept-Encoding"] isEqualToString:@"gzip"]);
+    XCTAssert([request.allHTTPHeaderFields[@"Content-Type"] isEqualToString:@"application/json"]);
 }
 
 #pragma mark - Query Creation

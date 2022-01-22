@@ -45,7 +45,7 @@
         [defaults synchronize];
     }
 
-    NSDictionary* infoDict = [NSBundle bundleForClass:[self class]].infoDictionary;
+    NSDictionary* infoDict = [NSBundle mainBundle].infoDictionary;
     if (defaults != nil && infoDict != nil) {
         NSString* appVersionKey = @"MPAppVersion";
         NSString* appVersionValue = infoDict[@"CFBundleShortVersionString"];
