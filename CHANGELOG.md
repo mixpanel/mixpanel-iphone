@@ -1,5 +1,9 @@
 #
 
+## [v4.1.1](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.1) (2022-01-22)
+
+#
+
 ## [v4.1.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.0) (2022-01-14)
 
 ### Enhancements
@@ -118,6 +122,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 **Merged pull requests:**
 
 - delete M&E code [\#930](https://github.com/mixpanel/mixpanel-iphone/pull/930)
+
+
 
 
 
