@@ -35,7 +35,7 @@ Check out our [Advanced iOS - Objective-C Guide](https://developer.mixpanel.com/
 
 
 # Quick Start Guide
-Caution: From version 4.0.0.beta.3 to version v4.1.0, we have a bug that events with ampersand(&) will be rejected by the server. We recommend you update to 4.1.1 or above.
+Caution: From v4.0.0.beta.3 to v4.1.0, we have a bug that events with ampersand(&) will be rejected by the server. We recommend you update to v4.1.1 or above.
 
 ## 1. Install Mixpanel
 You can install the Mixpanel iOS - Objective-C library by using CocoaPods or Carthage. You will need your project token for initializing your library. You can get your project token from [project settings](https://mixpanel.com/settings/project).
