@@ -10,6 +10,7 @@
 #
 
 ## [v4.1.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.0) (2022-01-14)
+### Caution: In this version, we have a bug that event names with & or % will be rejected by the server. We recommend you update to 3.1.1 or above.
 
 ### Enhancements
 
@@ -26,9 +27,17 @@
 
 #
 
-## [v4.0.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0) (2022-01-02)
+## [v4.0.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.0) (2022-01-14)
 
-## [v4.0.0.rc.1](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.rc.1) (2021-12-17)
+## Caution: From v4.0.0.beta.3 to v4.1.0, we have a bug that events with ampersand(&) will be rejected by the server. We recommend you update to v4.1.1 or above.
+-  Remove Messages & Experiments feature, for more detail, please check this [post](https://mixpanel.com/blog/why-were-sunsetting-messaging-and-experiments/#:~:text=A%20year%20from%20now%2C%20on,offering%20discounts%20for%20getting%20started):
+
+- Upgrade the offline tracking storage with SQLite, it will:
+  - Reduce crashes caused by race conditions for serializing data
+  - Greatly improve the performance for intensive tracking needs
+  - Fix the memory leaks
+  - Be a non-functional change and transparent to all users, the new version will take care of migrating data from the NSKeyedArchiver files to SQLite DBs, no data will be lost.
+#
 
 ## [v3.9.2](https://github.com/mixpanel/mixpanel-iphone/tree/v3.9.2) (2021-12-14)
 
@@ -50,30 +59,6 @@
 
 From this version, Mixpanel SDK no longer sets property $braze_external_id and $ios_urban_airship_channel_id automatically. Please refer to this doc for the integration setup guide if you need to export Mixpanel Cohorts to Braze or Airship.
 
-## [v4.0.0.beta.4](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.beta.4) (2021-12-13)
-
-**Closed issues:**
-
-- Crash in connectToABTestDesigner [\#959](https://github.com/mixpanel/mixpanel-iphone/issues/959)
-- Crash in \[Mixpanel unarchiveFromFile:asClass:\] [\#958](https://github.com/mixpanel/mixpanel-iphone/issues/958)
-- 3.9.x build failure on Mac Catalyst due to MPFree deprecation [\#957](https://github.com/mixpanel/mixpanel-iphone/issues/957)
-- Feature: Ability to import tracked events older than five days [\#712](https://github.com/mixpanel/mixpanel-iphone/issues/712)
-
-**Merged pull requests:**
-
-- Add network queue for network request [\#961](https://github.com/mixpanel/mixpanel-iphone/pull/961)
-- Add NSSecureCoding allowed classes to avoid warning [\#956](https://github.com/mixpanel/mixpanel-iphone/pull/956)
-
-## [v4.0.0.beta.3](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.beta.3) (2021-11-15)
-
-**Closed issues:**
-
-- $carrier property can be reported as `nil` when there is multiple SIMs support [\#949](https://github.com/mixpanel/mixpanel-iphone/issues/949)
-
-**Merged pull requests:**
-
-- Replace NSKeyedArchiver with SQLite for offline tracking [\#953](https://github.com/mixpanel/mixpanel-iphone/pull/953)
-
 #
 
 ## [v3.9.1](https://github.com/mixpanel/mixpanel-iphone/tree/v3.9.1) (2021-11-14)
@@ -86,20 +71,6 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 
 - Carrier name retrieval [\#955](https://github.com/mixpanel/mixpanel-iphone/pull/955)
 - Remove alias check when calling identify [\#954](https://github.com/mixpanel/mixpanel-iphone/pull/954)
-
-## [4.0.0.beta.2](https://github.com/mixpanel/mixpanel-iphone/tree/4.0.0.beta.2) (2021-06-26)
-
-**Closed issues:**
-
-- Realme , iphone [\#946](https://github.com/mixpanel/mixpanel-iphone/issues/946)
-- Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '+\[MPSwizzler [\#937](https://github.com/mixpanel/mixpanel-iphone/issues/937)
-- iOS 13 crashes on `\[MixpanelExceptionHandler sharedHandler\]` [\#872](https://github.com/mixpanel/mixpanel-iphone/issues/872)
-
-**Merged pull requests:**
-
-- Improve README for quick start guide [\#947](https://github.com/mixpanel/mixpanel-iphone/pull/947)
-- remove github actions for uploading Carthage artifact [\#945](https://github.com/mixpanel/mixpanel-iphone/pull/945)
-
 #
 
 ## [v3.8.0](https://github.com/mixpanel/mixpanel-iphone/tree/v3.8.0) (2021-06-15)
@@ -118,15 +89,6 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
 
-## [v4.0.0.beta.1](https://github.com/mixpanel/mixpanel-iphone/tree/v4.0.0.beta.1) (2021-04-08)
-
-**Closed issues:**
-
-- Concurrency Issue with TimedEvents [\#926](https://github.com/mixpanel/mixpanel-iphone/issues/926)
-
-**Merged pull requests:**
-
-- delete M&E code [\#930](https://github.com/mixpanel/mixpanel-iphone/pull/930)
 
 
 
