@@ -22,20 +22,14 @@
 
 #pragma mark - Network
 - (void)test5XXResponse {
-    [[LSNocilla sharedInstance] clearStubs];
-    [[LSNocilla sharedInstance] start];
-    stubEngage();
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
-    
-    stubTrack().andReturn(503);
-
+    [testMixpanel setServerURL:kFakeServerUrl];
     [testMixpanel track:@"Fake Event"];
 
     [testMixpanel flush];
     [self waitForMixpanelQueues:testMixpanel];
     
     [testMixpanel flush];
-    [[LSNocilla sharedInstance] start];
     [self waitForMixpanelQueues:testMixpanel];
 
     // Failure count should be 3
@@ -44,28 +38,6 @@
     XCTAssert(waitTime >= 120.f, "Network backoff time is less than 2 minutes.");
     XCTAssert(testMixpanel.network.consecutiveFailures == 2, @"Network failures did not equal 2");
     XCTAssert([self eventQueue:testMixpanel.apiToken].count == 1, @"Removed an event from the queue that was not sent");
-    [self removeDBfile:testMixpanel.apiToken];
-}
-
-- (void)testRetryAfterHTTPHeader {
-    [[LSNocilla sharedInstance] clearStubs];
-    [[LSNocilla sharedInstance] start];
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
-    stubTrack().andReturn(200).withHeader(@"Retry-After", @"60");
-
-    [testMixpanel track:@"Fake Event"];
-
-    [testMixpanel flush];
-    [self waitForMixpanelQueues:testMixpanel];
-
-    [testMixpanel flush];
-    [self waitForMixpanelQueues:testMixpanel];
-
-    // Failure count should be 3
-    NSLog(@"Delta wait time is %.3f", testMixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970]);
-    NSTimeInterval deltaWaitTime = testMixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
-    XCTAssert(fabs(60 - deltaWaitTime) < 5, @"Mixpanel did not respect 'Retry-After' HTTP header");
-    XCTAssert(testMixpanel.network.consecutiveFailures == 0, @"Network failures did not equal 0");
     [self removeDBfile:testMixpanel.apiToken];
 }
 
@@ -105,12 +77,8 @@
 }
 
 - (void)testFlushNetworkFailure {
-    [[LSNocilla sharedInstance] stop];
-    [[LSNocilla sharedInstance] clearStubs];
-    [[LSNocilla sharedInstance] start];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
-    stubTrack().andFailWithError([NSError errorWithDomain:@"com.mixpanel.sdk.testing" code:1 userInfo:nil]);
-
+    [testMixpanel setServerURL:kFakeServerUrl];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
     }
@@ -123,7 +91,6 @@
 }
 
 - (void)testIdentify {
-    // stub needed because reset flushes
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *testToken = [self randomTokenId];
         Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
@@ -181,7 +148,6 @@
 }
 
 - (void)testIdentifyTrack {
-    // stub needed because reset flushes
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
     NSString *distinctIdBeforeidentify = testMixpanel.distinctId;
 
@@ -208,7 +174,6 @@
 }
 
 - (void)testIdentifyResetTrack {
-    // stub needed because reset flushes
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
 
     testMixpanel.anonymousId = nil;
@@ -260,7 +225,6 @@
 - (void)testHadPersistedDistinctId {
     NSString *randomTokenId = [self randomTokenId];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
-    // stub needed because reset flushes
     NSString *distinctIdBeforeidentify = testMixpanel.distinctId;
     
     Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
@@ -393,7 +357,6 @@
 }
 
 - (void)testInvalidPropertiesTrack {
-    stubTrack();
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
     NSDictionary *p = @{ @"data": [NSData data] };
     XCTAssertThrows([testMixpanel track:@"e1" properties:p], @"property type should not be allowed");
@@ -426,12 +389,6 @@
 }
 
 - (void)testReset {
-    // stub needed because reset flushes
-    [[LSNocilla sharedInstance] start];
-    stubTrack();
-    stubEngage();
-    stubGroups();
-    stubDecide();
     NSString *testToken = [self randomTokenId];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
     [testMixpanel identify:@"d1"];
@@ -466,11 +423,6 @@
 }
 
 - (void)testArchive {
-    [[LSNocilla sharedInstance] start];
-    stubTrack();
-    stubEngage();
-    stubGroups();
-    stubDecide();
     NSString *testToken = [self randomTokenId];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
     [testMixpanel archive];
@@ -652,31 +604,26 @@
 }
 
 - (void)testNetworkingWithStress {
-    [[LSNocilla sharedInstance] stop];
-    [[LSNocilla sharedInstance] clearStubs];
-    [[LSNocilla sharedInstance] start];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
     self.mixpanelWillFlush = NO;
-    stubTrack().andReturn(503);
     for (NSInteger i = 1; i <= 500; i++) {
         [testMixpanel track:@"Track Call"];
     }
+    [testMixpanel setServerURL:kFakeServerUrl];
     [self flushAndWaitForMixpanelQueues:testMixpanel];
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 500, @"none supposed to be flushed");
-    [[LSNocilla sharedInstance] clearStubs];
-    stubTrack().andReturn(200);
     testMixpanel.network.requestsDisabledUntilTime = 0;
+    [testMixpanel setServerURL:kDefaultServerString];
     [self flushAndWaitForMixpanelQueues:testMixpanel];
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 0, @"supposed to all be flushed");
     [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testConcurrentTracking {
-    [[LSNocilla sharedInstance] start];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
 
     self.mixpanelWillFlush = NO;
-    stubTrack().andReturn(503);
+    [testMixpanel setServerURL:kFakeServerUrl];
     dispatch_queue_t concurrentQueue = dispatch_queue_create("test_concurrent_queue", DISPATCH_QUEUE_CONCURRENT);
     dispatch_group_t trackGroup = dispatch_group_create();
     for (int i = 0; i < 500; i++) {
@@ -696,8 +643,7 @@
         }
         XCTAssertTrue(found, @"event that was tracked not found in eventsQueue");
     }
-    [[LSNocilla sharedInstance] clearStubs];
-    stubTrack().andReturn(200);
+    [testMixpanel setServerURL:kDefaultServerString];
     testMixpanel.network.requestsDisabledUntilTime = 0;
     [self flushAndWaitForMixpanelQueues:testMixpanel];
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 0, @"supposed to all be flushed");

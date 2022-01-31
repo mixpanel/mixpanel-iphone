@@ -11,20 +11,16 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['OS=15.0,name="iPhone 11"']
+        destination: ['OS=15.2,name="iPhone 13 Pro"']
         scheme: ['"[iOS] HelloMixpanel"']
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: |
-        cd HelloMixpanel
-        pod install --repo-update
     - name: Run Test
       working-directory: HelloMixpanel
       run: |
         set -o pipefail
-        xcodebuild -workspace HelloMixpanel.xcworkspace -scheme ${{ matrix.scheme }} -derivedDataPath Build/ -destination ${{ matrix.destination }} -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
+        xcodebuild -scheme ${{ matrix.scheme }} -derivedDataPath Build/ -destination ${{ matrix.destination }} -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
     - name: Pod Lint
       run: pod lib lint --allow-warnings
     - name: Code Coverage Report

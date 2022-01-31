@@ -5,7 +5,7 @@
 //  Copyright © Mixpanel. All rights reserved.
 //
 
-#import <Nocilla/Nocilla.h>
+
 #import "MixpanelBaseTests.h"
 #import "TestConstants.h"
 #import "MixpanelPrivate.h"
@@ -17,18 +17,10 @@
 - (void)setUp {
     [super setUp];
     
-    // HTTP Stubs
-    [[LSNocilla sharedInstance] start];
-
     self.mixpanelWillFlush = NO;
-    stubTrack();
-    stubEngage();
-    stubGroups();
-    stubDecide();
 }
 
 - (void)tearDown {
-    [[LSNocilla sharedInstance] start];
     [NSThread sleepForTimeInterval:1.0];
     [super tearDown];
 }

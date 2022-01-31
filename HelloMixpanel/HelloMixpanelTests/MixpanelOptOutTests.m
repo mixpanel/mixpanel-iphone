@@ -9,7 +9,6 @@
 #import "MixpanelPrivate.h"
 #import "TestConstants.h"
 #import "MixpanelPeoplePrivate.h"
-#import <OCMock/OCMock.h>
 
 
 @interface MixpanelOptOutTests : MixpanelBaseTests
