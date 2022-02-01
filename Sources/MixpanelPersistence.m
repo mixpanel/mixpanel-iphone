@@ -94,6 +94,17 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     return entities;
 }
 
+- (void)removeAutomaticEvents {
+    NSArray *events = [self loadEntitiesInBatch:PersistenceTypeEvents];
+    NSMutableArray *ids = [NSMutableArray new];
+    [events enumerateObjectsUsingBlock:^(NSMutableDictionary *event, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([event[@"event"] hasPrefix:@"$ae_"]) {
+            [ids addObject:event[@"id"]];
+        }
+    }];
+    [self removeEntitiesInBatch:PersistenceTypeEvents ids:ids];
+}
+
 - (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids {
     [self.mpdb deleteRows:type ids:ids];
 }

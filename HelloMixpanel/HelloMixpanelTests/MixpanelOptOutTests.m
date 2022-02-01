@@ -10,6 +10,12 @@
 #import "TestConstants.h"
 #import "MixpanelPeoplePrivate.h"
 
+@interface Mixpanel()
+
+- (void)handlingAutomaticEventsWith:(BOOL)decideTrackAutomaticEvents;
+
+@end
+
 
 @interface MixpanelOptOutTests : MixpanelBaseTests
 
@@ -37,11 +43,11 @@
     XCTAssertFalse([testMixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     [self waitForMixpanelQueues:testMixpanel];
     if ([[self eventQueue:testMixpanel.apiToken] count] == 1) {
-        NSDictionary *event = [self eventQueue:testMixpanel.apiToken][0];
+        NSDictionary *event = [self eventQueue:testMixpanel.apiToken].firstObject;
         XCTAssertEqualObjects(event[@"event"], @"$opt_in", @"When opted in, a track '$opt_in' should have been queued");
     }
     else {
-        XCTAssertTrue([[self eventQueue:testMixpanel.apiToken] count] == 1, @"When opted in, event queue should have one even(opt in) being queued");
+        XCTAssertTrue([[self eventQueue:testMixpanel.apiToken] count] == 0, @"When opted in, event queue should have one even(opt in) being queued");
     }
     [self removeDBfile:testMixpanel.apiToken];
 }
@@ -54,7 +60,7 @@
     
     [self waitForMixpanelQueues:testMixpanel];
 
-    NSDictionary *event = [self eventQueue:testMixpanel.apiToken][0];
+    NSDictionary *event = [self eventQueue:testMixpanel.apiToken].firstObject;
     if (![event[@"event"] isEqualToString:@"$opt_in"]) {
         event = [self eventQueue:testMixpanel.apiToken][1];
     }
@@ -67,7 +73,7 @@
 }
 
 - (void)testOptInTrackingForDistinctIDAndWithEventProperties
-{
+{    
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
     NSDate *now = [NSDate date];
     NSDictionary *p = @{ @"string": @"yello",
@@ -89,7 +95,7 @@
     XCTAssertTrue([props[@"$app_version"] isEqualToString:@"override"], @"reserved property override failed");
     
     if (eventQueue.count == 2) {
-        NSDictionary *event = [self eventQueue:testMixpanel.apiToken][0];
+        NSDictionary *event = [self eventQueue:testMixpanel.apiToken].firstObject;
         if (![event[@"event"] isEqualToString:@"$opt_in"]) {
             event = [self eventQueue:testMixpanel.apiToken][1];
         }
@@ -153,6 +159,7 @@
 - (void)testOptOutTrackingWillNotGenerateEventQueue
 {
     Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    [testMixpanel handlingAutomaticEventsWith:NO];
     [testMixpanel optOutTracking];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -165,6 +172,7 @@
 - (void)testOptOutTrackingWillNotGeneratePeopleQueue
 {
     Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    [testMixpanel handlingAutomaticEventsWith:NO];
     [testMixpanel identify:@"d1"];
     [testMixpanel optOutTracking];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
@@ -178,6 +186,7 @@
 - (void)testOptOutTrackingWillSkipIdentify
 {
     Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    [testMixpanel handlingAutomaticEventsWith:NO];
     [testMixpanel optOutTracking];
     [testMixpanel identify:@"d1"];
     //opt in again just to enable people queue

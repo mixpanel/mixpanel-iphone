@@ -171,7 +171,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
             self.automaticEvents = [[AutomaticEvents alloc] init];
             self.automaticEvents.delegate = self;
-            [self.automaticEvents initializeEvents:self.people];
+            [self.automaticEvents initializeEvents:self.people apiToken:apiToken];
 #endif
         }
         instances[apiToken] = self;
@@ -262,6 +262,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 - (void)setTrackAutomaticEventsEnabled:(BOOL)trackAutomaticEventsEnabled
 {
     [MixpanelPersistence saveAutomaticEventsEnabledFlag:trackAutomaticEventsEnabled fromDecide:NO apiToken:self.apiToken];
+    if (!trackAutomaticEventsEnabled) {
+        dispatch_async(self.serialQueue, ^{
+            [self.persistence removeAutomaticEvents];
+        });
+    }
 }
 
 #if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
@@ -1357,6 +1362,15 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #pragma mark - Decide
 
+- (void)handlingAutomaticEventsWith:(BOOL)decideTrackAutomaticEvents {
+    [MixpanelPersistence saveAutomaticEventsEnabledFlag:decideTrackAutomaticEvents fromDecide:YES apiToken:self.apiToken];
+    if (!decideTrackAutomaticEvents) {
+        dispatch_async(self.serialQueue, ^{
+            [self.persistence removeAutomaticEvents];
+        });
+    }
+}
+
 - (void)checkForDecideResponse
 {
     dispatch_async(self.networkQueue, ^{
@@ -1408,7 +1422,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                 
                 id rawAutomaticEvents = object[@"automatic_events"];
                 if (rawAutomaticEvents != nil && [rawAutomaticEvents isKindOfClass:[NSNumber class]]) {
-                    [MixpanelPersistence saveAutomaticEventsEnabledFlag:[rawAutomaticEvents boolValue] fromDecide:YES apiToken:self.apiToken];
+                    [self handlingAutomaticEventsWith: [rawAutomaticEvents boolValue]];
                 }
 
                 @synchronized (self) {

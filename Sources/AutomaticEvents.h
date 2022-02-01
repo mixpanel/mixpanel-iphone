@@ -17,7 +17,7 @@
 @property (atomic, weak) id<TrackDelegate> delegate;
 @property (atomic, assign) UInt64 minimumSessionDuration;
 @property (atomic, assign) UInt64 maximumSessionDuration;
-- (void)initializeEvents:(MixpanelPeople *)peopleInstance;
+- (void)initializeEvents:(MixpanelPeople *)peopleInstance apiToken:(NSString *)apiToken;
 
 @end
 

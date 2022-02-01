@@ -35,14 +35,19 @@
     return self;
 }
 
-- (void)initializeEvents:(MixpanelPeople *)peopleInstance {
+- (void)initializeEvents:(MixpanelPeople *)peopleInstance apiToken:(NSString *)apiToken {
     people = peopleInstance;
-    NSString *firstOpenKey = @"MPFirstOpen";
-    if (defaults != nil && ![defaults boolForKey:firstOpenKey]) {
-        [self.delegate track:@"$ae_first_open" properties:nil];
-        [people setOnce:@{@"$ae_first_app_open_date": [NSDate date]}];
-        [defaults setBool:TRUE forKey:firstOpenKey];
-        [defaults synchronize];
+    NSString *legacyFirstOpenKey = @"MPFirstOpen";
+    NSString *firstOpenKey = [NSString stringWithFormat:@"MPFirstOpen-%@", apiToken];
+    // do not track `$ae_first_open` again if the legacy key exist,
+    // but we will start using the key with the mixpanel token in favour of multiple instances support
+    if (defaults != nil && ![defaults boolForKey:legacyFirstOpenKey]) {
+        if (![defaults boolForKey:firstOpenKey]) {
+            [self.delegate track:@"$ae_first_open" properties:nil];
+            [people setOnce:@{@"$ae_first_app_open_date": [NSDate date]}];
+            [defaults setBool:TRUE forKey:firstOpenKey];
+            [defaults synchronize];
+        }
     }
 
     NSDictionary* infoDict = [NSBundle mainBundle].infoDictionary;
