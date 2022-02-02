@@ -6,6 +6,7 @@
 #endif
 #import "MixpanelPeople.h"
 #import "MixpanelType.h"
+#import "MixpanelGroup.h"
 
 
 #if defined(MIXPANEL_WATCHOS)
