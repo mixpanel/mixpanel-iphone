@@ -26,7 +26,7 @@
     [self waitForMixpanelQueues:testMixpanel];
     XCTAssertTrue([self unIdentifiedPeopleQueue:testMixpanel.apiToken].count == 505);
     
-    NSDictionary *r = [self unIdentifiedPeopleQueue:testMixpanel.apiToken].firstObject;
+    NSDictionary *r = [self unIdentifiedPeopleQueue:testMixpanel.apiToken][0];
     XCTAssertEqualObjects(r[@"$set"][@"i"], @(0));
     
     r = [self unIdentifiedPeopleQueue:testMixpanel.apiToken].lastObject;
@@ -43,7 +43,7 @@
     [self waitForMixpanelQueues:testMixpanel];
     XCTAssertTrue([self peopleQueue:testMixpanel.apiToken].count == 505);
     
-    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken].firstObject;
+    NSDictionary *r = [self peopleQueue:testMixpanel.apiToken][0];
     XCTAssertEqualObjects(r[@"$set"][@"i"], @(0));
     
     r = [self peopleQueue:testMixpanel.apiToken].lastObject;

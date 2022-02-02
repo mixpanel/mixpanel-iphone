@@ -23,6 +23,7 @@
 
 - (NSArray *)loadEntitiesInBatch:(NSString *)type;
 - (NSArray *)loadEntitiesInBatch:(NSString *)type flag:(BOOL)flag;
+- (void)removeAutomaticEvents;
 - (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids;
 - (void)identifyPeople;
 - (void)resetEntities;

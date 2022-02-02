@@ -16,12 +16,14 @@
 
 - (void)setUp {
     [super setUp];
-    
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
+    [defaults setBool:YES forKey:@"MPFirstOpen"];
     self.mixpanelWillFlush = NO;
 }
 
 - (void)tearDown {
-    [NSThread sleepForTimeInterval:1.0];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"Mixpanel"];
+    [defaults removeObjectForKey:@"MPFirstOpen"];
     [super tearDown];
 }
 

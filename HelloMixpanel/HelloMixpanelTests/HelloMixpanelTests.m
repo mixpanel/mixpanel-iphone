@@ -35,7 +35,7 @@
     // Failure count should be 3
     NSTimeInterval waitTime = testMixpanel.network.requestsDisabledUntilTime - [[NSDate date] timeIntervalSince1970];
     NSLog(@"Delta wait time is %.3f", waitTime);
-    XCTAssert(waitTime >= 120.f, "Network backoff time is less than 2 minutes.");
+    XCTAssert(waitTime >= 110.f, "Network backoff time is less than 2 minutes.");
     XCTAssert(testMixpanel.network.consecutiveFailures == 2, @"Network failures did not equal 2");
     XCTAssert([self eventQueue:testMixpanel.apiToken].count == 1, @"Removed an event from the queue that was not sent");
     [self removeDBfile:testMixpanel.apiToken];
@@ -78,6 +78,7 @@
 
 - (void)testFlushNetworkFailure {
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    testMixpanel.trackAutomaticEventsEnabled = NO;
     [testMixpanel setServerURL:kFakeServerUrl];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -94,6 +95,7 @@
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *testToken = [self randomTokenId];
         Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+        testMixpanel.trackAutomaticEventsEnabled = NO;
         NSString *distinctId = @"d1";
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
         XCTAssertEqualObjects(testMixpanel.distinctId, testMixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
@@ -409,8 +411,7 @@
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 0, @"events queue failed to reset");
     XCTAssertTrue([self peopleQueue:testMixpanel.apiToken].count == 0, @"people queue failed to reset");
 
-    NSString *testToken1 = [self randomTokenId];
-    testMixpanel = [[Mixpanel alloc] initWithToken:testToken1 andFlushInterval:60];
+    testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
     [self waitForMixpanelQueues:testMixpanel];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
     XCTAssertEqualObjects(testMixpanel.distinctId, [testMixpanel defaultDistinctId], @"distinct id failed to reset after archive");
@@ -425,6 +426,7 @@
 - (void)testArchive {
     NSString *testToken = [self randomTokenId];
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel.serverURL = kFakeServerUrl;
     [testMixpanel archive];
     testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
@@ -449,6 +451,7 @@
 
     [testMixpanel archive];
     testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel.serverURL = kFakeServerUrl;
     [self waitForMixpanelQueues:testMixpanel];
     XCTAssertEqualObjects(testMixpanel.distinctId, @"d1", @"custom distinct archive failed");
    
@@ -465,6 +468,7 @@
     XCTAssertEqualObjects(testMixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
 
     testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel.serverURL = kFakeServerUrl;
     eventQueue = [self eventQueue:testMixpanel.apiToken];
     peopleQueue = [self peopleQueue:testMixpanel.apiToken];
     groupQueue = [self groupQueue:testMixpanel.apiToken];
