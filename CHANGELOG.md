@@ -1,5 +1,19 @@
 #
 
+## [v4.1.2](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.2) (2022-02-03)
+
+### Enhancements
+
+- Remove `nocilla` and `ocmock` [\#979](https://github.com/mixpanel/mixpanel-iphone/pull/979)
+
+### Fixes
+
+- Fix duplicated header in the CocoaPods build [\#982](https://github.com/mixpanel/mixpanel-iphone/pull/982)
+- fix missing import MixpanelGroup [\#981](https://github.com/mixpanel/mixpanel-iphone/pull/981)
+- Fix first app open not respecting Automatic Events setting from server [\#980](https://github.com/mixpanel/mixpanel-iphone/pull/980)
+
+#
+
 ## [v4.1.1](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.1) (2022-01-22)
 
 ### Fixes:
@@ -88,6 +102,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
