@@ -62,4 +62,13 @@ jobs:
           prWoLabels: true
           author: false
           verbose: true
+      - name: "🚀 Create GitHub Release"
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.generate-release-changelog.outputs.changelog }}
 
