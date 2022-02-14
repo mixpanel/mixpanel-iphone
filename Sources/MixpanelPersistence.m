@@ -102,11 +102,13 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
             [ids addObject:event[@"id"]];
         }
     }];
-    [self removeEntitiesInBatch:PersistenceTypeEvents ids:ids];
+    if (ids.count > 0) {
+        [self removeEntitiesInBatch:PersistenceTypeEvents ids:ids];
+    }
 }
 
 - (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids {
-    [self.mpdb deleteRows:type ids:ids];
+    [self.mpdb deleteRows:type ids:ids isDeleteAll:NO];
 }
 
 - (void)identifyPeople {
@@ -115,7 +117,7 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
 
 - (void)resetEntities {
     for (NSString *type in @[PersistenceTypeEvents, PersistenceTypePeople, PersistenceTypeGroups]) {
-        [self.mpdb deleteRows:type ids:@[]];
+        [self.mpdb deleteRows:type ids:@[] isDeleteAll: YES];
     }
 }
 

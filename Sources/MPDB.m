@@ -140,10 +140,10 @@
     }
 }
 
-- (void)deleteRows:(NSString *)persistenceType ids:(NSArray *)ids {
+- (void)deleteRows:(NSString *)persistenceType ids:(NSArray *)ids isDeleteAll:(BOOL)isDeleteAll {
     if (self.connection) {
         NSString *tableName = [self tableNameFor:persistenceType];
-        NSString *fromString = ids.count > 0 ? [NSString stringWithFormat:@" WHERE id IN %@", [self idsSqlString: ids]] : @"";
+        NSString *fromString = isDeleteAll ? @"" : [NSString stringWithFormat:@" WHERE id IN %@", [self idsSqlString: ids]];
         NSString *deleteString = [NSString stringWithFormat:@"DELETE FROM %@%@", tableName, fromString];
         sqlite3_stmt *deleteStatement;
         if (sqlite3_prepare_v2(self.connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
