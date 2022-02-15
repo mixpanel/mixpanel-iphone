@@ -91,7 +91,7 @@
 
 - (void)removeDBfile:(NSString *)token {
     NSString *filename = [NSString stringWithFormat:@"%@_MPDB.sqlite", token];
-#if !defined(MIXPANEL_TVOS)
+#if !TARGET_OS_TV
     NSString *dbPath = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
 #else

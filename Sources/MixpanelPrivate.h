@@ -10,6 +10,7 @@
 #import "SessionMetadata.h"
 #import "MixpanelType.h"
 #import "MixpanelPersistence.h"
+#include <TargetConditionals.h>
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
@@ -54,7 +55,7 @@ static BOOL IdentifiedFlag = NO;
 @property (atomic, strong) AutomaticEvents *automaticEvents;
 #endif
 
-#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
+#if !TARGET_OS_WATCH && !TARGET_OS_OSX
 @property (nonatomic, assign) UIBackgroundTaskIdentifier taskId;
 #endif
 

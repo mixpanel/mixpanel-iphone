@@ -310,7 +310,7 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
 - (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
-#if !defined(MIXPANEL_TVOS)
+#if !TARGET_OS_TV
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
 #else

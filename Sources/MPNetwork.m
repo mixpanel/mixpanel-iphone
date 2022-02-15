@@ -15,7 +15,7 @@
 #import <UIKit/UIKit.h>
 #endif
 
-#if (defined(MIXPANEL_TVOS) || defined(MIXPANEL_WATCHOS) || defined(MIXPANEL_MACOS))
+#if TARGET_OS_TV || TARGET_OS_WATCH || TARGET_OS_OSX
 #define MIXPANEL_NO_NETWORK_ACTIVITY_INDICATOR 1
 #endif
 

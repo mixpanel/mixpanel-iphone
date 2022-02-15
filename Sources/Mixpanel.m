@@ -19,10 +19,10 @@
 #import "MixpanelIdentity.h"
 
 
-#if defined(MIXPANEL_WATCHOS)
+#if TARGET_OS_WATCH
 #import "MixpanelWatchProperties.h"
 #import <WatchKit/WatchKit.h>
-#elif defined(MIXPANEL_MACOS)
+#elif TARGET_OS_OSX
 #import <IOKit/IOKitLib.h>
 #endif
 
@@ -145,7 +145,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         self.superProperties = [NSDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
-#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
+#if !TARGET_OS_WATCH && !TARGET_OS_OSX
         if (![Mixpanel isAppExtension]) {
             self.taskId = UIBackgroundTaskInvalid;
         }
@@ -489,10 +489,10 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             p[@"distinct_id"] = self.distinctId;
         }
         if (self.anonymousId) {
-          p[@"$device_id"] = self.anonymousId;
+            p[@"$device_id"] = self.anonymousId;
         }
         if (self.userId) {
-          p[@"$user_id"] = self.userId;
+            p[@"$user_id"] = self.userId;
         }
         if (self.hadPersistedDistinctId) {
             p[@"$had_persisted_distinct_id"] = [NSNumber numberWithBool:self.hadPersistedDistinctId];
@@ -930,7 +930,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 - (NSString *)filePathFor:(NSString *)data
 {
     NSString *filename = [NSString stringWithFormat:@"mixpanel-%@-%@.plist", self.apiToken, data];
-#if !defined(MIXPANEL_TVOS)
+#if !TARGET_OS_TV
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
 #else
@@ -990,7 +990,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     return results;
 }
 
-#if defined(MIXPANEL_MACOS)
+#if TARGET_OS_OSX
 - (NSString *)macOSIdentifier
 {
     io_service_t platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
@@ -1015,11 +1015,11 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 - (NSString *)uniqueIdentifierForDevice
 {
     NSString *distinctId = nil;
-#if !defined(MIXPANEL_WATCHOS) && !defined(MIXPANEL_MACOS)
+#if !TARGET_OS_WATCH && !TARGET_OS_OSX
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
-#elif defined(MIXPANEL_MACOS)
+#elif TARGET_OS_OSX
     distinctId = [self macOSIdentifier];
 #endif
     return distinctId;
@@ -1083,9 +1083,9 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (NSDictionary *)collectDeviceProperties
 {
-#if defined(MIXPANEL_WATCHOS)
+#if TARGET_OS_WATCH
     return [MixpanelWatchProperties collectDeviceProperties];
-#elif defined(MIXPANEL_MACOS)
+#elif TARGET_OS_OSX
     CGSize size = [NSScreen mainScreen].frame.size;
     return @{
              @"$os": @"macOS",
@@ -1152,7 +1152,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 #pragma mark - UIApplication Events
 
-#if !defined(MIXPANEL_MACOS)
+#if !TARGET_OS_OSX
 - (void)setUpListeners
 {
     if (![Mixpanel isAppExtension]) {
@@ -1264,7 +1264,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     MPLogInfo(@"%@ application will resign active", self);
     [self stopFlushTimer];
 
-#if defined(MIXPANEL_MACOS)
+#if TARGET_OS_OSX
     if (self.flushOnBackground) {
         [self flush];
     } else {
@@ -1275,7 +1275,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 #endif
 }
 
-#if !defined(MIXPANEL_MACOS)
+#if !TARGET_OS_OSX
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     MPLogInfo(@"%@ did enter background", self);
