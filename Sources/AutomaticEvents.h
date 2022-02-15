@@ -5,6 +5,7 @@
 //  Copyright © Mixpanel. All rights reserved.
 //
 
+#if TARGET_OS_IOS
 #import <UIKit/UIKit.h>
 #import "MixpanelPeople.h"
 
@@ -21,3 +22,4 @@
 
 @end
 
+#endif

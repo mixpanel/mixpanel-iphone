@@ -5,7 +5,7 @@
 //  Copyright © Mixpanel. All rights reserved.
 //
 
-#if defined(MIXPANEL_WATCHOS)
+#if TARGET_OS_WATCH
 
 #import <Foundation/Foundation.h>
 

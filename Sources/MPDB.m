@@ -30,7 +30,7 @@
 
 - (NSString *)pathToDB {
     NSString *filename = [NSString stringWithFormat:@"%@_MPDB.sqlite", self.apiToken];
-#if !defined(MIXPANEL_TVOS)
+#if !TARGET_OS_TV
     return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
             stringByAppendingPathComponent:filename];
 #else
