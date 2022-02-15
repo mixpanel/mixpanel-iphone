@@ -693,7 +693,7 @@
             index++;
         }
 
-        [mpdb deleteRows:pType ids:@[@1, @2, @3]];
+        [mpdb deleteRows:pType ids:@[@1, @2, @3] isDeleteAll:NO];
         NSArray *dataArray2 = [mpdb readRows:pType numRows:numRows flag:false];
         // even though we request numRows, there should only be numRows - 3 left
         XCTAssertEqual([dataArray2 count], 47);

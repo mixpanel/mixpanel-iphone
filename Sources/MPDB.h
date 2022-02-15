@@ -17,7 +17,7 @@
 - (void)close;
 
 - (void)insertRow:(NSString *)persistenceType data:(NSData *)data flag:(BOOL) flag;
-- (void)deleteRows:(NSString *)persistenceType ids:(NSArray *)ids;
+- (void)deleteRows:(NSString *)persistenceType ids:(NSArray *)ids isDeleteAll:(BOOL)isDeleteAll;
 - (void)updateRowsFlag:(NSString *)persistenceType newFlag:(BOOL)newFlag;
 - (NSArray *)readRows:(NSString *)persistenceType numRows:(NSInteger)numRows flag:(BOOL)flag;
 
