@@ -55,7 +55,7 @@ Check out the [Carthage docs](https://github.com/Carthage/Carthage#if-youre-buil
 
 ### Installation Option 3: Swift Package Manager
 1.  In Xcode, select File > Add Packages...
-2.  Enter the package URL for this [repository](https://github.com/mixpanel/mixpanel-iphone) and must select a version greater or equal than v4.0.0
+2.  Enter the package URL for this [repository](https://github.com/mixpanel/mixpanel-iphone) and must select a version greater than or equal to v4.0.0
 
 ## 2. Initialize Mixpanel
 To initialize the library, add `#Import "Mixpanel/Mixpanel.h" into "AppDelegate.m" and call [sharedInstanceWithToken:](https://mixpanel.github.io/mixpanel-iphone/Classes/Mixpanel.html#//api/name/sharedInstanceWithToken:) with your project token as its argument in [application:didFinishLaunchingWithOptions:](https://developer.apple.com/documentation/uikit/uiapplicationdelegate#//apple_ref/occ/intfm/UIApplicationDelegate/application:willFinishLaunchingWithOptions:).
