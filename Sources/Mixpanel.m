@@ -227,7 +227,8 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         NSString *thumbsDown = @"\U0001f44e";
         NSString *logString = [NSString stringWithFormat:@"%@%@ Zihe & Jared here, tell us about the Mixpanel developer experience! https://www.mixpanel.com/devnps %@%@", waveHand, waveHand, thumbsUp, thumbsDown];
         NSLog(@"%@", logString);
-        [[NSUserDefaults standardUserDefaults] setInteger:surveyShownCount + 1 forKey:surveyShownCountKey];
+        surveyShownCount++;
+        [[NSUserDefaults standardUserDefaults] setInteger:surveyShownCount forKey:surveyShownCountKey];
         [self sendHttpEvent:@"Dev NPS Survey Logged" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Survey Shown Count": @(surveyShownCount), @"Debug Launch Count": @(debugInitCount)}];
     }
 }
