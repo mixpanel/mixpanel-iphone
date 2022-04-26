@@ -85,7 +85,7 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
 
 - (NSArray *)loadEntitiesInBatch:(NSString *)type flag:(BOOL)flag {
     NSArray *entities = [self.mpdb readRows:type numRows:NSIntegerMax flag:flag];
-    if (type == PersistenceTypePeople) {
+    if ([type isEqualToString:PersistenceTypePeople]) {
         NSString *distinctId = [MixpanelPersistence loadIdentity:self.apiToken].distinctId;
         for (NSMutableDictionary *r in entities) {
             if (r[@"$distinct_id"] == nil && distinctId) {
