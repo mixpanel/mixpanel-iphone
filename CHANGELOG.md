@@ -1,5 +1,18 @@
 #
 
+## [v4.1.4](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.4) (2022-04-26)
+
+### Enhancements
+
+- add dev nps survey [\#986](https://github.com/mixpanel/mixpanel-iphone/pull/986)
+- Remove `nocilla` and `ocmock` [\#979](https://github.com/mixpanel/mixpanel-iphone/pull/979)
+
+### Fixes
+
+- only add $distinct\_id to people records [\#987](https://github.com/mixpanel/mixpanel-iphone/pull/987)
+
+#
+
 ## [v4.1.3](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.3) (2022-02-15)
 
 ### Fixes
@@ -111,6 +124,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
