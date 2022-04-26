@@ -213,7 +213,6 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     [self checkForSurvey:distinctId debugInitCount: debugInitCount];
     [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:debugInitCountKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
 }
 
 - (void)checkForSurvey:(NSString *)distinctId
