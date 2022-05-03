@@ -44,6 +44,7 @@ static NSString *const MPDebugImplementedKey = @"MPDebugImplementedKey";
 static NSString *const MPDebugIdentifiedKey = @"MPDebugIdentifiedKey";
 static NSString *const MPDebugAliasedKey = @"MPDebugAliasedKey";
 static NSString *const MPDebugUsedPeopleKey = @"MPDebugUsedPeopleKey";
+static NSString *const MPSurveyShownCountKey = @"MPSurveyShownCountKey";
 
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
