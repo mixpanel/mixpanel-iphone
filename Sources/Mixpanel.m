@@ -533,7 +533,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     }
     
 #if defined(DEBUG)
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MPDebugTrackedKey"];
+    if (![event hasPrefix:@"$"]) [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MPDebugTrackedKey"];
 #endif
     
     properties = [properties copy];
