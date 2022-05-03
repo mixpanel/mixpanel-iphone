@@ -205,12 +205,14 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 - (void)didDebugInit:(NSString *)distinctId
 {
-    NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPDebugInitCountKey] + 1;
-    [self sendHttpEvent:@"SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
-    [self checkForSurvey:distinctId debugInitCount: debugInitCount];
-    [self checkIfImplemented:distinctId debugInitCount: debugInitCount];
-    [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:MPDebugInitCountKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (distinctId.length == 32) {
+        NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPDebugInitCountKey] + 1;
+        [self sendHttpEvent:@"SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
+        [self checkForSurvey:distinctId debugInitCount: debugInitCount];
+        [self checkIfImplemented:distinctId debugInitCount: debugInitCount];
+        [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:MPDebugInitCountKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 - (void)checkForSurvey:(NSString *)distinctId
@@ -1430,14 +1432,12 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
            properties:(NSDictionary *)properties
     completionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
 {
-    if (distinctId.length == 32) {
-        NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion}];
-        [trackingProperties addEntriesFromDictionary:properties];
-        NSString *requestData = [MPJSONHandler encodedJSONString:@[@{@"event": eventName, @"properties": trackingProperties}]];
-        NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
-        NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
-        [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
-    }
+    NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion}];
+    [trackingProperties addEntriesFromDictionary:properties];
+    NSString *requestData = [MPJSONHandler encodedJSONString:@[@{@"event": eventName, @"properties": trackingProperties}]];
+    NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
+    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
+    [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
 }
 
 #pragma mark - Logging
