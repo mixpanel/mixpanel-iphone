@@ -73,7 +73,7 @@
     
 #if defined(DEBUG)
     if (![[[properties allKeys] firstObject] hasPrefix:@"$ae_"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MPDebugUsedPeopleKey"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugUsedPeopleKey];
     }
 #endif
     
