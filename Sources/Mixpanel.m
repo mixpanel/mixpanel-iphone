@@ -219,7 +219,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 {
     NSString *surveyShownDateKey = @"MPSurveyShownDateKey";
     NSDate *surveyShownDate = [[NSUserDefaults standardUserDefaults] objectForKey:surveyShownDateKey];
-    if ([surveyShownDate timeIntervalSinceNow] < -3600) { // only show once per day
+    if (!surveyShownDate || [surveyShownDate timeIntervalSinceNow] < -3600) { // only show once per day
         NSString *waveHand = @"\U0001f44b";
         NSString *thumbsUp = @"\U0001f44d";
         NSString *thumbsDown = @"\U0001f44e";
