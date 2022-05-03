@@ -207,10 +207,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 {
     NSString *debugInitCountKey = @"MPDebugInitCountKey";
     NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:debugInitCountKey] + 1;
-    if (debugInitCount == 1) {
-        [self sendHttpEvent:@"First SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId];
-    }
+    [self sendHttpEvent:@"SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
     [self checkForSurvey:distinctId debugInitCount: debugInitCount];
+    [self checkIfImplemented:distinctId debugInitCount: debugInitCount];
     [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:debugInitCountKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -218,17 +217,38 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 - (void)checkForSurvey:(NSString *)distinctId
         debugInitCount:(NSInteger)debugInitCount
 {
-    NSString *surveyShownCountKey = @"MPSurveyShownCountKey";
-    NSInteger surveyShownCount = [[NSUserDefaults standardUserDefaults] integerForKey:surveyShownCountKey];
-    if ((debugInitCount > 10 && surveyShownCount < 1) || (debugInitCount > 20 && surveyShownCount < 2) || (debugInitCount > 30 && surveyShownCount < 3)) {
+    NSString *surveyShownDateKey = @"MPSurveyShownDateKey";
+    NSDate *surveyShownDate = [[NSUserDefaults standardUserDefaults] objectForKey:surveyShownDateKey];
+    if ([surveyShownDate timeIntervalSinceNow] < -3600) { // only show once per day
         NSString *waveHand = @"\U0001f44b";
         NSString *thumbsUp = @"\U0001f44d";
         NSString *thumbsDown = @"\U0001f44e";
         NSString *logString = [NSString stringWithFormat:@"%@%@ Zihe & Jared here, tell us about the Mixpanel developer experience! https://www.mixpanel.com/devnps %@%@", waveHand, waveHand, thumbsUp, thumbsDown];
         NSLog(@"%@", logString);
-        surveyShownCount++;
-        [[NSUserDefaults standardUserDefaults] setInteger:surveyShownCount forKey:surveyShownCountKey];
-        [self sendHttpEvent:@"Dev NPS Survey Logged" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Survey Shown Count": @(surveyShownCount), @"Debug Launch Count": @(debugInitCount)}];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:surveyShownDateKey];
+        [self sendHttpEvent:@"Dev NPS Survey Logged" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
+    }
+}
+
+- (void)checkIfImplemented:(NSString *)distinctId
+            debugInitCount:(NSInteger)debugInitCount
+{
+    NSString *hasImplementedKey = @"MPDebugImplementedKey";
+    BOOL hasImplemented = [[NSUserDefaults standardUserDefaults] boolForKey:hasImplementedKey];
+    if (!hasImplemented) {
+        NSInteger completed = 0;
+        BOOL hasTracked = [[NSUserDefaults standardUserDefaults] boolForKey:@"MPDebugTrackedKey"];
+        if (hasTracked) completed++;
+        BOOL hasIdentified = [[NSUserDefaults standardUserDefaults] boolForKey:@"MPDebugIdentifedKey"];
+        if (hasIdentified) completed++;
+        BOOL hasAliased = [[NSUserDefaults standardUserDefaults] boolForKey:@"MPDebugAliasedKey"];
+        if (hasAliased) completed++;
+        BOOL hasUsedPeople = [[NSUserDefaults standardUserDefaults] boolForKey:@"MPDebugUsedPeopleKey"];
+        if (hasUsedPeople) completed++;
+        if (completed >= 3) {
+            [self sendHttpEvent:@"SDK Implemented" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Tracked": @(hasTracked), @"Identified": @(hasIdentified), @"Aliased": @(hasAliased), @"Used People": @(hasUsedPeople), @"Debug Launch Count": @(debugInitCount)}];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:hasImplementedKey];
+        }
     }
 }
 
@@ -418,6 +438,10 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
+    
+#if defined(DEBUG)
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MPDebugIdentifiedKey"];
+#endif
 
     dispatch_async(self.serialQueue, ^{
         if(!self.anonymousId) {
@@ -470,6 +494,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
+    
+#if defined(DEBUG)
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MPDebugAliasedKey"];
+#endif
+    
     if (![alias isEqualToString:distinctID]) {
         dispatch_async(self.serialQueue, ^{
             self.alias = alias;
@@ -502,7 +531,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     if (![MixpanelPersistence loadAutomaticEventsEnabledFlagWithApiToken:self.apiToken] && [event hasPrefix:@"$ae_"]) {
         return;
     }
-
+    
+#if defined(DEBUG)
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MPDebugTrackedKey"];
+#endif
+    
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
 
