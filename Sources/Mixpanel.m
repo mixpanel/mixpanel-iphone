@@ -1447,6 +1447,9 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 - (void)setEnableLogging:(BOOL)enableLogging
 {
     [MPLogger sharedInstance].loggingEnabled = enableLogging;
+#if defined(DEBUG)
+    [self sendHttpEvent:@"Toggle SDK Logging" apiToken:@"metrics-1" distinctId:self.apiToken properties:@{@"Logging Enabled": @(enableLogging)}];
+#endif
 }
 
 - (BOOL)enableLogging
