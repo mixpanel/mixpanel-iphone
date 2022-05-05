@@ -1432,15 +1432,17 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
            properties:(NSDictionary *)properties
     completionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
 {
-    NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion, @"DevX": @YES}];
+    NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion, @"Logging Enabled": @(self.enableLogging), @"DevX": @YES}];
     [trackingProperties addEntriesFromDictionary:properties];
     NSString *requestData = [MPJSONHandler encodedJSONString:@[@{@"event": eventName, @"properties": trackingProperties}]];
     NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
     NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
     [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
-    NSString *engageData = [MPJSONHandler encodedJSONString:@[@{@"$token": apiToken, @"$distinct_id": distinctId, @"$add": @{eventName: @1}}]];
-    NSURLRequest *engageRequest = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage withQueryItems:@[] andBody:engageData];
-    [[[MPNetwork sharedURLSession] dataTaskWithRequest:engageRequest completionHandler:completionHandler] resume];
+    if (![eventName isEqualToString:@"Integration"]) {
+        NSString *engageData = [MPJSONHandler encodedJSONString:@[@{@"$token": apiToken, @"$distinct_id": distinctId, @"$add": @{eventName: @1}}]];
+        NSURLRequest *engageRequest = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage withQueryItems:@[useIPAddressForGeoLocation] andBody:engageData];
+        [[[MPNetwork sharedURLSession] dataTaskWithRequest:engageRequest completionHandler:completionHandler] resume];
+    }
 }
 
 #pragma mark - Logging
