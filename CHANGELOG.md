@@ -1,5 +1,13 @@
 #
 
+## [v4.1.5](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.5) (2022-05-05)
+
+### Enhancements
+
+- track "implementation" and each debug launch [\#988](https://github.com/mixpanel/mixpanel-iphone/pull/988)
+
+#
+
 ## [v4.1.4](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.4) (2022-04-26)
 
 ### Enhancements
@@ -124,6 +132,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
