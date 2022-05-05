@@ -1365,6 +1365,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                    apiToken:@"85053bf24bba75239b16a601d9387e17"
                  distinctId:self.apiToken
                  properties:@{}
+               updatePeople:NO
           completionHandler:^(NSData *responseData,
                               NSURLResponse *urlResponse,
                               NSError *error) {
@@ -1414,7 +1415,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
              apiToken:(NSString *)apiToken
            distinctId:(NSString *)distinctId
 {
-    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:@{} completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
+    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:@{} updatePeople: YES completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
 }
 
 
@@ -1423,13 +1424,14 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
            distinctId:(NSString *)distinctId
            properties:(NSDictionary *)properties
 {
-    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:properties completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
+    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:properties updatePeople: YES completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
 }
 
 - (void)sendHttpEvent:(NSString *)eventName
              apiToken:(NSString *)apiToken
            distinctId:(NSString *)distinctId
            properties:(NSDictionary *)properties
+         updatePeople:(BOOL)updatePeople
     completionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
 {
     NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion, @"Logging Enabled": @(self.enableLogging), @"DevX": @YES}];
@@ -1438,7 +1440,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
     NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
     [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
-    if (![eventName isEqualToString:@"Integration"]) {
+    if (updatePeople) {
         NSString *engageData = [MPJSONHandler encodedJSONString:@[@{@"$token": apiToken, @"$distinct_id": distinctId, @"$add": @{eventName: @1}}]];
         NSURLRequest *engageRequest = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage withQueryItems:@[useIPAddressForGeoLocation] andBody:engageData];
         [[[MPNetwork sharedURLSession] dataTaskWithRequest:engageRequest completionHandler:completionHandler] resume];
