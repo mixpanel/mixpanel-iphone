@@ -70,6 +70,13 @@
     if ([self.mixpanel hasOptedOutTracking]) {
         return;
     }
+    
+#if defined(DEBUG)
+    if (![[[properties allKeys] firstObject] hasPrefix:@"$ae_"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugUsedPeopleKey];
+    }
+#endif
+    
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = self.mixpanel;
     if (strongMixpanel) {

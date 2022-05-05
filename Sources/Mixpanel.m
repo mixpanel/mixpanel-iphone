@@ -205,30 +205,51 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 - (void)didDebugInit:(NSString *)distinctId
 {
-    NSString *debugInitCountKey = @"MPDebugInitCountKey";
-    NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:debugInitCountKey] + 1;
-    if (debugInitCount == 1) {
-        [self sendHttpEvent:@"First SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId];
+    if (distinctId.length == 32) {
+        NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPDebugInitCountKey] + 1;
+        [self sendHttpEvent:@"SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
+        [self checkForSurvey:distinctId debugInitCount: debugInitCount];
+        [self checkIfImplemented:distinctId debugInitCount: debugInitCount];
+        [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:MPDebugInitCountKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    [self checkForSurvey:distinctId debugInitCount: debugInitCount];
-    [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:debugInitCountKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)checkForSurvey:(NSString *)distinctId
         debugInitCount:(NSInteger)debugInitCount
 {
-    NSString *surveyShownCountKey = @"MPSurveyShownCountKey";
-    NSInteger surveyShownCount = [[NSUserDefaults standardUserDefaults] integerForKey:surveyShownCountKey];
-    if ((debugInitCount > 10 && surveyShownCount < 1) || (debugInitCount > 20 && surveyShownCount < 2) || (debugInitCount > 30 && surveyShownCount < 3)) {
+    NSDate *surveyShownDate = [[NSUserDefaults standardUserDefaults] objectForKey:MPSurveyShownDateKey];
+    if (!surveyShownDate || [surveyShownDate timeIntervalSinceNow] < -86400) { // only show once per day
         NSString *waveHand = @"\U0001f44b";
         NSString *thumbsUp = @"\U0001f44d";
         NSString *thumbsDown = @"\U0001f44e";
         NSString *logString = [NSString stringWithFormat:@"%@%@ Zihe & Jared here, tell us about the Mixpanel developer experience! https://www.mixpanel.com/devnps %@%@", waveHand, waveHand, thumbsUp, thumbsDown];
         NSLog(@"%@", logString);
-        surveyShownCount++;
-        [[NSUserDefaults standardUserDefaults] setInteger:surveyShownCount forKey:surveyShownCountKey];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:MPSurveyShownDateKey];
+        NSInteger surveyShownCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPSurveyShownCountKey] + 1;
+        [[NSUserDefaults standardUserDefaults] setInteger:surveyShownCount forKey:MPSurveyShownCountKey];
         [self sendHttpEvent:@"Dev NPS Survey Logged" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Survey Shown Count": @(surveyShownCount), @"Debug Launch Count": @(debugInitCount)}];
+    }
+}
+
+- (void)checkIfImplemented:(NSString *)distinctId
+            debugInitCount:(NSInteger)debugInitCount
+{
+    BOOL hasImplemented = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugImplementedKey];
+    if (!hasImplemented) {
+        NSInteger completed = 0;
+        BOOL hasTracked = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugTrackedKey];
+        completed += hasTracked;
+        BOOL hasIdentified = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugIdentifiedKey];
+        completed += hasIdentified;
+        BOOL hasAliased = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugAliasedKey];
+        completed += hasAliased;
+        BOOL hasUsedPeople = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugUsedPeopleKey];
+        completed += hasUsedPeople;
+        if (completed >= 3) {
+            [self sendHttpEvent:@"SDK Implemented" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Tracked": @(hasTracked), @"Identified": @(hasIdentified), @"Aliased": @(hasAliased), @"Used People": @(hasUsedPeople), @"Debug Launch Count": @(debugInitCount)}];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugImplementedKey];
+        }
     }
 }
 
@@ -418,6 +439,10 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
+    
+#if defined(DEBUG)
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugIdentifiedKey];
+#endif
 
     dispatch_async(self.serialQueue, ^{
         if(!self.anonymousId) {
@@ -470,6 +495,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         MPLogError(@"%@ create alias called with empty distinct id: %@", self, distinctID);
         return;
     }
+    
+#if defined(DEBUG)
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugAliasedKey];
+#endif
+    
     if (![alias isEqualToString:distinctID]) {
         dispatch_async(self.serialQueue, ^{
             self.alias = alias;
@@ -502,7 +532,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     if (![MixpanelPersistence loadAutomaticEventsEnabledFlagWithApiToken:self.apiToken] && [event hasPrefix:@"$ae_"]) {
         return;
     }
-
+    
+#if defined(DEBUG)
+    if (![event hasPrefix:@"$"]) [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugTrackedKey];
+#endif
+    
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
 
@@ -1331,6 +1365,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
                    apiToken:@"85053bf24bba75239b16a601d9387e17"
                  distinctId:self.apiToken
                  properties:@{}
+               updatePeople:NO
           completionHandler:^(NSData *responseData,
                               NSURLResponse *urlResponse,
                               NSError *error) {
@@ -1380,7 +1415,7 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
              apiToken:(NSString *)apiToken
            distinctId:(NSString *)distinctId
 {
-    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:@{} completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
+    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:@{} updatePeople: YES completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
 }
 
 
@@ -1389,27 +1424,36 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
            distinctId:(NSString *)distinctId
            properties:(NSDictionary *)properties
 {
-    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:properties completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
+    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:properties updatePeople: YES completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
 }
 
 - (void)sendHttpEvent:(NSString *)eventName
              apiToken:(NSString *)apiToken
            distinctId:(NSString *)distinctId
            properties:(NSDictionary *)properties
+         updatePeople:(BOOL)updatePeople
     completionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
 {
-    NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion}];
+    NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion, @"Logging Enabled": @(self.enableLogging), @"Project Token": distinctId, @"DevX": @YES}];
     [trackingProperties addEntriesFromDictionary:properties];
     NSString *requestData = [MPJSONHandler encodedJSONString:@[@{@"event": eventName, @"properties": trackingProperties}]];
     NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
     NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
     [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
+    if (updatePeople) {
+        NSString *engageData = [MPJSONHandler encodedJSONString:@[@{@"$token": apiToken, @"$distinct_id": distinctId, @"$add": @{eventName: @1}}]];
+        NSURLRequest *engageRequest = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage withQueryItems:@[useIPAddressForGeoLocation] andBody:engageData];
+        [[[MPNetwork sharedURLSession] dataTaskWithRequest:engageRequest completionHandler:completionHandler] resume];
+    }
 }
 
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging
 {
     [MPLogger sharedInstance].loggingEnabled = enableLogging;
+#if defined(DEBUG)
+    [self sendHttpEvent:@"Toggle SDK Logging" apiToken:@"metrics-1" distinctId:self.apiToken properties:@{@"Logging Enabled": @(enableLogging)}];
+#endif
 }
 
 - (BOOL)enableLogging

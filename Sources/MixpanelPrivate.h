@@ -36,6 +36,16 @@ static NSString *const PersistenceTypeGroups = @"groups";
 static BOOL UnIdentifiedFlag = YES;
 static BOOL IdentifiedFlag = NO;
 
+// Internal Standard UserDefaults Keys
+static NSString *const MPDebugTrackedKey = @"MPDebugTrackedKey";
+static NSString *const MPDebugInitCountKey = @"MPDebugInitCountKey";
+static NSString *const MPSurveyShownDateKey = @"MPSurveyShownDateKey";
+static NSString *const MPDebugImplementedKey = @"MPDebugImplementedKey";
+static NSString *const MPDebugIdentifiedKey = @"MPDebugIdentifiedKey";
+static NSString *const MPDebugAliasedKey = @"MPDebugAliasedKey";
+static NSString *const MPDebugUsedPeopleKey = @"MPDebugUsedPeopleKey";
+static NSString *const MPSurveyShownCountKey = @"MPSurveyShownCountKey";
+
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
 #else
