@@ -208,27 +208,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     if (distinctId.length == 32) {
         NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPDebugInitCountKey] + 1;
         [self sendHttpEvent:@"SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
-        [self checkForSurvey:distinctId debugInitCount: debugInitCount];
         [self checkIfImplemented:distinctId debugInitCount: debugInitCount];
         [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:MPDebugInitCountKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)checkForSurvey:(NSString *)distinctId
-        debugInitCount:(NSInteger)debugInitCount
-{
-    NSDate *surveyShownDate = [[NSUserDefaults standardUserDefaults] objectForKey:MPSurveyShownDateKey];
-    if (!surveyShownDate || [surveyShownDate timeIntervalSinceNow] < -86400) { // only show once per day
-        NSString *waveHand = @"\U0001f44b";
-        NSString *thumbsUp = @"\U0001f44d";
-        NSString *thumbsDown = @"\U0001f44e";
-        NSString *logString = [NSString stringWithFormat:@"%@%@ Zihe & Jared here, tell us about the Mixpanel developer experience! https://www.mixpanel.com/devnps %@%@", waveHand, waveHand, thumbsUp, thumbsDown];
-        NSLog(@"%@", logString);
-        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:MPSurveyShownDateKey];
-        NSInteger surveyShownCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPSurveyShownCountKey] + 1;
-        [[NSUserDefaults standardUserDefaults] setInteger:surveyShownCount forKey:MPSurveyShownCountKey];
-        [self sendHttpEvent:@"Dev NPS Survey Logged" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Survey Shown Count": @(surveyShownCount), @"Debug Launch Count": @(debugInitCount)}];
     }
 }
 
