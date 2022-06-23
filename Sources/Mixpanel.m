@@ -523,12 +523,12 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     [Mixpanel assertPropertyTypes:properties];
 
     NSTimeInterval epochInterval = [[NSDate date] timeIntervalSince1970];
-    NSNumber *epochSeconds = @(round(epochInterval));
+    NSNumber *epochMilliseconds = @(round(epochInterval * 1000));
     dispatch_async(self.serialQueue, ^{
         NSNumber *eventStartTime = self.timedEvents[event];
         NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:self.automaticProperties];
         p[@"token"] = self.apiToken;
-        p[@"time"] = epochSeconds;
+        p[@"time"] = epochMilliseconds;
         if (eventStartTime != nil) {
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
