@@ -1,5 +1,13 @@
 #
 
+## [v4.2.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.2.0) (2022-06-24)
+
+### Enhancements
+
+- use millisecond precision for event.time property [\#994](https://github.com/mixpanel/mixpanel-iphone/pull/994)
+
+#
+
 ## [v4.1.6](https://github.com/mixpanel/mixpanel-iphone/tree/v4.1.6) (2022-05-20)
 
 #
@@ -136,6 +144,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
