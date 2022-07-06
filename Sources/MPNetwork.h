@@ -12,7 +12,6 @@
 typedef NS_ENUM(NSUInteger, MPNetworkEndpoint) {
     MPNetworkEndpointTrack,
     MPNetworkEndpointEngage,
-    MPNetworkEndpointDecide,
     MPNetworkEndpointGroups
 };
 

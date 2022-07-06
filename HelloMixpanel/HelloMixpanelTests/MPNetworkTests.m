@@ -52,19 +52,6 @@
     XCTAssert([request.allHTTPHeaderFields[@"Content-Type"] isEqualToString:@"application/json"]);
 }
 
-#pragma mark - Query Creation
-- (void)testRequestForEndpointWithQueryItems {
-    // Build the query items for decide
-    NSArray *items = [MPNetwork buildDecideQueryForProperties:@{ @"test": @"4" }
-                                               withDistinctID:@"1234"
-                                                     andToken:@"deadc0de"];
-    XCTAssertEqual(items.count, (unsigned long)5, @"returned the wrong number of query items.");
-    
-    NSURLRequest *request = [self.network buildGetRequestForEndpoint:MPNetworkEndpointDecide
-                                                      withQueryItems:items];
-    XCTAssertEqualObjects(request.URL.absoluteString, @"http://localhost:31337/decide?version=1&lib=iphone&token=deadc0de&distinct_id=1234&properties=%7B%22test%22:%224%22%7D", @"incorrect URL for the query items.");
-}
-
 #if TARGET_OS_IOS
 //
 // Updating the networking activity indicator should work if we are managing it

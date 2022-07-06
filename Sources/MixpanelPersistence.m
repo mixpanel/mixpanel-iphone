@@ -40,8 +40,6 @@ static NSString *const kLegacyDefaultKeyHadPersistedDistinctId = @"hadPersistedD
 static NSString *const kDefaultKeySuiteName = @"Mixpanel";
 static NSString *const kDefaultKeyPrefix = @"mixpanel";
 static NSString *const kDefaultKeyOptOutStatus = @"OptOutStatus";
-static NSString *const kDefaultKeyAutomaticEventEnabled = @"AutomaticEventEnabled";
-static NSString *const kDefaultKeyAutomaticEventEnabledFromDecide = @"AutomaticEventEnabledFromDecide";
 static NSString *const kDefaultKeyTimedEvents = @"timedEvents";
 static NSString *const kDefaultKeySuperProperties = @"superProperties";
 static NSString *const kDefaultKeyDistinctId = @"MPDistinctID";
@@ -150,37 +148,6 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     return NO;
 }
 
-+ (void)saveAutomaticEventsEnabledFlag:(BOOL)value fromDecide:(BOOL)fromDecide apiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
-    if (defaults) {
-        NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
-        if (fromDecide) {
-            [defaults setBool:value forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabledFromDecide]];
-        } else {
-            [defaults setBool:value forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabled]];
-        }
-        [defaults synchronize];
-    }
-}
-
-+ (BOOL)loadAutomaticEventsEnabledFlagWithApiToken:(NSString *)apiToken {
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
-    if (defaults) {
-        NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
-        NSString *automaticEventsEnabledKey = [NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabled];
-        NSString *automaticEventsEnabledFromDecideKey = [NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabledFromDecide];
-        if ([defaults objectForKey:automaticEventsEnabledKey] == nil && [defaults objectForKey:automaticEventsEnabledFromDecideKey] == nil) {
-            return YES; // default true
-        }
-        if ([defaults objectForKey:automaticEventsEnabledKey] != nil) {
-            return [defaults boolForKey:automaticEventsEnabledKey];
-        } else { // if there is no local settings, get the value from Decide
-            return [defaults boolForKey:automaticEventsEnabledFromDecideKey];
-        }
-    }
-    return YES;
-}
-
 + (void)saveTimedEvents:(NSDictionary *)timedEvents apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
@@ -263,8 +230,6 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
-        [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabled]];
-        [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAutomaticEventEnabledFromDecide]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyOptOutStatus]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyTimedEvents]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeySuperProperties]];
@@ -302,10 +267,6 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     
     [MixpanelPersistence saveIdentity:mixpanelIdentity apiToken:self.apiToken];
     [MixpanelPersistence saveOptOutStatusFlag:[optOutStatus boolValue] apiToken:self.apiToken];
-    NSNumber *automaticEventsFlag = properties[kLegacyDefaultKeyAutomaticEvents];
-    if (automaticEventsFlag != nil) {
-        [MixpanelPersistence saveAutomaticEventsEnabledFlag:[automaticEventsFlag boolValue] fromDecide:NO apiToken:self.apiToken];
-    }
     [self removeLegacyFiles];
 }
 

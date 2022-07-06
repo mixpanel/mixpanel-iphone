@@ -31,8 +31,6 @@
 + (void)saveOptOutStatusFlag:(BOOL)value apiToken:(NSString *)apiToken;
 + (BOOL)loadOptOutStatusFlagWithApiToken:(NSString *)apiToken;
 + (BOOL)optOutStatusNotSet:(NSString *)apiToken;
-+ (void)saveAutomaticEventsEnabledFlag:(BOOL)value fromDecide:(BOOL)fromDecide apiToken:(NSString *)apiToken;
-+ (BOOL)loadAutomaticEventsEnabledFlagWithApiToken:(NSString *)apiToken;
 + (void)saveTimedEvents:(NSDictionary *)timedEvents apiToken:(NSString *)apiToken;
 + (NSDictionary *)loadTimedEvents:(NSString *)apiToken;
 + (void)saveSuperProperties:(NSDictionary *)superProperties apiToken:(NSString *)apiToken;

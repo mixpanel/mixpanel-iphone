@@ -3,7 +3,7 @@
 #import "ViewController.h"
 
 // IMPORTANT!!! replace with your api token from https://mixpanel.com/account/
-#define MIXPANEL_TOKEN @"YOUR_MIXPANEL_PROJECT_TOKEN"
+#define MIXPANEL_TOKEN @"6d83a31dc1373e3153a5a3d087084721"
 
 @implementation AppDelegate
 
@@ -25,7 +25,7 @@
 #endif
     } else {
         // Initialize the MixpanelAPI object
-        self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken];
+        self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken trackAutomaticEvents:YES];
     }
 
     // Override point for customization after application launch.

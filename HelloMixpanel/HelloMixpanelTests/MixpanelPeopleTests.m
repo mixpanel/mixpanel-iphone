@@ -17,7 +17,7 @@
 
 #pragma mark - Queue
 - (void)testDropUnidentifiedPeopleRecords {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     
     for (NSInteger i = 0; i < 505; i++) {
         [testMixpanel.people set:@"i" to:@(i)];
@@ -35,7 +35,7 @@
 }
 
 - (void)testDropPeopleRecords {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     for (NSInteger i = 0; i < 505; i++) {
         [testMixpanel.people set:@"i" to:@(i)];
@@ -52,7 +52,7 @@
 }
 
 - (void)testPeopleAssertPropertyTypes {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     NSDictionary *p = @{ @"URL": [NSData data] };
     XCTAssertThrows([testMixpanel.people set:p], @"unsupported property type was allowed");
     XCTAssertThrows([testMixpanel.people set:@"p1" to:[NSData data]], @"unsupported property type was allowed");
@@ -64,7 +64,7 @@
 
 #pragma mark - Operations
 - (void)testPeopleSet {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     NSDictionary *p = @{ @"p1": @"a" };
     [testMixpanel.people set:p];
@@ -76,7 +76,7 @@
 }
 
 - (void)testPeopleSetOnce {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     NSDictionary *p = @{@"p1": @"a"};
     [testMixpanel.people setOnce:p];
@@ -88,7 +88,7 @@
 }
 
 - (void)testPeopleSetReservedProperty {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     NSDictionary *p = @{@"$ios_app_version": @"override"};
     [testMixpanel.people set:p];
@@ -101,7 +101,7 @@
 }
 
 - (void)testPeopleSetTo {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people set:@"p1" to:@"a"];
     [self waitForMixpanelQueues:testMixpanel];
@@ -112,7 +112,7 @@
 }
 
 - (void)testPeopleIncrement {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     NSDictionary *p = @{ @"p1": @3 };
     [testMixpanel.people increment:p];
@@ -125,7 +125,7 @@
 
 - (void)testPeopleIncrementBy
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people increment:@"p1" by:@3];
     [self waitForMixpanelQueues:testMixpanel];
@@ -137,7 +137,7 @@
 
 - (void)testPeopleDeleteUser
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people deleteUser];
     [self waitForMixpanelQueues:testMixpanel];
@@ -149,7 +149,7 @@
 
 #pragma mark - ($) Charges
 - (void)testPeopleTrackChargeDecimal {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people trackCharge:@25.34];
     [self waitForMixpanelQueues:testMixpanel];
@@ -161,7 +161,7 @@
 }
 
 - (void)testPeopleTrackChargeNil {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
@@ -172,7 +172,7 @@
 }
 
 - (void)testPeopleTrackChargeZero {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people trackCharge:@0];
     [self waitForMixpanelQueues:testMixpanel];
@@ -183,7 +183,7 @@
 }
 
 - (void)testPeopleTrackChargeWithTime {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     NSDictionary *p = [self allPropertyTypes];
     [testMixpanel.people trackCharge:@25 withProperties:@{@"$time": p[@"date"]}];
@@ -196,7 +196,7 @@
 }
 
 - (void)testPeopleTrackChargeWithProperties {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people trackCharge:@25 withProperties:@{@"p1": @"a"}];
     [self waitForMixpanelQueues:testMixpanel];
@@ -207,7 +207,7 @@
 }
 
 - (void)testPeopleTrackCharge {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people trackCharge:@25];
     [self waitForMixpanelQueues:testMixpanel];
@@ -219,7 +219,7 @@
 }
 
 - (void)testPeopleClearCharges {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents: YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel.people clearCharges];
     [self waitForMixpanelQueues:testMixpanel];
