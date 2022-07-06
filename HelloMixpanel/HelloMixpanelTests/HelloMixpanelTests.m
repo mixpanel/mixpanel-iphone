@@ -77,8 +77,7 @@
 }
 
 - (void)testFlushNetworkFailure {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
-    testMixpanel.trackAutomaticEventsEnabled = NO;
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:NO andFlushInterval:60];
     [testMixpanel setServerURL:kFakeServerUrl];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -94,8 +93,7 @@
 - (void)testIdentify {
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *testToken = [self randomTokenId];
-        Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
-        testMixpanel.trackAutomaticEventsEnabled = NO;
+        Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:NO andFlushInterval:60];
         NSString *distinctId = @"d1";
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
         XCTAssertEqualObjects(testMixpanel.distinctId, testMixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");

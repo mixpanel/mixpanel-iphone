@@ -166,7 +166,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  This allows enabling or disabling collecting common mobile events
- If this is not set, it will query the Autotrack settings from the Mixpanel server
  */
 @property (nonatomic) BOOL trackAutomaticEventsEnabled;
 

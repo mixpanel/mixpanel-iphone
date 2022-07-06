@@ -12,12 +12,6 @@
 #import <StoreKit/StoreKit.h>
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
-@interface Mixpanel()
-
-- (void)handlingAutomaticEventsWith:(BOOL)decideTrackAutomaticEvents;
-
-@end
-
 
 @interface AutomaticEventsTests : MixpanelBaseTests
 
@@ -82,7 +76,6 @@
 - (void)testTrackAutomaticEventsIftrackAutomaticEventsEnabledIsTrue {
     // since the token does not exist, it will simulate decide being not available
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
-    testMixpanel.trackAutomaticEventsEnabled = YES;
     testMixpanel.minimumSessionDuration = 0;
     [testMixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
     [self waitForMixpanelQueues:testMixpanel];

@@ -10,12 +10,6 @@
 #import "TestConstants.h"
 #import "MixpanelPeoplePrivate.h"
 
-@interface Mixpanel()
-
-- (void)handlingAutomaticEventsWith:(BOOL)decideTrackAutomaticEvents;
-
-@end
-
 
 @interface MixpanelOptOutTests : MixpanelBaseTests
 

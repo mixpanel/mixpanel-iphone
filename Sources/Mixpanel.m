@@ -302,6 +302,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 - (void)setTrackAutomaticEventsEnabled:(BOOL)trackAutomaticEventsEnabled
 {
+    _trackAutomaticEventsEnabled = trackAutomaticEventsEnabled;
     if (!trackAutomaticEventsEnabled) {
         dispatch_async(self.serialQueue, ^{
             [self.persistence removeAutomaticEvents];
