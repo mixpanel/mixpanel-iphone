@@ -64,7 +64,7 @@ To initialize the library, add `#Import "Mixpanel/Mixpanel.h" into "AppDelegate.
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 ...
-  [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN"];
+  [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN" trackAutomaticEvents:YES];
 ...
 }
 ```
@@ -93,7 +93,7 @@ Here's a runnable code example that covers everything in this quickstart guide.
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 ...
-  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN"];
+  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN" trackAutomaticEvents:YES];
   [mixpanel track:@"Sign Up" properties:@{
     @"source": @"Pat's affiliate site",
     @"Opted out of email": @YES

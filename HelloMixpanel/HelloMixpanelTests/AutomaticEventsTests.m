@@ -52,18 +52,6 @@
     [self removeDBfile:testMixpanel.apiToken];
 }
 
-- (void)testTrackAutomaticEventsIfNetworkNotAvailable {
-    // since the token does not exist, it will simulate decide being not available
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
-    testMixpanel.minimumSessionDuration = 0;
-    [testMixpanel.automaticEvents performSelector:NSSelectorFromString(@"appWillResignActive:") withObject:nil];
-    [self waitForMixpanelQueues:testMixpanel];
-    NSDictionary *event = [[self eventQueue:testMixpanel.apiToken] lastObject];
-    XCTAssertEqual([self eventQueue:testMixpanel.apiToken].count, 1, @"automatic events should be accumulated if check decide is offline(decideInstance.automaticEventsEnabled is nil)");
-    XCTAssertTrue([event[@"event"] isEqualToString:@"$ae_session"], @"should be app session event");
-    [self removeDBfile:testMixpanel.apiToken];
-}
-
 - (void)testDiscardAutomaticEventsIftrackAutomaticEventsEnabledIsFalse {
     Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:NO andFlushInterval:60];
     testMixpanel.minimumSessionDuration = 0;
