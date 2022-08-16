@@ -1,0 +1,3564 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Mixpanel Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">mixpanel-iphone </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Mixpanel</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/alias">alias</option>
+		
+		<option value="//api/name/anonymousId">anonymousId</option>
+		
+		<option value="//api/name/delegate">delegate</option>
+		
+		<option value="//api/name/distinctId">distinctId</option>
+		
+		<option value="//api/name/enableLogging">enableLogging</option>
+		
+		<option value="//api/name/flushInterval">flushInterval</option>
+		
+		<option value="//api/name/flushOnBackground">flushOnBackground</option>
+		
+		<option value="//api/name/hadPersistedDistinctId">hadPersistedDistinctId</option>
+		
+		<option value="//api/name/maximumSessionDuration">maximumSessionDuration</option>
+		
+		<option value="//api/name/minimumSessionDuration">minimumSessionDuration</option>
+		
+		<option value="//api/name/people">people</option>
+		
+		<option value="//api/name/persistence">persistence</option>
+		
+		<option value="//api/name/serverURL">serverURL</option>
+		
+		<option value="//api/name/shouldManageNetworkActivityIndicator">shouldManageNetworkActivityIndicator</option>
+		
+		<option value="//api/name/trackAutomaticEventsEnabled">trackAutomaticEventsEnabled</option>
+		
+		<option value="//api/name/useIPAddressForGeoLocation">useIPAddressForGeoLocation</option>
+		
+		<option value="//api/name/useUniqueDistinctId">useUniqueDistinctId</option>
+		
+		<option value="//api/name/userId">userId</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/libVersion">+ libVersion</option>
+		
+		<option value="//api/name/sharedInstance">+ sharedInstance</option>
+		
+		<option value="//api/name/sharedInstanceWithToken:trackAutomaticEvents:">+ sharedInstanceWithToken:trackAutomaticEvents:</option>
+		
+		<option value="//api/name/sharedInstanceWithToken:trackAutomaticEvents:optOutTrackingByDefault:">+ sharedInstanceWithToken:trackAutomaticEvents:optOutTrackingByDefault:</option>
+		
+		<option value="//api/name/sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:">+ sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:</option>
+		
+		<option value="//api/name/sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:optOutTrackingByDefault:useUniqueDistinctId:">+ sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:optOutTrackingByDefault:useUniqueDistinctId:</option>
+		
+		<option value="//api/name/sharedInstanceWithToken:trackAutomaticEvents:useUniqueDistinctId:">+ sharedInstanceWithToken:trackAutomaticEvents:useUniqueDistinctId:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/addGroup:groupID:">- addGroup:groupID:</option>
+		
+		<option value="//api/name/archive">- archive</option>
+		
+		<option value="//api/name/clearSuperProperties">- clearSuperProperties</option>
+		
+		<option value="//api/name/clearTimedEvent:">- clearTimedEvent:</option>
+		
+		<option value="//api/name/clearTimedEvents">- clearTimedEvents</option>
+		
+		<option value="//api/name/createAlias:forDistinctID:">- createAlias:forDistinctID:</option>
+		
+		<option value="//api/name/createAlias:forDistinctID:usePeople:">- createAlias:forDistinctID:usePeople:</option>
+		
+		<option value="//api/name/currentSuperProperties">- currentSuperProperties</option>
+		
+		<option value="//api/name/eventElapsedTime:">- eventElapsedTime:</option>
+		
+		<option value="//api/name/flush">- flush</option>
+		
+		<option value="//api/name/flushWithCompletion:">- flushWithCompletion:</option>
+		
+		<option value="//api/name/getGroup:groupID:">- getGroup:groupID:</option>
+		
+		<option value="//api/name/hasOptedOutTracking">- hasOptedOutTracking</option>
+		
+		<option value="//api/name/identify:">- identify:</option>
+		
+		<option value="//api/name/identify:usePeople:">- identify:usePeople:</option>
+		
+		<option value="//api/name/initWithToken:trackAutomaticEvents:andFlushInterval:">- initWithToken:trackAutomaticEvents:andFlushInterval:</option>
+		
+		<option value="//api/name/initWithToken:trackAutomaticEvents:flushInterval:trackCrashes:useUniqueDistinctId:">- initWithToken:trackAutomaticEvents:flushInterval:trackCrashes:useUniqueDistinctId:</option>
+		
+		<option value="//api/name/libVersion">- libVersion</option>
+		
+		<option value="//api/name/optInTracking">- optInTracking</option>
+		
+		<option value="//api/name/optInTrackingForDistinctID:">- optInTrackingForDistinctID:</option>
+		
+		<option value="//api/name/optInTrackingForDistinctID:withEventProperties:">- optInTrackingForDistinctID:withEventProperties:</option>
+		
+		<option value="//api/name/optOutTracking">- optOutTracking</option>
+		
+		<option value="//api/name/registerSuperProperties:">- registerSuperProperties:</option>
+		
+		<option value="//api/name/registerSuperPropertiesOnce:">- registerSuperPropertiesOnce:</option>
+		
+		<option value="//api/name/registerSuperPropertiesOnce:defaultValue:">- registerSuperPropertiesOnce:defaultValue:</option>
+		
+		<option value="//api/name/removeGroup:groupID:">- removeGroup:groupID:</option>
+		
+		<option value="//api/name/reset">- reset</option>
+		
+		<option value="//api/name/setGroup:groupID:">- setGroup:groupID:</option>
+		
+		<option value="//api/name/setGroup:groupIDs:">- setGroup:groupIDs:</option>
+		
+		<option value="//api/name/timeEvent:">- timeEvent:</option>
+		
+		<option value="//api/name/track:">- track:</option>
+		
+		<option value="//api/name/track:properties:">- track:properties:</option>
+		
+		<option value="//api/name/trackWithGroups:properties:groups:">- trackWithGroups:properties:groups:</option>
+		
+		<option value="//api/name/unregisterSuperProperty:">- unregisterSuperProperty:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">Mixpanel Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>Mixpanel.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Mixpanel API.</p>
+
+<p>The primary interface for integrating Mixpanel with your app.</p>
+
+<p>Use the Mixpanel class to set up your project and track events in Mixpanel
+Engagement. It now also includes a <code>people</code> property for accessing
+the Mixpanel People API.</p>
+
+<pre>
+// Initialize the API
+Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"YOUR API TOKEN"];
+
+// Track an event in Mixpanel Engagement
+[mixpanel track:@"Button Clicked"];
+
+// Set properties on a user in Mixpanel People
+[mixpanel identify:@"CURRENT USER DISTINCT ID"];
+[mixpanel.people set:@"Plan" to:@"Premium"];
+</pre>
+
+
+<p>For more advanced usage, please see the <a
+href="[https://mixpanel.com/docs/integration-libraries/iphone](https://mixpanel.com/docs/integration-libraries/iphone)">Mixpanel iPhone
+Library Guide</a>.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/persistence" title="persistence"></a>
+	<h3 class="method-title"><code><a href="#//api/name/persistence">&nbsp;&nbsp;persistence</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly, strong) MixpanelPersistence *persistence</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/people" title="people"></a>
+	<h3 class="method-title"><code><a href="#//api/name/people">&nbsp;&nbsp;people</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Accessor to the Mixpanel People API object.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly, strong) MixpanelPeople *people</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>See the documentation for <a href="../Protocols/MixpanelDelegate.html">MixpanelDelegate</a> below for more information.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/distinctId" title="distinctId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/distinctId">&nbsp;&nbsp;distinctId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The distinct ID of the current user.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly, copy) NSString *distinctId</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A distinct ID is a string that uniquely identifies one of your users. By default,
+we&rsquo;ll use the device&rsquo;s advertisingIdentifier UUIDString, if that is not available
+we&rsquo;ll use the device&rsquo;s identifierForVendor UUIDString, and finally if that
+is not available we will generate a new random UUIDString. To change the
+current distinct ID, use the <code>identify:</code> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/anonymousId" title="anonymousId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/anonymousId">&nbsp;&nbsp;anonymousId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The default anonymous Id / distinct Id  given to the events before identify.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly, copy) NSString *anonymousId</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A default distinct ID is a string that uniquely identifies the anonymous activity.
+By default, we&rsquo;ll use the device&rsquo;s advertisingIdentifier UUIDString, if that is not
+available we&rsquo;ll use the device&rsquo;s identifierForVendor UUIDString, and finally if that
+is not available we will generate a new random UUIDString.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/userId" title="userId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/userId">&nbsp;&nbsp;userId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>  The user ID with which <code>identify:</code> is called with.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly, copy) NSString *userId</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>  This is null until <code>identify:</code> is called and is set to the id
+  with which identify is called with.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/alias" title="alias"></a>
+	<h3 class="method-title"><code><a href="#//api/name/alias">&nbsp;&nbsp;alias</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The alias of the current user.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly, copy) NSString *alias</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>An alias is another string that uniquely identifies one of your users. Typically,
+this is the user ID from your database. By using an alias you can link pre- and
+post-sign up activity as well as cross-platform activity under one distinct ID.
+To set the alias use the <code>createAlias:forDistinctID:</code> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/hadPersistedDistinctId" title="hadPersistedDistinctId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/hadPersistedDistinctId">&nbsp;&nbsp;hadPersistedDistinctId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>A flag which says if a <a href="#//api/name/distinctId">distinctId</a> is already in peristence from old sdk
+  Defaults to NO.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL hadPersistedDistinctId</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/serverURL" title="serverURL"></a>
+	<h3 class="method-title"><code><a href="#//api/name/serverURL">&nbsp;&nbsp;serverURL</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The base URL used for Mixpanel API requests.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) NSString *serverURL</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Useful if you need to proxy Mixpanel requests. Defaults to
+<a href="https://api.mixpanel.com.">https://api.mixpanel.com.</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/flushInterval" title="flushInterval"></a>
+	<h3 class="method-title"><code><a href="#//api/name/flushInterval">&nbsp;&nbsp;flushInterval</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Flush timer&rsquo;s interval.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) NSUInteger flushInterval</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Setting a <a href="#//api/name/flush">flush</a> interval of 0 will turn off the <a href="#//api/name/flush">flush</a> timer.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/flushOnBackground" title="flushOnBackground"></a>
+	<h3 class="method-title"><code><a href="#//api/name/flushOnBackground">&nbsp;&nbsp;flushOnBackground</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Control whether the library should <a href="#//api/name/flush">flush</a> data to Mixpanel when the app
+enters the background.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) BOOL flushOnBackground</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Defaults to YES. Only affects apps targeted at iOS 4.0, when background
+task support was introduced, and later.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/shouldManageNetworkActivityIndicator" title="shouldManageNetworkActivityIndicator"></a>
+	<h3 class="method-title"><code><a href="#//api/name/shouldManageNetworkActivityIndicator">&nbsp;&nbsp;shouldManageNetworkActivityIndicator</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Controls whether to show spinning network activity indicator when flushing
+data to the Mixpanel servers.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) BOOL shouldManageNetworkActivityIndicator</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Defaults to YES.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/useIPAddressForGeoLocation" title="useIPAddressForGeoLocation"></a>
+	<h3 class="method-title"><code><a href="#//api/name/useIPAddressForGeoLocation">&nbsp;&nbsp;useIPAddressForGeoLocation</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Controls whether to automatically send the client IP Address as part of
+event tracking. With an IP address, geo-location is possible down to neighborhoods
+within a city, although the Mixpanel Dashboard will just show you city level location
+specificity. For privacy reasons, you may be in a situation where you need to forego
+effectively having access to such granular location information via the IP Address.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) BOOL useIPAddressForGeoLocation</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Defaults to YES.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/useUniqueDistinctId" title="useUniqueDistinctId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/useUniqueDistinctId">&nbsp;&nbsp;useUniqueDistinctId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Controls whether or not to use a unique device identifier for the Mixpanel Distinct ID</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) BOOL useUniqueDistinctId</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Defaults to NO</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackAutomaticEventsEnabled" title="trackAutomaticEventsEnabled"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackAutomaticEventsEnabled">&nbsp;&nbsp;trackAutomaticEventsEnabled</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This allows enabling or disabling collecting common mobile events</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL trackAutomaticEventsEnabled</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enableLogging" title="enableLogging"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enableLogging">&nbsp;&nbsp;enableLogging</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Controls whether to enable the run time debug logging at all levels. Note that the
+Mixpanel SDK uses Apple System Logging to forward log messages to <code>STDERR</code>, this also
+means that mixpanel logs are segmented by log level. Settings this to <code>YES</code> will enable
+Mixpanel logging at the following levels:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) BOOL enableLogging</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<ul>
+<li> Error - Something has failed</li>
+<li> Warning - Something is amiss and might fail if not corrected</li>
+<li> Info - The lowest priority that is normally logged, purely informational in nature</li>
+<li> Debug - Information useful only to developers, and normally not logged.</li>
+</ul>
+
+
+<p>Defaults to NO.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/minimumSessionDuration" title="minimumSessionDuration"></a>
+	<h3 class="method-title"><code><a href="#//api/name/minimumSessionDuration">&nbsp;&nbsp;minimumSessionDuration</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The minimum session duration (ms) that is tracked in automatic events.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) UInt64 minimumSessionDuration</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default value is 10000 (10 seconds).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/maximumSessionDuration" title="maximumSessionDuration"></a>
+	<h3 class="method-title"><code><a href="#//api/name/maximumSessionDuration">&nbsp;&nbsp;maximumSessionDuration</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The maximum session duration (ms) that is tracked in automatic events.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic) UInt64 maximumSessionDuration</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default value is UINT64_MAX (no maximum session duration).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The a <a href="../Protocols/MixpanelDelegate.html">MixpanelDelegate</a> object that can be used to assert fine-grain control
+over Mixpanel network activity.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, weak) id&lt;MixpanelDelegate&gt; delegate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Using a delegate is optional. See the documentation for <a href="../Protocols/MixpanelDelegate.html">MixpanelDelegate</a>
+below for more information.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:trackAutomaticEvents:" title="sharedInstanceWithToken:trackAutomaticEvents:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:trackAutomaticEvents:">+&nbsp;sharedInstanceWithToken:trackAutomaticEvents:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns (and creates, if needed) a singleton instance of the API.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method will return a singleton instance of the <code>Mixpanel</code> class for
+you using the given project token. If an instance does not exist, this method will create
+one using <code>initWithToken:flushInterval:</code>. If you only have one
+instance in your project, you can use <code>sharedInstance</code> to retrieve it.</p>
+
+<pre>
+[[Mixpanel sharedInstance]](#//api/name/sharedInstance) track:@"Something Happened"]];
+</pre>
+
+
+<p>If you are going to use this singleton approach,
+<code>sharedInstanceWithToken:</code> <b>must be the first call</b> to the
+<code>Mixpanel</code> class, since it performs important initializations to
+the API.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:trackAutomaticEvents:optOutTrackingByDefault:" title="sharedInstanceWithToken:trackAutomaticEvents:optOutTrackingByDefault:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:trackAutomaticEvents:optOutTrackingByDefault:">+&nbsp;sharedInstanceWithToken:trackAutomaticEvents:optOutTrackingByDefault:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a singleton instance of the API, uses it to set whether or not to opt out tracking for
+GDPR compliance, and then returns it.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em> optOutTrackingByDefault:(BOOL)<em>optOutTrackingByDefault</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>optOutTrackingByDefault</code></th>
+						<td><p>whether or not to be opted out from tracking by default</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:" title="sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:">+&nbsp;sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a singleton instance of the API, uses it to track crashes, and then returns it.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em> trackCrashes:(BOOL)<em>trackCrashes</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackCrashes</code></th>
+						<td><p>whether or not to track crashes in Mixpanel. may want to disable if you&rsquo;re seeing
+issues with your crash reporting for either signals or exceptions</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>With the trackCrashes parameter, Mixpanel can track crashes.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:trackAutomaticEvents:useUniqueDistinctId:" title="sharedInstanceWithToken:trackAutomaticEvents:useUniqueDistinctId:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:trackAutomaticEvents:useUniqueDistinctId:">+&nbsp;sharedInstanceWithToken:trackAutomaticEvents:useUniqueDistinctId:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a singleton instance of the API, using the unique device identifier for distinct_id and then returns it.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em> useUniqueDistinctId:(BOOL)<em>useUniqueDistinctId</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>useUniqueDistinctId</code></th>
+						<td><p>whether or not to use the unique device identifier as the distinct_id</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>With the <a href="#//api/name/useUniqueDistinctId">useUniqueDistinctId</a> parameter, Mixpanel will use a unique device id for distinct_id.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:optOutTrackingByDefault:useUniqueDistinctId:" title="sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:optOutTrackingByDefault:useUniqueDistinctId:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:optOutTrackingByDefault:useUniqueDistinctId:">+&nbsp;sharedInstanceWithToken:trackAutomaticEvents:trackCrashes:optOutTrackingByDefault:useUniqueDistinctId:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a singleton instance of the API, uses it to track crashes, set whether or not to opt out tracking for
+GDPR compliance, and then returns it.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (Mixpanel *)sharedInstanceWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em> trackCrashes:(BOOL)<em>trackCrashes</em> optOutTrackingByDefault:(BOOL)<em>optOutTrackingByDefault</em> useUniqueDistinctId:(BOOL)<em>useUniqueDistinctId</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackCrashes</code></th>
+						<td><p>whether or not to track crashes in Mixpanel. may want to disable if you&rsquo;re seeing
+issues with your crash reporting for either signals or exceptions</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>optOutTrackingByDefault</code></th>
+						<td><p>whether or not to be opted out from tracking by default</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>useUniqueDistinctId</code></th>
+						<td><p>whether or not to use the unique device identifier as the distinct_id</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstance" title="sharedInstance"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstance">+&nbsp;sharedInstance</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns a previously instantiated singleton instance of the API.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (nullable Mixpanel *)sharedInstance</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The API must be initialized with <code>sharedInstanceWithToken:</code> or
+<code>initWithToken:flushInterval</code> before calling this class method.
+This method will return <code>nil</code> if there are no instances created. If there is more than
+one instace, it will return the first one that was created by using <code>sharedInstanceWithToken:</code>
+or <code>initWithToken:flushInterval:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithToken:trackAutomaticEvents:flushInterval:trackCrashes:useUniqueDistinctId:" title="initWithToken:trackAutomaticEvents:flushInterval:trackCrashes:useUniqueDistinctId:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithToken:trackAutomaticEvents:flushInterval:trackCrashes:useUniqueDistinctId:">&ndash;&nbsp;initWithToken:trackAutomaticEvents:flushInterval:trackCrashes:useUniqueDistinctId:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes an instance of the API with the given project token. This also sets
+it as a shared instance so you can use <code>sharedInstance</code> or
+<code>sharedInstanceWithToken:</code> to retrieve this object later.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em> flushInterval:(NSUInteger)<em>flushInterval</em> trackCrashes:(BOOL)<em>trackCrashes</em> useUniqueDistinctId:(BOOL)<em>useUniqueDistinctId</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>flushInterval</code></th>
+						<td><p>interval to run background flushing</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackCrashes</code></th>
+						<td><p>whether or not to track crashes in Mixpanel. may want to disable if you&rsquo;re seeing
+                        issues with your crash reporting for either signals or exceptions</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>useUniqueDistinctId</code></th>
+						<td><p>whether or not to use the unique device identifier as the distinct_id</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithToken:trackAutomaticEvents:andFlushInterval:" title="initWithToken:trackAutomaticEvents:andFlushInterval:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithToken:trackAutomaticEvents:andFlushInterval:">&ndash;&nbsp;initWithToken:trackAutomaticEvents:andFlushInterval:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes an instance of the API with the given project token. This also sets
+it as a shared instance so you can use <code>sharedInstance</code> or
+<code>sharedInstanceWithToken:</code> to retrieve this object later.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithToken:(NSString *)<em>apiToken</em> trackAutomaticEvents:(BOOL)<em>trackAutomaticEvents</em> andFlushInterval:(NSUInteger)<em>flushInterval</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>apiToken</code></th>
+						<td><p>your project token</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>trackAutomaticEvents</code></th>
+						<td><p>whether or not to track automatic events</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>flushInterval</code></th>
+						<td><p>interval to run background flushing</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/identify:" title="identify:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/identify:">&ndash;&nbsp;identify:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sets the distinct ID of the current user.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)identify:(NSString *)<em>distinctId</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctId</code></th>
+						<td><p>string that uniquely identifies the current user</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Mixpanel uses a randomly generated persistent UUID as the default local distinct ID.</p>
+
+<p>If you want to  use a unique persistent UUID, you can define the
+<code>MIXPANEL_UNIQUE_DISTINCT_ID</code>  preprocessor flag in your build settings.
+It then uses the IFV String (<code>UIDevice.current().identifierForVendor</code>) as the default local distinct ID.
+This ID will identify a user across all apps by the same vendor, but cannot be used to link the same
+user across apps from different vendors. If we are unable to get an IFV, we will fall back to generating
+a random persistent UUID.</p>
+
+<p>For tracking events, you do not need to call <code>identify:</code>.
+However, <b>Mixpanel User profiles always require an
+explicit call to <code>identify:</code></b>. If calls are made to
+<code>set:</code>, <code>increment</code> or other <code>MixpanelPeople</code>
+methods prior to calling <code>identify:</code>, then they are queued up and
+flushed once <code>identify:</code> is called.</p>
+
+<p>If you&rsquo;d like to use the default distinct ID for Mixpanel People as well
+(recommended), call <code>identify:</code> using the current distinct ID:
+<code>[mixpanel identify:mixpanel.distinctId]</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/identify:usePeople:" title="identify:usePeople:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/identify:usePeople:">&ndash;&nbsp;identify:usePeople:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sets the distinct ID of the current user. With the option of only updating the
+distinct ID value and not the Mixpanel People distinct ID.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)identify:(NSString *)<em>distinctId</em> usePeople:(BOOL)<em>usePeople</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctId</code></th>
+						<td><p>string that uniquely identifies the current user</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>usePeople</code></th>
+						<td><p>bool controls whether or not to set the <a href="#//api/name/people">people</a> <a href="#//api/name/distinctId">distinctId</a> to the event <a href="#//api/name/distinctId">distinctId</a></p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is not intended to be used unless you wish to prevent updating the Mixpanel
+People distinct ID value by passing a value of NO to the usePeople param. This can be
+useful if the user wishes to prevent People updates from being sent until the identify
+method is called.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/addGroup:groupID:" title="addGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addGroup:groupID:">&ndash;&nbsp;addGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Add a group to this user&rsquo;s membership for a particular group key.
+The groupKey must be an NSString. The groupID should be a legal MixpanelType value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)addGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/removeGroup:groupID:" title="removeGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/removeGroup:groupID:">&ndash;&nbsp;removeGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove a group from this user&rsquo;s membership for a particular group key.
+The groupKey must be an NSString. The groupID should be a legal MixpanelType value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)removeGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setGroup:groupIDs:" title="setGroup:groupIDs:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setGroup:groupIDs:">&ndash;&nbsp;setGroup:groupIDs:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the group to which the user belongs.
+The groupKey must be an NSString. The groupID should be an array
+of MixpanelTypes.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setGroup:(NSString *)<em>groupKey</em> groupIDs:(NSArray&lt;id&lt;MixpanelType&gt; &gt; *)<em>groupIDs</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupIDs</code></th>
+						<td><p>the group IDs</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setGroup:groupID:" title="setGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setGroup:groupID:">&ndash;&nbsp;setGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Convenience method to set a single group ID for the current user.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/trackWithGroups:properties:groups:" title="trackWithGroups:properties:groups:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackWithGroups:properties:groups:">&ndash;&nbsp;trackWithGroups:properties:groups:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tracks an event with specific groups.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)trackWithGroups:(NSString *)<em>event</em> properties:(NSDictionary *)<em>properties</em> groups:(NSDictionary *)<em>groups</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>event name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groups</code></th>
+						<td><p>groups dictionary, which contains key-value pairs
+for this event</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Similar to track(), the data will also be sent to the specific group
+datasets. Group key/value pairs are upserted into the property map
+before tracking.
+The keys in groups must be NSString objects. values can be any legal
+MixpanelType objects. If the event is being timed, the timer will
+stop and be added as a property.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getGroup:groupID:" title="getGroup:groupID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getGroup:groupID:">&ndash;&nbsp;getGroup:groupID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get a <a href="../Classes/MixpanelGroup.html">MixpanelGroup</a> identifier from groupKey and groupID.
+The groupKey must be an NSString. The groupID should be a legal MixpanelType value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (MixpanelGroup *)getGroup:(NSString *)<em>groupKey</em> groupID:(id&lt;MixpanelType&gt;)<em>groupID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupKey</code></th>
+						<td><p>the group key</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>groupID</code></th>
+						<td><p>the group ID</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/track:" title="track:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/track:">&ndash;&nbsp;track:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tracks an event.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)track:(NSString *)<em>event</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>event name</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/track:properties:" title="track:properties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/track:properties:">&ndash;&nbsp;track:properties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tracks an event with properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)track:(NSString *)<em>event</em> properties:(nullable NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>event name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Properties will allow you to segment your events in your Mixpanel reports.
+Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects. If the event is being timed, the timer will
+stop and be added as a property.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/registerSuperProperties:" title="registerSuperProperties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/registerSuperProperties:">&ndash;&nbsp;registerSuperProperties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Registers super properties, overwriting ones that have already been set.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)registerSuperProperties:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Super properties, once registered, are automatically sent as properties for
+all event tracking calls. They save you having to maintain and add a common
+set of properties to your events. Property keys must be <code>NSString</code>
+objects and values must be <code>NSString</code>, <code>NSNumber</code>,
+<code>NSNull</code>, <code>NSArray</code>, <code>NSDictionary</code>,
+<code>NSDate</code> or <code>NSURL</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/registerSuperPropertiesOnce:" title="registerSuperPropertiesOnce:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/registerSuperPropertiesOnce:">&ndash;&nbsp;registerSuperPropertiesOnce:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Registers super properties without overwriting ones that have already been
+set.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)registerSuperPropertiesOnce:(NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/registerSuperPropertiesOnce:defaultValue:" title="registerSuperPropertiesOnce:defaultValue:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/registerSuperPropertiesOnce:defaultValue:">&ndash;&nbsp;registerSuperPropertiesOnce:defaultValue:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Registers super properties without overwriting ones that have already been set
+unless the existing value is equal to defaultValue.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)registerSuperPropertiesOnce:(NSDictionary *)<em>properties</em> defaultValue:(nullable id)<em>defaultValue</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>properties dictionary</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>defaultValue</code></th>
+						<td><p>overwrite existing properties that have this value</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Property keys must be <code>NSString</code> objects and values must be
+<code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
+<code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
+<code>NSURL</code> objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/unregisterSuperProperty:" title="unregisterSuperProperty:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/unregisterSuperProperty:">&ndash;&nbsp;unregisterSuperProperty:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Removes a previously registered super property.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)unregisterSuperProperty:(NSString *)<em>propertyName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>propertyName</code></th>
+						<td><p>array of property name strings to remove</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>As an alternative to clearing all properties, unregistering specific super
+properties prevents them from being recorded on future events. This operation
+does not affect the value of other super properties. Any property name that is
+not registered is ignored.</p>
+
+<p>Note that after removing a super property, events will show the attribute as
+having the value <code>undefined</code> in Mixpanel until a new value is
+registered.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clearSuperProperties" title="clearSuperProperties"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clearSuperProperties">&ndash;&nbsp;clearSuperProperties</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Clears all currently set super properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)clearSuperProperties</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/currentSuperProperties" title="currentSuperProperties"></a>
+	<h3 class="method-title"><code><a href="#//api/name/currentSuperProperties">&ndash;&nbsp;currentSuperProperties</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns the currently set super properties.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSDictionary *)currentSuperProperties</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/timeEvent:" title="timeEvent:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/timeEvent:">&ndash;&nbsp;timeEvent:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Starts a timer that will be stopped and added as a property when a
+corresponding event is tracked.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)timeEvent:(NSString *)<em>event</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>a string, identical to the name of the event that will be tracked</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is intended to be used in advance of events that have
+a duration. For example, if a developer were to track an &ldquo;Image Upload&rdquo; event
+she might want to also know how long the upload took. Calling this method
+before the upload code would implicitly cause the <code>track</code>
+call to record its duration.</p>
+
+<pre>
+// begin timing the image upload
+[mixpanel timeEvent:@"Image Upload"];
+
+// upload the image
+[self uploadImageWithSuccessHandler:^{
+
+    // track the event
+    [mixpanel track:@"Image Upload"];
+}];
+</pre>
+
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/eventElapsedTime:" title="eventElapsedTime:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/eventElapsedTime:">&ndash;&nbsp;eventElapsedTime:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieves the time elapsed for the named event since <code>timeEvent:</code> was called.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (double)eventElapsedTime:(NSString *)<em>event</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>the name of the event to be tracked that was passed to <code>timeEvent:</code></p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clearTimedEvent:" title="clearTimedEvent:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clearTimedEvent:">&ndash;&nbsp;clearTimedEvent:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Clears the event timer for the named event.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)clearTimedEvent:(NSString *)<em>event</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>event</code></th>
+						<td><p>the name of the event to clear the timer for</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clearTimedEvents" title="clearTimedEvents"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clearTimedEvents">&ndash;&nbsp;clearTimedEvents</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Clears all current event timers.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)clearTimedEvents</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/reset" title="reset"></a>
+	<h3 class="method-title"><code><a href="#//api/name/reset">&ndash;&nbsp;reset</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Clears all stored properties and distinct IDs. Useful if your app&rsquo;s user logs out.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)reset</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/flush" title="flush"></a>
+	<h3 class="method-title"><code><a href="#//api/name/flush">&ndash;&nbsp;flush</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Uploads queued data to the Mixpanel server.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)flush</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>By default, queued data is flushed to the Mixpanel servers every minute (the
+default for <code>flushInterval</code>), and on background (since
+<code>flushOnBackground</code> is on by default). You only need to call this
+method manually if you want to force a flush at a particular moment.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/flushWithCompletion:" title="flushWithCompletion:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/flushWithCompletion:">&ndash;&nbsp;flushWithCompletion:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Calls <a href="#//api/name/flush">flush</a>, then optionally archives and calls a handler when finished.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)flushWithCompletion:(nullable void ( ^ ) ( void ))<em>handler</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>handler</code></th>
+						<td><p>completion handler to be called after <a href="#//api/name/flush">flush</a> completes</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>When calling <code>flush</code> manually, it is sometimes important to verify
+that the <a href="#//api/name/flush">flush</a> has finished before further action is taken. This is
+especially important when the app is in the background and could be suspended
+at any time if protocol is not followed.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/archive" title="archive"></a>
+	<h3 class="method-title"><code><a href="#//api/name/archive">&ndash;&nbsp;archive</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Writes current project info, including distinct ID, super properties to disk.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)archive</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This state will be recovered when the app is launched again if the Mixpanel
+library is initialized with the same project token. <b>You do not need to call
+this method</b>. The library listens for app state changes and handles
+persisting data as needed. It can be useful in some special circumstances,
+though, for example, if you&rsquo;d like to track app crashes from main.m.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/createAlias:forDistinctID:" title="createAlias:forDistinctID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/createAlias:forDistinctID:">&ndash;&nbsp;createAlias:forDistinctID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The <a href="#//api/name/alias">alias</a> method creates an <a href="#//api/name/alias">alias</a> which Mixpanel will use to remap one id to another. Multiple aliases can point to the same identifier.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)createAlias:(NSString *)<em>alias</em> forDistinctID:(NSString *)<em>distinctID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>alias</code></th>
+						<td><p>A unique identifier that you want to use as an identifier for this user.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctID</code></th>
+						<td><p>The current user identifier.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<pre>
+[mixpanel createAlias:@"New ID"
+         forDistinctID:mixpanel.distinctId];
+
+// You can add multiple id aliases to the existing id
+[mixpanel createAlias:@"Newer ID"
+         forDistinctID:mixpanel.distinctId];
+</pre>
+
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/createAlias:forDistinctID:usePeople:" title="createAlias:forDistinctID:usePeople:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/createAlias:forDistinctID:usePeople:">&ndash;&nbsp;createAlias:forDistinctID:usePeople:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a distinct_id <a href="#//api/name/alias">alias</a> from <a href="#//api/name/alias">alias</a> to original id.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)createAlias:(NSString *)<em>alias</em> forDistinctID:(NSString *)<em>distinctID</em> usePeople:(BOOL)<em>usePeople</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>alias</code></th>
+						<td><p>the new distinct_id that should represent original</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctID</code></th>
+						<td><p>the old distinct_id that <a href="#//api/name/alias">alias</a> will be mapped to</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>usePeople</code></th>
+						<td><p>bool controls whether or not to set the <a href="#//api/name/people">people</a> <a href="#//api/name/distinctId">distinctId</a> to the event <a href="#//api/name/distinctId">distinctId</a></p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is not intended to be used unless you wish to prevent updating the Mixpanel
+People distinct ID value by passing a value of NO to the usePeople param. This can be
+useful if the user wishes to prevent People updates from being sent until the identify
+method is called.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/libVersion" title="libVersion"></a>
+	<h3 class="method-title"><code><a href="#//api/name/libVersion">&ndash;&nbsp;libVersion</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns the Mixpanel library version number as a string, e.g. &ldquo;3.2.3&rdquo;.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)libVersion</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optOutTracking" title="optOutTracking"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optOutTracking">&ndash;&nbsp;optOutTracking</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt out tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optOutTracking</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is used to opt out tracking. This causes all events and <a href="#//api/name/people">people</a> request no longer
+to be sent back to the Mixpanel server.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optInTracking" title="optInTracking"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optInTracking">&ndash;&nbsp;optInTracking</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optInTracking</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+sent to Mixpanel after using this method.</p>
+
+<p>This method will internally track an opt in event to your project. If you want to identify the opt-in
+event and/or pass properties to the event, See also <code>optInTrackingForDistinctId:</code> and
+<code>optInTrackingForDistinctId:withEventProperties:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optInTrackingForDistinctID:" title="optInTrackingForDistinctID:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optInTrackingForDistinctID:">&ndash;&nbsp;optInTrackingForDistinctID:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optInTrackingForDistinctID:(nullable NSString *)<em>distinctID</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctID</code></th>
+						<td><p>optional string to use as the distinct ID for events. This will call <code>identify:</code>.
+If you use <a href="#//api/name/people">people</a> profiles make sure you manually call <code>identify:</code> after this method.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+sent to Mixpanel after using this method.</p>
+
+<p>This method will internally track an opt in event to your project. If you want to pass properties to the event, see also
+<code>optInTrackingForDistinctId:withEventProperties:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/optInTrackingForDistinctID:withEventProperties:" title="optInTrackingForDistinctID:withEventProperties:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/optInTrackingForDistinctID:withEventProperties:">&ndash;&nbsp;optInTrackingForDistinctID:withEventProperties:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Opt in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)optInTrackingForDistinctID:(nullable NSString *)<em>distinctID</em> withEventProperties:(nullable NSDictionary *)<em>properties</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>distinctID</code></th>
+						<td><p>optional string to use as the distinct ID for events. This will call <code>identify:</code>.
+If you use <a href="#//api/name/people">people</a> profiles make sure you manually call <code>identify:</code> after this method.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>properties</code></th>
+						<td><p>optional properties dictionary that could be passed to add properties to the opt-in event that is sent to
+Mixpanel.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method to opt in an already opted out user from tracking. People updates and track calls will be
+sent to Mixpanel after using this method.</p>
+
+<p>This method will internally track an opt in event to your project.See also <code>optInTracking</code> or
+<code>optInTrackingForDistinctId:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/hasOptedOutTracking" title="hasOptedOutTracking"></a>
+	<h3 class="method-title"><code><a href="#//api/name/hasOptedOutTracking">&ndash;&nbsp;hasOptedOutTracking</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns YES if the current user has opted out tracking, NO if the current user has opted in tracking.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)hasOptedOutTracking</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/libVersion" title="libVersion"></a>
+	<h3 class="method-title"><code><a href="#//api/name/libVersion">+&nbsp;libVersion</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns the Mixpanel library version number as a string, e.g. &ldquo;3.2.3&rdquo;.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)libVersion</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">Mixpanel.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2022 Mixpanel. All rights reserved. Updated: 2022-08-16</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>
