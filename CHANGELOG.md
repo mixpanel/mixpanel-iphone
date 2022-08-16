@@ -1,5 +1,13 @@
 #
 
+## [v5.0.0](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.0) (2022-08-16)
+
+### Enhancements
+
+- Remove Decide and make trackAutomaticEvents required parameter [\#996](https://github.com/mixpanel/mixpanel-iphone/pull/996)
+
+#
+
 ## [v4.2.0](https://github.com/mixpanel/mixpanel-iphone/tree/v4.2.0) (2022-06-24)
 
 ### Enhancements
@@ -144,6 +152,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
