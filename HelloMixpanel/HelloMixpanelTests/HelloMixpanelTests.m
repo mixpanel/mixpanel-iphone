@@ -22,7 +22,7 @@
 
 #pragma mark - Network
 - (void)test5XXResponse {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel setServerURL:kFakeServerUrl];
     [testMixpanel track:@"Fake Event"];
 
@@ -42,7 +42,7 @@
 }
 
 - (void)testFlushEvents {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -59,7 +59,7 @@
 }
 
 - (void)testFlushPeople {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [testMixpanel.people set:@"p1" to:[NSString stringWithFormat:@"%lu", (unsigned long)i]];
@@ -77,8 +77,7 @@
 }
 
 - (void)testFlushNetworkFailure {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
-    testMixpanel.trackAutomaticEventsEnabled = NO;
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:NO andFlushInterval:60];
     [testMixpanel setServerURL:kFakeServerUrl];
     for (NSUInteger i=0, n=50; i<n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -94,8 +93,7 @@
 - (void)testIdentify {
     for (NSInteger i = 0; i < 2; i++) { // run this twice to test reset works correctly wrt to distinct ids
         NSString *testToken = [self randomTokenId];
-        Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
-        testMixpanel.trackAutomaticEventsEnabled = NO;
+        Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:NO andFlushInterval:60];
         NSString *distinctId = @"d1";
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
         XCTAssertEqualObjects(testMixpanel.distinctId, testMixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
@@ -150,7 +148,7 @@
 }
 
 - (void)testIdentifyTrack {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSString *distinctIdBeforeidentify = testMixpanel.distinctId;
 
     testMixpanel.anonymousId = nil;
@@ -176,7 +174,7 @@
 }
 
 - (void)testIdentifyResetTrack {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
 
     testMixpanel.anonymousId = nil;
     testMixpanel.userId = nil;
@@ -211,25 +209,25 @@
 }
 
 - (void)testUseUniqueDistinctI {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
-    Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
+    Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     XCTAssertNotEqualObjects(testMixpanel.distinctId, testMixpanel2.distinctId, "by default, distinctId should not be unique to the device");
     
-    Mixpanel *testMixpanel3 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:NO];
-    Mixpanel *testMixpanel4 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:NO];
+    Mixpanel *testMixpanel3 = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES flushInterval:60 trackCrashes:NO useUniqueDistinctId:NO];
+    Mixpanel *testMixpanel4 = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES flushInterval:60 trackCrashes:NO useUniqueDistinctId:NO];
     XCTAssertNotEqualObjects(testMixpanel3.distinctId, testMixpanel4.distinctId, "distinctId should not be unique to the device if useUniqueDistinctId is set to NO");
     
-    Mixpanel *testMixpanel5 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
-    Mixpanel *testMixpanel6 = [[Mixpanel alloc] initWithToken:[self randomTokenId] flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
+    Mixpanel *testMixpanel5 = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
+    Mixpanel *testMixpanel6 = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
     XCTAssertEqualObjects(testMixpanel5.distinctId, testMixpanel6.distinctId, "distinctId should be unique to the device if useUniqueDistinctId is set to YES");
 }
 
 - (void)testHadPersistedDistinctId {
     NSString *randomTokenId = [self randomTokenId];
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:randomTokenId trackAutomaticEvents:YES andFlushInterval:60];
     NSString *distinctIdBeforeidentify = testMixpanel.distinctId;
     
-    Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:randomTokenId andFlushInterval:60];
+    Mixpanel *testMixpanel2 = [[Mixpanel alloc] initWithToken:randomTokenId  trackAutomaticEvents:YES andFlushInterval:60];
     XCTAssertEqualObjects(testMixpanel2.distinctId, distinctIdBeforeidentify, @"mixpanel anonymous distinct id should not be changed for each init");
 
     NSString *distinctId = @"d1";
@@ -254,7 +252,7 @@
 }
 
 - (void)testTrackWithDefaultProperties {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel track:@"Something Happened"];
     [self waitForMixpanelQueues:testMixpanel];
     [self waitForAsyncQueue];
@@ -281,7 +279,7 @@
 }
 
 - (void)testTrackWithCustomProperties {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDate *now = [NSDate date];
     NSDictionary *p = @{ @"string": @"yello",
                          @"number": @3,
@@ -298,7 +296,7 @@
 }
 
 - (void)testTrackWithCustomDistinctIdAndToken {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = @{ @"token": @"t1", @"distinct_id": @"d1" };
     [testMixpanel track:@"e1" properties:p];
     [self waitForMixpanelQueues:testMixpanel];
@@ -311,7 +309,7 @@
 }
 
 - (void)testRegisterSuperProperties {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = @{ @"p1": @"a", @"p2": [NSDate date]};
     [testMixpanel registerSuperProperties:p];
     [self waitForMixpanelQueues:testMixpanel];
@@ -359,14 +357,14 @@
 }
 
 - (void)testInvalidPropertiesTrack {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = @{ @"data": [NSData data] };
     XCTAssertThrows([testMixpanel track:@"e1" properties:p], @"property type should not be allowed");
     [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testInvalidSuperProperties {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = @{ @"data": [NSData data] };
     XCTAssertThrows([testMixpanel registerSuperProperties:p], @"property type should not be allowed");
     XCTAssertThrows([testMixpanel registerSuperPropertiesOnce:p], @"property type should not be allowed");
@@ -375,14 +373,14 @@
 }
 
 - (void)testValidPropertiesTrack {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = [self allPropertyTypes];
     XCTAssertNoThrow([testMixpanel track:@"e1" properties:p], @"property type should be allowed");
     [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testValidSuperProperties {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = [self allPropertyTypes];
     XCTAssertNoThrow([testMixpanel registerSuperProperties:p], @"property type should be allowed");
     XCTAssertNoThrow([testMixpanel registerSuperPropertiesOnce:p],  @"property type should be allowed");
@@ -392,7 +390,7 @@
 
 - (void)testReset {
     NSString *testToken = [self randomTokenId];
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel track:@"e1"];
 
@@ -411,7 +409,7 @@
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 0, @"events queue failed to reset");
     XCTAssertTrue([self peopleQueue:testMixpanel.apiToken].count == 0, @"people queue failed to reset");
 
-    testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     [self waitForMixpanelQueues:testMixpanel];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
     XCTAssertEqualObjects(testMixpanel.distinctId, [testMixpanel defaultDistinctId], @"distinct id failed to reset after archive");
@@ -425,10 +423,10 @@
 
 - (void)testArchive {
     NSString *testToken = [self randomTokenId];
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     testMixpanel.serverURL = kFakeServerUrl;
     [testMixpanel archive];
-    testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
     XCTAssertEqualObjects(testMixpanel.distinctId, [testMixpanel defaultDistinctId], @"default distinct id archive failed");
 #endif
@@ -450,7 +448,7 @@
     [self waitForMixpanelQueues:testMixpanel];
 
     [testMixpanel archive];
-    testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     testMixpanel.serverURL = kFakeServerUrl;
     [self waitForMixpanelQueues:testMixpanel];
     XCTAssertEqualObjects(testMixpanel.distinctId, @"d1", @"custom distinct archive failed");
@@ -467,7 +465,7 @@
     XCTAssertTrue(groupQueue.count == 1, @"pending groups queue archive failed");
     XCTAssertEqualObjects(testMixpanel.timedEvents[@"e2"], @5.0, @"timedEvents archive failed");
 
-    testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     testMixpanel.serverURL = kFakeServerUrl;
     eventQueue = [self eventQueue:testMixpanel.apiToken];
     peopleQueue = [self peopleQueue:testMixpanel.apiToken];
@@ -486,7 +484,7 @@
 }
 
 - (void)testArchiveInMultithreadNotCrash {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDictionary *p = @{@"p1": @"a"};
     [testMixpanel identify:@"d1"];
     [testMixpanel registerSuperProperties:p];
@@ -511,14 +509,14 @@
     }
 
     [self waitForMixpanelQueues:testMixpanel];
-    Mixpanel *testMixpanel1 = [[Mixpanel alloc] initWithToken:[self randomTokenId]  andFlushInterval:60];
+    Mixpanel *testMixpanel1 = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES  andFlushInterval:60];
     XCTAssertTrue([self eventQueue:testMixpanel1.apiToken].count >= 0, @"archive should not crash");
     [self removeDBfile:testMixpanel1.apiToken];
 }
 
 - (void)testMixpanelDelegate {
     NSString *testToken = [self randomTokenId];
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     self.mixpanelWillFlush = NO;
     testMixpanel.delegate = self;
 
@@ -535,7 +533,7 @@
 - (void)testNilArguments {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSString *originalDistinctID = testMixpanel.distinctId;
     [testMixpanel identify:nil];
     XCTAssertEqualObjects(testMixpanel.distinctId, originalDistinctID, @"identify nil should do nothing.");
@@ -565,7 +563,7 @@
 }
 
 - (void)testEventTiming {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel track:@"Something Happened"];
     [self waitForMixpanelQueues:testMixpanel];
     NSDictionary *e = [self eventQueue:testMixpanel.apiToken].lastObject;
@@ -608,7 +606,7 @@
 }
 
 - (void)testNetworkingWithStress {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     self.mixpanelWillFlush = NO;
     for (NSInteger i = 1; i <= 500; i++) {
         [testMixpanel track:@"Track Call"];
@@ -624,7 +622,7 @@
 }
 
 - (void)testConcurrentTracking {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
 
     self.mixpanelWillFlush = NO;
     [testMixpanel setServerURL:kFakeServerUrl];
@@ -657,7 +655,7 @@
 - (void)testInitializeMixpanelOnBackgroundThread {
     XCTestExpectation *expectation = [self expectationWithDescription:@"main thread checker found no errors"];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+        Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
         XCTAssertNotNil(testMixpanel);
         [expectation fulfill];
     });
@@ -721,7 +719,7 @@
     [self prepareForMigrationFiles:legacyFiles];
     
     // initialize mixpanel will do the migration automatically if found legacy archive files.
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
@@ -759,7 +757,6 @@
     NSDictionary *setProperties2 = groupQueue[1][@"$set"];
     XCTAssertEqualObjects(setProperties2[@"a"], @1);
     XCTAssertTrue([MixpanelPersistence loadOptOutStatusFlagWithApiToken:testToken]);
-    XCTAssertTrue([MixpanelPersistence loadAutomaticEventsEnabledFlagWithApiToken:testToken]);
     
     //timedEvents
     NSDictionary *testTimedEvents = [MixpanelPersistence loadTimedEvents:testToken];

@@ -24,7 +24,7 @@
 {
     NSDictionary *p = @{@"token" : @"t1", @"distinct_id" : @"d1", @"key" : @"id1"};
     NSDictionary *g = @{@"key" : @"id2"};
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel trackWithGroups:@"e1" properties:p groups:g];
     [self waitForMixpanelQueues:testMixpanel];
 
@@ -35,7 +35,7 @@
 
 - (void)testGetGroup
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g1 = [testMixpanel getGroup:@"key1" groupID:@"id"];
     MixpanelGroup *g2 = [testMixpanel getGroup:@"key1" groupID:@"id"];
     XCTAssertEqual(g1, g2);
@@ -50,7 +50,7 @@
 
 - (void)testGetGroupCacheCollision
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g1 = [testMixpanel getGroup:@"key_collision" groupID:@"happens"];
     MixpanelGroup *g2 = [testMixpanel getGroup:@"key" groupID:@"collision_happens"];
     XCTAssertNotEqual(g1, g2);
@@ -59,7 +59,7 @@
 
 - (void)testSetGroup
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel setGroup:@"p1" groupID:@"a"];
     [testMixpanel track:@"ev"];
@@ -76,7 +76,7 @@
 
 - (void)testAddGroupBasic
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel addGroup:@"key" groupID:@"id1"];
     [self waitForMixpanelQueues:testMixpanel];
@@ -88,7 +88,7 @@
 
 - (void)testAddGroupIgnoreExistingValue
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel addGroup:@"key" groupID:@"id1"];
     [testMixpanel addGroup:@"key" groupID:@42];
@@ -101,7 +101,7 @@
 
 - (void)testRemoveGroupBasic
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel setGroup:@"key" groupIDs:@[@"id"]];
     [testMixpanel removeGroup:@"key" groupID:@"id"];
@@ -118,7 +118,7 @@
 
 - (void)testRemoveGroupIgnoreNonExistingValue
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel identify:@"d1"];
     [testMixpanel setGroup:@"key" groupIDs:@[ @"id1", @"id2", @"id3" ]];
     [testMixpanel removeGroup:@"key" groupID:@"id1"];
@@ -132,7 +132,7 @@
 
 - (void)testGroupSet
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g = [testMixpanel getGroup:@"key" groupID:@"id"];
     [g set:@{@"foo" : @"bar"}];
     [self waitForMixpanelQueues:testMixpanel];
@@ -146,7 +146,7 @@
 
 - (void)testGroupSetOnce
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g = [testMixpanel getGroup:@"key" groupID:@"id"];
     [g setOnce:@{@"foo" : @"bar"}];
     [self waitForMixpanelQueues:testMixpanel];
@@ -160,7 +160,7 @@
 
 - (void)testGroupUnion
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g = [testMixpanel getGroup:@"key" groupID:@"id"];
     [g union:@"foo" values:@[ @"bar" ]];
     [self waitForMixpanelQueues:testMixpanel];
@@ -174,7 +174,7 @@
 
 - (void)testGroupUnset
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g = [testMixpanel getGroup:@"key" groupID:@"id"];
     [g unset:@"foo"];
     [self waitForMixpanelQueues:testMixpanel];
@@ -188,7 +188,7 @@
 
 - (void)testGroupDelete
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g = [testMixpanel getGroup:@"key" groupID:@"id"];
     [g deleteGroup];
     [self waitForMixpanelQueues:testMixpanel];
@@ -202,7 +202,7 @@
 
 - (void)testGroupRemove
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     MixpanelGroup *g = [testMixpanel getGroup:@"key" groupID:@"id"];
     [g remove:@"foo" value:@"bar"];
     [self waitForMixpanelQueues:testMixpanel];

@@ -42,12 +42,12 @@ static NSString *defaultProjectToken;
 static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:trackCrashes optOutTrackingByDefault:NO useUniqueDistinctId:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:trackCrashes optOutTrackingByDefault:NO useUniqueDistinctId:NO];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
     if (instances[apiToken]) {
         return instances[apiToken];
@@ -59,23 +59,23 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     const NSUInteger flushInterval = 60;
 #endif
 
-    return [[self alloc] initWithToken:apiToken flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId];
+    return [[self alloc] initWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:YES];
 }
 
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:NO];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:YES optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:NO];
 }
 
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken useUniqueDistinctId:(BOOL)useUniqueDistinctId
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackCrashes:YES optOutTrackingByDefault:NO useUniqueDistinctId:useUniqueDistinctId];
+    return [Mixpanel sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:YES optOutTrackingByDefault:NO useUniqueDistinctId:useUniqueDistinctId];
 }
 
 + (nullable Mixpanel *)sharedInstance
@@ -111,6 +111,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
+         trackAutomaticEvents:(BOOL)trackAutomaticEvents
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
                optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
@@ -132,6 +133,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
         }
         self.apiToken = apiToken;
+        _trackAutomaticEventsEnabled = trackAutomaticEvents;
         _flushInterval = flushInterval;
         self.persistence = [[MixpanelPersistence alloc] initWithToken: apiToken];
         [self.persistence migrate];
@@ -183,11 +185,13 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
+         trackAutomaticEvents:(BOOL)trackAutomaticEvents
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
           useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
     return [self initWithToken:apiToken
+          trackAutomaticEvents:trackAutomaticEvents
                  flushInterval:flushInterval
                   trackCrashes:trackCrashes
                 optOutTrackingByDefault:NO
@@ -195,9 +199,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
+         trackAutomaticEvents:(BOOL)trackAutomaticEvents
              andFlushInterval:(NSUInteger)flushInterval
 {
     return [self initWithToken:apiToken
+          trackAutomaticEvents:trackAutomaticEvents
                  flushInterval:flushInterval
                   trackCrashes:NO
            useUniqueDistinctId:NO];
@@ -296,7 +302,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 - (void)setTrackAutomaticEventsEnabled:(BOOL)trackAutomaticEventsEnabled
 {
-    [MixpanelPersistence saveAutomaticEventsEnabledFlag:trackAutomaticEventsEnabled fromDecide:NO apiToken:self.apiToken];
+    _trackAutomaticEventsEnabled = trackAutomaticEventsEnabled;
     if (!trackAutomaticEventsEnabled) {
         dispatch_async(self.serialQueue, ^{
             [self.persistence removeAutomaticEvents];
@@ -511,7 +517,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         event = @"mp_event";
     }
     
-    if (![MixpanelPersistence loadAutomaticEventsEnabledFlagWithApiToken:self.apiToken] && [event hasPrefix:@"$ae_"]) {
+    if (!self.trackAutomaticEventsEnabled && [event hasPrefix:@"$ae_"]) {
         return;
     }
     
@@ -830,7 +836,6 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         self.hadPersistedDistinctId = NO;
         self.cachedGroups = [NSMutableDictionary dictionary];
         self.timedEvents = [NSMutableDictionary dictionary];
-        self.decideResponseCached = NO;
         [self.persistence resetEntities];
         [self archive];
     });
@@ -1299,12 +1304,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     MPLogInfo(@"%@ application did become active", self);
     [self startFlushTimer];
-    
-#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-    if (![Mixpanel isAppExtension]) {
-        [self checkForDecideResponse];
-    }
-#endif
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1358,9 +1357,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
         }];
     }
 
-    @synchronized (self) {
-        self.decideResponseCached = NO;
-    }
     if (self.flushOnBackground) {
         dispatch_group_enter(bgGroup);
         [self flushWithCompletion:^{
@@ -1442,90 +1438,5 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 {
     return [MPLogger sharedInstance].loggingEnabled;
 }
-
-
-#if !MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT
-
-#pragma mark - Decide
-
-- (void)handlingAutomaticEventsWith:(BOOL)decideTrackAutomaticEvents {
-    [MixpanelPersistence saveAutomaticEventsEnabledFlag:decideTrackAutomaticEvents fromDecide:YES apiToken:self.apiToken];
-    if (!decideTrackAutomaticEvents) {
-        dispatch_async(self.serialQueue, ^{
-            [self.persistence removeAutomaticEvents];
-        });
-    }
-}
-
-- (void)checkForDecideResponse
-{
-    dispatch_async(self.networkQueue, ^{
-        __block BOOL hadError = NO;
-
-        BOOL decideResponseCached;
-        @synchronized (self) {
-            decideResponseCached = self.decideResponseCached;
-        }
-
-        if (!decideResponseCached) {
-            // Build a proper URL from our parameters
-            NSArray *queryItems = [MPNetwork buildDecideQueryForProperties:self.people.automaticPeopleProperties
-                                                            withDistinctID:self.people.distinctId ?: self.distinctId
-                                                                  andToken:self.apiToken];
-
-
-            // Build a network request from the URL
-            NSURLRequest *request = [self.network buildGetRequestForEndpoint:MPNetworkEndpointDecide
-                                                              withQueryItems:queryItems];
-
-            // Send the network request
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:^(NSData *responseData,
-                                                                                           NSURLResponse *urlResponse,
-                                 
-                                                                                           NSError *error) {                
-                if (error) {
-                    MPLogError(@"%@ decide check http error: %@", self, error);
-                    hadError = YES;
-                    dispatch_semaphore_signal(semaphore);
-                    return;
-                }
-
-                // Handle network response
-                NSDictionary *object = [NSJSONSerialization JSONObjectWithData:responseData options:(NSJSONReadingOptions)0 error:&error];
-                if (error) {
-                    MPLogError(@"%@ decide check json error: %@, data: %@", self, error, [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
-                    hadError = YES;
-                    dispatch_semaphore_signal(semaphore);
-                    return;
-                }
-                if (object[@"error"]) {
-                    MPLogError(@"%@ decide check api error: %@", self, object[@"error"]);
-                    hadError = YES;
-                    dispatch_semaphore_signal(semaphore);
-                    return;
-                }
-                
-                id rawAutomaticEvents = object[@"automatic_events"];
-                if (rawAutomaticEvents != nil && [rawAutomaticEvents isKindOfClass:[NSNumber class]]) {
-                    [self handlingAutomaticEventsWith: [rawAutomaticEvents boolValue]];
-                }
-
-                @synchronized (self) {
-                    self.decideResponseCached = YES;
-                }
-
-                dispatch_semaphore_signal(semaphore);
-            }] resume];
-
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
-        } else {
-            MPLogInfo(@"%@ decide cache found, skipping network request", self);
-        }
-    });
-}
-
-#endif
 
 @end

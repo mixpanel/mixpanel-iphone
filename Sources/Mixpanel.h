@@ -166,7 +166,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  This allows enabling or disabling collecting common mobile events
- If this is not set, it will query the Autotrack settings from the Mixpanel server
  */
 @property (nonatomic) BOOL trackAutomaticEventsEnabled;
 
@@ -231,8 +230,9 @@ NS_ASSUME_NONNULL_BEGIN
  the API.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents;
 
 /*!
  Initializes a singleton instance of the API, uses it to set whether or not to opt out tracking for
@@ -241,10 +241,11 @@ NS_ASSUME_NONNULL_BEGIN
  With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
 
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents optOutTrackingByDefault:(BOOL)optOutTrackingByDefault;
 
 /*!
  Initializes a singleton instance of the API, uses it to track crashes, and then returns it.
@@ -252,10 +253,11 @@ NS_ASSUME_NONNULL_BEGIN
  With the trackCrashes parameter, Mixpanel can track crashes.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes;
 
 /*!
  Initializes a singleton instance of the API, using the unique device identifier for distinct_id and then returns it.
@@ -263,9 +265,10 @@ NS_ASSUME_NONNULL_BEGIN
  With the useUniqueDistinctId parameter, Mixpanel will use a unique device id for distinct_id.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  @param useUniqueDistinctId    whether or not to use the unique device identifier as the distinct_id
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken useUniqueDistinctId:(BOOL)useUniqueDistinctId;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents useUniqueDistinctId:(BOOL)useUniqueDistinctId;
 
 /*!
  Initializes a singleton instance of the API, uses it to track crashes, set whether or not to opt out tracking for
@@ -274,12 +277,13 @@ NS_ASSUME_NONNULL_BEGIN
  With the optOutTrackingByDefault parameter, Mixpanel tracking can be opted out by default.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
  issues with your crash reporting for either signals or exceptions
  @param optOutTrackingByDefault  whether or not to be opted out from tracking by default
  @param useUniqueDistinctId whether or not to use the unique device identifier as the distinct_id
  */
-+ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId;
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId;
 
 /*!
  Returns a previously instantiated singleton instance of the API.
@@ -300,12 +304,14 @@ NS_ASSUME_NONNULL_BEGIN
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  @param flushInterval   interval to run background flushing
  @param trackCrashes    whether or not to track crashes in Mixpanel. may want to disable if you're seeing
                         issues with your crash reporting for either signals or exceptions
  @param useUniqueDistinctId whether or not to use the unique device identifier as the distinct_id
  */
 - (instancetype)initWithToken:(NSString *)apiToken
+         trackAutomaticEvents:(BOOL)trackAutomaticEvents
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
           useUniqueDistinctId:(BOOL)useUniqueDistinctId;
@@ -318,9 +324,10 @@ NS_ASSUME_NONNULL_BEGIN
  Creates and initializes a new API object. See also <code>sharedInstanceWithToken:</code>.
 
  @param apiToken        your project token
+ @param trackAutomaticEvents    whether or not to track automatic events
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)apiToken andFlushInterval:(NSUInteger)flushInterval;
+- (instancetype)initWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents andFlushInterval:(NSUInteger)flushInterval;
 
 /*!
  Sets the distinct ID of the current user.

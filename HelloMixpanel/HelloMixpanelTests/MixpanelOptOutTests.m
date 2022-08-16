@@ -10,12 +10,6 @@
 #import "TestConstants.h"
 #import "MixpanelPeoplePrivate.h"
 
-@interface Mixpanel()
-
-- (void)handlingAutomaticEventsWith:(BOOL)decideTrackAutomaticEvents;
-
-@end
-
 
 @interface MixpanelOptOutTests : MixpanelBaseTests
 
@@ -30,7 +24,7 @@
 - (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutYES
 {
     NSString *testToken = [self randomTokenId];
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:testToken optOutTrackingByDefault:YES];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:testToken trackAutomaticEvents:YES optOutTrackingByDefault:YES];
     
     XCTAssertTrue([testMixpanel hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
     [self removeDBfile:testMixpanel.apiToken];
@@ -38,7 +32,7 @@
 
 - (void)testOptInWillAddOptInEvent
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel optInTracking];
     XCTAssertFalse([testMixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     [self waitForMixpanelQueues:testMixpanel];
@@ -54,7 +48,7 @@
 
 - (void)testOptInTrackingForDistinctID
 {
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     [testMixpanel optInTrackingForDistinctID:@"testDistinctId"];
     XCTAssertFalse([testMixpanel hasOptedOutTracking], @"The current user should have opted in tracking");
     
@@ -74,7 +68,7 @@
 
 - (void)testOptInTrackingForDistinctIDAndWithEventProperties
 {    
-    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] andFlushInterval:60];
+    Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:YES andFlushInterval:60];
     NSDate *now = [NSDate date];
     NSDictionary *p = @{ @"string": @"yello",
                          @"number": @3,
@@ -113,10 +107,10 @@
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForMultipleInstances
 {
-    Mixpanel *mixpanel1 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:YES];
+    Mixpanel *mixpanel1 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES optOutTrackingByDefault:YES];
     XCTAssertTrue([mixpanel1 hasOptedOutTracking], @"When initialize with opted out flag set to YES, the current user should have opted out tracking");
     
-    Mixpanel *mixpanel2 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:NO];
+    Mixpanel *mixpanel2 = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES optOutTrackingByDefault:NO];
     XCTAssertFalse([mixpanel2 hasOptedOutTracking], @"When initialize with opted out flag set to NO, the current user should have opted in tracking");
     
     [self removeDBfile:mixpanel1.apiToken];
@@ -126,21 +120,21 @@
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyAfterInitializedWithOptedOutNO
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] optOutTrackingByDefault:NO];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES optOutTrackingByDefault:NO];
     XCTAssertFalse([testMixpanel hasOptedOutTracking], @"When initialize with opted out flag set to NO, the current user should have opted out tracking");
     [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyByDefault
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     XCTAssertFalse([testMixpanel hasOptedOutTracking], @"By default, the current user should not opted out tracking");
     [self removeDBfile:testMixpanel.apiToken];
 }
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptOut
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     [testMixpanel optOutTracking];
     XCTAssertTrue([testMixpanel hasOptedOutTracking], @"When optOutTracking is called, the current user should have opted out tracking");
     [self removeDBfile:testMixpanel.apiToken];
@@ -148,7 +142,7 @@
 
 - (void)testHasOptOutTrackingFlagBeingSetProperlyForOptIn
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     [testMixpanel optOutTracking];
     XCTAssertTrue([testMixpanel hasOptedOutTracking], @"By calling optOutTracking, the current user should have opted out tracking");
     [testMixpanel optInTracking];
@@ -158,8 +152,7 @@
 
 - (void)testOptOutTrackingWillNotGenerateEventQueue
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
-    [testMixpanel handlingAutomaticEventsWith:NO];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:NO];
     [testMixpanel optOutTracking];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
         [testMixpanel track:[NSString stringWithFormat:@"event %lu", (unsigned long)i]];
@@ -171,8 +164,7 @@
 
 - (void)testOptOutTrackingWillNotGeneratePeopleQueue
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
-    [testMixpanel handlingAutomaticEventsWith:NO];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:NO];
     [testMixpanel identify:@"d1"];
     [testMixpanel optOutTracking];
     for (NSUInteger i = 0, n = 50; i < n; i++) {
@@ -185,8 +177,7 @@
 
 - (void)testOptOutTrackingWillSkipIdentify
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
-    [testMixpanel handlingAutomaticEventsWith:NO];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:NO];
     [testMixpanel optOutTracking];
     [testMixpanel identify:@"d1"];
     //opt in again just to enable people queue
@@ -201,7 +192,7 @@
 
 - (void)testOptOutTrackingWillSkipAlias
 {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     [testMixpanel optOutTracking];
     [testMixpanel createAlias:@"testAlias" forDistinctID:@"aDistinctID"];
     XCTAssertFalse([testMixpanel.alias isEqualToString:@"testAlias"], @"When opted out, alias should not be set");
@@ -209,7 +200,7 @@
 }
 
 - (void)testOptOutTrackingRegisterSuperProperties {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     NSDictionary *p = @{ @"p1": @"a", @"p2": @3, @"p3": [NSDate date] };
     [testMixpanel optOutTracking];
     [testMixpanel registerSuperProperties:p];
@@ -219,7 +210,7 @@
 }
 
 - (void)testOptOutTrackingRegisterSuperPropertiesOnce {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     NSDictionary *p = @{ @"p4": @"a" };
     [testMixpanel optOutTracking];
     [testMixpanel registerSuperPropertiesOnce:p];
@@ -230,7 +221,7 @@
 }
 
 - (void)testOptOutWilSkipTimeEvent {
-    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId]];
+    Mixpanel *testMixpanel = [Mixpanel sharedInstanceWithToken:[self randomTokenId] trackAutomaticEvents:YES];
     [testMixpanel optOutTracking];
     [testMixpanel timeEvent:@"400 Meters"];
     [testMixpanel track:@"400 Meters"];

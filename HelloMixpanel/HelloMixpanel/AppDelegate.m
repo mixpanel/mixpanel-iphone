@@ -25,7 +25,7 @@
 #endif
     } else {
         // Initialize the MixpanelAPI object
-        self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken];
+        self.mixpanel = [Mixpanel sharedInstanceWithToken:mixpanelToken trackAutomaticEvents:YES];
     }
 
     // Override point for customization after application launch.

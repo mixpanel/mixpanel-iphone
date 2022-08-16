@@ -86,8 +86,6 @@ static NSString *const MPDebugUsedPeopleKey = @"MPDebugUsedPeopleKey";
 @property (nonatomic, strong) NSMutableDictionary *timedEvents;
 @property (nonatomic, strong) SessionMetadata *sessionMetadata;
 
-@property (nonatomic) BOOL decideResponseCached;
-
 
 @property (nonatomic, assign) BOOL optOutStatus;
 @property (nonatomic, assign) BOOL optOutStatusNotSet;

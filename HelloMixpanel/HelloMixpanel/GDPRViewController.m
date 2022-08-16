@@ -68,13 +68,13 @@
 
 - (void)testInitWithDefaultOptOut
 {
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:@"a token id" optOutTrackingByDefault:YES];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:@"a token id" trackAutomaticEvents:YES optOutTrackingByDefault:YES];
     [self presentLogMessage:@"Init Mixpanel with default opt-out(sample only), to make it work, place it in your startup stage of your app" title:@"Init Mixpanel with default opt-out"];
 }
 
 - (void)testInitWithDefaultOptIn
 {
-    self.mixpanel = [Mixpanel sharedInstanceWithToken:@"a token id" optOutTrackingByDefault:NO];
+    self.mixpanel = [Mixpanel sharedInstanceWithToken:@"a token id" trackAutomaticEvents:YES optOutTrackingByDefault:NO];
     [self presentLogMessage:@"Init Mixpanel with default opt-out(sample only), to make it work, place it in your startup stage of your app" title:@"Init Mixpanel with default opt-out"];
 }
 
