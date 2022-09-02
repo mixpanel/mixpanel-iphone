@@ -82,7 +82,7 @@ Mixpanel *mixpanel = [Mixpanel sharedInstance];
 ```
 
 ## 4. Check for Success
-[Open up Events View in Mixpanel](http://mixpanel.com/report/events) to view incoming events. 
+[Open up Events in Mixpanel](http://mixpanel.com/report/events) to view incoming events. 
 
 Once data hits our API, it generally takes ~60 seconds for it to be processed, stored, and queryable in your project.
 
