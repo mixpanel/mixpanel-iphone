@@ -4,7 +4,7 @@
 //
 //  Copyright © Mixpanel. All rights reserved.
 //
-#include <TargetConditionals.h>
+#import <TargetConditionals.h>
 #if TARGET_OS_IOS
 
 #import "AutomaticEvents.h"

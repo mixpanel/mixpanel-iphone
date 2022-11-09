@@ -51,7 +51,7 @@ Mixpanel supports Carthage to package your dependencies as a framework. Include 
 ```objc
 github "mixpanel/mixpanel-iphone"
 ```
-Check out the [Carthage docs](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos) for more info.
+Check out the [Carthage docs](https://github.com/Carthage/Carthage#quick-start) for more info.
 
 ### Installation Option 3: Swift Package Manager
 1.  In Xcode, select File > Add Packages...

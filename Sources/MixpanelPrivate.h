@@ -10,7 +10,7 @@
 #import "SessionMetadata.h"
 #import "MixpanelType.h"
 #import "MixpanelPersistence.h"
-#include <TargetConditionals.h>
+#import <TargetConditionals.h>
 
 #if TARGET_OS_IOS
 #import <UIKit/UIKit.h>

@@ -5,6 +5,7 @@
 #include <sys/sysctl.h>
 
 #import <objc/runtime.h>
+#import <TargetConditionals.h>
 #import "Mixpanel.h"
 #import "MixpanelPeople.h"
 #import "MixpanelPeoplePrivate.h"

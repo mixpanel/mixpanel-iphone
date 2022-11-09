@@ -4,6 +4,7 @@
 //
 //  Copyright © Mixpanel. All rights reserved.
 //
+#import <TargetConditionals.h>
 
 #import "Mixpanel.h"
 #import "MixpanelPrivate.h"

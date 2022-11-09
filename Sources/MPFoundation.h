@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <TargetConditionals.h>
 
 #if TARGET_OS_IPHONE
 #ifndef NSFoundationVersionNumber_iOS_9_0
