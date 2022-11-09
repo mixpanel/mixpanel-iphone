@@ -3,6 +3,7 @@
 #include <net/if_dl.h>
 #include <sys/socket.h>
 #include <sys/sysctl.h>
+#import <TargetConditionals.h>
 
 #import <objc/runtime.h>
 #import "Mixpanel.h"
