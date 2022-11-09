@@ -4,7 +4,7 @@
 //
 //  Copyright © Mixpanel. All rights reserved.
 //
-
+#import <TargetConditionals.h>
 
 #import "MixpanelBaseTests.h"
 #import "TestConstants.h"
