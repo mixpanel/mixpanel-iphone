@@ -1,0 +1,43 @@
+name: mixpanel/mixpanel-iphone
+on:
+  push:
+    branches:
+    - "**/*"
+    - master
+    - 4.0.0.beta
+  pull_request:
+concurrency:
+#   # This item has no matching transformer
+#   maximum_number_of_builds: 0
+env:
+  WORKSPACE: HelloMixpanel/HelloMixpanel.xcworkspace
+  SCHEME: "[iOS] HelloMixpanel"
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - uses: maxim-lobanov/setup-xcode@v1.5.1
+      with:
+        xcode-version: '12'
+    - run: gem uninstall fourflusher --force -a -q -I -x
+    - run: gem install fourflusher
+    - run: gem uninstall cocoapods --force -a -q -I -x
+    - run: gem install cocoapods -v 1.6.1
+    - run: pods install
+    - run: set -o pipefail
+    - run: xcodebuild -version
+    - run: xcodebuild -showsdks
+    - run: travis_retry xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
+    - run: xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty -c
+    strategy:
+      matrix:
+        include:
+        - DESTINATION: OS=13.0,name=iPad Pro (9.7-inch)
+          RUN_TESTS: 'YES'
+          POD_LINT: 'YES'
+    env:
+      DESTINATION: "${{ matrix.DESTINATION }}"
+      RUN_TESTS: "${{ matrix.RUN_TESTS }}"
+      POD_LINT: "${{ matrix.POD_LINT }}"
