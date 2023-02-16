@@ -101,7 +101,7 @@ static NSString *const MPDebugUsedPeopleKey = @"MPDebugUsedPeopleKey";
 
 - (NSString *)deviceModel;
 
-- (NSString *)defaultDistinctId;
+- (NSString *)defaultDeviceId;
 - (void)archive;
 
 // for group caching
