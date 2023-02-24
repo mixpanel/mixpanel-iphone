@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['OS=16.2,name="iPhone 14 Pro"']
+        destination: ['name="iPhone 14 Pro",OS=latest']
         scheme: ['"[iOS] HelloMixpanel"']
 
     steps:
@@ -22,7 +22,7 @@ jobs:
         set -o pipefail
         xcodebuild -scheme ${{ matrix.scheme }} -derivedDataPath Build/ -destination ${{ matrix.destination }} -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
     - name: Pod Lint
-      run: pod lib lint --allow-warnings
+      run: pod lib lint --platforms=ios,tvos --allow-warnings
     - name: Code Coverage Report
       working-directory: HelloMixpanel/build/Logs/Test
       run: |
