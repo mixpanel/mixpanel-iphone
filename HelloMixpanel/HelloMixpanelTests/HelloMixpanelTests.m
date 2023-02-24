@@ -13,6 +13,7 @@
 #import "MixpanelGroupPrivate.h"
 #import "MPNetworkPrivate.h"
 #import "MPDB.h"
+#define DEVICE_PREFIX @"$device:"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
 
@@ -96,8 +97,8 @@
         Mixpanel *testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:NO andFlushInterval:60];
         NSString *distinctId = @"d1";
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
-        XCTAssertEqualObjects(testMixpanel.distinctId, testMixpanel.defaultDistinctId, @"mixpanel identify failed to set default distinct id");
-        XCTAssertEqualObjects(testMixpanel.anonymousId, testMixpanel.defaultDistinctId, @"mixpanel identify failed to set anonymous id");
+        XCTAssertEqualObjects(testMixpanel.distinctId, [DEVICE_PREFIX stringByAppendingString:testMixpanel.defaultDeviceId], @"mixpanel identify failed to set default distinct id");
+        XCTAssertEqualObjects(testMixpanel.anonymousId, testMixpanel.defaultDeviceId, @"mixpanel identify failed to set anonymous id");
 #endif
         XCTAssertNil(testMixpanel.people.distinctId, @"mixpanel people distinct id should default to nil");
         XCTAssertNil(testMixpanel.userId, @"mixpanel userId should default to nil");
@@ -106,7 +107,7 @@
         [self waitForMixpanelQueues:testMixpanel];
         XCTAssertEqual([self eventQueue:testMixpanel.apiToken].count, 1, @"events should be sent right away with default distinct id");
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
-        XCTAssertEqualObjects(testMixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], testMixpanel.defaultDistinctId, @"events should use default distinct id if none set");
+        XCTAssertEqualObjects(testMixpanel.eventsQueue.lastObject[@"properties"][@"distinct_id"], [DEVICE_PREFIX stringByAppendingString:testMixpanel.defaultDeviceId], @"events should use default distinct id if none set");
 #endif
         [testMixpanel.people set:@"p1" to:@"a"];
         [self waitForMixpanelQueues:testMixpanel];
@@ -236,7 +237,7 @@
     [testMixpanel track:@"Something Happened"];
     [self waitForMixpanelQueues:testMixpanel];
 
-    XCTAssertEqualObjects(testMixpanel.anonymousId, distinctIdBeforeidentify, @"mixpanel identify shouldn't change anonymousId");
+    XCTAssertEqualObjects([DEVICE_PREFIX stringByAppendingString:testMixpanel.anonymousId], distinctIdBeforeidentify, @"mixpanel identify shouldn't change anonymousId");
     XCTAssertEqualObjects(testMixpanel.distinctId, distinctId, @"mixpanel identify failed to set distinct id");
     XCTAssertEqualObjects(testMixpanel.userId, distinctId, @"mixpanel identify failed to set user id");
     XCTAssertEqualObjects(testMixpanel.people.distinctId, distinctId, @"mixpanel identify failed to set people distinct id");
@@ -245,7 +246,7 @@
     NSDictionary *e = [self eventQueue:testMixpanel.apiToken].lastObject;
     NSDictionary *p = e[@"properties"];
     XCTAssertEqualObjects(p[@"distinct_id"], distinctId, @"incorrect distinct_id");
-    XCTAssertEqualObjects(p[@"$device_id"], distinctIdBeforeidentify, @"incorrect device_id");
+    XCTAssertEqualObjects([DEVICE_PREFIX stringByAppendingString:p[@"$device_id"]], distinctIdBeforeidentify, @"incorrect device_id");
     XCTAssertEqualObjects(p[@"$user_id"], distinctId, @"incorrect user_id");
     XCTAssertTrue(p[@"$had_persisted_distinct_id"], @"incorrect flag");
     [self removeDBfile:testMixpanel.apiToken];
@@ -402,7 +403,8 @@
     [testMixpanel reset];
     [self waitForMixpanelQueues:testMixpanel];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
-    XCTAssertEqualObjects(testMixpanel.distinctId, [testMixpanel defaultDistinctId], @"distinct id failed to reset");
+    NSString *defaultDeviceId = [testMixpanel defaultDeviceId];
+    XCTAssertEqualObjects(testMixpanel.distinctId, [DEVICE_PREFIX stringByAppendingString:defaultDeviceId], @"distinct id failed to reset");
 #endif
     XCTAssertNil(testMixpanel.people.distinctId, @"people distinct id failed to reset");
     XCTAssertTrue([testMixpanel currentSuperProperties].count == 0, @"super properties failed to reset");
@@ -412,7 +414,8 @@
     testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
     [self waitForMixpanelQueues:testMixpanel];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
-    XCTAssertEqualObjects(testMixpanel.distinctId, [testMixpanel defaultDistinctId], @"distinct id failed to reset after archive");
+    NSString *defaultDeviceId = [testMixpanel defaultDeviceId];
+    XCTAssertEqualObjects(testMixpanel.distinctId, [DEVICE_PREFIX stringByAppendingString:defaultDeviceId], @"distinct id failed to reset after archive");
 #endif
     XCTAssertNil(testMixpanel.people.distinctId, @"people distinct id failed to reset after archive");
     XCTAssertTrue([testMixpanel currentSuperProperties].count == 0, @"super properties failed to reset after archive");
@@ -428,7 +431,8 @@
     [testMixpanel archive];
     testMixpanel = [[Mixpanel alloc] initWithToken:testToken trackAutomaticEvents:YES andFlushInterval:60];
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
-    XCTAssertEqualObjects(testMixpanel.distinctId, [testMixpanel defaultDistinctId], @"default distinct id archive failed");
+    NSString *defaultDeviceId = [testMixpanel defaultDeviceId];
+    XCTAssertEqualObjects(testMixpanel.distinctId, [DEVICE_PREFIX stringByAppendingString:defaultDeviceId], @"default distinct id archive failed");
 #endif
     XCTAssertTrue([[testMixpanel currentSuperProperties] count] == 0, @"default super properties archive failed");
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 0, @"default events queue archive failed");

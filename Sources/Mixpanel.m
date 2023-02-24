@@ -32,6 +32,7 @@
 #endif
 
 #define VERSION @"5.0.1"
+#define DEVICE_PREFIX @"$device:"
 
 
 @implementation Mixpanel
@@ -144,7 +145,8 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
         self.serverURL = @"https://api.mixpanel.com";
         self.useUniqueDistinctId = useUniqueDistinctId;
-        self.distinctId = [self defaultDistinctId];
+        self.anonymousId = [self defaultDeviceId];
+        self.distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.superProperties = [NSDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
@@ -388,7 +390,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     }
 }
 
-- (NSString *)defaultDistinctId
+- (NSString *)defaultDeviceId
 {
     NSString *distinctId;
 #if defined(MIXPANEL_UNIQUE_DISTINCT_ID)
@@ -828,8 +830,8 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     dispatch_async(self.serialQueue, ^{
         // wait for all current network requests to finish before resetting
         [MixpanelPersistence deleteMPUserDefaultsData:self.apiToken];
-        self.anonymousId = [self defaultDistinctId];
-        self.distinctId = self.anonymousId;
+        self.anonymousId = [self defaultDeviceId];
+        self.distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.superProperties = [NSDictionary dictionary];
         self.userId = nil;
         self.people.distinctId = nil;
@@ -853,7 +855,7 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         self.alias = nil;
         self.people.distinctId = nil;
         self.userId = nil;
-        self.anonymousId = [self defaultDistinctId];
+        self.anonymousId = [self defaultDeviceId];
         self.distinctId = self.anonymousId;
         self.hadPersistedDistinctId = NO;
         self.superProperties = [NSDictionary new];
@@ -1014,8 +1016,8 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     self.alias = mixpanelIdentity.alias;
     self.hadPersistedDistinctId = mixpanelIdentity.hadPersistedDistinctId;
     if (!self.distinctId) {
-        self.distinctId = [self defaultDistinctId];
-        self.anonymousId = self.distinctId;
+        self.anonymousId = [self defaultDeviceId];
+        self.distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.hadPersistedDistinctId = YES;
         self.userId = nil;
         [MixpanelPersistence saveIdentity:[self currentMixpanelIdentity] apiToken:self.apiToken];
