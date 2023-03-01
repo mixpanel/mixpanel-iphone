@@ -1,5 +1,18 @@
 #
 
+## [v5.0.2](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.2) (2023-03-01)
+
+### Enhancements
+
+- identity v3 changes [\#1009](https://github.com/mixpanel/mixpanel-iphone/pull/1009)
+- Delete .travis.yml [\#1006](https://github.com/mixpanel/mixpanel-iphone/pull/1006)
+
+### Fixes
+
+- Disable watchOS in CI [\#1010](https://github.com/mixpanel/mixpanel-iphone/pull/1010)
+
+#
+
 ## [v5.0.1](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.1) (2022-11-09)
 
 ### Fixes
@@ -160,6 +173,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
