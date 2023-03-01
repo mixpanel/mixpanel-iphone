@@ -31,7 +31,7 @@
 #error The Mixpanel library must be compiled with ARC enabled
 #endif
 
-#define VERSION @"5.0.1"
+#define VERSION @"5.0.2"
 #define DEVICE_PREFIX @"$device:"
 
 
