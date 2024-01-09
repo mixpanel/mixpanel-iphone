@@ -64,7 +64,7 @@ To initialize the library, add `#Import "Mixpanel/Mixpanel.h" into "AppDelegate.
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 ...
-  [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN" trackAutomaticEvents:YES];
+  [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN" trackAutomaticEvents:NO];
 ...
 }
 ```
