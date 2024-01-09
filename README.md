@@ -93,7 +93,7 @@ Here's a runnable code example that covers everything in this quickstart guide.
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 ...
-  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN" trackAutomaticEvents:YES];
+  Mixpanel *mixpanel = [Mixpanel sharedInstanceWithToken:@"YOUR_API_TOKEN" trackAutomaticEvents:NO];
   [mixpanel track:@"Sign Up" properties:@{
     @"source": @"Pat's affiliate site",
     @"Opted out of email": @YES
