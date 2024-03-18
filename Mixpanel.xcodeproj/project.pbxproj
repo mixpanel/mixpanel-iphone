@@ -180,12 +180,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1727D17326F9090E006C74F3 /* MPDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPDB.h; sourceTree = "<group>"; };
 		1727D17426F9090E006C74F3 /* MPDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPDB.m; sourceTree = "<group>"; };
 		1727D17D26F9092C006C74F3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		1727D17F26F9093F006C74F3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS7.4.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		1727D18126F9094D006C74F3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.5.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
-		1785A9782BA8B1730099A0E2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = HelloMixpanel/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		17B0976A2707A64B00492E14 /* MixpanelPersistence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MixpanelPersistence.h; sourceTree = "<group>"; };
 		17B0976F2707A66F00492E14 /* MixpanelPersistence.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelPersistence.m; sourceTree = "<group>"; };
 		511FC39D1C2B74BD00DC4796 /* Mixpanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mixpanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -352,7 +352,7 @@
 		7C170C2D1A4A02F500D9E0F2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1785A9782BA8B1730099A0E2 /* PrivacyInfo.xcprivacy */,
+				1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */,
 				86543180260AB3F800C478DE /* ios.modulemap */,
 				86543182260AB3F800C478DE /* macos.modulemap */,
 				86543183260AB3F800C478DE /* tvos.modulemap */,
