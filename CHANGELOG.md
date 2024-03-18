@@ -1,5 +1,13 @@
 #
 
+## [v5.0.3](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.3) (2024-03-18)
+
+### Enhancements
+
+- Add privacy manifest [\#1019](https://github.com/mixpanel/mixpanel-iphone/pull/1019)
+
+#
+
 ## [v5.0.2](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.2) (2023-03-01)
 
 ### Enhancements
@@ -173,6 +181,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
