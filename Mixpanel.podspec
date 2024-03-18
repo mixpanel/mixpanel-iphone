@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.libraries = 'icucore'
   s.swift_version = '4.2'
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '13.0'
   all_files = 'Sources/**/*.{m,h}'
   public_header_files = 'Sources/Mixpanel.h', 'Sources/MixpanelType.h', 'Sources/MixpanelGroup.h', 'Sources/MixpanelType.h', 'Sources/MixpanelPeople.h'
   private_header_files = 'Sources/MixpanelPeoplePrivate.h', 'Sources/MixpanelGroupPrivate.h', 'Sources/MPNetworkPrivate.h', 'Sources/MixpanelPrivate.h', 'Sources/SessionMetadata.h', 'Sources/MixpanelIdentity.h', 'Sources/MPJSONHander.h', 'Sources/MixpanelPersistence.h', 'Sources/MPDB.h'
