@@ -27,6 +27,10 @@
 		17B097712707A66F00492E14 /* MixpanelPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B0976F2707A66F00492E14 /* MixpanelPersistence.m */; };
 		17B097722707A66F00492E14 /* MixpanelPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B0976F2707A66F00492E14 /* MixpanelPersistence.m */; };
 		17B097732707A66F00492E14 /* MixpanelPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B0976F2707A66F00492E14 /* MixpanelPersistence.m */; };
+		17D33A252BB1E39F006EF5F7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */; };
+		17D33A262BB1E3A5006EF5F7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */; };
+		17D33A272BB1E3A9006EF5F7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */; };
+		17D33A282BB1E3B0006EF5F7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */; };
 		511FC3591C2B74BD00DC4796 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		513243441D1B473100CBA9AA /* WatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 513243431D1B473100CBA9AA /* WatchKit.framework */; };
 		519AD7A41CB706A6005411A5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 519AD7A31CB706A6005411A5 /* Security.framework */; };
@@ -313,6 +317,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		17D33A292BB1E60A006EF5F7 /* Mixpanel */ = {
+			isa = PBXGroup;
+			children = (
+				1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */,
+			);
+			path = Mixpanel;
+			sourceTree = "<group>";
+		};
 		7C170C201A4A02F500D9E0F2 = {
 			isa = PBXGroup;
 			children = (
@@ -352,7 +364,6 @@
 		7C170C2D1A4A02F500D9E0F2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1706BC3B2BA8BBA400FC0754 /* PrivacyInfo.xcprivacy */,
 				86543180260AB3F800C478DE /* ios.modulemap */,
 				86543182260AB3F800C478DE /* macos.modulemap */,
 				86543183260AB3F800C478DE /* tvos.modulemap */,
@@ -387,6 +398,7 @@
 		86542F83260AB0FA00C478DE /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				17D33A292BB1E60A006EF5F7 /* Mixpanel */,
 				86AE15A027BB29B400E271B2 /* Log */,
 				86AE159C27BB297A00E271B2 /* Utilities */,
 				86AE159B27BB296A00E271B2 /* Networking */,
@@ -758,6 +770,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17D33A262BB1E3A5006EF5F7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -765,6 +778,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17D33A252BB1E39F006EF5F7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,6 +807,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17D33A272BB1E3A9006EF5F7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +815,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17D33A282BB1E3B0006EF5F7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1109,7 +1125,7 @@
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "@rpath";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Sources/ios.modulemap;
 				OTHER_CFLAGS = "";
@@ -1150,7 +1166,7 @@
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "@rpath";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Sources/ios.modulemap;
 				OTHER_CFLAGS = "";
@@ -1417,7 +1433,7 @@
 				SDKROOT = appletvos;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = Debug;
@@ -1458,7 +1474,7 @@
 				SDKROOT = appletvos;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = Release;
