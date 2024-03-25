@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.libraries = 'icucore'
   s.swift_version = '4.2'
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '11.0'
   all_files = 'Sources/**/*.{m,h}'
   public_header_files = 'Sources/Mixpanel.h', 'Sources/MixpanelType.h', 'Sources/MixpanelGroup.h', 'Sources/MixpanelType.h', 'Sources/MixpanelPeople.h'
   private_header_files = 'Sources/MixpanelPeoplePrivate.h', 'Sources/MixpanelGroupPrivate.h', 'Sources/MPNetworkPrivate.h', 'Sources/MixpanelPrivate.h', 'Sources/SessionMetadata.h', 'Sources/MixpanelIdentity.h', 'Sources/MPJSONHander.h', 'Sources/MixpanelPersistence.h', 'Sources/MPDB.h'
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.ios.public_header_files = public_header_files
   s.ios.private_header_files = private_header_files
   s.ios.frameworks = 'UIKit', 'Foundation', 'SystemConfiguration', 'CoreTelephony', 'Accelerate', 'CoreGraphics', 'QuartzCore', 'StoreKit'
-  s.tvos.deployment_target = '12.0'
+  s.tvos.deployment_target = '11.0'
   s.tvos.source_files  = all_files
   s.tvos.exclude_files = 'Sources/MixpanelWatchProperties.{m,h}','Sources/Include/*.h'
   s.tvos.public_header_files = public_header_files
