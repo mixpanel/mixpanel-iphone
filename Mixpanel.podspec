@@ -6,10 +6,11 @@ Pod::Spec.new do |s|
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Mixpanel, Inc' => 'support@mixpanel.com' }
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
+  s.resources    = 'Sources/Mixpanel/PrivacyInfo.xcprivacy'
   s.requires_arc = true
   s.libraries = 'icucore'
   s.swift_version = '4.2'
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '12.0'
   all_files = 'Sources/**/*.{m,h}'
   public_header_files = 'Sources/Mixpanel.h', 'Sources/MixpanelType.h', 'Sources/MixpanelGroup.h', 'Sources/MixpanelType.h', 'Sources/MixpanelPeople.h'
   private_header_files = 'Sources/MixpanelPeoplePrivate.h', 'Sources/MixpanelGroupPrivate.h', 'Sources/MPNetworkPrivate.h', 'Sources/MixpanelPrivate.h', 'Sources/SessionMetadata.h', 'Sources/MixpanelIdentity.h', 'Sources/MPJSONHander.h', 'Sources/MixpanelPersistence.h', 'Sources/MPDB.h'
