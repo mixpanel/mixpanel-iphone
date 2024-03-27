@@ -1,5 +1,13 @@
 #
 
+## [v5.0.7](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.7) (2024-03-27)
+
+### Fixes
+
+- Fix 'Multiple commands produce' error when the App need to add PrivacyInfo.xcprivacy. [\#1025](https://github.com/mixpanel/mixpanel-iphone/pull/1025)
+
+#
+
 ## [v5.0.6](https://github.com/mixpanel/mixpanel-iphone/tree/v5.0.6) (2024-03-25)
 
 ### Fixes
@@ -201,6 +209,8 @@ From this version, Mixpanel SDK no longer sets property $braze_external_id and $
 - Add github workflow for auto release [\#935](https://github.com/mixpanel/mixpanel-iphone/pull/935)
 - Migrate CI to github actions [\#933](https://github.com/mixpanel/mixpanel-iphone/pull/933)
 - update readme for beta version [\#931](https://github.com/mixpanel/mixpanel-iphone/pull/931)
+
+
 
 
 
