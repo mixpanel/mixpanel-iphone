@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Mixpanel, Inc' => 'support@mixpanel.com' }
   s.source       = { :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => "v#{s.version}" }
-  s.resources    = 'Sources/Mixpanel/PrivacyInfo.xcprivacy'
+  s.resource_bundles = {'Mixpanel' => ['Sources/Mixpanel/PrivacyInfo.xcprivacy']}
   s.requires_arc = true
   s.libraries = 'icucore'
   s.swift_version = '4.2'
