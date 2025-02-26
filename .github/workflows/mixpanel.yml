@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['name="iPhone 15 Pro",OS=latest']
+        destination: ['name=iPhone 15 Pro,OS=latest']
         scheme: ['"[iOS] HelloMixpanel"']
 
     steps:
