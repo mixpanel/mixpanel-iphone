@@ -210,6 +210,11 @@
                     int eId = sqlite3_column_int(selectStatement, 0);
                     NSError *error;
                     NSMutableDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:blob options:NSJSONReadingMutableContainers error:&error];
+                    if (error) {
+                        NSString* utf8BlobString = [[NSString alloc] initWithData:blob encoding:NSUTF8StringEncoding];
+                        [self logSqlError:[NSString stringWithFormat:@"Serialization error in %@ for column blob %@", tableName, utf8BlobString]];
+                        continue;
+                    }
                     jsonObject[@"id"] = [NSNumber numberWithInt:eId];
                     [rows addObject:jsonObject];
                     rowsRead++;
