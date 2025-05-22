@@ -139,4 +139,6 @@ No worries, here are some links that you will find useful:
 * **[Sample app](https://github.com/mixpanel/mixpanel-iphone/tree/master/HelloMixpanel)**
 * **[Full API Reference](https://mixpanel.github.io/mixpanel-iphone/index.html)**
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mixpanel/mixpanel-iphone)
+
 Have any questions? Reach out to Mixpanel [Support](https://help.mixpanel.com/hc/en-us/requests/new) to speak to someone smart, quickly.
