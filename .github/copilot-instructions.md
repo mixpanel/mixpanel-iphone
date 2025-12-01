@@ -55,7 +55,7 @@ cd HelloMixpanel
 xcodebuild \
   -scheme "[iOS] HelloMixpanel" \
   -derivedDataPath Build/ \
-  -destination "name=iPhone 15 Pro,OS=latest" \
+  -destination "name=iPhone 16 Pro,OS=latest" \
   -configuration Debug \
   ONLY_ACTIVE_ARCH=NO \
   ENABLE_TESTABILITY=YES \
