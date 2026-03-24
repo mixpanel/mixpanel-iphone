@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check-out"
-        uses: actions/checkout@v1
+        uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e  # v1
       - name: "Update Release CHANGELOG"
         id: update-release-changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.2
+        uses: heinrichreimer/github-changelog-generator-action@854576bb5274851427527d8199fba0061552dff5  # v2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           onlyLastTag: true
@@ -38,14 +38,14 @@ jobs:
           git config user.email "zihe.jia@mixpanel.com"
           git commit -m "Update CHANGELOG"
       - name: Push CHANGELOG changes
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@40bf560936a8022e68a3c00e7d2abefaf01305a6  # v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
           force: true
       - name: "Prepare for the Github Release"
         id: generate-release-changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.2
+        uses: heinrichreimer/github-changelog-generator-action@854576bb5274851427527d8199fba0061552dff5  # v2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: "output.md"
@@ -64,7 +64,7 @@ jobs:
           verbose: true
       - name: "🚀 Create GitHub Release"
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e  # v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
