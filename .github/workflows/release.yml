@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check-out"
-        uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e  # v1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
       - name: "Update Release CHANGELOG"
         id: update-release-changelog
         uses: heinrichreimer/github-changelog-generator-action@854576bb5274851427527d8199fba0061552dff5  # v2.2
