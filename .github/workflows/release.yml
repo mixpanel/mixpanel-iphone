@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e  # v1
       - name: "Update Release CHANGELOG"
         id: update-release-changelog
-        uses: heinrichreimer/github-changelog-generator-action@854576bb5274851427527d8199fba0061552dff5  # v2.2
+        uses: heinrichreimer/github-changelog-generator-action@e60b5a2bd9fcd88dadf6345ff8327863fb8b490f  # v2.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           onlyLastTag: true
@@ -45,7 +45,7 @@ jobs:
           force: true
       - name: "Prepare for the Github Release"
         id: generate-release-changelog
-        uses: heinrichreimer/github-changelog-generator-action@854576bb5274851427527d8199fba0061552dff5  # v2.2
+        uses: heinrichreimer/github-changelog-generator-action@e60b5a2bd9fcd88dadf6345ff8327863fb8b490f  # v2.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: "output.md"
