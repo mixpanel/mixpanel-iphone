@@ -565,6 +565,9 @@ NS_ASSUME_NONNULL_BEGIN
  The keys in groups must be NSString objects. values can be any legal
  MixpanelType objects. If the event is being timed, the timer will
  stop and be added as a property.
+
+ A hierarchical groups project allows one group per group key, so a call with an array or
+ set group value is dropped with an error log there.
  
  @param event               event name
  @param properties          properties dictionary

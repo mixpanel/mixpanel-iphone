@@ -622,6 +622,38 @@
     XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"team"], expected);
 }
 
+- (void)testTrackWithGroupsSendsSingleValue {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:@{@"page": @"home"} groups:@{@"team": @"finance"}];
+
+    NSDictionary *properties = [self lastEventProperties:@"Viewed Report" mixpanel:mixpanel];
+    XCTAssertEqualObjects(properties[@"team"], @"finance");
+    XCTAssertEqualObjects(properties[@"page"], @"home");
+}
+
+- (void)testTrackWithGroupsWithListIsDropped {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel trackWithGroups:@"Viewed Report"
+                   properties:@{@"page": @"home"}
+                       groups:@{@"region": @"emea", @"team": @[@"finance", @"sales"]}];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:nil groups:@{@"team": @[@"finance"]}];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:nil groups:@{@"team": [NSSet setWithObject:@"finance"]}];
+
+    XCTAssertEqual([self countEvents:@"Viewed Report" mixpanel:mixpanel], 0);
+}
+
+- (void)testDisabledTrackWithGroupsSendsList {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel trackWithGroups:@"Viewed Report"
+                   properties:@{@"page": @"home"}
+                       groups:@{@"team": @[@"finance", @"sales"]}];
+
+    NSArray *expected = @[@"finance", @"sales"];
+    XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"team"], expected);
+}
+
 #pragma mark - Group profiles
 
 - (void)testGroupUpdatesCarryCompany {

@@ -711,6 +711,17 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     if ([self hasOptedOutTracking]) {
         return;
     }
+    if (self.hierarchicalGroups) {
+        // Hierarchical groups read a list as the name of one group, not as membership in each
+        for (id groupKey in groups) {
+            id groupID = groups[groupKey];
+            if ([groupID isKindOfClass:[NSArray class]] || [groupID isKindOfClass:[NSSet class]]) {
+                MPLogError(@"trackWithGroups with a list is not supported for hierarchical groups projects, which allow "
+                           @"one %@ per user. Use one group id per key. The event was dropped.", groupKey);
+                return;
+            }
+        }
+    }
     if (properties == nil) {
         [self track:event properties:groups];
         return;
