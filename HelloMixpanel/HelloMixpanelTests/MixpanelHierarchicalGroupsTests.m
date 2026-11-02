@@ -669,29 +669,15 @@
     XCTAssertEqual([mixpanel getGroup:@"$company_id" groupID:@"acme"], [mixpanel getCompany]);
 }
 
-- (void)testGetCompanyBeforeIdentifyDropsUpdates {
+- (void)testGetCompanyBeforeIdentifyIsNil {
     Mixpanel *mixpanel = [self newMixpanel:YES];
-    MixpanelGroup *company = [mixpanel getCompany];
-    XCTAssertNotNil(company);
-    [company set:@{@"tier": @"enterprise"}];
-    [company setOnce:@{@"tier": @"enterprise"}];
-    [company unset:@"tier"];
-    [company union:@"tags" values:@[@"a"]];
-    [company remove:@"tags" value:@"a"];
-    [company deleteGroup];
-
-    XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertNil([mixpanel getCompany]);
 }
 
-- (void)testGetCompanyWhenDisabledDropsUpdates {
+- (void)testGetCompanyWhenDisabledIsNil {
     Mixpanel *mixpanel = [self newMixpanel:NO];
     [mixpanel identify:@"user_123"];
-    MixpanelGroup *company = [mixpanel getCompany];
-    XCTAssertNotNil(company);
-    [company set:@{@"tier": @"enterprise"}];
-
-    XCTAssertEqual([self groups:mixpanel].count, 0);
-    XCTAssertEqual([self people:mixpanel].count, 0);
+    XCTAssertNil([mixpanel getCompany]);
 }
 
 - (void)testGetCompanyKeepsTheCompanyAtCallTime {

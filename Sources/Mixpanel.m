@@ -888,10 +888,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     }
 }
 
-- (MixpanelGroup *)getCompany {
+- (nullable MixpanelGroup *)getCompany {
     if (!self.hierarchicalGroups) {
-        return [[MixpanelUnavailableGroup alloc] initWithReason:@"getCompany is only for hierarchical groups projects, "
-                @"enabled with hierarchicalGroups:YES when initializing Mixpanel."];
+        MPLogError(@"getCompany is only for hierarchical groups projects, "
+                   @"enabled with hierarchicalGroups:YES when initializing Mixpanel.");
+        return nil;
     }
     // Waits for earlier identify calls, so the company is the one current at call time
     __block NSString *companyId;
@@ -899,8 +900,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         companyId = self.companyId;
     }];
     if (companyId == nil) {
-        return [[MixpanelUnavailableGroup alloc] initWithReason:@"getCompany needs a company. Call "
-                @"identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId] first."];
+        MPLogError(@"getCompany needs a company. Call "
+                   @"identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId] first.");
+        return nil;
     }
     return [self getGroup:MPCompanyIdGroupKey groupID:companyId];
 }

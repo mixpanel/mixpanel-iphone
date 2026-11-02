@@ -593,12 +593,12 @@ NS_ASSUME_NONNULL_BEGIN
  </pre>
 
  Only for projects that use hierarchical groups. On any other project, or before a company
- is identified, the returned group drops every update with an error log, so it is never nil.
+ is identified, this returns nil with an error log.
 
  The company is fixed when this is called, so a group kept across <code>reset</code> or a new
  identify still updates the earlier company.
  */
-- (MixpanelGroup *)getCompany;
+- (nullable MixpanelGroup *)getCompany;
 
 /*!
  Tracks an event.

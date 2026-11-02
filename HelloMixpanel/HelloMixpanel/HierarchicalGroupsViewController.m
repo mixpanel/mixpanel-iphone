@@ -52,7 +52,7 @@ typedef void (^HGActionBlock)(void);
     [self addOptOutActions];
     [self addEventActions];
     [self addUserActions];
-    [self addGroupActionsWithLabel:@"Company" groupKey:@"$company_id" group:^MixpanelGroup *{
+    [self addGroupActionsWithLabel:@"Company" groupKey:@"$company_id" group:^MixpanelGroup * _Nullable {
         return [self.mixpanel getCompany];
     }];
     [self addGroupActionsWithLabel:@"Team" groupKey:@"team_id" group:^MixpanelGroup *{
@@ -281,8 +281,9 @@ typedef void (^HGActionBlock)(void);
     }];
 }
 
-// The same group profile operations, for the company and for the custom team_id group
-- (void)addGroupActionsWithLabel:(NSString *)label groupKey:(NSString *)groupKey group:(MixpanelGroup * (^)(void))group
+// The same group profile operations, for the company and for the custom team_id group. The group
+// is nil when there is no company, and messaging nil does nothing
+- (void)addGroupActionsWithLabel:(NSString *)label groupKey:(NSString *)groupKey group:(MixpanelGroup * _Nullable (^)(void))group
 {
     [self addAction:[NSString stringWithFormat:@"%@: Set Property", label]
             message:[NSString stringWithFormat:@"Group: set \"tier\" on %@", groupKey]

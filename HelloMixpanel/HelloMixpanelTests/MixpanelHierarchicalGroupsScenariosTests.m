@@ -701,7 +701,7 @@ static NSString *const TEAM_ID = @"my_team_id";
 #pragma mark - Set Company Property Before Identify (Unsupported)
 
 - (void)testSetCompanyPropertyBeforeIdentifyIsUnsupported {
-    [[self.mixpanel getCompany] set:@{@"tier": @"enterprise"}];
+    XCTAssertNil([self.mixpanel getCompany]);
 
     [self assertNothingSent];
 }

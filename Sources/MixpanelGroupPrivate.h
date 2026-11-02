@@ -17,11 +17,3 @@
 - (instancetype)init:(Mixpanel *)mixpanel groupKey:(NSString*)groupKey groupID:(id<MixpanelType>)groupID;
 
 @end
-
-// A group with nothing to update, from getCompany when there is no company. Every method drops
-// the update with an error log.
-@interface MixpanelUnavailableGroup : MixpanelGroup
-
-- (instancetype)initWithReason:(NSString *)reason;
-
-@end
