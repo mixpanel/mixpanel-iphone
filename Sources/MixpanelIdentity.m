@@ -8,35 +8,65 @@
 #import "MixpanelIdentity.h"
 
 
-@interface MixpanelIdentity()
-
-@property (nonatomic, readwrite, copy) NSString *distinctId;
-@property (nonatomic, readwrite, copy) NSString *peopleDistinctId;
-@property (nonatomic, readwrite, copy) NSString *anonymousId;
-@property (nonatomic, readwrite, copy) NSString *userId;
-@property (nonatomic, readwrite, copy) NSString *alias;
-
-@end
-
 @implementation MixpanelIdentity
 
-- (instancetype)initWithDistinctId:(NSString *)distinctId
-                  peopleDistinctId:(NSString *)peopleDistinctId
-                       anonymousId:(NSString *)anonymousId
-                            userId:(NSString *)userId
-                             alias:(NSString *)alias
-            hadPersistedDistinctId:(BOOL)hadPersistedDistinctId
+- (instancetype)initWithUserId:(NSString *)userId companyId:(NSString *)companyId
+{
+    return [self initWithUserId:userId companyId:companyId deviceId:nil];
+}
+
+- (instancetype)initWithUserId:(NSString *)userId companyId:(NSString *)companyId deviceId:(NSString *)deviceId
 {
     self = [super init];
     if (self) {
-        self.distinctId = distinctId;
-        self.peopleDistinctId = peopleDistinctId;
-        self.anonymousId = anonymousId;
-        self.userId = userId;
-        self.alias = alias;
-        self.hadPersistedDistinctId = hadPersistedDistinctId;
+        _userId = [userId copy];
+        _companyId = [companyId copy];
+        _deviceId = [deviceId copy];
     }
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    // immutable
+    return self;
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (self == object) {
+        return YES;
+    }
+    if (![object isKindOfClass:[MixpanelIdentity class]]) {
+        return NO;
+    }
+    MixpanelIdentity *other = (MixpanelIdentity *)object;
+    return (self.userId == other.userId || [self.userId isEqualToString:other.userId]) &&
+           (self.companyId == other.companyId || [self.companyId isEqualToString:other.companyId]) &&
+           (self.deviceId == other.deviceId || [self.deviceId isEqualToString:other.deviceId]);
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = self.userId.hash;
+    result = 31 * result + self.companyId.hash;
+    result = 31 * result + self.deviceId.hash;
+    return result;
+}
+
+- (NSString *)description
+{
+    NSMutableArray *fields = [NSMutableArray array];
+    if (self.userId) {
+        [fields addObject:[NSString stringWithFormat:@"userId=%@", self.userId]];
+    }
+    if (self.companyId) {
+        [fields addObject:[NSString stringWithFormat:@"companyId=%@", self.companyId]];
+    }
+    if (self.deviceId) {
+        [fields addObject:[NSString stringWithFormat:@"deviceId=%@", self.deviceId]];
+    }
+    return [NSString stringWithFormat:@"MixpanelIdentity(%@)", [fields componentsJoinedByString:@", "]];
 }
 
 @end

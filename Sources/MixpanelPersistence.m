@@ -12,6 +12,32 @@
 #import "MPJSONHander.h"
 
 
+@implementation MixpanelPersistedIdentity
+
+- (instancetype)initWithDistinctId:(NSString *)distinctId
+                  peopleDistinctId:(NSString *)peopleDistinctId
+                       anonymousId:(NSString *)anonymousId
+                            userId:(NSString *)userId
+                         companyId:(NSString *)companyId
+                             alias:(NSString *)alias
+            hadPersistedDistinctId:(BOOL)hadPersistedDistinctId
+{
+    self = [super init];
+    if (self) {
+        _distinctId = [distinctId copy];
+        _peopleDistinctId = [peopleDistinctId copy];
+        _anonymousId = [anonymousId copy];
+        _userId = [userId copy];
+        _companyId = [companyId copy];
+        _alias = [alias copy];
+        _hadPersistedDistinctId = hadPersistedDistinctId;
+    }
+    return self;
+}
+
+@end
+
+
 @interface MixpanelPersistence()
 
 @property (nonatomic, readonly) MPDB *mpdb;
@@ -47,6 +73,7 @@ static NSString *const kDefaultKeyDistinctId = @"MPDistinctID";
 static NSString *const kDefaultKeyPeopleDistinctId = @"MPPeopleDistinctID";
 static NSString *const kDefaultKeyAnonymousId = @"MPAnonymousId";
 static NSString *const kDefaultKeyUserId = @"MPUserId";
+static NSString *const kDefaultKeyCompanyId = @"MPCompanyId";
 static NSString *const kDefaultKeyAlias = @"MPAlias";
 static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDistinctId";
 
@@ -193,7 +220,7 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     return @{};
 }
 
-+ (void)saveIdentity:(MixpanelIdentity *)mixpanelIdentity apiToken:(NSString *)apiToken {
++ (void)saveIdentity:(MixpanelPersistedIdentity *)mixpanelIdentity apiToken:(NSString *)apiToken {
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     if (defaults) {
         NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
@@ -201,24 +228,27 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
         [defaults setValue: mixpanelIdentity.peopleDistinctId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]];
         [defaults setValue: mixpanelIdentity.anonymousId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]];
         [defaults setValue: mixpanelIdentity.userId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
+        [defaults setValue: mixpanelIdentity.companyId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyCompanyId]];
         [defaults setValue: mixpanelIdentity.alias forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
         [defaults setBool: mixpanelIdentity.hadPersistedDistinctId forKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
         [defaults synchronize];
     }
 }
 
-+ (MixpanelIdentity *)loadIdentity:(NSString *)apiToken {
++ (MixpanelPersistedIdentity *)loadIdentity:(NSString *)apiToken {
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kDefaultKeySuiteName];
     NSString *prefix = [NSString stringWithFormat:@"%@-%@", kDefaultKeyPrefix, apiToken];
     NSString *distinctId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyDistinctId]];
     NSString *peopleDistinctId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]];
     NSString *anonymousId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]];
     NSString *userId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
+    NSString *companyId = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyCompanyId]];
     NSString *alias = [defaults stringForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
     BOOL hadPersistedDistinctId = [defaults boolForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
     
-    return [[MixpanelIdentity alloc] initWithDistinctId:distinctId peopleDistinctId:peopleDistinctId
-                                                anonymousId:anonymousId userId:userId alias:alias hadPersistedDistinctId:hadPersistedDistinctId];
+    return [[MixpanelPersistedIdentity alloc] initWithDistinctId:distinctId peopleDistinctId:peopleDistinctId
+                                                     anonymousId:anonymousId userId:userId companyId:companyId
+                                                           alias:alias hadPersistedDistinctId:hadPersistedDistinctId];
 }
 
 + (void)deleteMPUserDefaultsData:(NSString *)apiToken {
@@ -229,6 +259,7 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyPeopleDistinctId]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAnonymousId]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyUserId]];
+        [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyCompanyId]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyAlias]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyHadPersistedDistinctId]];
         [defaults removeObjectForKey:[NSString stringWithFormat:@"%@%@", prefix, kDefaultKeyOptOutStatus]];
@@ -259,12 +290,13 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     [MixpanelPersistence saveTimedEvents:properties[kLegacyDefaultKeyTimeEvents] apiToken:self.apiToken];
     [self saveEntities:properties[kLegacyDefaultKeyPeopleUnidentifiedQueue] type:PersistenceTypePeople flag:UnIdentifiedFlag];
     
-    MixpanelIdentity *mixpanelIdentity = [[MixpanelIdentity alloc] initWithDistinctId:properties[kLegacyDefaultKeyDistinctId]
-                                                                     peopleDistinctId:properties[kLegacyDefaultKeyPeopleDistinctId]
-                                                                          anonymousId:properties[kLegacyDefaultKeyAnonymousId]
-                                                                               userId:properties[kLegacyDefaultKeyUserId]
-                                                                                alias:properties[kLegacyDefaultKeyAlias]
-                                                               hadPersistedDistinctId:[properties[kLegacyDefaultKeyHadPersistedDistinctId] boolValue]];
+    MixpanelPersistedIdentity *mixpanelIdentity = [[MixpanelPersistedIdentity alloc] initWithDistinctId:properties[kLegacyDefaultKeyDistinctId]
+                                                                                       peopleDistinctId:properties[kLegacyDefaultKeyPeopleDistinctId]
+                                                                                            anonymousId:properties[kLegacyDefaultKeyAnonymousId]
+                                                                                                 userId:properties[kLegacyDefaultKeyUserId]
+                                                                                              companyId:nil
+                                                                                                  alias:properties[kLegacyDefaultKeyAlias]
+                                                                                 hadPersistedDistinctId:[properties[kLegacyDefaultKeyHadPersistedDistinctId] boolValue]];
     
     [MixpanelPersistence saveIdentity:mixpanelIdentity apiToken:self.apiToken];
     [MixpanelPersistence saveOptOutStatusFlag:[optOutStatus boolValue] apiToken:self.apiToken];

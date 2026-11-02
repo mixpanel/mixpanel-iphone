@@ -768,7 +768,7 @@
     XCTAssertNotNil(testTimedEvents[@"Time Event A"]);
     XCTAssertNotNil(testTimedEvents[@"Time Event B"]);
     XCTAssertNotNil(testTimedEvents[@"Time Event C"]);
-    MixpanelIdentity *identity = [MixpanelPersistence loadIdentity:testToken];
+    MixpanelPersistedIdentity *identity = [MixpanelPersistence loadIdentity:testToken];
     XCTAssertEqualObjects(identity.distinctId, @"demo_user");
     XCTAssertEqualObjects(identity.peopleDistinctId, @"demo_user");
     XCTAssertNotNil(identity.anonymousId);

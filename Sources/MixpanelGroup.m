@@ -94,6 +94,17 @@
     if (strongMixpanel) {
         properties = [properties copy];
         dispatch_async(strongMixpanel.serialQueue, ^{
+            // Hierarchical groups require $company_id at the top level of every /groups write
+            NSString *companyId = nil;
+            if (strongMixpanel.hierarchicalGroups) {
+                companyId = strongMixpanel.companyId;
+                if (companyId == nil) {
+                    MPLogError(@"Group profile updates for hierarchical groups projects require a company. Call "
+                               @"identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId] "
+                               @"first. The update to %@=%@ was dropped.", self.groupKey, self.groupID);
+                    return;
+                }
+            }
             NSMutableDictionary *req = [NSMutableDictionary dictionary];
             NSMutableDictionary *props = [NSMutableDictionary dictionary];
             req[@"$token"] = strongMixpanel.apiToken;
@@ -104,6 +115,9 @@
             req[@"$group_key"] = self.groupKey;
             req[@"$group_id"] = self.groupID;
             req[@"$token"] = strongMixpanel.apiToken;
+            if (companyId) {
+                req[@"$company_id"] = companyId;
+            }
             if ([action isEqualToString:@"$unset"]) {
                 // $unset takes an array of property names which is supplied to
                 // this method in the properties parameter under the key
@@ -130,6 +144,56 @@
         }
 #endif
     }
+}
+
+@end
+
+@implementation MixpanelUnavailableGroup
+{
+    NSString *_reason;
+}
+
+- (instancetype)initWithReason:(NSString *)reason
+{
+    if (self = [super init:nil groupKey:@"" groupID:@""]) {
+        _reason = [reason copy];
+    }
+    return self;
+}
+
+- (void)drop
+{
+    MPLogError(@"%@ The update was dropped.", _reason);
+}
+
+- (void)set:(NSDictionary *)properties
+{
+    [self drop];
+}
+
+- (void)setOnce:(NSDictionary *)properties
+{
+    [self drop];
+}
+
+- (void)unset:(NSString *)property
+{
+    [self drop];
+}
+
+- (void)union:(NSString *)property values:(NSArray<id<MixpanelType>> *)values
+{
+    [self drop];
+}
+
+- (void)remove:(NSString *)property value:(id<MixpanelType>)value
+{
+    [self drop];
+}
+
+- (void)deleteGroup
+{
+    [self drop];
 }
 
 @end

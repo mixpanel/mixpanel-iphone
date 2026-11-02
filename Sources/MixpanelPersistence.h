@@ -10,7 +10,27 @@
 
 #import <Foundation/Foundation.h>
 #import "MPDB.h"
-#import "MixpanelIdentity.h"
+
+// The identity state archived per token. Distinct from the public MixpanelIdentity.
+@interface MixpanelPersistedIdentity : NSObject
+
+@property (nonatomic, readonly, copy) NSString *distinctId;
+@property (nonatomic, readonly, copy) NSString *peopleDistinctId;
+@property (nonatomic, readonly, copy) NSString *anonymousId;
+@property (nonatomic, readonly, copy) NSString *userId;
+@property (nonatomic, readonly, copy) NSString *companyId;
+@property (nonatomic, readonly, copy) NSString *alias;
+@property (nonatomic, assign) BOOL hadPersistedDistinctId;
+
+- (instancetype)initWithDistinctId:(NSString *)distinctId
+                  peopleDistinctId:(NSString *)peopleDistinctId
+                       anonymousId:(NSString *)anonymousId
+                            userId:(NSString *)userId
+                         companyId:(NSString *)companyId
+                             alias:(NSString *)alias
+            hadPersistedDistinctId:(BOOL)hadPersistedDistinctId;
+
+@end
 
 @interface MixpanelPersistence : NSObject
 
@@ -35,8 +55,8 @@
 + (NSDictionary *)loadTimedEvents:(NSString *)apiToken;
 + (void)saveSuperProperties:(NSDictionary *)superProperties apiToken:(NSString *)apiToken;
 + (NSDictionary *)loadSuperProperties:(NSString *)apiToken;
-+ (void)saveIdentity:(MixpanelIdentity *)mixpanelIdentity apiToken:(NSString *)apiToken;
-+ (MixpanelIdentity *)loadIdentity:(NSString *)apiToken;
++ (void)saveIdentity:(MixpanelPersistedIdentity *)mixpanelIdentity apiToken:(NSString *)apiToken;
++ (MixpanelPersistedIdentity *)loadIdentity:(NSString *)apiToken;
 + (void)deleteMPUserDefaultsData:(NSString *)apiToken;
 
 

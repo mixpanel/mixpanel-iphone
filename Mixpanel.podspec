@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.swift_version = '4.2'
   s.ios.deployment_target = '11.0'
   all_files = 'Sources/**/*.{m,h}'
-  public_header_files = 'Sources/Mixpanel.h', 'Sources/MixpanelType.h', 'Sources/MixpanelGroup.h', 'Sources/MixpanelType.h', 'Sources/MixpanelPeople.h'
-  private_header_files = 'Sources/MixpanelPeoplePrivate.h', 'Sources/MixpanelGroupPrivate.h', 'Sources/MPNetworkPrivate.h', 'Sources/MixpanelPrivate.h', 'Sources/SessionMetadata.h', 'Sources/MixpanelIdentity.h', 'Sources/MPJSONHander.h', 'Sources/MixpanelPersistence.h', 'Sources/MPDB.h'
+  public_header_files = 'Sources/Mixpanel.h', 'Sources/MixpanelType.h', 'Sources/MixpanelGroup.h', 'Sources/MixpanelType.h', 'Sources/MixpanelPeople.h', 'Sources/MixpanelIdentity.h'
+  private_header_files = 'Sources/MixpanelPeoplePrivate.h', 'Sources/MixpanelGroupPrivate.h', 'Sources/MPNetworkPrivate.h', 'Sources/MixpanelPrivate.h', 'Sources/SessionMetadata.h', 'Sources/MPJSONHander.h', 'Sources/MixpanelPersistence.h', 'Sources/MPDB.h'
   s.ios.source_files  = all_files
   s.ios.exclude_files = 'Sources/MixpanelWatchProperties.{m,h}','Sources/Include/*.h'
   s.ios.public_header_files = public_header_files

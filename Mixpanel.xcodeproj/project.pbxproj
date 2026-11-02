@@ -133,6 +133,10 @@
 		86EDD336272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
 		86EDD337272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
 		86EDD338272A14F900BA05F9 /* MixpanelIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD334272A14F900BA05F9 /* MixpanelIdentity.m */; };
+		86EDD33A272A150E00BA05F9 /* MixpanelIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 86EDD339272A150E00BA05F9 /* MixpanelIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		86EDD33B272A150E00BA05F9 /* MixpanelIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 86EDD339272A150E00BA05F9 /* MixpanelIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		86EDD33C272A150E00BA05F9 /* MixpanelIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 86EDD339272A150E00BA05F9 /* MixpanelIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		86EDD33D272A150E00BA05F9 /* MixpanelIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 86EDD339272A150E00BA05F9 /* MixpanelIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E163D08E1EA69B4500DA4BF6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E163D08D1EA69B4500DA4BF6 /* StoreKit.framework */; };
 		E1C2BE5C1CFD6A010052172F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D451A4A05A000D9E0F2 /* Foundation.framework */; };
 		E1C2BE5E1CFD6A010052172F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C170D411A4A059400D9E0F2 /* UIKit.framework */; };
@@ -509,6 +513,7 @@
 				865430A3260AB29C00C478DE /* MixpanelPeoplePrivate.h in Headers */,
 				865430C1260AB2A300C478DE /* MixpanelType.h in Headers */,
 				86543058260AB28A00C478DE /* MixpanelGroup.h in Headers */,
+				86EDD33A272A150E00BA05F9 /* MixpanelIdentity.h in Headers */,
 				86543135260AB2C200C478DE /* MPNetworkPrivate.h in Headers */,
 				865430FD260AB2B400C478DE /* MPFoundation.h in Headers */,
 				1727D17626F9090E006C74F3 /* MPDB.h in Headers */,
@@ -534,6 +539,7 @@
 				86542FC0260AB14F00C478DE /* MixpanelPeople.h in Headers */,
 				86542FB7260AB14F00C478DE /* MixpanelPeoplePrivate.h in Headers */,
 				86542FBE260AB14F00C478DE /* MixpanelGroup.h in Headers */,
+				86EDD33B272A150E00BA05F9 /* MixpanelIdentity.h in Headers */,
 				86542FA9260AB14F00C478DE /* MPNetwork.h in Headers */,
 				86542FAD260AB14F00C478DE /* SessionMetadata.h in Headers */,
 				86542FB9260AB14F00C478DE /* MixpanelPrivate.h in Headers */,
@@ -551,6 +557,7 @@
 				865430C6260AB2A300C478DE /* MixpanelType.h in Headers */,
 				1727D17726F9090E006C74F3 /* MPDB.h in Headers */,
 				8654305D260AB28A00C478DE /* MixpanelGroup.h in Headers */,
+				86EDD33C272A150E00BA05F9 /* MixpanelIdentity.h in Headers */,
 				8654308A260AB29500C478DE /* MixpanelPeople.h in Headers */,
 				8654303F260AB28300C478DE /* MixpanelExceptionHandler.h in Headers */,
 				865430A8260AB29C00C478DE /* MixpanelPeoplePrivate.h in Headers */,
@@ -572,6 +579,7 @@
 				865430CB260AB2A400C478DE /* MixpanelType.h in Headers */,
 				1727D17826F9090E006C74F3 /* MPDB.h in Headers */,
 				86543062260AB28B00C478DE /* MixpanelGroup.h in Headers */,
+				86EDD33D272A150E00BA05F9 /* MixpanelIdentity.h in Headers */,
 				8654308F260AB29500C478DE /* MixpanelPeople.h in Headers */,
 				86543044260AB28400C478DE /* MixpanelExceptionHandler.h in Headers */,
 				865430AD260AB29D00C478DE /* MixpanelPeoplePrivate.h in Headers */,
