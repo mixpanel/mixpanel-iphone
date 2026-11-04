@@ -889,7 +889,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     NSString *mapKey = [self keyForGroup:groupKey groupID:groupID];
     @synchronized(self.cachedGroups) {
         MixpanelGroup *group = self.cachedGroups[mapKey];
-        if (!group || ![group.groupKey isEqualToString:groupKey] ||
+        if (!group || group.groupKey != groupKey ||
             ![groupID equalToMixpanelType:group.groupID]) {
             group = [[MixpanelGroup alloc] init:self groupKey:groupKey groupID:groupID];
             // if key collision happens, the old entry will be evicted
