@@ -9,7 +9,7 @@
 
 // Hierarchical groups is an init-time option and instances are shared per token, so this page
 // uses its own project rather than the one AppDelegate initializes.
-static NSString *const MIXPANEL_HG_PROJECT_TOKEN = @"0d15128ec05aa2ba0fb3d45185f63a11";
+static NSString *const MIXPANEL_HG_PROJECT_TOKEN = @"YOUR_HG_PROJECT_TOKEN";
 
 // Filter the console on "HGDemo" to see each button's header, followed by the SDK's own logs
 // for what the call did.
