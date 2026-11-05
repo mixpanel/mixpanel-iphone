@@ -695,7 +695,9 @@
     XCTAssertEqualObjects(message[@"$group_id"], @"acme");
     XCTAssertEqualObjects(message[@"$company_id"], @"acme");
     XCTAssertEqualObjects(message[@"$set"][@"tier"], @"enterprise");
-    XCTAssertEqual([mixpanel getGroup:@"$company_id" groupID:@"acme"], [mixpanel getCompany]);
+    MixpanelGroup *company = [mixpanel getCompany];
+    XCTAssertEqualObjects(company.groupKey, @"$company_id");
+    XCTAssertEqualObjects(company.groupID, @"acme");
 }
 
 - (void)testGetCompanyBeforeIdentifyIsNil {
