@@ -87,10 +87,10 @@ NS_ASSUME_NONNULL_BEGIN
  and it cannot be parsed back when either ID contains <code>|</code>. Events still send the
  user ID as their distinct ID.
 
- Deprecated: use <code>identity</code> instead. Its user, company and device IDs are what every
- Mixpanel SDK accepts directly, so nothing has to build or parse a combined ID.
+ Don't use this on a hierarchical groups project. Prefer <code>identity</code>, whose user,
+ company and device IDs every Mixpanel SDK accepts directly.
  */
-@property (atomic, readonly, copy) NSString *distinctId DEPRECATED_MSG_ATTRIBUTE("Use identity instead.");
+@property (atomic, readonly, copy) NSString *distinctId;
 
 /*!
  Who events are currently attributed to: the identified user, their company on a

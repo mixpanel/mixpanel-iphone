@@ -10,9 +10,6 @@
 #import "MixpanelPeoplePrivate.h"
 #import "MixpanelPrivate.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
 static NSString *const TRACK = @"/track/";
 static NSString *const ENGAGE = @"/engage/";
 static NSString *const GROUPS = @"/groups/";
@@ -716,4 +713,3 @@ static NSString *const TEAM_ID = @"my_team_id";
 
 @end
 
-#pragma clang diagnostic pop

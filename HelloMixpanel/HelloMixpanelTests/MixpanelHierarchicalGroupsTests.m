@@ -11,9 +11,6 @@
 #import "MixpanelPeoplePrivate.h"
 #import "MixpanelPrivate.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
 // Hierarchical groups is fixed when the instance is created. These tests cover what changes when
 // it is on, and that nothing changes when it is off.
 @interface MixpanelHierarchicalGroupsTests : MixpanelBaseTests
@@ -803,4 +800,3 @@
 
 @end
 
-#pragma clang diagnostic pop
