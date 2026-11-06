@@ -41,14 +41,21 @@ jobs:
 
             await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
-            // Ensure the label exists, then apply it.
+            // Ensure the label exists, then apply it. Two issues opened at the same time
+            // can both see a 404 here and race to create the label; the loser gets a 422
+            // ("already_exists"), which is fine, so swallow that and continue.
             try {
               await github.rest.issues.getLabel({ owner, repo, name: label });
             } catch (error) {
               if (error.status !== 404) throw error;
-              await github.rest.issues.createLabel({
-                owner, repo, name: label, color: 'e4e669',
-                description: 'Filed against the deprecated mixpanel-iphone SDK',
-              });
+              try {
+                await github.rest.issues.createLabel({
+                  owner, repo, name: label, color: 'e4e669',
+                  description: 'Filed against the deprecated mixpanel-iphone SDK',
+                });
+              } catch (createError) {
+                if (createError.status !== 422) throw createError;
+                core.info(`Label "${label}" was created concurrently by another run.`);
+              }
             }
             await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [label] });
