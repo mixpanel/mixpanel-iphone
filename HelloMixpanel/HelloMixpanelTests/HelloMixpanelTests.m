@@ -13,6 +13,7 @@
 #import "MixpanelGroupPrivate.h"
 #import "MPNetworkPrivate.h"
 #import "MPDB.h"
+#import <sqlite3.h>
 #define DEVICE_PREFIX @"$device:"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
@@ -711,6 +712,58 @@
     [mpdb close];
     // TODO: What's up with this log we get when deleting the db file? Connection should be closed and nil.
     // BUG IN CLIENT OF libsqlite3.dylib: database integrity compromised by API violation: vnode unlinked while in use
+    [self removeDBfile:testToken];
+}
+
+- (NSString *)dbPathForToken:(NSString *)token {
+    NSString *filename = [NSString stringWithFormat:@"%@_MPDB.sqlite", token];
+#if !TARGET_OS_TV
+    return [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject]
+            stringByAppendingPathComponent:filename];
+#else
+    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject]
+            stringByAppendingPathComponent:filename];
+#endif
+}
+
+// Regression test for https://github.com/mixpanel/mixpanel-iphone/issues/1037
+// A transient error (here SQLITE_BUSY from another connection's lock) must not
+// recreate the database: that deleted queued data and left statements unfinalized.
+- (void)testMPDBInsertWhileLockedKeepsExistingRows {
+    NSString *testToken = [self randomTokenId];
+    [self removeDBfile:testToken];
+    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
+    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event"} options:0 error:NULL];
+    [mpdb insertRow:@"events" data:eventData flag:NO];
+    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1);
+
+    sqlite3 *otherConnection = NULL;
+    XCTAssertEqual(sqlite3_open([[self dbPathForToken:testToken] UTF8String], &otherConnection), SQLITE_OK);
+    XCTAssertEqual(sqlite3_exec(otherConnection, "BEGIN EXCLUSIVE;", NULL, NULL, NULL), SQLITE_OK);
+    [mpdb insertRow:@"events" data:eventData flag:NO];
+    sqlite3_exec(otherConnection, "COMMIT;", NULL, NULL, NULL);
+    sqlite3_close(otherConnection);
+
+    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "Existing rows should survive a busy error");
+    [mpdb insertRow:@"events" data:eventData flag:NO];
+    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 2, "Connection should still work after a busy error");
+    [mpdb close];
+    [self removeDBfile:testToken];
+}
+
+- (void)testMPDBRecreatesCorruptDatabase {
+    NSString *testToken = [self randomTokenId];
+    [self removeDBfile:testToken];
+    NSMutableData *junk = [NSMutableData dataWithLength:8192];
+    memset(junk.mutableBytes, 0x5A, junk.length);
+    XCTAssertTrue([junk writeToFile:[self dbPathForToken:testToken] atomically:YES]);
+
+    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
+    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event"} options:0 error:NULL];
+    [mpdb insertRow:@"events" data:eventData flag:NO]; // fails with SQLITE_NOTADB and recreates the file
+    [mpdb insertRow:@"events" data:eventData flag:NO];
+    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "A corrupt database should be recreated");
+    [mpdb close];
     [self removeDBfile:testToken];
 }
 
