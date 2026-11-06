@@ -54,19 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param companyId   the user's company id, or nil on a project without hierarchical groups
  */
 - (instancetype)initWithUserId:(nullable NSString *)userId
-                     companyId:(nullable NSString *)companyId;
-
-/*!
- Creates an identity with a device id, as Mixpanel reports through its <code>identity</code>
- property. Identifying ignores the device id, since Mixpanel owns it.
-
- @param userId      the user's id
- @param companyId   the user's company id, or nil on a project without hierarchical groups
- @param deviceId    the device id Mixpanel assigned
- */
-- (instancetype)initWithUserId:(nullable NSString *)userId
-                     companyId:(nullable NSString *)companyId
-                      deviceId:(nullable NSString *)deviceId NS_DESIGNATED_INITIALIZER;
+                     companyId:(nullable NSString *)companyId NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

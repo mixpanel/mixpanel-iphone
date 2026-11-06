@@ -6,21 +6,25 @@
 //
 
 #import "MixpanelIdentity.h"
+#import "MixpanelPrivate.h"
 
 
 @implementation MixpanelIdentity
 
 - (instancetype)initWithUserId:(NSString *)userId companyId:(NSString *)companyId
 {
-    return [self initWithUserId:userId companyId:companyId deviceId:nil];
-}
-
-- (instancetype)initWithUserId:(NSString *)userId companyId:(NSString *)companyId deviceId:(NSString *)deviceId
-{
     self = [super init];
     if (self) {
         _userId = [userId copy];
         _companyId = [companyId copy];
+    }
+    return self;
+}
+
+- (instancetype)initWithUserId:(NSString *)userId companyId:(NSString *)companyId deviceId:(NSString *)deviceId
+{
+    self = [self initWithUserId:userId companyId:companyId];
+    if (self) {
         _deviceId = [deviceId copy];
     }
     return self;

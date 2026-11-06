@@ -47,6 +47,15 @@ static NSString *const MPDebugIdentifiedKey = @"MPDebugIdentifiedKey";
 static NSString *const MPDebugAliasedKey = @"MPDebugAliasedKey";
 static NSString *const MPDebugUsedPeopleKey = @"MPDebugUsedPeopleKey";
 
+// Only Mixpanel creates an identity with a device id, since it owns the device id
+@interface MixpanelIdentity ()
+
+- (instancetype)initWithUserId:(NSString *)userId
+                     companyId:(NSString *)companyId
+                      deviceId:(NSString *)deviceId;
+
+@end
+
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
 #else
