@@ -14,6 +14,8 @@
 #import "MPNetworkPrivate.h"
 #import "MPDB.h"
 #import <sqlite3.h>
+#import <fcntl.h>
+#import <sys/param.h>
 #define DEVICE_PREFIX @"$device:"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
@@ -763,6 +765,93 @@
     [mpdb insertRow:@"events" data:eventData flag:NO]; // fails with SQLITE_NOTADB and recreates the file
     [mpdb insertRow:@"events" data:eventData flag:NO];
     XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "A corrupt database should be recreated");
+    [mpdb close];
+    [self removeDBfile:testToken];
+}
+
+- (int)openFileDescriptorCountForPath:(NSString *)path {
+    int count = 0;
+    char buffer[MAXPATHLEN];
+    const char *needle = [[path lastPathComponent] UTF8String];
+    for (int fd = 0; fd < 4096; fd++) {
+        if (fcntl(fd, F_GETPATH, buffer) != -1 && strstr(buffer, needle)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+// The crash in #1037 came from recreating the database before finalizing a live statement:
+// sqlite3_close failed, the connection (and its file descriptor) leaked, and the statement was
+// finalized afterwards. Corrupt the table under an open connection so the insert prepares
+// successfully and fails during step, then check that no descriptor leaked.
+- (void)testMPDBRecreatesDatabaseCorruptedDuringWrite {
+    NSString *testToken = [self randomTokenId];
+    NSString *dbPath = [self dbPathForToken:testToken];
+    [self removeDBfile:testToken];
+    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
+    NSString *padding = [@"" stringByPaddingToLength:3000 withString:@"x" startingAtIndex:0];
+    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event", @"pad": padding} options:0 error:NULL];
+    for (int i = 0; i < 20; i++) {
+        [mpdb insertRow:@"events" data:eventData flag:NO];
+    }
+    int descriptorsBefore = [self openFileDescriptorCountForPath:dbPath];
+
+    sqlite3 *otherConnection = NULL;
+    sqlite3_stmt *statement = NULL;
+    int rootPage = 0, pageSize = 0;
+    XCTAssertEqual(sqlite3_open([dbPath UTF8String], &otherConnection), SQLITE_OK);
+    NSString *rootQuery = [NSString stringWithFormat:@"SELECT rootpage FROM sqlite_master WHERE name = 'mixpanel_%@_events'", testToken];
+    sqlite3_prepare_v2(otherConnection, [rootQuery UTF8String], -1, &statement, NULL);
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        rootPage = sqlite3_column_int(statement, 0);
+    }
+    sqlite3_finalize(statement);
+    sqlite3_prepare_v2(otherConnection, "PRAGMA page_size", -1, &statement, NULL);
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        pageSize = sqlite3_column_int(statement, 0);
+    }
+    sqlite3_finalize(statement);
+    sqlite3_close(otherConnection);
+    XCTAssertGreaterThan(rootPage, 0);
+    XCTAssertGreaterThan(pageSize, 0);
+
+    // Overwrite the table's root page, and change the file change counter so the open connection rereads it.
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:dbPath];
+    NSMutableData *junk = [NSMutableData dataWithLength:pageSize];
+    memset(junk.mutableBytes, 0xFF, junk.length);
+    [fileHandle seekToFileOffset:(unsigned long long)pageSize * (rootPage - 1)];
+    [fileHandle writeData:junk];
+    uint32_t changeCounter = 0xDEADBEEF;
+    [fileHandle seekToFileOffset:24];
+    [fileHandle writeData:[NSData dataWithBytes:&changeCounter length:sizeof(changeCounter)]];
+    [fileHandle closeFile];
+
+    [mpdb insertRow:@"events" data:eventData flag:NO]; // step fails with SQLITE_CORRUPT and recreates the database
+    XCTAssertLessThanOrEqual([self openFileDescriptorCountForPath:dbPath], descriptorsBefore, "The old connection should be closed, not leaked");
+    [mpdb insertRow:@"events" data:eventData flag:NO];
+    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "The recreated database should accept writes");
+    [mpdb close];
+    [self removeDBfile:testToken];
+}
+
+- (void)testMPDBRecoversMissingTable {
+    NSString *testToken = [self randomTokenId];
+    [self removeDBfile:testToken];
+    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
+    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event"} options:0 error:NULL];
+    [mpdb insertRow:@"people" data:eventData flag:NO];
+
+    sqlite3 *otherConnection = NULL;
+    XCTAssertEqual(sqlite3_open([[self dbPathForToken:testToken] UTF8String], &otherConnection), SQLITE_OK);
+    NSString *dropTable = [NSString stringWithFormat:@"DROP TABLE mixpanel_%@_events;", testToken];
+    XCTAssertEqual(sqlite3_exec(otherConnection, [dropTable UTF8String], NULL, NULL, NULL), SQLITE_OK);
+    sqlite3_close(otherConnection);
+
+    [mpdb insertRow:@"events" data:eventData flag:NO]; // "no such table": recreates tables without deleting data
+    [mpdb insertRow:@"events" data:eventData flag:NO];
+    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "The missing table should be recreated");
+    XCTAssertEqual([mpdb readRows:@"people" numRows:NSIntegerMax flag:NO].count, 1, "Other tables should keep their rows");
     [mpdb close];
     [self removeDBfile:testToken];
 }

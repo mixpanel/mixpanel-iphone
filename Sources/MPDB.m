@@ -122,6 +122,7 @@
         NSString *insertString = [NSString stringWithFormat:@"INSERT INTO %@ (data, flag, time) VALUES(?, ?, ?);", tableName];
         sqlite3_stmt *insertStatement = NULL;
         BOOL needsRecreate = NO;
+        BOOL needsCreateTables = NO;
         if (sqlite3_prepare_v2(self.connection, [insertString UTF8String], -1, &insertStatement, nil) == SQLITE_OK) {
             sqlite3_bind_blob(insertStatement, 1, [data bytes], (int)[data length], SQLITE_TRANSIENT);
             sqlite3_bind_int(insertStatement, 2, flag ? 1 : 0);
@@ -131,14 +132,19 @@
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to insert row into table %@", tableName]];
                 needsRecreate = [self isUnrecoverableError];
+                needsCreateTables = !needsRecreate;
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"INSERT statement for table %@ could not be prepared", tableName]];
             needsRecreate = [self isUnrecoverableError];
+            needsCreateTables = !needsRecreate;
         }
         sqlite3_finalize(insertStatement);
         if (needsRecreate) {
             [self recreate];
+        } else if (needsCreateTables) {
+            // e.g. "no such table" after createTables failed at open; this is non-destructive.
+            [self createTables];
         }
     } else {
         [self reconnect];
@@ -152,20 +158,26 @@
         NSString *deleteString = [NSString stringWithFormat:@"DELETE FROM %@%@", tableName, fromString];
         sqlite3_stmt *deleteStatement = NULL;
         BOOL needsRecreate = NO;
+        BOOL needsCreateTables = NO;
         if (sqlite3_prepare_v2(self.connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(deleteStatement) == SQLITE_DONE) {
                 MPLogInfo(@"Successfully deleted rows from table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to delete rows from table %@", tableName]];
                 needsRecreate = [self isUnrecoverableError];
+                needsCreateTables = !needsRecreate;
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"DELETE statement for table %@ could not be preapred", tableName]];
             needsRecreate = [self isUnrecoverableError];
+            needsCreateTables = !needsRecreate;
         }
         sqlite3_finalize(deleteStatement);
         if (needsRecreate) {
             [self recreate];
+        } else if (needsCreateTables) {
+            // e.g. "no such table" after createTables failed at open; this is non-destructive.
+            [self createTables];
         }
     } else {
         [self reconnect];
@@ -187,20 +199,26 @@
         NSString *updateString = [NSString stringWithFormat:@"UPDATE %@ SET flag = %d where flag = %d", tableName, newFlag, !newFlag];
         sqlite3_stmt *updateStatement = NULL;
         BOOL needsRecreate = NO;
+        BOOL needsCreateTables = NO;
         if (sqlite3_prepare_v2(self.connection, [updateString UTF8String], -1, &updateStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(updateStatement) == SQLITE_DONE) {
                 MPLogInfo(@"Successfully updated rows in table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to update rows in table %@", tableName]];
                 needsRecreate = [self isUnrecoverableError];
+                needsCreateTables = !needsRecreate;
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"UPDATE statement for table %@ could not be prepared", tableName]];
             needsRecreate = [self isUnrecoverableError];
+            needsCreateTables = !needsRecreate;
         }
         sqlite3_finalize(updateStatement);
         if (needsRecreate) {
             [self recreate];
+        } else if (needsCreateTables) {
+            // e.g. "no such table" after createTables failed at open; this is non-destructive.
+            [self createTables];
         }
     } else {
         [self reconnect];
