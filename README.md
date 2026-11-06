@@ -1,8 +1,9 @@
+> [!WARNING]
+> **This SDK is deprecated and is not actively maintained.**
+> Mixpanel recommends migrating to the **[mixpanel-swift](https://github.com/mixpanel/mixpanel-swift)** SDK. Its API is Swift-only; Objective-C apps can adopt it through a small `@objc` Swift wrapper of their own.
+> Apart from critical issues (security vulnerabilities or crashes that block shipping), issues and pull requests in this repository may not receive a timely response.
+> If you are blocked on a show-stopper in production, please contact [Mixpanel Support](https://help.mixpanel.com/hc/en-us/requests/new).
 
-
-[![Build Status](https://travis-ci.org/mixpanel/mixpanel-iphone.svg?branch=yolo-travis-ci)](https://travis-ci.org/mixpanel/mixpanel-iphone)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/mixpanel/mixpanel-iphone.svg)](http://isitmaintained.com/project/mixpanel/mixpanel-iphone "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/mixpanel/mixpanel-iphone.svg)](http://isitmaintained.com/project/mixpanel/mixpanel-iphone "Percentage of issues still open")
 [![CocoaPods Version](http://img.shields.io/cocoapods/v/Mixpanel.svg?style=flat)](https://mixpanel.com)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Apache License](http://img.shields.io/cocoapods/l/Mixpanel.svg?style=flat)](https://mixpanel.com)
@@ -26,8 +27,7 @@
 <a name="introduction"></a>
 # Overview
 
-The Mixpanel library for iOS is an open source project, and we'd love to see your contributions! We'd also love for you to come and work with us! Check out https://mixpanel.com/jobs/#openings for details.
-If you are using Swift, we recommend our **[Swift Library](https://github.com/mixpanel/mixpanel-swift)**.
+**This library is deprecated.** Mixpanel recommends the **[mixpanel-swift](https://github.com/mixpanel/mixpanel-swift)** SDK for new and existing iOS, macOS, tvOS, and watchOS projects. The Swift SDK does not expose an Objective-C API, so Objective-C apps that migrate need a thin Swift wrapper marked `@objc` to call it. See the warning at the top of this page for support expectations.
 
 Check out our [Advanced iOS - Objective-C Guide](https://developer.mixpanel.com/docs/ios) for additional advanced configurations and use cases, like setting up your project with European Union data storage.
 
