@@ -564,7 +564,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             }
             self.eventsDistinctId = distinctId;
             self.userId = distinctId;
-            [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
+            // A hierarchical groups project ties the device to the user from the identity keys on later
+            // events, so it has no $identify
+            if (!self.hierarchicalGroups) {
+                [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
+            }
         }
         if (usePeople) {
             self.people.distinctId = distinctId;

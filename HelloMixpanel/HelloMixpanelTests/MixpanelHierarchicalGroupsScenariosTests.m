@@ -52,7 +52,7 @@ static NSString *const TEAM_ID = @"my_team_id";
 }
 
 - (void)drain {
-    // Some work queues more work, such as identify tracking $identify
+    // Some work queues more work, such as identify tracking an event
     [self waitForMixpanelQueues:self.mixpanel];
     [self waitForMixpanelQueues:self.mixpanel];
 }
@@ -165,12 +165,10 @@ static NSString *const TEAM_ID = @"my_team_id";
 #pragma mark - Identify
 
 - (void)testIdentify {
-    NSString *anonymousDistinctId = [self deviceDistinctId];
     [self identify];
 
-    NSDictionary *props = [self onlyEvent:@"$identify"];
-    [self assertIdentified:props];
-    XCTAssertEqualObjects(props[@"$anon_distinct_id"], anonymousDistinctId);
+    // No $identify: the next event's identity keys tie the device to the user
+    XCTAssertEqual([self sent].count, 0);
 }
 
 #pragma mark - Track (Identified)
@@ -610,16 +608,8 @@ static NSString *const TEAM_ID = @"my_team_id";
     [self clearSent];
     [self.mixpanel optInTrackingWithIdentity:[self user:USER_ID company:COMPANY_ID] properties:nil];
 
-    // $identify and $opt_in, both carrying the user and company, in either order
-    NSArray *sent = [self sent];
-    XCTAssertEqual(sent.count, 2);
-    NSMutableSet *events = [NSMutableSet set];
-    for (NSDictionary *request in sent) {
-        XCTAssertEqualObjects(request[@"endpoint"], TRACK);
-        [events addObject:request[@"body"][@"event"]];
-        [self assertIdentified:request[@"body"][@"properties"]];
-    }
-    XCTAssertEqualObjects(events, ([NSSet setWithArray:@[@"$identify", @"$opt_in"]]));
+    // Only $opt_in, carrying the user and company
+    [self assertIdentified:[self onlyEvent:@"$opt_in"]];
     XCTAssertFalse([self.mixpanel hasOptedOutTracking]);
 }
 

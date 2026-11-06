@@ -115,13 +115,17 @@
     XCTAssertEqualObjects(mixpanel.distinctId, @"$company:acme|$user:user_123");
 }
 
-- (void)testIdentifyEventCarriesTheNewCompany {
+- (void)testIdentifyTracksNoIdentifyEvent {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 0);
 
-    NSDictionary *props = [self lastEventProperties:@"$identify" mixpanel:mixpanel];
+    // The next event carries the identity keys that tie the device to the user
+    [mixpanel track:@"Viewed Report"];
+    NSDictionary *props = [self lastEventProperties:@"Viewed Report" mixpanel:mixpanel];
     XCTAssertEqualObjects(props[@"$company_id"], @"acme");
     XCTAssertEqualObjects(props[@"$user_id"], @"user_123");
+    XCTAssertEqualObjects(props[@"$device_id"], mixpanel.anonymousId);
 }
 
 - (void)testAnonymousEventsCarryNoCompany {
@@ -154,11 +158,10 @@
 - (void)testCompanyChangeIsAnIdentityChange {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
-    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
-    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 1);
+    XCTAssertEqualObjects(mixpanel.distinctId, @"$company:acme|$user:user_123");
 
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"globex"]];
-    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 2);
+    XCTAssertEqualObjects(mixpanel.distinctId, @"$company:globex|$user:user_123");
 
     [mixpanel track:@"Viewed Report"];
     XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"globex");
@@ -183,7 +186,6 @@
     XCTAssertEqualObjects(mixpanel.identity.companyId, @"acme");
     [mixpanel track:@"Viewed Report"];
     XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"acme");
-    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 1);
 }
 
 - (void)testIdentifyWithEmptyCompanyDoesNothing {
@@ -213,7 +215,6 @@
 
     XCTAssertEqualObjects(mixpanel.identity.userId, @"user_123");
     XCTAssertEqualObjects(mixpanel.identity.companyId, @"acme");
-    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 1);
 }
 
 - (void)testInvalidIdentitiesDoNothing {
@@ -248,7 +249,7 @@
 
     // What analytics reports, it accepts back unchanged
     [mixpanel identifyWithIdentity:mixpanel.identity];
-    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 1);
+    XCTAssertEqualObjects(mixpanel.identity, [[MixpanelIdentity alloc] initWithUserId:@"user_123" companyId:@"acme" deviceId:mixpanel.anonymousId]);
 }
 
 - (void)testGetIdentityWhenDisabledHasNoCompany {

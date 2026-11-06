@@ -491,9 +491,10 @@ NS_ASSUME_NONNULL_BEGIN
  [mixpanel identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:@"user_123" companyId:@"acme"]];
  </pre>
 
- Calling this with the current user and a different company is an identity change and tracks
- <code>$identify</code>, as switching users does. An identity without both a user ID and a
- company ID is logged and ignored.
+ Calling this with the current user and a different company is an identity change, as switching
+ users is. No <code>$identify</code> event is tracked: Mixpanel ties the device to the user from the
+ <code>$device_id</code>, <code>$user_id</code> and <code>$company_id</code> on later events. An
+ identity without both a user ID and a company ID is logged and ignored.
 
  On any other project Mixpanel ignores <code>$company_id</code>, so an identity that names a
  company is logged and ignored rather than attributed without it. An identity with a nil or
