@@ -666,9 +666,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
-        // The stored id, not the distinctId property: ingestion resolves a hierarchical user
-        // from the identity keys, so the combined form is never sent
-        if (self.eventsDistinctId) {
+        // The stored id, not the distinctId property. On a hierarchical groups project an identified
+        // user is $user_id and $company_id, so no distinct_id
+        if (self.eventsDistinctId && !(self.hierarchicalGroups && self.userId && self.companyId)) {
             p[@"distinct_id"] = self.eventsDistinctId;
         }
         if (self.anonymousId) {

@@ -269,9 +269,9 @@
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
     XCTAssertEqualObjects(mixpanel.distinctId, @"$company:acme|$user:user_123");
 
-    // Events still send the stored id; ingestion resolves the user from the identity keys
+    // Events send no distinct_id; ingestion resolves the user from the identity keys
     [mixpanel track:@"Viewed Report"];
-    XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"distinct_id"], @"user_123");
+    XCTAssertNil([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"distinct_id"]);
 
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"globex"]];
     XCTAssertEqualObjects(mixpanel.distinctId, @"$company:globex|$user:user_123");

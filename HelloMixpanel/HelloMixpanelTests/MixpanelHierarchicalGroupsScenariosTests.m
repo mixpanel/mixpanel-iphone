@@ -121,7 +121,7 @@ static NSString *const TEAM_ID = @"my_team_id";
 }
 
 - (void)assertIdentified:(NSDictionary *)props {
-    XCTAssertEqualObjects(props[@"distinct_id"], USER_ID);
+    XCTAssertNil(props[@"distinct_id"]);
     XCTAssertEqualObjects(props[@"$user_id"], USER_ID);
     XCTAssertEqualObjects(props[@"$company_id"], COMPANY_ID);
     XCTAssertEqualObjects(props[@"$device_id"], self.mixpanel.anonymousId);
