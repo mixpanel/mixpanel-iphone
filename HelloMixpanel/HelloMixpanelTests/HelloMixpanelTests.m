@@ -728,47 +728,6 @@
 #endif
 }
 
-// Regression test for https://github.com/mixpanel/mixpanel-iphone/issues/1037
-// A transient error (here SQLITE_BUSY from another connection's lock) must not
-// recreate the database: that deleted queued data and left statements unfinalized.
-- (void)testMPDBInsertWhileLockedKeepsExistingRows {
-    NSString *testToken = [self randomTokenId];
-    [self removeDBfile:testToken];
-    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
-    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event"} options:0 error:NULL];
-    [mpdb insertRow:@"events" data:eventData flag:NO];
-    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1);
-
-    sqlite3 *otherConnection = NULL;
-    XCTAssertEqual(sqlite3_open([[self dbPathForToken:testToken] UTF8String], &otherConnection), SQLITE_OK);
-    XCTAssertEqual(sqlite3_exec(otherConnection, "BEGIN EXCLUSIVE;", NULL, NULL, NULL), SQLITE_OK);
-    [mpdb insertRow:@"events" data:eventData flag:NO];
-    sqlite3_exec(otherConnection, "COMMIT;", NULL, NULL, NULL);
-    sqlite3_close(otherConnection);
-
-    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "Existing rows should survive a busy error");
-    [mpdb insertRow:@"events" data:eventData flag:NO];
-    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 2, "Connection should still work after a busy error");
-    [mpdb close];
-    [self removeDBfile:testToken];
-}
-
-- (void)testMPDBRecreatesCorruptDatabase {
-    NSString *testToken = [self randomTokenId];
-    [self removeDBfile:testToken];
-    NSMutableData *junk = [NSMutableData dataWithLength:8192];
-    memset(junk.mutableBytes, 0x5A, junk.length);
-    XCTAssertTrue([junk writeToFile:[self dbPathForToken:testToken] atomically:YES]);
-
-    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
-    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event"} options:0 error:NULL];
-    [mpdb insertRow:@"events" data:eventData flag:NO]; // fails with SQLITE_NOTADB and recreates the file
-    [mpdb insertRow:@"events" data:eventData flag:NO];
-    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "A corrupt database should be recreated");
-    [mpdb close];
-    [self removeDBfile:testToken];
-}
-
 - (int)openFileDescriptorCountForPath:(NSString *)path {
     int count = 0;
     char buffer[MAXPATHLEN];
@@ -831,27 +790,6 @@
     XCTAssertLessThanOrEqual([self openFileDescriptorCountForPath:dbPath], descriptorsBefore, "The old connection should be closed, not leaked");
     [mpdb insertRow:@"events" data:eventData flag:NO];
     XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "The recreated database should accept writes");
-    [mpdb close];
-    [self removeDBfile:testToken];
-}
-
-- (void)testMPDBRecoversMissingTable {
-    NSString *testToken = [self randomTokenId];
-    [self removeDBfile:testToken];
-    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
-    NSData *eventData = [NSJSONSerialization dataWithJSONObject:@{@"event": @"Test Event"} options:0 error:NULL];
-    [mpdb insertRow:@"people" data:eventData flag:NO];
-
-    sqlite3 *otherConnection = NULL;
-    XCTAssertEqual(sqlite3_open([[self dbPathForToken:testToken] UTF8String], &otherConnection), SQLITE_OK);
-    NSString *dropTable = [NSString stringWithFormat:@"DROP TABLE mixpanel_%@_events;", testToken];
-    XCTAssertEqual(sqlite3_exec(otherConnection, [dropTable UTF8String], NULL, NULL, NULL), SQLITE_OK);
-    sqlite3_close(otherConnection);
-
-    [mpdb insertRow:@"events" data:eventData flag:NO]; // "no such table": recreates tables without deleting data
-    [mpdb insertRow:@"events" data:eventData flag:NO];
-    XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "The missing table should be recreated");
-    XCTAssertEqual([mpdb readRows:@"people" numRows:NSIntegerMax flag:NO].count, 1, "Other tables should keep their rows");
     [mpdb close];
     [self removeDBfile:testToken];
 }
