@@ -39,14 +39,6 @@ static NSString *const MPUserIdGroupKey = @"$user_id";
 static NSString *const MPCompanyIdGroupKey = @"$company_id";
 static BOOL IdentifiedFlag = NO;
 
-// Internal Standard UserDefaults Keys
-static NSString *const MPDebugTrackedKey = @"MPDebugTrackedKey";
-static NSString *const MPDebugInitCountKey = @"MPDebugInitCountKey";
-static NSString *const MPDebugImplementedKey = @"MPDebugImplementedKey";
-static NSString *const MPDebugIdentifiedKey = @"MPDebugIdentifiedKey";
-static NSString *const MPDebugAliasedKey = @"MPDebugAliasedKey";
-static NSString *const MPDebugUsedPeopleKey = @"MPDebugUsedPeopleKey";
-
 // Only Mixpanel creates an identity with a device id, since it owns the device id
 @interface MixpanelIdentity ()
 

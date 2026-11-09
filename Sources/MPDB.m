@@ -121,6 +121,7 @@
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *insertString = [NSString stringWithFormat:@"INSERT INTO %@ (data, flag, time) VALUES(?, ?, ?);", tableName];
         sqlite3_stmt *insertStatement;
+        BOOL needsRecreate = NO;
         if (sqlite3_prepare_v2(self.connection, [insertString UTF8String], -1, &insertStatement, nil) == SQLITE_OK) {
             sqlite3_bind_blob(insertStatement, 1, [data bytes], (int)[data length], SQLITE_TRANSIENT);
             sqlite3_bind_int(insertStatement, 2, flag ? 1 : 0);
@@ -129,13 +130,17 @@
                 MPLogInfo(@"Successfully inserted row into table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to insert row into table %@", tableName]];
-                [self recreate];
+                needsRecreate = YES;
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"INSERT statement for table %@ could not be prepared", tableName]];
-            [self recreate];
+            needsRecreate = YES;
         }
         sqlite3_finalize(insertStatement);
+        if (needsRecreate) {
+            // Recreate only after finalizing, or sqlite3_close fails and the connection leaks (#1037).
+            [self recreate];
+        }
     } else {
         [self reconnect];
     }
@@ -147,18 +152,23 @@
         NSString *fromString = isDeleteAll ? @"" : [NSString stringWithFormat:@" WHERE id IN %@", [self idsSqlString: ids]];
         NSString *deleteString = [NSString stringWithFormat:@"DELETE FROM %@%@", tableName, fromString];
         sqlite3_stmt *deleteStatement;
+        BOOL needsRecreate = NO;
         if (sqlite3_prepare_v2(self.connection, [deleteString UTF8String], -1, &deleteStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(deleteStatement) == SQLITE_DONE) {
                 MPLogInfo(@"Successfully deleted rows from table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to delete rows from table %@", tableName]];
-                [self recreate];
+                needsRecreate = YES;
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"DELETE statement for table %@ could not be preapred", tableName]];
-            [self recreate];
+            needsRecreate = YES;
         }
         sqlite3_finalize(deleteStatement);
+        if (needsRecreate) {
+            // Recreate only after finalizing, or sqlite3_close fails and the connection leaks (#1037).
+            [self recreate];
+        }
     } else {
         [self reconnect];
     }
@@ -178,18 +188,23 @@
         NSString *tableName = [self tableNameFor:persistenceType];
         NSString *updateString = [NSString stringWithFormat:@"UPDATE %@ SET flag = %d where flag = %d", tableName, newFlag, !newFlag];
         sqlite3_stmt *updateStatement;
+        BOOL needsRecreate = NO;
         if (sqlite3_prepare_v2(self.connection, [updateString UTF8String], -1, &updateStatement, nil) == SQLITE_OK) {
             if (sqlite3_step(updateStatement) == SQLITE_DONE) {
                 MPLogInfo(@"Successfully updated rows in table %@", tableName);
             } else {
                 [self logSqlError:[NSString stringWithFormat:@"Failed to update rows in table %@", tableName]];
-                [self recreate];
+                needsRecreate = YES;
             }
         } else {
             [self logSqlError:[NSString stringWithFormat:@"UPDATE statement for table %@ could not be prepared", tableName]];
-            [self recreate];
+            needsRecreate = YES;
         }
         sqlite3_finalize(updateStatement);
+        if (needsRecreate) {
+            // Recreate only after finalizing, or sqlite3_close fails and the connection leaks (#1037).
+            [self recreate];
+        }
     } else {
         [self reconnect];
     }

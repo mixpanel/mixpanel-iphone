@@ -195,9 +195,6 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             [self.automaticEvents initializeEvents:self.people apiToken:apiToken];
 #endif
         }
-#if defined(DEBUG)
-        [self didDebugInit:apiToken];
-#endif
         instances[apiToken] = self;
     }
     return self;
@@ -227,38 +224,6 @@ static CTTelephonyNetworkInfo *telephonyInfo;
                  flushInterval:flushInterval
                   trackCrashes:NO
            useUniqueDistinctId:NO];
-}
-
-- (void)didDebugInit:(NSString *)distinctId
-{
-    if (distinctId.length == 32) {
-        NSInteger debugInitCount = [[NSUserDefaults standardUserDefaults] integerForKey:MPDebugInitCountKey] + 1;
-        [self sendHttpEvent:@"SDK Debug Launch" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Debug Launch Count": @(debugInitCount)}];
-        [self checkIfImplemented:distinctId debugInitCount: debugInitCount];
-        [[NSUserDefaults standardUserDefaults] setInteger:debugInitCount forKey:MPDebugInitCountKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)checkIfImplemented:(NSString *)distinctId
-            debugInitCount:(NSInteger)debugInitCount
-{
-    BOOL hasImplemented = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugImplementedKey];
-    if (!hasImplemented) {
-        NSInteger completed = 0;
-        BOOL hasTracked = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugTrackedKey];
-        completed += hasTracked;
-        BOOL hasIdentified = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugIdentifiedKey];
-        completed += hasIdentified;
-        BOOL hasAliased = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugAliasedKey];
-        completed += hasAliased;
-        BOOL hasUsedPeople = [[NSUserDefaults standardUserDefaults] boolForKey:MPDebugUsedPeopleKey];
-        completed += hasUsedPeople;
-        if (completed >= 3) {
-            [self sendHttpEvent:@"SDK Implemented" apiToken:@"metrics-1" distinctId:distinctId properties:@{@"Tracked": @(hasTracked), @"Identified": @(hasIdentified), @"Aliased": @(hasAliased), @"Used People": @(hasUsedPeople), @"Debug Launch Count": @(debugInitCount)}];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugImplementedKey];
-        }
-    }
 }
 
 - (void)dealloc
@@ -585,10 +550,6 @@ OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, pt
         MPLogWarning(@"%@ cannot identify blank distinct id: %@", self, distinctId);
         return;
     }
-    
-#if defined(DEBUG)
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugIdentifiedKey];
-#endif
 
     dispatch_async(self.serialQueue, ^{
         if(!self.anonymousId) {
@@ -668,10 +629,6 @@ OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, pt
         return;
     }
     
-#if defined(DEBUG)
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugAliasedKey];
-#endif
-    
     if (![alias isEqualToString:distinctID]) {
         dispatch_async(self.serialQueue, ^{
             self.alias = alias;
@@ -704,10 +661,6 @@ OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, pt
     if (!self.trackAutomaticEventsEnabled && [event hasPrefix:@"$ae_"]) {
         return;
     }
-    
-#if defined(DEBUG)
-    if (![event hasPrefix:@"$"]) [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugTrackedKey];
-#endif
     
     properties = [properties copy];
     [Mixpanel assertPropertyTypes:properties];
@@ -973,9 +926,6 @@ OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, pt
         [mutableSuperProps removeObjectForKey:groupKey];
         // Saved here on the serial queue rather than queued again with people unset:, so it keeps its
         // place before later group and profile updates and stays with the current user
-#if defined(DEBUG)
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugUsedPeopleKey];
-#endif
         NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
         [self.people saveHierarchicalGroupsRecordWithAction:@"$unset" properties:@{@"$properties": @[groupKey]}
                                                        time:epochMilliseconds];
@@ -1739,24 +1689,6 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
     MPLogInfo(@"%@ starting background cleanup task %lu", self, (unsigned long)self.taskId);
 
     dispatch_group_t bgGroup = dispatch_group_create();
-    NSString *trackedKey = [NSString stringWithFormat:@"MPTracked:%@", self.apiToken];
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:trackedKey]) {
-        dispatch_group_enter(bgGroup);
-        [self sendHttpEvent:@"Integration"
-                   apiToken:@"85053bf24bba75239b16a601d9387e17"
-                 distinctId:self.apiToken
-                 properties:@{}
-               updatePeople:NO
-          completionHandler:^(NSData *responseData,
-                              NSURLResponse *urlResponse,
-                              NSError *error) {
-            if (!error) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:trackedKey];
-            }
-            dispatch_group_leave(bgGroup);
-        }];
-    }
-
     if (self.flushOnBackground) {
         dispatch_group_enter(bgGroup);
         [self flushWithCompletion:^{
@@ -1789,49 +1721,10 @@ static void MixpanelReachabilityCallback(SCNetworkReachabilityRef target, SCNetw
 
 #endif // MIXPANEL_NO_APP_LIFECYCLE_SUPPORT
 
-- (void)sendHttpEvent:(NSString *)eventName
-             apiToken:(NSString *)apiToken
-           distinctId:(NSString *)distinctId
-{
-    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:@{} updatePeople: YES completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
-}
-
-
-- (void)sendHttpEvent:(NSString *)eventName
-             apiToken:(NSString *)apiToken
-           distinctId:(NSString *)distinctId
-           properties:(NSDictionary *)properties
-{
-    [self sendHttpEvent:eventName apiToken:apiToken distinctId:distinctId properties:properties updatePeople: YES completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
-}
-
-- (void)sendHttpEvent:(NSString *)eventName
-             apiToken:(NSString *)apiToken
-           distinctId:(NSString *)distinctId
-           properties:(NSDictionary *)properties
-         updatePeople:(BOOL)updatePeople
-    completionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
-{
-    NSMutableDictionary *trackingProperties = [[NSMutableDictionary alloc] initWithDictionary:@{@"token": apiToken, @"mp_lib": @"iphone", @"distinct_id": distinctId, @"$lib_version": self.libVersion, @"Logging Enabled": @(self.enableLogging), @"Project Token": distinctId, @"DevX": @YES}];
-    [trackingProperties addEntriesFromDictionary:properties];
-    NSString *requestData = [MPJSONHandler encodedJSONString:@[@{@"event": eventName, @"properties": trackingProperties}]];
-    NSURLQueryItem *useIPAddressForGeoLocation = [NSURLQueryItem queryItemWithName:@"ip" value:self.useIPAddressForGeoLocation ? @"1": @"0"];
-    NSURLRequest *request = [self.network buildPostRequestForEndpoint:MPNetworkEndpointTrack withQueryItems:@[useIPAddressForGeoLocation] andBody:requestData];
-    [[[MPNetwork sharedURLSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
-    if (updatePeople) {
-        NSString *engageData = [MPJSONHandler encodedJSONString:@[@{@"$token": apiToken, @"$distinct_id": distinctId, @"$add": @{eventName: @1}}]];
-        NSURLRequest *engageRequest = [self.network buildPostRequestForEndpoint:MPNetworkEndpointEngage withQueryItems:@[useIPAddressForGeoLocation] andBody:engageData];
-        [[[MPNetwork sharedURLSession] dataTaskWithRequest:engageRequest completionHandler:completionHandler] resume];
-    }
-}
-
 #pragma mark - Logging
 - (void)setEnableLogging:(BOOL)enableLogging
 {
     [MPLogger sharedInstance].loggingEnabled = enableLogging;
-#if defined(DEBUG)
-    [self sendHttpEvent:@"Toggle SDK Logging" apiToken:@"metrics-1" distinctId:self.apiToken properties:@{@"Logging Enabled": @(enableLogging)}];
-#endif
 }
 
 - (BOOL)enableLogging
