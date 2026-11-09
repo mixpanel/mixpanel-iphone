@@ -54,7 +54,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId hierarchicalGroups:NO];
+    return [self sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId hierarchicalGroups:NO];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents hierarchicalGroups:(BOOL)hierarchicalGroups
@@ -444,6 +444,14 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     }
 }
 
+// distinctId is computed, so setting eventsDistinctId posts its KVO. On a hierarchical groups project it
+// also reads userId and companyId, which are set before eventsDistinctId wherever they change so that
+// notification carries the new value.
++ (NSSet<NSString *> *)keyPathsForValuesAffectingDistinctId
+{
+    return [NSSet setWithObject:@"eventsDistinctId"];
+}
+
 - (NSString *)distinctId
 {
     if (!self.hierarchicalGroups) {
@@ -570,7 +578,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             NSString *oldDistinctId = [self.eventsDistinctId copy];
             self.alias = nil;
             if (self.hierarchicalGroups) {
+                // Before eventsDistinctId, whose KVO tells distinctId observers, so they see the new identity
                 self.companyId = companyId;
+                self.userId = distinctId;
             }
             self.eventsDistinctId = distinctId;
             self.userId = distinctId;
@@ -1067,6 +1077,11 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
         // wait for all current network requests to finish before resetting
         [MixpanelPersistence deleteMPUserDefaultsData:self.apiToken];
         self.anonymousId = [self defaultDeviceId];
+        if (self.hierarchicalGroups) {
+            // Before eventsDistinctId, whose KVO tells distinctId observers, so they see the new identity
+            self.userId = nil;
+            self.companyId = nil;
+        }
         self.eventsDistinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.superProperties = [NSDictionary dictionary];
         self.userId = nil;
@@ -1110,7 +1125,11 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)optInTracking
 {
-    [self optInTrackingWithIdentity:nil properties:nil];
+    if (self.hierarchicalGroups) {
+        [self optInTrackingWithIdentity:nil properties:nil];
+    } else {
+        [self optInTrackingForDistinctID:nil withEventProperties:nil];
+    }
 }
 
 - (void)optInTrackingForDistinctID:(NSString *)distinctID

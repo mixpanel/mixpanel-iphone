@@ -11,6 +11,34 @@
 #import "MixpanelPeoplePrivate.h"
 #import "MixpanelPrivate.h"
 
+@interface MixpanelHierarchicalGroupsTestSubclass : Mixpanel
+@end
+
+@implementation MixpanelHierarchicalGroupsTestSubclass
+@end
+
+// Records the new distinctId from each KVO notification
+@interface MixpanelDistinctIdObserver : NSObject
+@property (atomic, strong) NSMutableArray<NSString *> *values;
+@end
+
+@implementation MixpanelDistinctIdObserver
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _values = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    @synchronized (self) {
+        [self.values addObject:change[NSKeyValueChangeNewKey]];
+    }
+}
+
+@end
+
 // Hierarchical groups is fixed when the instance is created. These tests cover what changes when
 // it is on, and that nothing changes when it is off.
 @interface MixpanelHierarchicalGroupsTests : MixpanelBaseTests
@@ -819,5 +847,66 @@
     XCTAssertTrue([self newMixpanel:YES].hierarchicalGroups);
 }
 
-@end
+- (void)testSharedInstanceFactoryKeepsSubclass {
+    NSString *token = [self randomTokenId];
+    [self.tokens addObject:token];
+    Mixpanel *mixpanel = [MixpanelHierarchicalGroupsTestSubclass sharedInstanceWithToken:token
+                                                                    trackAutomaticEvents:NO
+                                                                            trackCrashes:NO
+                                                                 optOutTrackingByDefault:NO
+                                                                     useUniqueDistinctId:NO];
+    XCTAssertEqualObjects([mixpanel class], [MixpanelHierarchicalGroupsTestSubclass class]);
+}
 
+- (void)testDistinctIdKVOWhenDisabled {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [self drain:mixpanel];
+    MixpanelDistinctIdObserver *observer = [MixpanelDistinctIdObserver new];
+    [mixpanel addObserver:observer forKeyPath:@"distinctId" options:NSKeyValueObservingOptionNew context:NULL];
+    [mixpanel identify:@"user_123"];
+    [self drain:mixpanel];
+    [mixpanel removeObserver:observer forKeyPath:@"distinctId"];
+
+    XCTAssertEqualObjects(observer.values, @[@"user_123"]);
+}
+
+- (void)testDistinctIdKVOOnCompanyChange {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [self drain:mixpanel];
+    MixpanelDistinctIdObserver *observer = [MixpanelDistinctIdObserver new];
+    [mixpanel addObserver:observer forKeyPath:@"distinctId" options:NSKeyValueObservingOptionNew context:NULL];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"globex"]];
+    [self drain:mixpanel];
+    [mixpanel identifyWithIdentity:[self user:@"user_456" company:@"globex"]];
+    [self drain:mixpanel];
+    [mixpanel reset];
+    [self drain:mixpanel];
+    [mixpanel removeObserver:observer forKeyPath:@"distinctId"];
+
+    NSArray *expected = @[@"$company:globex|$user:user_123", @"$company:globex|$user:user_456",
+                          [@"$device:" stringByAppendingString:mixpanel.anonymousId]];
+    XCTAssertEqualObjects(observer.values, expected);
+}
+
+- (void)testOptInTrackingWhenEnabled {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel optOutTracking];
+    [self drain:mixpanel];
+    XCTAssertTrue([mixpanel hasOptedOutTracking]);
+    [mixpanel optInTracking];
+    XCTAssertFalse([mixpanel hasOptedOutTracking]);
+    XCTAssertNotNil([self lastEventProperties:@"$opt_in" mixpanel:mixpanel]);
+}
+
+- (void)testOptInTrackingWhenDisabled {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel optOutTracking];
+    [self drain:mixpanel];
+    XCTAssertTrue([mixpanel hasOptedOutTracking]);
+    [mixpanel optInTracking];
+    XCTAssertFalse([mixpanel hasOptedOutTracking]);
+    XCTAssertNotNil([self lastEventProperties:@"$opt_in" mixpanel:mixpanel]);
+}
+
+@end
