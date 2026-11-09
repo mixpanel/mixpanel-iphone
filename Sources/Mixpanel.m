@@ -59,7 +59,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents hierarchicalGroups:(BOOL)hierarchicalGroups
 {
-    return [Mixpanel sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:YES optOutTrackingByDefault:NO useUniqueDistinctId:NO hierarchicalGroups:hierarchicalGroups];
+    return [self sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:YES optOutTrackingByDefault:NO useUniqueDistinctId:NO hierarchicalGroups:hierarchicalGroups];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId hierarchicalGroups:(BOOL)hierarchicalGroups

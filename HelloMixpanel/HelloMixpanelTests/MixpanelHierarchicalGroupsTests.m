@@ -912,6 +912,15 @@
     XCTAssertEqualObjects([mixpanel class], [MixpanelHierarchicalGroupsTestSubclass class]);
 }
 
+- (void)testHierarchicalGroupsFactoryKeepsSubclass {
+    NSString *token = [self randomTokenId];
+    [self.tokens addObject:token];
+    Mixpanel *mixpanel = [MixpanelHierarchicalGroupsTestSubclass sharedInstanceWithToken:token
+                                                                    trackAutomaticEvents:NO
+                                                                      hierarchicalGroups:YES];
+    XCTAssertEqualObjects([mixpanel class], [MixpanelHierarchicalGroupsTestSubclass class]);
+}
+
 - (void)testDistinctIdKVOWhenDisabled {
     Mixpanel *mixpanel = [self newMixpanel:NO];
     [self drain:mixpanel];
