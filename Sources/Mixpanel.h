@@ -330,12 +330,20 @@ NS_ASSUME_NONNULL_BEGIN
  <ul>
  <li>Identify with <code>identifyWithIdentity:</code>. Every event then carries
  <code>$company_id</code> beside <code>$user_id</code> and <code>$device_id</code>.</li>
+ <li><code>$company_id</code> is the identified company. An event's <code>$company_id</code> is
+ always the identified one, replacing a different value passed to <code>track</code> or
+ <code>trackWithGroups</code> with a warning; before a company is identified a passed
+ <code>$company_id</code> is removed with a warning and the event is still sent. Super property
+ and group membership calls that name <code>$company_id</code> are refused whole with an error
+ log.</li>
  <li><code>people</code> updates are sent to <code>/groups</code> as the <code>$user_id</code>
- group profile within the company. <code>/groups</code> has no <code>$add</code>,
- <code>$append</code> or <code>$merge</code>, so increment, append, merge and trackCharge are
- dropped with an error log.</li>
- <li>Group profile updates carry the current <code>$company_id</code>, and are dropped until a
- company is known.</li>
+ group profile within the company. Updates made before identifying are queued and sent, in
+ order, for the user and company of the next <code>identifyWithIdentity:</code>; <code>reset</code>
+ clears them. <code>/groups</code> has no <code>$add</code>, <code>$append</code> or
+ <code>$merge</code>, so increment, append, merge and trackCharge are dropped with an error log.</li>
+ <li>Updates to a <code>$company_id</code> group profile carry that company as
+ <code>$company_id</code>. Other group profile updates carry the current <code>$company_id</code>,
+ and are dropped until a company is known.</li>
  </ul>
 
  If an instance already exists for the token, it is returned unchanged.
@@ -494,11 +502,15 @@ NS_ASSUME_NONNULL_BEGIN
  Calling this with the current user and a different company is an identity change, as switching
  users is. No <code>$identify</code> event is tracked: Mixpanel ties the device to the user from the
  <code>$device_id</code>, <code>$user_id</code> and <code>$company_id</code> on later events. An
- identity without both a user ID and a company ID is logged and ignored.
+ identity without both a user ID and a company ID is logged and ignored. People updates made
+ before the first identify are sent now, as this user's profile in this company.
 
  On any other project Mixpanel ignores <code>$company_id</code>, so an identity that names a
  company is logged and ignored rather than attributed without it. An identity with a nil or
  empty user ID is also logged and ignored.
+
+ On any project an ID that is only whitespace counts as empty, and a user ID starting with
+ <code>$device:</code>, which Mixpanel reserves for device IDs, is logged and ignored.
 
  Mixpanel owns the device ID, which stays the same across identifies so earlier anonymous
  activity follows the user. A <code>deviceId</code> on the identity is ignored, with a warning
@@ -525,7 +537,8 @@ NS_ASSUME_NONNULL_BEGIN
  The groupKey must be an NSString. The groupID should be a legal MixpanelType value.
 
  On a hierarchical groups project this clears the group key when the user belongs to
- groupID, and does nothing otherwise.
+ groupID, and does nothing otherwise. The <code>$company_id</code> key is set only by
+ <code>identifyWithIdentity:</code> there, so removing it is refused with an error log.
  
  @param groupKey        the group key
  @param groupID         the group ID
@@ -538,7 +551,8 @@ NS_ASSUME_NONNULL_BEGIN
  of MixpanelTypes.
 
  A hierarchical groups project allows one group per group key, so this is dropped with an
- error log there. Use <code>setGroup:groupID:</code> instead.
+ error log there. Use <code>setGroup:groupID:</code> instead, for any key but
+ <code>$company_id</code>, which is set only by <code>identifyWithIdentity:</code>.
  
  @param groupKey        the group key
  @param groupIDs        the group IDs
@@ -550,7 +564,9 @@ NS_ASSUME_NONNULL_BEGIN
 
  On a hierarchical groups project a user belongs to one group per group key, so the group is
  stored as a single value rather than an array, and an array groupID is dropped with an
- error log.
+ error log. The company is set only by <code>identifyWithIdentity:</code>, so a
+ <code>$company_id</code> groupKey is refused with an error log there. Before identifying, the
+ user profile part of the update is queued until <code>identifyWithIdentity:</code>.
  
  @param groupKey        the group key
  @param groupID         the group ID
@@ -568,7 +584,8 @@ NS_ASSUME_NONNULL_BEGIN
  stop and be added as a property.
 
  A hierarchical groups project allows one group per group key, so a call with an array or
- set group value is dropped with an error log there.
+ set group value is dropped with an error log there. Its <code>$company_id</code> is always the
+ identified company, as with <code>track:properties:</code>.
  
  @param event               event name
  @param properties          properties dictionary
@@ -621,6 +638,11 @@ NS_ASSUME_NONNULL_BEGIN
  <code>NSURL</code> objects. If the event is being timed, the timer will
  stop and be added as a property.
 
+ On a hierarchical groups project <code>$company_id</code> is part of the user's identity. Once
+ a company is identified every event carries it, and a different <code>$company_id</code> in
+ properties is replaced with a warning. Before then a <code>$company_id</code> in properties is
+ removed with a warning, and the event is still sent.
+
  @param event           event name
  @param properties      properties dictionary
  */
@@ -636,6 +658,10 @@ NS_ASSUME_NONNULL_BEGIN
  <code>NSNull</code>, <code>NSArray</code>, <code>NSDictionary</code>,
  <code>NSDate</code> or <code>NSURL</code> objects.
 
+ On a hierarchical groups project <code>$company_id</code> is set only by
+ <code>identifyWithIdentity:</code>, so a call that includes it is refused whole with an
+ error log.
+
  @param properties      properties dictionary
  */
 - (void)registerSuperProperties:(NSDictionary *)properties;
@@ -649,6 +675,10 @@ NS_ASSUME_NONNULL_BEGIN
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
  <code>NSURL</code> objects.
 
+ On a hierarchical groups project <code>$company_id</code> is set only by
+ <code>identifyWithIdentity:</code>, so a call that includes it is refused whole with an
+ error log.
+
  @param properties      properties dictionary
  */
 - (void)registerSuperPropertiesOnce:(NSDictionary *)properties;
@@ -661,6 +691,10 @@ NS_ASSUME_NONNULL_BEGIN
  <code>NSString</code>, <code>NSNumber</code>, <code>NSNull</code>,
  <code>NSArray</code>, <code>NSDictionary</code>, <code>NSDate</code> or
  <code>NSURL</code> objects.
+
+ On a hierarchical groups project <code>$company_id</code> is set only by
+ <code>identifyWithIdentity:</code>, so a call that includes it is refused whole with an
+ error log.
 
  @param properties      properties dictionary
  @param defaultValue    overwrite existing properties that have this value
@@ -678,6 +712,9 @@ NS_ASSUME_NONNULL_BEGIN
  Note that after removing a super property, events will show the attribute as
  having the value <code>undefined</code> in Mixpanel until a new value is
  registered.
+
+ On a hierarchical groups project <code>$company_id</code> is set only by
+ <code>identifyWithIdentity:</code>, so unregistering it is refused with an error log.
 
  @param propertyName   array of property name strings to remove
  */
@@ -849,8 +886,9 @@ Use <code>identifyWithIdentity:</code> instead.
  This method will internally track an opt in event to your project. If you want to pass properties to the event, see also
  <code>optInTrackingForDistinctId:withEventProperties:</code>.
 
- Not supported on a hierarchical groups project, where it is logged and ignored and the user
- stays opted out. Use <code>optInTrackingWithIdentity:properties:</code> instead.
+ On a hierarchical groups project a distinct ID is logged and ignored and the user stays opted
+ out; use <code>optInTrackingWithIdentity:properties:</code> instead. A nil distinct ID opts in
+ as <code>optInTracking</code> does.
 
  @param distinctID     optional string to use as the distinct ID for events. This will call <code>identify:</code>.
  If you use people profiles make sure you manually call <code>identify:</code> after this method.
@@ -868,8 +906,9 @@ Use <code>identifyWithIdentity:</code> instead.
 
  @param distinctID     optional string to use as the distinct ID for events. This will call <code>identify:</code>.
  If you use people profiles make sure you manually call <code>identify:</code> after this method.
- Not supported on a hierarchical groups project, where it is logged and ignored and the user
- stays opted out. Use <code>optInTrackingWithIdentity:properties:</code> instead.
+ On a hierarchical groups project a distinct ID is logged and ignored and the user stays
+ opted out; use <code>optInTrackingWithIdentity:properties:</code> instead. A nil distinct ID
+ opts in as <code>optInTracking</code> does.
 
  @param properties     optional properties dictionary that could be passed to add properties to the opt-in event that is sent to
  Mixpanel.

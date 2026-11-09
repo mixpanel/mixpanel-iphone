@@ -67,6 +67,7 @@
 }
 
 - (Mixpanel *)newMixpanel:(BOOL)hierarchicalGroups token:(NSString *)token {
+    BOOL firstLaunch = ![self.tokens containsObject:token];
     [self.tokens addObject:token];
     Mixpanel *mixpanel = [[Mixpanel alloc] initWithToken:token
                                     trackAutomaticEvents:NO
@@ -77,6 +78,12 @@
                                       hierarchicalGroups:hierarchicalGroups];
     // mixpanelWillFlush: returns NO, so queued records stay in the database to inspect
     mixpanel.delegate = self;
+    if (firstLaunch) {
+        // Depending on what earlier tests left in user defaults, a first launch may queue a
+        // $ae_first_app_open_date profile update. Start each test from empty queues.
+        [self drain:mixpanel];
+        [mixpanel.persistence resetEntities];
+    }
     return mixpanel;
 }
 
@@ -105,6 +112,12 @@
 - (NSArray *)groups:(Mixpanel *)mixpanel {
     [self drain:mixpanel];
     return [self groupQueue:mixpanel.apiToken];
+}
+
+- (NSArray *)unidentifiedGroups:(Mixpanel *)mixpanel {
+    [self drain:mixpanel];
+    return [[[MixpanelPersistence alloc] initWithToken:mixpanel.apiToken] loadEntitiesInBatch:PersistenceTypeGroups
+                                                                                         flag:UnIdentifiedFlag];
 }
 
 - (NSDictionary *)lastEventProperties:(NSString *)eventName mixpanel:(Mixpanel *)mixpanel {
@@ -166,21 +179,24 @@
     XCTAssertNotNil(props[@"$device_id"]);
 }
 
-- (void)testCompanyIdOverridesSuperProperty {
+- (void)testCompanyIdSuperPropertyIsRefused {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel registerSuperProperties:@{@"$company_id": @"stale"}];
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
     [mixpanel track:@"Viewed Report"];
 
     XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"acme");
+    XCTAssertNil(mixpanel.currentSuperProperties[@"$company_id"]);
 }
 
-- (void)testEventPropertyOverridesCompanyId {
+- (void)testIdentifiedCompanyReplacesEventCompanyId {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
-    [mixpanel track:@"Viewed Report" properties:@{@"$company_id": @"explicit"}];
+    [mixpanel track:@"Viewed Report" properties:@{@"$company_id": @"explicit", @"page": @"home"}];
 
-    XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"explicit");
+    NSDictionary *props = [self lastEventProperties:@"Viewed Report" mixpanel:mixpanel];
+    XCTAssertEqualObjects(props[@"$company_id"], @"acme");
+    XCTAssertEqualObjects(props[@"page"], @"home");
 }
 
 - (void)testCompanyChangeIsAnIdentityChange {
@@ -529,21 +545,23 @@
     XCTAssertEqual([self groups:mixpanel].count, 0);
 }
 
-- (void)testPeopleUpdatesBeforeIdentifyAreDropped {
+- (void)testPeopleUpdatesBeforeIdentifyAreHeld {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel.people set:@{@"plan": @"pro"}];
 
     XCTAssertEqual([self people:mixpanel].count, 0);
     XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 1);
 }
 
-- (void)testPeopleUpdatesWithoutCompanyAreDropped {
+- (void)testPeopleUpdatesWithoutCompanyAreHeld {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel identify:@"user_123"];
     [mixpanel.people set:@{@"plan": @"pro"}];
 
     XCTAssertEqual([self people:mixpanel].count, 0);
     XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 1);
 }
 
 - (void)testSetGroupWritesUserProfileThroughGroups {
@@ -907,6 +925,404 @@
     [mixpanel optInTracking];
     XCTAssertFalse([mixpanel hasOptedOutTracking]);
     XCTAssertNotNil([self lastEventProperties:@"$opt_in" mixpanel:mixpanel]);
+}
+
+#pragma mark - optInTrackingForDistinctID: with a nil id
+
+- (void)testOptInForNilDistinctIdOptsIn {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingForDistinctID:nil];
+    XCTAssertFalse([mixpanel hasOptedOutTracking]);
+
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingForDistinctID:nil withEventProperties:@{@"source": @"settings"}];
+    XCTAssertFalse([mixpanel hasOptedOutTracking]);
+
+    XCTAssertEqual([self countEvents:@"$opt_in" mixpanel:mixpanel], 2);
+    NSDictionary *props = [self lastEventProperties:@"$opt_in" mixpanel:mixpanel];
+    XCTAssertEqualObjects(props[@"source"], @"settings");
+    XCTAssertNil(props[@"$user_id"]);
+    XCTAssertNil(props[@"$company_id"]);
+}
+
+- (void)testOptInForDistinctIdWhenDisabled {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingForDistinctID:@"user_123" withEventProperties:nil];
+
+    XCTAssertFalse([mixpanel hasOptedOutTracking]);
+    [self drain:mixpanel];
+    XCTAssertEqualObjects(mixpanel.distinctId, @"user_123");
+    XCTAssertEqual([self countEvents:@"$opt_in" mixpanel:mixpanel], 1);
+}
+
+#pragma mark - Reserved and blank user ids
+
+- (void)testDevicePrefixedUserIdIsRefused {
+    for (NSNumber *enabled in @[@YES, @NO]) {
+        Mixpanel *mixpanel = [self newMixpanel:enabled.boolValue];
+        NSString *anonymous = mixpanel.distinctId;
+        NSString *company = enabled.boolValue ? @"acme" : nil;
+        [mixpanel identifyWithIdentity:[self user:@"$device:abc" company:company]];
+        [self drain:mixpanel];
+
+        XCTAssertEqualObjects(mixpanel.distinctId, anonymous);
+        XCTAssertNil(mixpanel.identity.userId);
+        XCTAssertNil(mixpanel.identity.companyId);
+        XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 0);
+
+        [mixpanel optOutTracking];
+        [mixpanel optInTrackingWithIdentity:[self user:@"$device:abc" company:company] properties:nil];
+        XCTAssertTrue([mixpanel hasOptedOutTracking]);
+    }
+}
+
+- (void)testDeviceInsideUserIdIsAccepted {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_$device:abc" company:@"acme"]];
+    XCTAssertEqualObjects(mixpanel.identity.userId, @"user_$device:abc");
+}
+
+- (void)testWhitespaceIdsCountAsEmpty {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    NSString *anonymous = mixpanel.distinctId;
+    [mixpanel identifyWithIdentity:[self user:@"  " company:@"acme"]];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@" \t\n"]];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.distinctId, anonymous);
+    XCTAssertNil(mixpanel.identity.userId);
+    XCTAssertNil(mixpanel.identity.companyId);
+
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingWithIdentity:[self user:@"user_123" company:@"  "] properties:nil];
+    XCTAssertTrue([mixpanel hasOptedOutTracking]);
+}
+
+- (void)testWhitespaceUserIdCountsAsEmptyWhenDisabled {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    NSString *anonymous = mixpanel.distinctId;
+    [mixpanel identifyWithIdentity:[self user:@" " company:nil]];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.distinctId, anonymous);
+    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 0);
+}
+
+- (void)testIdsAreNotTrimmed {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@" user_123 " company:@" acme "]];
+
+    XCTAssertEqualObjects(mixpanel.identity.userId, @" user_123 ");
+    XCTAssertEqualObjects(mixpanel.identity.companyId, @" acme ");
+}
+
+#pragma mark - A company group is its own company
+
+- (void)testCompanyGroupKeptAcrossCompanySwitchUpdatesItsCompany {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    MixpanelGroup *company = [mixpanel getCompany];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"globex"]];
+    [company set:@{@"tier": @"enterprise"}];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 1);
+    XCTAssertEqualObjects(groups.firstObject[@"$group_key"], @"$company_id");
+    XCTAssertEqualObjects(groups.firstObject[@"$group_id"], @"acme");
+    XCTAssertEqualObjects(groups.firstObject[@"$company_id"], @"acme");
+}
+
+- (void)testCompanyGroupKeptAcrossResetIsStillSent {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    MixpanelGroup *company = [mixpanel getCompany];
+    [mixpanel reset];
+    [self drain:mixpanel];
+    [company set:@{@"tier": @"enterprise"}];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 1);
+    XCTAssertEqualObjects(groups.firstObject[@"$group_id"], @"acme");
+    XCTAssertEqualObjects(groups.firstObject[@"$company_id"], @"acme");
+}
+
+- (void)testCompanyGroupBeforeIdentifyIsSent {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [[mixpanel getGroup:@"$company_id" groupID:@"acme"] set:@{@"tier": @"enterprise"}];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 1);
+    XCTAssertEqualObjects(groups.firstObject[@"$group_id"], @"acme");
+    XCTAssertEqualObjects(groups.firstObject[@"$company_id"], @"acme");
+}
+
+- (void)testCustomGroupAfterCompanySwitchUsesCurrentCompany {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    MixpanelGroup *team = [mixpanel getGroup:@"team" groupID:@"finance"];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"globex"]];
+    [team set:@{@"size": @12}];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 1);
+    XCTAssertEqualObjects(groups.firstObject[@"$group_key"], @"team");
+    XCTAssertEqualObjects(groups.firstObject[@"$group_id"], @"finance");
+    XCTAssertEqualObjects(groups.firstObject[@"$company_id"], @"globex");
+}
+
+- (void)testDisabledCompanyGroupCarriesNoCompany {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [[mixpanel getGroup:@"$company_id" groupID:@"acme"] set:@{@"tier": @"enterprise"}];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 1);
+    XCTAssertEqualObjects(groups.firstObject[@"$group_id"], @"acme");
+    XCTAssertNil(groups.firstObject[@"$company_id"]);
+}
+
+#pragma mark - $company_id is reserved for identifyWithIdentity:
+
+- (void)testRegisterSuperPropertiesWithCompanyIdIsRefusedWhole {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel registerSuperProperties:@{@"$company_id": @"acme", @"plan": @"pro"}];
+    [mixpanel registerSuperPropertiesOnce:@{@"$company_id": @"acme", @"tier": @"gold"}];
+    [mixpanel registerSuperPropertiesOnce:@{@"$company_id": @"acme", @"region": @"us"} defaultValue:@"none"];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties, @{});
+}
+
+- (void)testRegisterSuperPropertiesWithoutCompanyIdStillWorks {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel registerSuperProperties:@{@"plan": @"pro"}];
+    [mixpanel registerSuperPropertiesOnce:@{@"tier": @"gold"}];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties, (@{@"plan": @"pro", @"tier": @"gold"}));
+}
+
+- (void)testUnregisterCompanyIdIsRefused {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel unregisterSuperProperty:@"$company_id"];
+    [mixpanel track:@"Viewed Report"];
+
+    XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"acme");
+}
+
+- (void)testCompanyIdGroupMembershipCallsAreRefused {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel setGroup:@"$company_id" groupID:@"globex"];
+    [mixpanel setGroup:@"$company_id" groupIDs:@[@"globex"]];
+    [mixpanel removeGroup:@"$company_id" groupID:@"acme"];
+    [mixpanel addGroup:@"$company_id" groupID:@"globex"];
+    [mixpanel track:@"Viewed Report"];
+
+    XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"acme");
+    XCTAssertNil(mixpanel.currentSuperProperties[@"$company_id"]);
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertEqualObjects(mixpanel.identity.companyId, @"acme");
+}
+
+- (void)testDisabledCompanyIdSuperPropertyAndGroupWork {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel registerSuperProperties:@{@"$company_id": @"acme", @"plan": @"pro"}];
+    [self drain:mixpanel];
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties[@"$company_id"], @"acme");
+
+    [mixpanel unregisterSuperProperty:@"$company_id"];
+    [mixpanel registerSuperPropertiesOnce:@{@"$company_id": @"globex"}];
+    [self drain:mixpanel];
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties[@"$company_id"], @"globex");
+
+    [mixpanel setGroup:@"$company_id" groupID:@"initech"];
+    [self drain:mixpanel];
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties[@"$company_id"], @[@"initech"]);
+    [mixpanel removeGroup:@"$company_id" groupID:@"initech"];
+    [self drain:mixpanel];
+    XCTAssertNil(mixpanel.currentSuperProperties[@"$company_id"]);
+}
+
+#pragma mark - An event's $company_id is the identified company
+
+- (void)testTrackWithGroupsCompanyIdIsReplaced {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:@{@"page": @"home"} groups:@{@"$company_id": @"globex", @"team": @"finance"}];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:nil groups:@{@"$company_id": @"globex"}];
+
+    NSArray *events = [self events:mixpanel];
+    XCTAssertEqual(events.count, 2);
+    for (NSDictionary *event in events) {
+        XCTAssertEqualObjects(event[@"properties"][@"$company_id"], @"acme");
+    }
+    XCTAssertEqualObjects(events.firstObject[@"properties"][@"team"], @"finance");
+}
+
+- (void)testCompanyIdBeforeIdentifyIsRemoved {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel track:@"Opened" properties:@{@"$company_id": @"acme", @"page": @"home"}];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:nil groups:@{@"$company_id": @"acme"}];
+
+    NSDictionary *opened = [self lastEventProperties:@"Opened" mixpanel:mixpanel];
+    XCTAssertNil(opened[@"$company_id"]);
+    XCTAssertEqualObjects(opened[@"page"], @"home");
+    XCTAssertNil([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"]);
+}
+
+- (void)testDisabledEventCompanyIdIsSentAsGiven {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel identify:@"user_123"];
+    [mixpanel track:@"Opened" properties:@{@"$company_id": @"acme"}];
+    [mixpanel trackWithGroups:@"Viewed Report" properties:nil groups:@{@"$company_id": @"globex"}];
+
+    XCTAssertEqualObjects([self lastEventProperties:@"Opened" mixpanel:mixpanel][@"$company_id"], @"acme");
+    XCTAssertEqualObjects([self lastEventProperties:@"Viewed Report" mixpanel:mixpanel][@"$company_id"], @"globex");
+}
+
+#pragma mark - Profile updates before identify are queued
+
+- (void)testPeopleUpdatesBeforeIdentifyAreSentAtIdentify {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel.people set:@{@"plan": @"pro"}];
+    [mixpanel.people setOnce:@{@"first_seen": @"today"}];
+    [mixpanel.people unset:@[@"legacy"]];
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel.people union:@{@"roles": @[@"admin"]}];
+
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 0);
+    XCTAssertEqual([self people:mixpanel].count, 0);
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 4);
+    NSArray *operations = @[@"$set", @"$set_once", @"$unset", @"$union"];
+    for (NSUInteger i = 0; i < operations.count && i < groups.count; i++) {
+        NSDictionary *message = groups[i];
+        XCTAssertNotNil(message[operations[i]], @"%@", operations[i]);
+        XCTAssertEqualObjects(message[@"$group_key"], @"$user_id");
+        XCTAssertEqualObjects(message[@"$group_id"], @"user_123");
+        XCTAssertEqualObjects(message[@"$company_id"], @"acme");
+        XCTAssertNotNil(message[@"$token"]);
+        XCTAssertNotNil(message[@"$time"]);
+        XCTAssertNil(message[@"$distinct_id"]);
+    }
+    XCTAssertEqualObjects(groups[0][@"$set"][@"plan"], @"pro");
+    [self assertDefaultPeopleProperties:groups[0][@"$set"]];
+    XCTAssertEqualObjects(groups[2][@"$unset"], @[@"legacy"]);
+}
+
+- (void)testQueuedPeopleUpdatesGoToTheFirstIdentifiedUser {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel.people set:@{@"plan": @"pro"}];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel identifyWithIdentity:[self user:@"user_456" company:@"globex"]];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 1);
+    XCTAssertEqualObjects(groups.firstObject[@"$group_id"], @"user_123");
+    XCTAssertEqualObjects(groups.firstObject[@"$company_id"], @"acme");
+}
+
+- (void)testQueuedPeopleUpdatesWaitForAValidIdentity {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel.people set:@{@"plan": @"pro"}];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:nil]];
+    [mixpanel identify:@"user_123"];
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 1);
+
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    XCTAssertEqual([self groups:mixpanel].count, 1);
+}
+
+- (void)testResetClearsQueuedPeopleUpdates {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel.people set:@{@"plan": @"pro"}];
+    [mixpanel reset];
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 0);
+
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+}
+
+- (void)testUnsupportedPeopleOperationsBeforeIdentifyAreDropped {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel.people increment:@{@"logins": @1}];
+    [mixpanel.people append:@{@"history": @"a"}];
+    [mixpanel.people trackCharge:@9.99];
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 0);
+
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertEqual([self people:mixpanel].count, 0);
+}
+
+- (void)testGroupMembershipBeforeIdentifyQueuesTheProfileUpdate {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel setGroup:@"team" groupID:@"finance"];
+    [mixpanel setGroup:@"region" groupID:@"emea"];
+    [mixpanel removeGroup:@"region" groupID:@"emea"];
+    [self drain:mixpanel];
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties, @{@"team": @"finance"});
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 3);
+    XCTAssertEqualObjects(groups[0][@"$set"][@"team"], @"finance");
+    XCTAssertEqualObjects(groups[1][@"$set"][@"region"], @"emea");
+    XCTAssertEqualObjects(groups[2][@"$unset"], @[@"region"]);
+    for (NSDictionary *message in groups) {
+        XCTAssertEqualObjects(message[@"$group_key"], @"$user_id");
+        XCTAssertEqualObjects(message[@"$group_id"], @"user_123");
+        XCTAssertEqualObjects(message[@"$company_id"], @"acme");
+    }
+}
+
+- (void)testDisabledPeopleUpdatesBeforeIdentifyStayInThePeopleQueue {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel.people set:@{@"plan": @"pro"}];
+    [self drain:mixpanel];
+    XCTAssertEqual([self unIdentifiedPeopleQueue:mixpanel.apiToken].count, 1);
+
+    [mixpanel identify:@"user_123"];
+    [self drain:mixpanel];
+    XCTAssertEqual([self unIdentifiedPeopleQueue:mixpanel.apiToken].count, 0);
+    NSArray *people = [self peopleQueue:mixpanel.apiToken];
+    XCTAssertEqual(people.count, 1);
+    XCTAssertEqualObjects(people.firstObject[@"$distinct_id"], @"user_123");
+    XCTAssertEqual([self groups:mixpanel].count, 0);
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 0);
+}
+
+#pragma mark - Opt out keeps the device prefix
+
+- (void)testOptOutUsesDevicePrefixedDistinctId {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel optOutTracking];
+    [self drain:mixpanel];
+
+    NSString *expected = [@"$device:" stringByAppendingString:mixpanel.anonymousId];
+    XCTAssertEqualObjects(mixpanel.eventsDistinctId, expected);
+    XCTAssertEqualObjects(mixpanel.distinctId, expected);
+
+    [mixpanel optInTracking];
+    XCTAssertEqualObjects([self lastEventProperties:@"$opt_in" mixpanel:mixpanel][@"distinct_id"], expected);
+}
+
+- (void)testDisabledOptOutUsesBareAnonymousId {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel identify:@"user_123"];
+    [mixpanel optOutTracking];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.eventsDistinctId, mixpanel.anonymousId);
+    XCTAssertEqualObjects(mixpanel.distinctId, mixpanel.anonymousId);
 }
 
 @end

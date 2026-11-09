@@ -593,8 +593,8 @@ static NSString *const TEAM_ID = @"my_team_id";
     [self.mixpanel optInTracking];
 
     NSDictionary *props = [self onlyEvent:@"$opt_in"];
-    // Opt-out sets the distinct id to the bare new device id, without the $device: prefix
-    XCTAssertEqualObjects(props[@"distinct_id"], self.mixpanel.anonymousId);
+    // Opt-out sets the distinct id to the new device id with the $device: prefix, as reset does
+    XCTAssertEqualObjects(props[@"distinct_id"], [@"$device:" stringByAppendingString:self.mixpanel.anonymousId]);
     XCTAssertEqualObjects(props[@"$device_id"], self.mixpanel.anonymousId);
     XCTAssertNil(props[@"$user_id"]);
     XCTAssertNil(props[@"$company_id"]);

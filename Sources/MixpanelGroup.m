@@ -94,10 +94,13 @@
     if (strongMixpanel) {
         properties = [properties copy];
         dispatch_async(strongMixpanel.serialQueue, ^{
-            // Hierarchical groups require $company_id at the top level of every /groups write
-            NSString *companyId = nil;
+            // Hierarchical groups require $company_id at the top level of every /groups write. A company
+            // group is its own company; any other group belongs to the identified company.
+            id companyId = nil;
             if (strongMixpanel.hierarchicalGroups) {
-                companyId = strongMixpanel.companyId;
+                BOOL isCompanyGroup = [self.groupKey isKindOfClass:[NSString class]]
+                    && [self.groupKey isEqualToString:MPCompanyIdGroupKey];
+                companyId = isCompanyGroup ? self.groupID : strongMixpanel.companyId;
                 if (companyId == nil) {
                     MPLogError(@"Group profile updates for hierarchical groups projects require a company. Call "
                                @"identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId] "

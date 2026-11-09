@@ -10,6 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*!
+ A group profile to update.
+
+ On a hierarchical groups project every update carries a top-level <code>$company_id</code>.
+ A <code>$company_id</code> group is its own company, so its updates carry its group ID, with
+ or without an identified company and across a new identify or <code>reset</code>. Any other group's updates carry
+ the company identified when the update is made, and are dropped with an error log until a
+ company is identified.
+ */
 @interface MixpanelGroup : NSObject
 
 /*!

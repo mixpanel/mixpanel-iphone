@@ -143,6 +143,24 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     [self.mpdb updateRowsFlag:PersistenceTypePeople newFlag:NO];
 }
 
+- (void)identifyHierarchicalGroupsPeopleWithUserId:(NSString *)userId companyId:(NSString *)companyId {
+    // Unidentified user profile records wait in the groups queue without a user or company. Requeue
+    // them, in order, as the identified user's $user_id group profile.
+    NSArray *records = [self.mpdb readRows:PersistenceTypeGroups numRows:NSIntegerMax flag:UnIdentifiedFlag];
+    if (records.count == 0 || userId == nil || companyId == nil) {
+        return;
+    }
+    NSMutableArray *ids = [NSMutableArray arrayWithCapacity:records.count];
+    for (NSMutableDictionary *record in records) {
+        [ids addObject:record[@"id"]];
+        [record removeObjectForKey:@"id"];
+        record[@"$group_id"] = userId;
+        record[@"$company_id"] = companyId;
+        [self saveEntity:record type:PersistenceTypeGroups flag:IdentifiedFlag];
+    }
+    [self.mpdb deleteRows:PersistenceTypeGroups ids:ids isDeleteAll:NO];
+}
+
 - (void)resetEntities {
     for (NSString *type in @[PersistenceTypeEvents, PersistenceTypePeople, PersistenceTypeGroups]) {
         [self.mpdb deleteRows:type ids:@[] isDeleteAll: YES];

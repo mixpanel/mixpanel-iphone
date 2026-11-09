@@ -46,6 +46,7 @@
 - (void)removeAutomaticEvents;
 - (void)removeEntitiesInBatch:(NSString *)type ids:(NSArray *)ids;
 - (void)identifyPeople;
+- (void)identifyHierarchicalGroupsPeopleWithUserId:(NSString *)userId companyId:(NSString *)companyId;
 - (void)resetEntities;
 - (void)migrate;
 + (void)saveOptOutStatusFlag:(BOOL)value apiToken:(NSString *)apiToken;
