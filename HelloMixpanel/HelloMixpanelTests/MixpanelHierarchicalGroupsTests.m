@@ -17,9 +17,11 @@
 @implementation MixpanelHierarchicalGroupsTestSubclass
 @end
 
-// Records the new distinctId from each KVO notification
+// Records the new distinctId from each KVO notification, and the old and new pair when observed with
+// NSKeyValueObservingOptionOld
 @interface MixpanelDistinctIdObserver : NSObject
 @property (atomic, strong) NSMutableArray<NSString *> *values;
+@property (atomic, strong) NSMutableArray<NSArray *> *changes;
 @end
 
 @implementation MixpanelDistinctIdObserver
@@ -27,6 +29,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         _values = [NSMutableArray array];
+        _changes = [NSMutableArray array];
     }
     return self;
 }
@@ -34,6 +37,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     @synchronized (self) {
         [self.values addObject:change[NSKeyValueChangeNewKey]];
+        [self.changes addObject:@[change[NSKeyValueChangeOldKey] ?: [NSNull null], change[NSKeyValueChangeNewKey]]];
     }
 }
 
@@ -653,6 +657,38 @@
     XCTAssertEqualObjects(groups.lastObject[@"$group_key"], @"$user_id");
 }
 
+- (void)testRemoveThenSetGroupKeepsProfileUpdateOrder {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel setGroup:@"team" groupID:@"finance"];
+    [self drain:mixpanel];
+    [mixpanel removeGroup:@"team" groupID:@"finance"];
+    [mixpanel setGroup:@"team" groupID:@"sales"];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 3);
+    if (groups.count == 3) {
+        XCTAssertEqualObjects(groups[1][@"$unset"], @[@"team"]);
+        XCTAssertEqualObjects(groups[2][@"$set"][@"team"], @"sales");
+    }
+    XCTAssertEqualObjects(mixpanel.currentSuperProperties[@"team"], @"sales");
+}
+
+- (void)testRemoveGroupThenIdentifyUpdatesTheEarlierUser {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel setGroup:@"team" groupID:@"finance"];
+    [self drain:mixpanel];
+    [mixpanel removeGroup:@"team" groupID:@"finance"];
+    [mixpanel identifyWithIdentity:[self user:@"user_456" company:@"globex"]];
+
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 2);
+    XCTAssertEqualObjects(groups.lastObject[@"$unset"], @[@"team"]);
+    XCTAssertEqualObjects(groups.lastObject[@"$group_id"], @"user_123");
+    XCTAssertEqualObjects(groups.lastObject[@"$company_id"], @"acme");
+}
+
 - (void)testRemoveOtherGroupDoesNothing {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
@@ -905,6 +941,47 @@
     NSArray *expected = @[@"$company:globex|$user:user_123", @"$company:globex|$user:user_456",
                           [@"$device:" stringByAppendingString:mixpanel.anonymousId]];
     XCTAssertEqualObjects(observer.values, expected);
+}
+
+- (void)testDistinctIdKVOReportsOldAndNewValuesOncePerChange {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [self drain:mixpanel];
+    MixpanelDistinctIdObserver *observer = [MixpanelDistinctIdObserver new];
+    [mixpanel addObserver:observer forKeyPath:@"distinctId"
+                  options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:NULL];
+    NSString *device1 = [@"$device:" stringByAppendingString:mixpanel.anonymousId];
+    // A new user
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [self drain:mixpanel];
+    // The same user in a new company
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"globex"]];
+    [self drain:mixpanel];
+    // A new user in the same company
+    [mixpanel identifyWithIdentity:[self user:@"user_456" company:@"globex"]];
+    [self drain:mixpanel];
+    // No change, so no notification
+    [mixpanel identifyWithIdentity:[self user:@"user_456" company:@"globex"]];
+    [self drain:mixpanel];
+    [mixpanel reset];
+    [self drain:mixpanel];
+    NSString *device2 = [@"$device:" stringByAppendingString:mixpanel.anonymousId];
+    [mixpanel identifyWithIdentity:[self user:@"user_789" company:@"initech"]];
+    [self drain:mixpanel];
+    [mixpanel optOutTracking];
+    [self drain:mixpanel];
+    NSString *device3 = [@"$device:" stringByAppendingString:mixpanel.anonymousId];
+    [mixpanel removeObserver:observer forKeyPath:@"distinctId"];
+
+    NSArray *expected = @[
+        @[device1, @"$company:acme|$user:user_123"],
+        @[@"$company:acme|$user:user_123", @"$company:globex|$user:user_123"],
+        @[@"$company:globex|$user:user_123", @"$company:globex|$user:user_456"],
+        @[@"$company:globex|$user:user_456", device2],
+        @[device2, @"$company:initech|$user:user_789"],
+        @[@"$company:initech|$user:user_789", device3],
+    ];
+    XCTAssertEqualObjects(observer.changes, expected);
+    XCTAssertEqualObjects(mixpanel.distinctId, device3);
 }
 
 - (void)testOptInTrackingWhenEnabled {
@@ -1213,6 +1290,49 @@
     XCTAssertEqualObjects(groups[0][@"$set"][@"plan"], @"pro");
     [self assertDefaultPeopleProperties:groups[0][@"$set"]];
     XCTAssertEqualObjects(groups[2][@"$unset"], @[@"legacy"]);
+}
+
+- (void)testQueuedPeopleUpdatesMoveOnceWithoutDuplicates {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel.people set:@{@"plan": @"pro"}];
+    [mixpanel.people unset:@[@"legacy"]];
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 2);
+
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"acme"]];
+    [self drain:mixpanel];
+    // Moving again finds nothing waiting
+    dispatch_sync(mixpanel.serialQueue, ^{
+        [mixpanel.persistence identifyHierarchicalGroupsPeopleWithUserId:@"user_123" companyId:@"acme"];
+    });
+
+    XCTAssertEqual([self unidentifiedGroups:mixpanel].count, 0);
+    NSArray *groups = [self groups:mixpanel];
+    XCTAssertEqual(groups.count, 2);
+    if (groups.count == 2) {
+        XCTAssertEqualObjects(groups[0][@"$set"][@"plan"], @"pro");
+        XCTAssertEqualObjects(groups[1][@"$unset"], @[@"legacy"]);
+    }
+}
+
+- (void)testDatabaseTransactionIsInvisibleUntilCommitted {
+    NSString *token = [self randomTokenId];
+    [self.tokens addObject:token];
+    MPDB *db = [[MPDB alloc] initWithToken:token];
+    MPDB *reader = [[MPDB alloc] initWithToken:token];
+    NSData *data = [@"{\"$set\":{}}" dataUsingEncoding:NSUTF8StringEncoding];
+    __block NSUInteger rowsSeenDuringTransaction = NSNotFound;
+    BOOL ran = [db performInTransaction:^{
+        [db insertRow:PersistenceTypeGroups data:data flag:IdentifiedFlag];
+        [db insertRow:PersistenceTypeGroups data:data flag:IdentifiedFlag];
+        rowsSeenDuringTransaction = [reader readRows:PersistenceTypeGroups numRows:NSIntegerMax flag:IdentifiedFlag].count;
+    }];
+
+    XCTAssertTrue(ran);
+    XCTAssertEqual(rowsSeenDuringTransaction, 0);
+    XCTAssertEqual([reader readRows:PersistenceTypeGroups numRows:NSIntegerMax flag:IdentifiedFlag].count, 2);
+    [reader close];
+    [db close];
 }
 
 - (void)testQueuedPeopleUpdatesGoToTheFirstIdentifiedUser {

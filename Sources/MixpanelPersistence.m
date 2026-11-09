@@ -150,15 +150,19 @@ static NSString *const kDefaultKeyHadPersistedDistinctId = @"MPHadPersistedDisti
     if (records.count == 0 || userId == nil || companyId == nil) {
         return;
     }
-    NSMutableArray *ids = [NSMutableArray arrayWithCapacity:records.count];
-    for (NSMutableDictionary *record in records) {
-        [ids addObject:record[@"id"]];
-        [record removeObjectForKey:@"id"];
-        record[@"$group_id"] = userId;
-        record[@"$company_id"] = companyId;
-        [self saveEntity:record type:PersistenceTypeGroups flag:IdentifiedFlag];
-    }
-    [self.mpdb deleteRows:PersistenceTypeGroups ids:ids isDeleteAll:NO];
+    // One transaction, so an interrupted identify leaves either the waiting records or their identified
+    // copies, never both
+    [self.mpdb performInTransaction:^{
+        NSMutableArray *ids = [NSMutableArray arrayWithCapacity:records.count];
+        for (NSMutableDictionary *record in records) {
+            [ids addObject:record[@"id"]];
+            [record removeObjectForKey:@"id"];
+            record[@"$group_id"] = userId;
+            record[@"$company_id"] = companyId;
+            [self saveEntity:record type:PersistenceTypeGroups flag:IdentifiedFlag];
+        }
+        [self.mpdb deleteRows:PersistenceTypeGroups ids:ids isDeleteAll:NO];
+    }];
 }
 
 - (void)resetEntities {

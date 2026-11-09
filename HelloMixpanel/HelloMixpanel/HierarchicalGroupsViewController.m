@@ -47,24 +47,41 @@ typedef void (^HGActionBlock)(void);
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 
     self.actions = [NSMutableDictionary dictionary];
+    __weak HierarchicalGroupsViewController *weakSelf = self;
     self.actionTitles = [NSMutableArray array];
     [self addIdentityActions];
     [self addOptOutActions];
     [self addEventActions];
     [self addUserActions];
     [self addGroupActionsWithLabel:@"Company" groupKey:@"$company_id" group:^MixpanelGroup * _Nullable {
-        return [self.mixpanel getCompany];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return nil;
+        }
+        return [strongSelf.mixpanel getCompany];
     }];
     [self addGroupActionsWithLabel:@"Team" groupKey:@"team_id" group:^MixpanelGroup *{
-        return [self.mixpanel getGroup:@"team_id" groupID:[self teamId]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return nil;
+        }
+        return [strongSelf.mixpanel getGroup:@"team_id" groupID:[strongSelf teamId]];
     }];
     [self addAction:@"Flush" message:@"Flush queued data" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Flushing");
-        [self.mixpanel flush];
+        [strongSelf.mixpanel flush];
     }];
     [self addAction:@"Reset" message:@"Reset identity" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Resetting");
-        [self.mixpanel reset];
+        [strongSelf.mixpanel reset];
     }];
 
     self.trackActions = self.actions;
@@ -140,144 +157,262 @@ typedef void (^HGActionBlock)(void);
 - (void)addAction:(NSString *)title message:(NSString *)message block:(HGActionBlock)block
 {
     [self.actionTitles addObject:title];
+    // Weak, as self keeps this block in actions
+    __weak HierarchicalGroupsViewController *weakSelf = self;
     self.actions[title] = ^{
-        [self.view endEditing:YES];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        [strongSelf.view endEditing:YES];
         NSLog(@"[%@] ===== %@ =====", LOGTAG, title);
         block();
         // Flush after every call so its requests show up on their own
-        [self.mixpanel flush];
-        [self presentLogMessage:message title:@"Hierarchical Groups"];
+        [strongSelf.mixpanel flush];
+        [strongSelf presentLogMessage:message title:@"Hierarchical Groups"];
     };
 }
 
 - (void)addIdentityActions
 {
+    __weak HierarchicalGroupsViewController *weakSelf = self;
     [self addAction:@"Identify" message:@"Identify: user + company" block:^{
-        NSLog(@"Identifying %@ at %@", [self userId], [self companyId]);
-        [self.mixpanel identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:[self userId]
-                                                                           companyId:[self companyId]]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Identifying %@ at %@", [strongSelf userId], [strongSelf companyId]);
+        [strongSelf.mixpanel identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:[strongSelf userId]
+                                                                                 companyId:[strongSelf companyId]]];
     }];
     [self addAction:@"Invalid: Identify Without Company" message:@"Identify: user only" block:^{
-        NSLog(@"Identifying %@ without a company", [self userId]);
-        [self.mixpanel identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:[self userId] companyId:nil]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Identifying %@ without a company", [strongSelf userId]);
+        [strongSelf.mixpanel identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:[strongSelf userId] companyId:nil]];
     }];
     [self addAction:@"Invalid: Identify With Distinct ID" message:@"identify:" block:^{
-        NSLog(@"Identifying %@ with identify:", [self userId]);
-        [self.mixpanel identify:[self userId]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Identifying %@ with identify:", [strongSelf userId]);
+        [strongSelf.mixpanel identify:[strongSelf userId]];
     }];
     [self addAction:@"Invalid: Alias" message:@"createAlias:forDistinctID:" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Aliasing new_alias");
-        NSString *distinctId = self.mixpanel.identity.userId ?: self.mixpanel.identity.deviceId;
-        [self.mixpanel createAlias:@"new_alias" forDistinctID:distinctId ?: @""];
+        NSString *distinctId = strongSelf.mixpanel.identity.userId ?: strongSelf.mixpanel.identity.deviceId;
+        [strongSelf.mixpanel createAlias:@"new_alias" forDistinctID:distinctId ?: @""];
     }];
     [self addAction:@"Show Identity" message:@"Identity (see console)" block:^{
-        NSLog(@"[%@] identity=%@ optedOut=%@ superProperties=%@", LOGTAG, self.mixpanel.identity,
-              [self.mixpanel hasOptedOutTracking] ? @"YES" : @"NO", [self.mixpanel currentSuperProperties]);
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"[%@] identity=%@ optedOut=%@ superProperties=%@", LOGTAG, strongSelf.mixpanel.identity,
+              [strongSelf.mixpanel hasOptedOutTracking] ? @"YES" : @"NO", [strongSelf.mixpanel currentSuperProperties]);
     }];
 }
 
 - (void)addOptOutActions
 {
+    __weak HierarchicalGroupsViewController *weakSelf = self;
     [self addAction:@"Opt Out" message:@"optOutTracking" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Opting out");
-        [self.mixpanel optOutTracking];
+        [strongSelf.mixpanel optOutTracking];
     }];
     [self addAction:@"Opt In" message:@"optInTracking" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Opting in anonymously");
-        [self.mixpanel optInTracking];
+        [strongSelf.mixpanel optInTracking];
     }];
     [self addAction:@"Opt In With Identity" message:@"optInTrackingWithIdentity:properties:" block:^{
-        NSLog(@"Opting in as %@ at %@", [self userId], [self companyId]);
-        [self.mixpanel optInTrackingWithIdentity:[[MixpanelIdentity alloc] initWithUserId:[self userId]
-                                                                                companyId:[self companyId]]
-                                      properties:nil];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Opting in as %@ at %@", [strongSelf userId], [strongSelf companyId]);
+        [strongSelf.mixpanel optInTrackingWithIdentity:[[MixpanelIdentity alloc] initWithUserId:[strongSelf userId]
+                                                                                      companyId:[strongSelf companyId]]
+                                            properties:nil];
     }];
     [self addAction:@"Invalid: Opt In With Distinct ID" message:@"optInTrackingForDistinctID:" block:^{
-        NSLog(@"Opting in as %@ with optInTrackingForDistinctID:", [self userId]);
-        [self.mixpanel optInTrackingForDistinctID:[self userId]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Opting in as %@ with optInTrackingForDistinctID:", [strongSelf userId]);
+        [strongSelf.mixpanel optInTrackingForDistinctID:[strongSelf userId]];
     }];
 }
 
 - (void)addEventActions
 {
+    __weak HierarchicalGroupsViewController *weakSelf = self;
     [self addAction:@"Track Event" message:@"Event: \"HG Event!\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Tracking HG event");
-        [self.mixpanel track:@"HG Event!" properties:@{@"source": @"hierarchical_groups_page"}];
+        [strongSelf.mixpanel track:@"HG Event!" properties:@{@"source": @"hierarchical_groups_page"}];
     }];
     [self addAction:@"Set Team Group" message:@"setGroup: team_id" block:^{
-        NSLog(@"Setting team_id to %@", [self teamId]);
-        [self.mixpanel setGroup:@"team_id" groupID:[self teamId]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Setting team_id to %@", [strongSelf teamId]);
+        [strongSelf.mixpanel setGroup:@"team_id" groupID:[strongSelf teamId]];
     }];
     [self addAction:@"Invalid: Set Team Groups (List)" message:@"setGroup: team_id list" block:^{
-        NSLog(@"Setting team_id to a list of %@", [self teamId]);
-        [self.mixpanel setGroup:@"team_id" groupIDs:@[[self teamId]]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Setting team_id to a list of %@", [strongSelf teamId]);
+        [strongSelf.mixpanel setGroup:@"team_id" groupIDs:@[[strongSelf teamId]]];
     }];
     [self addAction:@"Invalid: Add Team Group" message:@"addGroup: team_id" block:^{
-        NSLog(@"Adding team_id %@", [self teamId]);
-        [self.mixpanel addGroup:@"team_id" groupID:[self teamId]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Adding team_id %@", [strongSelf teamId]);
+        [strongSelf.mixpanel addGroup:@"team_id" groupID:[strongSelf teamId]];
     }];
     [self addAction:@"Remove Team Group" message:@"removeGroup: team_id" block:^{
-        NSLog(@"Removing team_id %@", [self teamId]);
-        [self.mixpanel removeGroup:@"team_id" groupID:[self teamId]];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Removing team_id %@", [strongSelf teamId]);
+        [strongSelf.mixpanel removeGroup:@"team_id" groupID:[strongSelf teamId]];
     }];
     [self addAction:@"Track With Team Group" message:@"Event: \"HG Team Event!\"" block:^{
-        NSLog(@"Tracking HG event with team_id %@", [self teamId]);
-        [self.mixpanel trackWithGroups:@"HG Team Event!" properties:@{} groups:@{@"team_id": [self teamId]}];
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        NSLog(@"Tracking HG event with team_id %@", [strongSelf teamId]);
+        [strongSelf.mixpanel trackWithGroups:@"HG Team Event!" properties:@{} groups:@{@"team_id": [strongSelf teamId]}];
     }];
 }
 
 - (void)addUserActions
 {
+    __weak HierarchicalGroupsViewController *weakSelf = self;
     // User profile ($user_id group profile)
     [self addAction:@"User: Set Property" message:@"People: set \"plan\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Setting a user property");
-        [self.mixpanel.people set:@"plan" to:@"enterprise"];
+        [strongSelf.mixpanel.people set:@"plan" to:@"enterprise"];
     }];
     [self addAction:@"User: Set Properties (Map)" message:@"People: set properties" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Setting multiple user properties");
-        [self.mixpanel.people set:@{@"role": @"admin", @"seats": @5}];
+        [strongSelf.mixpanel.people set:@{@"role": @"admin", @"seats": @5}];
     }];
     [self addAction:@"User: Set Property Once" message:@"People: setOnce \"first_seen\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Setting a user property once");
-        [self.mixpanel.people setOnce:@{@"first_seen": @"2026-10-27"}];
+        [strongSelf.mixpanel.people setOnce:@{@"first_seen": @"2026-10-27"}];
     }];
     [self addAction:@"User: Union Property" message:@"People: union \"devices\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Union user property");
-        [self.mixpanel.people union:@{@"devices": @[@"ios", @"android"]}];
+        [strongSelf.mixpanel.people union:@{@"devices": @[@"ios", @"android"]}];
     }];
     [self addAction:@"User: Remove Property" message:@"People: remove from \"devices\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Removing from user property");
-        [self.mixpanel.people remove:@{@"devices": @"android"}];
+        [strongSelf.mixpanel.people remove:@{@"devices": @"android"}];
     }];
     [self addAction:@"User: Unset Property" message:@"People: unset \"plan\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Unsetting a user property");
-        [self.mixpanel.people unset:@[@"plan"]];
+        [strongSelf.mixpanel.people unset:@[@"plan"]];
     }];
     [self addAction:@"Invalid: User Clear Charges" message:@"People: clearCharges" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Clearing charges");
-        [self.mixpanel.people clearCharges];
+        [strongSelf.mixpanel.people clearCharges];
     }];
     [self addAction:@"User: Delete User" message:@"People: deleteUser" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Deleting user");
-        [self.mixpanel.people deleteUser];
+        [strongSelf.mixpanel.people deleteUser];
     }];
 
     // User profile operations /groups has no equivalent for, dropped with an error log
     [self addAction:@"Invalid: User Increment" message:@"People: increment \"logins\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Incrementing a user property");
-        [self.mixpanel.people increment:@"logins" by:@1];
+        [strongSelf.mixpanel.people increment:@"logins" by:@1];
     }];
     [self addAction:@"Invalid: User Increment (Map)" message:@"People: increment properties" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Incrementing multiple user properties");
-        [self.mixpanel.people increment:@{@"logins": @1, @"sessions": @2}];
+        [strongSelf.mixpanel.people increment:@{@"logins": @1, @"sessions": @2}];
     }];
     [self addAction:@"Invalid: User Append" message:@"People: append \"history\"" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Appending to a user property");
-        [self.mixpanel.people append:@{@"history": @"opened_hg_page"}];
+        [strongSelf.mixpanel.people append:@{@"history": @"opened_hg_page"}];
     }];
     [self addAction:@"Invalid: User Track Charge" message:@"People: trackCharge 9.99" block:^{
+        HierarchicalGroupsViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
         NSLog(@"Tracking a charge");
-        [self.mixpanel.people trackCharge:@9.99];
+        [strongSelf.mixpanel.people trackCharge:@9.99];
     }];
 }
 

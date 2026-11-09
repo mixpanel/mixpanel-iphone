@@ -445,11 +445,27 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 // distinctId is computed, so setting eventsDistinctId posts its KVO. On a hierarchical groups project it
-// also reads userId and companyId, which are set before eventsDistinctId wherever they change so that
-// notification carries the new value.
+// also reads userId, companyId and anonymousId, so the paths that change them post one distinctId
+// notification around the whole change and set eventsDistinctId with
+// setEventsDistinctIdWithoutNotification:.
 + (NSSet<NSString *> *)keyPathsForValuesAffectingDistinctId
 {
     return [NSSet setWithObject:@"eventsDistinctId"];
+}
+
+// The Objective-C runtime function behind a synthesized atomic copy setter
+OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, ptrdiff_t offset);
+
+// Sets eventsDistinctId exactly as its atomic copy setter does, but without the KVO notification the
+// setter posts, for callers that post the distinctId notification themselves.
+- (void)setEventsDistinctIdWithoutNotification:(NSString *)eventsDistinctId
+{
+    static ptrdiff_t offset;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        offset = ivar_getOffset(class_getInstanceVariable([Mixpanel class], "_eventsDistinctId"));
+    });
+    objc_setProperty_atomic_copy(self, @selector(setEventsDistinctId:), eventsDistinctId, offset);
 }
 
 - (NSString *)distinctId
@@ -588,12 +604,16 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             NSString *oldDistinctId = [self.eventsDistinctId copy];
             self.alias = nil;
             if (self.hierarchicalGroups) {
-                // Before eventsDistinctId, whose KVO tells distinctId observers, so they see the new identity
+                // distinctId reads all three, so observers get one notification around the whole change
+                [self willChangeValueForKey:@"distinctId"];
                 self.companyId = companyId;
                 self.userId = distinctId;
+                [self setEventsDistinctIdWithoutNotification:distinctId];
+                [self didChangeValueForKey:@"distinctId"];
+            } else {
+                self.eventsDistinctId = distinctId;
+                self.userId = distinctId;
             }
-            self.eventsDistinctId = distinctId;
-            self.userId = distinctId;
             // A hierarchical groups project ties the device to the user from the identity keys on later
             // events, so it has no $identify
             if (!self.hierarchicalGroups) {
@@ -951,7 +971,21 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         }
         NSMutableDictionary *mutableSuperProps = [superProps mutableCopy];
         [mutableSuperProps removeObjectForKey:groupKey];
-        [self.people unset:@[groupKey]];
+        // Saved here on the serial queue rather than queued again with people unset:, so it keeps its
+        // place before later group and profile updates and stays with the current user
+#if defined(DEBUG)
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MPDebugUsedPeopleKey];
+#endif
+        NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
+        [self.people saveHierarchicalGroupsRecordWithAction:@"$unset" properties:@{@"$properties": @[groupKey]}
+                                                       time:epochMilliseconds];
+#if MIXPANEL_FLUSH_IMMEDIATELY
+        [self flush];
+#else
+        if ([Mixpanel isAppExtension]) {
+            [self flush];
+        }
+#endif
         return mutableSuperProps;
     }];
 }
@@ -1138,13 +1172,18 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     dispatch_async(self.serialQueue, ^{
         // wait for all current network requests to finish before resetting
         [MixpanelPersistence deleteMPUserDefaultsData:self.apiToken];
-        self.anonymousId = [self defaultDeviceId];
         if (self.hierarchicalGroups) {
-            // Before eventsDistinctId, whose KVO tells distinctId observers, so they see the new identity
+            // distinctId reads the ids changed below, so observers get one notification around the whole change
+            [self willChangeValueForKey:@"distinctId"];
+            self.anonymousId = [self defaultDeviceId];
             self.userId = nil;
             self.companyId = nil;
+            [self setEventsDistinctIdWithoutNotification:[DEVICE_PREFIX stringByAppendingString:self.anonymousId]];
+            [self didChangeValueForKey:@"distinctId"];
+        } else {
+            self.anonymousId = [self defaultDeviceId];
+            self.eventsDistinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         }
-        self.eventsDistinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.superProperties = [NSDictionary dictionary];
         self.userId = nil;
         self.companyId = nil;
@@ -1171,12 +1210,21 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     dispatch_async(self.serialQueue, ^{
         self.alias = nil;
         self.people.distinctId = nil;
-        self.userId = nil;
-        self.companyId = nil;
-        self.anonymousId = [self defaultDeviceId];
-        // A hierarchical groups project keeps an anonymous user under $device:, as reset does
-        self.eventsDistinctId = self.hierarchicalGroups ? [DEVICE_PREFIX stringByAppendingString:self.anonymousId]
-                                                        : self.anonymousId;
+        if (self.hierarchicalGroups) {
+            // distinctId reads the ids changed below, so observers get one notification around the whole change
+            [self willChangeValueForKey:@"distinctId"];
+            self.userId = nil;
+            self.companyId = nil;
+            self.anonymousId = [self defaultDeviceId];
+            // A hierarchical groups project keeps an anonymous user under $device:, as reset does
+            [self setEventsDistinctIdWithoutNotification:[DEVICE_PREFIX stringByAppendingString:self.anonymousId]];
+            [self didChangeValueForKey:@"distinctId"];
+        } else {
+            self.userId = nil;
+            self.companyId = nil;
+            self.anonymousId = [self defaultDeviceId];
+            self.eventsDistinctId = self.anonymousId;
+        }
         self.hadPersistedDistinctId = NO;
         self.superProperties = [NSDictionary new];
         [self.timedEvents removeAllObjects];

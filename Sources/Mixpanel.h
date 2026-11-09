@@ -84,8 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
  the user, so once both are known this returns <code>$company:{companyId}|$user:{userId}</code>.
  Until a company is known, Mixpanel keeps the user under the device, so this returns
  <code>$device:</code> followed by the device ID. The combined form is Mixpanel's own format,
- and it cannot be parsed back when either ID contains <code>|</code>. Events still send the
- user ID as their distinct ID.
+ and it cannot be parsed back when either ID contains <code>|</code>. Events never send it:
+ once both are known, events omit <code>distinct_id</code> and carry <code>$user_id</code> and
+ <code>$company_id</code> instead.
 
  Don't use this on a hierarchical groups project. Prefer <code>identity</code>, whose user,
  company and device IDs every Mixpanel SDK accepts directly.

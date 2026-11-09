@@ -677,12 +677,21 @@ static NSString *const TEAM_ID = @"my_team_id";
     XCTAssertNil(self.mixpanel.currentSuperProperties[@"team_id"]);
 }
 
-#pragma mark - Set User Property Before Identify (Unsupported)
+#pragma mark - Set User Property Before Identify (Queued Until Identify)
 
-- (void)testSetUserPropertyBeforeIdentifyIsUnsupported {
+- (void)testSetUserPropertyBeforeIdentifyIsSentAtIdentify {
     [self.mixpanel.people set:@"plan" to:@"enterprise"];
 
     [self assertNothingSent];
+
+    [self identify];
+
+    NSDictionary *message = [self onlySent:GROUPS];
+    XCTAssertEqualObjects(message[@"$set"][@"plan"], @"enterprise");
+    XCTAssertEqualObjects(message[@"$group_key"], @"$user_id");
+    XCTAssertEqualObjects(message[@"$group_id"], USER_ID);
+    XCTAssertEqualObjects(message[@"$company_id"], COMPANY_ID);
+    XCTAssertNil(message[@"$distinct_id"]);
 }
 
 #pragma mark - Set Company Property Before Identify (Unsupported)

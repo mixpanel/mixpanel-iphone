@@ -162,36 +162,7 @@
     __strong Mixpanel *strongMixpanel = self.mixpanel;
     properties = [properties copy];
     dispatch_async(strongMixpanel.serialQueue, ^{
-        // Read on the serial queue, so the update follows any earlier identify
-        NSString *userId = self.distinctId;
-        NSString *companyId = strongMixpanel.companyId;
-        BOOL identified = userId != nil && companyId != nil;
-        NSMutableDictionary *r = [NSMutableDictionary dictionary];
-        if ([action isEqualToString:@"$unset"]) {
-            // $unset takes an array of property names, supplied under the key "$properties"
-            r[action] = properties[@"$properties"];
-        } else {
-            NSMutableDictionary *p = [NSMutableDictionary dictionary];
-            if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
-                [p addEntriesFromDictionary:self.automaticPeopleProperties];
-            }
-            [p addEntriesFromDictionary:properties];
-            r[action] = [NSDictionary dictionaryWithDictionary:p];
-        }
-        r[@"$token"] = strongMixpanel.apiToken;
-        r[@"$time"] = epochMilliseconds;
-        r[@"$group_key"] = MPUserIdGroupKey;
-        [r addEntriesFromDictionary:[strongMixpanel.sessionMetadata toDictionaryForEvent:NO]];
-        if (identified) {
-            r[@"$group_id"] = userId;
-            r[@"$company_id"] = companyId;
-            MPLogInfo(@"%@ queueing user profile record as a group record: %@", strongMixpanel, r);
-            [strongMixpanel.persistence saveEntity:r type:PersistenceTypeGroups flag:IdentifiedFlag];
-        } else {
-            // Held until identifyWithIdentity: names the user and company, as unidentified people records are
-            MPLogInfo(@"%@ queueing unidentified user profile record: %@", strongMixpanel, r);
-            [strongMixpanel.persistence saveEntity:r type:PersistenceTypeGroups flag:UnIdentifiedFlag];
-        }
+        [self saveHierarchicalGroupsRecordWithAction:action properties:properties time:epochMilliseconds];
     });
 #if MIXPANEL_FLUSH_IMMEDIATELY
     [strongMixpanel flush];
@@ -200,6 +171,42 @@
         [strongMixpanel flush];
     }
 #endif
+}
+
+// Builds and saves a hierarchical groups user profile record. Runs on the serial queue, so the record
+// is attributed to the identity current at that point in the queue.
+- (void)saveHierarchicalGroupsRecordWithAction:(NSString *)action properties:(NSDictionary *)properties time:(NSNumber *)epochMilliseconds
+{
+    __strong Mixpanel *strongMixpanel = self.mixpanel;
+    NSString *userId = self.distinctId;
+    NSString *companyId = strongMixpanel.companyId;
+    BOOL identified = userId != nil && companyId != nil;
+    NSMutableDictionary *r = [NSMutableDictionary dictionary];
+    if ([action isEqualToString:@"$unset"]) {
+        // $unset takes an array of property names, supplied under the key "$properties"
+        r[action] = properties[@"$properties"];
+    } else {
+        NSMutableDictionary *p = [NSMutableDictionary dictionary];
+        if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
+            [p addEntriesFromDictionary:self.automaticPeopleProperties];
+        }
+        [p addEntriesFromDictionary:properties];
+        r[action] = [NSDictionary dictionaryWithDictionary:p];
+    }
+    r[@"$token"] = strongMixpanel.apiToken;
+    r[@"$time"] = epochMilliseconds;
+    r[@"$group_key"] = MPUserIdGroupKey;
+    [r addEntriesFromDictionary:[strongMixpanel.sessionMetadata toDictionaryForEvent:NO]];
+    if (identified) {
+        r[@"$group_id"] = userId;
+        r[@"$company_id"] = companyId;
+        MPLogInfo(@"%@ queueing user profile record as a group record: %@", strongMixpanel, r);
+        [strongMixpanel.persistence saveEntity:r type:PersistenceTypeGroups flag:IdentifiedFlag];
+    } else {
+        // Held until identifyWithIdentity: names the user and company, as unidentified people records are
+        MPLogInfo(@"%@ queueing unidentified user profile record: %@", strongMixpanel, r);
+        [strongMixpanel.persistence saveEntity:r type:PersistenceTypeGroups flag:UnIdentifiedFlag];
+    }
 }
 
 - (void)set:(NSDictionary *)properties
