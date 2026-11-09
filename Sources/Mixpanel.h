@@ -887,7 +887,8 @@ Use <code>identifyWithIdentity:</code> instead.
  <code>optInTrackingForDistinctID:</code> can't express.
 
  @param identity       optional user, and on a hierarchical groups project their company. This will call
- <code>identifyWithIdentity:</code>.
+ <code>identifyWithIdentity:</code>. An identity <code>identifyWithIdentity:</code> would refuse is logged, and the
+ user stays opted out.
  @param properties     optional properties dictionary that could be passed to add properties to the opt-in event that is sent to
  Mixpanel.
  */

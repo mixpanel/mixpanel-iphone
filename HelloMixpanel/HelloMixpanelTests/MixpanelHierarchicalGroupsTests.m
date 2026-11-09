@@ -342,6 +342,24 @@
     XCTAssertEqual([self countEvents:@"$opt_in" mixpanel:mixpanel], 0);
 }
 
+- (void)testOptInWithIdentityWithoutCompanyIsDropped {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingWithIdentity:[self user:@"user_123" company:nil] properties:nil];
+
+    XCTAssertTrue([mixpanel hasOptedOutTracking]);
+    XCTAssertEqual([self countEvents:@"$opt_in" mixpanel:mixpanel], 0);
+}
+
+- (void)testOptInWithCompanyWhenDisabledIsDropped {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingWithIdentity:[self user:@"user_123" company:@"acme"] properties:nil];
+
+    XCTAssertTrue([mixpanel hasOptedOutTracking]);
+    XCTAssertEqual([self countEvents:@"$opt_in" mixpanel:mixpanel], 0);
+}
+
 - (void)testOptInWithoutArgumentsStillWorks {
     Mixpanel *mixpanel = [self newMixpanel:YES];
     [mixpanel optOutTracking];

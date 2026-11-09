@@ -503,25 +503,13 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         MPLogError(@"Can't identify with a nil MixpanelIdentity.");
         return;
     }
+    NSString *identityError = [self identityError:identity];
+    if (identityError) {
+        MPLogError(@"%@ Nothing was identified.", identityError);
+        return;
+    }
     NSString *userId = identity.userId;
     NSString *companyId = identity.companyId;
-    if (self.hierarchicalGroups) {
-        if (userId.length == 0 || companyId.length == 0) {
-            MPLogError(@"Can't identify %@: hierarchical groups projects identify a user by company and user id, so both "
-                       @"are required. Nothing was identified.", identity);
-            return;
-        }
-    } else {
-        if (userId.length == 0) {
-            MPLogError(@"Can't identify %@ without a user id. Nothing was identified.", identity);
-            return;
-        }
-        if (companyId != nil) {
-            MPLogError(@"Can't identify %@: a company requires hierarchicalGroups:YES when initializing Mixpanel. "
-                       @"Mixpanel ignores $company_id on other projects, so nothing was identified.", identity);
-            return;
-        }
-    }
     NSString *deviceId = identity.deviceId;
     NSString *anonymousId = self.anonymousId;
     if (deviceId != nil && ![deviceId isEqualToString:anonymousId]) {
@@ -529,6 +517,28 @@ static CTTelephonyNetworkInfo *telephonyInfo;
                      @"the user.", deviceId, identity, anonymousId);
     }
     [self identify:userId companyId:companyId usePeople:YES];
+}
+
+// Why an identity can't be used on this project, or nil when it can. Callers add what was dropped.
+- (NSString *)identityError:(MixpanelIdentity *)identity
+{
+    NSString *userId = identity.userId;
+    NSString *companyId = identity.companyId;
+    if (self.hierarchicalGroups) {
+        if (userId.length == 0 || companyId.length == 0) {
+            return [NSString stringWithFormat:@"Can't identify %@: hierarchical groups projects identify a user by "
+                    @"company and user id, so both are required.", identity];
+        }
+    } else {
+        if (userId.length == 0) {
+            return [NSString stringWithFormat:@"Can't identify %@ without a user id.", identity];
+        }
+        if (companyId != nil) {
+            return [NSString stringWithFormat:@"Can't identify %@: a company requires hierarchicalGroups:YES when "
+                    @"initializing Mixpanel. Mixpanel ignores $company_id on other projects.", identity];
+        }
+    }
+    return nil;
 }
 
 - (void)identify:(NSString *)distinctId companyId:(NSString *)companyId usePeople:(BOOL)usePeople
@@ -1126,6 +1136,11 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)optInTrackingWithIdentity:(MixpanelIdentity *)identity properties:(NSDictionary *)properties
 {
+    NSString *identityError = identity ? [self identityError:identity] : nil;
+    if (identityError) {
+        MPLogError(@"%@ The user is still opted out.", identityError);
+        return;
+    }
     self.optOutStatus = NO;
     [MixpanelPersistence saveOptOutStatusFlag:NO apiToken:self.apiToken];
     if (identity) {
