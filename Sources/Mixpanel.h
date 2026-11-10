@@ -80,16 +80,9 @@ NS_ASSUME_NONNULL_BEGIN
  is not available we will generate a new random UUIDString. To change the
  current distinct ID, use the <code>identify:</code> method.
 
- On a hierarchical groups project Mixpanel builds the distinct ID from the company and
- the user, so once both are known this returns <code>$company:{companyId}|$user:{userId}</code>.
- Until a company is known, Mixpanel keeps the user under the device, so this returns
- <code>$device:</code> followed by the device ID. The combined form is Mixpanel's own format,
- and it cannot be parsed back when either ID contains <code>|</code>. Events never send it:
- once both are known, events omit <code>distinct_id</code> and carry <code>$user_id</code> and
- <code>$company_id</code> instead.
-
- Don't use this on a hierarchical groups project. Prefer <code>identity</code>, whose user,
- company and device IDs every Mixpanel SDK accepts directly.
+ This should not be used on a hierarchical groups project, where a user is identified by
+ their company and user ID: use <code>identity</code> instead. Reading it logs a warning there
+ and returns Mixpanel's best match for the current user.
  */
 @property (atomic, readonly, copy) NSString *distinctId;
 

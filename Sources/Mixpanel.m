@@ -438,6 +438,8 @@ OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, pt
     if (!self.hierarchicalGroups) {
         return self.eventsDistinctId;
     }
+    MPLogWarning(@"%@ distinctId should not be used on a hierarchical groups project, which identifies a user "
+                 @"by company and user id. Use identity instead.", self);
     __block NSString *distinctId;
     [self performSyncOnSerialQueue:^{
         NSString *userId = self.userId;
