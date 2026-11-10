@@ -34,6 +34,9 @@
 #define VERSION @"5.0.8"
 #define DEVICE_PREFIX @"$device:"
 
+// Identifies the serial queue, so work already on it can read state without dispatch_sync
+static void *const MPSerialQueueKey = (void *)&MPSerialQueueKey;
+
 
 @implementation Mixpanel
 
@@ -51,6 +54,16 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId
 {
+    return [self sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId hierarchicalGroups:NO];
+}
+
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents hierarchicalGroups:(BOOL)hierarchicalGroups
+{
+    return [self sharedInstanceWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents trackCrashes:YES optOutTrackingByDefault:NO useUniqueDistinctId:NO hierarchicalGroups:hierarchicalGroups];
+}
+
++ (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents trackCrashes:(BOOL)trackCrashes optOutTrackingByDefault:(BOOL)optOutTrackingByDefault useUniqueDistinctId:(BOOL)useUniqueDistinctId hierarchicalGroups:(BOOL)hierarchicalGroups
+{
     if (instances[apiToken]) {
         return instances[apiToken];
     }
@@ -61,7 +74,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     const NSUInteger flushInterval = 60;
 #endif
 
-    return [[self alloc] initWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId];
+    return [[self alloc] initWithToken:apiToken trackAutomaticEvents:trackAutomaticEvents flushInterval:flushInterval trackCrashes:trackCrashes optOutTrackingByDefault:optOutTrackingByDefault useUniqueDistinctId:useUniqueDistinctId hierarchicalGroups:hierarchicalGroups];
 }
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken trackAutomaticEvents:(BOOL)trackAutomaticEvents
@@ -116,8 +129,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
          trackAutomaticEvents:(BOOL)trackAutomaticEvents
                 flushInterval:(NSUInteger)flushInterval
                  trackCrashes:(BOOL)trackCrashes
-               optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
+      optOutTrackingByDefault:(BOOL)optOutTrackingByDefault
           useUniqueDistinctId:(BOOL)useUniqueDistinctId
+           hierarchicalGroups:(BOOL)hierarchicalGroups
 {
     if (apiToken.length == 0) {
         if (apiToken == nil) {
@@ -135,6 +149,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
         }
         self.apiToken = apiToken;
+        _hierarchicalGroups = hierarchicalGroups;
         _trackAutomaticEventsEnabled = trackAutomaticEvents;
         _flushInterval = flushInterval;
         self.persistence = [[MixpanelPersistence alloc] initWithToken: apiToken];
@@ -146,7 +161,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         self.serverURL = @"https://api.mixpanel.com";
         self.useUniqueDistinctId = useUniqueDistinctId;
         self.anonymousId = [self defaultDeviceId];
-        self.distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
+        self.eventsDistinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.superProperties = [NSDictionary dictionary];
         self.automaticProperties = [self collectAutomaticProperties];
 
@@ -157,6 +172,7 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 #endif
         NSString *label = [NSString stringWithFormat:@"com.mixpanel.%@.%p", apiToken, (void *)self];
         self.serialQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_set_specific(self.serialQueue, MPSerialQueueKey, (__bridge void *)self, NULL);
         NSString *networkLabel = [label stringByAppendingString:@".network"];
         self.networkQueue = dispatch_queue_create([networkLabel UTF8String], DISPATCH_QUEUE_SERIAL);
         self.sessionMetadata = [[SessionMetadata alloc] init];
@@ -194,8 +210,9 @@ static CTTelephonyNetworkInfo *telephonyInfo;
           trackAutomaticEvents:trackAutomaticEvents
                  flushInterval:flushInterval
                   trackCrashes:trackCrashes
-                optOutTrackingByDefault:NO
-           useUniqueDistinctId:useUniqueDistinctId];
+       optOutTrackingByDefault:NO
+           useUniqueDistinctId:useUniqueDistinctId
+            hierarchicalGroups:NO];
 }
 
 - (instancetype)initWithToken:(NSString *)apiToken
@@ -374,10 +391,82 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     return distinctId;
 }
 
-- (MixpanelIdentity *)currentMixpanelIdentity
+- (MixpanelPersistedIdentity *)currentMixpanelIdentity
 {
-    return [[MixpanelIdentity alloc] initWithDistinctId:self.distinctId peopleDistinctId:self.people.distinctId
-                                            anonymousId:self.anonymousId userId:self.userId alias:self.alias hadPersistedDistinctId:self.hadPersistedDistinctId];;
+    return [[MixpanelPersistedIdentity alloc] initWithDistinctId:self.eventsDistinctId peopleDistinctId:self.people.distinctId
+                                                     anonymousId:self.anonymousId userId:self.userId companyId:self.companyId
+                                                           alias:self.alias hadPersistedDistinctId:self.hadPersistedDistinctId];
+}
+
+// Runs block on the serial queue and waits, so it sees every earlier call. Runs it in place when
+// already on the serial queue, which would otherwise deadlock.
+- (void)performSyncOnSerialQueue:(dispatch_block_t)block
+{
+    if (dispatch_get_specific(MPSerialQueueKey) == (__bridge void *)self) {
+        block();
+    } else {
+        dispatch_sync(self.serialQueue, block);
+    }
+}
+
+// distinctId is computed, so setting eventsDistinctId posts its KVO. On a hierarchical groups project it
+// also reads userId, companyId and anonymousId, so the paths that change them post one distinctId
+// notification around the whole change and set eventsDistinctId with
+// setEventsDistinctIdWithoutNotification:.
++ (NSSet<NSString *> *)keyPathsForValuesAffectingDistinctId
+{
+    return [NSSet setWithObject:@"eventsDistinctId"];
+}
+
+// The Objective-C runtime function behind a synthesized atomic copy setter
+OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, ptrdiff_t offset);
+
+// Sets eventsDistinctId exactly as its atomic copy setter does, but without the KVO notification the
+// setter posts, for callers that post the distinctId notification themselves.
+- (void)setEventsDistinctIdWithoutNotification:(NSString *)eventsDistinctId
+{
+    static ptrdiff_t offset;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        offset = ivar_getOffset(class_getInstanceVariable([Mixpanel class], "_eventsDistinctId"));
+    });
+    objc_setProperty_atomic_copy(self, @selector(setEventsDistinctId:), eventsDistinctId, offset);
+}
+
+- (NSString *)distinctId
+{
+    if (!self.hierarchicalGroups) {
+        return self.eventsDistinctId;
+    }
+    MPLogWarning(@"%@ distinctId should not be used on a hierarchical groups project, which identifies a user "
+                 @"by company and user id. Use identity instead.", self);
+    __block NSString *distinctId;
+    [self performSyncOnSerialQueue:^{
+        NSString *userId = self.userId;
+        if (!userId) {
+            // Anonymous, so already $device:{deviceId}
+            distinctId = self.eventsDistinctId;
+        } else if (self.companyId) {
+            distinctId = [NSString stringWithFormat:@"$company:%@|$user:%@", self.companyId, userId];
+        } else if (self.anonymousId) {
+            // Mixpanel ignores a user id without a company while the event carries a device id
+            distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
+        } else {
+            distinctId = self.eventsDistinctId;
+        }
+    }];
+    return distinctId;
+}
+
+- (MixpanelIdentity *)identity
+{
+    __block MixpanelIdentity *identity;
+    [self performSyncOnSerialQueue:^{
+        identity = [[MixpanelIdentity alloc] initWithUserId:self.userId
+                                                  companyId:(self.hierarchicalGroups ? self.companyId : nil)
+                                                   deviceId:self.anonymousId];
+    }];
+    return identity;
 }
 
 - (void)identify:(NSString *)distinctId
@@ -386,6 +475,74 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 }
 
 - (void)identify:(NSString *)distinctId usePeople:(BOOL)usePeople
+{
+    if (self.hierarchicalGroups) {
+        MPLogError(@"identify: is not supported for hierarchical groups projects, which identify a user by company "
+                   @"and user id. Use identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId]. "
+                   @"Nothing was identified.");
+        return;
+    }
+    [self identify:distinctId companyId:nil usePeople:usePeople];
+}
+
+- (void)identifyWithIdentity:(MixpanelIdentity *)identity
+{
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    if (identity == nil) {
+        MPLogError(@"Can't identify with a nil MixpanelIdentity.");
+        return;
+    }
+    NSString *identityError = [self identityError:identity];
+    if (identityError) {
+        MPLogError(@"%@ Nothing was identified.", identityError);
+        return;
+    }
+    NSString *userId = identity.userId;
+    NSString *companyId = identity.companyId;
+    NSString *deviceId = identity.deviceId;
+    NSString *anonymousId = self.anonymousId;
+    if (deviceId != nil && ![deviceId isEqualToString:anonymousId]) {
+        MPLogWarning(@"Ignoring deviceId %@ on %@. The SDK owns the device id (%@) so earlier anonymous events follow "
+                     @"the user.", deviceId, identity, anonymousId);
+    }
+    [self identify:userId companyId:companyId usePeople:YES];
+}
+
+// Why an identity can't be used on this project, or nil when it can. Callers add what was dropped.
+- (NSString *)identityError:(MixpanelIdentity *)identity
+{
+    NSString *userId = identity.userId;
+    NSString *companyId = identity.companyId;
+    if (self.hierarchicalGroups) {
+        if ([Mixpanel isBlankId:userId] || [Mixpanel isBlankId:companyId]) {
+            return [NSString stringWithFormat:@"Can't identify %@: hierarchical groups projects identify a user by "
+                    @"company and user id, so both are required.", identity];
+        }
+    } else {
+        if ([Mixpanel isBlankId:userId]) {
+            return [NSString stringWithFormat:@"Can't identify %@ without a user id.", identity];
+        }
+        if (companyId != nil) {
+            return [NSString stringWithFormat:@"Can't identify %@: a company requires hierarchicalGroups:YES when "
+                    @"initializing Mixpanel. Mixpanel ignores $company_id on other projects.", identity];
+        }
+    }
+    if ([userId hasPrefix:DEVICE_PREFIX]) {
+        return [NSString stringWithFormat:@"Can't identify %@: user ids starting with %@ are reserved for device ids.",
+                identity, DEVICE_PREFIX];
+    }
+    return nil;
+}
+
+// Whether an id is nil, empty or only whitespace. The id itself is used as given, never trimmed.
++ (BOOL)isBlankId:(NSString *)identifier
+{
+    return [identifier stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0;
+}
+
+- (void)identify:(NSString *)distinctId companyId:(NSString *)companyId usePeople:(BOOL)usePeople
 {
     if ([self hasOptedOutTracking]) {
         return;
@@ -398,21 +555,40 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
     dispatch_async(self.serialQueue, ^{
         if(!self.anonymousId) {
-            self.anonymousId = self.distinctId;
+            self.anonymousId = self.eventsDistinctId;
             self.hadPersistedDistinctId = YES;
         }
         // identify only changes the distinct id if it doesn't match the ID
         // if it's new, blow away the alias as well.
-        if (![distinctId isEqualToString:self.distinctId]) {
-            NSString *oldDistinctId = [self.distinctId copy];
+        BOOL userChanged = ![distinctId isEqualToString:self.eventsDistinctId];
+        // A user in another company is another user, so a new company is an identity change.
+        BOOL companyChanged = self.hierarchicalGroups && companyId != nil && ![companyId isEqualToString:self.companyId];
+        if (userChanged || companyChanged) {
+            NSString *oldDistinctId = [self.eventsDistinctId copy];
             self.alias = nil;
-            self.distinctId = distinctId;
-            self.userId = distinctId;
-            [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
+            if (self.hierarchicalGroups) {
+                // distinctId reads all three, so observers get one notification around the whole change
+                [self willChangeValueForKey:@"distinctId"];
+                self.companyId = companyId;
+                self.userId = distinctId;
+                [self setEventsDistinctIdWithoutNotification:distinctId];
+                [self didChangeValueForKey:@"distinctId"];
+            } else {
+                self.eventsDistinctId = distinctId;
+                self.userId = distinctId;
+            }
+            // A hierarchical groups project ties the device to the user from the identity keys on later
+            // events, so it has no $identify
+            if (!self.hierarchicalGroups) {
+                [self track:@"$identify" properties:@{@"$anon_distinct_id": oldDistinctId}];
+            }
         }
         if (usePeople) {
             self.people.distinctId = distinctId;
             [self.persistence identifyPeople];
+            if (self.hierarchicalGroups) {
+                [self.persistence identifyHierarchicalGroupsPeopleWithUserId:distinctId companyId:self.companyId];
+            }
         } else {
             self.people.distinctId = nil;
         }
@@ -436,6 +612,13 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID usePeople:(BOOL)usePeople
 {
     if ([self hasOptedOutTracking]) {
+        return;
+    }
+
+    if (self.hierarchicalGroups) {
+        MPLogError(@"createAlias is not supported for hierarchical groups projects, which identify a user by company "
+                   @"and user id. Use identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId]. "
+                   @"The alias was dropped.");
         return;
     }
 
@@ -495,8 +678,10 @@ static CTTelephonyNetworkInfo *telephonyInfo;
             [self.timedEvents removeObjectForKey:event];
             p[@"$duration"] = @([[NSString stringWithFormat:@"%.3f", epochInterval - [eventStartTime doubleValue]] floatValue]);
         }
-        if (self.distinctId) {
-            p[@"distinct_id"] = self.distinctId;
+        // The stored id, not the distinctId property. On a hierarchical groups project an identified
+        // user is $user_id and $company_id, so no distinct_id
+        if (self.eventsDistinctId && !(self.hierarchicalGroups && self.userId && self.companyId)) {
+            p[@"distinct_id"] = self.eventsDistinctId;
         }
         if (self.anonymousId) {
             p[@"$device_id"] = self.anonymousId;
@@ -510,6 +695,25 @@ static CTTelephonyNetworkInfo *telephonyInfo;
         [p addEntriesFromDictionary:self.superProperties];
         if (properties) {
             [p addEntriesFromDictionary:properties];
+        }
+        if (self.hierarchicalGroups) {
+            // $company_id is part of the user's identity, so it is only ever the identified company
+            id callerCompanyId = properties[MPCompanyIdGroupKey];
+            if (self.companyId) {
+                if (callerCompanyId != nil && ![callerCompanyId isEqual:self.companyId]) {
+                    MPLogWarning(@"%@ event %@ has $company_id %@, which hierarchical groups projects set from the "
+                                 @"identified company. Sending the identified company %@ instead.",
+                                 self, event, callerCompanyId, self.companyId);
+                }
+                p[MPCompanyIdGroupKey] = self.companyId;
+            } else if (p[MPCompanyIdGroupKey] != nil) {
+                if (callerCompanyId != nil) {
+                    MPLogWarning(@"%@ event %@ has $company_id %@ before a company is identified. Hierarchical groups "
+                                 @"projects set it with identifyWithIdentity:, so it was removed from the event.",
+                                 self, event, callerCompanyId);
+                }
+                [p removeObjectForKey:MPCompanyIdGroupKey];
+            }
         }
 
         NSMutableDictionary *e = [[NSMutableDictionary alloc] initWithDictionary:@{ @"event": event,
@@ -534,6 +738,17 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     if ([self hasOptedOutTracking]) {
         return;
     }
+    if (self.hierarchicalGroups) {
+        // Hierarchical groups read a list as the name of one group, not as membership in each
+        for (id groupKey in groups) {
+            id groupID = groups[groupKey];
+            if ([groupID isKindOfClass:[NSArray class]] || [groupID isKindOfClass:[NSSet class]]) {
+                MPLogError(@"trackWithGroups with a list is not supported for hierarchical groups projects, which allow "
+                           @"one %@ per user. Use one group id per key. The event was dropped.", groupKey);
+                return;
+            }
+        }
+    }
     if (properties == nil) {
         [self track:event properties:groups];
         return;
@@ -552,6 +767,11 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 - (void)addGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
     if ([self hasOptedOutTracking]) {
+        return;
+    }
+
+    if (self.hierarchicalGroups) {
+        [self logSingleGroupOnly:@"addGroup" groupKey:groupKey];
         return;
     }
 
@@ -582,6 +802,13 @@ static CTTelephonyNetworkInfo *telephonyInfo;
 
 - (void)removeGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
     if ([self hasOptedOutTracking]) {
+        return;
+    }
+    if (self.hierarchicalGroups) {
+        if ([self refusesCompanyIdKey:groupKey operation:@"removeGroup"]) {
+            return;
+        }
+        [self removeHierarchicalGroup:groupKey groupID:groupID];
         return;
     }
     [self updateSuperPropertiesAsync:^NSDictionary *(NSDictionary *superProps) {
@@ -619,14 +846,100 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     if ([self hasOptedOutTracking]) {
         return;
     }
+    if (self.hierarchicalGroups) {
+        if (![self refusesCompanyIdKey:groupKey operation:@"setGroup"]) {
+            [self logSingleGroupOnly:@"setGroup with a list" groupKey:groupKey];
+        }
+        return;
+    }
     NSDictionary *properties = @{groupKey : groupIDs};
     [self registerSuperProperties:properties];
     [self.people set:properties];
 }
 
 - (void)setGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
+    if (self.hierarchicalGroups) {
+        [self setHierarchicalGroup:groupKey groupID:groupID];
+        return;
+    }
     NSArray *groupIDs = @[ groupID ];
     [self setGroup:groupKey groupIDs:groupIDs];
+}
+
+- (void)setHierarchicalGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
+    if ([self hasOptedOutTracking]) {
+        return;
+    }
+    if (groupKey == nil || groupID == nil) {
+        MPLogWarning(@"groupKey and groupID must be non-nil");
+        return;
+    }
+    if ([self refusesCompanyIdKey:groupKey operation:@"setGroup"]) {
+        return;
+    }
+    // Hierarchical groups read a list as the name of one group, not as membership in each
+    if ([(NSObject *)groupID isKindOfClass:[NSArray class]] || [(NSObject *)groupID isKindOfClass:[NSSet class]]) {
+        [self logSingleGroupOnly:@"setGroup with a list" groupKey:groupKey];
+        return;
+    }
+    NSDictionary *properties = @{groupKey : groupID};
+    [self registerSuperProperties:properties];
+    [self.people set:properties];
+}
+
+// On a hierarchical groups project $company_id is the identified company, set only by
+// identifyWithIdentity:, so a public call that names it is refused whole.
+- (BOOL)refusesCompanyIdKey:(NSString *)key operation:(NSString *)operation {
+    if (!self.hierarchicalGroups || ![key isKindOfClass:[NSString class]] || ![key isEqualToString:MPCompanyIdGroupKey]) {
+        return NO;
+    }
+    MPLogError(@"%@ with $company_id is not supported for hierarchical groups projects, where $company_id is the "
+               @"identified company. Use identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId "
+               @"companyId:companyId]. Nothing was changed.", operation);
+    return YES;
+}
+
+- (BOOL)refusesCompanyIdIn:(NSDictionary *)properties operation:(NSString *)operation {
+    return self.hierarchicalGroups && properties[MPCompanyIdGroupKey] != nil
+        && [self refusesCompanyIdKey:MPCompanyIdGroupKey operation:operation];
+}
+
+- (void)logSingleGroupOnly:(NSString *)operation groupKey:(NSString *)groupKey {
+    MPLogError(@"%@ is not supported for hierarchical groups projects, which allow one %@ per user. "
+               @"Use setGroup:groupID:. The update was dropped.", operation, groupKey);
+}
+
+- (void)removeHierarchicalGroup:(NSString *)groupKey groupID:(id<MixpanelType>)groupID {
+    if (groupKey == nil || groupID == nil) {
+        MPLogWarning(@"groupKey and groupID must be non-nil");
+        return;
+    }
+    [self updateSuperPropertiesAsync:^NSDictionary *(NSDictionary *superProps) {
+        id value = superProps[groupKey];
+        // A one-item list, stored by an earlier version or before hierarchical groups was
+        // enabled, counts as that item
+        if ([value isKindOfClass:[NSArray class]] && [(NSArray *)value count] == 1) {
+            value = [(NSArray *)value firstObject];
+        }
+        if (value == nil || ![groupID equalToMixpanelType:value]) {
+            return superProps;
+        }
+        NSMutableDictionary *mutableSuperProps = [superProps mutableCopy];
+        [mutableSuperProps removeObjectForKey:groupKey];
+        // Saved here on the serial queue rather than queued again with people unset:, so it keeps its
+        // place before later group and profile updates and stays with the current user
+        NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
+        [self.people saveHierarchicalGroupsRecordWithAction:@"$unset" properties:@{@"$properties": @[groupKey]}
+                                                       time:epochMilliseconds];
+#if MIXPANEL_FLUSH_IMMEDIATELY
+        [self flush];
+#else
+        if ([Mixpanel isAppExtension]) {
+            [self flush];
+        }
+#endif
+        return mutableSuperProps;
+    }];
 }
 
 - (NSString *)keyForGroup:(NSString *)groupKey
@@ -649,6 +962,25 @@ static CTTelephonyNetworkInfo *telephonyInfo;
     }
 }
 
+- (nullable MixpanelGroup *)getCompany {
+    if (!self.hierarchicalGroups) {
+        MPLogError(@"getCompany is only for hierarchical groups projects, "
+                   @"enabled with hierarchicalGroups:YES when initializing Mixpanel.");
+        return nil;
+    }
+    // Waits for earlier identify calls, so the company is the one current at call time
+    __block NSString *companyId;
+    [self performSyncOnSerialQueue:^{
+        companyId = self.companyId;
+    }];
+    if (companyId == nil) {
+        MPLogError(@"getCompany needs a company. Call "
+                   @"identifyWithIdentity:[[MixpanelIdentity alloc] initWithUserId:userId companyId:companyId] first.");
+        return nil;
+    }
+    return [self getGroup:MPCompanyIdGroupKey groupID:companyId];
+}
+
 typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)updateSuperPropertiesAsync:(PropertyUpdate) update{
@@ -662,6 +994,9 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
     if ([self hasOptedOutTracking]) {
+        return;
+    }
+    if ([self refusesCompanyIdIn:properties operation:@"registerSuperProperties"]) {
         return;
     }
 
@@ -684,6 +1019,9 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     if ([self hasOptedOutTracking]) {
         return;
     }
+    if ([self refusesCompanyIdIn:properties operation:@"registerSuperPropertiesOnce"]) {
+        return;
+    }
     
     [Mixpanel assertPropertyTypes:properties];
     dispatch_async(self.serialQueue, ^{
@@ -701,6 +1039,9 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)unregisterSuperProperty:(NSString *)propertyName
 {
+    if ([self refusesCompanyIdKey:propertyName operation:@"unregisterSuperProperty"]) {
+        return;
+    }
     dispatch_async(self.serialQueue, ^{
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:self.superProperties];
         tmp[propertyName] = nil;
@@ -783,10 +1124,21 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     dispatch_async(self.serialQueue, ^{
         // wait for all current network requests to finish before resetting
         [MixpanelPersistence deleteMPUserDefaultsData:self.apiToken];
-        self.anonymousId = [self defaultDeviceId];
-        self.distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
+        if (self.hierarchicalGroups) {
+            // distinctId reads the ids changed below, so observers get one notification around the whole change
+            [self willChangeValueForKey:@"distinctId"];
+            self.anonymousId = [self defaultDeviceId];
+            self.userId = nil;
+            self.companyId = nil;
+            [self setEventsDistinctIdWithoutNotification:[DEVICE_PREFIX stringByAppendingString:self.anonymousId]];
+            [self didChangeValueForKey:@"distinctId"];
+        } else {
+            self.anonymousId = [self defaultDeviceId];
+            self.eventsDistinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
+        }
         self.superProperties = [NSDictionary dictionary];
         self.userId = nil;
+        self.companyId = nil;
         self.people.distinctId = nil;
         self.alias = nil;
         self.hadPersistedDistinctId = NO;
@@ -801,15 +1153,30 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 - (void)optOutTracking{
     if (self.people.distinctId) {
         [self.people deleteUser];
-        [self.people clearCharges];
+        // trackCharge has no hierarchical groups equivalent, so there are no charges to clear
+        if (!self.hierarchicalGroups) {
+            [self.people clearCharges];
+        }
         [self flush];
     }
     dispatch_async(self.serialQueue, ^{
         self.alias = nil;
         self.people.distinctId = nil;
-        self.userId = nil;
-        self.anonymousId = [self defaultDeviceId];
-        self.distinctId = self.anonymousId;
+        if (self.hierarchicalGroups) {
+            // distinctId reads the ids changed below, so observers get one notification around the whole change
+            [self willChangeValueForKey:@"distinctId"];
+            self.userId = nil;
+            self.companyId = nil;
+            self.anonymousId = [self defaultDeviceId];
+            // A hierarchical groups project keeps an anonymous user under $device:, as reset does
+            [self setEventsDistinctIdWithoutNotification:[DEVICE_PREFIX stringByAppendingString:self.anonymousId]];
+            [self didChangeValueForKey:@"distinctId"];
+        } else {
+            self.userId = nil;
+            self.companyId = nil;
+            self.anonymousId = [self defaultDeviceId];
+            self.eventsDistinctId = self.anonymousId;
+        }
         self.hadPersistedDistinctId = NO;
         self.superProperties = [NSDictionary new];
         [self.timedEvents removeAllObjects];
@@ -822,7 +1189,11 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)optInTracking
 {
-    [self optInTrackingForDistinctID:nil withEventProperties:nil];
+    if (self.hierarchicalGroups) {
+        [self optInTrackingWithIdentity:nil properties:nil];
+    } else {
+        [self optInTrackingForDistinctID:nil withEventProperties:nil];
+    }
 }
 
 - (void)optInTrackingForDistinctID:(NSString *)distinctID
@@ -832,10 +1203,32 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 
 - (void)optInTrackingForDistinctID:(NSString *)distinctID withEventProperties:(NSDictionary *)properties
 {
+    // A nil id identifies no one, so it is a plain opt-in on any project
+    if (distinctID != nil && self.hierarchicalGroups) {
+        MPLogError(@"optInTrackingForDistinctID: with a distinct id is not supported for hierarchical groups projects, "
+                   @"which identify a user by company and user id. Use optInTrackingWithIdentity:[[MixpanelIdentity "
+                   @"alloc] initWithUserId:userId companyId:companyId] properties:properties. The user is still opted out.");
+        return;
+    }
     self.optOutStatus = NO;
     [MixpanelPersistence saveOptOutStatusFlag:NO apiToken:self.apiToken];
     if (distinctID) {
         [self identify:distinctID];
+    }
+    [self track:@"$opt_in" properties:properties];
+}
+
+- (void)optInTrackingWithIdentity:(MixpanelIdentity *)identity properties:(NSDictionary *)properties
+{
+    NSString *identityError = identity ? [self identityError:identity] : nil;
+    if (identityError) {
+        MPLogError(@"%@ The user is still opted out.", identityError);
+        return;
+    }
+    self.optOutStatus = NO;
+    [MixpanelPersistence saveOptOutStatusFlag:NO apiToken:self.apiToken];
+    if (identity) {
+        [self identifyWithIdentity:identity];
     }
     [self track:@"$opt_in" properties:properties];
 }
@@ -961,16 +1354,19 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
     self.optOutStatusNotSet = [MixpanelPersistence optOutStatusNotSet:self.apiToken];
     self.superProperties = [MixpanelPersistence loadSuperProperties:self.apiToken];
     self.timedEvents = [[MixpanelPersistence loadTimedEvents:self.apiToken] mutableCopy];
-    MixpanelIdentity *mixpanelIdentity = [MixpanelPersistence loadIdentity:self.apiToken];
-    self.distinctId = mixpanelIdentity.distinctId;
+    MixpanelPersistedIdentity *mixpanelIdentity = [MixpanelPersistence loadIdentity:self.apiToken];
+    self.eventsDistinctId = mixpanelIdentity.distinctId;
     self.people.distinctId = mixpanelIdentity.peopleDistinctId;
     self.anonymousId = mixpanelIdentity.anonymousId;
     self.userId = mixpanelIdentity.userId;
+    if (self.hierarchicalGroups) {
+        self.companyId = mixpanelIdentity.companyId;
+    }
     self.alias = mixpanelIdentity.alias;
     self.hadPersistedDistinctId = mixpanelIdentity.hadPersistedDistinctId;
-    if (!self.distinctId) {
+    if (!self.eventsDistinctId) {
         self.anonymousId = [self defaultDeviceId];
-        self.distinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
+        self.eventsDistinctId = [DEVICE_PREFIX stringByAppendingString:self.anonymousId];
         self.hadPersistedDistinctId = YES;
         self.userId = nil;
         [MixpanelPersistence saveIdentity:[self currentMixpanelIdentity] apiToken:self.apiToken];

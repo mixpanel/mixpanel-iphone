@@ -250,6 +250,28 @@
     return rows;
 }
 
+- (BOOL)performInTransaction:(void (^)(void))block {
+    if (!self.connection) {
+        [self reconnect];
+        return NO;
+    }
+    if (sqlite3_exec(self.connection, "BEGIN IMMEDIATE TRANSACTION", NULL, NULL, NULL) != SQLITE_OK) {
+        [self logSqlError:@"Failed to begin transaction"];
+        return NO;
+    }
+    sqlite3 *transactionConnection = self.connection;
+    block();
+    // A failed write recreates the database, which closes the connection and rolls the transaction back
+    if (self.connection != transactionConnection) {
+        return YES;
+    }
+    if (sqlite3_exec(self.connection, "COMMIT TRANSACTION", NULL, NULL, NULL) != SQLITE_OK) {
+        [self logSqlError:@"Failed to commit transaction"];
+        sqlite3_exec(self.connection, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+    }
+    return YES;
+}
+
 - (void)logSqlError:(NSString *)message {
     if (self.connection) {
         if (message) {

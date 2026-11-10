@@ -34,7 +34,19 @@ static NSString *const PersistenceTypePeople = @"people";
 static NSString *const PersistenceTypeGroups = @"groups";
 
 static BOOL UnIdentifiedFlag = YES;
+// Hierarchical groups keys: a user profile is the $user_id group profile within its $company_id
+static NSString *const MPUserIdGroupKey = @"$user_id";
+static NSString *const MPCompanyIdGroupKey = @"$company_id";
 static BOOL IdentifiedFlag = NO;
+
+// Only Mixpanel creates an identity with a device id, since it owns the device id
+@interface MixpanelIdentity ()
+
+- (instancetype)initWithUserId:(NSString *)userId
+                     companyId:(NSString *)companyId
+                      deviceId:(NSString *)deviceId;
+
+@end
 
 #if defined(MIXPANEL_NO_AUTOMATIC_EVENTS_SUPPORT)
 @interface Mixpanel ()
@@ -64,7 +76,11 @@ static BOOL IdentifiedFlag = NO;
 @property (atomic, strong) MixpanelPeople *people;
 @property (atomic, strong) NSMutableDictionary<NSString*, MixpanelGroup*> * cachedGroups;
 @property (atomic, strong) MPNetwork *network;
-@property (atomic, copy) NSString *distinctId;
+// The distinct id events are sent with. The public distinctId reports the id Mixpanel resolves
+// the user to, which differs on a hierarchical groups project.
+@property (atomic, copy) NSString *eventsDistinctId;
+// Only set on a hierarchical groups project
+@property (atomic, copy) NSString *companyId;
 @property (atomic, copy) NSString *alias;
 @property (atomic, copy) NSString *anonymousId;
 @property (atomic, copy) NSString *userId;

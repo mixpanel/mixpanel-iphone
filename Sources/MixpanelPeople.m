@@ -74,6 +74,10 @@
     
     NSNumber *epochMilliseconds = @(round([[NSDate date] timeIntervalSince1970] * 1000));
     __strong Mixpanel *strongMixpanel = self.mixpanel;
+    if (strongMixpanel.hierarchicalGroups) {
+        [self addHierarchicalGroupsRecordWithAction:action properties:properties time:epochMilliseconds];
+        return;
+    }
     if (strongMixpanel) {
         properties = [properties copy];
         BOOL ignore_time = self.ignoreTime;
@@ -129,6 +133,73 @@
             [strongMixpanel flush];
         }
 #endif
+    }
+}
+
+// A hierarchical groups user profile is the $user_id group profile within the user's company, so
+// it is sent to /groups and supports only what /groups supports.
+- (void)addHierarchicalGroupsRecordWithAction:(NSString *)action properties:(NSDictionary *)properties time:(NSNumber *)epochMilliseconds
+{
+    static NSSet<NSString *> *groupOperations;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        groupOperations = [NSSet setWithArray:@[@"$set", @"$set_once", @"$unset", @"$union", @"$remove", @"$delete"]];
+    });
+    if (![groupOperations containsObject:action]) {
+        MPLogError(@"%@ is not supported for hierarchical groups projects, whose user profiles are group profiles keyed "
+                   @"by $user_id. Supported operations are [$set, $set_once, $unset, $union, $remove, $delete], so "
+                   @"increment, append, merge and trackCharge have no hierarchical groups equivalent. The update was "
+                   @"dropped.", action);
+        return;
+    }
+
+    __strong Mixpanel *strongMixpanel = self.mixpanel;
+    properties = [properties copy];
+    dispatch_async(strongMixpanel.serialQueue, ^{
+        [self saveHierarchicalGroupsRecordWithAction:action properties:properties time:epochMilliseconds];
+    });
+#if MIXPANEL_FLUSH_IMMEDIATELY
+    [strongMixpanel flush];
+#else
+    if ([Mixpanel isAppExtension]) {
+        [strongMixpanel flush];
+    }
+#endif
+}
+
+// Builds and saves a hierarchical groups user profile record. Runs on the serial queue, so the record
+// is attributed to the identity current at that point in the queue.
+- (void)saveHierarchicalGroupsRecordWithAction:(NSString *)action properties:(NSDictionary *)properties time:(NSNumber *)epochMilliseconds
+{
+    __strong Mixpanel *strongMixpanel = self.mixpanel;
+    NSString *userId = self.distinctId;
+    NSString *companyId = strongMixpanel.companyId;
+    BOOL identified = userId != nil && companyId != nil;
+    NSMutableDictionary *r = [NSMutableDictionary dictionary];
+    if ([action isEqualToString:@"$unset"]) {
+        // $unset takes an array of property names, supplied under the key "$properties"
+        r[action] = properties[@"$properties"];
+    } else {
+        NSMutableDictionary *p = [NSMutableDictionary dictionary];
+        if ([action isEqualToString:@"$set"] || [action isEqualToString:@"$set_once"]) {
+            [p addEntriesFromDictionary:self.automaticPeopleProperties];
+        }
+        [p addEntriesFromDictionary:properties];
+        r[action] = [NSDictionary dictionaryWithDictionary:p];
+    }
+    r[@"$token"] = strongMixpanel.apiToken;
+    r[@"$time"] = epochMilliseconds;
+    r[@"$group_key"] = MPUserIdGroupKey;
+    [r addEntriesFromDictionary:[strongMixpanel.sessionMetadata toDictionaryForEvent:NO]];
+    if (identified) {
+        r[@"$group_id"] = userId;
+        r[@"$company_id"] = companyId;
+        MPLogInfo(@"%@ queueing user profile record as a group record: %@", strongMixpanel, r);
+        [strongMixpanel.persistence saveEntity:r type:PersistenceTypeGroups flag:IdentifiedFlag];
+    } else {
+        // Held until identifyWithIdentity: names the user and company, as unidentified people records are
+        MPLogInfo(@"%@ queueing unidentified user profile record: %@", strongMixpanel, r);
+        [strongMixpanel.persistence saveEntity:r type:PersistenceTypeGroups flag:UnIdentifiedFlag];
     }
 }
 
@@ -237,6 +308,12 @@
 
 - (void)clearCharges
 {
+    // trackCharge has no hierarchical groups equivalent, so there are no charges to clear
+    if (self.mixpanel.hierarchicalGroups) {
+        MPLogError(@"clearCharges is not supported for hierarchical groups projects, which can't trackCharge. "
+                   @"The update was dropped.");
+        return;
+    }
     [self set:@{@"$transactions": @[]}];
 }
 

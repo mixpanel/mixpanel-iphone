@@ -27,9 +27,14 @@
 		2892541F16548283003DAFFE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892541E16548283003DAFFE /* CoreTelephony.framework */; };
 		45720A9A212E0CD3000D6FC3 /* MixpanelGroupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45720A99212E0CD3000D6FC3 /* MixpanelGroupTests.m */; };
 		45720A9B212E0CD3000D6FC3 /* MixpanelGroupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45720A99212E0CD3000D6FC3 /* MixpanelGroupTests.m */; };
+		45720A9D212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45720A9C212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m */; };
+		45720A9E212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45720A9C212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m */; };
+		45720AA0212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45720A9F212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m */; };
+		45720AA1212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 45720A9F212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m */; };
 		457CA2052141AFFE003B3862 /* MixpanelTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 457CA2022141AF87003B3862 /* MixpanelTypeTests.m */; };
 		457CA2062141B001003B3862 /* MixpanelTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 457CA2022141AF87003B3862 /* MixpanelTypeTests.m */; };
 		45C5F9A02146F417001B08CE /* GroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C5F99D2146F416001B08CE /* GroupViewController.m */; };
+		45C5F9A12146F417001B08CE /* HierarchicalGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C5F9A22146F417001B08CE /* HierarchicalGroupsViewController.m */; };
 		515B59D61CB6C8FD00A34060 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5118184DBE00848D48 /* CFNetwork.framework */; };
 		515B59D71CB6C90200A34060 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C13E5318184DC700848D48 /* Security.framework */; };
 		515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2808F9BF1610EFE4005772B7 /* HelloMixpanelTests.m */; };
@@ -394,9 +399,13 @@
 		2892541C16548047003DAFFE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		2892541E16548283003DAFFE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		45720A99212E0CD3000D6FC3 /* MixpanelGroupTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelGroupTests.m; sourceTree = "<group>"; };
+		45720A9C212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelHierarchicalGroupsTests.m; sourceTree = "<group>"; };
+		45720A9F212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixpanelHierarchicalGroupsScenariosTests.m; sourceTree = "<group>"; };
 		457CA2022141AF87003B3862 /* MixpanelTypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MixpanelTypeTests.m; sourceTree = "<group>"; };
 		45C5F99D2146F416001B08CE /* GroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupViewController.m; sourceTree = "<group>"; };
 		45C5F99F2146F417001B08CE /* GroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupViewController.h; sourceTree = "<group>"; };
+		45C5F9A22146F417001B08CE /* HierarchicalGroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HierarchicalGroupsViewController.m; sourceTree = "<group>"; };
+		45C5F9A32146F417001B08CE /* HierarchicalGroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HierarchicalGroupsViewController.h; sourceTree = "<group>"; };
 		515B59FC1CB6F95200A34060 /* Mixpanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Mixpanel.xcodeproj; path = ../Mixpanel.xcodeproj; sourceTree = "<group>"; };
 		517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPNetworkTests.m; sourceTree = "<group>"; };
 		518010151D11CEA300C5F3EA /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nocilla.framework; sourceTree = "<group>"; };
@@ -653,6 +662,8 @@
 				51D96E921D1219AE001F622D /* Helpers */,
 				51D96E821D120D4F001F622D /* MixpanelPeopleTests.m */,
 				45720A99212E0CD3000D6FC3 /* MixpanelGroupTests.m */,
+				45720A9C212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m */,
+				45720A9F212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m */,
 				86584204205AF1E3006E45C5 /* MixpanelOptOutTests.m */,
 				517ABB6D1D14ADCD00FF8061 /* MPNetworkTests.m */,
 				457CA2022141AF87003B3862 /* MixpanelTypeTests.m */,
@@ -728,6 +739,8 @@
 			children = (
 				45C5F99F2146F417001B08CE /* GroupViewController.h */,
 				45C5F99D2146F416001B08CE /* GroupViewController.m */,
+				45C5F9A32146F417001B08CE /* HierarchicalGroupsViewController.h */,
+				45C5F9A22146F417001B08CE /* HierarchicalGroupsViewController.m */,
 				860BE3652075A82C00C12F18 /* BaseTestViewController.h */,
 				860BE3662075A82C00C12F18 /* BaseTestViewController.m */,
 				860BE3692075AC2100C12F18 /* UtilityViewController.h */,
@@ -1300,6 +1313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45C5F9A02146F417001B08CE /* GroupViewController.m in Sources */,
+				45C5F9A12146F417001B08CE /* HierarchicalGroupsViewController.m in Sources */,
 				2808F99E1610EFE3005772B7 /* main.m in Sources */,
 				2808F9A21610EFE3005772B7 /* AppDelegate.m in Sources */,
 				860BE36E2076979C00C12F18 /* GDPRViewController.m in Sources */,
@@ -1321,6 +1335,8 @@
 				862FD908205B56FA007E28D1 /* MixpanelOptOutTests.m in Sources */,
 				51D96E831D120D4F001F622D /* MixpanelPeopleTests.m in Sources */,
 				45720A9A212E0CD3000D6FC3 /* MixpanelGroupTests.m in Sources */,
+				45720A9D212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m in Sources */,
+				45720AA0212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m in Sources */,
 				515EE7CC1D10D31A00D035A4 /* HelloMixpanelTests.m in Sources */,
 				51D96E851D120D80001F622D /* MixpanelBaseTests.m in Sources */,
 				517ABB711D14ADE900FF8061 /* MPNetworkTests.m in Sources */,
@@ -1392,6 +1408,8 @@
 				E123C4AD1D1355990015B425 /* MixpanelBaseTests.m in Sources */,
 				457CA2062141B001003B3862 /* MixpanelTypeTests.m in Sources */,
 				45720A9B212E0CD3000D6FC3 /* MixpanelGroupTests.m in Sources */,
+				45720A9E212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsTests.m in Sources */,
+				45720AA1212E0CD3000D6FC3 /* MixpanelHierarchicalGroupsScenariosTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
