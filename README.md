@@ -29,7 +29,7 @@
 The Mixpanel library for iOS is an open source project, and we'd love to see your contributions! We'd also love for you to come and work with us! Check out https://mixpanel.com/jobs/#openings for details.
 If you are using Swift, we recommend our **[Swift Library](https://github.com/mixpanel/mixpanel-swift)**.
 
-Check out our [Advanced iOS - Objective-C Guide](https://developer.mixpanel.com/docs/ios) for additional advanced configurations and use cases, like setting up your project with European Union data storage.
+Check out our [Advanced iOS - Objective-C Guide](https://docs.mixpanel.com/docs/tracking-methods/sdks/ios) for additional advanced configurations and use cases, like setting up your project with European Union data storage.
 
 [Skip to a complete code example](#complete-code-example).
 
@@ -144,7 +144,7 @@ Please refer to our [Apple App Developer Privacy Guidance](https://mixpanel.com/
 ## I want to know more!
 
 No worries, here are some links that you will find useful:
-* **[Advanced iOS - Objective-C Guide](https://developer.mixpanel.com/docs/ios)**
+* **[Advanced iOS - Objective-C Guide](https://docs.mixpanel.com/docs/tracking-methods/sdks/ios)**
 * **[Sample app](https://github.com/mixpanel/mixpanel-iphone/tree/master/HelloMixpanel)**
 * **[Full API Reference](https://mixpanel.github.io/mixpanel-iphone/index.html)**
 
