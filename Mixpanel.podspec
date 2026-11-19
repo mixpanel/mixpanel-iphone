@@ -2,6 +2,8 @@ Pod::Spec.new do |s|
   s.name         = 'Mixpanel'
   s.version      = '5.0.8'
   s.summary      = 'iPhone tracking library for Mixpanel Analytics'
+  s.description  = 'iPhone tracking library for Mixpanel Analytics. CocoaPods support is deprecated; use Swift Package Manager. See https://github.com/mixpanel/mixpanel-iphone#1-install-mixpanel'
+  s.deprecated   = true
   s.homepage     = 'https://mixpanel.com'
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Mixpanel, Inc' => 'support@mixpanel.com' }
