@@ -62,9 +62,11 @@ Check out the [Carthage docs](https://github.com/Carthage/Carthage#quick-start) 
 >   ```
 > - **After November 2027:** CocoaPods support will be removed in a future major release.
 
-1. If this is your first time using CocoaPods, install it with `gem install cocoapods`.
-2. Create a Podfile in your Xcode project directory by running `pod init`, then add `pod 'Mixpanel'` (or the `:git` line above for versions after the trunk freeze).
-3. Run `pod install` in your Xcode project directory and open the generated `.xcworkspace`.
+If your project already uses CocoaPods:
+1. Add `pod 'Mixpanel'` to your Podfile (or the `:git` line above for versions after the trunk freeze).
+2. Run `pod install` in your Xcode project directory.
+
+New to CocoaPods? Use [Swift Package Manager](#installation-option-1-swift-package-manager-recommended) instead.
 
 ## 2. Initialize Mixpanel
 To initialize the library, add `#Import "Mixpanel/Mixpanel.h" into "AppDelegate.m" and call [sharedInstanceWithToken:](https://mixpanel.github.io/mixpanel-iphone/Classes/Mixpanel.html#//api/name/sharedInstanceWithToken:) with your project token as its argument in [application:didFinishLaunchingWithOptions:](https://developer.apple.com/documentation/uikit/uiapplicationdelegate#//apple_ref/occ/intfm/UIApplicationDelegate/application:willFinishLaunchingWithOptions:).
