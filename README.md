@@ -41,8 +41,8 @@ Caution: From v4.0.0.beta.3 to v4.1.0, we have a bug that events with ampersand(
 You can install the Mixpanel iOS - Objective-C library by using Swift Package Manager (recommended), Carthage, or CocoaPods (deprecated). You will need your project token for initializing your library. You can get your project token from [project settings](https://mixpanel.com/settings/project).
 
 ### Installation Option 1: Swift Package Manager (recommended)
-1.  In Xcode, select File > Add Packages...
-2.  Enter the package URL for this [repository](https://github.com/mixpanel/mixpanel-iphone) and must select a version greater than or equal to v4.0.0
+1.  In Xcode, select File > Add Package Dependencies...
+2.  Enter the package URL for this [repository](https://github.com/mixpanel/mixpanel-iphone) and select version v4.0.0 or later.
 
 ### Installation Option 2: Carthage
 Mixpanel supports Carthage to package your dependencies as a framework. Include the following dependency in your Cartfile:
