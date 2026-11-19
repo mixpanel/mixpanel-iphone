@@ -60,7 +60,7 @@ Check out the [Carthage docs](https://github.com/Carthage/Carthage#quick-start) 
 >   ```ruby
 >   pod 'Mixpanel', :git => 'https://github.com/mixpanel/mixpanel-iphone.git', :tag => 'vX.Y.Z'
 >   ```
-> - **Around December 2027:** CocoaPods support is removed in the next major release.
+> - **After November 2027:** CocoaPods support will be removed in a future major release.
 
 1. If this is your first time using CocoaPods, install it with `gem install cocoapods`.
 2. Create a Podfile in your Xcode project directory by running `pod init`, then add `pod 'Mixpanel'` (or the `:git` line above for versions after the trunk freeze).
