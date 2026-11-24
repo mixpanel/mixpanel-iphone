@@ -1086,6 +1086,31 @@
     XCTAssertTrue([mixpanel hasOptedOutTracking]);
 }
 
+- (void)testIdsContainingPipeAreRefused {
+    Mixpanel *mixpanel = [self newMixpanel:YES];
+    NSString *anonymous = mixpanel.distinctId;
+    [mixpanel identifyWithIdentity:[self user:@"user|123" company:@"acme"]];
+    [mixpanel identifyWithIdentity:[self user:@"user_123" company:@"ac|me"]];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.distinctId, anonymous);
+    XCTAssertNil(mixpanel.identity.userId);
+    XCTAssertNil(mixpanel.identity.companyId);
+    XCTAssertEqual([self countEvents:@"$identify" mixpanel:mixpanel], 0);
+
+    [mixpanel optOutTracking];
+    [mixpanel optInTrackingWithIdentity:[self user:@"user|123" company:@"acme"] properties:nil];
+    XCTAssertTrue([mixpanel hasOptedOutTracking]);
+}
+
+- (void)testIdsContainingPipeAreAcceptedWhenDisabled {
+    Mixpanel *mixpanel = [self newMixpanel:NO];
+    [mixpanel identifyWithIdentity:[self user:@"user|123" company:nil]];
+    [self drain:mixpanel];
+
+    XCTAssertEqualObjects(mixpanel.identity.userId, @"user|123");
+}
+
 - (void)testWhitespaceUserIdCountsAsEmptyWhenDisabled {
     Mixpanel *mixpanel = [self newMixpanel:NO];
     NSString *anonymous = mixpanel.distinctId;

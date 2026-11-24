@@ -520,6 +520,10 @@ OBJC_EXPORT void objc_setProperty_atomic_copy(id self, SEL _cmd, id newValue, pt
             return [NSString stringWithFormat:@"Can't identify %@: hierarchical groups projects identify a user by "
                     @"company and user id, so both are required.", identity];
         }
+        if ([userId containsString:@"|"] || [companyId containsString:@"|"]) {
+            return [NSString stringWithFormat:@"Can't identify %@: hierarchical groups projects reserve \"|\", so a "
+                    @"user or company id can't contain it.", identity];
+        }
     } else {
         if ([Mixpanel isBlankId:userId]) {
             return [NSString stringWithFormat:@"Can't identify %@ without a user id.", identity];
