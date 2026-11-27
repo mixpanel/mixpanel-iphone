@@ -68,7 +68,7 @@
         } else {
             MPLogInfo(@"Successfully opened connection to database at path: %@", dbPath);
             [self enableWriteAheadLogging];
-            [self createTablesAndIndexes];
+            [self createTables];
         }
     }
 }
@@ -132,32 +132,10 @@
     }
 }
 
-- (void)createIndexFor:(NSString *)persistenceType {
-    if (self.connection) {
-        NSString *tableName = [self tableNameFor:persistenceType];
-        NSString *indexName = [NSString stringWithFormat:@"idx_%@_time", persistenceType];
-        NSString *createIndexString = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@ (time);", indexName, tableName];
-        sqlite3_stmt *createIndexStatement;
-        if (sqlite3_prepare_v2(self.connection, [createIndexString UTF8String], -1, &createIndexStatement, nil) == SQLITE_OK) {
-            if (sqlite3_step(createIndexStatement) == SQLITE_DONE) {
-                MPLogInfo(@"%@ index created", indexName);
-            } else {
-                [self logSqlError:[NSString stringWithFormat:@"%@ index creation failed", indexName]];
-            }
-        } else {
-            [self logSqlError:[NSString stringWithFormat:@"CREATE statement for index %@ could not be prepared", indexName]];
-        }
-        sqlite3_finalize(createIndexStatement);
-    } else {
-        [self reconnect];
-    }
-}
-
-- (void)createTablesAndIndexes {
-    for (NSString *persistenceType in @[@"events", @"people", @"groups"]) {
-        [self createTableFor:persistenceType];
-        [self createIndexFor:persistenceType];
-    }
+- (void)createTables {
+    [self createTableFor:@"events"];
+    [self createTableFor:@"people"];
+    [self createTableFor:@"groups"];
 }
 
 - (void)insertRow:(NSString *)persistenceType data:(NSData *)data flag:(BOOL) flag {

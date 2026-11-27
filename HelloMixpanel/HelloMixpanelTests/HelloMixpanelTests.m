@@ -808,9 +808,8 @@
     return result;
 }
 
-// A database written by an older SDK (rollback journal, no index) keeps its queued rows
-// and is switched to WAL with a time index on open.
-- (void)testMPDBUsesWALAndTimeIndexWithoutLosingExistingRows {
+// A database written by an older SDK (rollback journal) keeps its queued rows and is switched to WAL on open.
+- (void)testMPDBUsesWALWithoutLosingExistingRows {
     NSString *testToken = [self randomTokenId];
     NSString *dbPath = [self dbPathForToken:testToken];
     [self removeDBfile:testToken];
@@ -828,11 +827,6 @@
     XCTAssertEqual(rows.count, 1, "Rows queued before upgrade should survive");
     XCTAssertEqualObjects(rows.firstObject[@"event"], @"queued");
     XCTAssertEqualObjects([self stringForQuery:@"PRAGMA journal_mode" dbPath:dbPath], @"wal");
-    for (NSString *pType in @[@"events", @"people", @"groups"]) {
-        NSString *indexQuery = [NSString stringWithFormat:@"SELECT tbl_name FROM sqlite_master WHERE type = 'index' AND name = 'idx_%@_time'", pType];
-        NSString *expectedTable = [NSString stringWithFormat:@"mixpanel_%@_%@", testToken, pType];
-        XCTAssertEqualObjects([self stringForQuery:indexQuery dbPath:dbPath], expectedTable);
-    }
     [mpdb close];
     [self removeDBfile:testToken];
 }
