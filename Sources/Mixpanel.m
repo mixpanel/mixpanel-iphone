@@ -1027,6 +1027,10 @@ typedef NSDictionary*(^PropertyUpdate)(NSDictionary*);
 #if !TARGET_OS_WATCH && !TARGET_OS_OSX
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
+        // App Clips return an all-zero identifierForVendor, which would merge every user into one distinct_id.
+        if ([distinctId isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
+            distinctId = nil;
+        }
     }
 #elif TARGET_OS_OSX
     distinctId = [self macOSIdentifier];

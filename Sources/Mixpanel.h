@@ -75,7 +75,8 @@ NS_ASSUME_NONNULL_BEGIN
  A distinct ID is a string that uniquely identifies one of your users. By default,
  we'll use the device's advertisingIdentifier UUIDString, if that is not available
  we'll use the device's identifierForVendor UUIDString, and finally if that
- is not available we will generate a new random UUIDString. To change the
+ is not available (or is all zeros, as in App Clips) we will generate a new random
+ UUIDString. To change the
  current distinct ID, use the <code>identify:</code> method.
  */
 @property (atomic, readonly, copy) NSString *distinctId;
@@ -86,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
  A default distinct ID is a string that uniquely identifies the anonymous activity.
  By default, we'll use the device's advertisingIdentifier UUIDString, if that is not
  available we'll use the device's identifierForVendor UUIDString, and finally if that
- is not available we will generate a new random UUIDString.
+ is not available (or is all zeros, as in App Clips) we will generate a new random UUIDString.
  */
 @property (atomic, readonly, copy) NSString *anonymousId;
 
@@ -339,8 +340,8 @@ NS_ASSUME_NONNULL_BEGIN
  <code>MIXPANEL_UNIQUE_DISTINCT_ID</code>  preprocessor flag in your build settings.
  It then uses the IFV String (`UIDevice.current().identifierForVendor`) as the default local distinct ID.
  This ID will identify a user across all apps by the same vendor, but cannot be used to link the same
- user across apps from different vendors. If we are unable to get an IFV, we will fall back to generating
- a random persistent UUID.
+ user across apps from different vendors. If we are unable to get an IFV, or it is all zeros (App Clips),
+ we will fall back to generating a random persistent UUID.
 
  For tracking events, you do not need to call <code>identify:</code>.
  However, <b>Mixpanel User profiles always require an

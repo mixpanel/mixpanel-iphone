@@ -16,6 +16,7 @@
 #import <sqlite3.h>
 #import <fcntl.h>
 #import <sys/param.h>
+#import <objc/runtime.h>
 #define DEVICE_PREFIX @"$device:"
 
 @interface HelloMixpanelTests : MixpanelBaseTests
@@ -425,6 +426,35 @@
     XCTAssertTrue([self eventQueue:testMixpanel.apiToken].count == 0, @"events queue failed to reset after archive");
     XCTAssertTrue([self peopleQueue:testMixpanel.apiToken].count == 0, @"people queue failed to reset after archive");
     [self removeDBfile:testMixpanel.apiToken];
+}
+
+- (void)testZeroedIdentifierForVendorFallsBackToRandomUUID {
+    // App Clips report an all-zero identifierForVendor.
+    NSString *zeroedUUID = [[[NSUUID alloc] initWithUUIDBytes:(uuid_t){0}] UUIDString];
+    Method method = class_getInstanceMethod([UIDevice class], @selector(identifierForVendor));
+    IMP originalIMP = method_setImplementation(method, imp_implementationWithBlock(^NSUUID *(id device) {
+        return [[NSUUID alloc] initWithUUIDString:zeroedUUID];
+    }));
+
+    Mixpanel *firstInstall = nil;
+    Mixpanel *secondInstall = nil;
+    NSString *deviceId = nil;
+    @try {
+        firstInstall = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:NO flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
+        secondInstall = [[Mixpanel alloc] initWithToken:[self randomTokenId] trackAutomaticEvents:NO flushInterval:60 trackCrashes:NO useUniqueDistinctId:YES];
+        [self waitForMixpanelQueues:firstInstall];
+        [self waitForMixpanelQueues:secondInstall];
+        deviceId = [firstInstall defaultDeviceId];
+    } @finally {
+        method_setImplementation(method, originalIMP);
+    }
+
+    XCTAssertNotEqualObjects(deviceId, zeroedUUID, @"zeroed identifierForVendor must not be used as the device id");
+    XCTAssertNotNil([[NSUUID alloc] initWithUUIDString:deviceId], @"device id should fall back to a random UUID");
+    XCTAssertNotEqualObjects(firstInstall.anonymousId, zeroedUUID, @"anonymous id must not be the zeroed identifierForVendor");
+    XCTAssertNotEqualObjects(firstInstall.anonymousId, secondInstall.anonymousId, @"App Clip users must not share one anonymous id");
+    [self removeDBfile:firstInstall.apiToken];
+    [self removeDBfile:secondInstall.apiToken];
 }
 
 - (void)testArchive {
