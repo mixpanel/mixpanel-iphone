@@ -760,6 +760,8 @@
     sqlite3_stmt *statement = NULL;
     int rootPage = 0, pageSize = 0;
     XCTAssertEqual(sqlite3_open([dbPath UTF8String], &otherConnection), SQLITE_OK);
+    // Move every page from the WAL into the main file so the corruption below is what gets read.
+    XCTAssertEqual(sqlite3_exec(otherConnection, "PRAGMA wal_checkpoint(TRUNCATE)", NULL, NULL, NULL), SQLITE_OK);
     NSString *rootQuery = [NSString stringWithFormat:@"SELECT rootpage FROM sqlite_master WHERE name = 'mixpanel_%@_events'", testToken];
     sqlite3_prepare_v2(otherConnection, [rootQuery UTF8String], -1, &statement, NULL);
     if (sqlite3_step(statement) == SQLITE_ROW) {
@@ -771,25 +773,60 @@
         pageSize = sqlite3_column_int(statement, 0);
     }
     sqlite3_finalize(statement);
-    sqlite3_close(otherConnection);
     XCTAssertGreaterThan(rootPage, 0);
     XCTAssertGreaterThan(pageSize, 0);
 
-    // Overwrite the table's root page, and change the file change counter so the open connection rereads it.
+    // Overwrite the table's root page.
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:dbPath];
     NSMutableData *junk = [NSMutableData dataWithLength:pageSize];
     memset(junk.mutableBytes, 0xFF, junk.length);
     [fileHandle seekToFileOffset:(unsigned long long)pageSize * (rootPage - 1)];
     [fileHandle writeData:junk];
-    uint32_t changeCounter = 0xDEADBEEF;
-    [fileHandle seekToFileOffset:24];
-    [fileHandle writeData:[NSData dataWithBytes:&changeCounter length:sizeof(changeCounter)]];
     [fileHandle closeFile];
+    // Commit an unrelated change to the WAL so the open connection drops its page cache and rereads the root page.
+    XCTAssertEqual(sqlite3_exec(otherConnection, "CREATE TABLE cache_buster(x)", NULL, NULL, NULL), SQLITE_OK);
+    sqlite3_close(otherConnection);
 
     [mpdb insertRow:@"events" data:eventData flag:NO]; // step fails with SQLITE_CORRUPT and recreates the database
     XCTAssertLessThanOrEqual([self openFileDescriptorCountForPath:dbPath], descriptorsBefore, "The old connection should be closed, not leaked");
     [mpdb insertRow:@"events" data:eventData flag:NO];
     XCTAssertEqual([mpdb readRows:@"events" numRows:NSIntegerMax flag:NO].count, 1, "The recreated database should accept writes");
+    [mpdb close];
+    [self removeDBfile:testToken];
+}
+
+- (NSString *)stringForQuery:(NSString *)query dbPath:(NSString *)dbPath {
+    sqlite3 *connection = NULL;
+    sqlite3_stmt *statement = NULL;
+    NSString *result = nil;
+    sqlite3_open([dbPath UTF8String], &connection);
+    if (sqlite3_prepare_v2(connection, [query UTF8String], -1, &statement, NULL) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
+        result = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(statement, 0)];
+    }
+    sqlite3_finalize(statement);
+    sqlite3_close(connection);
+    return result;
+}
+
+// A database written by an older SDK (rollback journal) keeps its queued rows and is switched to WAL on open.
+- (void)testMPDBUsesWALWithoutLosingExistingRows {
+    NSString *testToken = [self randomTokenId];
+    NSString *dbPath = [self dbPathForToken:testToken];
+    [self removeDBfile:testToken];
+    sqlite3 *legacy = NULL;
+    XCTAssertEqual(sqlite3_open([dbPath UTF8String], &legacy), SQLITE_OK);
+    NSString *createLegacy = [NSString stringWithFormat:
+        @"CREATE TABLE mixpanel_%@_events(id integer primary key autoincrement,data blob,time real, flag integer);"
+        @"INSERT INTO mixpanel_%@_events (data, flag, time) VALUES ('{\"event\":\"queued\"}', 0, 1);", testToken, testToken];
+    XCTAssertEqual(sqlite3_exec(legacy, [createLegacy UTF8String], NULL, NULL, NULL), SQLITE_OK);
+    sqlite3_close(legacy);
+    XCTAssertEqualObjects([self stringForQuery:@"PRAGMA journal_mode" dbPath:dbPath], @"delete");
+
+    MPDB *mpdb = [[MPDB alloc] initWithToken:testToken];
+    NSArray *rows = [mpdb readRows:@"events" numRows:NSIntegerMax flag:NO];
+    XCTAssertEqual(rows.count, 1, "Rows queued before upgrade should survive");
+    XCTAssertEqualObjects(rows.firstObject[@"event"], @"queued");
+    XCTAssertEqualObjects([self stringForQuery:@"PRAGMA journal_mode" dbPath:dbPath], @"wal");
     [mpdb close];
     [self removeDBfile:testToken];
 }

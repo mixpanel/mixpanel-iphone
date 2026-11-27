@@ -56,14 +56,36 @@
     }
     NSString *dbPath = [self pathToDB];
     if (dbPath) {
-        if (sqlite3_open_v2([dbPath UTF8String], &_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nil) != SQLITE_OK ) {
+        int openFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST && !TARGET_OS_SIMULATOR
+        // Keep the database and its WAL/SHM files writable in the background after first unlock,
+        // otherwise WAL writes can hang while the device is locked.
+        openFlags |= SQLITE_OPEN_FILEPROTECTION_COMPLETEUNTILFIRSTUSERAUTHENTICATION;
+#endif
+        if (sqlite3_open_v2([dbPath UTF8String], &_connection, openFlags, nil) != SQLITE_OK ) {
             [self logSqlError: [NSString stringWithFormat:@"Error opening or creating database at path: %@", dbPath]];
             [self close];
         } else {
             MPLogInfo(@"Successfully opened connection to database at path: %@", dbPath);
+            [self enableWriteAheadLogging];
             [self createTables];
         }
     }
+}
+
+// WAL journaling greatly reduces disk writes compared to the default rollback journal.
+- (void)enableWriteAheadLogging {
+    sqlite3_stmt *pragmaStatement;
+    if (sqlite3_prepare_v2(self.connection, "PRAGMA journal_mode=WAL;", -1, &pragmaStatement, nil) == SQLITE_OK) {
+        if (sqlite3_step(pragmaStatement) == SQLITE_ROW) {
+            MPLogInfo(@"SQLite journal mode set to %s", sqlite3_column_text(pragmaStatement, 0));
+        } else {
+            [self logSqlError:@"Failed to enable journal_mode=WAL"];
+        }
+    } else {
+        [self logSqlError:@"PRAGMA journal_mode=WAL statement could not be prepared"];
+    }
+    sqlite3_finalize(pragmaStatement);
 }
 
 - (void)close {
