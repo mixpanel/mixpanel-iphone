@@ -56,14 +56,36 @@
     }
     NSString *dbPath = [self pathToDB];
     if (dbPath) {
-        if (sqlite3_open_v2([dbPath UTF8String], &_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nil) != SQLITE_OK ) {
+        int openFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST && !TARGET_OS_SIMULATOR
+        // Keep the database and its WAL/SHM files writable in the background after first unlock,
+        // otherwise WAL writes can hang while the device is locked.
+        openFlags |= SQLITE_OPEN_FILEPROTECTION_COMPLETEUNTILFIRSTUSERAUTHENTICATION;
+#endif
+        if (sqlite3_open_v2([dbPath UTF8String], &_connection, openFlags, nil) != SQLITE_OK ) {
             [self logSqlError: [NSString stringWithFormat:@"Error opening or creating database at path: %@", dbPath]];
             [self close];
         } else {
             MPLogInfo(@"Successfully opened connection to database at path: %@", dbPath);
-            [self createTables];
+            [self enableWriteAheadLogging];
+            [self createTablesAndIndexes];
         }
     }
+}
+
+// WAL journaling greatly reduces disk writes compared to the default rollback journal.
+- (void)enableWriteAheadLogging {
+    sqlite3_stmt *pragmaStatement;
+    if (sqlite3_prepare_v2(self.connection, "PRAGMA journal_mode=WAL;", -1, &pragmaStatement, nil) == SQLITE_OK) {
+        if (sqlite3_step(pragmaStatement) == SQLITE_ROW) {
+            MPLogInfo(@"SQLite journal mode set to %s", sqlite3_column_text(pragmaStatement, 0));
+        } else {
+            [self logSqlError:@"Failed to enable journal_mode=WAL"];
+        }
+    } else {
+        [self logSqlError:@"PRAGMA journal_mode=WAL statement could not be prepared"];
+    }
+    sqlite3_finalize(pragmaStatement);
 }
 
 - (void)close {
@@ -110,10 +132,32 @@
     }
 }
 
-- (void)createTables {
-    [self createTableFor:@"events"];
-    [self createTableFor:@"people"];
-    [self createTableFor:@"groups"];
+- (void)createIndexFor:(NSString *)persistenceType {
+    if (self.connection) {
+        NSString *tableName = [self tableNameFor:persistenceType];
+        NSString *indexName = [NSString stringWithFormat:@"idx_%@_time", persistenceType];
+        NSString *createIndexString = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@ (time);", indexName, tableName];
+        sqlite3_stmt *createIndexStatement;
+        if (sqlite3_prepare_v2(self.connection, [createIndexString UTF8String], -1, &createIndexStatement, nil) == SQLITE_OK) {
+            if (sqlite3_step(createIndexStatement) == SQLITE_DONE) {
+                MPLogInfo(@"%@ index created", indexName);
+            } else {
+                [self logSqlError:[NSString stringWithFormat:@"%@ index creation failed", indexName]];
+            }
+        } else {
+            [self logSqlError:[NSString stringWithFormat:@"CREATE statement for index %@ could not be prepared", indexName]];
+        }
+        sqlite3_finalize(createIndexStatement);
+    } else {
+        [self reconnect];
+    }
+}
+
+- (void)createTablesAndIndexes {
+    for (NSString *persistenceType in @[@"events", @"people", @"groups"]) {
+        [self createTableFor:persistenceType];
+        [self createIndexFor:persistenceType];
+    }
 }
 
 - (void)insertRow:(NSString *)persistenceType data:(NSData *)data flag:(BOOL) flag {
